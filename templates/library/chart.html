@@ -1,0 +1,145 @@
+<style type="text/css">
+    * Progress Bar CSS */
+    .step{
+        display: inline-block;
+    }
+.progress-steps {
+width: 100%;
+text-align: center;
+display:flex;
+flex-wrap:wrap;
+}
+
+.progress-steps .step{
+background: transparent;
+height: 4em;
+position:relative;
+text-align:center;
+flex-grow:1;
+transition:all 0.3s;
+}
+
+.progress-steps .step:after {
+background: #ccc;  
+content: '';
+position: absolute;
+height: 0.5em;
+width: 100%;
+left: 0;
+top: 1.75em;
+z-index:1;
+}
+
+.step .step-circle {
+background: #ccc;
+border-radius: 50%;
+width: 1.5em;
+height: 1.5em;
+margin:1.25em auto;
+z-index:3;
+position:relative;
+transition:all 0.2s;
+}
+
+.progress-steps .step.active .step-circle {
+background:#17b6e0;
+width:3em;
+height:3em;
+margin:0.5em auto;
+box-shadow: 0px 3px 15px rgba(0,0,0,0.3);
+transition:all 0.1s;
+}
+
+.progress-steps .step.active:before {
+content: '';
+position: absolute;
+height: 0.5em;
+left: 0;
+top: 1.75em;
+background: #17b6e0;
+width: 50%;
+z-index:3;
+}
+
+.progress-steps .step.active .step-circle:after {
+content:'';
+position:absolute;
+background:#fff;
+width:1em;
+height:1em;
+top:1em;
+left:1em;
+border-radius:50%;
+z-index:4;
+transition:none;
+}
+
+.progress-steps .step.done .step-circle {
+background:#17b6e0;
+width:2.5em;
+height:2.5em;
+margin:0.75em auto;
+box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+}
+
+.progress-steps .step.done .step-circle:after {
+font-family:FontAwesome;
+position: absolute;
+content: "✓";
+font-weight: 600;
+top: 0.55em;
+left: 0.85em;
+color: #fff;
+}
+
+
+.step-circle:hover{
+box-shadow: 3px 6px 15px rgba(0,0,0,0.3) !important;
+cursor:pointer;
+}
+
+.progress-steps .step.done:after {
+background: #1493bf;
+}
+
+.progress-steps .step .label {
+display:block;
+color: #bbb;
+font-size: 13px;
+word-wrap:break-word;
+}
+
+
+/* Done / Active */
+
+.progress-steps .step.done .label {
+color: #17b6e0;
+}
+.progress-steps .step.active .label {
+color: #17b6e0;
+font-size:1em;
+font-weight:bold;
+}
+
+@media (max-width:768px){
+.progress-steps .step .label{
+font-size:0.6em;
+}
+
+.progress-steps .step.active .label{
+font-size:0.75em;
+}
+}
+</style>
+<div class="ui segment" style="padding-bottom: 25px">
+    <div class="progress-steps">
+        {% for lesson in course.lessons.all %}
+        <div class="step {% if forloop.counter == 1 %}done{%elif forloop.counter == 2 %}active{%endif%}">
+            <div class="step-circle"></div>
+            <span class="label">{{ lesson.title }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+

@@ -1,0 +1,72 @@
+{% load crispy_forms_tags %}
+{% load ttttags %}
+{% load tagss %}
+{% load staticfiles %}
+<style type="text/css">
+    .triangle{
+        margin: 0 -5px !important;
+    }
+</style>
+<div class="content">
+    <div class="ui segment" style="padding-bottom: 20px;margin-bottom: 0;">
+        <h3 style="margin-bottom: 0;text-align: center; color: #696969;font-size: 30px;font-weight: 500">
+            {{ lesson.title }}
+            <br>
+            {% if lesson.is_homework %}
+                <span style="color: #fff; font-size: 13px; margin-left: 0px;">Домашка</span>
+            {% endif %}
+            {% if profile.is_trener %} 
+            <a class="show_edit"><i class="icon pencil" style="font-size: 12px;"></i></a>
+            {% endif %}
+        </h3>
+        <div class="ui grid" style="text-align: center; margin: 14px 0 0 0;">
+            <a class="switch_btn" style="width: 15%;">
+                <i class="icon angle left"></i> 
+            </a>
+            {% for paper in lesson.papers.all %}
+            <a class="{% if forloop.counter == 1 %}switch_btn_active{% endif %} switch_btn switch_btn{{ lesson.id }}" 
+            style="width: calc(70%/{{ lesson.papers.all|length }});" paper_id='{{ paper.id }}' lesson_id='{{ lesson.id }}'>
+                {{ paper.title }}
+                <span class="l{{ lesson.id }}p{{ paper.id }}done_tick" style="font-size: 16px; font-weight: 600; {% if paper|is_done:profile == False %}display: none;{% endif %}">
+                    <i class="icon check" style="color: #32CD32 !important"></i>
+                </span>
+            </a>
+            {% endfor %}
+            <a class="switch_btn" style="width: 15%;">
+                 <i class="icon angle right"></i>
+            </a>
+        </div>
+        {% if profile.is_trener %}
+            {% include 'library/add_paper.html' %}
+        {% endif %}
+    </div>
+    {% for paper in lesson.papers.all %}
+        {% include 'library/paper_detail.html' %}
+    {% endfor %}
+    <div class="ui segment" style="margin-top: 0;background-color: #f9f9fb;color: #757575;font-weight: 500">
+        <a class="like_lesson" id="{{ lesson.id }}" url="{{ lesson.like_url }}" style="font-size: 23px;">
+            <i class="ui icon triangle up" id="likeup_lesson{{ lesson.id }}" {% if profile in lesson.likes.all %} style="color: #6c9b45 !important;" {% else %} style="color: #e8e8e8;"{% endif %} ></i>
+        </a>
+        <span id="likes_number_lesson{{ lesson.id }}">{{ lesson|count_likes }}</span>
+        <a class="dislike_lesson" id="{{ lesson.id }}" url="{{ lesson.dislike_url }}" style="color: #e8e8e8;font-size: 23px;">
+            <i class="icon triangle down" id="dislikedown_lesson{{ lesson.id }}" {% if profile in lesson.dislikes.all %} style="color: red !important;" {% else %} style="color: #e8e8e8;"{% endif %}></i>
+        </a>
+        <span style="margin-left: 20px;">
+            <i class="icon comment"></i>
+            {{ lesson.comments.all|length }}
+        </span>
+        <span style="float: right;">
+            <a href="{{ lesson.author_profile.get_absolute_url }}">
+                <img src="{% static 'images/nophoto.png' %}" style="width: 30px;height: 30px;border-radius: 100%;">
+            </a>
+        </span>
+        <span style="float: right;margin-right: 15px">
+            <a href="{{ lesson.author_profile.get_absolute_url }}">
+                {{ lesson.author_profile.first_name }}
+            </a>
+        </span>
+    </div>
+    {% include 'library/comments.html' %}
+</div>
+<span style="display: none;" class="lesson_id" id="{{ lesson.id }}"></span>
+<span style="display: none;" class="current_paper" url = "{{ lesson.check_paper_url }}" id="{{ lesson.papers.all.0.id }}"></span>

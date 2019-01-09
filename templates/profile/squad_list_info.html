@@ -1,0 +1,36 @@
+<div class="ui grid group-block">
+                        <div class="three wide column left-side" style="padding-right: 0;">
+                            <div class="img-block">
+                                {% if sq.image %}
+                                <a href="{{ sq.get_absolute_url }}"><img style="width: 80px; height: 80px; border-radius: 100%;" class="olymp-image" src="{{ sq.image.url }}"></a>
+                                {% else %}
+                                <a href="{{ sq.get_absolute_url }}"><img style="width: 80px; height: 80px; border-radius: 100%;" class="olymp-image" src="{{ main_page.squad_image.url }}"></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="thirteen wide column right-side" style="padding-top: 25px;">
+                            <h5 style="font-size: 13px;margin-bottom: 5px">
+                            <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
+                            <a class="group_action" id="{{ sq.id }}" style="float: right; cursor: pointer; color: grey">
+                                <i class="icon ellipsis horizontal"></i>
+                            </a>
+                            </h5>
+                            <div style="display: none; position: absolute;right: 0;z-index: 3000; width: 150px;" id="{{ sq.id }}group_action" class="ui vertical menu">
+                                <div style="padding: 12px">
+                                    <a class="follow_btn" style="border-radius: 0" data-href='{{ sq.get_api_reg }}'>Отписаться</a>
+                                </div>
+                                {% if user.is_staff and sq.author_profile == profile %}
+                                <div class="item">
+                                    <a href='{{ sq.get_update_url }}'>Изменить</a>
+                                </div>
+                                <div class="item">
+                                    <a href='{{ sq.get_delete_url }}' style="color: red;">Удалить</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <p style="color: grey; font-size: 12px;margin-bottom: 5px">{{ sq.slogan }}</p>
+                            <p style="color: grey; font-size: 12px;">{{ sq.followers_number }} студент{% if sq.followers_number > 1 and sq.followers_number < 5 %}а{% elif sq.followers_number >= 5 or sq.followers_number == 0 %}ов{% endif %}</p>
+                        </div>
+                        
+                    </div>
+                    <div class="ui divider"></div>

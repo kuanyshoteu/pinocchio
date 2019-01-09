@@ -1,0 +1,119 @@
+{% load staticfiles %}
+<style type="text/css">
+    .de{
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
+</style>
+<div class="ui segment" style="padding: 0">
+    {% if idet_urok %}
+    <div class="header text-center" style="background-color: #5181b8; color: white; padding: 14px;">
+        <h3>Идет урок</h3>
+    </div>
+    {% endif %}
+</div>                 
+<div class="ui raised card " style="width: 100%;">
+    <div class="content" style="padding: 15px 20px;">
+        <div class="right floated" style="padding-right: 14px;">
+            <img  src="{% static 'images/coins_gold.png' %}" style="width: 25px;">
+            <span style="font-size: 18px;" id="hiscoins">{{ hisprofile.coins }}</span>
+        </div>
+        <div class="header">
+            {{ hisprofile.first_name }}
+        </div>
+        <div class="meta">
+            <a class="open_form_status" style="color: #828282;">
+                <span class="hisstatus">
+                    {% if hisprofile.is_creator %}
+                        Creator
+                    {% elif hisprofile.is_ceo %}
+                        CEO
+                    {% elif hisprofile.is_manager %}
+                        Менеджер
+                    {% elif hisprofile.is_trener %}
+                        Учитель
+                    {% else %}
+                        Студент
+                    {% endif %}
+                </span>
+            </a>
+        </div>
+        <div class="description">
+            {% if profile.user.username == main_page.admin_name %}
+            <form class="ui form update_status" style="display: none; width: 200px;" method='POST'
+                  enctype="multipart/form-data">{% csrf_token %}
+                <textarea style="width: 150px;" type='text' class="textarea_status">{{ hisprofile.status }}</textarea>
+                <a class='ui button blue mini change_status' data-href='{{ hisprofile.change_status_url }}'>Сохранить</a>
+            </form>
+            {% endif %}
+            <div class="ui divider"></div>                                    
+            <div class="ui grid" style="margin-top: 10px;">
+                <div class="four wide column de">
+                    <p style="color: #828282;">День рождения: </p>
+                    <p style="color: #828282;">Место учебы: </p>
+                    {% if hisprofile.phone %}
+                    <p style="color: #828282;">Телефон: </p>
+                    {% endif %}
+                        <p style="color: #828282;">Почта: </p>
+                    {% if hisprofile.status == 'trener' %}
+                        <p style="color: #828282;">Предметы: </p>
+                    {% else %}
+                        <p style="color: #828282;">Классы: </p>
+                    {% endif %}
+                    
+                </div>
+                <div class="five wide column de">
+                    <p><a href="">{{ hisprofile.birthdate }}</a></p>
+                    <p><a href="">_{{ hisprofile.school.title }}</a></p>
+                    <p>{{ hisprofile.phone }}</p>
+                    <p>{{ hisprofile.mail }}</p>
+                    <p>
+                    {% for sq in hisprofile.squads.all %}
+                        <a href="{{ sq.get_absolute_url }}">
+                            {{ sq.title }}
+                        </a>{% if forloop.counter < hisprofile.squad_trener.all|length %}, {% endif %}
+                    {% endfor %}
+                    </p>
+                
+                </div>
+                <div class="seven wide column" style="padding-top: 0">
+                    {% include 'profile/circle_chart.html' %}
+                </div>
+                <!-- <div class="sixteen wide column de">
+                    <a class="ui button tiny show_account_details" status='closed'>Показать подробную информацию</a>
+                </div> -->
+            </div>
+            <div class="account_details" style="display: none; width: 100%; margin-top: 15px; margin-bottom: 15px;">
+        <!--         <div class="ui grid">
+                    <div class="four wide column de">
+                    </div>
+                    <div class="eleven wide column de">
+                    </div>
+                    {% if hisprofile.city %}
+                    <div class="four wide column de">
+                    </div>
+                    <div class="eleven wide column de">
+                    </div>
+                    {% endif %}
+                </div> -->
+            </div>        
+        </div>
+    </div>
+    <div class="content" style="padding: 15px 20px;">
+        <div style="text-align: center;">
+                <a style="display: inline-block; padding: 0 15px;" href="">
+                    <div class="count">35</div>
+                    <div class="count_label">решенных задач</div>
+                </a>
+                <a style="display: inline-block; padding: 0 15px;" href="">
+                    <div class="count">5</div>
+                    <div class="count_label">просмотренных видео</div>
+                </a>
+                <a style="display: inline-block; padding: 0 15px;" href="">
+                    <div class="count">2</div>
+                    <div class="count_label">пройденных курсов</div>
+                </a>
+            
+        </div>
+    </div>
+</div>

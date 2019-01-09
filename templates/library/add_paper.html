@@ -1,0 +1,24 @@
+<a class="ui button blue mini edit" onclick="$('#l{{ lesson.id }}add_paper_modal').modal('show')" id='{{ lesson.id }}' style="margin:0 0 5px 0; cursor: pointer;">
+  Добавить раздел
+</a>    
+
+<div class="ui mini modal" style="width: 70%; padding: 14px; height: 100%" id="l{{ lesson.id }}add_paper_modal">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Добавить раздел в урок {{ lesson.title }}
+    </div>
+    <div class="content">
+        <form class="ui form add-paper" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="ui grid">
+                <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0">
+                    <b>Название раздела</b>
+                    <textarea class="new_paper_title_l{{ lesson.id }}" type="text" id='new_paper_title_l{{ lesson.id }}' style="height: 46px; width: 100%;"></textarea>
+                </div>
+            </div>
+
+            <br>
+            <a class='ui blue button mini new_paper' id='{{ lesson.id }}' paper_id='l{{ lesson.id }}' data-href='{{ lesson.add_paper_url }}' style="margin-top:10px;">Создать</a>
+
+        </form>
+    </div>
+</div>

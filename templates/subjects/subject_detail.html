@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<div id="group-details" style="padding-bottom: 200px;">
+    {% if user.is_authenticated %}
+    <a id="go-back-btn"  href='{% url "subjects:list" %}'>
+        <i class="arrow left icon"></i>Назад
+    </a>
+    {% endif %}
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                <div class="ui grid">
+                    <div class="{% if instance.image_banner %}fifteen{%else%}eleven{%endif%} wide column" style="padding-bottom: 0;padding-right: 0;">
+                        <div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
+                            <div class="ui grid">
+                                {% if instance.image_banner %}
+                                <div class="sixteen wide column" style="padding: 0">
+                                    <img src="{{ instance.image_banner.url }}" style="height: 200px; width: 100%;">
+                                </div>
+                                {% endif %}
+                                <div class="eleven wide column" style="padding: 0">
+                                    <div class="group-name">
+                                        {% if instance.image_banner %}
+                                            {% if instance.image_icon %}
+                                            <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
+                                            {% else %}
+                                            <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
+                                            {% endif %}
+                                        {% endif %}
+                                        <span class="ui header ava-title">{{ instance.title }}</span>
+                                    </div>
+                                </div>
+                                <div class="five wide column" >
+                                </div>  
+                            </div>
+                        </div>
+                    {% if instance.image_banner %}    
+                    </div>
+                    <div class="eleven wide column" style="padding-right: 0">
+                    {% endif %}
+                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;{% if not course.image %}margin-top: 0{% endif %}">
+                            Информация
+                        </div>                        
+                        <div class="ui segment" style="{% if not course.image %}margin-top: 0{% endif %}">
+                            <div class="ui grid">
+                                <div class="one wide column">
+                                    <i class="icon list" style="font-size: 17px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;">
+                                    {{ instance.get_markdown }}
+                                </div>
+                                <div class="one wide column">
+                                    <i class="icon id badge" style="font-size: 20px;padding: 0;margin-left: -5px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;">
+                                    Урок ведет:
+                                    <a href='{{ instance.teacher.all.0.get_absolute_url }}'>{{ instance.teacher.all.0.first_name }}</a>
+                                </div>
+                                <div class="one wide column">
+                                    <i class="icon calendar alternate" style="font-size: 20px;padding: 0;margin-left: -5px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;">
+                                    Начало курса: {{ instance.start_date }}
+                                    <br>
+                                    Окончание: {{ instance.end_date }}
+                                </div>
+                            </div>                            
+                        </div>
+                        {% if profile.is_trener %}
+                            {% include 'subjects/subject_calendar.html' %}
+                        {% endif %}
+                        {% include 'subjects/chart.html' %}
+                        {% include 'subjects/dated_materials.html' %}
+                    </div>
+                    <div class="four wide column" style="padding-right: 0;">
+                        {% if not instance.image_banner %}
+                        <div class="ui segment">
+                            {% if instance.image_icon %}
+                            <img src="{{ instance.image_icon.url }}" style="width: 100%;">
+                            {% else %}
+                            <img style="width: 100%; " src="{% static 'images/squad.png' %}">
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        {% if instance.teacher.all.0 == profile or profile.user.is_superuser %}
+                        <div class="ui segment" style="color: #67707a;">
+                            <a href="{{ instance.get_update_url }}">
+                                <div class="ui grid">
+                                    <span class="two wide column">
+                                        <i class="icon cog" style="font-size: 20px;"></i>
+                                    </span>
+                                    <span class="thirteen wide column">
+                                        Управление
+                                    </span>                                    
+                                </div>
+                            </a>
+                            <a href="{{ instance.get_delete_url }}">
+                                <div class="ui grid">
+                                    <span class="two wide column">
+                                        <i class="icon x" style="font-size: 20px;"></i>
+                                    </span>
+                                    <span class="thirteen wide column">
+                                        Удалить
+                                    </span>                                    
+                                </div>
+                            </a>
+                        </div>
+                        {% endif %}
+                        <div class="ui segment">
+                            <a href="{{ instance.lessons_url }}">
+                                Уроки <span style="color: #939393;"></span>
+                            </a>
+                            <div style="margin-top: 14px;">
+                                {% for material in instance.materials.all %}
+                                    {% for lesson in material.lessons.all %}
+                                        {% if forloop.counter < 4 %}
+                                        <div style="padding-bottom: 10px; font-size: 15px;">
+                                            <a href="{{ lesson.get_absolute_url }}">
+                                                <img src='{% static "images/doc.png" %}' style="height: 15px;">
+                                                {{ lesson.title }}
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if videos|length > 0 or youtubes|length > 0 %}
+                        <div class="ui segment">
+                            <a href="{{ instance.videos_url }}">
+                                Видеозаписи
+                            </a>
+                            <div style="margin-top: 14px;padding: 10px;" class="ui grid">
+                            {% for video in videos %}
+                                <div style="padding: 0; margin-bottom: 18px;">
+                                    <video style="width: 100%; height: 112px;border-radius: 5px;padding: 0; border: none;" controls>
+                                        <source src="{{ video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            {% endfor %}
+                            {% for youtube in youtubes %}
+                            <div style="padding: 0; margin-bottom: 18px;">
+                                    <iframe style="width: 100%; height: 112px;border-radius: 5px;padding: 0; border: none;" src="{{ youtube }}" allowfullscreen></iframe>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'subjects/subject_materials.html' %}
+<span class="day_id" id="" group_id = '{{ instance.id }}'></span>
+
+{% endblock content %}

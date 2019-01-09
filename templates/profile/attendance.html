@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<style type="text/css">
+    .switch_btn_active{
+        background-color: #5181b8;
+        color: white;
+    }
+    .switch_btn_active:hover{
+        color: white;
+    }
+</style>
+{% if hisprofile == profile or profile.is_manager %}
+    <div class="ui segment" style="margin-bottom: 0">
+        <div class="ui grid">
+            <div class="one wide column" style="margin-right: 14px;">
+                <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            </div>
+            <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+                Журналы
+            </div>
+        </div>
+    </div> 
+    <div class="ui segment" style="margin-top: 0">
+    {% if hisprofile.is_trener %}
+        {% for subject in hisprofile.teachers_subjects.all %}
+        <a style="padding: 14px; font-size: 13px;" class="open_attendance" id="{{ subject.id }}">
+            <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
+        </a>
+        {% endfor %} 
+        {% for subject in hisprofile.teachers_subjects.all %}
+            <div style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="subject{{ subject.id }}" class="subject_attendance">
+            {% include 'profile/att_details.html' %}
+            </div>
+        {% endfor %} 
+    {% else %}
+        {% for subject in hisprofile.hissubjects.all %}
+        <a style="padding: 14px; font-size: 13px;">
+            <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
+        </a>
+        {% endfor %} 
+        {% for subject in hisprofile.hissubjects.all %}
+            <div style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="subject{{ subject.id }}" class="subject_attendance">
+            {% include 'profile/att_details.html' %}
+            </div>
+        {% endfor %}     
+    {% endif %}
+    </div> 
+{% endif %}

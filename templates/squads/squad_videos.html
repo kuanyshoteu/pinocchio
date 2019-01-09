@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+
+{% block content %}
+<div id="group-details" style="padding-bottom: 50px;">
+    {% if user.is_authenticated %}
+    <a id="go-back-btn"  href='{{ instance.get_absolute_url }}'>
+        <i class="arrow left icon"></i>Назад
+    </a>
+    {% endif %}
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px; font-size: 16px; color: #000;">
+                    <a href="{{ instance.get_absolute_url }}" style="color: #656565;">{{ instance.title }}</a><i class="icon angle right"></i>Видео
+                </div>
+                <div class="ui grid segment" style="padding: 15px;margin-top: 0">
+                    {% for lesson in instance.lessons.all %}
+                        {% for paper in lesson.papers.all %}
+                            {% for subtheme in paper.subthemes.all %} 
+                                {% if subtheme.video %}
+                                <div class="five wide column" style="padding: 5px;">
+                                    <video style="width: 100%; height: 136px;border-radius: 5px;padding: 0; border: none;" controls>
+                                        <source src="{{ subtheme.video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                {% endif %}
+                                {% if subtheme.youtube_video_link != '' %}
+                                <div class="five wide column" style="padding: 5px;">
+                                    <iframe style="width: 100%; height: 136px;border-radius: 5px;padding: 0; border: none;" src="{{ subtheme.youtube_video_link }}"></iframe>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

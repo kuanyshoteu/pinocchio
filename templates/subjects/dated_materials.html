@@ -1,0 +1,47 @@
+{% load ttags %}
+<div class="ui segment">
+    {% for material in instance.materials.all %}
+    {% if material.number <= instance.number_of_lectures %}
+    {% if material|findorder:profile != 'de' or profile.is_trener %}
+    <div style="padding: 0 14px 14px 0">
+        <a class="open_time_lessons" status="closed" id="{{ material.id }}">
+            <i class="icon angle right" id="iconright{{ material.id }}"></i>
+            <i class="icon angle down" style="display: none;" id="icondown{{ material.id }}"></i>
+            {% if profile.is_trener %}
+                <span style="color: black;">{{ material.number }} урок</span>
+            {% else %}
+                <span style="color: black;">
+                    {% for x in material|findorder:profile %}
+                    {{ x }}
+                    {% endfor %}
+                </span>
+            {% endif %}
+        </a> 
+        <div class="ui divider" style="margin-bottom: 0"></div>
+        <div style="display: none; margin-left: 35px;" id="time_lessons{{ material.id }}"> 
+            {% if material.lessons.all|length == 0 %}
+                <span id="pusto{{ material.id }}" style="color: grey; font-size: 12px;">Пока нет материала</span>
+            {% endif %}
+            <div id="lesson_list{{ material.id }}">
+                {% for lesson in material.lessons.all %}
+                <div style="padding-top: 10px;">
+                    <a href="{{ lesson.get_absolute_url }}">
+                        <span>{{ lesson.title }}</span>
+                    </a>
+                    {% if lesson.is_homework %}
+                        <span style="color: #21BA45; font-size: 11px; margin-left: 15px;">Домашка</span>
+                    {% endif %}
+                </div>
+                <div class="ui divider" style="margin-bottom: 0"></div>
+                {% endfor %}
+            </div>
+            
+            {% if profile.is_trener %}
+            <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+</div>

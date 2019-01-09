@@ -1,0 +1,142 @@
+{% load tagss %}
+{% load staticfiles %}
+<div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
+    <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
+        {% if profile.is_trener == False %}
+            {% if task|is_correct:profile == True %}
+                <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px; ">{{ forloop.counter }}.</span>
+            {% else %}
+                <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
+            {% endif %}
+            {% if task|is_correct:profile == True and task.is_test %}
+                <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+            {% else %}
+                <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+            {% endif %}
+        {% endif %}
+        {% if profile.is_trener %}
+            <a class="edit" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="delete_task edit" id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
+            <br>
+            <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
+            <div class="ui mini modal" id="modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">
+                <i class="close icon"></i>
+                <div class="header text-center">
+                    Изменить задачу
+                </div>
+                <div class="content">
+                    <form class="ui form {{ task.id }}edit_text_form" method='POST' enctype='multipart/form-data' style="margin-bottom: 0;">{% csrf_token %}
+                        <b>Условие: </b>
+                        <textarea type="text" class='change_task_textl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 60px; margin-bottom: 5px;">{{ task.text }}</textarea>
+                        {% if task.is_test %}
+                            <b>Варианты:</b>
+                            <br>
+                            {% for variant in task.variants %}
+                                <div style="display: flex;">
+                                    <label class="test_variant" style="width: 35px !important; height: 35px;" for="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">
+                                        {% load tags %}
+                                        <input {% if task.is_mult_ans %}type="checkbox"{% else %}type="radio"{% endif %}
+                                         class="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}" value="{{ variant }}" name="selector" 
+                                            {% if variant in task.answer %}checked{% endif %}
+                                        >
+                                    </label>
+                                    <textarea style="width: 200px;" class="variant_value_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">{{ variant }}</textarea>
+                                </div>
+                                <br>
+                            {% endfor %}
+                        {% else %}
+                            <b>Ответ: </b>
+                            <br>
+                            <textarea type="text" class='change_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 200px; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
+                        {% endif %}
+                        <br>
+                        <b>Возможное колличество баллов: </b>
+                        <br>
+                        <textarea type="text" class='change_task_costl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style=" height: 40px; padding: 5px;">{{ task.cost }}</textarea>
+                        <br><br>
+                        <a class="ui button mini blue change_task_text" paper_id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="{{ task.id }}" data-href='{{ task.change_text_url }}'>Сохранить</a>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+
+        <span style="font-size: 17px;">{{ task.text }}</span>
+        {% if task.image %}
+        <img style="height: 50px;" src="{{ task.image.url }}">
+        {% endif %}
+        <div style="margin-top: 10px;">
+            <a class="ui label">
+              <img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 15px !important;">
+              {{ task.cost }}
+            </a>        
+            {% for tag in task.tags.all %}
+                <a class="ui label">
+                    {{ tag.title }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="sixteen wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            {% if task.is_test %}
+                <span class="task_type_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" type="test" style="display: none;"></span>
+                {% for variant in task.variants %}
+                <div style="display: flex;">
+                    <label class="test_variant" for="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">
+                        {% load tags %}
+                        <input {% if task.is_mult_ans %}type="checkbox"{% else %}type="radio"{% endif %}
+                        {% if profile.is_trener == False %}
+                            class="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}" value="{{ variant }}" name="selector" 
+                            {% if variant in task|hisanswers:profile %}checked{% endif %}
+                        {% elif profile.is_trener %}
+                            {% if variant in task.answer %}checked{% endif %}
+                        {% endif %}
+                        > {{ variant }}
+                    </label>
+                </div>
+                <br>
+                {% endfor %}
+            {% else %}
+                <span class="task_type_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" type="input" style="display: none;"></span>
+                {% for ans in task.answer %}
+                    <b>Ответ {% if task.answer|length > 1 %}{{ forloop.counter }}{% endif %}:</b>
+                    {% if profile.is_trener %}
+                        <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
+                    {% else %}
+                        <br>
+                        <textarea class="ans_textarea check_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">{{ task|hisanswer:profile }}</textarea>
+                        {% if task|is_correct:profile == True %}
+                            <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+                        {% else %}
+                            <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% if profile.is_trener == False and task|is_correct:profile == False %}
+                <a class="ui button mini blue check_task_answer" style="display: inline-block;margin-left: 20px;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' paper='clsw' paper_id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}'>Отправить</a>
+                <div id='coins_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' class="" style="display: none;">
+                    <div class="ui grid" style="width: 100px;">
+                        <div class="four wide column" style="padding: 0;line-height: 30px;">
+                            <h4>+{{ task.cost }}</h4>                                        
+                        </div>
+                        <div class="twelve wide column" style="padding: 0">
+                            <img style="width: 30px;" src="{% static 'images/coins_gold.png'%}">                
+                        </div>
+                    </div>
+                </div> 
+            {% endif %}
+        </form>
+        <div class="ui segment wrong_answer_alert_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" style="display: none;">
+            {% if profile.is_trener == False %}
+            <span style="color: #DB2828;">
+                Упс! Неверно, попробуйте еще раз!
+            </span>
+            {% else %}
+            <span style="color: #32CD32;">
+                Ответ изменен
+            </span>
+            {% endif %}  
+        </div>
+    </div>
+</div>

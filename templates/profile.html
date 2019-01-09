@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block head_title %}
+{{ hisprofile.first_name }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+{{ form.media }}
+{{ paper_form.media }}
+{% endblock head_extra %}
+
+{% block content %}
+<span class="page_status" style="display: none;" status='start_info'></span>
+<a id="go-back-btn" class="start_info_btn" style="display: none;">
+    <i class="arrow left icon"></i>Назад
+</a>
+
+<div id="profile">
+    <div class="ui container" >
+        <div class="ui stackable grid">
+            {% include 'left_menu.html' %}
+            <div class="eleven wide column" style="margin-left: 10px;">
+                {% include 'profile/classwork.html' %}
+                <div class="ui stackable grid info">
+                    <div class="four wide column left-side" style="padding: 14px 0;">
+                        {% include 'profile/avatar.html' %}
+                    </div>
+                    <div class="twelve wide column right-side" style="padding-top: 0">
+                        {% include 'profile/main_info.html' %}
+                        <div class="">
+                            <div class="ui tab active" id="detailed_info"> 
+                                {% include 'profile/hissubjects.html' %}
+                                {% include 'profile/attendance.html' %}     
+                                {% include 'profile/trello_cards.html' %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

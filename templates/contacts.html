@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+
+<script src="https://maps.api.2gis.ru/2.0/loader.js"></script>
+
+<div id="contacts">
+    <div class="ui container">
+        <div class="ui grid stackable">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                <div class="ui segment" style="padding: 20px;">
+                    <div class="ui grid stackable">
+                        <div class="eight wide column">
+                            <h3>Наше местоположение:</h3>
+                            <div class="content">
+                                <div id="map" style="width: 100%; height: 400px;">
+                                </div>
+                                <script>
+                                    DG.then(function () {
+                                        map = DG.map('map', {
+                                            center: [43.265300, 76.937717],
+                                            zoom: 16,
+                                        });
+                                        DG.marker([43.265300, 76.937717]).addTo(map).bindPopup('1-й этаж, офис 107');
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        <div class="eight wide column">
+                            <h3>Наши данные:</h3>
+                            <div class="ui list">
+                                <div class="item">
+                                    <i class="map marker alternate icon icon"></i>
+                                    <div class="content">
+                                        <b>Адрес:</b> г. Алматы, ул. Желтоксан 37а, 1-й этаж, офис 107
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <i class="phone icon"></i>
+                                    <div class="content">
+                                        <b>Телефон:</b> +7 708 070 63 70
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <i class="instagram icon"></i>
+                                    <div class="content">
+                                        <b>Instagram:</b> <a
+                                            href="https://www.instagram.com/triple_a_academy/">@triple_a_academy</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

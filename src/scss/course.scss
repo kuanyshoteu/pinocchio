@@ -1,0 +1,93 @@
+#course-list{
+  .title-course{
+    font-size: 24px;
+    font-weight:600;
+  }
+  .star-rating{
+    font-size: 20px;
+    color: #fff;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+}
+
+#course-detail{
+  .course-info{
+    margin-top: 20px;
+
+    .title-course{
+      font-size: 24px;
+      font-weight:600;
+    }
+    .star-rating{
+      position: relative;
+      top: -5px;
+      font-size: 20px;
+      color: #FFE623;
+    }
+  }
+
+  .course-content{
+    margin-top: 20px;
+
+  }
+  img{
+    width: 300px;
+    height: auto;
+    margin-top: 10px;
+  }
+
+
+
+}
+#course-submit{
+  width:44.6%;
+}
+
+
+#card-course{
+  margin-right: 50px;
+  background-color: #2c333b;
+
+  a{
+    color:#fff;
+  }
+  div{
+    color:#fff;
+  }
+
+  .course-level{
+    font-weight: 600;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+}
+
+.olymp-image{
+  width: 100%;
+  height: auto;
+}
+
+#course-details {
+  background-color: #2c333b;
+  width:30%;
+  float: left;
+  margin-right: 50px;
+  .admin-rules {
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  a, span, h3 {
+    color: #fff;
+  }
+  .star-rating {
+    font-size: 20px;
+    color: #fff;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  h3{
+    margin-top: 10px;
+  }
+}

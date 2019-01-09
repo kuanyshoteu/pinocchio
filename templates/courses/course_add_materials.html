@@ -1,0 +1,41 @@
+{% load staticfiles %}
+<span class="day_id" id="" group_id = '{{ course.id }}' style="display: none;"></span>
+<div class="ui modal" id="materials">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        <h3 class="parent_title">Материалы</h3>
+    </div>
+    <div class="data">
+        <span class="parent_folder_id", parentId='none' parentTitle='Материалы' style="display: none;"></span>
+    </div>
+    <div class="content">
+        <a class="back_to_parent" style="display: none;"><i class="arrow left icon"></i>Назад</a>
+        <div id="papers" class="ui grid stackable" style="margin: 0">
+        {% for lesson in lessons %}
+            <div class="two wide column paper" id="all_paper{{ lesson.id }}"
+            {% if lesson.folder.all.0 %} style="display: none;" parent='{{ lesson.folder.all.0.id }}' {% else %} parent='none' {% endif %} 
+            >
+                <a style="cursor: pointer;" class="add_paper" id="{{ lesson.id }}" title="{{ lesson.title }}" data-href='{{ course.add_lesson_url }}'>  
+                    <img src="{% static 'images/doc.png' %}" id="paper_image{{ lesson.id }}" style="height: 50px;">
+                    <br>
+                    <span id="paper_title{{ lesson.id }}">{{ lesson.title }}</span>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="ui divider"></div>
+        <div id="folders" class="ui grid stackable" style="margin: 0">
+        {% for folder in folders %}
+            <div class="two wide column folder" id="all_folder{{ folder.id }}"
+            {% if folder.parent %} style="display: none;" parent='{{ folder.parent.id }}' {% else %} parent='none' {% endif %}
+            >
+                <a class="open_folder" id="{{ folder.id }}" title="Папка {{ folder.title }}">
+                    <img src="{% static 'images/folder.png' %}" id="folder_image{{ folder.id }}" style="height: 50px;">
+                    <br>
+                    <span id="folder_title{{ folder.id }}">{{ folder.title }}</span>
+                </a>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>

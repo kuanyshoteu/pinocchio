@@ -1,0 +1,19 @@
+<div class="ui tiny modal" id="registration-modal">
+    <i class="close icon"></i>
+    <div class="header">
+        Modal Title
+    </div>
+    <div class="content">
+        <h1 style="text-align: center;">{{ title }}</h1>
+        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            <div class="ui input" style="display:block;">
+                {{ form }}
+            </div>
+            <input type='submit' class='ui button green'style="margin-top:20px;width:100%;" value='{{ title }}' />
+        </form>
+    </div>
+    <div class="actions">
+        <div class="ui button">Cancel</div>
+        <div class="ui button">OK</div>
+    </div>
+</div>

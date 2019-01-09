@@ -1,0 +1,68 @@
+{% load crispy_forms_tags %}
+<div class="ui tiny modal" id="{{ time.0.2 }}squad" style="width: 700px;">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Посещаемость и оценки группы <a href="{{ time.0.0.get_absolute_url }}">{{ time.0.0.title }}</a>
+        <br>
+        <span style="font-size: 13px; font-weight: 400;">{{ time.0.1.0.timestamp }}</span>
+    </div>
+    <div class="content">
+        <div class="ui grid">
+            <div class="five wide column">
+                <span style="font-size: 11px; color: grey;">Ученики:</span>
+            </div>
+            <div class="eight wide column">
+                <span style="font-size: 11px; color: grey;">Посещаемость:</span>
+            </div>
+            <div class="three wide column">
+                <span style="font-size: 11px; color: grey;">Оценка:</span>
+            </div>
+        </div>                            
+        <form class="ui form" method='POST' >{% csrf_token %}
+            {% for profile_atnds in time.0.1 %}
+                <div class="ui grid">
+                    <div class="five wide column">
+                        {{ profile_atnds.student.user }}
+                    </div>
+                    <div class="eight wide column">
+                        {% if profile_atnds.present == 'present' %}
+                        <a class="ui button mini present green" id="present{{ profile_atnds.id }}" id2="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}'>
+                            На уроке
+                        </a>
+                        {% else %}
+                        <a class="ui button mini present" id="present{{ profile_atnds.id }}" id2="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}'>
+                            На уроке
+                        </a>
+                        {% endif %}
+                        {% if profile_atnds.present == 'absent' %}
+                        <a class="ui button mini absent red" id="absent{{ profile_atnds.id }}" id2="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}'>
+                            Отсутсвует
+                        </a>
+                        {% else %}
+                        <a class="ui button mini absent" id="absent{{ profile_atnds.id }}" id2="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}'>
+                            Отсутсвует
+                        </a>    
+                        {% endif %}
+                        {% if profile_atnds.present == 'late' %}
+                        <a class="ui button mini late yellow" id="late{{ profile_atnds.id }}" id2="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}'>
+                            Опоздал
+                        </a>               
+                        {% else %}
+                        <a class="ui button mini late" id="late{{ profile_atnds.id }}" id2="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}'>
+                            Опоздал
+                        </a>               
+                        {% endif %}
+                    </div>
+                    <div class="three wide column">
+                        <input type="text" class="grade" id='{{ profile_atnds.id }}' name="{{ profile_atnds.id }}" data-href='{{ profile_atnds.student.change_att_url }}' {% if profile_atnds.grade > 0 %} placeholder='{{ profile_atnds.grade }}'{% endif %}/>
+
+                        <input type='hidden' id="att{{ profile_atnds.id }}" name="att{{ profile_atnds.id }}" value='{{ profile_atnds.present }}'>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+            <br><br>
+        </form>
+    </div>
+</div>
+

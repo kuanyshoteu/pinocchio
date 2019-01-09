@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block head_title %}
+{{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+
+
+{% block content %}
+
+
+
+<div class="ui container">
+    <div class="ui icon message">
+        <i class="exclamation triangle icon"></i>
+        <div class="content" style="margin-top:0;">
+            <div class="header">
+                Are you sure you want to delete: "{{ object.title }}"?
+            </div>
+            <form method="POST" action="." style="margin-top:20px"> {% csrf_token %}
+                <input type='submit' value='Confirm' class='ui button green'>
+                <a href='{{ object.get_absolute_url }}' class='ui button red'>Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

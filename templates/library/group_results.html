@@ -1,0 +1,41 @@
+<div style="margin-top:10px; margin-bottom: 20px;">
+<h4>Результаты групп:</h4>
+{% for squad in paper.squad_list.all %}
+<a class="open_group_details_hmw ui segment {{ lesson.id }}{{ squad.0.id }}squad_results" id='{{ forloop.counter }}'
+   style="padding: 10px 30px 10px; background-color: #5181b8; margin-right: 10px;color: white; outline: none;border-radius:2px;cursor: pointer;text-decoration: none;">
+    {{ squad.title }}
+</a>
+<table class="ui celled table text-center group_details" id='{{ forloop.counter }}details_hmw'
+       style="width: 50%; display: none;">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>ex hw</th>
+        <th>hw</th>
+        <th>Class</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for squad_results in squad.1 %}
+    <tr>
+        <td>
+            {{ forloop.counter }}
+        </td>
+        <td><p>{{ squad_results.0.user }}</p></td>
+        <td><p>{{ squad_results.1 }}%</p></td>
+        <td><p>{{ squad_results.1 }}%</p></td>
+        <td><p>{{ squad_results.1 }}%</p></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endfor %}
+<br><br>
+    {% if profile == hisprofile or profile.user.username == main_page.admin_name %}
+        <a href="{{ lesson.get_delete_url }}" style="float: right;">
+            <i class="trash alternate icon" style="font-size: 18px; color: red;"></i>
+        </a>
+        <br>
+    {% endif %}
+</div>

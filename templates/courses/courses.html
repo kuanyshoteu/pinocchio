@@ -1,0 +1,117 @@
+{% load tags %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.0/slick.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/jquery.slick/1.5.0/slick-theme.css">
+<style type="text/css">
+  blockquote{
+    margin: 0 !important;
+  }
+  .slick-prev {
+    left: -15px;
+  }
+  .slick-next {
+    right: -15px;
+  }
+  .slick-prev:before, .slick-next:before {
+    opacity: 1;
+  }
+</style>
+{% include 'courses/course_sets.html' %}
+{% if profile.is_trener %}
+<div class="ui segment" style="background-color: #fafbfc;margin-top: 7px;">
+    <div class="ui grid">
+          <div class="one wide column" style="margin-right: 7px;">
+              <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
+          </div>
+          <div class="fourteen wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+              Управление
+              <div style="float: right;">
+                  <a class="ui button mini blue create_paper" href='{{ profile.create_course_url }}'>
+                    Создать курс
+                  </a>
+              </div>
+          </div>
+      </div>
+</div>
+{% endif %}              
+<div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
+    <div class="ui grid">
+          <div class="one wide column" style="margin-right: 7px;">
+              <img src="{% static 'images/rocket.png' %}" style="width: 28px;border-radius: 3px;">  
+          </div>
+          <div class="fourteen wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+              Самые популярные курсы
+          </div>
+      </div>
+</div>
+<div class="ui segment" style="margin-top: 0;margin-bottom: 20px;background-color: #88ABD3">
+    <section role="complementary" class="simple white-back quotes no-fouc" style="height: 350px; width: 100%;">
+        <blockquote>
+            <div id="papers" class="ui grid stackable" style="margin: 0">
+                {% for course in courses %}
+                <div class="four wide column" id="all_course{{ course.id }}" style="padding: 14px 7px;">
+                    {% include 'courses/course_block.html' %}
+                </div>
+                {% endfor %}
+            </div>
+        </blockquote>
+        <blockquote>
+          <div id="papers" class="ui grid stackable" style="margin: 0">
+            {% for course in courses %}
+            <div class="four wide column" id="all_course{{ course.id }}" style="padding: 14px 7px;">
+                {% include 'courses/course_block.html' %}
+            </div>
+            {% endfor %}
+          </div>
+        </blockquote>
+    </section>
+</div>
+<div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;margin-top: 50px;">
+    <div class="ui grid">
+          <div class="one wide column" style="margin-right: 7px;">
+              <img src="{% static 'images/free.png' %}" style="width: 28px;border-radius: 3px;">  
+          </div>
+          <div class="fourteen wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+              Бесплатные курсы
+          </div>
+      </div>
+</div>
+<div class="ui segment" style="margin-top: 0;margin-bottom: 0;background-color: #fff">
+    <section role="complementary" class="simple white-back quotes no-fouc" style="height: 350px; width: 100%;">
+        <blockquote>
+            <div id="papers" class="ui grid stackable" style="margin: 0">
+                {% for course in courses %}
+                <div class="four wide column" id="all_course{{ course.id }}" style="padding: 14px 7px;">
+                    {% include 'courses/course_block.html' %}
+                </div>
+                {% endfor %}
+            </div>
+        </blockquote>
+        <blockquote>
+          <div id="papers" class="ui grid stackable" style="margin: 0">
+            {% for course in courses %}
+            <div class="four wide column" id="all_course{{ course.id }}" style="padding: 14px 7px;">
+                {% include 'courses/course_block.html' %}
+            </div>
+            {% endfor %}
+          </div>
+        </blockquote>
+    </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js"></script>
+<script type="text/javascript">
+    $('.quotes').slick({
+  dots: true,
+  infinite: true,
+  autoplay: true,
+  autoplaySpeed: 6000,
+  speed: 800,
+  slidesToShow: 1,
+  adaptiveHeight: true
+});
+    $( document ).ready(function() {
+$('.no-fouc').removeClass('no-fouc');
+});
+  </script>

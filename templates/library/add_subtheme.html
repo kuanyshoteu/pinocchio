@@ -1,0 +1,28 @@
+{% load crispy_forms_tags %}
+{{ subtheme_form.media }}
+<a class="ui button blue edit" onclick="$('#l{{ lesson.id }}p{{ paper.id }}add_subtheme_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}' style="margin-top:10px; cursor: pointer;">
+ + Добавить подраздел
+</a>
+<br><br>    
+
+<div class="ui mini modal" style="width: 70%; padding: 14px; height: 100%" id="l{{ lesson.id }}p{{ paper.id }}add_subtheme_modal">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Добавить подраздел в раздел {{ paper.title }}
+    </div>
+    <div class="content">
+        <form class="ui form add-subtheme" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="ui grid">
+                <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0">
+                    <input name='paper_id' style="display: none;" value='{{ paper.id }}'>
+                    {{ subtheme_form|crispy }}
+                </div>
+            </div>
+
+            <br>
+            <input type='submit' class='ui button blue' value='Сохранить' />
+            
+
+        </form>
+    </div>
+</div>

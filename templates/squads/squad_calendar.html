@@ -1,0 +1,102 @@
+{% load tttags %}
+<style type="text/css">
+    .icon.angle:before{
+        font-size: 20px;
+    }
+</style>
+<span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
+<div class="ui segment" style="margin-bottom: 0">
+    <div class="ui grid">
+      <div class="one wide column">
+          <i class="icon calendar alternate" style="font-size: 17px;"></i>
+      </div>
+      <div class="fifteen wide column" style="padding-right: 25px;">
+          Расписание
+      </div>
+  </div>
+</div>
+<div id="calendar" length='{{ instance.weeks.all|length }}' style="min-height: 300px;min-width: 100%">
+{% for week in instance.weeks.all %}
+    {% if week.actual %}
+        <span style="display: none;" class="week_id" id="{{ forloop.counter }}"></span>
+    {% endif %}
+    <div id="week{{ forloop.counter }}" style="{% if not week.actual %}display: none;{% endif %}padding-bottom: 0">
+        <div class="week" style="height: 27px;padding-top: 15px;padding-bottom: 0px;">
+            <div class="ui grid">
+                <div class="one wide column" style="padding-bottom: 0">
+                    <a class="leftt" ></a>
+                </div>
+                <div class="thirteen wide column center aligned" style="color: rgba(255, 255, 255, .5);padding-bottom: 0;padding-top: 2px;">
+                    {{ week.week_cells.all.0.date|date:'F' }}, {{ forloop.counter }} неделя 
+                </div>
+                <div class="two wide column" style="padding-bottom: 0">
+                    <a style="float: right;" class="rightt"></a>
+                </div>
+            </div>
+        </div>
+        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
+        <div class="week" id="0">
+            <div class="daysmall" style="padding-top: 17px;">
+            </div>
+            {% for week_cell in week|week_dates %}
+            {% if week_cell.date|date:'w' != '0' %}
+            <div class="daysmall">
+                <div class="day-name">
+                    <span>{{ week_cell.date|date:'l' }}</span>
+                    <br>
+                    <span style="color: white">{{ week_cell.date }}</span>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
+        {% for timep in time_periods %}
+        <div class="week" id="{{ forloop.counter }}">
+            <div class="daysmall" style="padding-top: 17px;">
+                {{ timep.start }}-{{ timep.end }}
+            </div>
+            {% for cell in week|time_cells:timep %} 
+            {% if cell.date|date:'w' != '0' %}                                       
+            <div class="daysmall other">
+                {% for material in cell.subject_materials.all %}
+                    <div class="ui segment" style="padding: 1px; background-color: #5181b8;box-shadow: none;margin-bottom: 0">
+                        <a style="color: #fff;" onclick="$('#lessons{{ material.id }}').modal('show')">
+                            {{ material.subject.title }}
+                            {% if cell.subject_materials.all|length == 1 %}
+                            <br>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ material.subject.teacher.all.0.first_name }}</span>
+                            <br>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ material.subject.cabinet }}</span>
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="ui modal" id="lessons{{ material.id }}" style="width: 68.75% !important;min-height: 100px;">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            {% if material.lessons.all|length == 0 %}
+                                Пока нет материалов
+                            {% endif %}
+                            <div class="ui grid stackable">
+                            {% for lesson in material.lessons.all %}
+                                <div class="two wide column">
+                                    <a href="{{ lesson.get_absolute_url }}" style="cursor: pointer;">
+                                        <img src="{{ main_page.paper_image.url }}" id="paper_image{{ lesson.id }}" style="height: 50px;">
+                                        <br>
+                                        <span id="paper_title{{ lesson.id }}">{{ lesson.title }}</span>
+                                    </a>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
+        {% endfor %}
+    </div>
+{% endfor %}
+</div>   

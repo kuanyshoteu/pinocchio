@@ -1,0 +1,18 @@
+
+<div class="ui tiny modal" id="signup-modal">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Запись на урок
+    </div>
+    <div class="content">
+        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            <div class="ui input text-center" id="go-ahead-r">
+                {{ signup_form }}
+                {{ signup_form2 }}
+                <br><br>
+                <input type='submit' class='ui button green btn-go text-center' value='Записаться' />
+            </div>
+        </form>
+    </div>
+</div>
+

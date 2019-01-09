@@ -1,0 +1,94 @@
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+<div class="start_urok" style="display: none;">
+	<div class="ui segment" style="background-color:#fafbfc;margin-bottom: 0;padding: 18px;">
+		<a class="open_allsquads current_squads" style="font-size: 15px;">Урок</a>
+		<a class="open_mysquads other_squads">
+            Домашки 
+        </a>
+	</div>
+	{% if lesson_now %}
+	<div class="allsquads" style="margin-top: 0">
+		<div class="ui segment">
+			<div class="ui grid">
+			{% for subject in classwork %}
+				<div class="{% if lesson_now %}sixteen{% else %}four{% endif %} wide column" style="padding-left: 20px;">
+					{% for material in subject.1 %}
+						<b>Класс {{ material.0.title }}</b>
+						<span style="color: grey;font-size: 11px;margin-right: 20px;">Урок {{ material.2.number }}</span>
+						<span style="color: grey;font-size: 11px">{{ material.1.date }} {{ material.1.time_period.start }}-{{ material.1.time_period.end }}</span>
+						{% for lesson in material.2.lessons.all %}
+							<div style="padding-top: 10px;">
+			                    <a>
+			                    	<img src='{% static "images/doc.png" %}' style="height: 15px;">
+			                        <span>{{ lesson.title }}</span>
+			                    </a>
+			                    {% if lesson.is_homework %}
+			                        <span style="color: #21BA45; font-size: 11px; margin-left: 0px;">Домашка</span>
+			                    {% endif %}
+			                </div>
+			                <div class="ui divider" style="margin-top: 5px"></div>
+						{% endfor %}
+						<br>
+					{% endfor %}
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+
+		{% for subject in classwork %}
+			{% for material in subject.1 %}
+				{% for lesson in material.2.lessons.all %}
+					{% include 'library/lesson.html' %}
+				{% endfor %}
+			{% endfor %}
+		{% endfor %}
+	</div>
+	{% else %}
+	<div class="ui segment allsquads" style="text-align: center;color: #656565;margin-top: 0;padding-bottom: 50px;">
+		<img src="{% static 'images/fun.png' %}" style="height: 200px;">
+		<br>
+		Урок еще не начался
+	</div>
+	{% endif %}	
+	<div class="mysquads" style="margin-top: 0; display: none;">
+		<div class="ui segment " style="margin-top: 0">
+			<div class="ui grid">
+			{% for subject in homeworks %}
+				<div class="{% if lesson_now %}sixteen{% else %}four{% endif %} wide column" style="padding-left: 20px;">
+					<h4>{{ subject.0.title }}</h4>
+					{% if subject.1.0 != 'none' %}
+						{% for material in subject.1 %}
+							<b>Класс {{ material.0.title }}</b>
+							<br>
+							{% if material != 'none' %}
+							<span style="color: grey;font-size: 11px;margin-right: 20px;">Урок {{ material.2.number }}</span>
+							<br>
+							<span style="color: grey;font-size: 11px">{{ material.1.date }} {{ material.1.time_period.start }}-{{ material.1.time_period.end }}</span>
+							{% for lesson in material.2.lessons.all %}
+								<div style="padding-top: 10px;">
+				                    <a href="{{ lesson.get_absolute_url }}">
+				                    	<img src='{% static "images/doc.png" %}' style="height: 15px;">
+				                        <span>{{ lesson.title }}</span>
+				                    </a>
+				                    {% if lesson.is_homework %}
+				                        <span style="color: #21BA45; font-size: 11px; margin-left: 0px;">Домашка</span>
+				                    {% endif %}
+				                </div>
+				                <div class="ui divider" style="margin-top: 5px"></div>
+							{% endfor %}
+							{% else %}
+								<span style="color: #656565;">Домашек нет</span>
+							{% endif %}						
+							<br>
+						{% endfor %}
+					{% else %}
+						<span style="color: #656565;">Уроки закончились</span>
+					{% endif %}
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>

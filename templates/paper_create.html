@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %} 
+	{{ form.media }}
+{% endblock head_extra %}
+
+
+{% block content %}
+
+<div class='ui container'>
+	<div class="ui segment" style="width:50%;line-height: 40px;">
+		<h1>Create Group</h1>
+		<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+			{{ form|crispy }}
+			<input type='submit' class='ui button green' style="margin-top: 20px;margin-bottom: 20px" value='Create Group' />
+		</form>
+	</div>
+
+</div>
+{% endblock content %}

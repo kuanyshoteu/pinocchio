@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+{% block content %}
+{% load staticfiles %}
+
+<div id="profile">
+    <div class='ui container'>
+        <div class="ui grid stackable">
+            {% include 'left_menu.html' %}
+            <div class="eight wide column">
+                {% if profile.is_trener %}
+                <div class="ui segment" style="padding: 7px 15px;">
+                    <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin-bottom: 0">{% csrf_token %}
+                        <div class="ui grid">
+                            <div class="one wide column" style="margin-top: 4px;">
+                                {% if profile.image %}
+                                <img style="width: 28px;border-radius: 100%;" src="{{ profile.image.url }}">
+                                {% else %}
+                                <img style="width: 28px;border-radius: 100%;" src="{% static 'images/nophoto.png' %}">        
+                                {% endif %}
+                            </div>
+                            <div class="fifteen wide column">
+                                <input type="text" name="" placeholder="Что у вас нового?" style="border: none;margin-bottom: 0;padding: 0 10px">
+                            </div>
+                        </div>
+                    </form>                 
+                </div>
+                {% endif %}
+                <div class="allposts">
+                    {% for post in posts %}
+                    {% include 'news/post_list_info.html' %}
+                    {% endfor %}
+                </div>
+                <div class="myposts" style="display: none;">
+                    {% if profile.is_manager %}
+                        {% for post in profile.post_trener.all %}
+                            {% include 'news/post_list_info.html' %}
+                        {% endfor %}
+                    {% else %}
+                        {% for post in profile.posts.all %}
+                            {% include 'news/post_list_info.html' %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="four wide column">
+                <div class="ui segment" style="padding-left: 0; padding-right: 0">
+                    {% if post_categories|length > 0 %}
+                        {% for category in post_categories %}
+                            <a class="full-w">{{ category.title }}</a>
+                        {% endfor %}
+                    {% else %}
+                    <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
+                        <a class="full-w" style="color: black;font-size: 13px;"><b>Новости</b></a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+      $(".group_action").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '#' + this_.attr("id") + 'group_action'
+        $(form_id).fadeToggle();
+      })
+    })
+</script>
+
+{% endblock content %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_extra %} 
+	{{ form.media }}
+{% endblock head_extra %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="group-create">
+	{% if instance %}
+	<a id="go-back-btn"  href='{{ instance.get_absolute_url }}'>
+        <i class="arrow left icon"></i>Назад
+    </a>
+	{% else %}
+	<a id="go-back-btn"  href='{% url "squads:list" %}'>
+        <i class="arrow left icon"></i>Назад
+    </a>
+    {% endif %}
+	<div class='ui container'>
+		<div class="ui grid stackable">
+            {% include 'left_menu.html' %}
+            <div class="eleven wide column">
+            	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+            		<div class="ui grid stackable">
+            			<div class="twelve wide column">
+            				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+				        		Основная информация
+				        	</div>
+				        	<div class="ui segment" style="margin-top: 0">
+				        		<div class="ui grid">
+				        			<div class="sixteen wide column" style="text-align: center;padding: 14px 25%;font-weight: 600">
+			        					{{ form|crispy }}
+			        					{% if instance %}
+			        					Классный руководитель:
+			        					<br>
+										<select id="change_teacher" class="change_teacher" subject_id="{{ instance.id }}" url="{{ instance.change_curator_url }}">
+											<option value="{{ instance.curator.all.0.id }}">{{ instance.curator.all.0.first_name }}</option>
+											{% for teacher in all_teachers %}
+												{% if teacher != instance.curator.all.0 %}
+													<option value="{{ teacher.id }}">{{ teacher.first_name }}</option>
+												{% endif %}
+											{% endfor %}
+										</select>
+						    			{% endif %}
+			        				</div>
+			        				<div class="sixteen wide column" style="margin: 0;padding: 0">
+				        				<div class="ui divider" style="margin: 0"></div>
+				        			</div>
+			        				<div class="six wide column">
+				        			</div>
+				        			<div class="ten wide column" style="text-align: left;">
+			        					{% if instance %}
+										<input type='submit' class='ui button blue tiny' value='Сохранить' />
+										{% else %}
+					    				<input type='submit' class='ui button blue tiny' value='Продолжить создание класса' />
+						    			{% endif %}
+			        				</div>
+			        			</div>
+			        		</div>
+			        		{% if instance %}
+            				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+				        		Ученики
+				        	</div>
+				        	<div class="ui segment" style="margin-top: 0">
+				        		<div class="ui grid">
+			        				<div class="sixteen wide column">
+				        				Добавить ученика:
+				        			</div>
+		        					<br><br>
+									{% for student in all_students %}
+									<div class="sixteen wide column">
+										<label class="test_variant" for="student{{ student.id }}">
+				                            <input name="student{{ student.id }}" type="checkbox" id="student{{ student.id }}"
+				                            {% if student in instance.students.all %}checked{% endif %}>
+			        						{% if student.image %}
+			                                    <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
+			                                {% else %}
+			                                    <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
+			                                {% endif %}
+				                            <span style="width:100%;">{{ student.first_name }}</span>
+				                        </label>
+				                    </div>
+				                    <br>    
+		                            {% endfor %}
+			        				<div class="sixteen wide column" style="margin: 0;padding: 0">
+				        				<div class="ui divider" style="margin: 0"></div>
+				        			</div>
+			        				<div class="sixteen wide column" style="margin: 0;">
+			        					<input type='submit' class='ui button blue tiny' value='Сохранить' />
+				        			</div>
+			        			</div>
+			        		</div>
+			        		{% endif %}
+			        	</div>
+			        	<div class="four wide column" style="padding: 14px 0;">
+							<div class="ui segment" style="height: 200px;position: fixed;width: 18%;padding: 0">
+								<a href="{{ instance.get_absolute_url }}" >
+									<div class="ui grid grey_hover" style="margin: 5px 0;">
+										<div class="four wide column" style="padding: 10px 5px 10px 14px;">
+											{% if instance.image_icon %}
+	                                        <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
+	                                        {% else %}
+	                                        <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
+	                                        {% endif %}
+										</div>
+										<div class="ten wide column" style="padding: 10px 0 0 5px;">
+											{{ instance.title }}
+											<br>
+											<span style="color: #777e8c;font-size: 12px;">вернуться к странице</span>
+										</div>
+									</div>
+								</a>
+								<div class="ui divider" style="margin: 5px;"></div>
+								<div style="border-left: 2px solid #5181b8;padding: 7px 18px;background-color: #f0f2f5;">
+			                        <a class="full-w" style="color: black;font-size: 13px;"><b>Настройки</b></a>
+			                    </div>
+							</div>
+						</div>  
+					</div>			
+	    		</form>
+			</div>
+		</div>
+	</div>	
+</div>
+
+
+{% endblock content %}

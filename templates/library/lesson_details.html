@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<a id="go-back-btn" href="{% if lesson.folder.all.0 %}{{ lesson.folder.all.0.get_absolute_url }}{% else %}{% url 'library:main' %}{% endif %}">
+    <i class="arrow left icon"></i>Назад
+</a>
+
+<div id="profile">
+    <div class="ui container" >
+        <div class="ui stackable grid">
+            {% include 'left_menu.html' %}
+            <div class="eleven wide column" style="padding-top: 20px;">
+				{% include 'library/lesson.html' %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}

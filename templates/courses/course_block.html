@@ -1,0 +1,61 @@
+{% load staticfiles %}
+{% load tags %}
+
+<div class="ui segment" style="padding: 0; box-shadow: 0 1px 6px rgba(31, 31, 31, 0.12), 0 1px 4px rgba(31, 31, 31, 0.12);">
+    <a id="{{ course.id }}" class="open_paper_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+    <div class="ui segment paper_features{{ course.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+        <a style="cursor: pointer;" class="file_action" object_type='paper' action='copy' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+        <div class="ui divider"></div>
+        <a style="cursor: pointer;" class="file_action" object_type='paper' action='cut' data-href='{{ profile.file_action_url }}' id="{{ course.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+        <div class="ui divider"></div>
+        <a class="delete_course" id="{{ course.id }}" data-href='{{ course.delete_course_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
+    </div>
+    <a href="{{ course.get_seller_url }}" style="cursor: pointer;padding: 56.2% 0 0 0;position: relative;display: block;">
+        {% if course.image %}
+            <img src="{{ course.image.url }}" id="paper_image{{ course.id }}" style="width: 100%;border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
+        {% else %}
+            <img src="{% static 'images/books.png' %}" id="paper_image{{ course.id }}" style="width: 100%;height: 45%; border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
+        {% endif %}
+        <img src="{% static 'images/calendar.png' %}" style="width: 45px; height: 45px;border-radius: 5px;position: absolute;z-index: 400; margin-top: -30px;margin-left: 18px;">
+        <div class="ui segment" style="height: 145px; margin-top: 0;margin-bottom: 0;border-radius: 0;padding: 35px 18px 18px 18px;">
+            <span id="paper_title{{ course.id }}" style="color: rgb(31, 31, 31);font-size: 16px;line-height: 1.5rem;">{{ course.title }} {% if profile in course.students.all or profile == course.author_profile %}<i class="icon check" style="color: #21BA45 !important"></i>{% endif %} </span>
+            <div class="ui grid" style="margin-top: 10px;">
+                <div class="eight wide column" style="padding-top: 0;padding-right: 0px;">
+                    <span style="display: block;font-size: 12px;">
+                        {% for star in course.stars %}
+                            <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: #F7BB56 !important;"></i>
+                        {% endfor %}
+                        {% for star in course.stars|notstars %}
+                            <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;"></i>
+                        {% endfor %}
+                    </span>
+                </div>
+                <div class="eight wide column" style="padding-top: 0;padding-left: 0">
+                    <span style="font-size: 11px;color: #56565a;font-weight: 600">{{ course.rating }}</span>
+                    <span style="font-size: 11px;color: #56565a;margin-left:10px;">
+                        <i class="icon eye" style="margin-right: 0px;"></i> 100{{ course.students|length }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+          <div class="ui grid">
+                <div class="four wide column" style="padding: 10px;">
+                    {% if course.author_profile.image %}
+                    <img src="{{ course.author_profile.image.url }}" style="width: 30px;border-radius: 100%">
+                    {% else %}
+                    <img src="{% static 'images/nophoto.png' %}" style="width: 30px;border-radius: 100%">
+                    {% endif %}
+                </div>
+                <div class="four wide column" style="padding: 7px 10px 10px 0;">
+                    <span style="display: block;font-size: 12px;color: #848484;">{{ course.author_profile.first_name }}</span>
+                    <span style="display: block;font-size: 11px;color: #848484;line-height: 11px;"><i>{{ course.author_profile.school }}</i></span>
+                </div>
+            </div>
+        </div>
+    </a>
+    <form class="ui form rename_paper{{ course.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+        <textarea style="padding: 0; height: 60px;" id='change_paper_name{{ course.id }}' type="text">{{ course.title }}</textarea>
+        <a class="ui button mini blue change_paper_name" id="{{ course.id }}" data-href='{{ course.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+    </form>
+</div>

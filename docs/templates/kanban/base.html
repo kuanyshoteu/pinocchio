@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% block head_extra %}
+{{ form.media }}
+{{ comment_form.media }}
+
+
+{% endblock head_extra %}
+<div id="profile">
+    <div class="ui container">      
+        <div class="ui stackable grid">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column"> 
+                {% for board in boards %}
+                <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
+                    <div class="ui grid">
+                        <div class="one wide column" style="margin-right: 7px;">
+                            <img src="{% static 'images/rocket.png' %}" style="width: 28px;border-radius: 3px;">  
+                        </div>
+                        <div class="five wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+                            Проект: <b>{{ board.name }}</b>
+                            <form action="/docs/delete-board/"  method="POST" style="display: inline-block;margin-left: 20px;margin-bottom: 0">{% csrf_token %}
+                                <input type="hidden" name="board_delete_id" value="{{ board.id }}" />
+                                <input type='submit' class='ui button mini' value='Удалить' />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div style='margin-top: 0; padding: 20px;' class="ui segment">
+                    <div class="ui stackable grid">
+                        {% for column in board.columns.all %}
+                        <div class="five wide column" data-column-id="{{ column.id }}" style="padding-right: 0">
+                            <div class="columnn" style="background-color: #88ABD3;color: #fff">
+                                <h4> 
+                                    {{ column.title }}
+                                    <a class="open_form_column" id='{{ column.id }}' style="cursor: pointer; float: right; width: 10px; margin-right: 10px;">
+                                      <i class="ui icon ellipsis horizontal" style="color: #fff !important"></i>
+                                    </a>
+                                </h4>
+                                <div style="display: none;" id="{{ column.id }}column">
+                                    <div class="ui segment" style="width: 230px; position: absolute;z-index: 500;margin-left: 50px;">
+                                        <p style="color: grey">Действия с разделом</p>
+                                        <hr style="background-color: grey">
+                                        <form action="/docs/delete-column/"  method="POST" class="ui form">{% csrf_token %}
+                                            <input type="hidden" name="column_delete_id" value="{{ column.id }}" />
+                                            <input type='submit' class="ui button mini red"  value='Удалить раздел' />
+                                        </form>
+                                    </div>
+                                </div>
+                                {% for card in column.cards.all %}
+                                <div class="card" draggable="true" data-card-id="{{ card.id }}">
+                                 {% if card.metka_list.all|length > 0 %}
+                                 <div style="margin-bottom: 2px;">
+                                  {% for metka in card.metka_list.all %}
+                                    <div style="margin: 5px 5px 0px 0; padding: 3px 4px;
+                                       {% if metka.name == 'Срочно' %}
+                                        background-color: #eb5a46; 
+                                       {% elif metka.name == 'В будущем' %}
+                                        background-color: #51e898;
+                                       {% endif %}
+                                       border-radius: 3px; cursor: pointer;" id="{{ metka.0.id }}">
+                                        <div style="padding: 0 0 0 10px;">
+                                          <span style="color: white; font-size: 12px;">{{ metka.name }}</span>
+                                        </div>
+                                    </div>    
+                                  {% endfor %}
+                                  </div>
+                                  {% endif %}
+                                 <a href="{{ card.get_absolute_url }}" style="padding: 8px 8px 8px 0;">{{ card.title }}</a>
+                                 <a class="open_form_card" id='{{ card.id }}' style="cursor: pointer; float: right; width: 10px; margin-right: 10px;"><i class="ui icon pencil alternate"></i></a>
+                                 <br>
+                                 {% if card.user_list.all|length > 0 %}
+                                 <br><br>
+                                 <div class="ui grid">
+                                  {% for usr in card.user_list.all %}
+                                    <div class="four wide column" style="padding: 0 0 14px 10px;">
+                                      <a href="{{ usr.get_absolute_url }}">
+                                      {% if usr.image %}
+                                      <img src="{{ usr.image.url }}" class="ui avatar image">
+                                      {% else %}
+                                      <img src='{{ main_page.image.url }}' class="ui avatar image">
+                                      {% endif %}
+                                      </a>
+                                    </div>
+                                  {% endfor %}
+                                  </div>
+                                  {% endif %}
+                                </div>
+                                <div style="display: none;" id="{{ card.id }}card">
+                                    <div class="ui segment" style="width: 230px; position: absolute;">
+                                      <p style="color: grey">Действия с карточкой</p>
+                                      <hr style="background-color: grey">
+                                       <form action="/docs/delete-card/"  method="POST" class="ui form">{% csrf_token %}
+                                        <input type="hidden" name="card_delete_id" value="{{ card.id }}" />
+                                        <input type='submit' style="background-color: white; cursor: pointer; border-width: 0;" class='' value='Удалить задание…' />
+                                       </form>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <form action="/docs/new-card/" method="POST" class="ui form">{% csrf_token %}
+                                    <input type="hidden" name="column_id" value="{{ column.id }}" />
+                                    <input type="text" name="title" class="new-card no-display" data-column-id="{{ column.id }}" />
+                                    <input type='submit' class='ui button green mini new-cardd no-display' data-column-id="{{ column.id }}" value='Добавить' />
+                                </form>
+                                <button class="show-new-card ui button mini yellow" data-column-id="{{ column.id }}">Добавить карточку</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <form action="/docs/new-column/" method="POST" class="ui form" style="margin-top: 20px;margin-bottom: 0;width: 200px;">{% csrf_token %}
+                        <input type="hidden" name="board_id" value="{{ board.id }}" />
+                        <input type="text" name="column_title" class="new-column no-display" data-board-id="{{ board.id }}" />
+                        <input type='submit' class='ui button green mini new-columnn no-display' data-board-id="{{ board.id }}" value='Добавить' />
+                    </form>
+                    <button class="show-new-column ui button mini blue" data-column-id="{{ board.id }}">Добавить раздел</button>
+                </div>
+                {% empty %}
+                <p><em>Заданий пока нет</em></p>
+                {% endfor %}
+                
+                <button class="show-new-board ui button mini blue">Добавить проект</button>                  
+                <form action="/docs/new-board/" method="POST" class="ui form" style="width: 300px;">{% csrf_token %}
+                    <input type="text" name="board_name" class="new-board no-display"/>
+                    <br>
+                    <input type='submit' class='ui button green mini new-boardd no-display' value='Добавить' />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//bensmithett.github.io/dragster/lib/dragster.js"></script>
+<script>
+    $(document).ready(function(){
+      $(".open_form_card").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '#' + this_.attr("id") + 'card'
+        $(form_id).fadeToggle();
+      })
+      $(".open_form_column").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '#' + this_.attr("id") + 'column'
+        $(form_id).fadeToggle();
+      })
+      $(".open_form_board").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '#' + this_.attr("id") + 'board'
+        $(form_id).fadeToggle();
+      })
+    })
+</script>
+
+ <script>
+  function parse_cookies() {
+   var cookies = {};
+   if (document.cookie && document.cookie !== '') {
+    document.cookie.split(';').forEach(function (c) {
+     var m = c.trim().match(/(\w+)=(.*)/);
+     if(m !== undefined) {
+      cookies[m[1]] = decodeURIComponent(m[2]);
+     }
+    });
+   }
+   return cookies;
+  }
+  const cookies = parse_cookies();
+
+  for (button of document.getElementsByClassName('show-new-card')) {
+   button.addEventListener('click', e => {
+    const newCard = document.querySelector('.new-card[data-column-id="' + e.currentTarget.dataset.columnId + '"]');
+    newCard.classList.remove('no-display');
+    e.currentTarget.classList.add('no-display');
+    newCard.focus();
+    const newCardd = document.querySelector('.new-cardd[data-column-id="' + e.currentTarget.dataset.columnId + '"]');
+    newCardd.classList.remove('no-display');
+    newCardd.focus();
+   });
+  }
+
+  for (button of document.getElementsByClassName('show-new-column')) {
+   button.addEventListener('click', e => {
+    const newColumn = document.querySelector('.new-column[data-board-id="' + e.currentTarget.dataset.columnId + '"]');
+    newColumn.classList.remove('no-display');
+    e.currentTarget.classList.add('no-display');
+    newColumn.focus();
+    const newColumnn = document.querySelector('.new-columnn[data-board-id="' + e.currentTarget.dataset.columnId + '"]');
+    newColumnn.classList.remove('no-display');
+    newColumnn.focus();
+   });
+  }
+  for (button of document.getElementsByClassName('show-new-board')) {
+   button.addEventListener('click', e => {
+    const newBoard = document.querySelector('.new-board');
+    newBoard.classList.remove('no-display');
+    e.currentTarget.classList.add('no-display');
+    newBoard.focus();
+    const newBoardd = document.querySelector('.new-boardd');
+    newBoardd.classList.remove('no-display');
+    newBoardd.focus();
+   });
+  }
+
+  for (card of document.getElementsByClassName('card')) {
+   card.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('Text', e.currentTarget.dataset.cardId);
+   });
+  }
+
+  for (element of document.getElementsByClassName('column')) {
+   new Dragster(element);
+   element.addEventListener('dragover', e => {
+    if (e.preventDefault) e.preventDefault();
+   });
+   element.addEventListener('dragster:enter', e => {
+    e.currentTarget.classList.add('dropme')
+   });
+   element.addEventListener('dragster:leave', e => {
+    e.currentTarget.classList.remove('dropme')
+   });
+   element.addEventListener('drop', e => {
+    e.currentTarget.classList.remove('dropme')
+    const postData = JSON.stringify({
+     'column_id': e.currentTarget.dataset.columnId,
+     'card_id': e.dataTransfer.getData('Text'),
+    });
+
+    fetch('/docs/drop/', {
+     credentials: 'same-origin',
+     method: 'post',
+     headers: {
+      'X-CSRFToken': cookies['csrftoken'],
+     },
+     body: postData,
+    }).then(response => {
+     if (response.ok) {
+      window.location = '/docs/';
+     } 
+    });
+
+   });
+  }
+ </script>
+
+{% endblock %}

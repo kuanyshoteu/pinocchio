@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% block head_extra %}
+{{ form.media }}
+{% endblock head_extra %}
+{% block content %}
+
+<div id="profile">
+    <div class='ui container'>
+        <div class="ui grid stackable">
+            {% include 'left_menu.html' %}
+            <div class="eight wide column">
+                <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
+                    <a class="open_allsubjects current_subjects">
+                        Все предметы 
+                        <span style="font-size: 13px;color: #939393;">{{ subjects|length }}</span>
+                    </a>
+                    <a class="open_mysubjects other_subjects">
+                        Мои предметы 
+                        <span style="font-size: 13px;color: #939393;">
+                            {% if profile.status == 'trener' %}
+                                {{ profile.subject_trener.all|length }}
+                            {% else %}
+                                {{ profile.subjects.all|length }}
+                            {% endif %}
+                        </span>
+                    </a>
+                    {% if user.is_staff %}
+                        <a class="ui button mini blue mini" style="float: right;" href='{% url "subjects:create" %}'>Создать новый предмет</a>
+                    {% endif %}
+                    
+                </div>
+                <div class="ui segment allsubjects" style="margin-top: 0;">
+                    {% for sq in subjects %}
+                    {% include 'subjects/subject_list_info.html' %}
+                    {% endfor %}
+                </div>
+                <div class="ui segment mysubjects" style="margin-top: 0; display: none;">
+                    {% if profile.status == 'trener' %}
+                        {% for sq in profile.subject_trener.all %}
+                            {% include 'subjects/subject_list_info.html' %}
+                        {% endfor %}
+                    {% else %}
+                        {% for sq in profile.subjects.all %}
+                            {% include 'subjects/subject_list_info.html' %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="four wide column">
+                <div class="ui segment" style="padding-left: 0; padding-right: 0">
+                    {% if subject_categories|length > 0 %}
+                        {% for category in subject_categories %}
+                            <a class="full-w">{{ category.title }}</a>
+                        {% endfor %}
+                    {% else %}
+                    <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
+                        <a class="full-w" style="color: black;font-size: 13px;"><b>Все предметы</b></a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+      $(".group_action").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '#' + this_.attr("id") + 'group_action'
+        $(form_id).fadeToggle();
+      })
+    })
+</script>
+
+{% endblock content %}

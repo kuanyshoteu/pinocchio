@@ -1,0 +1,49 @@
+{% load ttttags %}
+<div id="paper{{ squad.id }}sub{{ subject.id }}" class="ppr{{ subject.id }} {% if forloop.counter == 1 %}paper_active{% else %}paper{% endif %}" style="background-color: #4A4A4A; min-height: 200px">
+	<div class="ui grid" style="margin: 0">
+		<div class="three wide column">
+			<div style="padding-top: 5px;text-align: left;color: white;height: 81px;line-height: 81px;">
+		    </div>
+			{% for student in squad.students.all %}
+				<div style="padding-top: 5px;text-align: left;color: white;height: 30px;line-height: 30px;">
+			        {{ student.first_name }}
+			    </div>
+			{% endfor %}
+		</div>
+
+		{% for sm in subject.materials.all %}
+		{% if sm|find_sc:squad|length > 0 %}
+		<div class="two wide column" style="padding: 14px 3px;{% if forloop.counter > 7 %} display: none;{% endif %}" >
+			<div style="padding-top: 5px;text-align: left;color: white;">
+				{% for squad_cell in sm|find_sc:squad %}
+				<div style="height: 62px;">
+					{{ squad_cell.date }}
+				</div>
+                <div style="width: 100%;float: left;">
+                    <span style="font-size: 11px; color: grey;float: left;">
+                        {{ squad_cell.time_period.start }}-{{ squad_cell.time_period.end }}
+                    </span>
+                </div>
+                <br>
+            	{% for attendance in squad_cell|find_attendance:subject %}
+            	{% if attendance.student in squad.students.all %}
+            	<div style="width: 100%;height: 30px;">
+	                <div style="width: 50%;float: left;">
+	                    <form method='POST' style="margin: 0;" action='' enctype='multipart/form-data' class="ui form">{% csrf_token %}
+	                        <textarea id="attendance{{ attendance.id }}" style="margin: 0;padding: 1px;height: 22px;text-align: center;">{% if attendance.grade > 0 %}{{ attendance.grade }}{% endif %}</textarea>
+	                    </form>
+	                </div>
+	                <div style="width: 50%;float: left;">
+	                    <a id="{{ attendance.id }}" data-href="{{ attendance.change_url }}" class="ui button mini blue save_grade" style="padding: 5px 8px;">✓</a>
+	                </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+	                
+	            {% endfor %}
+			</div>
+		</div>
+		{% endif %}
+		{% endfor %}
+	</div>
+</div>

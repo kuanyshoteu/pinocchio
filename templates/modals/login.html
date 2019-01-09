@@ -1,0 +1,15 @@
+<div class="ui mini modal" id="login-modal">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Login
+    </div>
+    <div class="content">
+        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            <div class="ui input text-center" id="go-ahead">
+                {{ log_form }}
+            </div>
+            <input type='submit' class='ui button green btn-go' value='Login'/>
+        </form>
+    </div>
+</div>
+

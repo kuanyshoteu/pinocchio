@@ -1,0 +1,83 @@
+{% load staticfiles %}
+<div class="ui tab active" id="detailed_info">
+  <div class="ui segment" style=";margin-bottom: 0;background-color: #fafbfc;">
+    <h4 style="display: inline-block;">Уроки</h4>
+    {% if profile.is_trener %}
+    <div style="float: right;">
+      {% if cache.full %}
+          <a class="ui button mini blue pastee" data-href='{{ profile.paste_object_url }}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}'>Вставить</a>
+      {% else %}
+          <a class="ui button mini disabled">Вставить</a>
+      {% endif %}                      
+      <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_folder_url }}' >
+        Создать папку
+      </a>
+      <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_lesson_url }}'>
+        Создать урок
+      </a>
+    </div> 
+    {% endif %}    
+  </div>
+  <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+      <div id="papers" class="ui grid stackable" style="margin: 0">
+      {% for lesson in lessons %}
+        {% if not root or lesson.folder.all|length == 0 %}
+        <div class="two wide column" id="all_lesson{{ lesson.id }}">
+          <a id="{{ lesson.id }}" class="open_paper_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+          <div class="ui segment paper_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+              <a  class="rename_lesson" id="{{ lesson.id }}"><i class="icon pencil alternate"></i>Переименовать</a>
+              <div class="ui divider"></div>
+              <a  class="file_action" object_type='paper' action='copy' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+              <div class="ui divider"></div>
+              <a  class="file_action" object_type='paper' action='cut' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <div class="ui divider"></div>
+              <a class="delete_lesson" id="{{ lesson.id }}" data-href='{{ lesson.delete_lesson_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
+          </div>
+          <a href="{{ lesson.get_absolute_url }}" >
+              <img src="{% static 'images/doc.png' %}" id="paper_image{{ lesson.id }}" style="height: 50px;">
+              <br>
+              <span id="lesson_title{{ lesson.id }}">{{ lesson.title }}</span>
+          </a>
+          <form class="ui form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+              <textarea style="padding: 0; height: 60px;" id='change_lesson_name{{ lesson.id }}' type="text">{{ lesson.title }}</textarea>
+              <a class="ui button mini blue change_lesson_name" id="{{ lesson.id }}" data-href='{{ lesson.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+          </form>
+        </div>
+        <div class="ui modal" id="lesson_details{{ lesson.id }}" style="padding: 14px;">
+            <i class="close icon"></i>
+        </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+  </div>
+  <div class="ui segment" style="margin-top: 0">
+      <div id="folders" class="ui grid stackable" style="margin: 0">
+      {% for folder in folders %}
+        {% if not root or not folder.parent %}
+        <div class="two wide column" id="all_folder{{ folder.id }}">
+          <a id="{{ folder.id }}" class="open_folder_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+
+          <div class="ui segment folder_features{{ folder.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+              <a  class="rename_folder" id="{{ folder.id }}"><i class="icon pencil alternate"></i> Переименовать</a>
+              <div class="ui divider"></div>
+              <a  class="file_action" object_type='folder' action='copy' data-href='{{ profile.file_action_url }}' id="{{ folder.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+              <div class="ui divider"></div>
+              <a  class="file_action" object_type='folder' action='cut' data-href='{{ profile.file_action_url }}' id="{{ folder.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <div class="ui divider"></div>
+              <a class="delete_folder" id="{{ folder.id }}" data-href='{{ folder.delete_folder_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
+          </div>
+          <a href="{{ folder.get_absolute_url }}">
+              <img src="{% static 'images/folder.png' %}" id="folder_image{{ folder.id }}" style="height: 50px;">
+              <br>
+              <span id="folder_title{{ folder.id }}">{{ folder.title }}</span>
+          </a>
+          <form class="ui form rename_form{{ folder.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+              <textarea style="padding: 0; height: 60px;" id='change_folder_name{{ folder.id }}' type="text">{{ folder.title }}</textarea>
+              <a class="ui button mini blue change_folder_name" id="{{ folder.id }}" data-href='{{ folder.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+          </form>
+        </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+  </div>
+</div>              

@@ -1,0 +1,67 @@
+
+<a class="ui button blue mini edit" onclick="$('#l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_problem_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}{{ subtheme.id }}' style="margin-top:10px; cursor: pointer;">
+  Добавить задачу
+</a>
+
+<div class="ui mini modal" style="width: 70%; padding: 14px; height: 100%" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_problem_modal">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Добавить задачу в подраздел {{ subtheme.title }}
+    </div>
+    <div class="content">
+        <div class="ui top menu" style="margin-top: 0">
+            <a style="width: 25%; padding-left: 0; padding-right: 0; text-align: center;display: block;" class="item open_students_table" page='problem_listl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'>Список задач</a>
+            <a style="width: 25%; padding-left: 0; padding-right: 0; text-align: center;display: block;" class="item open_students_table" page='new_probleml{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'>Новая задача</a>
+        </div>
+        <div class="ui active tab" id="problem_listl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" data-tab="info">
+            {% for task in tasks %}
+                {% include 'library/task_detail.html' %}
+            {% endfor %}
+        </div>
+        <div class="ui tab" id="new_probleml{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+            <form class="ui form add-problem" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+                <h4>Выберите тип задачи:</h4> 
+                <span class="problem_type_info" info='input' style="display: none;"></span>
+                <a class="problem_type" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="test">Тест</a><br><br>
+                
+                <div class="ui grid">
+                    <div class="twelve wide column" style="font-size: 15px;padding-bottom: 0">
+                        <b>Условие</b>
+                        <textarea class="new_problem_text_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="text" id='new_problem_textl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' style="height: 110px; width: 100%;"></textarea>
+                        <br>
+                        <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}test" style="display: none;">
+                            <ul class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}variants">
+                                <li>
+                                    <b>Вариант ответа:</b>
+                                    <textarea  style="height: 46px;width: 50%;" type="text" class='new_problem_test_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'></textarea>
+                                </li>
+                            </ul>
+                            <br>
+                            <a class="add_variant" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+                                Добавить вариант ответа
+                            </a>
+                        </div>
+                    </div>
+                    <div class="four wide column" style="font-size: 15px;padding-bottom: 0">
+                        <b>Цена задачи</b>
+                        <br>
+                        <textarea  style="height: 46px; width: 100%;" class="new_problem_cost" type="text" id='new_problem_costl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'></textarea>
+                        <br>
+                        <div class="answers_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+                            <b>Ответ</b>
+                            <br>
+                            <textarea  style="height: 46px;width: 100%;" class="new_problem_ans_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="text"></textarea>
+                            <br>
+                        </div>
+                        <a class="add_answer l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_answer" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+                            Добавить правильный ответ
+                        </a>
+                    </div>
+                </div>
+
+                <br>
+                <a class='ui blue button mini new_problem' subtheme_id='{{ subtheme.id }}' id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' data-href='{{ subtheme.add_task_url }}' style="margin-top:10px;">Добавить</a>
+            </form>
+        </div>
+    </div>
+</div>

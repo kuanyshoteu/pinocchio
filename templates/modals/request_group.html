@@ -1,0 +1,18 @@
+
+<div class="ui tiny modal" id="request_group-modal" style="width: 500px;">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        Заявка на новую группу
+    </div>
+    <div class="content">
+        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            <div class="ui input text-center" id="go-ahead-r">
+            {{ request_group_form }}
+            <br><br>
+            <input type='submit' class='ui button green btn-go text-center' value='Оставить заявку' />
+            </div>
+            
+        </form>
+    </div>
+</div>
+

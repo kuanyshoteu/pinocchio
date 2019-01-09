@@ -1,0 +1,79 @@
+
+<style type="text/css">
+    #keywords {
+  margin: 0 auto;
+  font-size: 13px;
+  margin-bottom: 15px;
+  color: #fff;
+}
+
+
+#keywords thead {
+  cursor: pointer;
+}
+#keywords thead tr th { 
+  font-weight: bold;
+  padding: 12px 30px;
+  padding-left: 42px;
+}
+#keywords thead tr th span { 
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+
+#keywords tbody tr { 
+  color: #fff;
+}
+#keywords tbody tr td {
+  text-align: center;
+  padding: 15px 10px;
+}
+#keywords tbody tr td.lalign {
+  text-align: left;
+}
+</style>
+<div class="ui segment" style="margin-bottom: 0">
+  <div class="ui grid">
+      <div class="one wide column">
+          <i class="icon trophy" style="font-size: 17px;"></i>
+      </div>
+      <div class="fifteen wide column" style="padding-right: 25px;">
+          Самые успешные
+      </div>
+  </div>
+</div>
+<div class="ui segment" style="margin-top: 0;padding: 0">
+    <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;">
+        <thead>
+            <tr>
+                <th><span>Имя</span></th>
+                <th><span>Дили</span></th>
+                <th><span>Кол-во задач</span></th>
+                <th><span></span></th>
+                <th><span></span></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for student in instance.students.all %}
+            <tr>
+                <td class="lalign">
+                    {{ forloop.counter }}. 
+                    <div class="ui segment" style="padding: 5px; background-color: #5181b8;box-shadow: none;margin-bottom: 0;display: inline-block;">
+                        {{ student.first_name }}
+                    </div>
+                </td>
+                <td>{{ student.coins }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.14/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+      $('#keywords').tablesorter(); 
+    });
+</script>

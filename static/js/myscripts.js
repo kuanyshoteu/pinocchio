@@ -1,0 +1,790 @@
+$(document).ready(function () {
+    $('.open_attendance').click(function (event){
+        var id = $(this).attr('id')
+        for (var i = 0; i < document.getElementsByClassName('subject_attendance').length; i++){
+            document.getElementsByClassName('subject_attendance')[i].setAttribute('style', 'display:none;')
+        }
+        document.getElementById('subject' + id).setAttribute('style', 'display:block')
+    })
+    $('.login_btn').click(function (event){
+        var username = document.getElementsByClassName('username')[0].value
+        var password = document.getElementsByClassName('password')[0].value
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'username':username,
+                'password':password,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        });
+    })
+    $('.continue').click(function (event){
+        $(this).hide()
+        $(".continue_div").show()
+    })
+    $('.register_btn').click(function (event){
+        var first_name = document.getElementsByClassName('reg_first_name')[0].value
+        var second_name = document.getElementsByClassName('reg_second_name')[0].value
+        var school = document.getElementsByClassName('reg_school')[0].value
+        var phone = document.getElementsByClassName('reg_phone')[0].value
+        var mail = document.getElementsByClassName('reg_mail')[0].value
+        if(first_name != '' && second_name != '' && school != '' && phone != '' && mail != ''){
+            var password1 = document.getElementsByClassName('reg_password1')[0].value
+            var password2 = document.getElementsByClassName('reg_password2')[0].value
+            if(password1 == password2){
+                $(".match_pass_message").hide()
+                if(password1.length > 6){
+                    $(".short_pass_message").hide()
+                    $.ajax({
+                        url: $(this).attr('url'),
+                        data: {
+                            'first_name':first_name,
+                            'second_name':second_name,
+                            'school':school,
+                            'phone':phone,
+                            'mail':mail,  
+                            'password1':password1,
+                            'password2':password2,              
+                        },
+                        dataType: 'json',
+                        success: function (data) {
+                            location.reload()
+                        }
+                    });
+                }
+                else{$(".short_pass_message").show()}
+            }
+            else{$(".match_pass_message").show()}
+        }
+        else{$(".fill_message").show()}
+        
+    })
+    $('.openchart').on('click', function(e) {
+        id = $(this).attr('id')
+        if ($(this).attr('status') == 'closed'){
+            $('#chart' + id).show('slow')
+            $(this).attr('status', 'opened')
+            $('#icondown' + id).show()
+            $('#iconright' + id).hide()
+        }
+        else{
+            $('#chart' + id).hide('slow')
+            $(this).attr('status', 'closed')
+            $('#icondown' + id).hide()
+            $('#iconright' + id).show()
+        }
+    });
+    $('.add_variant').click(function (event){
+        console.log('de')
+        var id = $(this).attr('id')
+        ul = document.getElementsByClassName(id + 'variants')[0]
+        li = document.createElement('li')
+        b = document.createElement('b')
+        b.innerHTML = 'Вариант ответа: '
+        textarea = document.createElement('textarea')
+        textarea.setAttribute('style', 'height: 46px;width: 50%;')
+        textarea.setAttribute('class', 'new_problem_test_' + id)
+        li.appendChild(b)
+        li.appendChild(textarea)
+        ul.appendChild(li)
+    })
+    $('.add_answer').click(function (event){
+        console.log('de')
+        var id = $(this).attr('id')
+        div = document.getElementsByClassName('answers_' + id)[0]
+        li = document.createElement('li')
+        b = document.createElement('b')
+        b.innerHTML = 'Ответ: '
+        br = document.createElement('br')
+        textarea = document.createElement('textarea')
+        textarea.setAttribute('style', 'height: 46px;width: 100%;')
+        textarea.setAttribute('class', 'new_problem_ans_' + id)
+        div.appendChild(b)
+        div.appendChild(br)
+        div.appendChild(textarea)
+        div.appendChild(br)
+    })
+    $(".problem_type").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var id = this_.attr('id')
+        $('.' + id + 'test').fadeToggle()
+        $('.' + id + 'add_answer').fadeToggle()
+        if ($('.problem_type_info').attr('info') == 'input'){
+            $('.problem_type_info').attr('info', 'test')            
+        }
+        else{
+            $('.problem_type_info').attr('info', 'input')
+        }
+    })
+
+    $(".start_urok_btn").click(function () {
+        if($('.page_status').attr('status') != 'start_urok'){
+            $('.start_urok').show();
+            $(".start_info_btn").show();
+            $('.info').hide();
+            $('.start_homework').hide();
+        }
+    });
+    $(".start_info_btn").click(function () {
+        $('.start_urok').hide();
+        $('.start_homework').hide();
+        $(".start_info_btn").hide();
+        $('.info').show();
+     });
+    $(".start_homework_btn").click(function () {
+            $('.start_urok').hide();
+            $('.info').hide();
+            $(".start_info_btn").show();
+            $('.start_homework').show();
+    });
+    
+    $(".show_account_details").click(function () {
+        if($(this).attr('status') == 'closed'){
+            document.getElementsByClassName('show_account_details')[0].innerHTML = 'Скрыть подробную информацию'
+            $('.account_details').show()
+            $(this).attr('status','opened')
+        }
+        else{
+            document.getElementsByClassName('show_account_details')[0].innerHTML = 'Показать подробную информацию'
+            $('.account_details').hide()
+            $(this).attr('status','closed')
+        }
+    });
+    $(".content-markdown").each(function () {
+        var content = $(this).text()
+        var markedContent = marked(content)
+        $(this).html(markedContent)
+    });
+    $(".open_form_trener").click(function (event) {
+        event.preventDefault();
+        $(".form_trener").fadeToggle();
+    });
+    $(".open_subject_form").click(function (event) {
+        event.preventDefault();
+        $(".subject_form" + $(this).attr('id')).fadeToggle();
+    });
+    $(".change_subject").click(function () {
+        var this_ = $(this)
+        id = this_.attr("id")
+        var pageUrl = this_.attr("data-href")
+        var title = $('#subject_title' + id).val();
+        var text = $('#id_text' + id).val();
+        var cost = $('#subject_cost' + id).val();
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                    'title':title,
+                    'cost':cost,
+                    'text':text,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    document.getElementById(this_.attr("id")+'title').innerHTML = title 
+                    document.getElementById(this_.attr("id")+'text').innerHTML = marked(text) 
+                    document.getElementById(this_.attr("id")+'cost').innerHTML = cost 
+                    $(".subject_form" + id).fadeToggle();
+                }
+            });
+        }
+    });
+    $(".open_form").click(function (event) {
+        event.preventDefault();
+        $(".update_form").fadeToggle();
+    })
+    $(".open_comments").click(function (event) {
+        event.preventDefault();
+        $(".comments").fadeToggle();
+    })
+    $(".open_docs").click(function (event) {
+        event.preventDefault();
+        $(".docs").fadeToggle();
+    })
+    $(".open_page").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var page = this_.attr('page')
+        $("#detailed_info").attr('class', 'ui tab');
+        $("#all_squads").attr('class', 'ui tab');
+        $("#attendance").attr('class', 'ui tab');
+        $("#zaiavki").attr('class', 'ui tab');
+        if (page == 'profile_info'){
+            $("#detailed_info").attr('class', 'ui tab active');
+        }
+        if (page == 'profile_zaiavki'){
+            $("#zaiavki").attr('class', 'ui tab active');
+        }
+        if (page == 'profile_attendance'){
+            $("#attendance").attr('class', 'ui tab active');
+        }
+        if (page == 'profile_squads'){
+            $("#all_squads").attr('class', 'ui tab active');
+        }
+    })
+    $(".open_students_table").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var page = this_.attr('page')
+        for(var i = 0; i < document.getElementsByClassName('tab').length; i++){
+            document.getElementsByClassName('tab')[i].setAttribute('class', 'ui tab')
+        }
+        $("#" + page).attr('class', 'ui tab active');
+
+    })
+
+    $(".save_zaiavka").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var Url = this_.attr("data-href")
+        var name = $('.zaiavka_name').val()
+        var phone = $('.zaiavka_phone').val()
+        console.log(name, phone)
+        if (Url) {
+            $.ajax({
+                url: Url,
+                method: "GET",
+                data: {
+                    'name':name,
+                    'phone':phone
+                },
+                success: function (data) {
+                    $(".ok_zaiavka").show()
+                }, error: function (error) {
+                }
+            })
+        }
+    })
+    $(".open_form_status").click(function (event) {
+        event.preventDefault();
+        $(".update_status").fadeToggle();
+    })
+    $(".open_form_paper").click(function (event) {
+        event.preventDefault();
+        $(".create_paper").fadeToggle();
+    })
+    $(".open_form_task").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '.' + this_.attr("id") + 'add_task'
+        $(form_id).fadeToggle();
+    })
+    $(".open_add_child").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '.' + this_.attr("id") + 'add_child'
+        $(form_id).fadeToggle();
+    })
+    $(".open_groups").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var form_id = '.' + 'groups' + this_.attr("id")
+        $(form_id).fadeToggle();
+    })
+    $(".open_group_details").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var table_id = '#' + this_.attr("id") + 'details';
+        console.log(table_id)
+        $(table_id).fadeToggle();
+    })
+    
+    $(".open_group_details_hmw").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var table_id = '#' + this_.attr("id") + 'details_hmw'
+        $(table_id).fadeToggle();
+    })
+    $(".open_group_details_cls").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var table_id = '#' + this_.attr("id") + 'details_cls'
+        $(table_id).fadeToggle();
+    })
+    $(".open_chart").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        $('#' + this_.attr("id") + 'chart').fadeToggle();
+    })
+})
+$(document).ready(function () {
+    $(".delete_zaiavka").click(function (e) {
+        e.preventDefault()
+        var this_ = $(this)
+        var icon = '#zaiavka' + this_.attr("id")
+        var name = '#zaiavka_name_' + this_.attr("id")
+        var phone = '#zaiavka_phone_' + this_.attr("id")
+        var time = '#zaiavka_time_' + this_.attr("id")
+        var changeUrl = this_.attr("data-href")
+        if (changeUrl) {
+            $.ajax({
+                url: changeUrl,
+                method: "GET",
+                data: {},
+                success: function (data) {
+                    console.log('roro')
+                    $(icon).css('display', 'none')
+                    $(name).css('text-decoration', 'line-through')
+                    $(name).css('color', 'grey')
+                    $(phone).css('text-decoration', 'line-through')
+                    $(phone).css('color', 'grey')
+                    $(time).css('text-decoration', 'line-through')
+                    $(time).css('color', 'grey')
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".delete_follow").click(function (e) {
+        e.preventDefault()
+        var this_ = $(this)
+        var icon = '#follow' + this_.attr("id")
+        var user = '#follow_user_' + this_.attr("id")
+        var group = '#follow_group_' + this_.attr("id")
+        var phone = '#follow_phone_' + this_.attr("id")
+        var time = '#follow_time_' + this_.attr("id")
+        var changeUrl = this_.attr("data-href")
+        if (changeUrl) {
+            $.ajax({
+                url: changeUrl,
+                method: "GET",
+                data: {},
+                success: function (data) {
+                    console.log('roro')
+                    $(icon).css('display', 'none')
+                    $(user).css('text-decoration', 'line-through')
+                    $(user).css('color', 'grey')
+                    $(group).css('text-decoration', 'line-through')
+                    $(group).css('color', 'grey')
+                    $(phone).css('text-decoration', 'line-through')
+                    $(phone).css('color', 'grey')
+                    $(time).css('text-decoration', 'line-through')
+                    $(time).css('color', 'grey')
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".change_status").click(function (e) {
+        e.preventDefault()
+        var Url = $(this).attr("data-href")
+        status = $(".textarea_status").val()
+        console.log(status)
+        $.ajax({
+            url: Url,
+            method: "GET",
+            data: {
+                'status':status
+            },
+            success: function (data) {
+                hisstatus = document.getElementsByClassName('hisstatus')[0]
+                hisstatus.innerHTML = status
+            }, error: function (error) {
+            }
+
+        })
+    })
+    $(".add_group_btn").click(function (e) {
+        e.preventDefault()
+        var this_ = $(this)
+        var squadUrl = this_.attr("data-href")
+        if (squadUrl) {
+            $.ajax({
+                url: squadUrl,
+                data: {
+                    'paper_id':this_.attr("paper_id"),
+                    'squad_id':this_.attr("squad_id"),
+                    'isin':this_.attr("isin"),
+                },
+                success: function (data) {
+                    if (this_.attr("isin") == 'yes') {
+                        this_.css('background-color', '#F2F2F2')
+                        this_.css('color', 'black')
+                        this_.attr('isin', 'no')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn_urok").css('background-color', '#F2F2F2')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn_urok").css('color', 'black')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn_urok").attr('isin', 'no')
+
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results').hide()
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results_urok').hide()
+                    }
+                    else {
+                        this_.css('background-color', '#5181b8')
+                        this_.css('color', 'white')
+                        this_.attr('isin', 'yes')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn_urok").css('background-color', '#5181b8')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn_urok").css('color', 'white')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn_urok").attr('isin', 'yes')
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results').show()
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results_urok').show()
+
+                    }
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".save_grade").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        grade=$("#attendance" + this_.attr("id")).val()
+        console.log($("#attendance" + this_.attr("id")).val())
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                method: "GET",
+                data: {
+                    'id':this_.attr("id"),
+                    'grade':grade,                        
+                },
+                success: function (data) {
+                    this_.attr('class','ui button mini green save_grade')
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".present").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                method: "GET",
+                data: {
+                    'id':this_.attr("id2"),
+                    'attendance':'present',                        
+                },
+                success: function (data) {
+                    var attendance = '#' + 'att' + this_.attr("id2")
+                    var absent = '#' + 'absent' + this_.attr("id2")
+                    var late = '#' + 'late' + this_.attr("id2")
+                    $(attendance).attr('value', 'present');
+                    this_.css('background-color', '#21BA45');
+                    this_.css('color', 'white');
+                    $(absent).css('background-color', '#e5ebf1');
+                    $(absent).css('color', 'rgba(0, 0, 0, 0.9)');
+                    $(late).css('background-color', '#e5ebf1');
+                    $(late).css('color', 'rgba(0, 0, 0, 0.9)');
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".absent").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                method: "GET",
+                data: {
+                    'id':this_.attr("id2"),
+                    'attendance':'absent',                        
+                },
+                success: function (data) {
+                    var attendance = '#' + 'att' + this_.attr("id2");
+                    var present = '#' + 'present' + this_.attr("id2");
+                    var late = '#' + 'late' + this_.attr("id2");
+                    $(attendance).attr('value', 'absent');
+                    this_.css('background-color', '#DB2828');
+                    this_.css('color', 'white');
+                    $(present).css('background-color', '#e5ebf1');
+                    $(present).css('color', 'rgba(0, 0, 0, 0.9)');
+                    $(late).css('background-color', '#e5ebf1');
+                    $(late).css('color', 'rgba(0, 0, 0, 0.9)');
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".late").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        var attendance = '#' + 'att' + this_.attr("id2")
+                    
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id2"),
+                    'attendance':'late',
+                },
+                success: function (data) {
+                    var absent = '#' + 'absent' + this_.attr("id2")
+                    var present = '#' + 'present' + this_.attr("id2")
+                    $(attendance).attr('value', 'late');
+                    this_.css('background-color', '#FBBD08')
+                    this_.css('color', 'white')
+                    $(absent).css('background-color', '#e5ebf1')
+                    $(absent).css('color', 'rgba(0, 0, 0, 0.9)')
+                    $(present).css('background-color', '#e5ebf1')
+                    $(present).css('color', 'rgba(0, 0, 0, 0.9)')
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+    $(".grade").change(function () {
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        var grade = $(this).val();
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("name"),
+                    'grade':grade
+                },
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    });
+    $(".zhurnal_grade").click(function () {
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        var grade = $('#grade' + this_.attr("name")).val();
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("name"),
+                    'grade':grade
+                },
+                dataType: 'json',
+                success: function (data) {
+                }
+            });
+        }
+    });
+})
+$(document).ready(function () {
+    $(".check_task_answer").click(function () {
+        var this_ = $(this)
+        var id = this_.attr("id")
+        var pageUrl = this_.attr("data-href")
+        var paper_id = this_.attr("paper_id")
+        var answer = ""
+        if( $(".task_type_" + paper_id).attr("type") == "input" ){
+            for(var i = 0; i < document.getElementsByClassName('check_task_answer_' + paper_id).length; i++){
+                answer = answer + document.getElementsByClassName('check_task_answer_' + paper_id)[i].value + ";"
+            }
+        }
+        if( $(".task_type_" + paper_id).attr("type") == "test" ){
+            for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){
+                if(document.getElementsByClassName("option_" + paper_id)[i].checked){
+                    answer = answer + document.getElementsByClassName("option_" + paper_id)[i].getAttribute("value") + ";"
+                }
+            }
+        }
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                    'answer':answer,
+                    'parent_id':this_.attr("parent_id"),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(document.getElementById('hiscoins') != undefined){
+                        document.getElementById('hiscoins').innerHTML = data.hiscoins;
+                    }
+                    if (data.solved == true){
+                        document.getElementsByClassName('wrong_answer_alert_' + paper_id)[0].setAttribute('style', 'display:none')
+                        document.getElementsByClassName(paper_id + 'solved')[0].setAttribute('style', 'margin-right: 10px; font-size: 16px; font-weight: 600; color: green;');
+                        document.getElementsByClassName(paper_id + 'solved_tick')[0].setAttribute('style', 'color: green;font-size: 16px; font-weight: 600;')
+                        if(data.action == 'plus'){
+                            $('#coins_' + paper_id).toggleClass('bubble');
+                            $('.check_task_answer_' + paper_id).attr('style', 'border: 1.5px solid #008100 !important');                            
+                        }
+                    }
+                    else{
+                        document.getElementsByClassName('wrong_answer_alert_' + paper_id)[0].setAttribute('style', 'display:block')
+                        $('.check_task_answer_' + paper_id).attr('style', '')
+                        document.getElementsByClassName(paper_id + 'solved')[0].setAttribute('style', 'margin-right: 10px; font-size: 16px; font-weight: 600; color: black;');
+                        document.getElementsByClassName(paper_id + 'solved_tick')[0].setAttribute('style', 'display:none')
+                    }
+                }
+            });
+        }
+    });
+    $(".open_group_details_urok").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var table_id = '#' + this_.attr("id") + 'details_urok'
+        $(table_id).fadeToggle();
+    })
+    $(".add_group_btn_urok").click(function (e) {
+        e.preventDefault()
+        var this_ = $(this)
+        var squadUrl = this_.attr("data-href")
+        if (squadUrl) {
+            $.ajax({
+                url: squadUrl,
+                data: {
+                    'paper_id':this_.attr("paper_id"),
+                    'squad_id':this_.attr("squad_id"),
+                    'isin':this_.attr("isin"),
+                },
+                success: function (data) {
+                    if (this_.attr("isin") == 'yes') {
+                        this_.css('background-color', '#F2F2F2')
+                        this_.css('color', 'black')
+                        this_.attr('isin', 'no')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn").css('background-color', '#F2F2F2')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn").css('color', 'black')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn").attr('isin', 'no')
+
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results_urok').hide()
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results').hide()
+                    }
+                    else {
+                        this_.css('background-color', '#5181b8')
+                        this_.css('color', 'white')
+                        this_.attr('isin', 'yes')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn").css('background-color', '#5181b8')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn").css('color', 'white')
+                        $('#' + this_.attr("paper_id") + this_.attr("squad_id") + "add_group_btn").attr('isin', 'yes')
+
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results_urok').show()
+                        $('.' + this_.attr("paper_id") + this_.attr("squad_id") + 'squad_results').show()
+                    }
+                }, error: function (error) {
+                    console.log('error')
+                }
+
+            })
+        }
+    })
+})
+$(document).ready(function () {
+    $(".task_answer").change(function () {
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        var answer = $(this).val();
+        console.log(pageUrl);
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                    'answer':answer
+                },
+                dataType: 'json',
+                success: function (data) {
+                    this_.attr('placeholder', answer);
+                }
+            });
+        }
+    });
+    $(document).on("click", '.delete_task', function () {
+        var this_ = $(this)
+        console.log('de')
+        var pageUrl = this_.attr("data-href")
+        if (pageUrl) {
+            console.log('de4')
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    location.reload()
+                }
+            });
+        }
+    });
+    $(document).on("click", '.change_task_text', function () {
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        id = this_.attr("id")
+        paper_id = this_.attr("paper_id")
+        var text = document.getElementsByClassName('change_task_text' + paper_id)[0].value
+        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[0].value
+
+        var answer = ""
+        var variant = ""
+        if( $(".task_type_" + paper_id).attr("type") == "input" ){
+            answer = answer + document.getElementsByClassName('change_task_answer_' + paper_id)[1].value + ";"
+        }
+        if( $(".task_type_" + paper_id).attr("type") == "test" ){
+            for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){
+                var old_variant = document.getElementsByClassName("option_" + paper_id)[i].getAttribute("value")
+                variant = variant + document.getElementsByClassName("variant_value_"+paper_id +'v'+ old_variant)[0].value+";"
+                if(document.getElementsByClassName("option_" + paper_id)[i].checked){
+                    answer = answer + document.getElementsByClassName("variant_value_"+paper_id +'v'+ old_variant)[0].value+";"
+                }
+            }
+        }
+        console.log(answer)
+
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':id,
+                    'text':text,
+                    'cost':cost,
+                    'answer':answer,
+                    'variant':variant,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    location.reload()
+                }
+            });
+        }
+    });
+
+})
+
+$('.menu-btn').on('click', function(e) {
+  e.preventDefault();
+  this_ = $('.vmenu')
+  if ( this_.attr('stage') == 'passive' ){
+      this_.attr('stage', 'active');
+      this_.toggleClass('menu_active');
+      $('.contenttt').toggleClass('content_active');
+  }
+  else{
+      this_.attr('stage', 'passive');
+      document.getElementById("contenttt").classList.remove('content_active');
+      document.getElementById("vmenu2").classList.remove('menu_active');
+  }
+})
+$('.menu_back').on('click', function(e) {
+  e.preventDefault();
+  this_ = $('.vmenu')
+  if ( this_.attr('stage') == 'active' ){
+      this_.attr('stage', 'passive');
+      document.getElementById("contenttt").classList.remove('content_active');
+      document.getElementById("vmenu2").classList.remove('menu_active');
+  }
+})
+

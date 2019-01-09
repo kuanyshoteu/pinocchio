@@ -1,0 +1,11 @@
+{% if subtheme.task_list.all|length > 0 %}
+    <div class="tasksl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" id='tasksl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' last='{{ subtheme.task_list.all|length }}'>
+        {% for task in subtheme.task_list.all %}
+	        {% include 'library/task_detail.html' %}
+        {% endfor %}
+    </div>
+{% endif %}
+{% if profile.is_trener %}
+    {% include 'library/add_problem.html' %}
+{% endif %}
+
