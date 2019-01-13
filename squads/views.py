@@ -13,7 +13,7 @@ from datetime import timedelta
 from .forms import SquadForm
 from .table_change_form import TableChangeForm
 from .models import *
-from schools.models import School
+#from schools.models import School
 from subjects.models import *
 from papers.models import *
 from library.models import Folder
@@ -30,10 +30,10 @@ import pandas as pd
 import os
 
 def squad_detail(request, slug=None):
-    school = School.objects.all()[0]
-    for p in Profile.objects.all():
-        p.school = school
-        p.save()
+    # school = School.objects.all()[0]
+    # for p in Profile.objects.all():
+    #     p.school = school
+    #     p.save()
 
     # ff = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # file = str(ff) + "/abc.xlsx"
