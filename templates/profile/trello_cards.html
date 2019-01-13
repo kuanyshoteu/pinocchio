@@ -64,7 +64,7 @@
                                   {% if usr.image %}
                                   <img src="{{ usr.image.url }}" class="ui avatar image">
                                   {% else %}
-                                  <img src='{{ main_page.image.url }}' class="ui avatar image">
+                                  <img src='{% static "images/nophoto.png" %}' class="ui avatar image">
                                   {% endif %}
                                   </a>
                                 </div>
