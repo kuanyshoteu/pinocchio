@@ -13,7 +13,7 @@ from datetime import timedelta
 from .forms import SquadForm
 from .table_change_form import TableChangeForm
 from .models import *
-from school.models import School
+from schools.models import School
 from subjects.models import *
 from papers.models import *
 from library.models import Folder
