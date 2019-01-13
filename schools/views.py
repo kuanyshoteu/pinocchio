@@ -29,10 +29,6 @@ import pandas as pd
 import os
 
 def school_detail(request, slug=None):
-    school = School.objects.all()[0]
-    for p in Profile.objects.all():
-        p.school = school
-        p.save()
     profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
