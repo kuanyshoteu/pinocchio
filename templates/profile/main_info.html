@@ -48,33 +48,20 @@
             {% endif %}
             <div class="ui divider"></div>                                    
             <div class="ui grid" style="margin-top: 10px;">
-                <div class="four wide column de">
+                <div class="four wide column de" style="padding-right: 0">
                     <p style="color: #828282;">День рождения: </p>
                     <p style="color: #828282;">Место учебы: </p>
                     {% if hisprofile.phone %}
                     <p style="color: #828282;">Телефон: </p>
                     {% endif %}
-                        <p style="color: #828282;">Почта: </p>
-                    {% if hisprofile.status == 'trener' %}
-                        <p style="color: #828282;">Предметы: </p>
-                    {% else %}
-                        <p style="color: #828282;">Классы: </p>
-                    {% endif %}
-                    
+                    <p style="color: #828282;">Почта: </p>                   
                 </div>
-                <div class="five wide column de">
+                <div class="five wide column de" style="padding-left: 0">
                     <p><a href="">{{ hisprofile.birthdate }}</a></p>
                     <p><a href="">_{{ hisprofile.school.title }}</a></p>
                     <p>{{ hisprofile.phone }}</p>
                     <p>{{ hisprofile.mail }}</p>
-                    <p>
-                    {% for sq in hisprofile.squads.all %}
-                        <a href="{{ sq.get_absolute_url }}">
-                            {{ sq.title }}
-                        </a>{% if forloop.counter < hisprofile.squad_trener.all|length %}, {% endif %}
-                    {% endfor %}
-                    </p>
-                
+                    <a class="ui button mini blue" style="margin-top: 10px;">Скачать резюме</a> 
                 </div>
                 <div class="seven wide column" style="padding-top: 0">
                     {% include 'profile/circle_chart.html' %}
