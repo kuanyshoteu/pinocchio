@@ -1,4 +1,39 @@
 $(document).ready(function () {
+    $('.open_point').click(function (event){
+        
+    })
+    $('#keywords').tablesorter(); 
+    
+    $('.att_present').click(function (event){
+        var id = $(this).attr('id')
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log($('#grades' + id))
+                $('#grades' + id).show()
+                $('#attendance'+id).hide()
+            }
+        });
+    })
+    $(".switch_att_btn").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var paper_id = this_.attr('paper_id')
+        var lesson_id = this_.attr('lesson_id')
+        current_class = this_.attr('class')
+        for(var i = 0; i < document.getElementsByClassName('switch_att_btn' + lesson_id).length; i++){
+            document.getElementsByClassName('switch_att_btn' + lesson_id)[i].setAttribute('class', 'switch_att_btn switch_att_btn' + lesson_id)    
+        }
+        for(var i = 0; i < document.getElementsByClassName('ppr' + lesson_id).length; i++){
+            document.getElementsByClassName('ppr' + lesson_id)[i].setAttribute('class', 'paper ppr ppr' + lesson_id)
+        }
+        this_.attr('class', current_class + ' switch_att_btn_active switch_att_btn')
+        $('#paper' + paper_id + lesson_id).attr('class', 'paper_active ppr ppr' + lesson_id)
+    })
     $('.open_attendance').click(function (event){
         var id = $(this).attr('id')
         for (var i = 0; i < document.getElementsByClassName('subject_attendance').length; i++){
@@ -437,15 +472,15 @@ $(document).ready(function () {
     $(".save_grade").click(function (event) {
         event.preventDefault();
         var this_ = $(this)
-        var pageUrl = this_.attr("data-href")
-        grade=$("#attendance" + this_.attr("id")).val()
-        console.log($("#attendance" + this_.attr("id")).val())
+        var pageUrl = this_.attr("url")
+        var grade = this_.attr('grade')
+        var id = this_.attr('id')
         if (pageUrl) {
             $.ajax({
                 url: pageUrl,
                 method: "GET",
                 data: {
-                    'id':this_.attr("id"),
+                    'id':id,
                     'grade':grade,                        
                 },
                 success: function (data) {

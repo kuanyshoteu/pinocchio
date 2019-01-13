@@ -18,6 +18,7 @@ from django.db.models.signals import post_save
 
 from pagedown.widgets import PagedownWidget
 from django.contrib.postgres.fields import ArrayField
+from schools.models import School
 
 def upload_location(instance, filename):
     ProfileModel = instance.__class__
@@ -34,8 +35,8 @@ class Profile(models.Model):
     is_creator = models.BooleanField(default=False)
     is_ceo = models.BooleanField(default=False)
 
-    school =  models.TextField(default='')
-
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='students')
+    
     birthdate = models.DateField(null = True, blank = True) 
     mail = models.TextField(default = '')
     phone = models.TextField(blank = True,null = True, default = '')
@@ -48,7 +49,7 @@ class Profile(models.Model):
     width_field = models.IntegerField(default=0, null = True)
     
     class Meta:
-        ordering = ['id']
+        ordering = ['-coins']
 
     def get_absolute_url(self):
         self.user.username = self.user.username.replace(' ', '_')

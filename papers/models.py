@@ -74,11 +74,6 @@ class Paper(models.Model):
     class Meta:
         ordering = ['id']
 
-class PaperSolver(models.Model):
-    author_profile = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='check_papers')
-    solver_correctness = models.BooleanField(default=False)
-    paper = models.ForeignKey(Paper, default=1, on_delete = models.CASCADE, related_name='solver')
-
 def create_slug(instance, new_slug=None):
     if len(Paper.objects.all()) > 0:
         paper = Paper.objects.all()[len(Paper.objects.all())-1]
@@ -103,6 +98,7 @@ class Lesson(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(Profile, related_name='liked_lessons')
     dislikes = models.ManyToManyField(Profile, related_name='disliked_lessons')
+    done_by = models.ManyToManyField(Profile, related_name='done_lessons')
     
     def add_paper_url(self):
         return reverse("papers:add_paper_url")
@@ -122,11 +118,6 @@ class Lesson(models.Model):
         return reverse("papers:lesson_dislike_url")
     class Meta:
         ordering = ['id']
-
-class LessonSolver(models.Model):
-    author_profile = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='check_lessons')
-    solver_correctness = models.BooleanField(default=False)
-    lesson = models.ForeignKey(Lesson, default=1, on_delete = models.CASCADE, related_name='solver')
 
 class Comment(models.Model):
     lesson = models.ForeignKey(Lesson, null=True, on_delete = models.CASCADE, related_name='comments')
@@ -159,6 +150,7 @@ class Course(models.Model):
     cost = models.IntegerField(default = 0)
     content = models.TextField(default='')
     students = models.ManyToManyField(Profile, default=1, related_name='courses')
+    done_by = models.ManyToManyField(Profile, related_name='done_courses')
 
     timestamp = models.DateTimeField(auto_now_add=True)
     rating = models.FloatField(default=0)

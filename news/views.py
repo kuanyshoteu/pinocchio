@@ -22,7 +22,7 @@ from django.contrib.auth.models import User
 
 def post_detail(request, slug=None):
     instance = get_object_or_404(Post, slug=slug)
-    profile = 'admin'
+    profile = ''
     is_auth = False
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
@@ -37,7 +37,7 @@ def post_create(request):
     if not request.user.is_authenticated:
         raise Http404
 
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     if not profile.is_trener:
@@ -70,7 +70,7 @@ def post_update(request, slug=None):
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
         
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
 
@@ -85,7 +85,7 @@ def post_list(request):
     if not request.user.is_authenticated:
         raise Http404
         
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     

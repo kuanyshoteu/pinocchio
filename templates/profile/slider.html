@@ -1,0 +1,87 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.css">
+
+<style class="cp-pen-styles">
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+}
+.main-slider-section {
+  width: 90%;
+  height: 300px;
+}
+.main-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+.main-slider .swiper-wrapper .swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: #fff;
+}
+
+
+.block-slider {
+  width: 100%;
+  height: 100%;
+}
+.block-slider .swiper-slide {
+  background: #4F628E;
+}
+.next-btn,
+.prev-btn {
+  width: 26px;
+  height: 20px;
+  margin-top: -10px;
+}
+</style>
+<div class="wrapper">
+  <div class="main-slider-section">
+    <div class="main-slider swiper-container">
+      <div class="swiper-wrapper">
+        <a class="swiper-slide">
+            d
+        </a>
+        <a class="swiper-slide">
+            d
+        </a>
+        <a class="swiper-slide">
+          <div class="block-slider swiper-container">
+            d
+          </div>
+        </a>
+        <a class="swiper-slide">
+          <div class="block-slider swiper-container">
+            d
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="swiper-button-prev uploaded-in-prev"></div>
+    <div class="swiper-button-next uploaded-in-next"></div>
+  </div>
+</div>
+<script src='//static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script><script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.js'></script>
+<script >var mainSwiper = new Swiper('.main-slider', {
+    slidesPerView: 3,
+    spaceBetween: 15,
+    centeredSlides: false,
+    nextButton: '.uploaded-in-next',
+    prevButton: '.uploaded-in-prev' });
+
+
+var mainSecondSwiper = new Swiper('.block-slider', {
+    slidesPerView: 1,
+    spaceBetween: 0,
+    centeredSlides: false,
+    nextButton: '.next-btn',
+    prevButton: '.prev-btn' });
+//# sourceURL=pen.js
+</script>

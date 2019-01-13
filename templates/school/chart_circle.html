@@ -1,0 +1,38 @@
+{% load staticfiles %}
+{% load ttttags %}
+<p style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;text-align: center;">
+   <a href="{{ student.get_absolute_url }}">{{ student.first_name }}</a>
+</p>
+<div class="ui segment" style="background-image: linear-gradient(110deg, #4d4d4d, #3c3f3b, #141414);width: 100px;border-radius: 5px;padding-top: 0px;">
+    <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="80" height="112" xmlns="http://www.w3.org/2000/svg">
+      <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" cx="16.91549431" cy="14.91549431" r="15.91549431" fill="none"/>
+      <circle class="circle-chart__circle" stroke="#5E93E3" stroke-width="2" stroke-dasharray="{{ student.coins }},100" stroke-linecap="round" fill="none" cx="18.91549431" cy="16.91549431" r="15.91549431" />
+      <g class="circle-chart__info">
+        <defs>
+          <rect id="rect" x="5%" y="0%" width="90%" height="88%" rx="15"/>
+          <clipPath id="clip">
+            <use xlink:href="#rect"/>
+          </clipPath>
+        </defs>
+
+        <use xlink:href="#rect" stroke-width="0" stroke="black"/>
+        {% if student.image %}
+        <image xlink:href="{{ student.image.url }}" clip-path="url(#clip)" x="0" y="0" height="100%" width="100%"/>
+        {% else %}
+        <image xlink:href="{% static 'images/nophoto.png' %}" clip-path="url(#clip)" x="0" y="0" r="15.91549431" r="15" height="100%" width="100%"/>
+        {% endif %}
+
+      <text class="circle-chart__percent" stroke="#fff" stroke-width="0.2" fill="#fff" x="16.91549431" y="38" alignment-baseline="central" text-anchor="middle" font-size="6">{{ student.coins }}</text>
+    </svg>
+</div>
+<style type="text/css">
+  .circle-chart__circle {
+      animation: circle-chart-fill 3s reverse;
+      transform: rotate(-90deg);
+      transform-origin: center;
+}
+
+@keyframes circle-chart-fill {
+  to { stroke-dasharray: 0 100; }
+}
+</style>

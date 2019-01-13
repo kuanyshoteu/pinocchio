@@ -18,7 +18,7 @@ from library.models import Folder
 from accounts.models import *
 
 def lesson_details(request, lesson_id = None):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
@@ -308,7 +308,7 @@ def dislike_lesson(request):
     return JsonResponse(data)
 
 def course_details(request, course_id=None):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
@@ -323,7 +323,7 @@ def course_details(request, course_id=None):
     return render(request, 'courses/course_details.html', context=context)
 
 def course_seller(request, course_id=None):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
@@ -349,7 +349,7 @@ def course_update(request, course_id=None):
         course.save()
         return HttpResponseRedirect(course.get_update_url())
         
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
 
@@ -365,7 +365,7 @@ def course_create(request):
     if not request.user.is_authenticated:
         raise Http404
 
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     if not profile.is_trener:

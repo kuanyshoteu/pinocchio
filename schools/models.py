@@ -12,7 +12,6 @@ from django.utils.safestring import mark_safe
 from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
-from accounts.models import Profile
 
 def upload_location(instance, filename):
     CourseModel = instance.__class__
@@ -23,8 +22,6 @@ def upload_location(instance, filename):
     return "%s/%s" %(instance.id, filename)
 
 class School(models.Model):
-    curator = models.ManyToManyField(Profile, default=1, related_name='school_curator')
-
     title = models.CharField(max_length=250)
     image_icon = models.ImageField(upload_to=upload_location, 
             null=True,
@@ -52,7 +49,7 @@ class School(models.Model):
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
-        return reverse("schools:detail", kwargs={"id": self.id})
+        return reverse("schools:detail")
     def get_delete_url(self):
         return reverse("schools:delete", kwargs={"id": self.id})
     def get_update_url(self):

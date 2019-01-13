@@ -187,6 +187,8 @@ class Attendance(models.Model):
         ordering = ['squad_cell', 'student']
     def change_url(self):
         return reverse("accounts:change_att_url")
+    def present_url(self):
+        return reverse("accounts:present_url")
 
 class SubjectCategory(models.Model):
     title = models.TextField(default = '')

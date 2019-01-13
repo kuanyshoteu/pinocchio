@@ -32,7 +32,7 @@
                               <i class="ui icon columns" style="color: grey; font-size: 15px; font-weight: 300;"></i>
                               <span style="margin-left: 10px;">{{ card.title }}</span>
                           </h3>
-                          <p style="color: grey; margin-left: 35px;">в списке <span style="text-decoration: underline;">{{ card.column.title }}</span></p>
+                          <p style="color: grey; margin-left: 35px;">в списке <span style;">{{ card.column.title }}</span></p>
                           <div style="margin-left: 35px;">
                               <span style="color: grey; margin-right: 10px;">Участники: </span>
                               <div class="ui grid stackable">
@@ -50,7 +50,7 @@
                               {% endfor %}
                               </div>
                           </div>
-                          <br>
+                          <br><br>
                           <p style="color: grey; margin-left: 35px;">Метки</p>
                           <div style="margin-left: 35px;" class="ui grid">
                           {% for metka in metkas %}
@@ -75,7 +75,7 @@
                           <h4>
                               <i class="ui icon align left" style="color: grey; font-size: 15px;"></i>                  
                               <span style="margin-left: 10px;">Описание</span> 
-                              <a style="color: grey; text-decoration: underline; font-size: 13px; font-weight:300; margin-left: 10px; cursor: pointer;" class="open_form_desc">Изменить...</a>
+                              <a style="font-size: 13px; font-weight:300; margin-left: 10px;" class="open_form_desc">Изменить</a>
                           </h4>
                           <p id='{{ card.id }}card_desc' style="margin-left: 35px;">{{ card.description }}</p>
                           <form class="ui form desc" style="margin-left: 35px; display: none;" method="post" enctype="multipart/form-data">
@@ -85,11 +85,9 @@
                          
                       </div>
                       <div class="ui segment">
-                          <h4>
-                              <i class="ui icon align left" style="color: grey; font-size: 15px;"></i>                  
-                              <span style="margin-left: 10px;">Вложения</span>
-                              <a class="open_form_file new-file" id='{{ card.id }}' style="color: grey; text-decoration: underline; font-size: 13px; font-weight:300; margin-left: 10px; cursor: pointer;">Добавить вложения...</a>
-                          </h4>
+                          <i class="ui icon align left" style="color: grey; font-size: 15px;"></i>
+                          <span style="margin-left: 10px;font-size: 15px;font-weight: 600">Вложения</span>
+                          <a class="open_form_file new-file" id='{{ card.id }}' style="font-size: 13px; font-weight:300; margin-left: 10px; ">Добавить вложения</a>
                           {% if card.doc_list.all|length > 0 %}
                           <div style="margin-left: 35px;">
                           {% for doc in card.doc_list.all %}

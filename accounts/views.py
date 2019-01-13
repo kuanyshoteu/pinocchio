@@ -256,33 +256,25 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
+def att_present(request):
+    profile = Profile.objects.get(user = request.user)
+    if request.GET.get('id') and profile.is_trener:
+        attendance = Attendance.objects.get(id = request.GET.get('id'))
+        attendance.present = 'present'
+        attendance.save()
+    data = {
+    }
+    return JsonResponse(data)
+
 def ChangeAttendance(request):
     if request.GET.get('id'):
         attendance = Attendance.objects.get(id = int(request.GET.get('id')))
-        gradee = attendance.grade
-        presentt = attendance.present
-        if request.GET.get('attendance'):
-            attendance.present = request.GET.get('attendance')
-            attendance.grade = gradee
-        if request.GET.get('grade') and gradee == -1:
-            attendance.present = presentt
+        if request.GET.get('grade'):
             attendance.grade = int(request.GET.get('grade'))
         attendance.save()
-                    
     data = {
     }
     return JsonResponse(data)
-
-def ChangeStatus(request):
-    hisprofile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('status'):
-        hisprofile.status = request.GET.get('status')
-        hisprofile.save()
-
-    data = {
-    }
-    return JsonResponse(data)
-
 
 class ChangeTimeAPIToggle(APIView):    
     def get(self, request, format=None):

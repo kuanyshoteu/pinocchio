@@ -16,7 +16,13 @@
         {% else %}
             <img src="{% static 'images/books.png' %}" id="paper_image{{ course.id }}" style="width: 100%;height: 45%; border-radius: 7px 7px 0 0;background-color: white;box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;position: absolute;top: 0">
         {% endif %}
-        <img src="{% static 'images/calendar.png' %}" style="width: 45px; height: 45px;border-radius: 5px;position: absolute;z-index: 400; margin-top: -30px;margin-left: 18px;">
+        
+        {% if course.author_profile.school.image_icon %}
+            <img src="{{ course.author_profile.school.image_icon.url }}" style="width: 45px; height: 45px;border-radius: 5px;position: absolute;z-index: 400; margin-top: -30px;margin-left: 18px;">
+        {% else %}
+            <img src="{% static 'images/squad.png' %}" style="width: 45px; height: 45px;border-radius: 5px;position: absolute;z-index: 400; margin-top: -30px;margin-left: 18px;">
+        {% endif %}
+
         <div class="ui segment" style="height: 145px; margin-top: 0;margin-bottom: 0;border-radius: 0;padding: 35px 18px 18px 18px;">
             <span id="paper_title{{ course.id }}" style="color: rgb(31, 31, 31);font-size: 16px;line-height: 1.5rem;">{{ course.title }} {% if profile in course.students.all or profile == course.author_profile %}<i class="icon check" style="color: #21BA45 !important"></i>{% endif %} </span>
             <div class="ui grid" style="margin-top: 10px;">
@@ -49,7 +55,7 @@
                 </div>
                 <div class="four wide column" style="padding: 7px 10px 10px 0;">
                     <span style="display: block;font-size: 12px;color: #848484;">{{ course.author_profile.first_name }}</span>
-                    <span style="display: block;font-size: 11px;color: #848484;line-height: 11px;"><i>{{ course.author_profile.school }}</i></span>
+                    <span style="display: block;font-size: 11px;color: #848484;line-height: 11px;"><i>{{ course.author_profile.school.title }}</i></span>
                 </div>
             </div>
         </div>

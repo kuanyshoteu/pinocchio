@@ -9,7 +9,7 @@
     }
 </style>
 {% if hisprofile == profile or profile.is_manager %}
-    <div class="ui segment" style="margin-bottom: 0">
+    <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
         <div class="ui grid">
             <div class="one wide column" style="margin-right: 14px;">
                 <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
@@ -33,7 +33,7 @@
         {% endfor %} 
     {% else %}
         {% for subject in hisprofile.hissubjects.all %}
-        <a style="padding: 14px; font-size: 13px;">
+        <a style="padding: 14px; font-size: 13px;" class="open_attendance" id="{{ subject.id }}">
             <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
         </a>
         {% endfor %} 
@@ -45,3 +45,27 @@
     {% endif %}
     </div> 
 {% endif %}
+
+<script >
+    for(var i = 0; i < document.getElementsByClassName('swiper-container').length; i++){
+        var id = document.getElementsByClassName('swiper-container')[i].getAttribute('id');
+        var swiper = new Swiper('.main-slider' + id, {
+            slidesPerView: 4,
+            spaceBetween: 0,
+            centeredSlides: false,
+            nextButton: '.uploaded-in-next'+id,
+            prevButton: '.uploaded-in-prev'+id 
+        });
+        if ($('.today' + id).attr('number')){
+            number = $('.today' + id).attr('number')
+        }
+        else{
+            number = $('.past' + id).last().attr('number')
+        }
+        console.log(number)
+        if (number){
+            swiper.slideTo(parseInt(number))
+        }
+        var mySwiper = document.getElementsByClassName('.main-slider' + id).swiper
+    }
+</script>

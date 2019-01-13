@@ -1,0 +1,112 @@
+<div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+    <div class="ui grid">
+        <div class="one wide column">
+            <i class="icon chart line" style="font-size: 17px;"></i>
+        </div>
+        <div class="eleven wide column" style="padding-right: 25px;">
+            Обратная сторона
+        </div>
+    </div>
+</div>
+<div class="ui segment" style="margin-top: 0;margin-bottom: 0;padding: 18px;">
+    {% for squad in all_squads %}
+        <a style="margin-right: 14px;" class="open_point {% if forloop.counter == 1 %}current_point{% endif %}">
+            {{ squad.title }}
+        </a>
+    {% endfor %}
+</div>                        
+<div class="ui segment" style="margin-top: 0;">
+    <div class="ui segment" style="padding: 3px;background-color: rgba(16,133,135,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Отчисленные </span>
+    <div class="ui segment" style="margin-left: 14px; padding: 3px;background-color: rgba(236,83,62,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Взяли академ</span>
+    <div class="ui segment" style="margin-left: 14px; padding: 3px;background-color: #21BA45;width: 40px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Не сдали экзамен</span>
+    <br>
+    <canvas style="padding-right: 25px;" id="canvas2" height="70" width="500"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script type="text/javascript">
+  var lineChartData = {
+    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(16,133,135,1)",
+        pointColor: "rgba(16,133,135,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(16,133,135,1)",
+        data: ["128.940", "131.397", "132.235", "128.235", "125.636", "127.271", "125.667", "129.554"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(236,83,62,1)",
+        pointColor: "rgba(236,83,62,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["127.283", "125.147", "124.489", "116.783", "111.696", "110.563", "105.469", "104.332"]
+    }]
+}
+  var lineChartData2 = {
+    labels: ["2017", "2018", "2019"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#21BA45",
+        pointColor: "#21BA45",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "#21BA45",
+        data: ["28.940", "31.397", "32.235"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(236,83,62,1)",
+        pointColor: "rgba(236,83,62,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["17.283", "15.283", "12.283"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(16,133,135,1)",
+        pointColor: "rgba(16,133,135,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(16,133,135,1)",
+        data: ["5", "7", "2"]
+    }]
+}
+  var lineChartDataMoney = {
+    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#21BA45",
+        pointColor: "#21BA45",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "#21BA45",
+        data: ["128.940", "131.397", "132.235", "128.235", "145.636"]
+    }]
+}
+
+window.onload = function() {
+    var ctx = document.getElementById("canvas").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+        responsive: true
+    });
+    var ctx = document.getElementById("canvas2").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData2, {
+        responsive: true
+    });
+    var ctx = document.getElementById("canvas_money").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
+        responsive: true
+    });
+
+}
+</script>
