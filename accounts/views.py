@@ -163,37 +163,38 @@ def hislessons(hisprofile):
                 if timenow_int >= timep_start_int and timenow_int <= timep_end_int:
                     needed_timep = timep
 
-            sw = SquadWeek.objects.get(squad=squad, actual=True)
-            if needed_timep != 'none':
-                sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
-                if len(sc) > 0:
-                    sc = sc[0]
-                    if len(sc.subject_materials.filter(subject=subject)) > 0:
-                        last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                        lesson_now = True
-                        classwork = [[subject, [last_lecture]]]
-            else:
-                for sc in sw.week_cells.all():
-                    if sc.date > timezone.now().date():
+            sw = SquadWeek.objects.filter(squad=squad, actual=True)
+            if len(sw) > 0:
+                if needed_timep != 'none':
+                    sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
+                    if len(sc) > 0:
+                        sc = sc[0]
                         if len(sc.subject_materials.filter(subject=subject)) > 0:
                             last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-            
-            if last_lecture == 'none' and lesson_now == False:
-                index = list(squad.weeks.all()).index(sw)
-                if index+1 < len(squad.weeks.all()):
-                    found_in_this_week = False
-                    for i in range(index+1, len(squad.weeks.all())):
-                        if found_in_this_week:
-                            break
-                        sw = squad.weeks.all()[i]
-                        for sc in sw.week_cells.all():
-                            if sc.date > timezone.now().date():
-                                if len(sc.subject_materials.filter(subject=subject)) > 0:
-                                    if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
-                                        last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                                        found_in_this_week = True
-                                        break
-            homeworks.append(last_lecture) 
+                            lesson_now = True
+                            classwork = [[subject, [last_lecture]]]
+                else:
+                    for sc in sw.week_cells.all():
+                        if sc.date > timezone.now().date():
+                            if len(sc.subject_materials.filter(subject=subject)) > 0:
+                                last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                
+                if last_lecture == 'none' and lesson_now == False:
+                    index = list(squad.weeks.all()).index(sw)
+                    if index+1 < len(squad.weeks.all()):
+                        found_in_this_week = False
+                        for i in range(index+1, len(squad.weeks.all())):
+                            if found_in_this_week:
+                                break
+                            sw = squad.weeks.all()[i]
+                            for sc in sw.week_cells.all():
+                                if sc.date > timezone.now().date():
+                                    if len(sc.subject_materials.filter(subject=subject)) > 0:
+                                        if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
+                                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                                            found_in_this_week = True
+                                            break
+                homeworks.append(last_lecture) 
         res.append([subject, homeworks])
     return res, lesson_now, classwork
 
