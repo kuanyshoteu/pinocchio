@@ -108,6 +108,14 @@ DATABASES = {
 #         'HOST': 'localhost',
 #         'PORT': '',
 #     },
+#     'akuir': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'akuir',
+#         'USER': 'admin',
+#         'PASSWORD': '031196Kk',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
 # }
 
 # Password validation

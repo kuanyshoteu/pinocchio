@@ -15,8 +15,8 @@
             {% endif %}
         {% endif %}
         {% if profile.is_trener %}
-            <a class="edit" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
-            <a class="delete_task edit" id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
+            <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
             <br>
             <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
             <div class="ui mini modal" id="modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">

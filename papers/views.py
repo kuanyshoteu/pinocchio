@@ -400,16 +400,19 @@ def check_paper(request):
     if request.GET.get('current_paper'):
         profile = Profile.objects.get(user = request.user.id)
         paper = Paper.objects.get(id = int(request.GET.get('current_paper')))
-        paper_solver = profile.check_papers.get_or_create(paper=paper)[0]
-        paper_solver.solver_correctness = True
+        solver_correctness = True
+
         for subtheme in paper.subthemes.all():
             for task in subtheme.task_list.all():
                 solver = profile.check_tasks.get_or_create(task = task)[0]
                 if solver.solver_correctness == False:
-                    paper_solver.solver_correctness = False
+                    solver_correctness = False
                     break
-        paper_solver.save()
+        if solver_correctness:
+            paper.done_by.add(profile)
+        else:
+            paper.done_by.remove(profile)
     data = {
-        'is_solved': paper_solver.solver_correctness
+        'is_solved': solver_correctness
     }
     return JsonResponse(data)

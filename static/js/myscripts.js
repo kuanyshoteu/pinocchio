@@ -2,7 +2,6 @@ $(document).ready(function () {
     $('.open_point').click(function (event){
         
     })
-    $('#keywords').tablesorter(); 
     
     $('.att_present').click(function (event){
         var id = $(this).attr('id')
