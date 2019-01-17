@@ -491,6 +491,29 @@ $(document).ready(function(){
             }
         });  
     });
+    $(".add_problem").click(function () {
+        var this_ = $(this) 
+        var Url = this_.attr("url")
+        subtheme_id = this_.attr("subtheme_id");
+        task_id = this_.attr("task_id");
+        id = this_.attr("id");
+        $.ajax({
+            url: Url,
+            data: {
+                'subtheme_id':subtheme_id,
+                'task_id':task_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.action == 'add'){
+                    this_.text("Убрать");                    
+                }
+                else{
+                    this_.text("Добавить");
+                }
+            }
+        });  
+    });
     $(".open_paper_features").click(function (event) {
         event.preventDefault();
         var this_ = $(this)

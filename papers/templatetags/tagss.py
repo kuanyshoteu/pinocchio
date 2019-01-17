@@ -8,7 +8,10 @@ def is_correct(task, profile):
 
 @register.filter
 def is_done(paper, profile):
-    return paper.solver.get_or_create(author_profile=profile)[0].solver_correctness
+    if profile in paper.done_by.all():
+        return True
+    else:
+        return False
 
 @register.filter
 def addstr(str1, str2):

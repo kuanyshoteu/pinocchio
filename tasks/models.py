@@ -43,23 +43,18 @@ class Task(models.Model):
     variants = ArrayField(models.TextField(), default = [''])
 
     tags = models.ManyToManyField(ProblemTag, related_name='tasks')
-
     def __unicode__(self):
         return self.id
-
     def get_delete_url(self):
         return reverse("tasks:delete")
     def get_markdown(self):
         return mark_safe(markdown(self.content))
-
     def children(self): #replies
         return Task.objects.filter(parent=self)
-
     def change_answer_url(self):
         return reverse("tasks:change_answer_url")
     def change_text_url(self):
         return reverse("tasks:change_text_url")
-
     @property
     def get_content_type(self):
         instance = self
@@ -67,7 +62,7 @@ class Task(models.Model):
         return content_type
 
     class Meta:
-        ordering = ['id']
+        ordering = ['cost']
 
 class Solver(models.Model):
     solver_ans = ArrayField(models.TextField(), default = [''])

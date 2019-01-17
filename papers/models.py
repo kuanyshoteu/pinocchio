@@ -29,8 +29,10 @@ class Subtheme(models.Model):
     video = models.FileField(default='')
     file = models.FileField(default='')
     youtube_video_link = models.TextField(default='')
+    def new_task_url(self):
+        return reverse("papers:new_task_url")
     def add_task_url(self):
-        return reverse("papers:add_task_url")
+        return reverse("papers:add_task_url")        
     def rename_subtheme_url(self):
         return reverse("papers:rename_subtheme_url")
     def rewrite_subtheme_url(self):

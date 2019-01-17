@@ -23,10 +23,10 @@
             {% for paper in lesson.papers.all %}
             <a class="{% if forloop.counter == 1 %}switch_btn_active{% endif %} switch_btn switch_btn{{ lesson.id }}" 
             style="width: calc(70%/{{ lesson.papers.all|length }});" paper_id='{{ paper.id }}' lesson_id='{{ lesson.id }}'>
-                {{ paper.title }}
-                <span class="l{{ lesson.id }}p{{ paper.id }}done_tick" style="font-size: 16px; font-weight: 600; {% if paper|is_done:profile == False %}display: none;{% endif %}">
+                <span style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{ paper.title }}</span>
+                <div class="l{{ lesson.id }}p{{ paper.id }}done_tick" style="font-size: 16px; font-weight: 600; {% if paper|is_done:profile == False %}display: none;{% else %}display: inline-block;{% endif %}">
                     <i class="icon check" style="color: #32CD32 !important"></i>
-                </span>
+                </div>
             </a>
             {% endfor %}
             <a class="switch_btn" style="width: 15%;">

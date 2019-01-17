@@ -14,9 +14,13 @@
             <a style="width: 25%; padding-left: 0; padding-right: 0; text-align: center;display: block;" class="item open_students_table" page='new_probleml{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'>Новая задача</a>
         </div>
         <div class="ui active tab" id="problem_listl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" data-tab="info">
-            {% for task in tasks %}
-                {% include 'library/task_detail.html' %}
-            {% endfor %}
+            <div class="ui grid">
+                <div class="eleven wide column">
+                    {% for task in tasks %}
+                        {% include 'library/choose_task.html' %}
+                    {% endfor %}
+                </div>
+            </div>
         </div>
         <div class="ui tab" id="new_probleml{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
             <form class="ui form add-problem" method='POST' enctype='multipart/form-data'>{% csrf_token %}
@@ -60,7 +64,7 @@
                 </div>
 
                 <br>
-                <a class='ui blue button mini new_problem' subtheme_id='{{ subtheme.id }}' id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' data-href='{{ subtheme.add_task_url }}' style="margin-top:10px;">Добавить</a>
+                <a class='ui blue button mini new_problem' subtheme_id='{{ subtheme.id }}' id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' data-href='{{ subtheme.new_task_url }}' style="margin-top:10px;">Добавить</a>
             </form>
         </div>
     </div>

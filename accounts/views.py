@@ -165,6 +165,7 @@ def hislessons(hisprofile):
 
             sw = SquadWeek.objects.filter(squad=squad, actual=True)
             if len(sw) > 0:
+                sw = sw[0]
                 if needed_timep != 'none':
                     sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
                     if len(sc) > 0:

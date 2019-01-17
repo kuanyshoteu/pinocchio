@@ -92,7 +92,7 @@ def AddSubtheme(request):
     }
     return JsonResponse(data)
 
-def AddTask(request):
+def NewTask(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('text'):
         if request.GET.get('ans'):
@@ -117,6 +117,25 @@ def AddTask(request):
         'id':task.id,
         'change_text_url':task.change_text_url(),
         'change_answer_url':task.change_answer_url(),
+    }
+    return JsonResponse(data)
+
+def AddTask(request):
+    action = ''
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('subtheme_id') and request.GET.get('task_id'):
+        print(request.GET.get('subtheme_id'), request.GET.get('task_id'))
+        subtheme = Subtheme.objects.get(id = int(request.GET.get('subtheme_id')))
+        task = Task.objects.get(id = int(request.GET.get('task_id')))
+        if task in subtheme.task_list.all():
+            subtheme.task_list.remove(task)
+            action = 'remove'
+        else:
+            subtheme.task_list.add(task)
+            action = 'add'
+    print(action)
+    data = {
+        'action': action
     }
     return JsonResponse(data)
 
