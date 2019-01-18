@@ -4,10 +4,10 @@ from .models import *
 
 
 class ProfileModelAdmin(admin.ModelAdmin):
-    list_display = ["user", "id" ]
-    list_display_links = ["user"]
+    list_display = ["first_name", "id" ]
+    list_display_links = ["first_name"]
 
-    search_fields = ["user"]
+    search_fields = ["first_name"]
     class Meta:
         model = Profile
 
