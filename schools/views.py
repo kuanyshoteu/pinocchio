@@ -41,6 +41,7 @@ def school_detail(request, slug=None):
         "all_teachers":Profile.objects.filter(is_trener = True),
         "all_students":Profile.objects.filter(is_trener = False),
         "all_squads":Squad.objects.all(),
+        'courses':Course.objects.all(),
     }
     return render(request, "school/school_detail.html", context)
 
