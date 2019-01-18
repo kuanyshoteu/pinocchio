@@ -25,7 +25,7 @@ class ProblemTag(models.Model):
 
 class Task(models.Model):
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField()
     text = models.TextField()
     image = models.ImageField(upload_to=upload_location, 
             null=True, 
