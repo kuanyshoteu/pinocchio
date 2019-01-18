@@ -1,0 +1,46 @@
+{% load staticfiles %}
+<div class="ui segment" style="margin-bottom: 0;">
+    <div class="ui grid">
+        <div class="one wide column" style="margin-right: 14px;">
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="two wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            Успеваемость
+        </div>
+    </div>
+</div>
+<div class="ui segment" style="margin-top: 0">
+            {% for subject in hissubjects %}
+        <a style="padding: 14px; font-size: 13px;" class="open_attendance" id="{{ subject.id }}">
+            <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
+        </a>
+        {% endfor %} 
+        <br>
+    <div class="ui segment" style="padding: 3px; background-color: rgba(16,133,135,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
+    <canvas style="padding-right: 25px;" id="canvas_money" height="130" width="500"></canvas>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script type="text/javascript">
+var lineChartDataMoney = {
+    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#21BA45",
+        pointColor: "#21BA45",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "#21BA45",
+        data: ["128.940", "131.397", "132.235", "128.235", "145.636"]
+    }]
+}
+
+window.onload = function() {
+    var ctx = document.getElementById("canvas_money").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
+        responsive: true
+    });
+
+}
+
+</script>

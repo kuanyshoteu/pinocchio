@@ -1,4 +1,16 @@
 $(document).ready(function () {
+    $('.show_att_chart').click(function (event){
+        $('.attendances').hide()
+        $('.att_charts').show()
+        $('.show_att_chart').hide()
+        $('.show_attendances').show()
+    })
+    $('.show_attendances').click(function (event){
+        $('.att_charts').hide()
+        $('.attendances').show()
+        $('.show_attendances').hide()
+        $('.show_att_chart').show()
+    })
     $('.open_point').click(function (event){
         
     })
@@ -12,7 +24,6 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                console.log($('#grades' + id))
                 $('#grades' + id).show()
                 $('#attendance'+id).hide()
             }
@@ -112,7 +123,6 @@ $(document).ready(function () {
         }
     });
     $('.add_variant').click(function (event){
-        console.log('de')
         var id = $(this).attr('id')
         ul = document.getElementsByClassName(id + 'variants')[0]
         li = document.createElement('li')
@@ -126,7 +136,6 @@ $(document).ready(function () {
         ul.appendChild(li)
     })
     $('.add_answer').click(function (event){
-        console.log('de')
         var id = $(this).attr('id')
         div = document.getElementsByClassName('answers_' + id)[0]
         li = document.createElement('li')
@@ -277,7 +286,6 @@ $(document).ready(function () {
         var Url = this_.attr("data-href")
         var name = $('.zaiavka_name').val()
         var phone = $('.zaiavka_phone').val()
-        console.log(name, phone)
         if (Url) {
             $.ajax({
                 url: Url,
@@ -323,7 +331,6 @@ $(document).ready(function () {
         event.preventDefault();
         var this_ = $(this)
         var table_id = '#' + this_.attr("id") + 'details';
-        console.log(table_id)
         $(table_id).fadeToggle();
     })
     
@@ -360,7 +367,6 @@ $(document).ready(function () {
                 method: "GET",
                 data: {},
                 success: function (data) {
-                    console.log('roro')
                     $(icon).css('display', 'none')
                     $(name).css('text-decoration', 'line-through')
                     $(name).css('color', 'grey')
@@ -390,7 +396,6 @@ $(document).ready(function () {
                 method: "GET",
                 data: {},
                 success: function (data) {
-                    console.log('roro')
                     $(icon).css('display', 'none')
                     $(user).css('text-decoration', 'line-through')
                     $(user).css('color', 'grey')
@@ -411,7 +416,6 @@ $(document).ready(function () {
         e.preventDefault()
         var Url = $(this).attr("data-href")
         status = $(".textarea_status").val()
-        console.log(status)
         $.ajax({
             url: Url,
             method: "GET",
@@ -721,7 +725,6 @@ $(document).ready(function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")
         var answer = $(this).val();
-        console.log(pageUrl);
         if (pageUrl) {
             $.ajax({
                 url: pageUrl,
@@ -738,10 +741,8 @@ $(document).ready(function () {
     });
     $(document).on("click", '.delete_task', function () {
         var this_ = $(this)
-        console.log('de')
         var pageUrl = this_.attr("data-href")
         if (pageUrl) {
-            console.log('de4')
             $.ajax({
                 url: pageUrl,
                 data: {
@@ -759,8 +760,8 @@ $(document).ready(function () {
         var pageUrl = this_.attr("data-href")
         id = this_.attr("id")
         paper_id = this_.attr("paper_id")
-        var text = document.getElementsByClassName('change_task_text' + paper_id)[0].value
-        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[0].value
+        var text = document.getElementsByClassName('change_task_text' + paper_id)[1].value
+        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[1].value
 
         var answer = ""
         var variant = ""
@@ -776,7 +777,6 @@ $(document).ready(function () {
                 }
             }
         }
-        console.log(answer)
 
         if (pageUrl) {
             $.ajax({

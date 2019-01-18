@@ -95,10 +95,13 @@ def account_view(request, user = None):
                             videos.append(subtheme.video)
 
     hislessonss = hislessons(hisprofile)
+    time_periods = TimePeriod.objects.all()
     if hisprofile.is_trener:
         hissubjects = hisprofile.teachers_subjects.all()
+        hissquads = hisprofile.curators_squads.all()
     else:
         hissubjects = hisprofile.hissubjects.all()
+        hissquads = hisprofile.squads.all()        
     context = {
         "profile":yourprofile,
         "hisprofile": hisprofile,
@@ -109,6 +112,8 @@ def account_view(request, user = None):
         'hisboards':hisboards(hisprofile),
         'hissubjects':hissubjects,
         'days':Day.objects.all(),
+        'hissquads':hissquads,
+        'time_periods':time_periods,
         # "videos":hisvideos(hisprofile)[0],
         # 'youtubes':hisvideos(hisprofile)[1],
         'classwork':hislessonss[2],
