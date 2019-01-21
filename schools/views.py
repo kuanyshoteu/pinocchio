@@ -16,7 +16,7 @@ from subjects.models import *
 from squads.models import Squad
 from papers.models import *
 from library.models import Folder
-from accounts.models import Profile
+from accounts.models import Profile, Corruption
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -42,6 +42,7 @@ def school_detail(request, slug=None):
         "all_students":Profile.objects.filter(is_trener = False),
         "all_squads":Squad.objects.all(),
         'courses':Course.objects.all(),
+        'corruptions':Corruption.objects.all(),
     }
     return render(request, "school/school_detail.html", context)
 

@@ -81,18 +81,6 @@ def account_view(request, user = None):
     found_classwork = False
     idet_urok = False
     classwork = []
-    videos = []
-    cnt = 0
-    for subject in hisprofile.teachers_subjects.all():
-        for material in subject.materials.all():
-            for lesson in material.lessons.all():
-                for paper in lesson.papers.all():
-                    for subtheme in paper.subthemes.all():
-                        if cnt >= 2:
-                            break
-                        if subtheme.video:
-                            cnt += 1
-                            videos.append(subtheme.video)
 
     hislessonss = hislessons(hisprofile)
     time_periods = TimePeriod.objects.all()
@@ -110,45 +98,36 @@ def account_view(request, user = None):
         'all_profiles':Profile.objects.all(),
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
+        'hisattendance':hisattendance(hisprofile),
         'hissubjects':hissubjects,
         'days':Day.objects.all(),
         'hissquads':hissquads,
         'time_periods':time_periods,
-        # "videos":hisvideos(hisprofile)[0],
-        # 'youtubes':hisvideos(hisprofile)[1],
         'classwork':hislessonss[2],
         'homeworks':hislessonss[0],
         'lesson_now':hislessonss[1],
     }
     return render(request, "profile.html", context)
 
-def hisvideos(hisprofile):
-    found = False
-    youtubes = []
-    videos = []
-    cnt = 0
-    for subject in hisprofile.teachers_subjects.all():
-        for sm in subject.materials.all():
-            if found:
-                break
-            for lesson in sm.lessons.all():
-                if found:
-                    break
-                for paper in lesson.papers.all():
-                    if found:
-                        break
-                    for subtheme in paper.subthemes.all():
-                        if cnt >= 2:
-                            found = True
-                            break
-                        if subtheme.video:
-                            videos.append(subtheme.video)
-                            cnt += 1
-                        if subtheme.youtube_video_link:
-                            youtubes.append(subtheme.youtube_video_link)
-                            cnt += 1
-
-    return videos, youtubes
+def hisattendance(hisprofile):
+    res = []
+    sbj_array = []
+    sq_array = []
+    crnt_subject = hisprofile.teachers_subjects.first()
+    crnt_squad = crnt_subject.squads.first()
+    for attendance in hisprofile.madegrades.all():
+        if attendance.subject != crnt_subject:
+            crnt_subject = attendance.subject
+            res.append(sbj_array)
+            sbj_array = []
+        if attendance.squad != crnt_squad:
+            crnt_squad = attendance.squad
+            sbj_array.append(sq_array)
+            sq_array = []
+        sq_array.append(attendance)
+    print(res)        
+        
+    return 0
 
 def hislessons(hisprofile):
     res = []
@@ -280,6 +259,17 @@ def ChangeAttendance(request):
             attendance.grade = int(request.GET.get('grade'))
         attendance.save()
     data = {
+    }
+    return JsonResponse(data)
+
+def tell_about_corruption(request):
+    profile = Profile.objects.get(user = request.user)
+    ok = False
+    if request.GET.get('text'):
+        Corruption.objects.create(text=request.GET.get('text'),author_profile=profile, school=profile.school)
+        ok = True
+    data = {
+        'ok':ok
     }
     return JsonResponse(data)
 

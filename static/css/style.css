@@ -391,14 +391,16 @@ a{
 }
 .daysmall {
   display: inline-block;
-  width: 13%;
+  width: 14%;
   text-align: center;
   vertical-align: top;
   position: relative;
   z-index: 100;
-  padding: 3px;
+  padding: 0;
 }
-
+.daysmall_time {
+  width: 12%;
+}
 .day.other {
  color: rgba(255, 255, 255, .3);
 }

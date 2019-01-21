@@ -60,3 +60,4 @@ class School(models.Model):
         return mark_safe(markdown(self.content))
     def change_curator_url(self):
         return reverse("schools:change_curator_url")       
+

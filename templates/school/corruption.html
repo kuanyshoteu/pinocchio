@@ -1,0 +1,21 @@
+<div class="ui segment" style="margin-bottom: 0">
+  <div class="ui grid">
+      <div class="one wide column">
+          <i class="icon th list" style="font-size: 17px;"></i>
+      </div>
+      <div class="fifteen wide column" style="padding-right: 25px;">
+          Заявления о коррупции
+      </div>
+  </div>
+</div>
+<div class="ui segment" style="margin-top: 0;">
+	<div class="ui grid">
+		{% for corruption in corruptions %}
+		<div class="four wide column" style="padding: 14px 7px;">
+			<div class="ui segment">
+				{{ corruption.text }}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>

@@ -32,6 +32,7 @@ class Profile(models.Model):
     first_name = models.TextField(blank = True,null = True,default='')
     is_trener = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
+    is_director = models.BooleanField(default=False)
     is_creator = models.BooleanField(default=False)
     is_ceo = models.BooleanField(default=False)
 
@@ -82,6 +83,8 @@ class Profile(models.Model):
         return reverse("accounts:change_status_url")
     def change_url(self):
         return reverse("accounts:change_url")
+    def tell_about_corruption(self):
+        return reverse("accounts:tell_about_corruption")
     
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -101,23 +104,6 @@ class Zaiavka(models.Model):
     
     def get_api_deletezaiavka_url(self):
         return reverse("accounts:deletezaiavka-api-toggle", kwargs={"id": self.id})
-
-class School(models.Model):
-    name = models.TextField()
-    students = models.ManyToManyField(Profile, default=1, related_name='students_school')
-    treners = models.ManyToManyField(Profile, default=1, related_name='treners_school')
-    managers = models.ManyToManyField(Profile, default=1, related_name='managers_school')
-    director = models.ManyToManyField(Profile, default=1, related_name='director_school')
-    
-    image = models.ImageField(upload_to=upload_location, 
-            null=True, 
-            blank=True, 
-            width_field="width_field", 
-            height_field="height_field",)
-    height_field = models.IntegerField(default=0, null = True)
-    width_field = models.IntegerField(default=0, null = True)
-    class Meta:
-        ordering = ['id']
     
 class MainPage(models.Model):
     admin_name = models.TextField(default = 'admin2')
@@ -169,10 +155,13 @@ class MainPage(models.Model):
         return reverse("main:save_zaiavka_url")
     def get_markdown(self):
         return mark_safe(markdown(self.text))
+        
 
 def pre_save_course_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
 
-
-
+class Corruption(models.Model):
+    text = models.TextField(default='')
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='his_messages')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='corruptions')

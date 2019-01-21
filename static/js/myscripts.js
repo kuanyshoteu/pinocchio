@@ -1,4 +1,20 @@
 $(document).ready(function () {
+    $('.tell_about_corruption').click(function (event){
+        var text = $('.corruption_text').val()
+        console.log(text)
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.ok){
+                    $('.thanks').attr('style', 'background-color: #65C063;color: #fff;display: block;')                    
+                }
+            }
+        });
+    })
     $('.show_att_chart').click(function (event){
         $('.attendances').hide()
         $('.att_charts').show()

@@ -8,7 +8,7 @@
 <span style="display: none;" class="instance_id" id="{{ hissquads.0.id }}"></span>
 <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
     <div class="ui grid">
-        <div class="one wide column" style="margin-right: 14px;">
+        <div class="one wide column" style="margin-right: 16px;">
                 <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
@@ -37,7 +37,7 @@
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         <div class="week" id="0">
-            <div class="daysmall" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;">
             </div>
             {% for week_cell in week|week_dates %}
             {% if week_cell.date|date:'w' != '0' %}
@@ -54,14 +54,14 @@
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% for timep in time_periods %}
         <div class="week" id="{{ forloop.counter }}">
-            <div class="daysmall" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;font-size: 11px;">
                 {{ timep.start }}-{{ timep.end }}
             </div>
             {% for cell in week|time_cells:timep %} 
             {% if cell.date|date:'w' != '0' %}                                       
             <div class="daysmall other">
                 {% for material in cell.subject_materials.all %}
-                    <div class="ui segment" style="padding: 1px; background-color: #5181b8;box-shadow: none;margin-bottom: 0">
+                    <div class="ui segment" style="padding: 1px; background-color: #5181b8;box-shadow: none;margin-bottom: 0;margin-top: 5px;">
                         <a style="color: #fff;" onclick="$('#lessons{{ material.id }}').modal('show')">
                             {{ material.subject.title }}
                             {% if cell.subject_materials.all|length == 1 %}

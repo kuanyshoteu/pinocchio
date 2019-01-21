@@ -175,7 +175,8 @@ class Lecture(models.Model):
         ordering = ['cell']
 
 class Attendance(models.Model):
-    student = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='hisattendance')
+    teacher = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='madegrades')
+    student = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='hisgrades')
     squad_cell = models.ForeignKey(SquadCell, null=True, on_delete = models.CASCADE, related_name='attendances')
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='subject_attendances')
     squad = models.ForeignKey(Squad,null=True, on_delete = models.CASCADE, related_name='squad_attendances')
@@ -184,7 +185,7 @@ class Attendance(models.Model):
     present = models.TextField(default = '')
     grade = models.IntegerField(default = -1)
     class Meta:
-        ordering = ['squad_cell', 'student']
+        ordering = ['subject', 'squad', 'squad_cell', 'student']
     def change_url(self):
         return reverse("accounts:change_att_url")
     def present_url(self):

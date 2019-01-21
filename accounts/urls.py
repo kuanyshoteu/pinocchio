@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^change_url/$', change_profile, name='change_url'),
     url(r'^api/change_att_url/$', ChangeAttendance, name='change_att_url'),
     url(r'^api/present_url/$', att_present, name='present_url'),
+    url(r'^api/tell_about_corruption/$', tell_about_corruption, name='tell_about_corruption'),
     url(r'^(?P<user>[\w-]+)/$', account_view, name='profile'),
 ]
