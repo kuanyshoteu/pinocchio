@@ -98,7 +98,6 @@ def account_view(request, user = None):
         'all_profiles':Profile.objects.all(),
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
-        'hisattendance':hisattendance(hisprofile),
         'hissubjects':hissubjects,
         'days':Day.objects.all(),
         'hissquads':hissquads,
@@ -108,26 +107,6 @@ def account_view(request, user = None):
         'lesson_now':hislessonss[1],
     }
     return render(request, "profile.html", context)
-
-def hisattendance(hisprofile):
-    res = []
-    sbj_array = []
-    sq_array = []
-    crnt_subject = hisprofile.teachers_subjects.first()
-    crnt_squad = crnt_subject.squads.first()
-    for attendance in hisprofile.madegrades.all():
-        if attendance.subject != crnt_subject:
-            crnt_subject = attendance.subject
-            res.append(sbj_array)
-            sbj_array = []
-        if attendance.squad != crnt_squad:
-            crnt_squad = attendance.squad
-            sbj_array.append(sq_array)
-            sq_array = []
-        sq_array.append(attendance)
-    print(res)        
-        
-    return 0
 
 def hislessons(hisprofile):
     res = []

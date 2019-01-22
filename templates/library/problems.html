@@ -3,7 +3,6 @@
         {% for task in subtheme.task_list.all %}
 	        {% include 'library/task_detail.html' %}
         {% endfor %}
-	    {% include 'library/file_task.html' %}
     </div>
 {% endif %}
 {% if profile.is_trener %}

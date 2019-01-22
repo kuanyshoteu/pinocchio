@@ -31,9 +31,11 @@
         {% endfor %} 
         <div class="attendances">
             {% for subject in hissubjects %}
-                <div style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="subject{{ subject.id }}" class="subject_attendance">
-                {% include 'profile/att_details.html' %}
-                </div>
+                {% if forloop.counter == 1 %}
+                    <div id="subject{{ subject.id }}" class="subject_attendance">
+                    {% include 'profile/att_details.html' %}
+                    </div>
+                {% endif %}
             {% endfor %} 
         </div>
         <div class="att_charts" style="display: none;"> 
@@ -47,7 +49,7 @@
     for(var i = 0; i < document.getElementsByClassName('swiper-container').length; i++){
         var id = document.getElementsByClassName('swiper-container')[i].getAttribute('id');
         var swiper = new Swiper('.main-slider' + id, {
-            slidesPerView: 4,
+            slidesPerView: 5,
             spaceBetween: 0,
             centeredSlides: false,
             nextButton: '.uploaded-in-next'+id,
@@ -59,9 +61,8 @@
         else{
             number = $('.past' + id).last().attr('number')
         }
-        console.log(number)
         if (number){
-            swiper.slideTo(parseInt(number))
+            swiper.slideTo(parseInt(number-1))
         }
         var mySwiper = document.getElementsByClassName('.main-slider' + id).swiper
     }

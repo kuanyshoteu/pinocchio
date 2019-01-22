@@ -1,19 +1,20 @@
 {% load tttags %}
+{% load staticfiles %}
 <style type="text/css">
     .icon.angle:before{
         font-size: 20px;
     }
 </style>
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
-<div class="ui segment" style="margin-bottom: 0">
+<div class="ui segment" style="margin-bottom: 0;margin-top: 0">
     <div class="ui grid">
-      <div class="one wide column">
-          <i class="icon calendar alternate" style="font-size: 17px;"></i>
-      </div>
-      <div class="fifteen wide column" style="padding-right: 25px;">
-          Расписание
-      </div>
-  </div>
+        <div class="one wide column" style="margin-right: 16px;">
+                <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            Расписание
+        </div>
+    </div>
 </div>
 <div id="calendar" length='{{ instance.weeks.all|length }}' style="min-height: 300px;min-width: 100%">
 {% for week in instance.weeks.all %}
@@ -36,7 +37,7 @@
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         <div class="week" id="0">
-            <div class="daysmall" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;">
             </div>
             {% for week_cell in week|week_dates %}
             {% if week_cell.date|date:'w' != '0' %}

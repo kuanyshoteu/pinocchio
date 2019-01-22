@@ -4,18 +4,19 @@
     <a href="{% url 'library:courses' %}" style="color: #656565;">Курсы</a><i class="icon angle right"></i>{{ course.title }}
 </div>
 <div class="ui segment" style="margin-top: 0; padding: 0 0 30px 0;margin-bottom: 0">
-	<span style="position: absolute;font-size: 20px;color: #fff;margin-top: 50px;margin-left: 20px;">{{ course.title }}</span>
-	<a href="{{ course.get_absolute_url }}" style="position: absolute;margin-top: 100px;margin-left: 20px;background-color: #fff;width: 200px;" class="ui button large">
-	{% if profile in course.students.all or profile == course.author_profile %}Продолжить{% else %}Начать{% endif %} курс</a>
 	{% if course.image %}
 		<img src="{{ course.image.url }}" style="width: 100%;height: 200px;">
 	{% else %}
 		<img src="{% static 'images/back.png' %}" style="width: 100%;">
 	{% endif %}
-	<br>
-	<div style="margin-top: 44px;margin-bottom: 0; text-align: center;">
+	<div style="margin-bottom: 0; text-align: center;margin-top: 44px;width: 100%;">
 		<span style="font-size: 23px;color: #222;margin-bottom: 11px;font-weight: 700;">Об этом курсе</span>
-	</div>
+    	{% if profile in course.students.all or profile == course.author_profile %}
+	    	<a class="ui button large green" style="position: absolute; margin-top: -15px;margin-left: 50px;width: 20%;" href="{{ course.get_absolute_url }}">Продолжить курс</a>
+    	{% else %}
+    		<a class="ui button large green" onclick="$('.buy_course').modal('show')" style="position: absolute; margin-top: -15px;margin-left: 50px;width: 20%;">Начать курс</a>
+    	{% endif %}
+    </div>
 	<div style="margin-top: 0;padding: 20px;">
         <span style="font-size: 16px;margin-right: 10px;">
             {% for star in course.stars %}
@@ -27,7 +28,7 @@
         </span>
 	    <span style="font-size: 16px;color: #F7BB56;;font-weight: 600">{{ course.rating }}</span>
 	    <span style="font-size: 13px;color: #56565a;margin-left:10px;">
-	        Ученики: 100{{ course.students|length }}
+	        Студенты: 100{{ course.students|length }}
 	    </span>
 	    <br><br>
 		<span style="font-size: 15px;color: #56565a;">{{ course.get_markdown }}</span>
@@ -57,8 +58,8 @@
             </div>
             <div class="eleven wide column">
                 <a href='{{ course.author_profile.get_absolute_url }}' style="font-size: 20px;color: #373a3c;font-weight: 700">{{ course.author_profile.first_name }}</a>
-                <br>
-                {{ course.author_profile.school }}
+                <br><br>
+                {{ course.author_profile.school.title }}
                 <br>
                 {{ course.author_profile.description }}
             </div>
@@ -85,9 +86,7 @@
 				{{ lesson.papers.all.0.subthemes.all.0.content }}
 	                {% for paper in lesson.papers.all %}
 	                <div style="padding-top: 10px;padding-left: 30px;">
-	                    <a href="{{ lesson.get_absolute_url }}">
-	                        <span>{{ paper.title }}</span>
-	                    </a>
+                        <span>{{ paper.title }}</span>
 	                </div>
 	                {% endfor %}
 	            </div>
@@ -96,11 +95,49 @@
 	    {% endfor %}
 	</div>
 </div>
-<div class="ui segment" style="margin-top: 0; padding: 0;margin-bottom: 0;background-color:#44A8BF;">
+<div class="ui segment" style="margin-top: 0; padding: 0;margin-bottom: 0;">
 	<div style="margin-top: 0;padding: 20px;text-align: center;">		
-    	<span style="font-size: 20px;color: #fff;">Начните обучение сегодня</span>
-    	<br><br>	
-    	<a href="{{ course.get_absolute_url }}" class="ui button large" style="background-color: #fff">Начать курс</a>
+    	<span style="font-size: 20px;color: #222;">Начните обучение сегодня</span>
+    	<br><br>
+    	{% if profile in course.students.all or profile == course.author_profile %}
+	    	<a class="ui button large green" href="{{ course.get_absolute_url }}">Продолжить курс</a>
+    	{% else %}
+    		<a class="ui button large green open_buy_course" onclick="$('.buy_course').modal('show')" style="width: 30%;">Начать курс</a>
+    	{% endif %}
 	</div>
 </div>
 
+<div class="ui modal buy_course" style="width: 680px;">
+    <i class="close icon"></i>
+    <div class="content" style="padding: 0">
+    	<div class="ui grid" style="background-color: #fff;margin: 0;border-radius: 4px;padding: 25px;">
+    		<div class="four wide column" style="padding: 0;margin-right: 20px;">
+    			{% if course.image %}
+					<img src="{{ course.image.url }}" style="width: 140px;height: 140px;">
+				{% else %}
+					<img src="{% static 'images/books.png' %}" style="width: 140px;height: 140px;">
+				{% endif %}
+    		</div>
+    		<div class="eleven wide column" style="padding: 0">
+    			<div style="font-size: 18px;color: #222;">{{ course.title }}</div>
+    			<div style="color: #656565;margin-top: 4px;font-size: 13px;">
+			        <span style="margin-right: 10px;">
+			            {% for star in course.stars %}
+			                <i class="icon star" style="margin: 0 -3px 0 0;color: #F7BB56 !important;"></i>
+			            {% endfor %}
+			            {% for star in course.stars|notstars %}
+			                <i class="icon star outline" style="margin: 0 -3px 0 0;color: #F7BB56 !important;;"></i>
+			            {% endfor %}            
+			        </span>
+    				{{ course.students.all|length }} студентов
+    			</div>
+    			<div class="ui label" style="color: #000;margin-top: 9px;font-size: 15px;">
+	    			{{ course.cost }}
+		    		<img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 18px !important;width: 18px;">
+	    		</div>
+	    		<br>
+    			<a class="ui button blue pay_for_course" course_id={{ course.id }} url style="position: absolute;bottom: 0;width: 200px;">Купить курс</a>
+    		</div>
+    	</div>
+    </div>
+</div>
