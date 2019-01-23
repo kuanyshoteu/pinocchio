@@ -20,19 +20,20 @@
 {% if profile.is_trener %}
 <div class="ui segment" style="background-color: #fafbfc;margin-top: 7px;">
     <div class="ui grid">
-          <div class="one wide column" style="margin-right: 7px;">
-              <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
-          </div>
-          <div class="fourteen wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
-              Управление
-              <div style="float: right;">
-                  <a class="ui button mini blue create_paper" href='{{ profile.create_course_url }}'>
-                    Создать курс
-                  </a>
-              </div>
-          </div>
+      <div class="one wide column" style="margin-right: 7px;">
+        <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
       </div>
+      <div class="fourteen wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+        Управление
+        <div style="float: right;">
+          <a class="ui button mini blue create_paper" href='{{ profile.create_course_url }}'>
+            Создать курс
+          </a>
+        </div>
+      </div>
+    </div>
 </div>
+
 {% endif %}              
 <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
     <div class="ui grid">

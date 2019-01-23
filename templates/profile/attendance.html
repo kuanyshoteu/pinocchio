@@ -11,7 +11,7 @@
 {% if hisprofile == profile or profile.is_manager %}
     <div class="ui segment" style="margin-bottom: 0">
         <div class="ui grid">
-            <div class="one wide column" style="margin-right: 14px;">
+            <div class="one wide column">
                 <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
             </div>
             <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
@@ -19,6 +19,16 @@
             </div>
         </div>
     </div> 
+        <style>
+        .one.wide.column {
+            margin-right: 14px;
+        }
+        @media only screen and (max-width: 767px) {
+          .one.wide.column {
+            margin-right: 20px;
+          }
+        }
+        </style>
     <div class="ui segment" style="margin-top: 0">
     {% if hisprofile.is_trener %}
         {% for subject in hisprofile.teachers_subjects.all %}
