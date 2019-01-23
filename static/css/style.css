@@ -2,6 +2,49 @@ a{
 	cursor: pointer;
 	color: #285473;
 }
+    #keywords {
+      margin: 0 auto;
+      font-size: 13px;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+    #keywords thead {
+      cursor: pointer;
+    }
+    #keywords thead tr th { 
+      font-weight: bold;
+      padding: 14px;
+    }
+    #keywords thead tr th span { 
+      padding-right: 14px;
+      background-repeat: no-repeat;
+      background-position: 100% 100%;
+    }
+    #keywords tbody tr { 
+      color: #fff;
+    }
+    #keywords tbody tr td {
+      text-align: center;
+      padding: 14px 10px;
+    }
+    #keywords tbody tr td.lalign {
+      text-align: left;
+    }
+
+.swiper-container {
+  width: 75%;
+}
+.block-slider {
+  width: 100%;
+}
+.block-slider .swiper-slide {
+  background: #4F628E;
+}
+.next-btn,
+.prev-btn {
+  width: 26px;
+  height: 20px;
+}
 
 .subtheme_number_circle{
   background-color: #b0b0b0;
@@ -74,7 +117,13 @@ a{
 	padding:0 6px 17px 6px;color: #656565;font-size: 14px;
 }
 .current_squads{
-	border-bottom: 4px solid #5181b8;padding:0 6px 17px 6px;color: #000;font-size: 14px;
+  border-bottom: 2px solid #5181b8;padding:0 6px 17px 6px;color: #000;font-size: 14px;
+}
+.current_point{
+  border-bottom: 2px solid #5181b8;
+  padding:0 6px 8px 6px;
+  color: #000;
+  font-size: 14px;
 }
 .test_variant:hover{
 	border: 2px solid #5181b8;
@@ -103,6 +152,20 @@ a{
   color: #fff;
 }
 .switch_btn_active{
+  background-color: #1E90FF;
+  color: #fff;
+}
+.switch_att_btn{
+  border: 1px solid #e7e7e7;text-align: center; border-radius: 3px;color: #222; 
+  height: 30px;
+  padding-top: 4px;
+  padding-left: 0; padding-right: 0; text-align: center;display: block;
+}
+.switch_att_btn:hover{
+  background-color: #1E90FF;
+  color: #fff;
+}
+.switch_att_btn_active{
   background-color: #1E90FF;
   color: #fff;
 }
@@ -328,14 +391,16 @@ a{
 }
 .daysmall {
   display: inline-block;
-  width: 13%;
+  width: 14%;
   text-align: center;
   vertical-align: top;
   position: relative;
   z-index: 100;
-  padding: 3px;
+  padding: 0;
 }
-
+.daysmall_time {
+  width: 12%;
+}
 .day.other {
  color: rgba(255, 255, 255, .3);
 }

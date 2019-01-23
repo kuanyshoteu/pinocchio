@@ -1,0 +1,111 @@
+{% load tagss %}
+{% load staticfiles %}
+<div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
+    <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
+        {% if profile.is_trener == False %}
+                <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">1.</span>
+        {% endif %}
+        {% if profile.is_trener %}
+            <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
+            <br>
+            <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
+        {% endif %}
+
+        <span style="font-size: 17px;">Напишите сочинение про большие цели</span>
+        <div style="margin-top: 15px;">
+            <a class="ui label">
+              <img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 15px !important;">
+              7
+            </a>
+            <a class="ui label">
+                Литература
+            </a>
+            <a class="ui label">
+                Сочинение
+            </a>
+            
+        </div>
+    </div>
+    <div class="sixteen wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <input type="file" name="">        
+            <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' paper='clsw' paper_id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}'>Отправить</a>
+        </form>
+    </div>
+</div>
+
+<div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
+    <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
+        {% if profile.is_trener == False %}
+                <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">2.</span>
+        {% endif %}
+        {% if profile.is_trener %}
+            <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
+            <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
+            <br>
+            <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">2.</span>
+        {% endif %}
+
+        <table style="margin: 0;min-width: 300px;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Да</th>
+                    <th>Нет</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: center;">
+                        Определение 1
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" name="">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" name="">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">
+                        Определение 2
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" name="">
+                    </td>
+                    <td style="text-align: center;">
+                        <input type="checkbox" name="">
+                    </td>
+                </tr>
+            </tbody>            
+        </table>
+        <div style="margin-top: 15px;">
+            <a class="ui label">
+              <img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 15px !important;">
+              7
+            </a>
+            <a class="ui label">
+                Литература
+            </a>
+            <a class="ui label">
+                Сочинение
+            </a>
+            
+        </div>
+    </div>
+    <div class="sixteen wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' paper='clsw' paper_id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}'>Отправить</a>
+        </form>
+    </div>
+</div>
+<style type="text/css">
+  td{
+    border: 1px solid #C1C3D1;
+    }
+  th{
+    border: 1px solid #C1C3D1;
+    }
+  
+</style>

@@ -9,14 +9,18 @@
     }
 </style>
 {% if hisprofile == profile or profile.is_manager %}
-    <div class="ui segment" style="margin-bottom: 0">
+    <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
         <div class="ui grid">
             <div class="one wide column">
                 <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
             </div>
-            <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            <div class="two wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
                 Журналы
             </div>
+            <!-- <div class="ten wide column" style="padding-left: 0;line-height: 28px;font-size: 12px;">
+                <a class="show_att_chart">Показать графики</a>
+                <a class="show_attendances" style="display: none;">Показать оценки</a>
+            </div> -->
         </div>
     </div> 
         <style>
@@ -30,28 +34,45 @@
         }
         </style>
     <div class="ui segment" style="margin-top: 0">
-    {% if hisprofile.is_trener %}
-        {% for subject in hisprofile.teachers_subjects.all %}
+        {% for subject in hissubjects %}
         <a style="padding: 14px; font-size: 13px;" class="open_attendance" id="{{ subject.id }}">
             <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
         </a>
         {% endfor %} 
-        {% for subject in hisprofile.teachers_subjects.all %}
-            <div style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="subject{{ subject.id }}" class="subject_attendance">
-            {% include 'profile/att_details.html' %}
+        <div class="attendances">
+            {% for subject in hissubjects %}
+                <div style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="subject{{ subject.id }}" class="subject_attendance">
+                {% include 'profile/att_details.html' %}
+                </div>
+            {% endfor %} 
+        </div>
+        <div class="att_charts" style="display: none;"> 
+            <div class="ui segment" style="height: 232px;">
             </div>
-        {% endfor %} 
-    {% else %}
-        {% for subject in hisprofile.hissubjects.all %}
-        <a style="padding: 14px; font-size: 13px;">
-            <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
-        </a>
-        {% endfor %} 
-        {% for subject in hisprofile.hissubjects.all %}
-            <div style="{% if forloop.counter > 1 %}display: none;{% endif %}" id="subject{{ subject.id }}" class="subject_attendance">
-            {% include 'profile/att_details.html' %}
-            </div>
-        {% endfor %}     
-    {% endif %}
+        </div>    
     </div> 
 {% endif %}
+
+<script >
+    for(var i = 0; i < document.getElementsByClassName('swiper-container').length; i++){
+        var id = document.getElementsByClassName('swiper-container')[i].getAttribute('id');
+        var swiper = new Swiper('.main-slider' + id, {
+            slidesPerView: 4,
+            spaceBetween: 0,
+            centeredSlides: false,
+            nextButton: '.uploaded-in-next'+id,
+            prevButton: '.uploaded-in-prev'+id 
+        });
+        if ($('.today' + id).attr('number')){
+            number = $('.today' + id).attr('number')
+        }
+        else{
+            number = $('.past' + id).last().attr('number')
+        }
+        console.log(number)
+        if (number){
+            swiper.slideTo(parseInt(number))
+        }
+        var mySwiper = document.getElementsByClassName('.main-slider' + id).swiper
+    }
+</script>

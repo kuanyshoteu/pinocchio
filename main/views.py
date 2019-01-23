@@ -124,7 +124,7 @@ class SubjectAPIToggle(APIView):
         return Response(data)
 
 def contacts_view(request):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     
@@ -149,7 +149,7 @@ def trener_update(request, slug=None):
         instance.save()
         return HttpResponseRedirect(main_page.main_url())
     
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
 

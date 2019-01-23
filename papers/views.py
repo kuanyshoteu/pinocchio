@@ -18,7 +18,7 @@ from library.models import Folder
 from accounts.models import *
 
 def lesson_details(request, lesson_id = None):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
@@ -92,7 +92,7 @@ def AddSubtheme(request):
     }
     return JsonResponse(data)
 
-def AddTask(request):
+def NewTask(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('text'):
         if request.GET.get('ans'):
@@ -117,6 +117,25 @@ def AddTask(request):
         'id':task.id,
         'change_text_url':task.change_text_url(),
         'change_answer_url':task.change_answer_url(),
+    }
+    return JsonResponse(data)
+
+def AddTask(request):
+    action = ''
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('subtheme_id') and request.GET.get('task_id'):
+        print(request.GET.get('subtheme_id'), request.GET.get('task_id'))
+        subtheme = Subtheme.objects.get(id = int(request.GET.get('subtheme_id')))
+        task = Task.objects.get(id = int(request.GET.get('task_id')))
+        if task in subtheme.task_list.all():
+            subtheme.task_list.remove(task)
+            action = 'remove'
+        else:
+            subtheme.task_list.add(task)
+            action = 'add'
+    print(action)
+    data = {
+        'action': action
     }
     return JsonResponse(data)
 
@@ -308,7 +327,7 @@ def dislike_lesson(request):
     return JsonResponse(data)
 
 def course_details(request, course_id=None):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
@@ -323,7 +342,7 @@ def course_details(request, course_id=None):
     return render(request, 'courses/course_details.html', context=context)
 
 def course_seller(request, course_id=None):
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
@@ -349,7 +368,7 @@ def course_update(request, course_id=None):
         course.save()
         return HttpResponseRedirect(course.get_update_url())
         
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
 
@@ -365,7 +384,7 @@ def course_create(request):
     if not request.user.is_authenticated:
         raise Http404
 
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     if not profile.is_trener:
@@ -400,16 +419,19 @@ def check_paper(request):
     if request.GET.get('current_paper'):
         profile = Profile.objects.get(user = request.user.id)
         paper = Paper.objects.get(id = int(request.GET.get('current_paper')))
-        paper_solver = profile.check_papers.get_or_create(paper=paper)[0]
-        paper_solver.solver_correctness = True
+        solver_correctness = True
+
         for subtheme in paper.subthemes.all():
             for task in subtheme.task_list.all():
                 solver = profile.check_tasks.get_or_create(task = task)[0]
                 if solver.solver_correctness == False:
-                    paper_solver.solver_correctness = False
+                    solver_correctness = False
                     break
-        paper_solver.save()
+        if solver_correctness:
+            paper.done_by.add(profile)
+        else:
+            paper.done_by.remove(profile)
     data = {
-        'is_solved': paper_solver.solver_correctness
+        'is_solved': solver_correctness
     }
     return JsonResponse(data)

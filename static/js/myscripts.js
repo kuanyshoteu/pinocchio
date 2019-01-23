@@ -1,4 +1,65 @@
 $(document).ready(function () {
+    $('.tell_about_corruption').click(function (event){
+        var text = $('.corruption_text').val()
+        console.log(text)
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.ok){
+                    $('.thanks').attr('style', 'background-color: #65C063;color: #fff;display: block;')                    
+                }
+            }
+        });
+    })
+    $('.show_att_chart').click(function (event){
+        $('.attendances').hide()
+        $('.att_charts').show()
+        $('.show_att_chart').hide()
+        $('.show_attendances').show()
+    })
+    $('.show_attendances').click(function (event){
+        $('.att_charts').hide()
+        $('.attendances').show()
+        $('.show_attendances').hide()
+        $('.show_att_chart').show()
+    })
+    $('.open_point').click(function (event){
+        
+    })
+    
+    $('.att_present').click(function (event){
+        var id = $(this).attr('id')
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#grades' + id).show()
+                $('#attendance'+id).hide()
+            }
+        });
+    })
+    $(".switch_att_btn").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        var paper_id = this_.attr('paper_id')
+        var lesson_id = this_.attr('lesson_id')
+        current_class = this_.attr('class')
+        for(var i = 0; i < document.getElementsByClassName('switch_att_btn' + lesson_id).length; i++){
+            document.getElementsByClassName('switch_att_btn' + lesson_id)[i].setAttribute('class', 'switch_att_btn switch_att_btn' + lesson_id)    
+        }
+        for(var i = 0; i < document.getElementsByClassName('ppr' + lesson_id).length; i++){
+            document.getElementsByClassName('ppr' + lesson_id)[i].setAttribute('class', 'paper ppr ppr' + lesson_id)
+        }
+        this_.attr('class', current_class + ' switch_att_btn_active switch_att_btn')
+        $('#paper' + paper_id + lesson_id).attr('class', 'paper_active ppr ppr' + lesson_id)
+    })
     $('.open_attendance').click(function (event){
         var id = $(this).attr('id')
         for (var i = 0; i < document.getElementsByClassName('subject_attendance').length; i++){
@@ -78,7 +139,6 @@ $(document).ready(function () {
         }
     });
     $('.add_variant').click(function (event){
-        console.log('de')
         var id = $(this).attr('id')
         ul = document.getElementsByClassName(id + 'variants')[0]
         li = document.createElement('li')
@@ -92,7 +152,6 @@ $(document).ready(function () {
         ul.appendChild(li)
     })
     $('.add_answer').click(function (event){
-        console.log('de')
         var id = $(this).attr('id')
         div = document.getElementsByClassName('answers_' + id)[0]
         li = document.createElement('li')
@@ -243,7 +302,6 @@ $(document).ready(function () {
         var Url = this_.attr("data-href")
         var name = $('.zaiavka_name').val()
         var phone = $('.zaiavka_phone').val()
-        console.log(name, phone)
         if (Url) {
             $.ajax({
                 url: Url,
@@ -289,7 +347,6 @@ $(document).ready(function () {
         event.preventDefault();
         var this_ = $(this)
         var table_id = '#' + this_.attr("id") + 'details';
-        console.log(table_id)
         $(table_id).fadeToggle();
     })
     
@@ -326,7 +383,6 @@ $(document).ready(function () {
                 method: "GET",
                 data: {},
                 success: function (data) {
-                    console.log('roro')
                     $(icon).css('display', 'none')
                     $(name).css('text-decoration', 'line-through')
                     $(name).css('color', 'grey')
@@ -356,7 +412,6 @@ $(document).ready(function () {
                 method: "GET",
                 data: {},
                 success: function (data) {
-                    console.log('roro')
                     $(icon).css('display', 'none')
                     $(user).css('text-decoration', 'line-through')
                     $(user).css('color', 'grey')
@@ -377,7 +432,6 @@ $(document).ready(function () {
         e.preventDefault()
         var Url = $(this).attr("data-href")
         status = $(".textarea_status").val()
-        console.log(status)
         $.ajax({
             url: Url,
             method: "GET",
@@ -437,15 +491,15 @@ $(document).ready(function () {
     $(".save_grade").click(function (event) {
         event.preventDefault();
         var this_ = $(this)
-        var pageUrl = this_.attr("data-href")
-        grade=$("#attendance" + this_.attr("id")).val()
-        console.log($("#attendance" + this_.attr("id")).val())
+        var pageUrl = this_.attr("url")
+        var grade = this_.attr('grade')
+        var id = this_.attr('id')
         if (pageUrl) {
             $.ajax({
                 url: pageUrl,
                 method: "GET",
                 data: {
-                    'id':this_.attr("id"),
+                    'id':id,
                     'grade':grade,                        
                 },
                 success: function (data) {
@@ -687,7 +741,6 @@ $(document).ready(function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")
         var answer = $(this).val();
-        console.log(pageUrl);
         if (pageUrl) {
             $.ajax({
                 url: pageUrl,
@@ -704,10 +757,8 @@ $(document).ready(function () {
     });
     $(document).on("click", '.delete_task', function () {
         var this_ = $(this)
-        console.log('de')
         var pageUrl = this_.attr("data-href")
         if (pageUrl) {
-            console.log('de4')
             $.ajax({
                 url: pageUrl,
                 data: {
@@ -725,8 +776,8 @@ $(document).ready(function () {
         var pageUrl = this_.attr("data-href")
         id = this_.attr("id")
         paper_id = this_.attr("paper_id")
-        var text = document.getElementsByClassName('change_task_text' + paper_id)[0].value
-        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[0].value
+        var text = document.getElementsByClassName('change_task_text' + paper_id)[1].value
+        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[1].value
 
         var answer = ""
         var variant = ""
@@ -742,7 +793,6 @@ $(document).ready(function () {
                 }
             }
         }
-        console.log(answer)
 
         if (pageUrl) {
             $.ajax({

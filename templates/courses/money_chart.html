@@ -1,0 +1,28 @@
+
+<div class="ui segment" style="padding: 3px; background-color: rgba(16,133,135,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
+<canvas style="padding-right: 25px;" id="canvas_money" height="180" width="500"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+<script type="text/javascript">
+var lineChartDataMoney = {
+    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#21BA45",
+        pointColor: "#21BA45",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "#21BA45",
+        data: ["128.940", "131.397", "132.235", "128.235", "145.636"]
+    }]
+}
+
+window.onload = function() {
+    var ctx = document.getElementById("canvas_money").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
+        responsive: true
+    });
+
+}
+
+</script>

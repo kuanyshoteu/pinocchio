@@ -13,18 +13,18 @@
     <div class="ui segment" style="margin-top: 0">
         <div class="ui grid" style="padding: 7px 9px;">
             {% for subject in hissubjects %}
-                <div class="five wide column" style="padding:7px 5px;margin-bottom: 0">
+                <div class="sixteen wide column" style="padding:7px 5px;margin-bottom: 0">
                     <a href="{{ subject.get_absolute_url }}">
                     <div class="ui segment" style="
                         background-color:  {{ subject.color_back  }};
-                        color: #fff;height: 70px;
+                        color: #fff;height: 50px;
                         {% if subject.image_back %}
                         background-image: url({{ subject.image_back.url }});
                         {% endif %}
                         background-repeat: repeat;">
                         <span style="position: absolute;font-size: 16px;">{{ subject.title }}</span>
                         {% if subject.image_icon %}
-                        <img src="{{ subject.image_icon.url }}" style="width: 50px;float: right;border-radius: 100%;">
+                        <img src="{{ subject.image_icon.url }}" style="width: 40px;float: right;border-radius: 100%;margin-top:-7px;">
                         {% endif %}
                     </div>
                     </a>    

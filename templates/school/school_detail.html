@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="group-details" style="padding-bottom: 200px;">
+    {% if user.is_authenticated %}
+    <a id="go-back-btn"  href='{% url "squads:list" %}'>
+        <i class="arrow left icon"></i>Назад
+    </a>
+    {% endif %}
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                <div class="ui grid">
+                    <div class="fifteen wide column" style="padding-bottom: 0;padding-right: 0;">
+                        <div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
+                            <div class="ui grid">
+                                <div class="eleven wide column" style="padding: 0">
+                                    <div class="group-name">
+                                        {% if instance.image_banner %}
+                                            {% if instance.image_icon %}
+                                            <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
+                                            {% else %}
+                                            <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
+                                            {% endif %}
+                                        {% endif %}
+                                        <span class="ui header ava-title">{{ instance.title }}</span>
+                                    </div>
+                                </div>
+                                <div class="five wide column" >
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;margin-top: 0">
+                            Информация
+                        </div>
+                        <div class="ui segment" style="margin-top: 0">
+                            <div class="ui grid">
+                                <div class="one wide column" style="padding-bottom: 0">
+                                    <i class="icon info" style="font-size: 17px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;padding-bottom: 0">
+                                    {{ instance.get_markdown }}
+                                </div>
+                                <div class="one wide column">
+                                    <i class="icon id badge" style="font-size: 22px;padding: 0;margin-left: -5px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;">
+                                    Контакты: {{ instance.address }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui grid">
+                            <div class="six wide column" style="padding-right: 0">
+                                <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                                    Расходы
+                                </div>
+                                <div class="ui segment" style="margin-top: 0">
+                                    {% include 'school/money_circle_chart.html' %}
+                                </div>
+                            </div>
+                            <div class="ten wide column">
+                                <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                                    <div class="ui grid">
+                                        <div class="nine wide column" style="padding: 14px">
+                                            Доходы
+                                        </div>
+                                        <div class="seven wide column" style="padding: 10px">
+                                            <a class="ui button mini blue">Показать графики за год</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui segment" style="margin-top: 0;height: 273px;">
+                                    {% include 'school/money_chart.html' %}
+                                </div>
+                            </div>
+                        </div>
+                        {% include 'school/good_results_chart.html' %}
+                        {% include 'school/bad_results_chart.html' %}
+                        {% include 'school/course_good_results_chart.html' %}
+                        {% include 'school/course_bad_results_chart.html' %}
+                        {% include 'school/teachers_rating.html' %}
+                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                            <div class="ui grid">
+                                <div class="one wide column">
+                                    <i class="icon trophy" style="font-size: 17px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;">
+                                    Лучшие ученики
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment" style="margin-top: 0;">
+                            <div class="ui grid" style="margin-top: 10px;">
+                                {% for student in instance|top_students %}
+                                    <div style="width: 14%">
+                                        {% include 'school/chart_circle.html' %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% include 'school/corruption.html' %}                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="day_id" id="" group_id = '{{ instance.id }}'></span>
+{% include 'squads/squad_materials.html' %}
+
+{% endblock content %}

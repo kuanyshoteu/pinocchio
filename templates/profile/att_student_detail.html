@@ -1,39 +1,32 @@
 {% load ttttags %}
-{% load tttags %}
-<div class="week" id="{{ week.id }}">
-    <div class="daysmall" style="padding-top: 5px;text-align: left;color: white">
-        {{ student.first_name }}
-    </div>
-    {% for day in days %} 
-    {% if day.number != 7 %}                                       
-    <div class="daysmall other">
-        {% for squad_cell in day|day_cells:week %}
-            {% for att in squad_cell|cell_atts:student %}
-                {% if att.subject == subject %}
+<div id="paper{{ squad.id }}sub{{ subject.id }}" class="ppr{{ subject.id }} {% if forloop.counter == 1 %}paper_active{% else %}paper{% endif %}" style="background-color: #4A4A4A;">
+    <div class="ui grid" style="margin: 0;padding: 0 14px;">
+        {% for sm in subject.materials.all %}
+            {% if sm|find_sc:squad|length > 0 %}
+            <div class="two wide column" style="padding: 14px 3px;{% if forloop.counter > 9 %} display: none;{% endif %}" >
+                <div style="padding-top: 5px;text-align: left;color: white;">
+                    {% for squad_cell in sm|find_sc:squad %}
+                    <div style="height: 62px;">
+                        {{ squad_cell.date }}
+                    </div>
                     <div style="width: 100%;float: left;">
                         <span style="font-size: 11px; color: grey;float: left;">
-                            {{ att.squad_cell.time_period.start }}-{{ att.squad_cell.time_period.end }}
+                            {{ squad_cell.time_period.start }}-{{ squad_cell.time_period.end }}
                         </span>
                     </div>
                     <br>
-                    {% if att.grade == -1 and hisprofile.is_trener %}
-                    <div style="width: 50%;float: left;">
-                        <form method='POST' style="margin: 0;" action='' enctype='multipart/form-data' class="ui form">{% csrf_token %}
-                            <textarea id="attendance{{ att.id }}" style="margin: 0;padding: 1px;height: 22px;text-align: center;"></textarea>
-                        </form>
-                    </div>
-                    <div style="width: 50%;float: left;">
-                        <a id="{{ att.id }}" data-href="{{ att.change_url }}" class="ui button mini blue save_grade" style="padding: 5px 8px;">✓</a>
-                    </div>
-                    {% else %}
-                    <div style="float: left;color: black;padding: 1px;width: 100%;margin: 0" class="ui segment">
-                        {{ att.grade }}
-                    </div>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
+                    {% for attendance in squad_cell|hisattendance:hisprofile %}
+                        {% if attendance.subject == subject %}
+                        <div style="width: 100%;height: 30px;color: #222;padding: 5px;text-align: center;" class="ui segment">
+                            {% if attendance.grade > 0 %}{{ attendance.grade }}{% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                        
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         {% endfor %}
     </div>
-    {% endif %}
-    {% endfor %}
 </div>

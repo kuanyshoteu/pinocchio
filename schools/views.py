@@ -13,9 +13,10 @@ from datetime import timedelta
 from .forms import SchoolForm
 from .models import *
 from subjects.models import *
+from squads.models import Squad
 from papers.models import *
 from library.models import Folder
-from accounts.models import Profile
+from accounts.models import Profile, Corruption
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -28,23 +29,50 @@ import pandas as pd
 import os
 
 def school_detail(request, slug=None):
-    instance = get_object_or_404(School, slug=slug)
-    profile = 'admin'
-    is_auth = False
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
-        is_auth = True
-
+    instance = profile.school
     time_periods = TimePeriod.objects.all()
     context = {
         "instance": instance,
-        "school_url":instance.get_absolute_url(),
         "profile":profile,
         'time_periods':time_periods,
         "all_teachers":Profile.objects.filter(is_trener = True),
         "all_students":Profile.objects.filter(is_trener = False),
+        "all_squads":Squad.objects.all(),
+        'courses':Course.objects.all(),
+        'corruptions':Corruption.objects.all(),
     }
-    return render(request, "schools/school_detail.html", context)
+    return render(request, "school/school_detail.html", context)
+
+def school_rating(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "squads":Squad.objects.all(),
+        "subjects":Subject.objects.all(),
+    }
+    return render(request, "school/school_rating.html", context)
+
+def manager_page(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "squads":Squad.objects.all(),
+        "subjects":Subject.objects.all(),
+        "all_teachers":Profile.objects.filter(is_trener = True),
+        "all_squads":Squad.objects.all(),        
+    }
+    return render(request, "school/manager_page.html", context)
 
 def school_list(request):
     if not request.user.is_authenticated:
@@ -54,7 +82,7 @@ def school_list(request):
     if request.user.is_staff or request.user.is_superuser:
         staff = "yes"
         
-    profile = 'admin'
+    profile = ''
 
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
@@ -64,28 +92,6 @@ def school_list(request):
         "schools":School.objects.all(),
     }
     return render(request, "schools/school_list.html", context)
-
-def school_create(request):
-    if not request.user.is_authenticated:
-        raise Http404
-
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    if not profile.is_trener:
-        raise Http404
-        
-    form = SchoolForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
-        return HttpResponseRedirect(instance.get_update_url())   
-    
-    context = {
-        "form": form,
-        "profile":profile,
-    }
-    return render(request, "schools/school_create.html", context)
 
 def school_update(request, slug=None):
     if not request.user.is_staff and not request.user.is_superuser:
@@ -102,7 +108,7 @@ def school_update(request, slug=None):
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
         
-    profile = 'admin'
+    profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
 

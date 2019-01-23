@@ -1,0 +1,28 @@
+{% if hisprofile.is_trener and hisprofile == profile or profile.is_manager %}
+<div class="ui grid" style="padding: 0 10px;margin: 0">
+    <span style="font-size: 12.5px; padding: 0">Мой класс</span>
+    <div style="margin-top: 10px;width: 100%">
+        {% for sq in hisprofile.curators_squads.all %}
+        <div style="padding-bottom: 10px;">
+            <div class="ui grid">
+                <div class="four wide column" style="padding-left: 0; padding-right: 0">
+                    <a href="{{ sq.get_absolute_url }}">
+                    {% if sq.image %}
+                        <img class="ui avatar image" src="{{ sq.image.url }}" style="width: 40px; height: 40px;">
+                    {% else %}
+                        <img class="ui avatar image" style="width: 40px; height: 40px;" src="{% static 'images/squad.png' %}">
+                    {% endif %}
+                    </a>
+                </div>
+                <div class="twelve wide column" style="padding-left: 10px; padding-right: 0;color: #2a5885; ">
+                    <a href="{{ sq.get_absolute_url }}" >{{ sq.title }}</a>
+                    <br>
+                    <span style="font-size: 11px;color: #656565; width: 100%">{{ sq.slogan }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+

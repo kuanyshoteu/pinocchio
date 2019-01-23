@@ -10,8 +10,8 @@
                     <a class="rename_paper ui button mini" url={{ paper.rename_paper_url }} paper_id="{{ paper.id }}" id="l{{ lesson.id }}p{{ paper.id }}"">Сохранить</a>
                 </form>               
             </div>
-            <a class="delete_paper edit" url="{{ paper.delete_paper_url }}" id="{{ paper.id }}" style="float: right;"><i class="icon trash"></i></a>
-            <a class="open_rename_paper edit" id="l{{ lesson.id }}p{{ paper.id }}" style="float: right; margin-right: 25px;"><i class="icon pencil"></i></a>
+            <a class="delete_paper" url="{{ paper.delete_paper_url }}" id="{{ paper.id }}" style="float: right;"><i class="icon trash"></i></a>
+            <a class="open_rename_paper" id="l{{ lesson.id }}p{{ paper.id }}" style="float: right; margin-right: 25px;"><i class="icon pencil"></i></a>
         </h3>
     </div>
     {% endif %}
@@ -26,8 +26,8 @@
                     <a class="rename_subtheme ui button mini blue" url={{ subtheme.rename_subtheme_url }} subtheme_id="{{ subtheme.id }}" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Сохранить</a>
                 </form>               
             </div>
-            <a class="open_rename_subtheme edit" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="margin: 0 25px;"><i class="icon pencil"></i></a>
-            <a class="delete_subtheme edit" url="{{ subtheme.delete_subtheme_url }}" id="{{ subtheme.id }}"><i class="icon trash"></i></a>
+            <a class="open_rename_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="margin: 0 25px;"><i class="icon pencil"></i></a>
+            <a class="delete_subtheme" url="{{ subtheme.delete_subtheme_url }}" id="{{ subtheme.id }}"><i class="icon trash"></i></a>
             {% endif %}
         </h3>
         <div class="ui segment" style="padding: 50px;">
@@ -42,7 +42,7 @@
                     </form> 
                     <br><br>              
                 </div>
-                <a class="open_rewrite_subtheme edit" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="font-size: 12px">
+                <a class="open_rewrite_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="font-size: 12px">
                     Изменить текст
                 </a>
                 {% endif %}
@@ -56,7 +56,6 @@
                 <a href="{{ subtheme.file.url }}">Скачать {{ subtheme.file }}</a>
             </div>
             {% endif %}
-            
         	<br><br>
         	<div class="ui grid">
                 {% if subtheme.youtube_video_link != '' %}

@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^api/delete_paper_url/$', delete_paper, name = 'delete_paper_url'),
     url(r'^api/delete_lesson_url/$', delete_lesson, name = 'delete_lesson_url'),
     url(r'^api/delete_subtheme_url/$', delete_subtheme, name = 'delete_subtheme_url'),
+    url(r'^api/new_task_url/$', NewTask, name='new_task_url'),
     url(r'^api/add_task_url/$', AddTask, name='add_task_url'),
     url(r'^api/add_subtheme_url/$', AddSubtheme, name='add_subtheme_url'),
     url(r'^api/add_paper_url/$', AddPaper, name='add_paper_url'),

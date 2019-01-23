@@ -81,24 +81,15 @@ def account_view(request, user = None):
     found_classwork = False
     idet_urok = False
     classwork = []
-    videos = []
-    cnt = 0
-    for subject in hisprofile.teachers_subjects.all():
-        for material in subject.materials.all():
-            for lesson in material.lessons.all():
-                for paper in lesson.papers.all():
-                    for subtheme in paper.subthemes.all():
-                        if cnt >= 2:
-                            break
-                        if subtheme.video:
-                            cnt += 1
-                            videos.append(subtheme.video)
 
     hislessonss = hislessons(hisprofile)
+    time_periods = TimePeriod.objects.all()
     if hisprofile.is_trener:
         hissubjects = hisprofile.teachers_subjects.all()
+        hissquads = hisprofile.curators_squads.all()
     else:
         hissubjects = hisprofile.hissubjects.all()
+        hissquads = hisprofile.squads.all()        
     context = {
         "profile":yourprofile,
         "hisprofile": hisprofile,
@@ -107,43 +98,36 @@ def account_view(request, user = None):
         'all_profiles':Profile.objects.all(),
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
+        'hisattendance':hisattendance(hisprofile),
         'hissubjects':hissubjects,
         'days':Day.objects.all(),
-        # "videos":hisvideos(hisprofile)[0],
-        # 'youtubes':hisvideos(hisprofile)[1],
+        'hissquads':hissquads,
+        'time_periods':time_periods,
         'classwork':hislessonss[2],
         'homeworks':hislessonss[0],
         'lesson_now':hislessonss[1],
     }
     return render(request, "profile.html", context)
 
-def hisvideos(hisprofile):
-    found = False
-    youtubes = []
-    videos = []
-    cnt = 0
-    for subject in hisprofile.teachers_subjects.all():
-        for sm in subject.materials.all():
-            if found:
-                break
-            for lesson in sm.lessons.all():
-                if found:
-                    break
-                for paper in lesson.papers.all():
-                    if found:
-                        break
-                    for subtheme in paper.subthemes.all():
-                        if cnt >= 2:
-                            found = True
-                            break
-                        if subtheme.video:
-                            videos.append(subtheme.video)
-                            cnt += 1
-                        if subtheme.youtube_video_link:
-                            youtubes.append(subtheme.youtube_video_link)
-                            cnt += 1
-
-    return videos, youtubes
+def hisattendance(hisprofile):
+    res = []
+    sbj_array = []
+    sq_array = []
+    crnt_subject = hisprofile.teachers_subjects.first()
+    crnt_squad = crnt_subject.squads.first()
+    for attendance in hisprofile.madegrades.all():
+        if attendance.subject != crnt_subject:
+            crnt_subject = attendance.subject
+            res.append(sbj_array)
+            sbj_array = []
+        if attendance.squad != crnt_squad:
+            crnt_squad = attendance.squad
+            sbj_array.append(sq_array)
+            sq_array = []
+        sq_array.append(attendance)
+    print(res)        
+        
+    return 0
 
 def hislessons(hisprofile):
     res = []
@@ -163,37 +147,39 @@ def hislessons(hisprofile):
                 if timenow_int >= timep_start_int and timenow_int <= timep_end_int:
                     needed_timep = timep
 
-            sw = SquadWeek.objects.get(squad=squad, actual=True)
-            if needed_timep != 'none':
-                sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
-                if len(sc) > 0:
-                    sc = sc[0]
-                    if len(sc.subject_materials.filter(subject=subject)) > 0:
-                        last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                        lesson_now = True
-                        classwork = [[subject, [last_lecture]]]
-            else:
-                for sc in sw.week_cells.all():
-                    if sc.date > timezone.now().date():
+            sw = SquadWeek.objects.filter(squad=squad, actual=True)
+            if len(sw) > 0:
+                sw = sw[0]
+                if needed_timep != 'none':
+                    sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
+                    if len(sc) > 0:
+                        sc = sc[0]
                         if len(sc.subject_materials.filter(subject=subject)) > 0:
                             last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-            
-            if last_lecture == 'none' and lesson_now == False:
-                index = list(squad.weeks.all()).index(sw)
-                if index+1 < len(squad.weeks.all()):
-                    found_in_this_week = False
-                    for i in range(index+1, len(squad.weeks.all())):
-                        if found_in_this_week:
-                            break
-                        sw = squad.weeks.all()[i]
-                        for sc in sw.week_cells.all():
-                            if sc.date > timezone.now().date():
-                                if len(sc.subject_materials.filter(subject=subject)) > 0:
-                                    if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
-                                        last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                                        found_in_this_week = True
-                                        break
-            homeworks.append(last_lecture) 
+                            lesson_now = True
+                            classwork = [[subject, [last_lecture]]]
+                else:
+                    for sc in sw.week_cells.all():
+                        if sc.date > timezone.now().date():
+                            if len(sc.subject_materials.filter(subject=subject)) > 0:
+                                last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                
+                if last_lecture == 'none' and lesson_now == False:
+                    index = list(squad.weeks.all()).index(sw)
+                    if index+1 < len(squad.weeks.all()):
+                        found_in_this_week = False
+                        for i in range(index+1, len(squad.weeks.all())):
+                            if found_in_this_week:
+                                break
+                            sw = squad.weeks.all()[i]
+                            for sc in sw.week_cells.all():
+                                if sc.date > timezone.now().date():
+                                    if len(sc.subject_materials.filter(subject=subject)) > 0:
+                                        if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
+                                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                                            found_in_this_week = True
+                                            break
+                homeworks.append(last_lecture) 
         res.append([subject, homeworks])
     return res, lesson_now, classwork
 
@@ -256,33 +242,36 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
+def att_present(request):
+    profile = Profile.objects.get(user = request.user)
+    if request.GET.get('id') and profile.is_trener:
+        attendance = Attendance.objects.get(id = request.GET.get('id'))
+        attendance.present = 'present'
+        attendance.save()
+    data = {
+    }
+    return JsonResponse(data)
+
 def ChangeAttendance(request):
     if request.GET.get('id'):
         attendance = Attendance.objects.get(id = int(request.GET.get('id')))
-        gradee = attendance.grade
-        presentt = attendance.present
-        if request.GET.get('attendance'):
-            attendance.present = request.GET.get('attendance')
-            attendance.grade = gradee
-        if request.GET.get('grade') and gradee == -1:
-            attendance.present = presentt
+        if request.GET.get('grade'):
             attendance.grade = int(request.GET.get('grade'))
         attendance.save()
-                    
     data = {
     }
     return JsonResponse(data)
 
-def ChangeStatus(request):
-    hisprofile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('status'):
-        hisprofile.status = request.GET.get('status')
-        hisprofile.save()
-
+def tell_about_corruption(request):
+    profile = Profile.objects.get(user = request.user)
+    ok = False
+    if request.GET.get('text'):
+        Corruption.objects.create(text=request.GET.get('text'),author_profile=profile, school=profile.school)
+        ok = True
     data = {
+        'ok':ok
     }
     return JsonResponse(data)
-
 
 class ChangeTimeAPIToggle(APIView):    
     def get(self, request, format=None):

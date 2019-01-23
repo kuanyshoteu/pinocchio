@@ -4,62 +4,95 @@
     .lftitem{
         padding: 8px !important;
     }
+    .lftitemsmall:hover{
+        background: none !important;
+        text-decoration: underline !important;
+    }
+    .lftitemsmall{
+        padding: 0
+    }
 </style>
 {% if user.is_authenticated %}
-<div id="left-main-menu">
-    <div class="left-main-menu" style="position: fixed;width: 165px;">
-        <div class="ui vertical menu" style="background-color: #f4f4f4; border:0; box-shadow: none; ">
-            <a class="item lftitem" href='{{ profile.get_absolute_url }}'>
-                <i class="home icon"></i> Моя страница
-            </a>
-            {% if profile.is_manager %}
-            <a class="item lftitem" href='{% url "squads:list" %}'>
-                <i class="chart line icon"></i>Управление
-            </a>
-            {% endif %}
-            <a class="item lftitem" href='{% url "news:list" %}'>
-                <i class="newspaper icon"></i>Новости
-            </a>
-            {% if profile.is_trener %}
-            <a class="item lftitem" href='{% url "squads:list" %}'>
-                <i class="users icon"></i>Классы
-            </a>
-            {% endif %}
-            {% if profile.is_manager %}
-            <a class="item lftitem" href='{% url "subjects:list" %}'>
-                <i class="table icon"></i>Предметы
-            </a>
-            {% endif %}
-            {% if profile.is_trener %}
-            <a class="item lftitem" href='{% url "library:main" %}'>
-                <i class="file alternate icon"></i>База уроков
-            </a>
-            {% endif %}
-            <a class="item lftitem" href='{% url "library:courses" %}'>
-                <i class="rocket icon"></i>Курсы
-            </a>
-            <a class="item lftitem" href='/docs/'>
-                <i class="check calendar icon"></i>Задания
-            </a>
-            <div class="ui divider" style="margin: 7px 0 7px 35px;border-top: 1px solid #dfe2e8;border-bottom: none;"></div>
-            <a class="item lftitem start_urok_btn">
-                <i class="icon arrow right"></i>
-                Урок 
-                {% if lesson_now %}
-                <span style="background-color: #d1d9e0; padding: 6px 6px 4px 6px; border-radius: 1px;float: right;color: #5b6e85;font-size: 12px; margin-top: -4px;">
-                    1
-                </span>
+<div style="position: fixed;width: 155px;margin-left: 30px;z-index: 1000">
+    <div id="left-main-menu">
+        <div class="left-main-menu" style="width: 155px;">
+            <div class="ui vertical menu" style="background-color: #f4f4f4; border:0; box-shadow: none; ">
+                <a class="item lftitem" href='{{ profile.get_absolute_url }}'>
+                    <i class="home icon"></i> Моя страница
+                </a>
+                <a class="item lftitem" href='{% url "news:list" %}'>
+                    <i class="newspaper icon"></i>Новости
+                </a>
+                {% if profile.is_director %}
+                <a class="item lftitem" href='{% url "schools:detail" %}'>
+                    <i class="chart line icon"></i>Директор
+                </a>
                 {% endif %}
+                {% if profile.is_manager %}
+                <a class="item lftitem" href='{% url "schools:manager_page" %}'>
+                    <i class="cog icon"></i>Менеджер
+                </a>
+                {% endif %}
+                <a class="item lftitem" href='{% url "schools:rating" %}'>
+                    <i class="trophy icon"></i>Рейтинги
+                </a>
+                {% if profile.is_manager or profile.is_director %}
+                <a class="item lftitem" href='{% url "squads:list" %}'>
+                    <i class="users icon"></i>Классы
+                </a>
+                {% endif %}
+                {% if profile.is_manager or profile.is_director %}
+                <a class="item lftitem" href='{% url "subjects:list" %}'>
+                    <i class="table icon"></i>Предметы
+                </a>
+                {% endif %}
+                {% if profile.is_trener %}
+                <a class="item lftitem" href='{% url "library:main" %}'>
+                    <i class="file alternate icon"></i>База уроков
+                </a>
+                {% endif %}
+                <a class="item lftitem" href='{% url "library:courses" %}'>
+                    <i class="rocket icon"></i>Курсы
+                </a>
+                <a class="item lftitem" href='/docs/'>
+                    <i class="check calendar icon"></i>Задания
+                </a>
+                <div class="ui divider" style="margin: 7px 0 7px 35px;border-top: 1px solid #dfe2e8;border-bottom: none;width: 100px;"></div>
+                <a class="item lftitem start_urok_btn">
+                    <i class="icon arrow right"></i>
+                    Урок 
+                    {% if lesson_now %}
+                    <span style="background-color: #d1d9e0; padding: 6px 6px 4px 6px; border-radius: 1px;float: right;color: #5b6e85;font-size: 12px; margin-top: -4px;">
+                        1
+                    </span>
+                    {% endif %}
+                </a>
+            </div>
+            <a class="lftitemsmall" style="color: #939699;font-size: 12px;margin-left: 10px;" href='/contacts/'>
+                Контакты
             </a>
         </div>
-        <a class="lftitem" style="color: #939699;font-size: 12px;" href='/contacts/'>
-            О компании
-        </a>
-        <a class="lftitem" style="color: #939699;font-size: 12px;" href='/contacts/'>
-            Учителям
-        </a>
     </div>
+    <a class="ui button mini blue" onclick="$('#corruption').modal('show')" style="margin-top: 30px;margin-left: 25px;width: 100%;">
+        Заявить о коррупции
+    </a>
 </div>
-<div class="one wide column" style="margin-right: -50px;">
+<div style="margin-right: 150px;">
 </div>
 {% endif %}
+
+<div class="ui mini modal" id="corruption">
+    <i class="close icon"></i>
+    <div class="header text-center">
+        <span style="font-weight: 400">Анонимно сообщить о коррупции</span>
+    </div>
+    <div class="content">
+        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            Опишите ситуацию:
+            <textarea style="height: 150px;" class="corruption_text"></textarea>
+            <a class="ui button tiny blue full-w tell_about_corruption" url="{{ profile.tell_about_corruption }}">Отправить анонимно</a>
+        </form>
+        <div class="ui segment thanks" style="display: none;">Ваша заявка принята, спасибо!</div>
+    </div>
+</div>
+

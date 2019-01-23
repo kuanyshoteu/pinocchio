@@ -23,59 +23,90 @@
     <div class="ui container">      
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="eleven wide column"> 
+            <div class="twelve wide column"> 
                 <div class="content">
                   <div class="ui grid stackable">
-                    <div class="eleven wide column">                
-                      <div class="ui segment">
+                    <div class="eleven wide column" style="padding-right: 0">                
+                      <div class="ui segment" style="margin-bottom: 0">
                           <h3>
-                              <i class="ui icon columns" style="color: grey; font-size: 15px; font-weight: 300;"></i>
                               <span style="margin-left: 10px;">{{ card.title }}</span>
                           </h3>
-                          <p style="color: grey; margin-left: 35px;">в списке <span style="text-decoration: underline;">{{ card.column.title }}</span></p>
-                          <div style="margin-left: 35px;">
-                              <span style="color: grey; margin-right: 10px;">Участники: </span>
-                              <div class="ui grid stackable">
-                              {% for usr in all_profiles %}
-                                  <div id='{{ usr.id }}card_user' class="two wide column" {% if not usr in card.user_list.all %} style="display: none;" {% endif %}>
-                                        <a href="{{ usr.get_absolute_url }}" style="margin-right: 10px;">
-                                            {% if usr.image %}
-                                            <img src="{{ usr.image.url }}" class="ui avatar image">
-                                            {% else %}
-                                            <img src='{{ main_page.image.url }}' class="ui avatar image">
-                                            {% endif %}
-                                            {{ usr.user }}
-                                        </a>
-                                  </div>
-                              {% endfor %}
+                      </div>
+                      <div class="ui segment" style="margin-top: 0;">
+                          <div class="ui grid">
+                              <div class="one wide column">
+                                  <i class="icon list" style="font-size: 17px;"></i>
+                              </div>
+                              <div class="fifteen wide column" style="padding-right: 25px;">
+                                  <span class="ui segment" style="padding: 5px 14px;margin-right: 15px; background-color: #88ABD3;color: #fff">Проект {{ card.column.board.name }}</span>                                  
+                                  В колонке <span class="ui segment" style="padding: 5px 14px;background-color: #88ABD3;color: #fff">{{ card.column.title }}</span>
+                              </div>
+                              <div class="sixteen wide column" style="padding-right: 25px;">
+                                  {% include 'docs/chart.html' %}
                               </div>
                           </div>
-                          <br>
-                          <p style="color: grey; margin-left: 35px;">Метки</p>
-                          <div style="margin-left: 35px;" class="ui grid">
-                          {% for metka in metkas %}
-                              <div class="three wide column" style="margin: 5px 5px 10px 0; padding: 3px 4px;
-                                 {% if metka.name == 'Срочно' %}
-                                  background-color: #eb5a46; 
-                                 {% elif metka.name == 'В будущем' %}
-                                  background-color: #51e898;
-                                 {% endif %}
-                                 {% if not metka in card.metka_list.all %}
-                                 display: none;
-                                 {% endif %}
-                                 border-radius: 3px; cursor: pointer;" id="{{ metka.id }}card_metka">
-                                  <div style="padding: 0 0 0 10px;">
-                                    <span style="color: white; font-size: 12px;">{{ metka.name }}</span>
+                      </div>
+                      <div class="ui segment" style="margin-bottom: 0">
+                          <div class="ui grid">
+                              <div class="one wide column" style="line-height: 30px;">
+                                  <i class="icon users" style="font-size: 22px;padding: 0;margin-left: -5px;"></i>
+                              </div>
+                              <div class="three wide column" style="line-height: 30px;">
+                                  Участники: 
+                              </div>
+                              <div class="twelve wide column">
+                                  <div class="ui grid stackable" >
+                                  {% for usr in all_profiles %}
+                                      <div id='{{ usr.id }}card_user' class="three wide column" style="{% if not usr in card.user_list.all %}display: none;{% endif %}padding: 14px 0;">
+                                            <a href="{{ usr.get_absolute_url }}">
+                                                {% if usr.image %}
+                                                <img src="{{ usr.image.url }}" class="ui avatar image" style="width: 35px;height: 35px;">
+                                                {% else %}
+                                                <img src='{{ main_page.image.url }}' class="ui avatar image" style="width: 35px;height: 35px;">
+                                                {% endif %}
+                                                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{ usr.first_name }}</div>
+                                            </a>
+                                      </div>
+                                  {% endfor %}
                                   </div>
-                              </div>    
-                          {% endfor %}
+                              </div>
                           </div>
                       </div>
-                      <div class="ui segment">
+                      <div class="ui segment" style="margin-top: 0;margin-bottom: 0;">
+                          <div class="ui grid">
+                              <div class="one wide column">
+                                  <i class="icon tags" style="font-size: 22px;padding: 0;margin-left: -5px;"></i>
+                              </div>
+                              <div class="three wide column" style="padding-right: 25px;">
+                                  Теги: 
+                              </div>
+                              <div class="twelve wide column" style="padding-right: 25px;">
+                                  <div class="ui grid stackable" >
+                                    {% for metka in metkas %}
+                                        <div class="three wide column" style="margin: 5px 5px 10px 0; padding: 3px 4px;
+                                           {% if metka.name == 'Срочно' %}
+                                            background-color: #eb5a46; 
+                                           {% elif metka.name == 'В будущем' %}
+                                            background-color: #51e898;
+                                           {% endif %}
+                                           {% if not metka in card.metka_list.all %}
+                                           display: none;
+                                           {% endif %}
+                                           border-radius: 3px; cursor: pointer;" id="{{ metka.id }}card_metka">
+                                            <div style="padding: 0 0 0 10px;">
+                                              <span style="color: white; font-size: 12px;">{{ metka.name }}</span>
+                                            </div>
+                                        </div>    
+                                    {% endfor %}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="ui segment" style="margin-bottom: 0">
                           <h4>
                               <i class="ui icon align left" style="color: grey; font-size: 15px;"></i>                  
-                              <span style="margin-left: 10px;">Описание</span> 
-                              <a style="color: grey; text-decoration: underline; font-size: 13px; font-weight:300; margin-left: 10px; cursor: pointer;" class="open_form_desc">Изменить...</a>
+                              <span style="margin-left: 10px;font-weight: 500">Описание</span> 
+                              <a style="font-size: 13px; font-weight:300; margin-left: 10px;" class="open_form_desc">Изменить</a>
                           </h4>
                           <p id='{{ card.id }}card_desc' style="margin-left: 35px;">{{ card.description }}</p>
                           <form class="ui form desc" style="margin-left: 35px; display: none;" method="post" enctype="multipart/form-data">
@@ -84,12 +115,10 @@
                           </form>
                          
                       </div>
-                      <div class="ui segment">
-                          <h4>
-                              <i class="ui icon align left" style="color: grey; font-size: 15px;"></i>                  
-                              <span style="margin-left: 10px;">Вложения</span>
-                              <a class="open_form_file new-file" id='{{ card.id }}' style="color: grey; text-decoration: underline; font-size: 13px; font-weight:300; margin-left: 10px; cursor: pointer;">Добавить вложения...</a>
-                          </h4>
+                      <div class="ui segment" style="margin-top: 0">
+                          <i class="icon paperclip" style="color: grey; font-size: 15px;"></i>
+                          <span style="margin-left: 10px;font-size: 15px;font-weight: 500;margin-right: 14px;">Вложения</span>
+                          <a class="open_form_file new-file ui button mini" id='{{ card.id }}'>Добавить вложения</a>
                           {% if card.doc_list.all|length > 0 %}
                           <div style="margin-left: 35px;">
                           {% for doc in card.doc_list.all %}
@@ -164,51 +193,50 @@
                       </div>
                     </div> 
                     <div class="five wide column" style="padding-right: 20px;">
-                      <div class="ui segment">
-                            <h3>Добавить</h3>
-                            <!-- д -->
-                                <a class="ui button tiny open_user_list" id='{{ card.id }}' style="width: 100%; text-align: left;"><i class="ui icon user outline"></i>Участники</a>
-                                
-                            <!-- д -->
-                            <a class="ui button tiny open_metki" style="margin-top:10px; width: 100%; text-align: left;"><i class="ui icon user outline"></i>Метки</a>
-                            <a class="ui button tiny" style="margin-top:10px; width: 100%; text-align: left;"><i class="ui icon user outline"></i>Срок</a>
-                            <a class="ui button tiny open_form_file" id='{{ card.id }}' style="margin-top:10px; width: 100%; text-align: left;"><i class="ui icon user outline"></i>Вложения</a>
+                        <div class="ui segment" style="margin-bottom: 0;text-align: center;">
+                              <h4 style="font-weight: 500">Добавить</h4>
                         </div>
-                        <div class="ui segment" id="user_list" style="width: 304px; padding: 0 12px; display: none; z-index: 2004">
-                                    <p style="color: grey; text-align: center;padding-top: 10px;">Участники</p>
-                                    <div class="ui divider"></div>
-                                    <form method="POST" action='' enctype='multipart/form-data'>{% csrf_token %}
-                                    {% for prfl in all_profiles %}
-                                          <div style="margin: 5px 14px; padding: 5px 14px; background-color: #f2f2f2; border-radius: 3px; cursor: pointer;" class="ui grid prfl" data-href='{{ card.add_user_url }}'
-                                          profile_id="{{ prfl.id }}" card_id={{ card.id }} id="{{ prfl.id }}"  
-                                          {% if prfl in card.user_list.all %}
-                                            user_in='yes'
+                        <div class="ui segment" style="margin-top: 0;">
+                              <a class="ui button tiny open_user_list" id='{{ card.id }}' style="width: 100%; text-align: left;">Участники</a>
+                              <a class="ui button tiny open_metki" style="margin-top:10px; width: 100%; text-align: left;">Метки</a>
+                              <a class="ui button tiny" style="margin-top:10px; width: 100%; text-align: left;">Срок</a>
+                              <a class="ui button tiny open_form_file" id='{{ card.id }}' style="margin-top:10px; width: 100%; text-align: left;">Вложения</a>
+                        </div>
+                        <div class="ui segment" id="user_list" style="padding: 0 12px; display: none; z-index: 2004">
+                            <p style="color: grey; text-align: center;padding-top: 10px;">Участники</p>
+                            <div class="ui divider"></div>
+                            <form method="POST" action='' enctype='multipart/form-data'>{% csrf_token %}
+                            {% for prfl in all_profiles %}
+                                <div style="margin: 5px 14px; padding: 5px 14px; background-color: #f2f2f2; border-radius: 3px; cursor: pointer;" class="ui grid prfl" data-href='{{ card.add_user_url }}'
+                                  profile_id="{{ prfl.id }}" card_id={{ card.id }} id="{{ prfl.id }}"  
+                                  {% if prfl in card.user_list.all %}
+                                    user_in='yes'
+                                  {% else %}
+                                    user_in='no'
+                                  {% endif %}
+                                  >
+                                        <div class="three wide column" style="padding: 0;">
+                                          {% if prfl.image %}
+                                            <img class="ui avatar image" src="{{ prfl.image.url }}">
                                           {% else %}
-                                            user_in='no'
+                                            <img src='{{ main_page.image.url }}' class="ui avatar image">
                                           {% endif %}
-                                          >
-                                            <div class="three wide column" style="padding: 0;">
-                                              {% if prfl.image %}
-                                                <img class="ui avatar image" src="{{ prfl.image.url }}">
-                                              {% else %}
-                                                <img src='{{ main_page.image.url }}' class="ui avatar image">
-                                              {% endif %}
-                                            </div>
-                                            <div class="thirteen wide column" style="padding: 7px 0 0 7px;">
-                                              <a>{{ prfl.user }}</a>
-                                              {% if prfl in card.user_list.all %}
-                                              <span id='{{ prfl.id }}tick' style="float: right;"><i class="icon check" style="color: blue;"></i></span>
-                                              {% else %}
-                                              <span id='{{ prfl.id }}tick' style="float: right; display: none;"><i class="icon check" style="color: blue;"></i></span>
-                                              {% endif %}
-                                              <br>
-                                            </div>
-                                          </div>
-                                    {% endfor %}
-                                    </form>
-                                </div>
-                        <div class="ui segment" id="metka" style="width: 304px; padding: 0 12px; position: absolute; display: none; z-index: 2005;">
-                                <p style="color: grey; text-align: center;padding-top: 10px;">Метка</p>
+                                        </div>
+                                        <div class="thirteen wide column" style="padding: 7px 0 0 7px;">
+                                          <a>{{ prfl.first_name }}</a>
+                                          {% if prfl in card.user_list.all %}
+                                          <span id='{{ prfl.id }}tick' style="float: right;"><i class="icon check" style="color: blue;"></i></span>
+                                          {% else %}
+                                          <span id='{{ prfl.id }}tick' style="float: right; display: none;"><i class="icon check" style="color: blue;"></i></span>
+                                          {% endif %}
+                                          <br>
+                                        </div>
+                                  </div>
+                            {% endfor %}
+                            </form>
+                        </div>
+                        <div class="ui segment" id="metka" style="padding: 0 12px; position: absolute; display: none; z-index: 2005;">
+                                <p style="color: grey; text-align: center;padding-top: 10px;">Метки</p>
                                 <div class="ui divider"></div>
                                 <form method="POST" action='' enctype='multipart/form-data'>{% csrf_token %}
                                 {% for metka in metkas %}
@@ -247,7 +275,7 @@
                               <br><br>
                               <input type="submit" name="" class="ui button tiny green" value="Сохранить">
                             </form>
-                          </div>
+                        </div>
                     </div>
                   </div>
                 </div>

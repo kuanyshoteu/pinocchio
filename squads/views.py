@@ -13,6 +13,7 @@ from datetime import timedelta
 from .forms import SquadForm
 from .table_change_form import TableChangeForm
 from .models import *
+#from schools.models import School
 from subjects.models import *
 from papers.models import *
 from library.models import Folder
@@ -29,6 +30,11 @@ import pandas as pd
 import os
 
 def squad_detail(request, slug=None):
+    # school = School.objects.all()[0]
+    # for p in Profile.objects.all():
+    #     p.school = school
+    #     p.save()
+
     # ff = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # file = str(ff) + "/abc.xlsx"
     # data = pd.read_excel(file,header=None) #reading file
@@ -189,9 +195,7 @@ def squad_update(request, slug=None):
             for sm in subject.materials.all():
                 for student in instance.students.all():    
                     sc = sm.material_cells.filter(squad=instance)
-                    print('d',subject.title,student.first_name,sc,sm.material_cells.all())
                     if len(sc)>0:
-                        print(sc[0].date)
                         att = Attendance.objects.get_or_create(subject_materials=sm,student=student,subject=subject,squad_cell=sc[0])   
                         att[0].squad = instance
                         att[0].save()

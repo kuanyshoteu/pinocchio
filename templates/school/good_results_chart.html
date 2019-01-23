@@ -1,0 +1,30 @@
+
+<div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+    <div class="ui grid">
+        <div class="one wide column">
+            <i class="icon chart line" style="font-size: 17px;"></i>
+        </div>
+        <div class="eleven wide column" style="padding-right: 25px;">
+            Успеваемость и посещаемость
+        </div>
+        <div class="four wide column">
+            <a class="ui button mini blue">Показать графики за год</a>
+        </div>
+    </div>
+</div>
+<div class="ui segment" style="margin-top: 0;margin-bottom: 0;padding: 18px;">
+    {% for squad in all_squads %}
+        <a style="margin-right: 14px;" class="open_point {% if forloop.counter == 1 %}current_point{% endif %}">
+            {{ squad.title }}
+        </a>
+    {% endfor %}
+</div>
+<div class="ui segment" style="margin-top: 0;">
+
+	<div class="ui segment" style="padding: 3px; background-color: rgba(16,133,135,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
+	<span style="color: #222">Успеваемость </span>
+	<div class="ui segment" style="margin-left: 14px; padding: 3px;background-color: rgba(236,83,62,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
+	<span style="color: #222">Посещаемость </span>
+	<br>
+	<canvas style="padding-right: 25px;" id="canvas" height="100" width="500"></canvas>
+</div>

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="group-details">
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="eight wide column">
+                <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
+                    <div class="ui grid">
+                        <div class="one wide column">
+                            <i class="icon trophy" style="font-size: 17px;"></i>
+                        </div>
+                        <div class="fifteen wide column" style="padding-right: 25px;font-size: 15px;">
+                            Рейтинг студентов
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="ui segment" style="margin-top: 0;padding: 0">
+                    <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;margin: 0;width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
+                                <th><span>Посещаемость</span></th>
+                                <th><span>Успеваемость</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for teacher in instance|top_teachers %}
+                                <tr style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
+                                    <td style="text-align: left;">
+                                        {{ forloop.counter }}. 
+                                        {{ teacher.first_name }}
+                                    </td>
+                                    <td>{{ teacher.coins }}</td>
+                                    <td>{{ teacher.coins }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>                                        
+                </div>
+            </div>
+            <div class="three wide column" style="padding:14px 0">
+                <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+                    <form class="ui form">  
+                        <div class="ui grid">
+                            <div class="sixteen wide column" style="padding-bottom: 0">
+                                Выберите <b>предмет</b>:
+                                <div class="controls" style="margin-top: 10px"> 
+                                    <select class="selecttt form-control" id="id_curator"> 
+                                        {% for subject in subjects %}
+                                            <option value="{{ squad.id }}">{{ subject.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>                            
+                            </div>
+                            <div class="sixteen wide column" style="padding-bottom: 0">
+                                Выберите <b>класс</b>:
+                                <div class="controls" style="margin-top: 10px"> 
+                                    <select class="selecttt form-control" id="id_curator"> 
+                                        {% for squad in squads %}
+                                            <option value="{{ squad.id }}">{{ squad.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>                            
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
