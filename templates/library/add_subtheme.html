@@ -1,28 +1,70 @@
 {% load crispy_forms_tags %}
-{{ subtheme_form.media }}
-<a class="ui button blue" onclick="$('#l{{ lesson.id }}p{{ paper.id }}add_subtheme_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}' style="margin-top:10px; cursor: pointer;">
- + Добавить подраздел
-</a>
-<br><br>    
+{{ subtheme_text_form.media }}
+{{ subtheme_file_form.media }}
+{{ subtheme_video_form.media }}
+{% load tagss %}
 
-<div class="ui mini modal" style="width: 70%; padding: 14px; height: 100%" id="l{{ lesson.id }}p{{ paper.id }}add_subtheme_modal">
+<div class="ui segment" style="text-align: center;margin-top: 0">
+    <span style="font-size: 16px;font-weight: 600;color: darkgreen">Добавить</span>
+    <br><br>
+    <a class="ui button green large" style="width: 20%;" onclick="$('#l{{ lesson.id }}p{{ paper.id }}add_subtheme_text_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}'>
+        Текст
+    </a>
+    {% for subtheme in paper|last_subtheme %}
+        {% include 'library/add_problem.html' %}
+    {% endfor %}
+    <a class="ui button green large" style="width: 20%;" onclick="$('#l{{ lesson.id }}p{{ paper.id }}add_subtheme_video_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}'>
+        Видео
+    </a>
+    <a class="ui button green large" style="width: 20%;" onclick="$('#l{{ lesson.id }}p{{ paper.id }}add_subtheme_file_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}'>
+        Файл
+    </a>
+</div>
+<div class="ui mini modal" style="width: 50%; padding: 14px; height: 100%" id="l{{ lesson.id }}p{{ paper.id }}add_subtheme_text_modal">
     <i class="close icon"></i>
-    <div class="header text-center">
-        Добавить подраздел в раздел {{ paper.title }}
-    </div>
     <div class="content">
         <form class="ui form add-subtheme" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             <div class="ui grid">
                 <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0">
                     <input name='paper_id' style="display: none;" value='{{ paper.id }}'>
-                    {{ subtheme_form|crispy }}
+                    {{ subtheme_text_form|crispy }}
                 </div>
             </div>
-
-            <br>
-            <input type='submit' class='ui button blue' value='Сохранить' />
-            
-
+            <div style="text-align: center;margin-top: 15px;">
+                <input type='submit' class='ui button blue' value='Сохранить' />                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="ui mini modal" style="padding: 14px; height: 100%" id="l{{ lesson.id }}p{{ paper.id }}add_subtheme_video_modal">
+    <i class="close icon"></i>
+    <div class="content">
+        <form class="ui form add-subtheme" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="ui grid">
+                <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0">
+                    <input name='paper_id' style="display: none;" value='{{ paper.id }}'>
+                    {{ subtheme_video_form|crispy }}
+                </div>
+            </div>
+            <div style="text-align: center;margin-top: 15px;">
+                <input type='submit' class='ui button blue' value='Сохранить' />                
+            </div>
+        </form>
+    </div>
+</div>
+<div class="ui mini modal" style="padding: 14px; height: 100%" id="l{{ lesson.id }}p{{ paper.id }}add_subtheme_file_modal">
+    <i class="close icon"></i>
+    <div class="content">
+        <form class="ui form add-subtheme" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="ui grid">
+                <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0">
+                    <input name='paper_id' style="display: none;" value='{{ paper.id }}'>
+                    {{ subtheme_file_form|crispy }}
+                </div>
+            </div>
+            <div style="text-align: center;margin-top: 15px;">
+                <input type='submit' class='ui button blue' value='Сохранить' />                
+            </div>
         </form>
     </div>
 </div>

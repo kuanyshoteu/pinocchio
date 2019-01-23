@@ -11,7 +11,7 @@
 	{% endif %}
 	<div style="margin-bottom: 0; text-align: center;margin-top: 44px;width: 100%;">
 		<span style="font-size: 23px;color: #222;margin-bottom: 11px;font-weight: 700;">Об этом курсе</span>
-    	{% if profile in course.students.all or profile == course.author_profile %}
+    	{% if profile in course.students.all or profile == course.author_profile or profile.is_ceo or profile.is_creator %}
 	    	<a class="ui button large green" style="position: absolute; margin-top: -15px;margin-left: 50px;width: 20%;" href="{{ course.get_absolute_url }}">Продолжить курс</a>
     	{% else %}
     		<a class="ui button large green" onclick="$('.buy_course').modal('show')" style="position: absolute; margin-top: -15px;margin-left: 50px;width: 20%;">Начать курс</a>
@@ -99,7 +99,7 @@
 	<div style="margin-top: 0;padding: 20px;text-align: center;">		
     	<span style="font-size: 20px;color: #222;">Начните обучение сегодня</span>
     	<br><br>
-    	{% if profile in course.students.all or profile == course.author_profile %}
+    	{% if profile in course.students.all or profile == course.author_profile or profile.is_ceo or profile.is_creator %}
 	    	<a class="ui button large green" href="{{ course.get_absolute_url }}">Продолжить курс</a>
     	{% else %}
     		<a class="ui button large green open_buy_course" onclick="$('.buy_course').modal('show')" style="width: 30%;">Начать курс</a>
@@ -136,8 +136,13 @@
 		    		<img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 18px !important;width: 18px;">
 	    		</div>
 	    		<br>
-    			<a class="ui button blue pay_for_course" course_id={{ course.id }} url style="position: absolute;bottom: 0;width: 200px;">Купить курс</a>
+    			<a class="ui button blue pay_for_course" course_id={{ course.id }} url="{{ course.pay_for_course }}" style="position: absolute;bottom: 0;width: 200px;">Купить курс</a>
+    			<div class="ui segment not_enough_dils" style="display: none;text-align: center;">
+    				На Вашем счету недостаточно дилей
+    			</div>
     		</div>
     	</div>
     </div>
 </div>
+
+{% include 'courses/course_bought.html' %}

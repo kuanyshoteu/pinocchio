@@ -16,19 +16,27 @@ class PaperForm(forms.ModelForm):
             "content",
         ]
 
-class SubthemeForm(forms.ModelForm):
-    title = forms.CharField(label='<b>Название подраздела:', widget=forms.Textarea(attrs={'rows':1, 'cols':30}))
-    content = forms.CharField(label='Текст в подразделе:', widget=PagedownWidget(show_preview = False), required=False)
-    file = forms.FileField(label='Загрузите дополнительный файл:', required=False)
-    youtube_video_link = forms.CharField(label='Ссылка на видео:', required=False)
-    video = forms.FileField(label='Загрузите свое видео:', required=False)
-    
+class SubthemeTextForm(forms.ModelForm):
+    content = forms.CharField(label='', widget=PagedownWidget(show_preview = False), required=True)    
     class Meta:
         model = Subtheme
         fields = [
-            "title",     
             "content",
+        ]
+
+class SubthemeFileForm(forms.ModelForm):
+    file = forms.FileField(label='', required=True) 
+    class Meta:
+        model = Subtheme
+        fields = [
             "file",
+        ]
+class SubthemeVideoForm(forms.ModelForm):
+    youtube_video_link = forms.CharField(label='Ссылка на видео:', required=False)
+    video = forms.FileField(label='Загрузите свое видео:', required=False)    
+    class Meta:
+        model = Subtheme
+        fields = [
             "youtube_video_link",
             "video",
         ]

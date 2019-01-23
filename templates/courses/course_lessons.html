@@ -28,6 +28,8 @@
         </div>
     </div>
     {% endfor %}
-    <a class="ui button mini blue" onclick="$('#materials').modal('show')">Добавить урок</a>
-    {% include 'courses/course_add_materials.html' %}
+    {% if course.author_profile == profile %}
+        <a class="ui button mini blue" onclick="$('#materials').modal('show')">Добавить урок</a>
+        {% include 'courses/course_add_materials.html' %}
+    {% endif %}
 </div>

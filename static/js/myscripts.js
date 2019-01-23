@@ -140,26 +140,33 @@ $(document).ready(function () {
     });
     $('.add_variant').click(function (event){
         var id = $(this).attr('id')
+        var current_variant_number = parseInt($(this).attr('current_variant_number')) + 1
+        $(this).attr('current_variant_number', current_variant_number)
         ul = document.getElementsByClassName(id + 'variants')[0]
-        li = document.createElement('li')
-        b = document.createElement('b')
+        li = document.createElement('div')
+        b = document.createElement('span')
         b.innerHTML = 'Вариант ответа: '
         textarea = document.createElement('textarea')
-        textarea.setAttribute('style', 'height: 46px;width: 50%;')
+        textarea.setAttribute('style', 'height: 33px;width: 200px;')
         textarea.setAttribute('class', 'new_problem_test_' + id)
+        textarea.setAttribute('variant_number', current_variant_number)
+        checkbox = document.createElement('input')
+        checkbox.setAttribute('id', 'is_correct_variant_' + id + 'variant' + current_variant_number)
+        checkbox.setAttribute('type', 'checkbox')
         li.appendChild(b)
         li.appendChild(textarea)
+        li.appendChild(checkbox)
         ul.appendChild(li)
     })
     $('.add_answer').click(function (event){
         var id = $(this).attr('id')
         div = document.getElementsByClassName('answers_' + id)[0]
         li = document.createElement('li')
-        b = document.createElement('b')
+        b = document.createElement('span')
         b.innerHTML = 'Ответ: '
         br = document.createElement('br')
         textarea = document.createElement('textarea')
-        textarea.setAttribute('style', 'height: 46px;width: 100%;')
+        textarea.setAttribute('style', 'height: 33px;width: 200px;')
         textarea.setAttribute('class', 'new_problem_ans_' + id)
         div.appendChild(b)
         div.appendChild(br)
@@ -170,8 +177,8 @@ $(document).ready(function () {
         event.preventDefault();
         var this_ = $(this)
         var id = this_.attr('id')
+        $('.' + id + 'not_test').fadeToggle()
         $('.' + id + 'test').fadeToggle()
-        $('.' + id + 'add_answer').fadeToggle()
         if ($('.problem_type_info').attr('info') == 'input'){
             $('.problem_type_info').attr('info', 'test')            
         }
@@ -645,13 +652,13 @@ $(document).ready(function () {
         var answer = ""
         if( $(".task_type_" + paper_id).attr("type") == "input" ){
             for(var i = 0; i < document.getElementsByClassName('check_task_answer_' + paper_id).length; i++){
-                answer = answer + document.getElementsByClassName('check_task_answer_' + paper_id)[i].value + ";"
+                answer = answer + document.getElementsByClassName('check_task_answer_' + paper_id)[i].value + "&"
             }
         }
         if( $(".task_type_" + paper_id).attr("type") == "test" ){
             for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){
                 if(document.getElementsByClassName("option_" + paper_id)[i].checked){
-                    answer = answer + document.getElementsByClassName("option_" + paper_id)[i].getAttribute("value") + ";"
+                    answer = answer + document.getElementsByClassName("option_" + paper_id)[i].getAttribute("value") + "&"
                 }
             }
         }
@@ -782,14 +789,14 @@ $(document).ready(function () {
         var answer = ""
         var variant = ""
         if( $(".task_type_" + paper_id).attr("type") == "input" ){
-            answer = answer + document.getElementsByClassName('change_task_answer_' + paper_id)[1].value + ";"
+            answer = answer + document.getElementsByClassName('change_task_answer_' + paper_id)[1].value + "&"
         }
         if( $(".task_type_" + paper_id).attr("type") == "test" ){
             for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){
                 var old_variant = document.getElementsByClassName("option_" + paper_id)[i].getAttribute("value")
-                variant = variant + document.getElementsByClassName("variant_value_"+paper_id +'v'+ old_variant)[0].value+";"
+                variant = variant + document.getElementsByClassName("variant_value_"+paper_id +'v'+ old_variant)[0].value+"&"
                 if(document.getElementsByClassName("option_" + paper_id)[i].checked){
-                    answer = answer + document.getElementsByClassName("variant_value_"+paper_id +'v'+ old_variant)[0].value+";"
+                    answer = answer + document.getElementsByClassName("variant_value_"+paper_id +'v'+ old_variant)[0].value+"&"
                 }
             }
         }

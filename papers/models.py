@@ -23,7 +23,6 @@ def upload_location(instance, filename):
     return "%s" %(filename)
 
 class Subtheme(models.Model):
-    title = models.CharField(max_length=250)
     task_list = models.ManyToManyField(Task, related_name='subthemes')
     content = models.TextField(default='')
     video = models.FileField(default='')
@@ -171,7 +170,5 @@ class Course(models.Model):
         return mark_safe(markdown(self.content))
     def add_lesson_url(self):
         return reverse("papers:add_lesson_url")
-    def like_url(self):
-        return reverse("papers:course_like_url")
-    def dislike_url(self):
-        return reverse("papers:course_dislike_url")
+    def pay_for_course(self):
+        return reverse("papers:pay_for_course")
