@@ -87,6 +87,9 @@ def AddPaper(request):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('title'):
             paper = Paper.objects.create(title=request.GET.get('title'))
+            subtheme = Subtheme.objects.create()
+            subtheme.save()
+            paper.subthemes.add(subtheme)
             lesson.papers.add(paper)
         paper.author_profile = profile
         paper.save()
