@@ -14,7 +14,7 @@
         <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
             Расписание
         </div>
-  </div>
+    </div>
 </div>
 <div id="calendar" length='{{ hissquads.0.weeks.all|length }}' style="min-height: 200px;min-width: 100%;margin-bottom: 14px;">
 {% for week in hissquads.0.weeks.all %}
@@ -61,7 +61,7 @@
             {% if cell.date|date:'w' != '0' %}                                       
             <div class="daysmall other">
                 {% for material in cell.subject_materials.all %}
-                    <div class="ui segment" style="padding: 1px; background-color: #5181b8;box-shadow: none;margin-bottom: 0;margin-top: 5px;">
+                    <div class="ui segment" style="padding: 1px; background-color: {{material.subject.color_back}};box-shadow: none;margin-bottom: 0;margin-top: 5px;">
                         <a style="color: #fff;" onclick="$('#lessons{{ material.id }}').modal('show')">
                             {{ material.subject.title }}
                             {% if cell.subject_materials.all|length == 1 %}

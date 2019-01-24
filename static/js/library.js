@@ -1,4 +1,22 @@
 $(document).ready(function(){
+    $('.pay_for_course').click(function () {
+        var course_id = $(this).attr('course_id')
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'course_id':course_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok){
+                    $('.bought_course').modal('show')
+                }
+                else{
+                    $('.not_enough_dils').show('fast')
+                }
+            }
+        });
+    })
     $(".show_edit").click(function () {
         for (var i = document.getElementsByClassName('edit').length - 1; i >= 0; i--) {
             oldclass=document.getElementsByClassName('edit')[i].getAttribute('class')
@@ -465,15 +483,18 @@ $(document).ready(function(){
         text = $('#new_problem_text' + id).val()
         cost = $('#new_problem_cost' + id).val()
         var variants = ''
-        var ans = ''        
+        var ans = ''
+        var variant_ans = ''
         for(var i = 0; i < document.getElementsByClassName('new_problem_ans_' + id).length; i++){
-            ans = ans + document.getElementsByClassName('new_problem_ans_' + id)[i].value + ';'
-            console.log(ans)
+            ans = ans + document.getElementsByClassName('new_problem_ans_' + id)[i].value + '&'
         }
-
         for(var i = 0; i < document.getElementsByClassName('new_problem_test_' + id).length; i++){
-            variants = variants + document.getElementsByClassName('new_problem_test_' + id)[i].value + ';'
-            console.log(variants)
+            textarea = document.getElementsByClassName('new_problem_test_' + id)[i]
+            variants = variants + textarea.value + '&';
+            checkbox = document.getElementById('is_correct_variant_' + id + 'variant' + textarea.getAttribute('variant_number'))
+            if (checkbox.checked){
+                variant_ans = variant_ans + textarea.value + '&';
+            }
         }
 
         $.ajax({
@@ -481,6 +502,7 @@ $(document).ready(function(){
             data: {
                 'text':text,
                 'ans':ans,
+                'variant_ans':variant_ans,
                 'cost':cost,
                 'subtheme_id':subtheme_id,
                 'variants':variants,

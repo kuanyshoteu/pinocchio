@@ -46,8 +46,8 @@
                             {% endfor %}
                         {% else %}
                             <b>Ответ: </b>
-                            <br>
                             <textarea type="text" class='change_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 200px; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
+                            <br>
                         {% endif %}
                         <br>
                         <b>Возможное колличество баллов: </b>
@@ -103,13 +103,13 @@
                     {% if profile.is_trener %}
                         <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
                     {% else %}
-                        <br>
                         <textarea class="ans_textarea check_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">{{ task|hisanswer:profile }}</textarea>
                         {% if task|is_correct:profile == True %}
                             <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
                         {% else %}
                             <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
                         {% endif %}
+                        <br>
                     {% endif %}
                 {% endfor %}
             {% endif %}

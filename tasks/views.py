@@ -37,7 +37,7 @@ def ChangeAnswer(request):
     if request.GET.get('id'):
         task = Task.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('answer'):
-            answer = request.GET.get('answer').split(';')
+            answer = request.GET.get('answer').split('&')
             del answer[-1]
             answer = sorted(answer)
             if profile.is_trener:
@@ -68,7 +68,7 @@ def ChangeAnswer(request):
                         profile.coins -= task.cost
                         action = 'minus'
                         value = task.cost
-                solver_checks.solver_ans = request.GET.get('answer').split(';')
+                solver_checks.solver_ans = request.GET.get('answer').split('&')
                 solver_checks.save()
                 if request.GET.get('parent_id'):
                     if request.GET.get('parent_id') != '-1':
@@ -122,7 +122,7 @@ def ChangeText(request):
         if request.GET.get('cost'):
             task.cost = request.GET.get('cost')
         if request.GET.get('answer'):
-            answer = request.GET.get('answer').split(';')
+            answer = request.GET.get('answer').split('&')
             del answer[-1]
             task.answer = answer
         task.save()

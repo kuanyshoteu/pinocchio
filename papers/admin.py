@@ -29,9 +29,9 @@ class CommentAdmin(admin.ModelAdmin):
         model = Comment
 
 class SubthemeModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "id"]
-    list_display_links = ["title"]
-    list_filter = ["title"]
+    list_display = ["id"]
+    list_display_links = ["id"]
+    list_filter = ["id"]
 
     class Meta:
         model = Subtheme

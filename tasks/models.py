@@ -62,7 +62,7 @@ class Task(models.Model):
         return content_type
 
     class Meta:
-        ordering = ['cost']
+        ordering = ['id']
 
 class Solver(models.Model):
     solver_ans = ArrayField(models.TextField(), default = [''])

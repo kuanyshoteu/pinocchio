@@ -25,22 +25,41 @@ def lesson_details(request, lesson_id = None):
         raise Http404
 
     lesson = Lesson.objects.get(id=lesson_id)
-    subtheme_form = SubthemeForm(request.POST or None, request.FILES or None)
-    if subtheme_form.is_valid():
-        subtheme = subtheme_form.save(commit=False)
-        subtheme.youtube_video_link = subtheme.youtube_video_link.replace('watch?v=', 'embed/')
-        subtheme.save()
 
+    subtheme_text_form = SubthemeTextForm(request.POST or None)
+    if subtheme_text_form.is_valid():
+        subtheme = subtheme_text_form.save(commit=False)
+        subtheme.save()
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
+        return redirect(lesson.get_absolute_url())
 
+    subtheme_file_form = SubthemeFileForm(request.POST or None, request.FILES or None)
+    if subtheme_file_form.is_valid():
+        subtheme = subtheme_file_form.save(commit=False)
+        subtheme.save()
+        paper_id = request.POST.get('paper_id')
+        paper = Paper.objects.get(id = int(paper_id))
+        paper.subthemes.add(subtheme)
+        return redirect(lesson.get_absolute_url())
+
+    subtheme_video_form = SubthemeVideoForm(request.POST or None, request.FILES or None)
+    if subtheme_video_form.is_valid():
+        subtheme = subtheme_video_form.save(commit=False)
+        subtheme.youtube_video_link = subtheme.youtube_video_link.replace('watch?v=', 'embed/')
+        subtheme.save()
+        paper_id = request.POST.get('paper_id')
+        paper = Paper.objects.get(id = int(paper_id))
+        paper.subthemes.add(subtheme)
         return redirect(lesson.get_absolute_url())
 
     context = {
         "profile": profile,
         'lesson':lesson,
-        'subtheme_form':subtheme_form,
+        'subtheme_text_form':subtheme_text_form,
+        'subtheme_file_form':subtheme_file_form,
+        'subtheme_video_form':subtheme_video_form,
         'tasks':Task.objects.all(),
     }
     return render(request, template_name='library/lesson_details.html', context=context)
@@ -68,6 +87,9 @@ def AddPaper(request):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('title'):
             paper = Paper.objects.create(title=request.GET.get('title'))
+            subtheme = Subtheme.objects.create()
+            subtheme.save()
+            paper.subthemes.add(subtheme)
             lesson.papers.add(paper)
         paper.author_profile = profile
         paper.save()
@@ -94,23 +116,24 @@ def AddSubtheme(request):
 
 def NewTask(request):
     profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('text'):
-        if request.GET.get('ans'):
-            task = Task.objects.create(author_profile=profile, text=request.GET.get('text'), answer = request.GET.get('ans').split(';'))
+    if request.GET.get('text') and request.GET.get('cost') and request.GET.get('subtheme_id'):
+        print(request.GET.get('ans'), request.GET.get('variants'))
+        if request.GET.get('ans') != '&':
+            task = Task.objects.create(author_profile=profile, text=request.GET.get('text'), answer = request.GET.get('ans').split('&'))
             del task.answer[-1]
-        if request.GET.get('variants'):
-            task.variants = request.GET.get('variants').split(';')
+        elif request.GET.get('variants'):
+            task = Task.objects.create(author_profile=profile, text=request.GET.get('text'), answer = request.GET.get('variant_ans').split('&'))
+            del task.answer[-1]
+            task.variants = request.GET.get('variants').split('&')
             del task.variants[-1]
             if task.variants[0] != '':
                 task.is_test = True
                 if len(task.answer) > 1:
                     task.is_mult_ans = True
-        if request.GET.get('subtheme_id'):
-            subtheme = Subtheme.objects.get(id=int(request.GET.get('subtheme_id')))
-            task.subthemes.add(subtheme)                    
-        if request.GET.get('cost'):
-            task.cost = request.GET.get('cost')
-
+        
+        subtheme = Subtheme.objects.get(id=int(request.GET.get('subtheme_id')))
+        task.subthemes.add(subtheme)                    
+        task.cost = request.GET.get('cost')
         task.save()
     data = {
         "delete_url":task.get_delete_url(),
@@ -124,7 +147,6 @@ def AddTask(request):
     action = ''
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('subtheme_id') and request.GET.get('task_id'):
-        print(request.GET.get('subtheme_id'), request.GET.get('task_id'))
         subtheme = Subtheme.objects.get(id = int(request.GET.get('subtheme_id')))
         task = Task.objects.get(id = int(request.GET.get('task_id')))
         if task in subtheme.task_list.all():
@@ -133,7 +155,6 @@ def AddTask(request):
         else:
             subtheme.task_list.add(task)
             action = 'add'
-    print(action)
     data = {
         'action': action
     }
@@ -332,10 +353,14 @@ def course_details(request, course_id=None):
         profile = Profile.objects.get(user = request.user.id)
     else:
         raise Http404
-   
+    course = Course.objects.get(id=course_id)
+    if not profile.is_ceo and not profile.is_creator:
+        if not profile in course.students.all():
+            raise Http404
+
     context = {
         "profile": profile,
-        "course":Course.objects.get(id=course_id),
+        "course":course,
         'lessons':Lesson.objects.all(),
         "folders":Folder.objects.all(),
     }
@@ -413,6 +438,22 @@ def rename_course(request):
             course.save()
 
     data = {}
+    return JsonResponse(data)
+
+def pay_for_course(request):
+    if request.GET.get('course_id'):
+        ok = False
+        profile = Profile.objects.get(user = request.user.id)
+        course = Course.objects.get(id = int(request.GET.get('course_id')))
+        if profile.coins > course.cost:
+            course.students.add(profile)
+            profile.coins -= course.cost
+            profile.save()
+            ok = True
+
+    data = {
+        "ok":ok
+    }
     return JsonResponse(data)
 
 def check_paper(request):

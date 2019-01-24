@@ -656,6 +656,13 @@ a{
   -webkit-transform: translateX(0%) !important;
   transform: translateX(0%) !important;
 }
+.save_grade{
+  margin-right: 0px !important;
+  padding: 0px 5px  !important;
+  width: 22%;
+  height: 30px;
+  line-height: 30px !important;
+}
 .content_active {
   -webkit-transform: translateX(100%);
   transform: translateX(100%);

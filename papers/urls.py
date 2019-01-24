@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^course_update(?P<course_id>\d+)/$', course_update, name='course_update_url'),
     url(r'^api/delete_course_url/$', delete_course, name = 'delete_course_url'),
     url(r'^api/check_paper_url/$', check_paper, name = 'check_paper_url'),
+    url(r'^api/pay_for_course/$', pay_for_course, name = 'pay_for_course'),
 ]

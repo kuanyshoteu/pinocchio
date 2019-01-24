@@ -18,6 +18,10 @@ def addstr(str1, str2):
     return str(str1) + str(str2)
 
 @register.filter
+def last_subtheme(paper):
+    return [paper.subthemes.last()]
+
+@register.filter
 def hisanswers(task, profile):
     return task.solver_checks.get_or_create(author_profile=profile)[0].solver_ans
 

@@ -50,7 +50,7 @@ class Profile(models.Model):
     width_field = models.IntegerField(default=0, null = True)
     
     class Meta:
-        ordering = ['-coins']
+        ordering = ['-coins', 'first_name']
 
     def get_absolute_url(self):
         self.user.username = self.user.username.replace(' ', '_')

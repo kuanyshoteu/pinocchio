@@ -15,40 +15,30 @@
         </h3>
     </div>
     {% endif %}
-    <div style="margin-bottom: 0;">
-    {% for subtheme in paper.subthemes.all %}
-    	<h3 class="lined_text" style="margin-bottom: 0;font-weight: 500;padding-top: 20px;">
-            <span style="padding-left: 20px;" class="subtheme_title_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.title }}</span>
-            {% if paper.author_profile == profile or profile.user.is_superuser %}
-            <div class="subtheme_rename_div_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="display: none;">
-                <form class="ui form" style="margin-bottom: 0">
-                    <textarea style="width: 200px;margin-bottom: 0" class="subtheme_new_title_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.title }}</textarea>
-                    <a class="rename_subtheme ui button mini blue" url={{ subtheme.rename_subtheme_url }} subtheme_id="{{ subtheme.id }}" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Сохранить</a>
-                </form>               
-            </div>
-            <a class="open_rename_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="margin: 0 25px;"><i class="icon pencil"></i></a>
-            <a class="delete_subtheme" url="{{ subtheme.delete_subtheme_url }}" id="{{ subtheme.id }}"><i class="icon trash"></i></a>
-            {% endif %}
-        </h3>
-        <div class="ui segment" style="padding: 50px;">
+    <div class="ui segment" style="padding: 50px;margin-bottom: 0;margin-top: 0">
         <div class="subtheme_number_circle">{{ forloop.counter }}</div>
+        {% for subtheme in paper.subthemes.all %}
         	<div style="">
                 {% if paper.author_profile == profile or profile.user.is_superuser %}
-                <div class="subtheme_rewrite_div_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="display: none;">
-                    <form class="ui form" style="margin-bottom: 0">
-                        <textarea style="width: 100%;height: 150px;" class="subtheme_new_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.content}}</textarea>
-                        <br><br>
-                        <a class="rewrite_subtheme ui button mini blue" url={{ subtheme.rewrite_subtheme_url }} subtheme_id="{{ subtheme.id }}" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Сохранить</a>
-                    </form> 
-                    <br><br>              
-                </div>
-                <a class="open_rewrite_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="font-size: 12px">
-                    Изменить текст
-                </a>
+                    <div class="subtheme_rewrite_div_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="display: none;">
+                        <form class="ui form" style="margin-bottom: 0">
+                            <textarea style="width: 100%;height: 150px;" class="subtheme_new_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.content}}</textarea>
+                            <br><br>
+                            <a class="rewrite_subtheme ui button mini blue" url={{ subtheme.rewrite_subtheme_url }} subtheme_id="{{ subtheme.id }}" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Сохранить</a>
+                        </form> 
+                        <br><br>              
+                    </div>
+                    {% if subtheme.content != '' %}
+                        <a class="open_rewrite_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="font-size: 12px">
+                            Изменить текст
+                        </a>
+                    {% endif %}
                 {% endif %}
+                {% if subtheme.content != '' %}
                 <span class="subtheme_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
                     {{ subtheme.get_markdown }}
                 </span>
+                {% endif %}
             </div>
             {% if subtheme.file %}
             <b>Дополнительный файл:</b>
@@ -73,10 +63,10 @@
                 {% endif %}
         	</div>
             {% include 'library/problems.html' %}
-        </div>
-    {% endfor %} 
+        {% endfor %} 
+    </div>
+
     {% if profile.is_trener %}
         {% include 'library/add_subtheme.html' %}
     {% endif %}
-    </div>
 </div>
