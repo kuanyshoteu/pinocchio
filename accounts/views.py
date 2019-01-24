@@ -98,7 +98,6 @@ def account_view(request, user = None):
         'all_profiles':Profile.objects.all(),
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
-        'hisattendance':hisattendance(hisprofile),
         'hissubjects':hissubjects,
         'days':Day.objects.all(),
         'hissquads':hissquads,
