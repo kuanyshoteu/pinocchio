@@ -820,28 +820,37 @@ $(document).ready(function () {
     });
 
 })
+// vmenu2
 
-$('.menu-btn').on('click', function(e) {
-  e.preventDefault();
-  this_ = $('.vmenu')
-  if ( this_.attr('stage') == 'passive' ){
-      this_.attr('stage', 'active');
-      this_.toggleClass('menu_active');
-      $('.contenttt').toggleClass('content_active');
-  }
-  else{
-      this_.attr('stage', 'passive');
-      document.getElementById("contenttt").classList.remove('content_active');
-      document.getElementById("vmenu2").classList.remove('menu_active');
-  }
-})
-$('.menu_back').on('click', function(e) {
-  e.preventDefault();
-  this_ = $('.vmenu')
-  if ( this_.attr('stage') == 'active' ){
-      this_.attr('stage', 'passive');
-      document.getElementById("contenttt").classList.remove('content_active');
-      document.getElementById("vmenu2").classList.remove('menu_active');
-  }
-})
+// $('#toggle').on('ready', function(e) {
+//     $('#vmenu2').toggleClass('menu_active')
+//     console.log(e)
+// })
+// $('.image').on("click", function(e) {
+//     console.log(e)
+// })
+
+// $('.menu-btn').on('click', function(e) {
+//   e.preventDefault();
+//   this_ = $('.vmenu')
+//   if ( this_.attr('stage') == 'passive' ){
+//       this_.attr('stage', 'active');
+//       this_.toggleClass('menu_active');
+//       $('.contenttt').toggleClass('content_active');
+//   }
+//   else{
+//       this_.attr('stage', 'passive');
+//       document.getElementById("contenttt").classList.remove('content_active');
+//       document.getElementById("vmenu2").classList.remove('menu_active');
+//   }
+// })
+// $('.menu_back').on('click', function(e) {
+//   e.preventDefault();
+//   this_ = $('.vmenu')
+//   if ( this_.attr('stage') == 'active' ){
+//       this_.attr('stage', 'passive');
+//       document.getElementById("contenttt").classList.remove('content_active');
+//       document.getElementById("vmenu2").classList.remove('menu_active');
+//   }
+// })
 

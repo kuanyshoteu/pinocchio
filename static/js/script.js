@@ -8,8 +8,26 @@ $document.ready(function()
 		// .mq('@media only screen and (max-device-width: 1024px) and (orientation:landscape)');
 	});
 });
+const toggler = document.querySelector('.menu-btn#toggle')
+toggler.addEventListener('click', (e) => {
+	$('#vmenu2').toggleClass('menu_active');
+	$window.on('scroll', function(e) {
+		$('#vmenu2').removeClass('menu_active');
+	})
+})
+
+$(".five.wide.column.menu_back").on('click', function(e) {
+	$('#vmenu2').toggleClass('menu_active')
+})
 $window.on('load', function()
 {
+	// $('.menu-btn#toggle').on('click', function(e) {
+ //    $('#vmenu2').toggleClass('menu_active')
+ //    console.log(e)
+	// })
+	if (document.querySelector('.menu-btn#toggle')) {	
+	}
+
 	$body = $(document.body);
 
 	var slides = [
