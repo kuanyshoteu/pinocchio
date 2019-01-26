@@ -39704,8 +39704,7 @@ a:hover {
   }
 
   #left-main-menu {
-    height: 230px !important;
-    width: 100% !important;
+    display: none;
   }
 
   #group-details .twelve.wide.column {
