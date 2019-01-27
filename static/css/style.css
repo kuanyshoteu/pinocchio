@@ -444,6 +444,7 @@ a{
   padding-bottom: 5px;
   color: rgba(255, 255, 255, .5);
   letter-spacing: .7px;
+  text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
 }
 
 .day-number {
