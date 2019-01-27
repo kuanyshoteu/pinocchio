@@ -81,7 +81,7 @@ def test_account(request):
     found_classwork = False
     idet_urok = False
     classwork = []
-
+  
     hislessonss = hislessons(hisprofile)
     context = {
         "profile":hisprofile,
