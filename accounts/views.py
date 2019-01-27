@@ -80,7 +80,8 @@ def test_account(request):
     homework_list = []
     found_classwork = False
     idet_urok = False
-    classwork = [] 
+    classwork = []
+
     hislessonss = hislessons(hisprofile)
     context = {
         "profile":hisprofile,
@@ -90,7 +91,9 @@ def test_account(request):
         'all_profiles':Profile.objects.all(),
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
+        'hissubjects':hissubjects,
         'days':Day.objects.all(),
+        'hissquads':hissquads,
         'time_periods':time_periods,
         'classwork':hislessonss[2],
         'homeworks':hislessonss[0],
