@@ -50,7 +50,10 @@ class Profile(models.Model):
     width_field = models.IntegerField(default=0, null = True)
 
     tag_ids = ArrayField(models.IntegerField(), default = [])
-    skills = ArrayField(models.IntegerField(), default = [])
+    easy_skills = ArrayField(models.IntegerField(), default = [])
+    middle_skills = ArrayField(models.IntegerField(), default = [])
+    hard_skills = ArrayField(models.IntegerField(), default = [])
+    pro_skills = ArrayField(models.IntegerField(), default = [])
 
     class Meta:
         ordering = ['-coins', 'first_name']

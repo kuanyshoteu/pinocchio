@@ -665,6 +665,10 @@ $(document).ready(function () {
         var pageUrl = this_.attr("data-href")
         var paper_id = this_.attr("paper_id")
         var answer = ""
+        var tags = ''
+        for(var i = 0; i < document.getElementsByClassName('problem_tag_' + paper_id).length; i++){
+            tags = tags + document.getElementsByClassName('problem_tag_' + paper_id)[i].getAttribute('tag_id') + '&'
+        }        
         if( $(".task_type_" + paper_id).attr("type") == "input" ){
             for(var i = 0; i < document.getElementsByClassName('check_task_answer_' + paper_id).length; i++){
                 answer = answer + document.getElementsByClassName('check_task_answer_' + paper_id)[i].value + "&"
@@ -683,6 +687,7 @@ $(document).ready(function () {
                 data: {
                     'id':this_.attr("id"),
                     'answer':answer,
+                    'tags':tags,
                     'parent_id':this_.attr("parent_id"),
                 },
                 dataType: 'json',

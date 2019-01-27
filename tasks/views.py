@@ -34,6 +34,7 @@ def ChangeAnswer(request):
     parent = True
     action = ''
     value = 0
+    print('d', request.GET.get('tags'))
     if request.GET.get('id'):
         task = Task.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('answer'):

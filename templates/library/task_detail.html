@@ -70,7 +70,7 @@
               {{ task.cost }}
             </a>        
             {% for tag in task.tags.all %}
-                <a class="ui label">
+                <a class="ui label problem_tag_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" tag_id="{{ tag.id }}">
                     {{ tag.title }}
                 </a>
             {% endfor %}
