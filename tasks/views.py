@@ -34,7 +34,6 @@ def ChangeAnswer(request):
     parent = True
     action = ''
     value = 0
-    print('d', request.GET.get('tags'))
     if request.GET.get('id'):
         task = Task.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('answer'):
@@ -64,6 +63,23 @@ def ChangeAnswer(request):
                             profile.coins += task.cost
                             action = 'plus'
                             value = task.cost
+                            if request.GET.get('tags'):
+                                tags = request.GET.get('tags').split('&')
+                                del tags[-1]
+                                for tag_id in tags:
+                                    tag_id = int(tag_id)
+                                    if not tag_id in profile.tag_ids:
+                                        profile.tag_ids.append(tag_id)
+                                    index = profile.tag_ids.index(tag_id)
+                                    if task.cost <= 2:
+                                        profile.easy_skills[index] += task.cost
+                                    elif task.cost <= 10:
+                                        profile.middle_skills[index] += task.cost
+                                    elif task.cost <= 25:
+                                        profile.hard_skills[index] += task.cost
+                                    else:
+                                        profile.pro_skills[index] += task.cost
+                                    profile.save()
                 else:
                     if was_solved:
                         profile.coins -= task.cost
