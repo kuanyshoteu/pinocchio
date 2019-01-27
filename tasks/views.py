@@ -70,7 +70,12 @@ def ChangeAnswer(request):
                                     tag_id = int(tag_id)
                                     if not tag_id in profile.tag_ids:
                                         profile.tag_ids.append(tag_id)
+                                        profile.easy_skills.append(0)
+                                        profile.middle_skills.append(0)
+                                        profile.hard_skills.append(0)
+                                        profile.pro_skills.append(0)
                                     index = profile.tag_ids.index(tag_id)
+                                    print(profile.tag_ids, index)
                                     if task.cost <= 2:
                                         profile.easy_skills[index] += task.cost
                                     elif task.cost <= 10:

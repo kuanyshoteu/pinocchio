@@ -23,16 +23,16 @@
     {% endif %}
     <div id="week{{ forloop.counter }}" style="{% if not week.actual %}display: none;{% endif %}padding-bottom: 0">
         <div class="week" style="height: 27px;padding-top: 15px;padding-bottom: 0px;">
-            <div class="ui grid">
-                <div class="one wide column" style="padding-bottom: 0">
-                    <a class="leftt" ></a>
-                </div>
+            <div class="ui grid stackable">
+                <div class="one wide column" style="padding-bottom: 0;margin: 0">
+<!--                     <a class="leftt" ></a>
+ -->                </div>
                 <div class="thirteen wide column center aligned" style="color: rgba(255, 255, 255, .5);padding-bottom: 0;padding-top: 2px;">
                     {{ week.week_cells.all.0.date|date:'F' }}, {{ forloop.counter }} неделя 
                 </div>
-                <div class="two wide column" style="padding-bottom: 0">
-                    <a style="float: right;" class="rightt"></a>
-                </div>
+                <div class="one wide column" style="padding-bottom: 0">
+<!--                     <a style="float: right;" class="rightt"></a>
+ -->                </div>
             </div>
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>

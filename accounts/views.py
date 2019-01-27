@@ -151,7 +151,11 @@ def hislessons(hisprofile):
     res = []
     lesson_now = False
     classwork = []
-    for subject in hisprofile.teachers_subjects.all():
+    if hisprofile.is_trener:
+        hissubjects = hisprofile.teachers_subjects.all()
+    else:
+        hissubjects = hisprofile.hissubjects.all()
+    for subject in hissubjects:
         homeworks = []
         for squad in subject.squads.all():
             needed_timep = 'none'
