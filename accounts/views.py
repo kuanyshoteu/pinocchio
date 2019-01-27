@@ -90,7 +90,6 @@ def test_account(request):
         'all_profiles':Profile.objects.all(),
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
-        'hissubjects':hissubjects,
         'days':Day.objects.all(),
         'hissquads':hissquads,
         'time_periods':time_periods,
