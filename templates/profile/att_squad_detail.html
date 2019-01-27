@@ -31,7 +31,7 @@
 			            	{% for attendance in squad_cell|find_attendance:subject %}
 				            	{% if attendance.student in squad.students.all %}
 				            	<div style="width: 100%;height: 40px;padding: 5px 1px 1px 1px;{% if forloop.counter|is_odd %}background-color: #545454{%endif%};text-align: center;">
-				            		{% if attendance.squad_cell.date|check_date == 'now' %}
+				            		{% if attendance.squad_cell.date|check_date:5 == 'now' %}
 				            		<span style="display: none;" class="today{{ subject.id }}{{ squad.id }}" number='{{forloop.parentloop.parentloop.counter|minus}}'></span>
 				            		<div id="grades{{ attendance.id }}" style="{% if attendance.present != 'present' and attendance.present != 'late' %}display: none;{% endif %};height: 100%;">
 					            		<a class="ui button mini save_grade {% if attendance.grade == 5 %}green{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="5">5</a>
@@ -42,7 +42,7 @@
 				            		<div id="attendance{{ attendance.id }}" style="{% if attendance.present == 'present' or attendance.present == 'late' %}display: none;{% endif %}">
 				            			<a url="{{ attendance.present_url }}" class="ui button mini full-w blue att_present" id="{{attendance.id}}" style="padding: 7px 5px;">На уроке</a>
 				            		</div>
-				            		{% elif attendance.squad_cell.date|check_date == 'future' %}
+				            		{% elif attendance.squad_cell.date|check_date:2 == 'future' %}
 				            		{% else %}
 				            			<span style="display: none;" class="past{{ subject.id }}{{ squad.id }}" number='{{forloop.parentloop.parentloop.counter|minus}}'></span>
 					            		{% if attendance.grade > 0 %}

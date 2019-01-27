@@ -22816,7 +22816,7 @@ ul{
   -ms-user-select: none;
   user-select: none;
   background: none;
-  padding: 0.92857143em 1.14285714em;
+  padding: 7px 0;
   text-transform: none;
   color: rgba(0, 0, 0, 0.87);
   font-weight: normal;
@@ -39498,6 +39498,9 @@ body.pushable > .pusher {
   margin-top: 0;
   margin-bottom: 0;
   border-bottom: 1px solid #5181b8;
+  position: fixed; 
+  z-index: 2000;
+  width: 100%;
 }
 
 #main-menu .main {
@@ -39704,8 +39707,7 @@ a:hover {
   }
 
   #left-main-menu {
-    height: 230px !important;
-    width: 100% !important;
+    display: none;
   }
 
   #group-details .twelve.wide.column {

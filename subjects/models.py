@@ -154,6 +154,7 @@ class SubjectMaterials(models.Model):
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='materials')
     lessons = models.ManyToManyField(Lesson, related_name='subject_materials')
     number = models.IntegerField(default=0)
+    done_by = models.ManyToManyField(Profile, related_name='done_subject_materials')
     class Meta:
         ordering = ['number']
 

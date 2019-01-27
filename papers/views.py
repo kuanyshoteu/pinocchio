@@ -11,7 +11,7 @@ from django.views.generic import RedirectView
 
 from .forms import *
 from .models import *
-from tasks.models import Task
+from tasks.models import Task, ProblemTag
 from squads.models import Squad
 from papers.models import Comment
 from library.models import Folder
@@ -117,12 +117,12 @@ def AddSubtheme(request):
 def NewTask(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('text') and request.GET.get('cost') and request.GET.get('subtheme_id'):
-        print(request.GET.get('ans'), request.GET.get('variants'))
+        task = Task.objects.create(author_profile=profile, text=request.GET.get('text'))
         if request.GET.get('ans') != '&':
-            task = Task.objects.create(author_profile=profile, text=request.GET.get('text'), answer = request.GET.get('ans').split('&'))
+            task.answer = request.GET.get('ans').split('&')
             del task.answer[-1]
         elif request.GET.get('variants'):
-            task = Task.objects.create(author_profile=profile, text=request.GET.get('text'), answer = request.GET.get('variant_ans').split('&'))
+            task.answer = request.GET.get('variant_ans').split('&')
             del task.answer[-1]
             task.variants = request.GET.get('variants').split('&')
             del task.variants[-1]
@@ -130,6 +130,13 @@ def NewTask(request):
                 task.is_test = True
                 if len(task.answer) > 1:
                     task.is_mult_ans = True
+        if request.GET.get('tags') != '':
+            tags = request.GET.get('tags').split('&')
+            del tags[-1]
+            print(tags)
+            for t in tags:
+                tag = ProblemTag.objects.get_or_create(title=t)[0]
+                task.tags.add(tag)
         
         subtheme = Subtheme.objects.get(id=int(request.GET.get('subtheme_id')))
         task.subthemes.add(subtheme)                    
@@ -460,8 +467,8 @@ def check_paper(request):
     if request.GET.get('current_paper'):
         profile = Profile.objects.get(user = request.user.id)
         paper = Paper.objects.get(id = int(request.GET.get('current_paper')))
+        
         solver_correctness = True
-
         for subtheme in paper.subthemes.all():
             for task in subtheme.task_list.all():
                 solver = profile.check_tasks.get_or_create(task = task)[0]
@@ -470,6 +477,16 @@ def check_paper(request):
                     break
         if solver_correctness:
             paper.done_by.add(profile)
+            print('paper_done')
+            lesson = paper.lessons.first()
+            lesson_is_done = True
+            for ppr in lesson.papers.all():
+                if not profile in ppr.done_by.all():
+                    lesson_is_done = False
+                    break
+            if lesson_is_done:
+                print('lesson_done')
+                lesson.done_by.add(profile)
         else:
             paper.done_by.remove(profile)
     data = {

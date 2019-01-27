@@ -11,9 +11,13 @@
 {% load ttags %}
 {% load staticfiles %}
 {% block content %}
-<div id="group-details" style="padding-bottom: 200px;">
-    {% if user.is_authenticated %}
+<div id="group-details">
+    {% if profile.is_manager %}
     <a id="go-back-btn"  href='{% url "subjects:list" %}'>
+        <i class="arrow left icon"></i>Назад
+    </a>
+    {% else %}
+    <a id="go-back-btn"  href='{{ profile.get_absolute_url }}'>
         <i class="arrow left icon"></i>Назад
     </a>
     {% endif %}
@@ -22,7 +26,7 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 <div class="ui grid">
-                    <div class="{% if instance.image_banner %}fifteen{%else%}eleven{%endif%} wide column" style="padding-bottom: 0;padding-right: 0;">
+                    <div class="{% if instance.image_banner %}fifteen{%else%}eleven{%endif%} wide column">
                         <div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
                             <div class="ui grid">
                                 {% if instance.image_banner %}

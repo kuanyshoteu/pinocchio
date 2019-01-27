@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    $('.profile_name').click(function (event){
+        $('.profile_links').fadeToggle('fast')
+    })
     $('.tell_about_corruption').click(function (event){
         var text = $('.corruption_text').val()
         console.log(text)
@@ -173,6 +176,16 @@ $(document).ready(function () {
         div.appendChild(textarea)
         div.appendChild(br)
     })
+    $('.add_tag').click(function (event){
+        var id = $(this).attr('id')
+        div = document.getElementsByClassName('new_problem_tags_' + id)[0]
+        name = document.getElementById('new_problem_tag_name_' + id).value
+        a = document.createElement('a')
+        a.setAttribute('class', 'ui label new_problem_tag_'  + id)
+        a.setAttribute('name', name)
+        a.innerHTML = name
+        div.appendChild(a)
+    })
     $(".problem_type").click(function (event) {
         event.preventDefault();
         var this_ = $(this)
@@ -180,10 +193,12 @@ $(document).ready(function () {
         $('.' + id + 'not_test').fadeToggle()
         $('.' + id + 'test').fadeToggle()
         if ($('.problem_type_info').attr('info') == 'input'){
-            $('.problem_type_info').attr('info', 'test')            
+            $('.problem_type_info').attr('info', 'test')
+            this_.text('Ввод ответа')
         }
         else{
             $('.problem_type_info').attr('info', 'input')
+            this_.text('Тест')
         }
     })
 

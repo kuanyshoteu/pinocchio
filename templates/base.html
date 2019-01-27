@@ -17,7 +17,6 @@
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/slider.js" %}'></script>
-
     {% block head_extra %} {% endblock head_extra %}
 
 </head>
@@ -29,9 +28,8 @@
 {% include "modals/signup.html" %}
 {% include "modals/confirm_delete.html" %}
 
-<div class="ui stackable menu" id="main-menu" style="position: fixed; z-index: 2000;width: 100%;{%if main%}background: #44A8BF;{%endif%}">
-    <div class="ui container">
-    <div class="ui grid" style="padding: 0 0; margin: 0; width: 100%;">
+<div class="ui stackable menu" id="main-menu">
+    <div class="ui container">    
         <div class="contenttt" id='contenttt'>
             <a class="ui stackable left-menu-icon menu-btn" id="toggle" style="display: none; cursor: pointer; width: 17px; margin-top: 12px; margin-left: 9px;">
                 <i class="icon bars" style="color: white;"></i>
@@ -41,54 +39,32 @@
                     <span style="font-size: 26px;">P</span>inocchio
             </div>
         </div>
-        <div class="eleven wide column" style="padding: 0">
-            <div class="ui grid" style="margin:0">
-                <div class="four wide column" style="padding: 0">
-                </div>
-                <div class="twelve wide column" style="padding: 0">
-                    <div class="right menu stackable" style="float: right;">
-                        {% if main_form %}
-                            {% if user.is_authenticated %}
-                            <a class="item main" href='{% url "squads:list" %}'>
-                                Предметы
-                            </a>
-                            {% endif %}
-                            <a class="item main" href='/contacts/'>
-                                Контакты
-                            </a>
-                            {% if staff == 'yes' %}
-                            <a class="item main" href='/docs/'>
-                                Задания
-                            </a>
-                            {% endif %}
+        <div class="full-w left-main-menu">
+            {% if request.user.is_authenticated %}
+            <div class="item float_right">
+                <div class="">
+                    <a class="profile_name">
+                        {{ profile.first_name }}
+                        {% if profile.image %}
+                        <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
+                        {% else %}
+                        <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.png' %}">
                         {% endif %}
-                        {% if request.user.is_authenticated %}
-                        <div class="item" style="padding: 7px 0;">
-                            <div class="ui inline dropdown">
-                                <a class="" onclick='$(".profile_links").fadeToggle();'>
-                                    {{ profile.first_name }}
-                                    {% if profile.image %}
-                                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
-                                    {% else %}
-                                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.png' %}">
-                                    {% endif %}
-                                    <i class="angle down icon" style="margin-left: 0px;"></i>
-                                </a>
-                                <div class="menu profile_links" style="left: 0; ">
-                                    <a class="item pod-main" href='{{ profile.get_absolute_url }}'>
-                                        Мой страница
-                                    </a>
-                                    <div class="ui divider" style="margin: 0"></div>
-                                    <a class="item pod-main" href='{% url "logout" %}'>Выйти</a>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
+                        <i class="angle down icon" style="margin-left: 0px;"></i>
+                    </a>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
+</div>
+<div class="menu profile_links">
+    <div class="ui segment">
+        <a class="item pod-main" href='{{ profile.get_absolute_url }}'>
+            Мой страница
+        </a>
+        <div class="ui divider"></div>
+        <a class="item pod-main" href='{% url "logout" %}'>Выйти</a>        
     </div>
 </div>
 <br><br>
@@ -134,13 +110,13 @@
         <div class="five wide column menu_back" style="padding: 0;">
         </div>
     </div>
-    <div style="padding-top: 10px;min-height: 500px;">
+    <div style="padding-top: 10px;min-height: 100%;">
     {% block content %}{% endblock content %}
     </div>
 </div>
 
 
-<div class="ui inverted vertical footer segment" id="footer" style="{%if main%}background: #44A8BF;{%endif%}">
+<div class="ui inverted vertical footer segment" id="footer">
     <div class="ui center aligned container">
         <div class="logo-footer centered" style="color: #fff"><a style="text-decoration: underline;" href="{% url 'main:contacts' %}">Pinocchio.kz</a> © 2019</div>
         <br>

@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <a class="ui button green large" onclick="$('#l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_problem_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}{{ subtheme.id }}' style="width: 20%;">
   Задачу
 </a>
@@ -26,13 +27,17 @@
                     Выберите тип задачи:
                     <br>
                     <span class="problem_type_info" info='input' style="display: none;"></span>
-                    <a class="problem_type" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="test">Тест</a><br><br>
+                    <a class="problem_type" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="test">Тест</a>
                 </div>
-                <div class="ui segment" style="width: 60%;margin-left: auto;margin-right: auto;">
+                <div class="ui segment" style="width: 60%;margin: 20px auto;">
                     Условие:
                     <textarea class="new_problem_text_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="text" id='new_problem_textl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' style="height: 70px; width: 100%;"></textarea>
-                    <br>                    
-                    Цена задачи:
+                    <br>
+                    <span class="new_problem_tags_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}"></span>
+                    <textarea style="width: 100px;" type="text" id='new_problem_tag_name_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'></textarea>
+                    <a class="ui label add_tag" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Добавить тег</a>
+                    <br><br>
+                    <img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 17px !important;width: 17px;">
                     <textarea  style="height: 33px; width: 70px;" class="new_problem_cost" type="text" id='new_problem_costl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'></textarea>
                     <br>
                     <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}not_test">
@@ -47,7 +52,8 @@
                     </div>
                     <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}test" style="display: none;">
                         <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}variants">
-                            <div>Отметьте галочкой правильные варианты</div>
+                            <div class="is_homework">Отметьте галочкой правильные варианты</div>
+                            <br>
                             <div>
                                 Вариант ответа:
                                 <textarea  style="height: 33px;width: 200px;" type="text" class='new_problem_test_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' variant_number="1"></textarea>

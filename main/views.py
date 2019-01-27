@@ -18,6 +18,10 @@ from django.contrib.auth import (
 
     )
 from django.contrib.auth.models import User
+def loaderio(request):
+    context = {
+    }
+    return render(request, "loaderio.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:

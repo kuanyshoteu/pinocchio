@@ -39,10 +39,10 @@ def is_odd(number):
         return True
 
 @register.filter
-def check_date(date):
+def check_date(date, delta):
     if date > timezone.now().date():
         return 'future'
-    elif date + timedelta(5) >= timezone.now().date():
+    elif date + timedelta(int(delta)) >= timezone.now().date():
         return 'now'
     else:
         return 'past'

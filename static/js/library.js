@@ -484,7 +484,11 @@ $(document).ready(function(){
         cost = $('#new_problem_cost' + id).val()
         var variants = ''
         var ans = ''
+        var tags = ''
         var variant_ans = ''
+        for(var i = 0; i < document.getElementsByClassName('new_problem_tag_' + id).length; i++){
+            tags = tags + document.getElementsByClassName('new_problem_tag_' + id)[i].getAttribute('name') + '&'
+        }
         for(var i = 0; i < document.getElementsByClassName('new_problem_ans_' + id).length; i++){
             ans = ans + document.getElementsByClassName('new_problem_ans_' + id)[i].value + '&'
         }
@@ -502,6 +506,7 @@ $(document).ready(function(){
             data: {
                 'text':text,
                 'ans':ans,
+                'tags':tags,
                 'variant_ans':variant_ans,
                 'cost':cost,
                 'subtheme_id':subtheme_id,

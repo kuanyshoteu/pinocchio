@@ -48,7 +48,7 @@ class Paper(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='paper_author')
     subthemes = models.ManyToManyField(Subtheme, related_name='papers')
     done_by = models.ManyToManyField(Profile, related_name='done_papers')
-
+    typee = models.CharField(max_length=250, default = 'problem')
     def __unicode__(self):
         return self.title
 

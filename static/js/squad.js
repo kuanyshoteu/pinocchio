@@ -137,16 +137,16 @@ $(document).ready(function () {
     $('.open_time_lessons').on('click', function(e) {
         id = $(this).attr('id')
         if ($(this).attr('status') == 'closed'){
-            $('#time_lessons' + id).show('slow')
+            $('#time_lessons' + id).show('fast')
             $(this).attr('status', 'opened')
-            $('#icondown' + id).show()
-            $('#iconright' + id).hide()
+            // $('#icondown' + id).show()
+            // $('#iconright' + id).hide()
         }
         else{
-            $('#time_lessons' + id).hide('slow')
+            $('#time_lessons' + id).hide('fast')
             $(this).attr('status', 'closed')
-            $('#icondown' + id).hide()
-            $('#iconright' + id).show()
+            // $('#icondown' + id).hide()
+            // $('#iconright' + id).show()
         }
     });
     $('.open_mysquads').on('click', function(e) {

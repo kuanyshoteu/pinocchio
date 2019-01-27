@@ -1,35 +1,21 @@
 {% load ttags %}
-<div class="ui segment">
+{% include 'courses/course_file_system.html' %}        
+<div class="ui grid segment">   
     {% for lesson in course.lessons.all %}
-    <div style="padding: 0 14px 14px 0">
-        <a class="open_time_lessons" status="closed" id="{{ lesson.id }}">
-            <i class="icon angle right" id="iconright{{ lesson.id }}"></i>
-            <i class="icon angle down" style="display: none;" id="icondown{{ lesson.id }}"></i>
-            Модуль {{ forloop.counter }}: {{ lesson.title }}
+    <div class="four wide column">
+        <a class="ui button course_lesson {% if profile.is_trener or profile in lesson.done_by.all %}green{% endif %}" href="{{ lesson.get_absolute_url }}">
+            <span class="course_lesson_title">{{ lesson.title }}</span>
             {% if lesson.is_homework %}
-                <span style="color: #21BA45; font-size: 11px; margin-left: 15px;">Домашка</span>
+                <br>
+                <span class="is_homework">Домашка</span>
             {% endif %}
-        </a> 
-        <div class="ui divider" style="margin-bottom: 0"></div>
-        <div style="display: none; margin-left: 35px;" id="time_lessons{{ lesson.id }}"> 
-            {% if lesson.papers.all|length == 0 %}
-                <span id="pusto{{ lesson.id }}" style="color: grey; font-size: 12px;">Пока нет разделов</span>
-            {% endif %}
-            <div id="lesson_list{{ lesson.id }}">
-                {% for paper in lesson.papers.all %}
-                <div style="padding-top: 10px;">
-                    <a href="{{ lesson.get_absolute_url }}">
-                        <span>{{ paper.title }}</span>
-                    </a>
-                </div>
-                <div class="ui divider" style="margin-bottom: 0"></div>
-                {% endfor %}
-            </div>
-        </div>
+        </a>
     </div>
     {% endfor %}
+    <div>
     {% if course.author_profile == profile %}
         <a class="ui button mini blue" onclick="$('#materials').modal('show')">Добавить урок</a>
         {% include 'courses/course_add_materials.html' %}
     {% endif %}
+    </div>
 </div>

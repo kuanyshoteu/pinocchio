@@ -2,7 +2,33 @@ a{
 	cursor: pointer;
 	color: #285473;
 }
-    #keywords {
+.profile_name{
+  color: #fff;
+}
+.profile_name:hover{
+  color: #fff;
+}
+.profile_links{
+  display: none;
+  position: fixed;
+  margin-top: 50px;
+  right: 1em;
+  margin-right: 100px;
+  z-index: 3000;
+  width: 150px;
+}
+.float_right{
+  float: right;
+}
+.course_lesson{
+  min-height: 60px !important;
+  min-width: 100%  !important;
+}
+.is_homework{
+  font-size: 10px;
+  font-weight: 600;
+}
+   #keywords {
       margin: 0 auto;
       font-size: 13px;
       margin-bottom: 15px;

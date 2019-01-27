@@ -1,24 +1,33 @@
 {% load ttags %}
-<div class="ui segment">
+<div class="ui grid segment">
     {% for material in instance.materials.all %}
     {% if material.number <= instance.number_of_lectures %}
     {% if material|findorder:profile != 'de' or profile.is_trener %}
-    <div style="padding: 0 14px 14px 0">
-        <a class="open_time_lessons" status="closed" id="{{ material.id }}">
-            <i class="icon angle right" id="iconright{{ material.id }}"></i>
-            <i class="icon angle down" style="display: none;" id="icondown{{ material.id }}"></i>
+    <div class="four wide column">
             {% if profile.is_trener %}
-                <span style="color: black;">{{ material.number }} урок</span>
+            <a class="ui button full-w open_time_lessons green" status="closed" id="{{ material.id }}">
+                <span>{{ material.number }} урок</span>
+            </a>
             {% else %}
-                <span style="color: black;">
-                    {% for x in material|findorder:profile %}
+            <a class="ui button full-w open_time_lessons {% if material|check_material_date:profile %}green{% endif %}" status="closed" id="{{ material.id }}">
+                {% for x in material|findorder:profile %}
+                <span {% if forloop.counter == 1 %}class="is_homework"{% endif %}>
                     {{ x }}
-                    {% endfor %}
+                    <br>
                 </span>
+                {% endfor %}
+                <br>
+                {% for lesson in material.lessons.all %}
+                    {% if profile in lesson.done_by.all %}
+                        <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: yellow !important;"></i>
+                    {% else %}
+                        <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;"></i>
+                    {% endif%}
+                {% endfor %}
+            </a>
             {% endif %}
-        </a> 
         <div class="ui divider" style="margin-bottom: 0"></div>
-        <div style="display: none; margin-left: 35px;" id="time_lessons{{ material.id }}"> 
+        <div style="display: none;" id="time_lessons{{ material.id }}"> 
             {% if material.lessons.all|length == 0 %}
                 <span id="pusto{{ material.id }}" style="color: grey; font-size: 12px;">Пока нет материала</span>
             {% endif %}

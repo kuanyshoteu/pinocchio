@@ -48,7 +48,10 @@ class Profile(models.Model):
             height_field="height_field",)
     height_field = models.IntegerField(default=0, null = True)
     width_field = models.IntegerField(default=0, null = True)
-    
+
+    tag_ids = ArrayField(models.IntegerField(), default = [])
+    skills = ArrayField(models.IntegerField(), default = [])
+
     class Meta:
         ordering = ['-coins', 'first_name']
 
