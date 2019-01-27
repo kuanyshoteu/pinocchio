@@ -91,7 +91,6 @@ def test_account(request):
         'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
         'days':Day.objects.all(),
-        'hissquads':hissquads,
         'time_periods':time_periods,
         'classwork':hislessonss[2],
         'homeworks':hislessonss[0],
