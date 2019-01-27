@@ -80,7 +80,7 @@ def test_account(request):
     homework_list = []
     found_classwork = False
     idet_urok = False
-    classwork = []
+    classwork = [] 
     hislessonss = hislessons(hisprofile)
     context = {
         "profile":hisprofile,
