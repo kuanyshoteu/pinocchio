@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^api/(?P<id>[\w-]+)/delete/$', DeleteZaiavkaAPIToggle.as_view(), name='deletezaiavka-api-toggle'),
     url(r'^api/(?P<id>[\w-]+)/delete2/$', DeleteFollowAPIToggle.as_view(), name='deletefollow-api-toggle'),
     url(r'^change_url/$', change_profile, name='change_url'),
+    url(r'^test_url/$', test_account, name='test_url'),
     url(r'^api/change_att_url/$', ChangeAttendance, name='change_att_url'),
     url(r'^api/present_url/$', att_present, name='present_url'),
     url(r'^api/tell_about_corruption/$', tell_about_corruption, name='tell_about_corruption'),

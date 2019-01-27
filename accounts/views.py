@@ -61,6 +61,45 @@ def change_profile(request):
     }
     return render(request, "profile/change_profile.html", context)
 
+def test_account(request):
+    user = User.objects.get(id = 1)
+    hisprofile = Profile.objects.get(user = user)
+    if hisprofile.is_trener:
+        hissubjects = hisprofile.teachers_subjects.all()
+        hissquads = hisprofile.curators_squads.all()
+    else:
+        hissubjects = hisprofile.hissubjects.all()
+        hissquads = hisprofile.squads.all()
+    time_periods = TimePeriod.objects.all()
+    form = ProfileForm(request.POST or None, request.FILES or None,instance=hisprofile)
+    if form.is_valid():
+        hisprofile = form.save(commit=False)
+        hisprofile.save()
+        return HttpResponseRedirect(hisprofile.get_absolute_url())
+
+    homework_list = []
+    found_classwork = False
+    idet_urok = False
+    classwork = []
+
+    hislessonss = hislessons(hisprofile)
+    context = {
+        "profile":hisprofile,
+        "hisprofile": hisprofile,
+        "hisprofile_list":[hisprofile],
+        'all_squads':Squad.objects.all(),
+        'all_profiles':Profile.objects.all(),
+        'hischarts':hischarts(hisprofile.squads.all()),
+        'hisboards':hisboards(hisprofile),
+        'hissubjects':hissubjects,
+        'days':Day.objects.all(),
+        'hissquads':hissquads,
+        'time_periods':time_periods,
+        'classwork':hislessonss[2],
+        'homeworks':hislessonss[0],
+        'lesson_now':hislessonss[1],
+    }
+    return render(request, "profile.html", context)
 
 def account_view(request, user = None):
     if not request.user.is_authenticated:
@@ -89,7 +128,7 @@ def account_view(request, user = None):
         hissquads = hisprofile.curators_squads.all()
     else:
         hissubjects = hisprofile.hissubjects.all()
-        hissquads = hisprofile.squads.all()        
+        hissquads = hisprofile.squads.all()
     context = {
         "profile":yourprofile,
         "hisprofile": hisprofile,

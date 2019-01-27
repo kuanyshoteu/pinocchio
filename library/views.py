@@ -39,8 +39,6 @@ def courses(request):
     profile = 'admin'
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
     
     context = {
         "profile": profile,
