@@ -37,7 +37,7 @@ urlpatterns = [
     url(r'^library/', include("library.urls", namespace='library')),
     url(r'^news/', include("news.urls", namespace='news')),
     url(r'^api/squads/', include('squads.api.urls', namespace='api-squads')),
-    url(r'^loaderio-3243b189206f19311f4d47d7d3a8d300/', loaderio, name='loaderio'),
+    url(r'^loaderio-3614d85f1228305eef28963b2654a5ae/', loaderio, name='loaderio'),
     url(r'^', include("main.urls", namespace='main')),
 ]
 if settings.DEBUG:
