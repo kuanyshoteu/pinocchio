@@ -18,19 +18,19 @@
             	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
             		<div class="ui grid stackable">
             			<div class="twelve wide column" >
-            				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+            				<div class="ui segment">
 				        		Основная информация
 				        	</div>
-				        	<div class="ui segment" style="margin-top: 0;padding: 14px 25%">
+				        	<div class="ui segment">
 				        		<form class="ui form" method='POST' enctype="multipart/form-data" class="ui form">{% csrf_token %}
 								    {{ form }}
 								    <input type='submit' class='ui button blue mini' value='Сохранить'/>
 								</form>
 			        		</div>
-            				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+            				<div class="ui segment">
 				        		Пароль
 				        	</div>
-				        	<div class="ui segment" style="margin-top: 0;padding: 14px 25%">
+				        	<div class="ui segment">
 				        		<form class="ui form" method='POST' enctype="multipart/form-data" class="ui form">{% csrf_token %}
 								    {{ password_form }}
 								    <input type='submit' class='ui button blue mini' value='Сохранить'/>
@@ -38,27 +38,27 @@
 			        		</div>
 			        	</div>
 			        	<div class="four wide column" style="padding: 14px 0;">
-							<div class="ui segment" style="height: 200px;position: fixed;width: 18%;padding: 0">
+							<div class="ui segment">
 								<a href="{{ profile.get_absolute_url }}" >
-									<div class="ui grid grey_hover" style="margin: 5px 0;">
-										<div class="four wide column" style="padding: 10px 5px 10px 14px;">
+									<div class="ui grid grey_hover">
+										<div class="four wide column">
 											{% if profile.image %}
-	                                        <img src="{{ profile.image.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-	                                        {% else %}
-	                                        <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/nophoto.png' %}">
-	                                        {% endif %}
+                      <img src="{{ profile.image.url }}" class="ui avatar image">
+                      {% else %}
+                      <img class="ui avatar image" src="{% static 'images/nophoto.png' %}">
+                      {% endif %}
 										</div>
-										<div class="ten wide column" style="padding: 10px 0 0 5px;">
+										<div class="ten wide column">
 											{{ profile.first_name }}
 											<br>
-											<span style="color: #777e8c;font-size: 12px;">вернуться к странице</span>
+											<span>вернуться к странице</span>
 										</div>
 									</div>
 								</a>
-								<div class="ui divider" style="margin: 5px;"></div>
-								<div style="border-left: 2px solid #5181b8;padding: 7px 18px;background-color: #f0f2f5;">
-			                        <a class="full-w" style="color: black;font-size: 13px;"><b>Основное</b></a>
-			                    </div>
+								<div class="ui divider"></div>
+								<div>
+									<a class="full-w"><b>Основное</b></a>
+								</div>
 							</div>
 						</div>  
 					</div>			

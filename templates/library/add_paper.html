@@ -1,4 +1,4 @@
-<a class="ui button blue mini" onclick="showModal('#l{{ lesson.id }}add_paper_modal')" id='{{ lesson.id }}' style="margin:0 0 5px 0; cursor: pointer;">
+<a class="ui button blue mini" onclick="$('#l{{ lesson.id }}add_paper_modal').modal('show')" id='{{ lesson.id }}' style="margin:0 0 5px 0; cursor: pointer;">
   Добавить раздел
 </a>
 
@@ -15,29 +15,8 @@
                     <textarea class="new_paper_title_l{{ lesson.id }}" type="text" id='new_paper_title_l{{ lesson.id }}' style="height: 46px; width: 100%;"></textarea>
                 </div>
             </div>
-
             <br>
             <a class='ui blue button mini new_paper' id='{{ lesson.id }}' paper_id='l{{ lesson.id }}' data-href='{{ lesson.add_paper_url }}' style="margin-top:10px;">Создать</a>
-
         </form>
     </div>
 </div>
-
-<script>
-    function showModal(target) {
-        $("body").toggleClass("dimmed dimmable")
-        $(target).toggleClass("hidden")
-        $(target).toggleClass("visible active")
-        
-        console.log($(".ui.mini.modal"))
-        // $(".ui.mini.modal").removeClass("hidden")
-        // $(".ui.mini.modal").addClass("visible active")
-
-    }
-
-    // ui dimmer modals page transition visible active
-    // ui dimmer modals page transition hidden
-
-    // ui mini modal scrolling transition visible active
-    // ui mini modal scrolling transition hidden
-</script>
