@@ -11,87 +11,87 @@
     </div>
 </div> 
 <div class="ui segment" style="margin-top: 0">
-    <div class="ui stackable grid">
-        <div class="sixteen wide column">
-          {% for board in hisboards %}
-            <div style='margin-bottom: 50px;'>
-                <h3 style="margin-left: 10px;">
-                  {{ board.0.name }}
-                </h3>
-                <div class="ui segment" style="width: 230px; display: none;" id="{{ board.0.id }}board">
-                      <p style="color: grey">Действия со списком</p>
-                      <hr style="background-color: grey">
-                </div>
-                <div class="ui stackable grid">
-                {% for column in board.1 %}
-                  <div class="five wide column" data-column-id="{{ column.0.id }}">
-                    <div class="columnn">
-                       <h4>{{ column.0.title }}
-                       </h4>
-                       <div style="display: none;" id="{{ column.0.id }}column">
-                        <div class="ui segment" style="width: 230px; position: absolute;">
+        <div class="ui stackable grid">
+            <div class="sixteen wide column">
+              {% for board in hisboards %}
+                <div style='margin-bottom: 50px;'>
+                    <h3 style="margin-left: 10px;">
+                      {{ board.0.name }}
+                    </h3>
+                    <div class="ui segment" style="width: 230px; display: none;" id="{{ board.0.id }}board">
                           <p style="color: grey">Действия со списком</p>
                           <hr style="background-color: grey">
-                        </div>
-                       </div>
-                       {% for card in column.1 %}
-                       <div class="card" draggable="true" data-card-id="{{ card.id }}">
-                         {% if card.metka_list.all|length > 0 %}
-                         <div style="margin-bottom: 2px;">
-                          {% for metka in card.metka_list.all %}
-                            <div style="margin: 5px 5px 0px 0; padding: 3px 4px;
-                               {% if metka.name == 'Срочно' %}
-                                background-color: #eb5a46; 
-                               {% elif metka.name == 'В будущем' %}
-                                background-color: #51e898;
-                               {% endif %}
-                               border-radius: 3px; cursor: pointer;" id="{{ metka.0.id }}">
-                                <div style="padding: 0 0 0 10px;">
-                                  <span style="color: white; font-size: 12px;">{{ metka.name }}</span>
-                                </div>
-                            </div>    
-                          {% endfor %}
-                          </div>
-                          {% endif %}
-                         <a href="{{ card.get_absolute_url }}" style="padding: 8px 8px 8px 0;">{{ card.title }}</a>
-                         <br>
-                         {% if card.user_list.all|length > 0 %}
-                         <br><br>
-                         <div class="ui grid">
-                          {% for usr in card.user_list.all %}
-                            <div class="four wide column" style="padding: 0 0 14px 10px;">
-                              <a href="{{ usr.get_absolute_url }}">
-                              {% if usr.image %}
-                              <img src="{{ usr.image.url }}" class="ui avatar image">
-                              {% else %}
-                              <img src='{% static "images/nophoto.png" %}' class="ui avatar image">
-                              {% endif %}
-                              </a>
+                    </div>
+                    <div class="ui stackable grid">
+                    {% for column in board.1 %}
+                      <div class="five wide column" data-column-id="{{ column.0.id }}">
+                        <div class="columnn">
+                           <h4>{{ column.0.title }}
+                           </h4>
+                           <div style="display: none;" id="{{ column.0.id }}column">
+                            <div class="ui segment" style="width: 230px; position: absolute;">
+                              <p style="color: grey">Действия со списком</p>
+                              <hr style="background-color: grey">
                             </div>
+                           </div>
+                           {% for card in column.1 %}
+                           <div class="card" draggable="true" data-card-id="{{ card.id }}">
+                             {% if card.metka_list.all|length > 0 %}
+                             <div style="margin-bottom: 2px;">
+                              {% for metka in card.metka_list.all %}
+                                <div style="margin: 5px 5px 0px 0; padding: 3px 4px;
+                                   {% if metka.name == 'Срочно' %}
+                                    background-color: #eb5a46; 
+                                   {% elif metka.name == 'В будущем' %}
+                                    background-color: #51e898;
+                                   {% endif %}
+                                   border-radius: 3px; cursor: pointer;" id="{{ metka.0.id }}">
+                                    <div style="padding: 0 0 0 10px;">
+                                      <span style="color: white; font-size: 12px;">{{ metka.name }}</span>
+                                    </div>
+                                </div>    
+                              {% endfor %}
+                              </div>
+                              {% endif %}
+                             <a href="{{ card.get_absolute_url }}" style="padding: 8px 8px 8px 0;">{{ card.title }}</a>
+                             <br>
+                             {% if card.user_list.all|length > 0 %}
+                             <br><br>
+                             <div class="ui grid">
+                              {% for usr in card.user_list.all %}
+                                <div class="four wide column" style="padding: 0 0 14px 10px;">
+                                  <a href="{{ usr.get_absolute_url }}">
+                                  {% if usr.image %}
+                                  <img src="{{ usr.image.url }}" class="ui avatar image">
+                                  {% else %}
+                                  <img src='{% static "images/nophoto.png" %}' class="ui avatar image">
+                                  {% endif %}
+                                  </a>
+                                </div>
+                              {% endfor %}
+                              </div>
+                              {% endif %}
+                           </div>
+
+                           <div style="display: none;" id="{{ card.id }}card">
+                            <div class="ui segment" style="width: 230px; position: absolute;">
+                              <p style="color: grey">Действия с карточкой</p>
+                              <hr style="background-color: grey">
+                            </div>
+                           </div>
                           {% endfor %}
-                          </div>
-                          {% endif %}
-                       </div>
 
-                       <div style="display: none;" id="{{ card.id }}card">
-                        <div class="ui segment" style="width: 230px; position: absolute;">
-                          <p style="color: grey">Действия с карточкой</p>
-                          <hr style="background-color: grey">
-                        </div>
-                       </div>
-                      {% endfor %}
-
-                  </div>
-            </div>
-            {% endfor %}
-              <br><br>
-             </div>
-            </div>
-            
-           {% empty %}
-           <p><em>Заданий пока нет</em></p>
-           {% endfor %}
-           </div>
-    </div>
+                      </div>
+                </div>
+                {% endfor %}
+                  <br><br>
+                 </div>
+                </div>
+                
+               {% empty %}
+               <p><em>Заданий пока нет</em></p>
+               {% endfor %}
+               </div>
+        </div>
 </div>
 {% endif %}

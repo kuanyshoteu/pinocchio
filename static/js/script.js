@@ -16,6 +16,11 @@ toggler.addEventListener('click', (e) => {
 	})
 })
 
+function toggleModal (target) {
+	$(target).toggleClass('show')
+	$('#vmenu2').removeClass('menu_active');
+}
+
 $(".five.wide.column.menu_back").on('click', function(e) {
 	$('#vmenu2').toggleClass('menu_active')
 })

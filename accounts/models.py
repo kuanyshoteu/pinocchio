@@ -91,6 +91,8 @@ class Profile(models.Model):
         return reverse("accounts:change_url")
     def tell_about_corruption(self):
         return reverse("accounts:tell_about_corruption")
+    def hisattendance(self):
+        return reverse("accounts:hisattendance")
     
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

@@ -25,7 +25,7 @@ from .forms import *
 from .models import *
 from squads.models import *
 from docs.models import *
-from subjects.models import Day,Attendance,TimePeriod,SquadCell
+from subjects.models import *
 from django.contrib.auth.forms import PasswordChangeForm
 
 def change_profile(request):
@@ -89,7 +89,6 @@ def test_account(request):
         "hisprofile_list":[hisprofile],
         'all_squads':Squad.objects.all(),
         'all_profiles':Profile.objects.all(),
-        'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
         'hissubjects':hissubjects,
         'days':Day.objects.all(),
@@ -129,21 +128,22 @@ def account_view(request, user = None):
     else:
         hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
+
     context = {
         "profile":yourprofile,
         "hisprofile": hisprofile,
         "hisprofile_list":[hisprofile],
-        'all_squads':Squad.objects.all(),
-        'all_profiles':Profile.objects.all(),
-        'hischarts':hischarts(hisprofile.squads.all()),
         'hisboards':hisboards(hisprofile),
-        'hissubjects':hissubjects,
         'days':Day.objects.all(),
+        'hissubjects':hissubjects,
         'hissquads':hissquads,
+        'first_squad':hissquads[0].id,
+        'first_subject':hissubjects[0].id,
         'time_periods':time_periods,
         'classwork':hislessonss[2],
         'homeworks':hislessonss[0],
         'lesson_now':hislessonss[1],
+        'hisschedule':hisschedule(hissquads, hissubjects),
     }
     return render(request, "profile.html", context)
 
@@ -205,31 +205,6 @@ def hislessons(hisprofile):
         res.append([subject, homeworks])
     return res, lesson_now, classwork
 
-def hischarts(hissquads):
-    hischarts = []
-    pprs_results = []
-    # for sq in hissquads:
-    #     for lesson in sq.lessons.all():
-    #         pprs_results = []
-    #         for ppr in lesson.papers.all():
-    #             ppr_summary_result = 0
-    #             for student in sq.followers.all():
-    #                 resultt = 0
-    #                 cnt = 0
-    #                 for subtheme in ppr.subthemes.all():
-    #                     if len(subtheme.task_list.all()) > 0:
-    #                         ppr_summary_result += 100 * cnt/len(subtheme.task_list.all())
-    #                     else:
-    #                         ppr_summary_result = 0
-    #             if len(sq.followers.all()) == 0:
-    #                 result = 0
-    #             else:
-    #                 result = int( ppr_summary_result/len(sq.followers.all()) )
-    #             pprs_results.append( [ppr, result] )
-
-    #     hischarts.append([sq, pprs_results])
-    return(hischarts)
-
 def hisboards(hisprofile):
     hisboards = []
     for board in Board.objects.all():
@@ -251,7 +226,7 @@ def login_view(request):
     form = UserLoginForm(request.POST or None)
     if form.is_valid():
         username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get('password')
+        password = form.cleaned_data.get("password")
         user = authenticate(username=username, password=password)
         login(request, user)
         if next:
@@ -263,6 +238,57 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
+
+def hisschedule(hissquads, hissubjects):
+    schedule = []
+    for timep in TimePeriod.objects.all():
+        column = []
+        for day in Day.objects.all():
+            column.append([])
+        schedule.append(column)
+    for subject in hissubjects:
+        for lecture in subject.subject_lectures.all():
+            if lecture.squad in hissquads:
+                data = [subject.title, subject.cabinet, subject.teacher.first().first_name, lecture.squad.title]
+                schedule[lecture.cell.time_period.num - 1][lecture.cell.day.number - 1].append(data)
+    return schedule
+
+
+def hisattendance(request):
+    if request.GET.get('subject_id') and request.GET.get('class_id'):
+        subject_id = int(request.GET.get('subject_id'))
+        squad_id = int(request.GET.get('class_id'))
+
+        subject = Subject.objects.get(id = subject_id)
+        squad = Squad.objects.get(id = squad_id)
+
+        squads = []
+        for sq in subject.squads.all():
+            squads.append(sq.title)
+
+        students = []
+        for student in squad.students.all():
+            students.append(student.first_name)
+            
+        columns = []
+        for sm in subject.materials.all():
+            if len(sm.material_cells.filter(squad=squad)) > 0:
+                squad_cell = sm.material_cells.filter(squad=squad)[0]
+                grades = [squad_cell.date.strftime('%d %B %Y'), squad_cell.time_period.start + '-' + squad_cell.time_period.end]
+                for attendance in squad_cell.attendances.filter(subject=subject, squad=squad):
+                    if attendance.squad_cell.date + timedelta(2) >= timezone.now().date() and attendance.squad_cell.date < timezone.now().date():
+                        grades.append(attendance.id)
+                    if attendance.grade > 0:
+                        grades.append(attendance.grade)
+                    else:
+                        grades.append('')
+                columns.append(grades)
+        data = {
+            'classes':squads,
+            'students':students,
+            'columns':columns,
+        }
+        return JsonResponse(data)
 
 def att_present(request):
     profile = Profile.objects.get(user = request.user)

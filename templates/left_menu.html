@@ -72,26 +72,32 @@
                 Контакты
             </a>
         </div>
-    </div>
-<!--     <a class="ui button mini blue" onclick="$('#corruption').modal('show')" style="margin-top: 30px;margin-left: 25px;width: 100%;">
+    </div><!-- 
+    <a class="ui button mini blue" onclick="toggleModal('#corruption.modal')">
         Заявить о коррупции
-    </a>
- --></div>
+    </a> -->
+</div>
 <div style="margin-right: 150px;">
 </div>
 {% endif %}
 
 <div class="ui mini modal" id="corruption">
-    <i class="close icon"></i>
+    <i class="close icon" onclick="toggleModal('#corruption.modal')"></i>
     <div class="header text-center">
         <span style="font-weight: 400">Анонимно сообщить о коррупции</span>
     </div>
     <div class="content">
-        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+        <form method='POST' action="{{ profile.tell_about_corruption }}" enctype='multipart/form-data' class="ui form">{% csrf_token %}
             Опишите ситуацию:
-            <textarea style="height: 150px;" class="corruption_text"></textarea>
-            <a class="ui button tiny blue full-w tell_about_corruption" url="{{ profile.tell_about_corruption }}">Отправить анонимно</a>
+            <textarea name="corruption-title" style="height: 150px;" class="corruption_text"></textarea>
+            <button type="submit" class="ui button tiny blue full-w tell_about_corruption">Отправить анонимно</button>
         </form>
         <div class="ui segment thanks" style="display: none;">Ваша заявка принята, спасибо!</div>
     </div>
 </div>
+<style>
+    #corruption.show {
+        display: block;
+        /*position: fixed;*/
+    }
+</style>

@@ -54092,35 +54092,35 @@ $(function (){
 
 
 $(document).ready(function(){
-    $(".content-markdown").each(function(){
-        var content = $(this).text()
-        var markedContent = marked(content)
-        $(this).html(markedContent)
-    })
-    $(".post-detail-item img").each(function(){
-        $(this).addClass("img-responsive");
-    })
-    var contentInput = $("#id_content");
-    var titleInput = $("#id_title");
-    function setTitle(value) {
-        $("#preview-title").text(value)
-    }
-    setTitle(titleInput.val())
-    titleInput.keyup(function(){
-        var newContent = $(this).val()
-        setTitle(newContent)
-    })
-    $(".comment-reply-btn").click(function(event){
-        event.preventDefault();
-        $(this).parent().next(".comment-reply").fadeToggle();
-    })
-    $(".comment-children-reply-btn").click(function(event){
-        event.preventDefault();
-        $(this).parent().next(".comment-reply").fadeToggle();
-    })
+  $(".content-markdown").each(function(){
+    var content = $(this).text()
+    var markedContent = marked(content)
+    $(this).html(markedContent)
+  })
+  $(".post-detail-item img").each(function(){
+    $(this).addClass("img-responsive");
+  })
+  var contentInput = $("#id_content");
+  var titleInput = $("#id_title");
+  function setTitle(value) {
+    $("#preview-title").text(value)
+  }
+  setTitle(titleInput.val())
+  titleInput.keyup(function(){
+    var newContent = $(this).val()
+    setTitle(newContent)
+  })
+  $(".comment-reply-btn").click(function(event){
+    event.preventDefault();
+    $(this).parent().next(".comment-reply").fadeToggle();
+  })
+  $(".comment-children-reply-btn").click(function(event){
+    event.preventDefault();
+    $(this).parent().next(".comment-reply").fadeToggle();
+  })
 })
 
 $('.ui .item').on('click', function() {
-    $('.ui .item').removeClass('active');
-    $(this).addClass('active');
+  $('.ui .item').removeClass('active');
+  $(this).addClass('active');
 });

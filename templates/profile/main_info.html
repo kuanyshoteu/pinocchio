@@ -1,10 +1,4 @@
 {% load staticfiles %}
-<style type="text/css">
-    .de{
-        padding-top: 5px !important;
-        padding-bottom: 5px !important;
-    }
-</style>
 <div class="ui segment" style="padding: 0">
     {% if idet_urok %}
     <div class="header text-center" style="background-color: #5181b8; color: white; padding: 14px;">
@@ -12,17 +6,17 @@
     </div>
     {% endif %}
 </div>                 
-<div class="ui raised card" style="width: 100%;height: 260px;">
-    <div class="content" style="padding: 15px 20px;">
-        <div class="right floated" style="padding-right: 14px;">
-            <img  src="{% static 'images/coins_gold.png' %}" style="width: 25px;">
-            <span style="font-size: 18px;" id="hiscoins">{{ hisprofile.coins }}</span>
+<div class="ui raised card ">
+    <div class="content">
+        <div class="right floated">
+            <img  src="{% static 'images/coins_gold.png' %}">
+            <span id="hiscoins">{{ hisprofile.coins }}</span>
         </div>
         <div class="header">
             {{ hisprofile.first_name }}
         </div>
         <div class="meta">
-            <a class="open_form_status" style="color: #828282;">
+            <a class="open_form_status">
                 <span class="hisstatus">
                     {% if hisprofile.is_creator %}
                         Creator
@@ -39,61 +33,34 @@
             </a>
         </div>
         <div class="description">
-            
+            {% if profile.user.username == main_page.admin_name %}
+            <form class="ui form update_status" method='POST'
+                  enctype="multipart/form-data">{% csrf_token %}
+                <textarea type='text' class="textarea_status">{{ hisprofile.status }}</textarea>
+                <a class='ui button blue mini change_status' data-href='{{ hisprofile.change_status_url }}'>Сохранить</a>
+            </form>
+            {% endif %}
             <div class="ui divider"></div>                                    
-            <div class="ui grid" style="margin-top: 10px;">
+            <div class="ui grid">
                 <div class="four wide column de" style="padding-right: 0">
-                    <p style="color: #828282;">День рождения: </p>
-                    <p style="color: #828282;">Место учебы: </p>
+                    <p>День рождения: </p>
+                    <p>Место учебы: </p>
                     {% if hisprofile.phone %}
-                    <p style="color: #828282;">Телефон: </p>
+                    <p>Телефон: </p>
                     {% endif %}
-                    <p style="color: #828282;">Почта: </p>                   
+                    <p>Почта: </p>                   
                 </div>
-                <div class="five wide column de" style="padding-left: 0">
+                <div class="five wide column de">
                     <p><a href="">{{ hisprofile.birthdate }}</a></p>
                     <p><a href="">{{ hisprofile.school.title }}</a></p>
                     <p>{{ hisprofile.phone }}</p>
                     <p>{{ hisprofile.mail }}</p>
-                    <a class="ui button mini blue" style="margin-top: 10px;">Скачать резюме</a> 
+                    <a class="ui button mini blue">Скачать резюме</a> 
                 </div>
-                <div class="seven wide column" style="padding-top: 0">
+                <div class="seven wide column">
                     {% include 'profile/circle_chart.html' %}
                 </div>
             </div>
         </div>
-    </div>
-    <div class="content" style="padding: 15px 20px;">
-        <style>
-        .profile_asd {
-            display: -webkit-flex;
-            display: -moz-flex;
-            display: -ms-flex;
-            display: -o-flex;
-            display: flex;
-            justify-content: space-around;
-        }
-        @media only screen and (max-width: 767px) {
-            .profile_asd {
-                -webkit-flex-direction: column;
-                -moz-flex-direction: column;
-                -ms-flex-direction: column;
-                -o-flex-direction: column;
-                flex-direction: column;
-                -ms-align-items: center;
-                align-items: center;
-            }
-            .profile_asd > div{
-                display: -webkit-flex;
-                display: -moz-flex;
-                display: -ms-flex;
-                display: -o-flex;
-                display: flex;
-            }
-            .profile_asd > div .count {
-                margin-right: 10px;
-            }
-        }
-        </style>
     </div>
 </div>

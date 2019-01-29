@@ -10,10 +10,12 @@
 {% endblock head_extra %}
 
 {% block content %}
-<span class="page_status" style="display: none;" status='start_info'></span>
+<span class="first_squad" style="display: none;" id='{{ first_squad }}'></span>
+<span class="first_subject" style="display: none;" id='{{ first_subject }}'></span>
 <a id="go-back-btn" class="start_info_btn" style="display: none;">
     <i class="arrow left icon"></i>Назад
 </a>
+
 <div id="profile">
     <div class="ui container" >
         <div class="ui stackable grid">
@@ -29,7 +31,7 @@
                     </div>
                     <div class="sixteen wide column right-side" style="padding: 0">
                         <div class="ui tab active" id="detailed_info"> 
-                            <div class="ui stackable grid">
+                            <div class="ui grid">
                                 <div class="eleven wide column" style="padding-right: 0;">
                                     {% include 'profile/hisschedule.html' %}                                         
                                 </div>
@@ -39,7 +41,6 @@
                             </div>
                             {% include 'profile/attendance.html' %} 
                             {% include 'profile/money_chart.html' %}    
-                            {% include 'profile/histree.html' %}    
                             
                             {% include 'profile/trello_cards.html' %}
                         </div>
