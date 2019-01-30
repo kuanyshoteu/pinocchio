@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^api/delete_squad_url/$', delete_squad, name='delete_squad_url'),
     url(r'^api/add_paper_url/$', add_paper, name='add_paper_url'),
     url(r'^api/add_squad_url/$', add_squad, name='add_squad_url'),
+    url(r'^api/remove_lesson/$', remove_lesson, name='remove_lesson'),
     url(r'^api/change_teacher_url/$', change_teacher, name='change_teacher_url'),
     url(r'^api/change_start_url/$', change_start, name='change_start_url'),
     url(r'^api/change_end_url/$', change_end, name='change_end_url'),

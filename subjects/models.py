@@ -157,6 +157,8 @@ class SubjectMaterials(models.Model):
     done_by = models.ManyToManyField(Profile, related_name='done_subject_materials')
     class Meta:
         ordering = ['number']
+    def remove_lesson(self):
+        return reverse("subjects:remove_lesson")
 
 class SquadCell(models.Model):
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='cells')

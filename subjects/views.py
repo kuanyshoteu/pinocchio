@@ -499,6 +499,15 @@ def change_start(request):
     }
     return JsonResponse(data)
 
+def remove_lesson(request):
+    if request.GET.get('material_id') and request.GET.get('lesson_id'):
+        material = SubjectMaterials.objects.get(id=int(request.GET.get('material_id')))
+        lesson = Lesson.objects.get(id=int(request.GET.get('lesson_id')))
+        material.lessons.remove(lesson)
+        print('ok')
+    data = {
+    }
+    return JsonResponse(data)
 
 def change_end(request):
     if request.GET.get('date') and request.GET.get('subject_id'):

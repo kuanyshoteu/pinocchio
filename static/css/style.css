@@ -1,8 +1,44 @@
 a{
-	cursor: pointer;
-	color: #285473;
+  cursor: pointer;
+  color: #285473;
 }
-    #keywords {
+.remove_lesson_from_subject{
+  font-size: 10px;
+  color: red;
+  font-weight: 600;
+}
+.remove_lesson_from_subject:hover{
+  font-size: 10px;
+  color: red;
+  font-weight: 600;
+}
+.profile_name{
+  color: #fff;
+}
+.profile_name:hover{
+  color: #fff;
+}
+.profile_links{
+  display: none;
+  position: fixed;
+  margin-top: 50px;
+  right: 1em;
+  margin-right: 100px;
+  z-index: 3000;
+  width: 150px;
+}
+.float_right{
+  float: right;
+}
+.course_lesson{
+  min-height: 60px !important;
+  min-width: 100%  !important;
+}
+.is_homework{
+  font-size: 10px;
+  font-weight: 600;
+}
+   #keywords {
       margin: 0 auto;
       font-size: 13px;
       margin-bottom: 15px;
@@ -79,10 +115,10 @@ a{
   width: 5%;
 }
 .edit{
-	display: none !important;
+  display: none !important;
 }
 .ans_textarea{
-	width: 200px !important;height: 40px ;
+  width: 200px !important;height: 40px ;
 }
 .bubble {
   display: inline-block !important;
@@ -100,21 +136,21 @@ a{
     }
 }
 .edit_visible{
-	display: inline-block !important;
+  display: inline-block !important;
 }
 .test_variant{
-	padding: 10px;
-	cursor: pointer; 
-	width: 100% !important;
-	border: 2px solid #e4e4e4;
-	position: relative;
+  padding: 10px;
+  cursor: pointer; 
+  width: 100% !important;
+  border: 2px solid #e4e4e4;
+  position: relative;
 }
 .in_schedule{
-	color: #fff; padding: 1px; background-color: #5181b8 !important;box-shadow: none !important;
-	width: 100%;
+  color: #fff; padding: 1px; background-color: #5181b8 !important;box-shadow: none !important;
+  width: 100%;
 }
 .other_squads{
-	padding:0 6px 17px 6px;color: #656565;font-size: 14px;
+  padding:0 6px 17px 6px;color: #656565;font-size: 14px;
 }
 .current_squads{
   border-bottom: 2px solid #5181b8;padding:0 6px 17px 6px;color: #000;font-size: 14px;
@@ -126,20 +162,20 @@ a{
   font-size: 14px;
 }
 .test_variant:hover{
-	border: 2px solid #5181b8;
+  border: 2px solid #5181b8;
 }
 .problem_type{
-	text-decoration: underline;
+  text-decoration: underline;
 }
 .problem_type:hover{
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .paper{
-	display: none;
+  display: none;
 }
 .paper_active{
-	display: block;
+  display: block;
 }
 .switch_btn{
   border: 1px solid #e7e7e7;text-align: center; border-radius: 3px;color: #222; 
@@ -172,82 +208,82 @@ a{
 
 
 .page_video_thumb{
-	width: 100%;
+  width: 100%;
     height: 112px;
     display: inline-block;
     background-size: cover;
     background-position: 50%;
 }
 .count{
-	font-size: 19px;
+  font-size: 19px;
     color: #42648b;
     padding-bottom: 3px;
     line-height: 21px;
 }
 .count_label{
-	line-height: 15px;
+  line-height: 15px;
     color: #828282;
 }
 .show_account_details{
-	width: 100%;
-	background: white !important;
-	color: #2a5885;
+  width: 100%;
+  background: white !important;
+  color: #2a5885;
 }
 .show_account_details:hover{
-	background: #f0f2f5 !important;
-	color: #2a5885 !important;
+  background: #f0f2f5 !important;
+  color: #2a5885 !important;
 }
 .urok{
-	margin-top: 80px !important;
+  margin-top: 80px !important;
 }
 
 .small_link{
-	font-size: 11px; cursor: pointer;
-	padding: 0 !important;
-	 margin-left: 10px;
+  font-size: 11px; cursor: pointer;
+  padding: 0 !important;
+   margin-left: 10px;
 }
 .small_delete_link{
-	font-size: 11px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;
-	padding: 0 !important;
+  font-size: 11px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;
+  padding: 0 !important;
 }
 .follow_btn{
-	width: 100%;
+  width: 100%;
 }
 .main_text{
-	margin-top: 11px;
-	display: inline-block;
+  margin-top: 11px;
+  display: inline-block;
 }
 .icon.circle.outline:before{
-	font-size: 10px;
+  font-size: 10px;
 }
 #intro{
-	height:2500px;
-	text-align:center;
-	overflow:hidden;
-	position:static;
+  height:2500px;
+  text-align:center;
+  overflow:hidden;
+  position:static;
 }
 #intro .logo{text-align:center;
-	position:relative;
-	width:100%;
-	height:100%;
-	top:0;
+  position:relative;
+  width:100%;
+  height:100%;
+  top:0;
 }
 #intro .logo span{display:block;
-	position:absolute;
-	width:100%;
-	height:100%;
-	top:0;
-	left:0;
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
 }
 #intro .logo .logo_piffle{background:url('/static/images/intro/logo.png') no-repeat center 110px fixed;
-	z-index:1;
+  z-index:1;
 }
 #intro .logo .icon_fg{background:url('/static/images/intro/intro_icon_fg.png') no-repeat center 50px fixed;
 }
 #intro .logo .icon_bg{background:url('/static/images/intro/intro_icon_bg.png') no-repeat center 50px fixed;
 }
 .after_img_header{
-	-webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95), inset 0 0 8px rgba(0, 0, 0, 0.12), 1px 0 0 rgba(0, 0, 0, 0.25), -1px 0 0 rgba(0, 0, 0, 0.25), 0 1px 0 rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.09);
+  -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95), inset 0 0 8px rgba(0, 0, 0, 0.12), 1px 0 0 rgba(0, 0, 0, 0.25), -1px 0 0 rgba(0, 0, 0, 0.25), 0 1px 0 rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.09);
     -moz-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95),inset 0 0 8px rgba(0, 0, 0, 0.12),1px 0 0 rgba(0, 0, 0, 0.25),-1px 0 0 rgba(0, 0, 0, 0.25),0 1px 0 rgba(0, 0, 0, 0.2),0 -1px 0 rgba(0, 0, 0, 0.25),0 2px 2px rgba(0, 0, 0, 0.09);
     box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95), inset 0 0 8px rgba(0, 0, 0, 0.12), 1px 0 0 rgba(0, 0, 0, 0.25), -1px 0 0 rgba(0, 0, 0, 0.25), 0 1px 0 rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.09);
     padding: 6px 25px;
@@ -255,7 +291,7 @@ a{
     -moz-border-radius: 10px;
     border-radius: 10px;
     display: inline-block;
-    text-align: center;	
+    text-align: center; 
     padding: 6px 25px;
 }
 *, *:before, *:after {
@@ -409,15 +445,16 @@ a{
 }
 
 .day.today {
-	color: #5181b8;
+  color: #5181b8;
 }
 
 .day-name {
-  font-size: 9px;
+  font-size: 8px;
   text-transform: uppercase;
   padding-bottom: 5px;
   color: rgba(255, 255, 255, .5);
   letter-spacing: .7px;
+  text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
 }
 
 .day-number {
@@ -804,6 +841,5 @@ a{
   width: 600px;
   overflow-x: scroll;
 }
-
 
 

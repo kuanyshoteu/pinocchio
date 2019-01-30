@@ -133,7 +133,25 @@ $(document).ready(function () {
             }
         })
     });
-
+    $('.remove_lesson_from_subject').on('click', function(e) {
+        var material_id = $(this).attr('material_id');
+        var lesson_id = $(this).attr('lesson_id');
+        var url = $(this).attr('url');
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'material_id':material_id,
+                'lesson_id':lesson_id,
+            },
+            success: function (data) {
+                $("#lesson_in_material" + material_id + 'l' + lesson_id).hide('fast')
+            }, 
+            error: function (error) {
+                console.log('error')
+            }
+        })
+    });
     $('.open_time_lessons').on('click', function(e) {
         id = $(this).attr('id')
         if ($(this).attr('status') == 'closed'){
