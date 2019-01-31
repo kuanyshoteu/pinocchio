@@ -4,7 +4,6 @@ $(document).ready(function () {
     })
     $('.tell_about_corruption').click(function (event){
         var text = $('.corruption_text').val()
-        console.log(text)
         $.ajax({
             url: $(this).attr('url'),
             data: {
