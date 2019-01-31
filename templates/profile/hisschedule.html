@@ -19,7 +19,7 @@
 <div id="calendar" style="min-height: 200px;min-width: 100%;margin-bottom: 14px;">
     <div id="week">   
         <div class="week" id="0">
-            <div class="daysmall" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;">
             </div>
             {% for day in days %}
             {% if day.number != 7 %} 
@@ -31,32 +31,30 @@
             {% endif %}
             {% endfor %}
         </div>
-        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
-        {% for timep in time_periods %}
-        <div class="week" id="{{ forloop.counter }}">
-            <div class="daysmall" style="padding-top: 17px;">
-                {{ timep.start }}-{{ timep.end }}
-            </div>
-            
-            {% for row in hisschedule %}
-                {% for cell in row %}
-                    <div class="daysmall other">
-                        {% for lecture in cell %}
-                        <div class="ui segment in_schedule">
-                            {{ lecture.0 }}
-                            <br>
+        <div class="ui divider calendar_divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
+        {% for row in hisschedule %}
+            <div class="week" id="{{ forloop.counter }}">
+            {% for cell in row %}
+                {% if forloop.counter == 1 %}
+                <div class="daysmall daysmall_time">
+                    {{ cell }}
+                </div>
+                {% else %}
+                <div class="daysmall other">
+                    {% for lecture in cell %}
+                    <div class="in_schedule" style="background-color: {{lecture.3}}">
+                        {{ lecture.0 }}
+                        <div class="">
                             {{ lecture.1 }}
                             <br>
                             {{ lecture.2 }}
-                            <br>
-                            {{ lecture.3 }}
-                            <br>
                         </div>
-                        {% endfor %}
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
             {% endfor %}
-        </div>
+            </div>
         {% endfor %}
     </div>
 </div>   

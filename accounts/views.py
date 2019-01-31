@@ -242,15 +242,15 @@ from django.http import JsonResponse
 def hisschedule(hissquads, hissubjects):
     schedule = []
     for timep in TimePeriod.objects.all():
-        column = []
+        row = [timep.start + '-' + timep.end]
         for day in Day.objects.all():
-            column.append([])
-        schedule.append(column)
+            row.append([])
+        schedule.append(row)
     for subject in hissubjects:
         for lecture in subject.subject_lectures.all():
             if lecture.squad in hissquads:
-                data = [subject.title, subject.cabinet, subject.teacher.first().first_name, lecture.squad.title]
-                schedule[lecture.cell.time_period.num - 1][lecture.cell.day.number - 1].append(data)
+                data = [subject.title,subject.cabinet,subject.teacher.first().first_name,subject.color_back,lecture.squad.title]
+                schedule[lecture.cell.time_period.num - 1][lecture.cell.day.number].append(data)
     return schedule
 
 
