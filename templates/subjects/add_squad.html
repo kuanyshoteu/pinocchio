@@ -25,7 +25,7 @@
             </div>
             <div class="sixteen wide column" style="padding-top: 0">
                 {% for squad in instance.squads.all %}
-                    <div class="ui segment" draggable="true" old_cell="denone" ondragstart="drag(event)" id="squad{{ squad.id }}" squad_id='{{ squad.id }}' style="display: inline-block; width: 10%;padding: 1px;color: white; background-color: #5181b8; cursor: pointer;text-align: center">
+                    <div class="ui segment" draggable="true" old_cell="none" ondragstart="drag(event)" id="squad{{ squad.id }}" squad_id='{{ squad.id }}' style="display: inline-block; width: 10%;padding: 1px;color: white; background-color: #5181b8; cursor: pointer;text-align: center">
                         {{ squad.title }}
                         <br>
                         <span style="color: rgba(255, 255, 255, .5);font-size: 12px">{{ instance.cabinet }}</span>

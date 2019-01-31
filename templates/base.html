@@ -1,5 +1,4 @@
 {% load staticfiles %}
-<!--DOCTYPE html -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -21,7 +20,6 @@
     {% block head_extra %} {% endblock head_extra %}
 
 </head>
-
 <body>
 {% include "modals/request_group.html" %}
 {% include "modals/login.html" %}
@@ -29,55 +27,44 @@
 {% include "modals/signup.html" %}
 {% include "modals/confirm_delete.html" %}
 
-<div class="ui stackable menu" id="main-menu" style="position: fixed; z-index: 2000;width: 100%;{%if main%}background: #44A8BF;{%endif%}">
+<div class="ui stackable menu" id="main-menu">
     <div class="ui container">
-    <div class="ui grid" style="padding: 0 0; margin: 0; width: 100%;">
-        <div class="contenttt" id='contenttt'>
-            <div>
-                <a href='{% url "main:home" %}' class="header main">
-                    <i class="icon bars" style="color: white;"></i>
-                    <span style="font-size: 26px;">P</span>inocchio
-                </a>
-            </div>
+        <div class="menu-title">
+            <i class="icon bars" id="toggle"></i>
+            <a href='{% url "main:home" %}' class="header main">
+                <!-- <a class="ui stackable left-menu-icon menu-btn" id="toggle" style="display: none; cursor: pointer; width: 17px; margin-top: 12px; margin-left: 9px;">
+                <i class="icon bars" style="color: white;"></i> -->
+                <span style="font-size: 26px;">P</span>inocchio
+            </a>
         </div>
-        <div class="eleven wide column" style="padding: 0">
-            <div class="ui grid" style="margin:0">
-                <div class="four wide column" style="padding: 0">
-                </div>
-                <div class="twelve wide column" style="padding: 0">
-                    <div class="right menu stackable" style="float: right;">
+        <div class="eleven wide column">
+            <div class="ui grid">
+                <div class="twelve wide column">
+                    <div class="right menu">
                         {% if main_form %}
                             {% if user.is_authenticated %}
-                            <a class="item main" href='{% url "squads:list" %}'>
-                                Предметы
-                            </a>
+                            <a class="item main" href='{% url "squads:list" %}'>Предметы</a>
                             {% endif %}
-                            <a class="item main" href='/contacts/'>
-                                Контакты
-                            </a>
+                            <a class="item main" href='/contacts/'>Контакты</a>
                             {% if staff == 'yes' %}
-                            <a class="item main" href='/docs/'>
-                                Задания
-                            </a>
+                            <a class="item main" href='/docs/'>Задания</a>
                             {% endif %}
                         {% endif %}
                         {% if request.user.is_authenticated %}
-                        <div class="item" style="padding: 7px 0;">
+                        <div class="item">
                             <div class="ui inline dropdown">
                                 <a class="" onclick='$(".profile_links").fadeToggle();'>
                                     {{ profile.first_name }}
                                     {% if profile.image %}
-                                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
+                                    <img class="ui avatar image" src="{{ profile.image.url }}">
                                     {% else %}
-                                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.png' %}">
+                                    <img class="ui avatar image" src="{% static 'images/nophoto.png' %}">
                                     {% endif %}
-                                    <i class="angle down icon" style="margin-left: 0px;"></i>
+                                    <i class="angle down icon"></i>
                                 </a>
-                                <div class="menu profile_links" style="left: 0; ">
-                                    <a class="item pod-main" href='{{ profile.get_absolute_url }}'>
-                                        Мой страница
-                                    </a>
-                                    <div class="ui divider" style="margin: 0"></div>
+                                <div class="menu profile_links">
+                                    <a class="item pod-main" href='{{ profile.get_absolute_url }}'>Мой страница</a>
+                                    <div class="ui divider"></div>
                                     <a class="item pod-main" href='{% url "logout" %}'>Выйти</a>
                                 </div>
                             </div>
@@ -87,7 +74,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </div>
 <br><br>
@@ -154,13 +140,12 @@
 
 <script src='{% static "js/squad.js" %}'></script>
 <script src='{% static "js/library.js" %}'></script>
-    
-<script src='{% static "js/libs/goog.js" %}'></script>
+<!-- <script src='{% static "js/libs/goog.js" %}'></script> -->
 <script src='{% static "js/plugins.js" %}'></script>
-<script src='{% static "js/Parallax.class.js" %}'></script>
-<script src='{% static "js/ScrollParallax.class.js" %}'></script>
-<script src='{% static "js/Slide.class.js" %}'></script>
-<script src='{% static "js/SlideIntro.class.js" %}'></script> 
+<!-- <script src='{% static "js/Parallax.class.js" %}'></script> -->
+<!-- <script src='{% static "js/ScrollParallax.class.js" %}'></script> -->
+<!-- <script src='{% static "js/Slide.class.js" %}'></script> -->
+<!-- <script src='{% static "js/SlideIntro.class.js" %}'></script>  -->
 <script src='{% static "js/script.js" %}'></script>
 
 </body>

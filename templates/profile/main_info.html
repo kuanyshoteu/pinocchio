@@ -1,15 +1,15 @@
 {% load staticfiles %}
-<div class="ui segment" style="padding: 0">
+<div class="">
     {% if idet_urok %}
     <div class="header text-center" style="background-color: #5181b8; color: white; padding: 14px;">
         <h3>Идет урок</h3>
     </div>
     {% endif %}
 </div>                 
-<div class="ui raised card ">
+<div class="ui raised card">
     <div class="content">
         <div class="right floated">
-            <img  src="{% static 'images/coins_gold.png' %}">
+            <img class="coin-icon"  src="{% static 'images/coins_gold.png' %}">
             <span id="hiscoins">{{ hisprofile.coins }}</span>
         </div>
         <div class="header">

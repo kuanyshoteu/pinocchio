@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'tripleA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pinodb',
+        'NAME': 'pinodb2',
         'USER': 'ka4andev',
         'PASSWORD': 'qwertyuiop',
         'HOST': 'localhost',

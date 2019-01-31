@@ -8,7 +8,7 @@ $document.ready(function()
 		// .mq('@media only screen and (max-device-width: 1024px) and (orientation:landscape)');
 	});
 });
-const toggler = document.querySelector('.menu-btn#toggle')
+const toggler = document.querySelector('#toggle')
 toggler.addEventListener('click', (e) => {
 	$('#vmenu2').toggleClass('menu_active');
 	$window.on('scroll', function(e) {
