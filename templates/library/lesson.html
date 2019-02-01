@@ -17,20 +17,22 @@
             {% endif %}
         </h3>
         <div class="ui stackable grid" style="text-align: center; margin: 14px 0 0 0;">
-            <a class="switch_btn" style="width: 15%;">
-                <i class="icon angle left"></i> 
-            </a>
             {% for paper in lesson.papers.all %}
             <a class="{% if forloop.counter == 1 %}switch_btn_active{% endif %} switch_btn switch_btn{{ lesson.id }}" 
-            style="width: calc(70%/{{ lesson.papers.all|length }});" paper_id='{{ paper.id }}' lesson_id='{{ lesson.id }}'>
-                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: inline-block;width: 90%;">{{ paper.title }}</div>
+            style="width: calc(100%/({{ lesson.papers.all|length }} + 1));" paper_id='{{ paper.id }}' lesson_id='{{ lesson.id }}'>
+                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: inline-block;width: 90%;">
+                    {{ paper.title }}
+                </div>
                 <div class="l{{ lesson.id }}p{{ paper.id }}done_tick" style="{% if paper|is_done:profile == False %}display: none;{% else %}display: inline-block;float: right;background-color: #32CD32;border-radius: 50%;height: 15px;width: 15px;margin-top: 1px;{% endif %}">
                     <i class="icon check" style="color: #fff !important;font-size: 12px;margin-top: -1px"></i>
                 </div>
             </a>
             {% endfor %}
-            <a class="switch_btn" style="width: 15%;">
-                 <i class="icon angle right"></i>
+            <a class="{% if lesson.papers.all|length == 0 %}switch_btn_active{% endif %} switch_btn switch_btn{{ lesson.id }}" 
+            style="width: calc(100%/({{ lesson.papers.all|length }} + 1));" paper_id='estimate' lesson_id='{{ lesson.id }}'>
+                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: inline-block;width: 90%;">
+                    Оцените урок
+                </div>
             </a>
         </div>
         {% if profile.is_trener %}
@@ -40,14 +42,9 @@
     {% for paper in lesson.papers.all %}
         {% include 'library/paper_detail.html' %}
     {% endfor %}
+    {% include 'library/estimate_lesson.html' %}
+
     <div class="ui segment" style="margin-bottom: 0;background-color: #f9f9fb;color: #757575;font-weight: 500;margin-top: 55px;">
-        <a class="like_lesson" id="{{ lesson.id }}" url="{{ lesson.like_url }}" style="font-size: 23px;">
-            <i class="ui icon triangle up" id="likeup_lesson{{ lesson.id }}" {% if profile in lesson.likes.all %} style="color: #6c9b45 !important;" {% else %} style="color: #e8e8e8;"{% endif %} ></i>
-        </a>
-        <span id="likes_number_lesson{{ lesson.id }}">{{ lesson|count_likes }}</span>
-        <a class="dislike_lesson" id="{{ lesson.id }}" url="{{ lesson.dislike_url }}" style="color: #e8e8e8;font-size: 23px;">
-            <i class="icon triangle down" id="dislikedown_lesson{{ lesson.id }}" {% if profile in lesson.dislikes.all %} style="color: red !important;" {% else %} style="color: #e8e8e8;"{% endif %}></i>
-        </a>
         <span style="margin-left: 20px;">
             <i class="icon comment"></i>
             {{ lesson.comments.all|length }}

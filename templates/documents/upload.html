@@ -1,0 +1,12 @@
+<div class="ui mini modal" id="upload_doc_form">
+    <i class="close icon"></i>
+    <div class="content">
+        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            <div class="ui input text-center" id="go-ahead">
+                {{ file_form }}
+            </div>
+            <input type='submit' class='ui button green btn-go' value='Готово'/>
+        </form>
+    </div>
+</div>
+

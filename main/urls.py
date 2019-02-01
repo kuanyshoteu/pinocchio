@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^(?P<slug>[\w-]+)/update-trener/$', trener_update, name='update_trener'),
     url(r'^api/change_subject_url/$', ChangeSubject, name='change_subject_url'),    
     url(r'^save_zaiavka_url/$', SaveZaiavka, name='save_zaiavka_url'),    
+    url(r'^lesson/$', hislessons, name='hislessons'),
 ]

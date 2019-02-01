@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'news',
     'main',
     'schools',
+    'documents',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'

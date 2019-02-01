@@ -200,40 +200,6 @@ $(document).ready(function () {
             this_.text('Тест')
         }
     })
-
-    $(".start_urok_btn").click(function () {
-        if($('.page_status').attr('status') != 'start_urok'){
-            $('.start_urok').show();
-            $(".start_info_btn").show();
-            $('.info').hide();
-            $('.start_homework').hide();
-        }
-    });
-    $(".start_info_btn").click(function () {
-        $('.start_urok').hide();
-        $('.start_homework').hide();
-        $(".start_info_btn").hide();
-        $('.info').show();
-     });
-    $(".start_homework_btn").click(function () {
-            $('.start_urok').hide();
-            $('.info').hide();
-            $(".start_info_btn").show();
-            $('.start_homework').show();
-    });
-    
-    $(".show_account_details").click(function () {
-        if($(this).attr('status') == 'closed'){
-            document.getElementsByClassName('show_account_details')[0].innerHTML = 'Скрыть подробную информацию'
-            $('.account_details').show()
-            $(this).attr('status','opened')
-        }
-        else{
-            document.getElementsByClassName('show_account_details')[0].innerHTML = 'Показать подробную информацию'
-            $('.account_details').hide()
-            $(this).attr('status','closed')
-        }
-    });
     $(".content-markdown").each(function () {
         var content = $(this).text()
         var markedContent = marked(content)

@@ -20,8 +20,7 @@
     <div class="ui container" >
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column" style="margin-left: 10px;padding-right: 30px;">
-                {% include 'profile/classwork.html' %}
+            <div class="twelve wide column">
                 <div class="ui stackable grid info">
                     <div class="four wide column left-side" style="padding: 14px 0;">
                         {% include 'profile/avatar.html' %}
@@ -31,7 +30,7 @@
                     </div>
                     <div class="sixteen wide column right-side" style="padding: 0">
                         <div class="ui tab active" id="detailed_info"> 
-                            <div class="ui grid">
+                            <div class="ui grid stackable">
                                 <div class="eleven wide column" style="padding-right: 0;">
                                     {% include 'profile/hisschedule.html' %}                                         
                                 </div>

@@ -77,6 +77,8 @@ class Profile(models.Model):
         return reverse("accounts:change_page_url")
     def create_folder_url(self):
         return reverse("library:create_folder_url")
+    def create_docfolder_url(self):
+        return reverse("documents:create_docfolder_url")
     def create_lesson_url(self):
         return reverse("papers:create_lesson_url")
     def create_course_url(self):
@@ -93,6 +95,8 @@ class Profile(models.Model):
         return reverse("accounts:tell_about_corruption")
     def hisattendance(self):
         return reverse("accounts:hisattendance")
+    def hislessons(self):
+        return reverse("main:hislessons")        
     
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

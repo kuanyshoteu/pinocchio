@@ -77,12 +77,6 @@ def test_account(request):
         hisprofile.save()
         return HttpResponseRedirect(hisprofile.get_absolute_url())
 
-    homework_list = []
-    found_classwork = False
-    idet_urok = False
-    classwork = []
-
-    hislessonss = hislessons(hisprofile)
     context = {
         "profile":hisprofile,
         "hisprofile": hisprofile,
@@ -115,12 +109,6 @@ def account_view(request, user = None):
         hisprofile.save()
         return HttpResponseRedirect(hisprofile.get_absolute_url())
 
-    homework_list = []
-    found_classwork = False
-    idet_urok = False
-    classwork = []
-
-    hislessonss = hislessons(hisprofile)
     time_periods = TimePeriod.objects.all()
     if hisprofile.is_trener:
         hissubjects = hisprofile.teachers_subjects.all()
@@ -140,70 +128,9 @@ def account_view(request, user = None):
         'first_squad':hissquads[0].id,
         'first_subject':hissubjects[0].id,
         'time_periods':time_periods,
-        'classwork':hislessonss[2],
-        'homeworks':hislessonss[0],
-        'lesson_now':hislessonss[1],
         'hisschedule':hisschedule(hissquads, hissubjects),
     }
     return render(request, "profile.html", context)
-
-def hislessons(hisprofile):
-    res = []
-    lesson_now = False
-    classwork = []
-    if hisprofile.is_trener:
-        hissubjects = hisprofile.teachers_subjects.all()
-    else:
-        hissubjects = hisprofile.hissubjects.all()
-    for subject in hissubjects:
-        homeworks = []
-        for squad in subject.squads.all():
-            needed_timep = 'none'
-            last_lecture = 'none'
-            timenow_int = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
-            for timep in TimePeriod.objects.all():
-                tstart = timep.start.split(':')
-                timep_start_int = int(tstart[0]) * 60 + int(tstart[1])
-                tend = timep.end.split(':')
-                timep_end_int =   int(tend[0]) * 60 + int(tend[1])
-                if timenow_int >= timep_start_int and timenow_int <= timep_end_int:
-                    needed_timep = timep
-
-            sw = SquadWeek.objects.filter(squad=squad, actual=True)
-            if len(sw) > 0:
-                sw = sw[0]
-                if needed_timep != 'none':
-                    sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
-                    if len(sc) > 0:
-                        sc = sc[0]
-                        if len(sc.subject_materials.filter(subject=subject)) > 0:
-                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                            lesson_now = True
-                            classwork = [[subject, [last_lecture]]]
-                else:
-                    for sc in sw.week_cells.all():
-                        if sc.date > timezone.now().date():
-                            if len(sc.subject_materials.filter(subject=subject)) > 0:
-                                last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                
-                if last_lecture == 'none' and lesson_now == False:
-                    index = list(squad.weeks.all()).index(sw)
-                    if index+1 < len(squad.weeks.all()):
-                        found_in_this_week = False
-                        for i in range(index+1, len(squad.weeks.all())):
-                            if found_in_this_week:
-                                break
-                            sw = squad.weeks.all()[i]
-                            for sc in sw.week_cells.all():
-                                if sc.date > timezone.now().date():
-                                    if len(sc.subject_materials.filter(subject=subject)) > 0:
-                                        if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
-                                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                                            found_in_this_week = True
-                                            break
-                homeworks.append(last_lecture) 
-        res.append([subject, homeworks])
-    return res, lesson_now, classwork
 
 def hisboards(hisprofile):
     hisboards = []

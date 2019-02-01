@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block content %}
+
+{% block head_extra %}
+{{ form.media }}
+{{ comment_form.media }}
+{% endblock head_extra %}
+<div id="profile">
+    {% if folder %}
+        {% if folder.parent %}
+        <a id="go-back-btn"  href='{{ folder.parent.get_absolute_url }}'>
+            <i class="arrow left icon"></i>Назад
+        </a>
+        {% else %}
+        <a id="go-back-btn"  href='/documents/'>
+            <i class="arrow left icon"></i>Назад
+        </a>    
+        {% endif %}
+    {% endif %}
+    <div class="ui container">      
+        <div class="ui stackable grid">
+            {% include 'left_menu.html' %}
+            <div class="eleven wide column" style="margin-bottom: 0"> 
+                <div class="ui segment" style=";margin-bottom: 0;background-color: #fafbfc;">
+                  <h4 style="display: inline-block;">Документы</h4>
+                  {% if profile.is_trener %}
+                  <div style="float: right;">
+                    {% if cache.full %}
+                        <a class="ui button mini blue pastee" data-href='{{ profile.paste_object_url }}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}'>Вставить</a>
+                    {% else %}
+                        <a class="ui button mini disabled">Вставить</a>
+                    {% endif %}                      
+                    <a class="ui button mini blue create_docfolder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_docfolder_url }}' >
+                      Создать папку
+                    </a>
+                    <a class="ui button mini blue" onclick="$('#upload_doc_form').modal('show')" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_lesson_url }}'>
+                      Загрузить документ
+                    </a>
+                    {% include 'documents/upload.html' %}
+                  </div> 
+                  {% endif %}    
+                </div>
+                {% if folder %}
+                    {% include 'documents/folder.html' %}
+                {% else %}
+                    {% include 'documents/doc_list.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

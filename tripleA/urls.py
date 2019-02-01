@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^library/', include("library.urls", namespace='library')),
     url(r'^news/', include("news.urls", namespace='news')),
     url(r'^api/squads/', include('squads.api.urls', namespace='api-squads')),
+    url(r'^documents/', include("documents.urls", namespace='documents')),
     url(r'^', include("main.urls", namespace='main')),
 ]
 if settings.DEBUG:

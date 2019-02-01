@@ -3,6 +3,7 @@ from accounts.models import *
 from .models import *
 from accounts.forms import *
 from squads.models import Squad
+from subjects.models import *
 
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -43,6 +44,76 @@ def main_view(request):
         'form':form,
     }
     return render(request, "main.html", context)
+
+def hislessons(request):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    else:
+        raise Http404
+
+    res = []
+    lesson_now = False
+    classwork = []
+    if profile.is_trener:
+        hissubjects = profile.teachers_subjects.all()
+    else:
+        hissubjects = profile.hissubjects.all()
+    for subject in hissubjects:
+        homeworks = []
+        for squad in subject.squads.all():
+            needed_timep = 'none'
+            last_lecture = 'none'
+            timenow_int = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
+            for timep in TimePeriod.objects.all():
+                tstart = timep.start.split(':')
+                timep_start_int = int(tstart[0]) * 60 + int(tstart[1])
+                tend = timep.end.split(':')
+                timep_end_int =   int(tend[0]) * 60 + int(tend[1])
+                if timenow_int >= timep_start_int and timenow_int <= timep_end_int:
+                    needed_timep = timep
+
+            sw = SquadWeek.objects.filter(squad=squad, actual=True)
+            if len(sw) > 0:
+                sw = sw[0]
+                if needed_timep != 'none':
+                    sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
+                    if len(sc) > 0:
+                        sc = sc[0]
+                        if len(sc.subject_materials.filter(subject=subject)) > 0:
+                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                            lesson_now = True
+                            classwork = [[subject, [last_lecture]]]
+                else:
+                    for sc in sw.week_cells.all():
+                        if sc.date > timezone.now().date():
+                            if len(sc.subject_materials.filter(subject=subject)) > 0:
+                                last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                
+                if last_lecture == 'none' and lesson_now == False:
+                    index = list(squad.weeks.all()).index(sw)
+                    if index+1 < len(squad.weeks.all()):
+                        found_in_this_week = False
+                        for i in range(index+1, len(squad.weeks.all())):
+                            if found_in_this_week:
+                                break
+                            sw = squad.weeks.all()[i]
+                            for sc in sw.week_cells.all():
+                                if sc.date > timezone.now().date():
+                                    if len(sc.subject_materials.filter(subject=subject)) > 0:
+                                        if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
+                                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
+                                            found_in_this_week = True
+                                            break
+                homeworks.append(last_lecture) 
+        res.append([subject, homeworks])
+
+    context = {
+        "profile":profile,
+        'classwork':classwork,
+        'homeworks':res,
+        'lesson_now':lesson_now,
+    }
+    return render(request, "profile/classwork.html", context)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response

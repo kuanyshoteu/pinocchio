@@ -1,0 +1,22 @@
+{% load crispy_forms_tags %}
+<div class="{% if lesson.papers.all|length == 0 %}paper_active{% else %}paper{% endif %} ppr{{ lesson.id }}" id="paperestimate{{ lesson.id }}">
+    <div class="ui segment center aligned">
+        <br><br>
+        <h4>Насколько был понятен урок?</h4>
+        <div>
+            <a style="font-size: 25px;">
+                <i class="icon star" style="color: #F7BB56 !important;"></i>
+                <i class="icon star" style="color: #F7BB56 !important;"></i>
+                <i class="icon star" style="color: #F7BB56 !important;"></i>
+                <i class="icon star" style="color: #F7BB56 !important;"></i>
+                <i class="icon star outline" style="color: #F7BB56 !important;"></i>
+            </a>
+        </div>
+        <br><br>
+        <div style="font-size: 16px">
+            Если есть вопросы, можете спросить их в комментариях
+            <br><br><br><br>
+            <i class="arrow circle down icon" style="font-size: 50px;"></i>
+        </div>
+    </div>
+</div>

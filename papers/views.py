@@ -477,7 +477,6 @@ def check_paper(request):
                     break
         if solver_correctness:
             paper.done_by.add(profile)
-            print('paper_done')
             lesson = paper.lessons.first()
             lesson_is_done = True
             for ppr in lesson.papers.all():
@@ -485,7 +484,6 @@ def check_paper(request):
                     lesson_is_done = False
                     break
             if lesson_is_done:
-                print('lesson_done')
                 lesson.done_by.add(profile)
         else:
             paper.done_by.remove(profile)

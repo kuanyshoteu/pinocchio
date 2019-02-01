@@ -47,29 +47,44 @@ $(document).ready(function(){
         var current_paper = $('.current_paper').attr('id')
         var lesson_id = this_.attr('lesson_id')
         current_class = this_.attr('class')
-        
-        $.ajax({
-            url: $('.current_paper').attr('url'),
-            data: {
-                'current_paper':current_paper
-            },
-            dataType: 'json',
-            success: function (data) {
-                for(var i = 0; i < document.getElementsByClassName('switch_btn' + lesson_id).length; i++){
-                    document.getElementsByClassName('switch_btn' + lesson_id)[i].setAttribute('class', 'switch_btn switch_btn' + lesson_id)    
-                }
-                for(var i = 0; i < document.getElementsByClassName('ppr' + lesson_id).length; i++){
-                    document.getElementsByClassName('ppr' + lesson_id)[i].setAttribute('class', 'paper ppr ppr' + lesson_id)
-                }
-                this_.attr('class', current_class + ' switch_btn_active switch_btn')
-                $('#paper' + paper_id + lesson_id).attr('class', 'paper_active ppr ppr' + lesson_id)
-                $('.current_paper').attr('id', paper_id)
-                if(data.is_solved){
-                    $('.l' + lesson_id + 'p' + current_paper + 'done_tick').show()
-                    console.log('solved')
-                }
+        console.log(current_paper)
+        if(current_paper == 'estimate'){
+            for(var i = 0; i < document.getElementsByClassName('switch_btn' + lesson_id).length; i++){
+                document.getElementsByClassName('switch_btn' + lesson_id)[i].setAttribute('class', 'switch_btn switch_btn' + lesson_id)    
             }
-        });        
+            for(var i = 0; i < document.getElementsByClassName('ppr' + lesson_id).length; i++){
+                document.getElementsByClassName('ppr' + lesson_id)[i].setAttribute('class', 'paper ppr ppr' + lesson_id)
+            }
+            this_.attr('class', current_class + ' switch_btn_active switch_btn')
+            $('#paper' + paper_id + lesson_id).attr('class', 'paper_active ppr ppr' + lesson_id)
+            $('.current_paper').attr('id', paper_id)            
+        }
+        else{
+            $.ajax({
+                url: $('.current_paper').attr('url'),
+                data: {
+                    'current_paper':current_paper
+                },
+                dataType: 'json',
+                success: function (data) {
+                    for(var i = 0; i < document.getElementsByClassName('switch_btn' + lesson_id).length; i++){
+                        document.getElementsByClassName('switch_btn' + lesson_id)[i].setAttribute('class', 'switch_btn switch_btn' + lesson_id)    
+                    }
+                    for(var i = 0; i < document.getElementsByClassName('ppr' + lesson_id).length; i++){
+                        document.getElementsByClassName('ppr' + lesson_id)[i].setAttribute('class', 'paper ppr ppr' + lesson_id)
+                    }
+                    this_.attr('class', current_class + ' switch_btn_active switch_btn')
+                    $('#paper' + paper_id + lesson_id).attr('class', 'paper_active ppr ppr' + lesson_id)
+                    $('.current_paper').attr('id', paper_id)
+                    if(data.is_solved){
+                        $('.l' + lesson_id + 'p' + current_paper + 'done_tick').show()
+                    }
+                    else{
+                        $('.l' + lesson_id + 'p' + current_paper + 'done_tick').hide()
+                    }
+                }
+            }); 
+        }       
     })
 
     $(".like_comment").click(function () {
@@ -293,6 +308,21 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $(".create_folder").click(function () {
+        var this_ = $(this)
+        var pageUrl = this_.attr("data-href")
+        console.log('d')
+        $.ajax({
+            url: pageUrl,
+            data: {
+                'parent_id':this_.attr("parent_id")
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        });  
+    });
+    $(".create_docfolder").click(function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")
         console.log('d')
