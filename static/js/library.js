@@ -298,7 +298,7 @@ $(document).ready(function(){
                 features = document.getElementsByClassName(this_.attr("object_type") + '_features' + this_.attr('id'))[0]
                 
                 features.setAttribute('style', 'position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px;')
-                //console.log(features[0])
+                console.log('www')
             }
         });  
     });
@@ -571,10 +571,15 @@ $(document).ready(function(){
             }
         });  
     });
-    $(".open_paper_features").click(function (event) {
+    $(".open_lesson_features").click(function (event) {
         event.preventDefault();
         var this_ = $(this)
-        $('.paper_features' + this_.attr("id")).fadeToggle();
+        $('.lesson_features' + this_.attr("id")).fadeToggle();
+    })
+    $(".open_doc_features").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this)
+        $('.doc_features' + this_.attr("id")).fadeToggle();
     })
     $(".rename_lesson").click(function (event) {
         event.preventDefault();
@@ -596,6 +601,23 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function (data) {
                     $('#all_lesson' + this_.attr('id')).hide();
+                }
+            });  
+        }
+    })
+    $(".delete_doc").click(function (event) {
+        event.preventDefault();
+        var this_ = $(this);
+        var pageUrl = this_.attr("data-href")
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#all_doc' + this_.attr('id')).hide();
                 }
             });  
         }

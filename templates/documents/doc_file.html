@@ -1,0 +1,37 @@
+{% load staticfiles %}
+<div class="two wide column" id="all_doc{{ doc.id }}">
+  <a id="{{ doc.id }}" class="open_doc_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+  <div class="ui segment doc_features{{ doc.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+      <a  class="file_action" object_type='doc' action='copy' data-href='{{ profile.docfile_action_url }}' id="{{ doc.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon copy outline"></i> Копировать</a>
+      <div class="ui divider"></div>
+      <a  class="file_action" object_type='doc' action='cut' data-href='{{ profile.docfile_action_url }}' id="{{ doc.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon cut"></i> Вырезать</a>
+      <div class="ui divider"></div>
+      <a class="delete_doc" id="{{ doc.id }}" data-href='{{ doc.delete_doc_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
+  </div>
+  <a href="{{ doc.file.url }}" >
+      {% if doc.object_type == 'img' %}
+      <img src="{% static 'images/docs/doc_img.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'pdf' %}
+      <img src="{% static 'images/docs/doc_pdf.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'xls' %}
+      <img src="{% static 'images/docs/doc_xls.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'doc' %}
+      <img src="{% static 'images/docs/doc_doc.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'txt' %}
+      <img src="{% static 'images/docs/doc_txt.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'mp3' %}
+      <img src="{% static 'images/docs/doc_mp3.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'ppt' %}
+      <img src="{% static 'images/docs/doc_ppt.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% elif doc.object_type == 'html' %}
+      <img src="{% static 'images/docs/doc_code.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% else %}
+      <img src="{% static 'images/docs/doc_file.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      {% endif %}
+      <br>
+      <span id="doc_title{{ doc.id }}" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{ doc.file }}</span>
+  </a>
+</div>
+<div class="ui modal" id="doc_details{{ doc.id }}" style="padding: 14px;">
+    <i class="close icon"></i>
+</div>

@@ -17,22 +17,9 @@ def index(request):
     profile = 'admin'
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
-    staff = "no"
-    if request.user.is_staff or request.user.is_superuser:
-        staff = "yes"
-
-    main_page = 'de'
-    if len(MainPage.objects.all()) < 1:
-        main_page = MainPage.objects.create()
-    else:
-        main_page = MainPage.objects.all()[0]
-
     return render(request, template_name='kanban/base.html', context={
         'boards': Board.objects.all(),
-        "staff":staff,
-        "user":request.user,
         "profile":profile,
-        'main_page':main_page,
     })
 
 def new_board(request):
@@ -41,7 +28,7 @@ def new_board(request):
     name = request.POST.get('board_name')
     assert name
     Board.objects.create(name=name)
-    return redirect('/docs')
+    return redirect('/todolist')
 
 def new_column(request):
     if not request.user.is_authenticated:
@@ -51,7 +38,7 @@ def new_column(request):
     title = request.POST.get('column_title')
     if title: 
         Column.objects.create(title=title, board_id=board_id)
-    return redirect('/docs')
+    return redirect('/todolist')
 
 def new_card(request):
     if not request.user.is_authenticated:
@@ -60,7 +47,7 @@ def new_card(request):
     title = request.POST.get('title')
     assert title and column_id
     Card.objects.create(title=title, column_id=column_id)
-    return redirect('/docs')
+    return redirect('/todolist')
 
 def view_card(request, card_id, card_slug):
     if not request.user.is_authenticated:
@@ -165,21 +152,21 @@ def delete_card(request):
         raise Http404
     card_id = int(request.POST.get('card_delete_id'))
     Card.objects.get(id = card_id).delete()
-    return redirect('/docs')
+    return redirect('/todolist')
 
 def delete_column(request):
     if not request.user.is_authenticated:
         raise Http404
     column_id = int(request.POST.get('column_delete_id'))
     Column.objects.get(id = column_id).delete()
-    return redirect('/docs')
+    return redirect('/todolist')
 
 def delete_board(request):
     if not request.user.is_authenticated:
         raise Http404
     board_id = int(request.POST.get('board_delete_id'))
     Board.objects.get(id = board_id).delete()
-    return redirect('/docs')
+    return redirect('/todolist')
 
 
 def drop(request):
@@ -192,4 +179,4 @@ def drop(request):
     card = Card.objects.get(id=card_id)
     card.column = Column.objects.get(id=column_id)
     card.save()
-    return redirect('/docs')
+    return redirect('/todolist')

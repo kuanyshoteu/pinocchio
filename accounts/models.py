@@ -64,6 +64,11 @@ class Profile(models.Model):
         self.user.username = self.user.username.replace('қ', 'к')
         return reverse("accounts:profile", kwargs={"user": self.user})
 
+    # APIs
+    def hisattendance(self):
+        return reverse("accounts:hisattendance")
+    def hislessons(self):
+        return reverse("main:hislessons")        
     def get_api_change_url(self):
         return reverse("accounts:change-api-toggle")
     def city_api_url(self):
@@ -72,13 +77,13 @@ class Profile(models.Model):
         return reverse("main:filial_api_url")
     def subject_api_url(self):
         return reverse("main:subject_api_url")
-
-    def change_page_url(self):
-        return reverse("accounts:change_page_url")
+    def tell_about_corruption(self):
+        return reverse("accounts:tell_about_corruption")
+    def change_url(self):
+        return reverse("accounts:change_url")
+    # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")
-    def create_docfolder_url(self):
-        return reverse("documents:create_docfolder_url")
     def create_lesson_url(self):
         return reverse("papers:create_lesson_url")
     def create_course_url(self):
@@ -87,16 +92,13 @@ class Profile(models.Model):
         return reverse("library:file_action_url")
     def paste_object_url(self):
         return reverse("library:paste_object_url")
-    def change_status_url(self):
-        return reverse("accounts:change_status_url")
-    def change_url(self):
-        return reverse("accounts:change_url")
-    def tell_about_corruption(self):
-        return reverse("accounts:tell_about_corruption")
-    def hisattendance(self):
-        return reverse("accounts:hisattendance")
-    def hislessons(self):
-        return reverse("main:hislessons")        
+    #Actions with documents
+    def create_docfolder_url(self):
+        return reverse("documents:create_docfolder_url")
+    def docfile_action_url(self):
+        return reverse("documents:docfile_action_url")
+    def paste_docobject_url(self):
+        return reverse("documents:paste_docobject_url")
     
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

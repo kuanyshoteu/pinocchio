@@ -317,7 +317,6 @@ def change_schedule(request, id=None):
                     lecture.save()
                 else:
                     lecture.delete()
-                
         else:
             if request.GET.get('old_cell') != 'none':
                 old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))

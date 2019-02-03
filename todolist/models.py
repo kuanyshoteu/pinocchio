@@ -21,6 +21,13 @@ def upload_location(instance, filename):
 
 class Document(models.Model):
     file = models.FileField(upload_to=upload_location, null = True)
+    object_type = models.CharField(max_length=255, default='')
+
+    class Meta:
+        ordering = ['id']
+    def delete_doc_url(self):
+        return reverse("documents:delete_document_url")
+    
 
 class Metka(models.Model):
     name = models.CharField(max_length=255)
@@ -94,12 +101,12 @@ class Card(models.Model):
         return super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse("docs:card", kwargs={"card_id": self.id, "card_slug":self.slug})
+        return reverse("todolist:card", kwargs={"card_id": self.id, "card_slug":self.slug})
 
     def change_text_url(self):
-        return reverse("docs:change_card_text_url")
+        return reverse("todolist:change_card_text_url")
     def add_user_url(self):
-        return reverse("docs:add_user_url")
+        return reverse("todolist:add_user_url")
     def add_metka_url(self):
-        return reverse("docs:add_metka_url")
+        return reverse("todolist:add_metka_url")
 

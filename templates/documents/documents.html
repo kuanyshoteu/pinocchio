@@ -8,9 +8,9 @@
 {{ comment_form.media }}
 {% endblock head_extra %}
 <div id="profile">
-    {% if folder %}
-        {% if folder.parent %}
-        <a id="go-back-btn"  href='{{ folder.parent.get_absolute_url }}'>
+    {% if this_folder %}
+        {% if this_folder.parent %}
+        <a id="go-back-btn"  href='{{ this_folder.parent.get_absolute_url }}'>
             <i class="arrow left icon"></i>Назад
         </a>
         {% else %}
@@ -28,25 +28,59 @@
                   {% if profile.is_trener %}
                   <div style="float: right;">
                     {% if cache.full %}
-                        <a class="ui button mini blue pastee" data-href='{{ profile.paste_object_url }}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}'>Вставить</a>
+                        <a class="ui button mini blue pastee" data-href='{{ profile.paste_docobject_url }}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}documents{% endif %}'>Вставить</a>
                     {% else %}
                         <a class="ui button mini disabled">Вставить</a>
                     {% endif %}                      
-                    <a class="ui button mini blue create_docfolder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_docfolder_url }}' >
+                    <a class="ui button mini blue create_docfolder" parent_id="{% if this_folder %}{{ this_folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_docfolder_url }}' >
                       Создать папку
                     </a>
-                    <a class="ui button mini blue" onclick="$('#upload_doc_form').modal('show')" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_lesson_url }}'>
+                    <a class="ui button mini blue" onclick="$('#upload_doc_form').modal('show')" parent_id="{% if this_folder %}{{ this_folder.id }}{% else %}denone{% endif %}" data-href='{{ profile.create_lesson_url }}'>
                       Загрузить документ
                     </a>
                     {% include 'documents/upload.html' %}
                   </div> 
                   {% endif %}    
                 </div>
-                {% if folder %}
-                    {% include 'documents/folder.html' %}
-                {% else %}
-                    {% include 'documents/doc_list.html' %}
-                {% endif %}
+                <div class="ui tab active" id="detailed_info">
+                    {% if this_folder %}
+                        <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+                            <div id="docs" class="ui grid stackable" style="margin: 0">
+                            {% for doc in this_folder.files.all %}
+                                {% include 'documents/doc_file.html' %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                        <div class="ui segment" style="margin-top: 0">
+                            <div id="folders" class="ui grid stackable" style="margin: 0">
+                            {% for folder in this_folder.children.all %}
+                                {% if this_folder.parent != folder %}
+                                    {% include 'documents/doc_folder.html' %}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+                            <div id="docs" class="ui grid stackable" style="margin: 0">
+                            {% for doc in documents %}
+                                {% if not root or doc.docfolder.all|length == 0 %}
+                                    {% include 'documents/doc_file.html' %}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                        <div class="ui segment" style="margin-top: 0">
+                            <div id="folders" class="ui grid stackable" style="margin: 0">
+                            {% for folder in docfolders %}
+                                {% if folder.parent == None %}
+                                    {% include 'documents/doc_folder.html' %}
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>     
             </div>
         </div>
     </div>

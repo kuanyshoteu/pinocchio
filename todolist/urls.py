@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from .views import *
 
-app_name = 'docs'
+app_name = 'todolist'
 urlpatterns = [
     url(r'^new-card/$', new_card, name = 'new_card'),
     url(r'^delete-card/$', delete_card, name = 'delete_card'),

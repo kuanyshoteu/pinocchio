@@ -98,39 +98,11 @@ def file_action(request):
     data = {'status':'ok'}
     return JsonResponse(data)
 
-def copy_lesson(request):
-    profile = Profile.objects.get(user = request.user.id)
-    cache = Cache.objects.get_or_create(author_profile = profile)
-    cache = cache[0]
-    title = ''
-    if request.GET.get('new_parent') != 'library':
-        new_parent = Folder.objects.get(id = int(request.GET.get('new_parent')))
-    if cache.object_type == 'lesson':
-        lesson = Lesson.objects.get(id = cache.object_id)
-        new_lesson = Lesson.objects.create(user=request.user, author_profile = profile, title = lesson.title, content = lesson.content)
-        
-        for task in lesson.task_list.all():
-            new_task = Task.objects.create(user=request.user, 
-                author_profile = profile, text = task.text, answer = task.answer, 
-                height_field = task.height_field, width_field = task.width_field)
-            if task.image:
-                new_task.image = task.image
-            new_task.save()
-            new_lesson.task_list.add(new_task)
-
-        if request.GET.get('new_parent') != 'library':
-            new_parent.lesson_list.add(lesson)
-        if cache.action == 'cut':
-            lesson.delete()
-    return title
-
 def paste(request):
     profile = Profile.objects.get(user = request.user.id)
-    cache = Cache.objects.get_or_create(author_profile = profile)
-    cache = cache[0]
+    cache = Cache.objects.get_or_create(author_profile = profile)[0]
     title = ''
     link = ''
-    title = copy_lesson(request)
     if request.GET.get('new_parent') != 'library':
         new_parent = Folder.objects.get(id = int(request.GET.get('new_parent')))
     if cache.object_type == 'folder':    
@@ -138,35 +110,44 @@ def paste(request):
         title = folder.title
         link = folder.get_absolute_url()
 
-        if cache.action == 'copy':
-            copy_folder = Folder.objects.create(author_profile = profile, title=folder.title)
-            for child in folder.children.all():
-                copy_child = Folder.objects.create(author_profile = profile, title=child.title)
-                copy_folder.children.add(copy_child)
-            for ppr in folder.lesson_list.all():
-                copy_folder.lesson_list.add(ppr)
+        copy_folder = Folder.objects.create(author_profile = profile, title=folder.title)
+        for ppr in folder.lesson_list.all():
+            copy_folder.lesson_list.add(ppr)
 
+        if request.GET.get('new_parent') != 'library':
             copy_folder.parent = new_parent
             new_parent.children.add(copy_folder)
-            copy_folder.save()
+        copy_folder.save()
 
-        elif cache.action == 'cut':
-            folder.parent = new_parent
-            new_parent.children.add(folder)
-            folder.save()
-            if cache.previous_parent > 0:
-                previous_parent = Folder.objects.get(id = cache.previous_parent)
-                previous_parent.children.remove(folder)
-    else:
-        lesson = Lesson.objects.get(id = cache.object_id)
-        title = lesson.title
-        link = lesson.get_absolute_url()
-
-        new_parent.lesson_list.add(lesson)
-        lesson.save()
         if cache.action == 'cut' and cache.previous_parent > 0:
-            previous_parent = Lesson.objects.get(id = cache.previous_parent)
-            previous_parent.lesson_list.remove(lesson)
+            folder.delete()
+
+    if cache.object_type == 'lesson':
+        lesson = Lesson.objects.get(id = cache.object_id)
+        new_lesson = Lesson.objects.create(author_profile = profile, title = lesson.title)
+        new_lesson.save()
+        title = new_lesson.title
+        link = new_lesson.get_absolute_url()
+        for paper in lesson.papers.all():
+            new_paper = Paper.objects.create(title=paper.title,
+                author_profile=paper.author_profile,typee=paper.typee)
+            for subtheme in paper.subthemes.all():
+                new_subtheme = Subtheme.objects.create(content=subtheme.content,video=subtheme.video,
+                    youtube_video_link=subtheme.youtube_video_link)
+                new_paper.subthemes.add(new_subtheme)
+                for task in subtheme.task_list.all():
+                    new_task = Task.objects.create(
+                        author_profile = profile, text = task.text, answer = task.answer, 
+                        height_field = task.height_field, width_field = task.width_field)
+                    if task.image:
+                        new_task.image = task.image
+                    new_task.save()
+                    new_subtheme.task_list.add(new_task)
+
+        if request.GET.get('new_parent') != 'library':
+            new_parent.lesson_list.add(new_lesson)
+        if cache.action == 'cut':
+            lesson.delete()
                 
     data = {
         'status':'ok',

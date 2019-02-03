@@ -43,7 +43,6 @@ class Subtheme(models.Model):
         
 class Paper(models.Model):
     title = models.CharField(max_length=250)
-    slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='paper_author')
     subthemes = models.ManyToManyField(Subtheme, related_name='papers')
@@ -74,22 +73,6 @@ class Paper(models.Model):
 
     class Meta:
         ordering = ['id']
-
-def create_slug(instance, new_slug=None):
-    if len(Paper.objects.all()) > 0:
-        paper = Paper.objects.all()[len(Paper.objects.all())-1]
-        slug = slugify('qqq' + str(paper.id + 1))
-        if len(Paper.objects.filter(slug=slug)) > 0:
-            slug = slugify('qqq' + str(paper.id + 1) + 'q')
-    else:
-        slug = slugify('0')
-    return slug 
-
-def pre_save_course_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = create_slug(instance)
-
-pre_save.connect(pre_save_course_receiver, sender=Paper)
     
 class Lesson(models.Model):
     title = models.CharField(max_length=250)
@@ -118,7 +101,7 @@ class Lesson(models.Model):
     def dislike_url(self):
         return reverse("papers:lesson_dislike_url")
     class Meta:
-        ordering = ['id']
+        ordering = ['timestamp']
 
 class Comment(models.Model):
     lesson = models.ForeignKey(Lesson, null=True, on_delete = models.CASCADE, related_name='comments')

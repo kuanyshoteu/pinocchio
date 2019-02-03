@@ -14,7 +14,7 @@ from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField
 
 from accounts.models import Profile
-from docs.models import Document
+from todolist.models import Document
 
 class DocumentFolder(models.Model):
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='docfolders')
@@ -30,7 +30,7 @@ class DocumentFolder(models.Model):
     def delete_folder_url(self):
         return reverse("documents:delete_folder_url")
     def change_name_url(self):
-        return reverse("documents:change_name_url")
+        return reverse("documents:change_docname_url")
 
 class DocumentCache(models.Model):
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='doccache')

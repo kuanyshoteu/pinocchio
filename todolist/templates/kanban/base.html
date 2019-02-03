@@ -23,7 +23,7 @@
                         </div>
                         <div class="five wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
                             Проект: <b>{{ board.name }}</b>
-                            <form action="/docs/delete-board/"  method="POST" style="display: inline-block;margin-left: 20px;margin-bottom: 0">{% csrf_token %}
+                            <form action="/todolist/delete-board/"  method="POST" style="display: inline-block;margin-left: 20px;margin-bottom: 0">{% csrf_token %}
                                 <input type="hidden" name="board_delete_id" value="{{ board.id }}" />
                                 <input type='submit' class='ui button mini' value='Удалить' />
                             </form>
@@ -45,7 +45,7 @@
                                     <div class="ui segment" style="width: 230px; position: absolute;z-index: 500;margin-left: 50px;">
                                         <p style="color: grey">Действия с разделом</p>
                                         <hr style="background-color: grey">
-                                        <form action="/docs/delete-column/"  method="POST" class="ui form">{% csrf_token %}
+                                        <form action="/todolist/delete-column/"  method="POST" class="ui form">{% csrf_token %}
                                             <input type="hidden" name="column_delete_id" value="{{ column.id }}" />
                                             <input type='submit' class="ui button mini red"  value='Удалить раздел' />
                                         </form>
@@ -82,7 +82,7 @@
                                       {% if usr.image %}
                                       <img src="{{ usr.image.url }}" class="ui avatar image">
                                       {% else %}
-                                      <img src='{{ main_page.image.url }}' class="ui avatar image">
+                                      <img src='' class="ui avatar image">
                                       {% endif %}
                                       </a>
                                     </div>
@@ -94,14 +94,14 @@
                                     <div class="ui segment" style="width: 230px; position: absolute;">
                                       <p style="color: grey">Действия с карточкой</p>
                                       <hr style="background-color: grey">
-                                       <form action="/docs/delete-card/"  method="POST" class="ui form">{% csrf_token %}
+                                       <form action="/todolist/delete-card/"  method="POST" class="ui form">{% csrf_token %}
                                         <input type="hidden" name="card_delete_id" value="{{ card.id }}" />
                                         <input type='submit' style="background-color: white; cursor: pointer; border-width: 0;" class='' value='Удалить задание…' />
                                        </form>
                                     </div>
                                 </div>
                                 {% endfor %}
-                                <form action="/docs/new-card/" method="POST" class="ui form">{% csrf_token %}
+                                <form action="/todolist/new-card/" method="POST" class="ui form">{% csrf_token %}
                                     <input type="hidden" name="column_id" value="{{ column.id }}" />
                                     <input type="text" name="title" class="new-card no-display" data-column-id="{{ column.id }}" />
                                     <input type='submit' class='ui button green mini new-cardd no-display' data-column-id="{{ column.id }}" value='Добавить' />
@@ -111,7 +111,7 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <form action="/docs/new-column/" method="POST" class="ui form" style="margin-top: 20px;margin-bottom: 0;width: 200px;">{% csrf_token %}
+                    <form action="/todolist/new-column/" method="POST" class="ui form" style="margin-top: 20px;margin-bottom: 0;width: 200px;">{% csrf_token %}
                         <input type="hidden" name="board_id" value="{{ board.id }}" />
                         <input type="text" name="column_title" class="new-column no-display" data-board-id="{{ board.id }}" />
                         <input type='submit' class='ui button green mini new-columnn no-display' data-board-id="{{ board.id }}" value='Добавить' />
@@ -123,7 +123,7 @@
                 {% endfor %}
                 
                 <button class="show-new-board ui button mini blue">Добавить проект</button>                  
-                <form action="/docs/new-board/" method="POST" class="ui form" style="width: 300px;">{% csrf_token %}
+                <form action="/todolist/new-board/" method="POST" class="ui form" style="width: 300px;">{% csrf_token %}
                     <input type="text" name="board_name" class="new-board no-display"/>
                     <br>
                     <input type='submit' class='ui button green mini new-boardd no-display' value='Добавить' />
@@ -230,7 +230,7 @@
      'card_id': e.dataTransfer.getData('Text'),
     });
 
-    fetch('/docs/drop/', {
+    fetch('/todolist/drop/', {
      credentials: 'same-origin',
      method: 'post',
      headers: {
@@ -239,7 +239,7 @@
      body: postData,
     }).then(response => {
      if (response.ok) {
-      window.location = '/docs/';
+      window.location = '/todolist/';
      } 
     });
 

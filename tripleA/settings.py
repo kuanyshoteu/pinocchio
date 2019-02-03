@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'squads',
     'papers',
     'tasks',
-    'docs',
+    'todolist',
     'clients_base',
     'library',
     'subjects',

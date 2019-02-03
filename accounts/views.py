@@ -24,7 +24,7 @@ from django.shortcuts import render, redirect
 from .forms import *
 from .models import *
 from squads.models import *
-from docs.models import *
+from todolist.models import *
 from subjects.models import *
 from django.contrib.auth.forms import PasswordChangeForm
 

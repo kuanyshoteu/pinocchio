@@ -23,18 +23,18 @@
       {% for lesson in lessons %}
         {% if not root or lesson.folder.all|length == 0 %}
         <div class="two wide column" id="all_lesson{{ lesson.id }}">
-          <a id="{{ lesson.id }}" class="open_paper_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
-          <div class="ui segment paper_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+          <a id="{{ lesson.id }}" class="open_lesson_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+          <div class="ui segment lesson_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
               <a  class="rename_lesson" id="{{ lesson.id }}"><i class="icon pencil alternate"></i>Переименовать</a>
               <div class="ui divider"></div>
-              <a  class="file_action" object_type='paper' action='copy' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+              <a  class="file_action" object_type='lesson' action='copy' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
               <div class="ui divider"></div>
-              <a  class="file_action" object_type='paper' action='cut' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <a  class="file_action" object_type='lesson' action='cut' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
               <div class="ui divider"></div>
               <a class="delete_lesson" id="{{ lesson.id }}" data-href='{{ lesson.delete_lesson_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
           </div>
           <a href="{{ lesson.get_absolute_url }}" >
-              <img src="{% static 'images/doc.png' %}" id="paper_image{{ lesson.id }}" style="height: 50px;">
+              <img src="{% static 'images/doc.png' %}" id="lesson_image{{ lesson.id }}" style="height: 50px;">
               <br>
               <span id="lesson_title{{ lesson.id }}">{{ lesson.title }}</span>
           </a>
@@ -60,9 +60,9 @@
           <div class="ui segment folder_features{{ folder.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
               <a  class="rename_folder" id="{{ folder.id }}"><i class="icon pencil alternate"></i> Переименовать</a>
               <div class="ui divider"></div>
-              <a  class="file_action" object_type='folder' action='copy' data-href='{{ profile.file_action_url }}' id="{{ folder.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+              <a  class="file_action" object_type='folder' action='copy' data-href='{{ profile.file_action_url }}' id="{{ folder.id }}" parent='{% if folder.parent %}{{folder.parent.id}}{%else%}-1{% endif %}'><i class="icon copy outline"></i> Копировать</a>
               <div class="ui divider"></div>
-              <a  class="file_action" object_type='folder' action='cut' data-href='{{ profile.file_action_url }}' id="{{ folder.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+              <a  class="file_action" object_type='folder' action='cut' data-href='{{ profile.file_action_url }}' id="{{ folder.id }}" parent='{% if folder.parent %}{{folder.parent.id}}{%else%}-1{% endif %}'><i class="icon cut"></i> Вырезать</a>
               <div class="ui divider"></div>
               <a class="delete_folder" id="{{ folder.id }}" data-href='{{ folder.delete_folder_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
           </div>

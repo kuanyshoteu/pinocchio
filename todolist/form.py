@@ -1,6 +1,6 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from docs.models import *
+from todolist.models import *
 from django.forms import CharField
 
 class CommentForm(forms.ModelForm):
