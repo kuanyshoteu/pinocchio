@@ -1,4 +1,17 @@
 $(document).ready(function () {
+    $('.delete_post').click(function (event){
+        var id = $(this).attr('id')
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+                'post_id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.post_details' + id).hide('fast')
+            }
+        });
+    })    
     $('.create_new_post').on('click', function(e) {
         this_ = $(this)
         var text = $('.new_post_area').val()

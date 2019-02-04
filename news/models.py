@@ -44,7 +44,7 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("news:detail", kwargs={"id": self.id})
     def get_delete_url(self):
-        return reverse("news:delete", kwargs={"id": self.id})
+        return reverse("news:delete")
     def get_update_url(self):
         return reverse("news:update", kwargs={"id": self.id})
     def get_list_url(self):

@@ -58,25 +58,14 @@ def post_list(request):
     }
     return render(request, "news/post_list.html", context)
 
-def post_delete(request, slug=None):
-    if not request.user.is_authenticated:
-        raise Http404
-    try:
-        instance = Post.objects.get(slug=slug)
-    except:
-        raise Http404
-
-    if not request.user.is_staff and not request.user.is_superuser:
-        reponse.status_code = 403
-        return HttpResponse("You do not have permission to do this.")
-        
-    if request.method == "POST":
-        instance.delete()
-        return redirect("posts:list")
-    context = {
-        "object": instance
+def post_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    if profile.is_manager:
+        post = Post.objects.get(id=int(request.GET.get('post_id')))
+        post.delete()
+    data = {
     }
-    return render(request, "confirm_delete.html", context)
+    return JsonResponse(data)
 
 from django.http import JsonResponse
 
