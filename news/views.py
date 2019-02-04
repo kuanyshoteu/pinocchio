@@ -44,10 +44,12 @@ def post_list(request):
     
     if request.POST: 
         text = request.POST.get('post_text')
-        file = request.FILES['postfile']
-        Post.objects.create(author_profile=profile,content=text,image=file)
-        print(request.POST.get('post_text'))
-        print(request.FILES['postfile'])
+        newpost = Post.objects.create(author_profile=profile,content=text)
+        if len(request.FILES) > 0:
+            print('f', request.FILES)
+            file = request.FILES['postfile']
+            newpost.image = file
+            newpost.save()
         return HttpResponseRedirect('/news')
     
     context = {

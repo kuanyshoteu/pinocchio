@@ -181,7 +181,7 @@ def hisschedule(hissquads, hissubjects):
         schedule.append(row)
     for subject in hissubjects:
         for lecture in subject.subject_lectures.all():
-            if lecture.squad in hissquads:
+            if lecture.squad in hissquads and subject.teacher.first():
                 data = [subject.title,subject.cabinet,subject.teacher.first().first_name,subject.color_back,lecture.squad.title]
                 schedule[lecture.cell.time_period.num - 1][lecture.cell.day.number].append(data)
     return schedule

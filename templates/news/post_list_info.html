@@ -17,8 +17,6 @@
     {{ post.get_markdown }}
     {% if post.image %}
     <img style="width: 100%; max-height: 80%" src="{{ post.image.url }}">
-    {% else %}
-    <img style="width: 100%" src="{% static 'images/postuad.png' %}">
     {% endif %}
 </div>
 
