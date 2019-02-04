@@ -13,22 +13,34 @@
             {% include 'left_menu.html' %}
             <div class="eight wide column">
                 {% if profile.is_trener %}
-                <div class="ui segment" style="padding: 7px 15px;">
-                    <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin-bottom: 0">{% csrf_token %}
+                <form class="ui form show_post_form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+                    <div class="ui segment" style="padding: 7px 15px;margin: 0">
                         <div class="ui grid">
                             <div class="one wide column" style="margin-top: 4px;">
                                 {% if profile.image %}
-                                <img style="width: 28px;border-radius: 100%;" src="{{ profile.image.url }}">
+                                <img class="small_avatar" src="{{ profile.image.url }}">
                                 {% else %}
-                                <img style="width: 28px;border-radius: 100%;" src="{% static 'images/nophoto.png' %}">        
+                                <img class="small_avatar" src="{% static 'images/nophoto.png' %}">        
                                 {% endif %}
                             </div>
                             <div class="fifteen wide column">
-                                <input type="text" name="" placeholder="Что у вас нового?" style="border: none;margin-bottom: 0;padding: 0 10px">
+                                <input type="text" class="new_post_area" name="post_text" placeholder="Что у вас нового?">
+                            </div>
+                            <div class="sixteen wide column new_post_details" style="display: none;padding-top: 0">
+                                <div class="ui divider" style="margin-bottom: 8px;"></div>
+                                <select class="new_post_for">
+                                    <option value="all">Видно всем</option>
+                                    <option value="only_teachers">Только учителям</option>
+                                </select>
                             </div>
                         </div>
-                    </form>                 
-                </div>
+                    </div>
+                    <div class="ui segment new_post_details" style="display: none;margin-top: 0;background: #fafbfc;height: 50px;">
+                        <input type="file" name="postfile" id="postfile" class="postfile">
+                        <label class="file_post" for="postfile"><i class="icon camera"></i></label>
+                        <input type="submit" class="ui button blue mini" value="Отправить">
+                    </div>
+                </form>                 
                 {% endif %}
                 <div class="allposts">
                     {% for post in posts %}

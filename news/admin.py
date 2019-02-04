@@ -4,9 +4,8 @@ from django.contrib import admin
 from .models import *
 
 class PostModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "id"]
-    list_display_links = ["title"]
-    list_filter = ["title"]
+    list_display = ["id","content"]
+    list_display_links = ["id"]
 
     search_fields = ["content"]
     class Meta:

@@ -26,7 +26,7 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 <div class="ui grid">
-                    <div class="{% if instance.image_banner %}fifteen{%else%}eleven{%endif%} wide column">
+                    <div class="{% if instance.image_banner %}fifteen{%else%}twelve{%endif%} wide column">
                         <div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
                             <div class="ui grid">
                                 {% if instance.image_banner %}
@@ -87,7 +87,7 @@
                         {% endif %}
                         {% include 'subjects/dated_materials.html' %}
                     </div>
-                    <div class="four wide column" style="padding-right: 0;">
+                    <div class="four wide column" style="padding: 14px 0;">
                         {% if not instance.image_banner %}
                         <div class="ui segment">
                             {% if instance.image_icon %}

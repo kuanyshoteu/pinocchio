@@ -39,7 +39,7 @@ function drop(ev) {
 <div id="calendar" length='7'>           
     <div id="week">   
         <div class="week" id="0">
-            <div class="daysmall" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;">
             </div>
             {% for day in days %}
             {% if day.number != 7 %} 
@@ -54,7 +54,7 @@ function drop(ev) {
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% for timep in time_periods %}
         <div class="week" id="{{ forloop.counter }}">
-            <div class="daysmall" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;">
                 {{ timep.start }}-{{ timep.end }}
             </div>
             {% for cell in timep.time_cell.all %}  
@@ -63,7 +63,7 @@ function drop(ev) {
                 <div {% if page == 'subject_update' %} style=""{% endif %}>
                     {% for lecture in cell|cell_subject_lectures:instance %}
                         {% if lecture.squad in instance.squads.all %}
-                        <div class="ui segment in_schedule" squad_id='{{ lecture.squad.id }}' id="s{{ lecture.squad.id }}c{{ cell.id }}" old_cell="{{ cell.id }}" {% if page == 'subject_update' %} draggable="true" {% endif %} ondragstart="drag(event)" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;">
+                        <div class="ui segment in_schedule" squad_id='{{ lecture.squad.id }}' id="s{{ lecture.squad.id }}c{{ cell.id }}" old_cell="{{ cell.id }}" {% if page == 'subject_update' %} draggable="true" {% endif %} ondragstart="drag(event)" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:#5181b8;">
                             {{ lecture.squad.title }}
                             {% if cell|cell_subject_lectures:instance|length == 1 %}
                             <br>
@@ -76,12 +76,12 @@ function drop(ev) {
                     {% endfor %}
                     {% if page == 'subject_update' %}
                     <div id="{{ cell.id }}" ondrop="drop(event)" ondragover="allowDrop(event)" style="
-                            {% if cell|cell_subject_lectures:instance|length == 0 %}
-                                min-height: 79px;
-                                line-height: 79px;
-                            {% else %} 
-                                min-height: 20px;
-                            {% endif %}border: 1px solid grey;">+</div>
+                        {% if cell|cell_subject_lectures:instance|length == 0 %}
+                            min-height: 79px;
+                            line-height: 79px;
+                        {% else %} 
+                            min-height: 20px;
+                        {% endif %}border: 1px solid grey;">+</div>
                     {% endif %}
                 </div>
             </div>

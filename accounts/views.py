@@ -117,6 +117,12 @@ def account_view(request, user = None):
         hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
 
+    first_squad = ''
+    first_subject = ''
+    if len(hissquads) > 0:
+        first_squad = hissquads[0].id
+        first_subject = hissubjects[0].id,
+
     context = {
         "profile":yourprofile,
         "hisprofile": hisprofile,
@@ -125,8 +131,8 @@ def account_view(request, user = None):
         'days':Day.objects.all(),
         'hissubjects':hissubjects,
         'hissquads':hissquads,
-        'first_squad':hissquads[0].id,
-        'first_subject':hissubjects[0].id,
+        'first_squad':first_squad,
+        'first_subject':first_subject,
         'time_periods':time_periods,
         'hisschedule':hisschedule(hissquads, hissubjects),
     }

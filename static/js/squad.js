@@ -8,7 +8,6 @@ $(document).ready(function () {
             data: {
             },
             success: function (data) {
-                console.log('work')
                 document.getElementById('detder').innerHTML = data.calendar;
             }, 
             error: function (error) {

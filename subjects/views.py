@@ -307,7 +307,7 @@ def change_schedule(request, id=None):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         if request.GET.get('cell_id') != 'trash':
             cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
-            if request.GET.get('old_cell') == 'none':
+            if request.GET.get('old_cell') == 'denone':
                 lecture = Lecture.objects.get_or_create(subject=subject,squad=squad,cell=cell)
             else:
                 old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
@@ -318,7 +318,7 @@ def change_schedule(request, id=None):
                 else:
                     lecture.delete()
         else:
-            if request.GET.get('old_cell') != 'none':
+            if request.GET.get('old_cell') != 'denone':
                 old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
                 lecture = Lecture.objects.get(subject=subject,squad=squad,cell=old_cell)
                 lecture.delete()

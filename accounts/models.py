@@ -99,7 +99,10 @@ class Profile(models.Model):
         return reverse("documents:docfile_action_url")
     def paste_docobject_url(self):
         return reverse("documents:paste_docobject_url")
-    
+    # Actions with news
+    def create_post_url(self):
+        return reverse("news:create_post_url")
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

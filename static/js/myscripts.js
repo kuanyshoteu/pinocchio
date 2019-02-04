@@ -1,4 +1,25 @@
 $(document).ready(function () {
+    $('.create_new_post').on('click', function(e) {
+        this_ = $(this)
+        var text = $('.new_post_area').val()
+        var file = document.getElementById('postfile').files[0];
+        var url = this_.attr('url')
+
+        var xhr = new XMLHttpRequest();
+        var csrfToken = xhr.getResponseHeader('x-csrf-token');
+        xhr.open('post', url, true);
+        xhr.setRequestHeader('x-csrf-token', csrfToken); 
+        xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xhr.setRequestHeader("Accept", "application/json");
+        xhr.send(file);
+    });
+    $('.show_post_form').click(function (event){
+        $('.new_post_details').show('fast')
+        event.stopPropagation();
+    })
+    $("body").click(function(e){
+        $('.new_post_details').hide('fast');
+    });
     $('.profile_name').click(function (event){
         $('.profile_links').fadeToggle('fast')
     })

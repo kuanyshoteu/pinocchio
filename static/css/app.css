@@ -7555,7 +7555,7 @@ i.icon {
   -webkit-font-smoothing: antialiased;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  color: #99b1c6 !important;
+  color: #99b1c6;
 }
 
 i.icon:before {
@@ -21884,9 +21884,6 @@ ol.ui.horizontal.list li:before,
   align-self: inherit;
 }
 
-ul{
-  text-align: left !important;
-}
 .ui[class*="center aligned"].grid {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
@@ -39684,7 +39681,7 @@ a:hover {
   float: left;
   margin-left: 0;
   margin-right: 10px;
-  color: #285473;
+  color: #99b1c6;
 }
 
 #left-main-menu .item:before {

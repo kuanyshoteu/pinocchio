@@ -2,6 +2,43 @@ a{
   cursor: pointer;
   color: #285473;
 }
+.small_avatar{
+  width: 28px;
+  height: 28px;
+  border-radius: 100%;
+}
+.new_post_area{
+  border: none !important;
+  margin-bottom: 0 !important;
+  padding: 0 10px;
+}
+.new_post_for{
+  width: 150px !important;
+}
+.create_new_post{
+  float: right;
+}
+.file_post{
+  cursor: pointer;
+}
+.file_post{
+  cursor: pointer;
+}
+.camera{
+  font-size: 17px !important;
+}
+.camera:hover{
+  font-size: 17px !important;
+  color: #b2b2ff !important;
+}
+.postfile{
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
 .remove_lesson_from_subject{
   font-size: 10px;
   color: red;

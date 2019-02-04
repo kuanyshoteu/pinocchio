@@ -28,7 +28,6 @@ class Post(models.Model):
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-    title = models.CharField(max_length=250)    
     content = models.TextField(default='')
     image = models.ImageField(upload_to=upload_location, 
             null=True,
@@ -38,11 +37,10 @@ class Post(models.Model):
     height_field = models.IntegerField(default=0, null=True)
     width_field = models.IntegerField(default=0, null=True)
 
-
     class Meta:
-        ordering = ['title']
+        ordering = ['-id']
     def __unicode__(self):
-        return self.title
+        return self.id
     def get_absolute_url(self):
         return reverse("news:detail", kwargs={"id": self.id})
     def get_delete_url(self):

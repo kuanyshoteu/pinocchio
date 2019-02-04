@@ -28,7 +28,7 @@
 	<div class='ui container'>
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="eleven wide column">
+            <div class="twelve wide column">
             	<form style="margin-bottom: 0" class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
 	            	<div class="ui grid stackable">
 			            <div class="twelve wide column">
@@ -61,10 +61,10 @@
 							</div>
 						</div>
 						<div class="four wide column" style="padding: 14px 0;">
-							<div class="ui segment" style="height: 200px;position: fixed;width: 18%;padding: 0">
+							<div class="ui segment" style="height: 200px;position: fixed;padding: 0 14px 0 0">
 								<a href="{{ instance.get_absolute_url }}" >
 									<div class="ui grid grey_hover" style="margin: 5px 0;">
-										<div class="four wide column" style="padding: 10px 5px 10px 14px;">
+										<div class="five wide column" style="padding: 10px 5px 10px 14px;">
 											{% if instance.image_icon %}
 	                                        <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
 	                                        {% else %}

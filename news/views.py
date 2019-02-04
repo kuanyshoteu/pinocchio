@@ -19,6 +19,7 @@ from django.contrib.auth import (
     logout,
     )
 from django.contrib.auth.models import User
+from django.template import RequestContext
 
 def post_detail(request, slug=None):
     instance = get_object_or_404(Post, slug=slug)
@@ -33,54 +34,6 @@ def post_detail(request, slug=None):
     return render(request, "news/post_detail.html", context)
 
 
-def post_create(request):
-    if not request.user.is_authenticated:
-        raise Http404
-
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    if not profile.is_trener:
-        raise Http404
-        
-    form = PostForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
-        return HttpResponseRedirect(instance.get_update_url())   
-    
-    context = {
-        "form": form,
-        "profile":profile,
-    }
-    return render(request, "news/post_create.html", context)
-
-def post_update(request, slug=None):
-    if not request.user.is_staff and not request.user.is_superuser:
-        raise Http404
-    instance = get_object_or_404(Post, slug=slug)
-    form = PostForm(request.POST or None, request.FILES or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        if not instance.height_field:
-            instance.height_field = 0
-        if not instance.width_field:
-            instance.width_field = 0
-
-        instance.save()
-        return HttpResponseRedirect(instance.get_update_url())
-        
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-
-    context = {
-        "instance": instance,
-        "form":form,
-        "profile":profile,
-    }
-    return render(request, "news/post_create.html", context)
-
 def post_list(request):
     if not request.user.is_authenticated:
         raise Http404
@@ -88,6 +41,14 @@ def post_list(request):
     profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
+    
+    if request.POST: 
+        text = request.POST.get('post_text')
+        file = request.FILES['postfile']
+        Post.objects.create(author_profile=profile,content=text,image=file)
+        print(request.POST.get('post_text'))
+        print(request.FILES['postfile'])
+        return HttpResponseRedirect('/news')
     
     context = {
         "profile": profile,
@@ -118,7 +79,8 @@ def post_delete(request, slug=None):
 from django.http import JsonResponse
 
 
-def change_curator(request):
+def create_post(request):
+    profile = Profile.objects.get(user = request.user.id)
     data = {
     }
     return JsonResponse(data)
