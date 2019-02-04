@@ -7,23 +7,26 @@
         <div>
             <div class='rating-stars text-center'>
                 <ul id='stars'>
-                  <li class='star estimate_lesson' title='Poor' data-value='1'>
-                    <i class='fa fa-star fa-fw'></i>
-                  </li>
-                  <li class='star estimate_lesson' title='Fair' data-value='2'>
-                    <i class='fa fa-star fa-fw'></i>
-                  </li>
-                  <li class='star estimate_lesson' title='Good' data-value='3'>
-                    <i class='fa fa-star fa-fw'></i>
-                  </li>
-                  <li class='star estimate_lesson' title='Excellent' data-value='4'>
-                    <i class='fa fa-star fa-fw'></i>
-                  </li>
-                  <li class='star estimate_lesson' title='WOW!!!' data-value='5'>
-                    <i class='fa fa-star fa-fw'></i>
-                  </li>
+                    <li class='star estimate_lesson {%if hisestimation >= 1%}selected{%endif%}' title='Ужасно' data-value='1'>
+                        <i class='fa fa-star fa-fw'></i>
+                    </li>
+                    <li class='star estimate_lesson {%if hisestimation >= 2%}selected{%endif%}' title='Плохо' data-value='2'>
+                        <i class='fa fa-star fa-fw'></i>
+                    </li>
+                    <li class='star estimate_lesson {%if hisestimation >= 3%}selected{%endif%}' title='Средне' data-value='3'>
+                        <i class='fa fa-star fa-fw'></i>
+                    </li>
+                    <li class='star estimate_lesson {%if hisestimation >= 4%}selected{%endif%}' title='Хорошо' data-value='4'>
+                        <i class='fa fa-star fa-fw'></i>
+                    </li>
+                    <li class='star estimate_lesson {%if hisestimation == 5%}selected{%endif%}' title='Отлично' data-value='5'>
+                        <i class='fa fa-star fa-fw'></i>
+                    </li>
                 </ul>
-              </div>
+            </div>
+        </div>
+        <div class="ui segment thanks" style="background-color: #21BA45;width: 200px;color: #fff;margin: 0 auto;display: none;">
+            Спасибо за отзыв :)
         </div>
         <br><br>
         <div style="font-size: 16px">
@@ -33,6 +36,7 @@
         </div>
     </div>
 </div>
+<span style="display: none;" class="estimate_url" url="{{ lesson.estimate_lesson_url }}"></span>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 <style type="text/css">
 .clearfix {

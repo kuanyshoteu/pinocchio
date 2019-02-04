@@ -54,6 +54,11 @@ def lesson_details(request, lesson_id = None):
         paper.subthemes.add(subtheme)
         return redirect(lesson.get_absolute_url())
 
+    if not profile.id in lesson.estimater_ids:
+        lesson.estimater_ids.append(profile.id)
+        lesson.grades.append(0)
+    index = lesson.estimater_ids.index(profile.id)
+
     context = {
         "profile": profile,
         'lesson':lesson,
@@ -61,6 +66,7 @@ def lesson_details(request, lesson_id = None):
         'subtheme_file_form':subtheme_file_form,
         'subtheme_video_form':subtheme_video_form,
         'tasks':Task.objects.all(),
+        'hisestimation':lesson.grades[index],
     }
     return render(request, template_name='library/lesson_details.html', context=context)
 
@@ -318,39 +324,25 @@ def dislike_comment(request):
     }
     return JsonResponse(data)
 
-def like_lesson(request):
+def estimate_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
-    like = False
-    if request.GET.get('id'):
-        lesson = Lesson.objects.get(id=int(request.GET.get('id')))
-        if profile in lesson.dislikes.all():
-            lesson.dislikes.remove(profile) 
+    if request.GET.get('new_rating') and request.GET.get('lesson_id'):
+        lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
+        if not profile.id in lesson.estimater_ids:
+            lesson.estimater_ids.append(profile.id)
+            lesson.grades.append(1)
+        index = lesson.estimater_ids.index(profile.id)
+        lesson.grades[index] = int(request.GET.get('new_rating'))
+        grades_sum = 0
+        for grade in lesson.grades:
+            grades_sum += grade
+        if len(lesson.grades) > 0:
+            lesson.rating = int(grades_sum/len(lesson.grades))
         else:
-            lesson.likes.add(profile)
-            like = True
-    res = len(lesson.likes.all()) - len(lesson.dislikes.all())
-    if res > 0:
-        res = "+" + str(res)
+            lesson.rating = 0
+        lesson.save()
+        
     data = {
-        "like_num":res,
-        "like":like,
-    }
-    return JsonResponse(data)
-
-def dislike_lesson(request):
-    profile = Profile.objects.get(user = request.user.id)
-    dislike = False
-    if request.GET.get('id'):
-        lesson = Lesson.objects.get(id=int(request.GET.get('id')))
-        if profile in lesson.likes.all():
-            lesson.likes.remove(profile)
-        else:
-            lesson.dislikes.add(profile)
-            dislike = True
-    res = len(lesson.likes.all()) - len(lesson.dislikes.all())
-    data = {
-        "like_num":res,
-        "dislike":dislike,
     }
     return JsonResponse(data)
 

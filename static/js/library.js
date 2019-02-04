@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $('.estimate_lesson').click(function () {
+        lesson_id = $('.lesson_id').attr('id')
         var onStar = parseInt($(this).data('value'), 10); // The star currently selected
         var stars = $(this).parent().children('li.star');
         
@@ -13,27 +14,15 @@ $(document).ready(function(){
         
         // JUST RESPONSE (Not needed)
         var ratingValue = parseInt($('#stars li.selected').last().data('value'), 10);
-        var msg = "";
-        if (ratingValue > 1) {
-            msg = "Thanks! You rated this " + ratingValue + " stars.";
-        }
-        else {
-            msg = "We will improve ourselves. You rated this " + ratingValue + " stars.";
-        }
-        responseMessage(msg);
         $.ajax({
-            url: $(this).attr('url'),
+            url: $('.estimate_url').attr('url'),
             data: {
-                'course_id':course_id,
+                'new_rating':ratingValue,
+                'lesson_id':lesson_id,
             },
             dataType: 'json',
             success: function (data) {
-                if (data.ok){
-                    $('.bought_course').modal('show')
-                }
-                else{
-                    $('.not_enough_dils').show('fast')
-                }
+                $('.thanks').show('fast')
             }
         });            
     }) 

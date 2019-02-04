@@ -80,8 +80,9 @@ class Lesson(models.Model):
     is_homework = models.BooleanField(default=False)
     papers = models.ManyToManyField(Paper, related_name='lessons')
     timestamp = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(Profile, related_name='liked_lessons')
-    dislikes = models.ManyToManyField(Profile, related_name='disliked_lessons')
+    rating = models.IntegerField(default = 0)
+    grades = ArrayField(models.IntegerField(), default = [])
+    estimater_ids = ArrayField(models.IntegerField(), default = [])
     done_by = models.ManyToManyField(Profile, related_name='done_lessons')
     
     def add_paper_url(self):
@@ -96,10 +97,8 @@ class Lesson(models.Model):
         return reverse("papers:check_paper_url")
     def new_comment_url(self):
         return reverse("papers:new_comment_url")
-    def like_url(self):
-        return reverse("papers:lesson_like_url")
-    def dislike_url(self):
-        return reverse("papers:lesson_dislike_url")
+    def estimate_lesson_url(self):
+        return reverse("papers:estimate_lesson_url")
     class Meta:
         ordering = ['timestamp']
 
