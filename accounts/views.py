@@ -88,9 +88,6 @@ def test_account(request):
         'days':Day.objects.all(),
         'hissquads':hissquads,
         'time_periods':time_periods,
-        'classwork':hislessonss[2],
-        'homeworks':hislessonss[0],
-        'lesson_now':hislessonss[1],
     }
     return render(request, "profile.html", context)
 
