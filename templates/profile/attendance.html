@@ -1,0 +1,79 @@
+{% load staticfiles %}
+<style type="text/css">
+    .switch_btn_active{
+        background-color: #5181b8;
+        color: white;
+    }
+    .switch_btn_active:hover{
+        color: white;
+    }
+</style>
+{% if hisprofile == profile or profile.is_manager %}
+    <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+        <div class="ui grid">
+            <div class="one wide column">
+                <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            </div>
+            <div class="two wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+                Журналы
+            </div>
+            <!-- <div class="ten wide column" style="padding-left: 0;line-height: 28px;font-size: 12px;">
+                <a class="show_att_chart">Показать графики</a>
+                <a class="show_attendances" style="display: none;">Показать оценки</a>
+            </div> -->
+        </div>
+    </div> 
+        <style>
+        .one.wide.column {
+            margin-right: 14px;
+        }
+        @media only screen and (max-width: 767px) {
+          .one.wide.column {
+            margin-right: 20px;
+          }
+        }
+        </style>
+    <div class="ui segment" style="margin-top: 0">
+        {% for subject in hissubjects %}
+        <a style="padding: 14px; font-size: 13px;" class="open_attendance" id="{{ subject.id }}">
+            <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
+        </a>
+        {% endfor %} 
+        <div class="attendances">
+            {% for subject in hissubjects %}
+                {% if forloop.counter == 1 %}
+                    <div id="subject{{ subject.id }}" class="subject_attendance">
+                    {% include 'profile/att_details.html' %}
+                    </div>
+                {% endif %}
+            {% endfor %} 
+        </div>
+        <div class="att_charts" style="display: none;"> 
+            <div class="ui segment" style="height: 232px;">
+            </div>
+        </div>    
+    </div> 
+{% endif %}
+
+<script >
+    for(var i = 0; i < document.getElementsByClassName('swiper-container').length; i++){
+        var id = document.getElementsByClassName('swiper-container')[i].getAttribute('id');
+        var swiper = new Swiper('.main-slider' + id, {
+            slidesPerView: 5,
+            spaceBetween: 0,
+            centeredSlides: false,
+            nextButton: '.uploaded-in-next'+id,
+            prevButton: '.uploaded-in-prev'+id 
+        });
+        if ($('.today' + id).attr('number')){
+            number = $('.today' + id).attr('number')
+        }
+        else{
+            number = $('.past' + id).last().attr('number')
+        }
+        if (number){
+            swiper.slideTo(parseInt(number-1))
+        }
+        var mySwiper = document.getElementsByClassName('.main-slider' + id).swiper
+    }
+</script>
