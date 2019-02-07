@@ -19,7 +19,8 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from accounts.views import (login_view, register_view, logout_view)
-from main.views import(main_view)
+from papers.views import courses
+from main.views import(main_view, loaderio)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,8 +37,10 @@ urlpatterns = [
     url(r'^clients/', include("clients_base.urls", namespace='clients')),
     url(r'^library/', include("library.urls", namespace='library')),
     url(r'^news/', include("news.urls", namespace='news')),
+    url(r'^courses/$', courses, name='courses'),        
     url(r'^api/squads/', include('squads.api.urls', namespace='api-squads')),
     url(r'^documents/', include("documents.urls", namespace='documents')),
+    url(r'^loaderio-3614d85f1228305eef28963b2654a5ae', loaderio, name='loaderio'),
     url(r'^', include("main.urls", namespace='main')),
 ]
 if settings.DEBUG:

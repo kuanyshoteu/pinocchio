@@ -1,5 +1,5 @@
 {% load crispy_forms_tags %}
-<div class="{% if forloop.counter == 1 %}paper_active{% else %}paper{% endif %} ppr{{ lesson.id }}" id="paper{{ paper.id }}{{ lesson.id }}">
+
     {% if paper.author_profile == profile or profile.user.is_superuser %}
     <div class="ui segment" style="margin-bottom: 0">
         <h3 class="text-center" >
@@ -15,11 +15,9 @@
         </h3>
     </div>
     {% endif %}
-    <div class="ui segment" style="padding: 50px;margin-bottom: 0;margin-top: 0">
-        <div class="subtheme_number_circle">{{ forloop.counter }}</div>
+    <div class="ui segment" style="padding: 20px;margin-bottom: 0;margin-top: 0">
         {% for subtheme in paper.subthemes.all %}
-        	<div style="">
-                {% if paper.author_profile == profile or profile.user.is_superuser %}
+        	    {% if paper.author_profile == profile or profile.user.is_superuser %}
                     <div class="subtheme_rewrite_div_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="display: none;">
                         <form class="ui form" style="margin-bottom: 0">
                             <textarea style="width: 100%;height: 150px;" class="subtheme_new_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.content}}</textarea>
@@ -35,11 +33,10 @@
                     {% endif %}
                 {% endif %}
                 {% if subtheme.content != '' %}
-                <span class="subtheme_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+                <div class="subtheme_content subtheme_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
                     {{ subtheme.get_markdown }}
-                </span>
+                </div>
                 {% endif %}
-            </div>
             {% if subtheme.file %}
             <b>Дополнительный файл:</b>
             <div class="ui segment">
@@ -69,4 +66,3 @@
     {% if profile.is_trener %}
         {% include 'library/add_subtheme.html' %}
     {% endif %}
-</div>

@@ -17,19 +17,18 @@
             {% endif %}
         </h3>
         <div class="ui stackable grid" style="text-align: center; margin: 14px 0 0 0;">
-            {% for paper in lesson.papers.all %}
-            <a class="{% if forloop.counter == 1 %}switch_btn_active{% endif %} switch_btn switch_btn{{ lesson.id }}" 
-            style="width: calc(100%/({{ lesson.papers.all|length }} + 1));" paper_id='{{ paper.id }}' lesson_id='{{ lesson.id }}'>
+            {% for ppr in lesson.papers.all %}
+            <a class="{% if paper == ppr %}switch_btn_active{% endif %} switch_btn" href="{{ ppr.get_absolute_url }}" style="width: calc(100%/({{ lesson.papers.all|length }} + 1));">
                 <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: inline-block;width: 90%;">
-                    {{ paper.title }}
+                    {{ ppr.title }}
                 </div>
-                <div class="l{{ lesson.id }}p{{ paper.id }}done_tick" style="{% if paper|is_done:profile == False %}display: none;{% else %}display: inline-block;float: right;background-color: #32CD32;border-radius: 50%;height: 15px;width: 15px;margin-top: 1px;{% endif %}">
+                <div class="l{{ lesson.id }}p{{ ppr.id }}done_tick" style="{% if ppr|is_done:profile == False %}display: none;{% else %}display: inline-block;float: right;background-color: #32CD32;border-radius: 50%;height: 15px;width: 15px;margin-top: 1px;{% endif %}">
                     <i class="icon check" style="color: #fff !important;font-size: 12px;margin-top: -1px"></i>
                 </div>
             </a>
             {% endfor %}
-            <a class="{% if lesson.papers.all|length == 0 %}switch_btn_active{% endif %} switch_btn switch_btn{{ lesson.id }}" 
-            style="width: calc(100%/({{ lesson.papers.all|length }} + 1));" paper_id='estimate' lesson_id='{{ lesson.id }}'>
+            <a href="{{ lesson.estimate_lesson_page }}" class="{% if hisestimation or hisestimation == 0 %}switch_btn_active{% endif %} switch_btn" 
+            style="width: calc(100%/({{ lesson.papers.all|length }} + 1));">
                 <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: inline-block;width: 90%;">
                     Оцените урок
                 </div>
@@ -39,10 +38,11 @@
             {% include 'library/add_paper.html' %}
         {% endif %}
     </div>
-    {% for paper in lesson.papers.all %}
+    {% if hisestimation or hisestimation == 0 %}
+        {% include 'library/estimate_lesson.html' %}
+    {% else %}
         {% include 'library/paper_detail.html' %}
-    {% endfor %}
-    {% include 'library/estimate_lesson.html' %}
+    {% endif %}
 
     <div class="ui segment" style="margin-bottom: 0;background-color: #f9f9fb;color: #757575;font-weight: 500;margin-top: 55px;">
         <span style="margin-left: 20px;">

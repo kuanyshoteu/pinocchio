@@ -25,6 +25,39 @@ def lesson_details(request, lesson_id = None):
         raise Http404
 
     lesson = Lesson.objects.get(id=lesson_id)
+    for paper in lesson.papers.all():
+        if not profile in paper.done_by.all():
+            return redirect(paper.get_absolute_url())
+    return redirect(lesson.papers.last().get_absolute_url())
+
+def estimate_lesson_page(request, lesson_id = None):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    else:
+        raise Http404
+
+    lesson = Lesson.objects.get(id=lesson_id)
+    if not profile.id in lesson.estimater_ids:
+        lesson.estimater_ids.append(profile.id)
+        lesson.grades.append(0)
+    index = lesson.estimater_ids.index(profile.id)
+    context = {
+        "profile": profile,
+        'lesson':lesson,
+        'hisestimation':lesson.grades[index],
+    }
+    return render(request, template_name='library/lesson_details.html', context=context)
+
+def paper_details(request, paper_id = None):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    else:
+        raise Http404
+
+    paper = Paper.objects.get(id=paper_id)
+    lesson = paper.lessons.first()
 
     subtheme_text_form = SubthemeTextForm(request.POST or None)
     if subtheme_text_form.is_valid():
@@ -54,19 +87,14 @@ def lesson_details(request, lesson_id = None):
         paper.subthemes.add(subtheme)
         return redirect(lesson.get_absolute_url())
 
-    if not profile.id in lesson.estimater_ids:
-        lesson.estimater_ids.append(profile.id)
-        lesson.grades.append(0)
-    index = lesson.estimater_ids.index(profile.id)
-
     context = {
         "profile": profile,
         'lesson':lesson,
+        'paper':paper,
         'subtheme_text_form':subtheme_text_form,
         'subtheme_file_form':subtheme_file_form,
         'subtheme_video_form':subtheme_video_form,
         'tasks':Task.objects.all(),
-        'hisestimation':lesson.grades[index],
     }
     return render(request, template_name='library/lesson_details.html', context=context)
 
@@ -345,6 +373,46 @@ def estimate_lesson(request):
     data = {
     }
     return JsonResponse(data)
+
+def courses(request):
+    staff = "no"
+    if request.user.is_staff or request.user.is_superuser:
+        staff = "yes"
+    profile = 'admin'
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    
+    context = {
+        "profile": profile,
+        "course_sets":course_sets(),
+    }
+    return render(request, 'courses/course_list.html', context=context)
+
+def course_sets():
+    course_sets = []
+    tops = ['Курсы с лучшими рейтингами']
+    tops.append(package_courses('rating'))
+    news = ['Свежие курсы']
+    news.append(package_courses('-id'))
+    course_sets.append(tops)
+    course_sets.append(news)
+    return course_sets
+
+def package_courses(order_item):
+    index = 0
+    sets = []
+    temp_set = []
+    for course in Course.objects.all().order_by(order_item):
+        index += 1
+        temp_set.append(course)
+        if index % 4 == 0:
+            sets.append(temp_set)
+            temp_set = []
+        if index == 12:
+            break
+    if index < 12:
+        sets.append(temp_set)
+    return sets
 
 def course_details(request, course_id=None):
     profile = ''

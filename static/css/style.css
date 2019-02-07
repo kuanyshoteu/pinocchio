@@ -2,6 +2,11 @@ a{
   cursor: pointer;
   color: #285473;
 }
+.subtheme_content{
+  font-size: 14px;
+  margin-top: 20px;
+  padding: 30px;
+}
 .small_avatar{
   width: 28px;
   height: 28px;

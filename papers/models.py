@@ -52,9 +52,7 @@ class Paper(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        if not self.slug:
-            self.slug = slugify(translit(self.title, 'ru', reversed=True))
-        return reverse("papers:detail", kwargs={"slug": self.slug})
+        return reverse("papers:paper_absolute_url", kwargs={"paper_id": self.id})
 
     def api_url_add_group(self):
         return reverse("papers:add-group-toggle")
@@ -99,6 +97,8 @@ class Lesson(models.Model):
         return reverse("papers:new_comment_url")
     def estimate_lesson_url(self):
         return reverse("papers:estimate_lesson_url")
+    def estimate_lesson_page(self):
+        return reverse("papers:estimate_lesson_page", kwargs={"lesson_id": self.id})
     class Meta:
         ordering = ['timestamp']
 
@@ -139,7 +139,7 @@ class Course(models.Model):
     rating = models.FloatField(default=0)
     stars = ArrayField(models.IntegerField(), default = [])
     class Meta:
-        ordering = ['timestamp']
+        ordering = ['rating']
     def get_absolute_url(self):
         return reverse("papers:course_absolute_url", kwargs={"course_id": self.id})
     def get_seller_url(self):

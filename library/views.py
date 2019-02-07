@@ -32,24 +32,6 @@ def library(request):
     }
     return render(request, template_name='library.html', context=context)
 
-def courses(request):
-    staff = "no"
-    if request.user.is_staff or request.user.is_superuser:
-        staff = "yes"
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    
-    context = {
-        "profile": profile,
-        'yourid':profile.id,
-        'folders':Folder.objects.all(),
-        'courses':Course.objects.all(),
-        'cache':Cache.objects.get_or_create(author_profile = profile)[0],
-        'tasks':Task.objects.all(),
-    }
-    return render(request, 'courses/course_list.html', context=context)
-
 def folders():
     folders = []
     for folder in Folder.objects.all():

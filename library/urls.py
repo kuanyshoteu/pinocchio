@@ -10,6 +10,5 @@ urlpatterns = [
     url(r'^api/file_action_url/$', file_action, name = 'file_action_url'),
     url(r'^api/paste_object_url/$', paste, name = 'paste_object_url'),
     url(r'^(?P<folder_id>\d+)/$', folder_details, name='get_absolute_url'),
-    url(r'^courses/$', courses, name='courses'),
     url(r'^$', library, name='main'),
 ]

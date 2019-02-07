@@ -97,17 +97,6 @@
 							{% endfor %}
 							</div>
 						</div>
-							{% for subject in homeworks %}
-								{% if subject.1.0 != 'none' %}
-									{% for material in subject.1 %}
-										{% for lesson in material.2.lessons.all %}
-											<div {% if forloop.counter > 1 %}style="display: none;"{% endif %}>
-												{% include 'library/lesson.html' %}												
-											</div>
-										{% endfor %}
-									{% endfor %}
-								{% endif %}
-							{% endfor %}	
 					</div>
 				</div>
 			</div>

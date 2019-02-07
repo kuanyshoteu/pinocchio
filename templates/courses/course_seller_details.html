@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load tags %}
 <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px; font-size: 16px; color: #000;">
-    <a href="{% url 'library:courses' %}" style="color: #656565;">Курсы</a><i class="icon angle right"></i>{{ course.title }}
+    <a href="{% url 'courses' %}" style="color: #656565;">Курсы</a><i class="icon angle right"></i>{{ course.title }}
 </div>
 <div class="ui segment" style="margin-top: 0; padding: 0 0 30px 0;margin-bottom: 0">
 	{% if course.image %}

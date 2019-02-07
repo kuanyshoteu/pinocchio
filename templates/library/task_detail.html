@@ -1,7 +1,7 @@
 {% load tagss %}
 {% load staticfiles %}
-<div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
-    <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
+<div class="ui grid" style="background-color: #4A4A4A;margin: 0 0 15px 0;border-radius: 3px;color: #fff;">
+    <div class="ten wide column">
         {% if profile.is_trener == False %}
             {% if task|is_correct:profile == True %}
                 <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px; ">{{ forloop.counter }}.</span>
@@ -60,7 +60,7 @@
             </div>
         {% endif %}
 
-        <span style="font-size: 17px;">{{ task.text }}</span>
+        <span style="font-size: 14px;">{{ task.text }}</span>
         {% if task.image %}
         <img style="height: 50px;" src="{{ task.image.url }}">
         {% endif %}
@@ -76,7 +76,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="sixteen wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
+    <div class="six wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             {% if task.is_test %}
                 <span class="task_type_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" type="test" style="display: none;"></span>
@@ -100,6 +100,7 @@
                 <span class="task_type_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" type="input" style="display: none;"></span>
                 {% for ans in task.answer %}
                     <b>Ответ {% if task.answer|length > 1 %}{{ forloop.counter }}{% endif %}:</b>
+                    <br>
                     {% if profile.is_trener %}
                         <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
                     {% else %}
@@ -114,7 +115,7 @@
                 {% endfor %}
             {% endif %}
             {% if profile.is_trener == False and task|is_correct:profile == False %}
-                <a class="ui button mini blue check_task_answer" style="display: inline-block;margin-left: 20px;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' paper='clsw' paper_id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}'>Отправить</a>
+                <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' paper='clsw' paper_id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}'>Отправить</a>
                 <div id='coins_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' class="" style="display: none;">
                     <div class="ui grid" style="width: 100px;">
                         <div class="four wide column" style="padding: 0;line-height: 30px;">
