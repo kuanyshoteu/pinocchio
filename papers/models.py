@@ -48,6 +48,7 @@ class Paper(models.Model):
     subthemes = models.ManyToManyField(Subtheme, related_name='papers')
     done_by = models.ManyToManyField(Profile, related_name='done_papers')
     typee = models.CharField(max_length=250, default = 'problem')
+    
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
