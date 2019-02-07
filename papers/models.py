@@ -50,10 +50,8 @@ class Paper(models.Model):
     typee = models.CharField(max_length=250, default = 'problem')
     def __unicode__(self):
         return self.title
-
     def get_absolute_url(self):
         return reverse("papers:paper_absolute_url", kwargs={"paper_id": self.id})
-
     def api_url_add_group(self):
         return reverse("papers:add-group-toggle")
     def delete_paper_url(self):
