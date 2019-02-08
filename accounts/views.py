@@ -76,7 +76,7 @@ def test_account(request):
         hisprofile = form.save(commit=False)
         hisprofile.save()
         return HttpResponseRedirect(hisprofile.get_absolute_url())
-
+ 
     context = {
         "profile":hisprofile,
         "hisprofile": hisprofile,
