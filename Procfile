@@ -1,1 +1,1 @@
-web: gunicorn tripleA.wsgi --log-file -
+web: gunicorn tripleA.wsgi:app --log-file -
