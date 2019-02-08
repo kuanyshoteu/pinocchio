@@ -1,1 +1,1 @@
-web: gunicorn tripleA.wsgi:app --preload
+web: gunicorn hello:app --preload
