@@ -1,1 +1,2 @@
-web: gunicorn hello:tripleA
+web: gunicorn tripleA.wsgi --log-file -
+web: gunicorn hello:app
