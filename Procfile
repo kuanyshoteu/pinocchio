@@ -1,1 +1,1 @@
-web: gunicorn tripleA:app
+web: gunicorn hello:tripleA
