@@ -21,6 +21,7 @@ product==0.1.1.1
 prompt-toolkit==1.0.15
 protobuf==3.1.0
 psycopg2==2.7.1
+psycopg2-binary==2.7.7
 pydatalog==0.17.1
 Pygments==2.2.0
 pyparsing==2.2.0
