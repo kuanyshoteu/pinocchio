@@ -131,7 +131,7 @@ def account_view(request, user = None):
         'first_squad':first_squad,
         'first_subject':first_subject,
         'time_periods':time_periods,
-        'hisschedule':hisschedule(hissquads, hissubjects),
+        #'hisschedule':hisschedule(hissquads, hissubjects),
     }
     return render(request, "profile.html", context)
 
@@ -169,20 +169,40 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
-def hisschedule(hissquads, hissubjects):
-    schedule = []
+def update_schedule(request):
+    hisprofile = Profile.objects.get(user = request.user)
+    if hisprofile.is_trener:
+        hissubjects = hisprofile.teachers_subjects.all()
+        hissquads = hisprofile.curators_squads.all()
+    else:
+        hissubjects = hisprofile.hissubjects.all()
+        hissquads = hisprofile.squads.all()
+    hisprofile.hisschedule = []
     for timep in TimePeriod.objects.all():
-        row = [timep.start + '-' + timep.end]
+        row = [[[timep.start + '-' + timep.end]]]
         for day in Day.objects.all():
-            row.append([])
-        schedule.append(row)
+            if day.number != 7:
+                de = [['']]
+                row.append(de)
+        hisprofile.hisschedule.append(row)
     for subject in hissubjects:
         for lecture in subject.subject_lectures.all():
             if lecture.squad in hissquads and subject.teacher.first():
-                data = [subject.title,subject.cabinet,subject.teacher.first().first_name,subject.color_back,lecture.squad.title]
-                schedule[lecture.cell.time_period.num - 1][lecture.cell.day.number].append(data)
-    return schedule
+                print('hisschedule')
+                print(hisprofile.hisschedule[lecture.cell.time_period.num - 1][lecture.cell.day.number])
+                data = [[subject.title],[subject.cabinet],[subject.teacher.first().first_name],[subject.color_back],[lecture.squad.title]]
+                print('data')
+                print(data)
+#                hisprofile.hisschedule[lecture.cell.time_period.num - 1][lecture.cell.day.number] = data
+                # ['', '']
+                # [[''], ['']]
+                # [['']]
 
+    hisprofile.save()
+    print(hisprofile.hisschedule)
+    data = {
+    }
+    return JsonResponse(data)
 
 def hisattendance(request):
     if request.GET.get('subject_id') and request.GET.get('class_id'):

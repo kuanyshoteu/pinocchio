@@ -1,4 +1,15 @@
 $(document).ready(function () {
+    $('.update_schedule').click(function (event){
+        $.ajax({
+            url: $(this).attr('url'),
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        });
+    })
     $('.delete_post').click(function (event){
         var id = $(this).attr('id')
         $.ajax({

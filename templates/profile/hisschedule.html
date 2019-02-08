@@ -11,8 +11,11 @@
         <div class="one wide column" style="margin-right: 16px;">
                 <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
-        <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+        <div class="three wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
             Расписание
+        </div>
+        <div class="three wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            <a class="update_schedule" url="{{ profile.update_schedule_url }}"><i class="icon redo"></i></a>
         </div>
     </div>
 </div>
@@ -32,14 +35,14 @@
             {% endfor %}
         </div>
         <div class="ui divider calendar_divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
-        {% for row in hisschedule %}
+        {% for row in hisprofile.hisschedule %}
             <div class="week" id="{{ forloop.counter }}">
             {% for cell in row %}
                 {% if forloop.counter == 1 %}
                 <div class="daysmall daysmall_time">
-                    {{ cell }}
+                    {{ cell.0.0 }}
                 </div>
-                {% else %}
+                {% elif cell.0 != '' %}
                 <div class="daysmall other">
                     {% for lecture in cell %}
                     <div class="in_schedule" style="background-color: {{lecture.3}}">

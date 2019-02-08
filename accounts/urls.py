@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^change_url/$', change_profile, name='change_url'),
     url(r'^test_url/$', test_account, name='test_url'),
     url(r'^api/change_att_url/$', ChangeAttendance, name='change_att_url'),
+    url(r'^api/update_schedule/$', update_schedule, name='update_schedule_url'),
     url(r'^api/present_url/$', att_present, name='present_url'),
     url(r'^api/tell_about_corruption/$', tell_about_corruption, name='tell_about_corruption'),
     url(r'^api/attendance/$', hisattendance, name='hisattendance'),

@@ -44,13 +44,7 @@
 							</div>
 						</div>
 
-						{% for subject in classwork %}
-							{% for material in subject.1 %}
-								{% for lesson in material.2.lessons.all %}
-									{% include 'library/lesson.html' %}
-								{% endfor %}
-							{% endfor %}
-						{% endfor %}
+						
 					</div>
 					{% else %}
 					<div class="ui segment allsquads" style="text-align: center;color: #656565;margin-top: 0;padding-bottom: 50px;">

@@ -54,6 +54,7 @@ class Profile(models.Model):
     middle_skills = ArrayField(models.IntegerField(), default = [])
     hard_skills = ArrayField(models.IntegerField(), default = [])
     pro_skills = ArrayField(models.IntegerField(), default = [])
+    hisschedule = ArrayField(ArrayField(ArrayField(ArrayField(models.TextField()))), default = [])
 
     class Meta:
         ordering = ['-coins', 'first_name']
@@ -81,6 +82,8 @@ class Profile(models.Model):
         return reverse("accounts:tell_about_corruption")
     def change_url(self):
         return reverse("accounts:change_url")
+    def update_schedule_url(self):
+        return reverse("accounts:update_schedule_url")
     # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")
