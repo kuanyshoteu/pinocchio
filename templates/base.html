@@ -32,8 +32,6 @@
         <div class="menu-title">
             <i class="icon bars" id="toggle"></i>
             <a href='{% url "main:home" %}' class="header main">
-                <!-- <a class="ui stackable left-menu-icon menu-btn" id="toggle" style="display: none; cursor: pointer; width: 17px; margin-top: 12px; margin-left: 9px;">
-                <i class="icon bars" style="color: white;"></i> -->
                 <span style="font-size: 26px;">P</span>inocchio
             </a>
         </div>
@@ -80,29 +78,28 @@
 
 <div class='content-container' style="background-color: #f4f4f4;padding-bottom: 100px;">
     <div class="vmenu ui grid " id='vmenu2' stage='passive' style="margin: 0;padding: 0; width: 100%; height: 100%; z-index: 3000; position: fixed; margin-top: 5px;">
-
         <div class="eleven wide column" style="padding: 0;">
             <div class="ui segment" style="height: 100%; padding: 0; background-color: #f4f4f4; z-index: 3000;">
                 {% if user.is_authenticated %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item" href='{{ profile.get_absolute_url }}' style="background-color: #fff;">
+                    <a class="item" href='{{ profile.get_absolute_url }}'>
                         <i class="home icon"></i> Моя страница
                     </a>
-                    <a class="item" href='{% url "library:main" %}' style="background-color: #fff">
+                    <a class="item" href='{% url "library:main" %}'>
                         <i class="file alternate icon"></i>База знаний
                     </a>
-                    <a class="item" href='{% url "squads:list" %}' style="background-color: #fff">
+                    <a class="item" href='{% url "squads:list" %}'>
                         <i class="book icon"></i>Группы
                     </a>
-                    <a class="item" href='/clients/' style="background-color: #fff">
+                    <a class="item" href='/clients/'>
                         <i class="users icon"></i>База клиентов
                     </a>
-                    <a class="item" href='/docs/' style="background-color: #fff">
+                    <a class="item" href='/docs/'>
                         <i class="check square icon"></i>Документооборот
                     </a>
-                    <a class="item" href='/contacts/' style="background-color: #fff">
+                    <a class="item" href='/contacts/'>
                         <i class="address book icon"></i>Контакты
-                    </a>
+                    </a>  
                     <a class="item ui button mini blue" onclick="toggleModal('#corruption.modal')">
                         Заявить о коррупции
                     </a>
@@ -120,7 +117,7 @@
             </div>
         </div>
         <div class="five wide column menu_back" style="padding: 0;">
-        </div>
+            </div>
     </div>
     <div style="padding-top: 10px;min-height: 500px;">
     {% block content %}{% endblock content %}

@@ -550,6 +550,7 @@ template {
 html,
 body {
   height: 100%;
+  overflow-x: hidden !important;
 }
 
 html {
@@ -562,7 +563,7 @@ body {
   overflow-x: hidden;
   min-width: 320px;*/
   width: 100%;
-  background: #f4f4f4;
+  background: black;
   font-family: tahoma, tahoma, verdana, arial, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
@@ -39494,6 +39495,14 @@ body.pushable > .pusher {
 
 #profile .coin-icon {
   width: 40px;
+}
+
+#profile .img {
+  min-height: 200px;
+  width: 100%;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-position: 50% 50%;
 }
 
 @media only screen and (max-width: 767px) {

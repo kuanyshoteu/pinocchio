@@ -133,7 +133,7 @@ def NewTask(request):
         if request.GET.get('tags') != '':
             tags = request.GET.get('tags').split('&')
             del tags[-1]
-            print(tags)
+            # print(tags)
             for t in tags:
                 tag = ProblemTag.objects.get_or_create(title=t)[0]
                 task.tags.add(tag)

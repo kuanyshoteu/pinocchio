@@ -17,8 +17,8 @@
     </div>
 </div>
 <div id="calendar" style="min-height: 200px;min-width: 100%;margin-bottom: 14px;">
-    <div id="week">   
-        <div class="week" id="0">
+    <div id="week">
+        <div class="week-days" id="0">
             <div class="daysmall" style="padding-top: 17px;">
             </div>
             {% for day in days %}
@@ -44,13 +44,9 @@
                         {% for lecture in cell %}
                         <div class="ui segment in_schedule">
                             {{ lecture.0 }}
-                            <br>
                             {{ lecture.1 }}
-                            <br>
                             {{ lecture.2 }}
-                            <br>
                             {{ lecture.3 }}
-                            <br>
                         </div>
                         {% endfor %}
                     </div>
@@ -59,4 +55,4 @@
         </div>
         {% endfor %}
     </div>
-</div>   
+</div>  

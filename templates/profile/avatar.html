@@ -10,9 +10,11 @@
     <div class="image" style="background-color: #fff">
         <div style="height: 200px;">
             {% if hisprofile.image %}
-            <img src="{{ hisprofile.image.url }}" style="max-height: 200px;width: 100%;">
+            <div class="img" style="background-image: url({{ hisprofile.image.url }});"></div>
+            <!-- <img src="{{ hisprofile.image.url }}" style="max-height: 200px;width: 100%;"> -->
             {% else %}
-            <img src="{% static 'images/nophoto.png' %}" style="max-height: 200px;width: 100%;">        
+            <div class="img" style="background-image: url({% static 'images/nophoto.png' %});"></div>
+            <!-- <img src="{% static 'images/nophoto.png' %}" style="max-height: 200px;width: 100%;">         -->
             {% endif %}
         </div>
         <div style="padding: 0 14px;">

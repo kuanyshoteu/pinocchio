@@ -102,13 +102,16 @@ WSGI_APPLICATION = 'tripleA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pinodb2',
-        'USER': 'ka4andev',
-        'PASSWORD': 'qwertyuiop',
+        'NAME': 'pinodb',
+        'USER': 'alisher',
+        'PASSWORD': 'superuser',
         'HOST': 'localhost',
         'PORT': '',
     }
 }
+# python manage.py createsuperuser 
+# name: ka4anbek
+# password: superuser
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

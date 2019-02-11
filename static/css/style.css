@@ -378,6 +378,14 @@ a{
 .week {
  background: #4A4A4A;
 }
+.week-days {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  background: #4A4A4A;
+}
 
 .day {
   display: inline-block;
