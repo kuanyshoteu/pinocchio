@@ -13,6 +13,14 @@ class ProfileModelAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileModelAdmin)
 
+class ProfileSchedule(admin.ModelAdmin):
+    list_display = ["x", "y"]
+    list_display_links = ["x", "y"]
+    class Meta:
+        model = ProfileScheduleCell
+
+admin.site.register(ProfileScheduleCell, ProfileSchedule)
+
 class ZaiavkaModelAdmin(admin.ModelAdmin):
     list_display = ["name", "id", "phone"]
     list_display_links = ["name"]

@@ -1,4 +1,56 @@
 $(document).ready(function () {
+    $('.add_student').on('click', function(e) {
+        console.log('d')
+        var name = $('.new_student_name').val()
+        var phone = $('.new_student_phone').val()
+        var mail = $('.new_student_mail').val()
+
+        $.ajax({
+            url: $('.register_to_school_url').attr('url'),
+            data: {
+                'name':name,
+                'phone':phone,
+                'mail':mail,
+                'status':'student',
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.new_student_name').attr('class', '')
+                $('.new_student_phone').attr('class', '')
+                $('.new_student_mail').attr('class', '')
+                password_place = document.getElementById('password_place')
+                password = document.createElement('span')
+                password.innerHTML = data.password
+                password_place.appendChild(password)
+                $('#password_place').attr('id', '')
+
+                tr = document.createElement('tr')
+                td = document.createElement('td')
+                textarea = document.createElement('textarea')
+                textarea.setAttribute('class', 'new_student_name')
+                td.appendChild(textarea)
+                tr.appendChild(td)
+                // 
+                td2 = document.createElement('td')
+                textarea = document.createElement('textarea')
+                textarea.setAttribute('class', 'new_student_phone')
+                td2.appendChild(textarea)
+                tr.appendChild(td2)
+                // 
+                td3 = document.createElement('td')
+                textarea = document.createElement('textarea')
+                textarea.setAttribute('class', 'new_student_mail')
+                td3.appendChild(textarea)    
+                tr.appendChild(td3)
+                // 
+                td4 = document.createElement('td')
+                td4.setAttribute('id', 'password_place')
+                tr.appendChild(td4)
+                tbody = document.getElementById('create_student_rows')
+                tbody.appendChild(tr)
+            }
+        });
+    })
     $('.update_schedule').click(function (event){
         $.ajax({
             url: $(this).attr('url'),

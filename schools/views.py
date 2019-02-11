@@ -56,6 +56,7 @@ def school_rating(request):
         "instance": profile.school,
         "squads":Squad.objects.all(),
         "subjects":Subject.objects.all(),
+        "all_students":Profile.objects.filter(is_trener = False),
     }
     return render(request, "school/school_rating.html", context)
 
@@ -70,7 +71,8 @@ def manager_page(request):
         "squads":Squad.objects.all(),
         "subjects":Subject.objects.all(),
         "all_teachers":Profile.objects.filter(is_trener = True),
-        "all_squads":Squad.objects.all(),        
+        "all_squads":Squad.objects.all(),
+        'manager':'manager',    
     }
     return render(request, "school/manager_page.html", context)
 
@@ -145,15 +147,25 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
+import string
+import random
 
+def register_to_school(request):
+    if request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail') and request.GET.get('status'):
+        new_id = User.objects.order_by("id").last().id + 1
+        symbols = string.ascii_letters + string.digits
+        password = ''
+        for i in range(0, 9):
+            password += random.choice(symbols)
+        user = User.objects.create(username='user' + str(new_id), password=password)
+        user.save()
+        profile = Profile.objects.get(user = user)
+        profile.first_name = request.GET.get('name')
+        profile.phone = request.GET.get('phone')
+        profile.mail = request.GET.get('mail')
+        profile.save()
 
-def change_curator(request):
-    if request.GET.get('teacher_id') and request.GET.get('subject_id'):
-        school = School.objects.get(id = int(request.GET.get('subject_id')) )
-        curator = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
-        for oldteacher in school.curator.all():
-            school.curator.remove(oldteacher)
-        school.curator.add(curator)
     data = {
+        'password':password
     }
     return JsonResponse(data)

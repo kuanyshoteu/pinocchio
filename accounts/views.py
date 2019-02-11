@@ -177,29 +177,31 @@ def update_schedule(request):
     else:
         hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
-    hisprofile.hisschedule = []
+
     for timep in TimePeriod.objects.all():
-        row = [[[timep.start + '-' + timep.end]]]
         for day in Day.objects.all():
             if day.number != 7:
-                de = [['']]
-                row.append(de)
-        hisprofile.hisschedule.append(row)
+                cell = hisprofile.hisschedule.get_or_create(x=day.number,y=timep.num)[0]
+                cell.subjects = []
+                cell.squads = []
+                cell.colors = []
+                cell.teachers = []
+                cell.cabinets = []
+                cell.indexes = []
+                cell.save()
+
     for subject in hissubjects:
         for lecture in subject.subject_lectures.all():
             if lecture.squad in hissquads and subject.teacher.first():
-                print('hisschedule')
-                print(hisprofile.hisschedule[lecture.cell.time_period.num - 1][lecture.cell.day.number])
-                data = [[subject.title],[subject.cabinet],[subject.teacher.first().first_name],[subject.color_back],[lecture.squad.title]]
-                print('data')
-                print(data)
-#                hisprofile.hisschedule[lecture.cell.time_period.num - 1][lecture.cell.day.number] = data
-                # ['', '']
-                # [[''], ['']]
-                # [['']]
+                cell = hisprofile.hisschedule.get(x = lecture.cell.day.number,y=lecture.cell.time_period.num)
+                cell.subjects.append(subject.title)
+                cell.squads.append(lecture.squad.id)
+                cell.colors.append(subject.color_back)
+                cell.teachers.append(subject.teacher.first().first_name)
+                cell.cabinets.append(subject.cabinet)
+                cell.indexes.append(len(cell.subjects) - 1)
+                cell.save()
 
-    hisprofile.save()
-    print(hisprofile.hisschedule)
     data = {
     }
     return JsonResponse(data)
@@ -294,62 +296,6 @@ class DeleteFollowAPIToggle(APIView):
             "like_num":0,
         }
         return Response(data)
-
-def ChangePage(request):
-    profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('page'):
-        page = request.GET.get('page')
-        if page == 'cabinet':
-            profile.page = '0' + profile.page[1:]
-        if page == 'homework':
-            profile.page = '2' + profile.page[1:]
-        if page == 'profile_info':
-            profile.page = '0profile_info'
-        if page == 'profile_lesson':
-            profile.page = '0profile_lesson'
-        if page == 'profile_attendance':
-            profile.page = '0profile_attendance'
-        if page == 'profile_zaiavki':
-            profile.page = '0profile_zaiavki'
-        if page == 'profile_squads':
-            profile.page = '0profile_squads'
-
-        profile.save()
-    data = {
-        "like_num":0,
-    }
-    return JsonResponse(data)
-
-
-def register_view(request):
-    next = request.GET.get('next')
-    title = "Register"
-    form = UserRegisterForm(request.POST or None)
-    if form.is_valid():
-        user = form.save(commit=False)
-        password = form.cleaned_data.get('password')
-        password2 = form.cleaned_data.get('password2')
-        user.set_password(password)
-        user.save()
-        new_user = authenticate(username=user.username, password=password)
-        login(request, new_user)
-
-        profile = Profile.objects.get(user = new_user)
-        profile.rating = 0
-
-        for i in range(0, 28):
-            profile.schedule.append('free')
-        profile.save()
-        if next:
-            return redirect(next)
-        return redirect("/")
-
-    context = {
-        "form": form,
-        "title": title,
-        "timetable": timetable,        
-    }
-    return render(request, "form.html", context)
 
 def logout_view(request):
     logout(request)

@@ -1,68 +1,61 @@
 {% load crispy_forms_tags %}
-
-    {% if paper.author_profile == profile or profile.user.is_superuser %}
-    <div class="ui segment" style="margin-bottom: 0">
-        <h3 class="text-center" >
-            <span class="paper_title_l{{ lesson.id }}p{{ paper.id }}">{{ paper.title }}</span>
-            <div class="paper_rename_div_l{{ lesson.id }}p{{ paper.id }}" style="display: none;">
-                <form class="ui form" style="margin-bottom: 0">
-                    <textarea style="width: 200px;margin-bottom: 0" class="paper_new_title_l{{ lesson.id }}p{{ paper.id }}">{{ paper.title }}</textarea>
-                    <a class="rename_paper ui button mini" url={{ paper.rename_paper_url }} paper_id="{{ paper.id }}" id="l{{ lesson.id }}p{{ paper.id }}"">Сохранить</a>
-                </form>               
-            </div>
-            <a class="delete_paper" url="{{ paper.delete_paper_url }}" id="{{ paper.id }}" style="float: right;"><i class="icon trash"></i></a>
-            <a class="open_rename_paper" id="l{{ lesson.id }}p{{ paper.id }}" style="float: right; margin-right: 25px;"><i class="icon pencil"></i></a>
-        </h3>
+{% if paper.author_profile == profile or profile.user.is_superuser %}
+{% include 'library/add_paper.html' %}
+<div class="ui segment" style="display: inline-block;padding: 5px 14px;">
+    <div style="display: inline-block;" class="paper_title_l{{ lesson.id }}p{{ paper.id }}">{{ paper.title }}</div>
+    <div class="paper_rename_div_l{{ lesson.id }}p{{ paper.id }}" style="display: none;">
+        <form class="ui form" style="margin-bottom: 0">
+            <textarea style="width: 200px;margin-bottom: 0" class="paper_new_title_l{{ lesson.id }}p{{ paper.id }}">{{ paper.title }}</textarea>
+            <a class="rename_paper ui button mini" url={{ paper.rename_paper_url }} paper_id="{{ paper.id }}" id="l{{ lesson.id }}p{{ paper.id }}"">Сохранить</a>
+        </form>               
     </div>
-    {% endif %}
-    <div class="ui segment" style="padding: 20px;margin-bottom: 0;margin-top: 0">
-        {% for subtheme in paper.subthemes.all %}
-        	    {% if paper.author_profile == profile or profile.user.is_superuser %}
-                    <div class="subtheme_rewrite_div_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="display: none;">
-                        <form class="ui form" style="margin-bottom: 0">
-                            <textarea style="width: 100%;height: 150px;" class="subtheme_new_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.content}}</textarea>
-                            <br><br>
-                            <a class="rewrite_subtheme ui button mini blue" url={{ subtheme.rewrite_subtheme_url }} subtheme_id="{{ subtheme.id }}" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Сохранить</a>
-                        </form> 
-                        <br><br>              
-                    </div>
-                    {% if subtheme.content != '' %}
-                        <a class="open_rewrite_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="font-size: 12px">
-                            Изменить текст
-                        </a>
-                    {% endif %}
-                {% endif %}
-                {% if subtheme.content != '' %}
-                <div class="subtheme_content subtheme_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
-                    {{ subtheme.get_markdown }}
+    <a class="delete_paper" url="{{ paper.delete_paper_url }}" id="{{ paper.id }}"><i class="icon trash"></i></a>
+    <a class="open_rename_paper" id="l{{ lesson.id }}p{{ paper.id }}"><i class="icon pencil"></i></a>
+</div>
+{% endif %}
+<div style="padding: 30px 20px;margin-bottom: 0;margin-top: 0">
+    {% for subtheme in paper.subthemes.all %}
+    	    {% if paper.author_profile == profile or profile.user.is_superuser %}
+                <div class="subtheme_rewrite_div_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="display: none;">
+                    <form class="ui form" style="margin-bottom: 0">
+                        <textarea style="width: 100%;height: 150px;" class="subtheme_new_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">{{ subtheme.content}}</textarea>
+                        <a class="rewrite_subtheme ui button mini blue" url={{ subtheme.rewrite_subtheme_url }} subtheme_id="{{ subtheme.id }}" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">Сохранить</a>
+                    </form> 
                 </div>
+                {% if subtheme.content != '' %}
+                    <a class="open_rewrite_subtheme" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" style="font-size: 12px">
+                        Изменить текст
+                    </a>
                 {% endif %}
-            {% if subtheme.file %}
-            <b>Дополнительный файл:</b>
-            <div class="ui segment">
-                <a href="{{ subtheme.file.url }}">Скачать {{ subtheme.file }}</a>
+            {% endif %}
+            {% if subtheme.content != '' %}
+            <div class="subtheme_content subtheme_content_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+                {{ subtheme.get_markdown }}
             </div>
             {% endif %}
-        	<br><br>
-        	<div class="ui grid">
-                {% if subtheme.youtube_video_link != '' %}
-        		<div class="sixteen wide column" style="text-align: center;">
-        			<iframe style="width: 640px; height: 360px;" src="{{ subtheme.youtube_video_link }}" allowfullscreen></iframe>
-        		</div>
-        		{% endif %}
-                {% if subtheme.video %}
-                <div style="text-align: center;width: 100%">
-                    <video style="width: 640px; height: 360px; border: 1px solid grey; margin-bottom: 30px;" controls>
-                      <source src="{{ subtheme.video.url }}" type="video/mp4">
-                      Your browser does not support the video tag.
-                    </video>
-                </div>
-                {% endif %}
-        	</div>
-            {% include 'library/problems.html' %}
-        {% endfor %} 
-    </div>
+        {% if subtheme.file %}
+        <b>Дополнительный файл:</b>
+        <div class="ui segment">
+            <a href="{{ subtheme.file.url }}">Скачать {{ subtheme.file }}</a>
+        </div>
+        {% endif %}
+        {% if subtheme.youtube_video_link != '' or subtheme.video %}
+        <div style="text-align: center;margin-bottom: 45px;">
+            {% if subtheme.youtube_video_link != '' %}
+    			<iframe style="width: 92%; height: 360px;" src="{{ subtheme.youtube_video_link }}" allowfullscreen></iframe>
+    		{% endif %}
+            {% if subtheme.video %}
+                <video style="width: 92%; height: 360px; border: 1px solid grey;" controls>
+                  <source src="{{ subtheme.video.url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+            {% endif %}
+        </div>
+        {% endif %}
+        {% include 'library/problems.html' %}
+    {% endfor %} 
+{% if profile.is_trener %}
+    {% include 'library/add_subtheme.html' %}
+{% endif %}
+</div>
 
-    {% if profile.is_trener %}
-        {% include 'library/add_subtheme.html' %}
-    {% endif %}

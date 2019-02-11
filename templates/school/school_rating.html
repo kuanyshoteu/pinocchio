@@ -30,14 +30,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for teacher in instance|top_teachers %}
+                            {% for student in all_students %}
                                 <tr style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
                                     <td style="text-align: left;">
                                         {{ forloop.counter }}. 
-                                        {{ teacher.first_name }}
+                                        {{ student.first_name }}
                                     </td>
-                                    <td>{{ teacher.coins }}</td>
-                                    <td>{{ teacher.coins }}</td>
+                                    <td>{{ student.coins }}</td>
+                                    <td>{{ student.coins }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

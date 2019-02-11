@@ -85,5 +85,15 @@ def top_students(school):
 def top_teachers(school):
     return school.students.filter(is_trener=True)
 
+@register.filter
+def module_six(number):
+    return number % 6
 
+@register.filter
+def find_time_by_num(number):
+    tp = TimePeriod.objects.get(num = number)
+    return tp.start + '-' + tp.end
 
+@register.filter
+def find_by_index(array, index):
+    return array[index]

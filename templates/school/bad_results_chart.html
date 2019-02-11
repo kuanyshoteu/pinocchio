@@ -24,6 +24,11 @@
     <span style="color: #222">Не сдали экзамен</span>
     <br>
     <canvas style="padding-right: 25px;" id="canvas2" height="70" width="500"></canvas>
+    <canvas style="display: none;" id="canvas_money" height="70" width="500"></canvas>
+    <canvas style="display: none;" id="canvas_cg" height="70" width="500"></canvas>
+    <canvas style="display: none;" id="canvas_cb" height="70" width="500"></canvas>
+    
+
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript">
@@ -156,6 +161,7 @@ window.onload = function() {
     window.myLine = new Chart(ctx).Line(lineChartData2, {
         responsive: true
     });
+    {% if manager == 'manager' %}
     var ctx = document.getElementById("canvas_money").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
         responsive: true
@@ -168,6 +174,6 @@ window.onload = function() {
     window.myLine = new Chart(ctx).Line(lineChartData_cb, {
         responsive: true
     });
-
+    {% endif %}
 }
 </script>

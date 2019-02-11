@@ -1,6 +1,6 @@
 {% load tagss %}
 {% load staticfiles %}
-<div class="ui grid" style="background-color: #4A4A4A;margin: 0 0 15px 0;border-radius: 3px;color: #fff;">
+<div class="ui grid" style="margin: 0 0 20px 0; border-radius: 3px;border: 1px solid #d1d5da">
     <div class="ten wide column">
         {% if profile.is_trener == False %}
             {% if task|is_correct:profile == True %}
@@ -15,7 +15,7 @@
             {% endif %}
         {% endif %}
         {% if profile.is_trener %}
-            <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;color: lightblue">Изменить</a>
+            <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
             <a class="add_problem" id="l{{ lesson.id }}p{{ paper.id }}s{{subtheme.id}}" subtheme_id='{{ subtheme.id }}' task_id='{{ task.id }}' url="{{ subtheme.add_task_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Убрать</a>
             <br>
             <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
@@ -45,11 +45,10 @@
                                 <br>
                             {% endfor %}
                         {% else %}
-                            <b>Ответ: </b>
-                            <textarea type="text" class='change_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 200px; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
+                            <b>Ответ:</b>
                             <br>
+                            <textarea type="text" class='change_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
                         {% endif %}
-                        <br>
                         <b>Возможное колличество баллов: </b>
                         <br>
                         <textarea type="text" class='change_task_costl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style=" height: 40px; padding: 5px;">{{ task.cost }}</textarea>

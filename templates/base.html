@@ -1,5 +1,4 @@
 {% load staticfiles %}
-<!--DOCTYPE html -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -17,10 +16,10 @@
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/slider.js" %}'></script>
+
     {% block head_extra %} {% endblock head_extra %}
 
 </head>
-
 <body>
 {% include "modals/request_group.html" %}
 {% include "modals/login.html" %}
@@ -29,19 +28,14 @@
 {% include "modals/confirm_delete.html" %}
 
 <div class="ui stackable menu" id="main-menu">
-    <div class="ui container">    
-        <div class="contenttt" id='contenttt'>
-            <a class="ui stackable left-menu-icon menu-btn" id="toggle" style="display: none; cursor: pointer; width: 17px; margin-top: 12px; margin-left: 9px;">
-                <i class="icon bars" style="color: white;"></i>
+    <div class="ui container">
+        <div class="menu-title">
+            <i class="icon bars" id="toggle"></i>
+            <a href='{% url "main:home" %}' class="header main">
+                <img src="{% static 'images/logo4.png' %}" style="width: 118px; height: 25px;position: absolute;">
             </a>
-            <div style="width: 187.62px; padding-right: 0; margin-left: 55px;">
-                <img src="{% static 'images/logo3.png' %}" style="width: 121px; height: 30px;position: absolute;margin-top: 5px;">
-                <a href='{% url "main:home" %}' style="float: left; padding: 12px 0 6px 0; font-size: 21px;" class="header main stackable">
-                    Pinocch o
-                </a>
-            </div>
         </div>
-        <div class="full-w left-main-menu">
+                <div class="full-w left-main-menu">
             {% if request.user.is_authenticated %}
             <div class="item float_right" style="margin-right: 50px;">
                 <div class="">
@@ -58,6 +52,7 @@
             </div>
             {% endif %}
         </div>
+
     </div>
 </div>
 <div class="menu profile_links">
@@ -73,28 +68,30 @@
 
 <div class='content-container' style="background-color: #f4f4f4;padding-bottom: 100px;">
     <div class="vmenu ui grid " id='vmenu2' stage='passive' style="margin: 0;padding: 0; width: 100%; height: 100%; z-index: 3000; position: fixed; margin-top: 5px;">
-
         <div class="eleven wide column" style="padding: 0;">
             <div class="ui segment" style="height: 100%; padding: 0; background-color: #f4f4f4; z-index: 3000;">
                 {% if user.is_authenticated %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item" href='{{ profile.get_absolute_url }}' style="background-color: #fff;">
+                    <a class="item" href='{{ profile.get_absolute_url }}'>
                         <i class="home icon"></i> Моя страница
                     </a>
-                    <a class="item" href='{% url "library:main" %}' style="background-color: #fff">
+                    <a class="item" href='{% url "library:main" %}'>
                         <i class="file alternate icon"></i>База знаний
                     </a>
-                    <a class="item" href='{% url "squads:list" %}' style="background-color: #fff">
+                    <a class="item" href='{% url "squads:list" %}'>
                         <i class="book icon"></i>Группы
                     </a>
-                    <a class="item" href='/clients/' style="background-color: #fff">
+                    <a class="item" href='/clients/'>
                         <i class="users icon"></i>База клиентов
                     </a>
-                    <a class="item" href='/docs/' style="background-color: #fff">
+                    <a class="item" href='/docs/'>
                         <i class="check square icon"></i>Документооборот
                     </a>
-                    <a class="item" href='/contacts/' style="background-color: #fff">
+                    <a class="item" href='/contacts/'>
                         <i class="address book icon"></i>Контакты
+                    </a>  
+                    <a class="item ui button mini blue" onclick="toggleModal('#corruption.modal')">
+                        Заявить о коррупции
                     </a>
                 </div>
                 {% else %}
@@ -110,9 +107,9 @@
             </div>
         </div>
         <div class="five wide column menu_back" style="padding: 0;">
-        </div>
+            </div>
     </div>
-    <div style="padding-top: 10px;min-height: 100%;">
+    <div style="padding-top: 10px;min-height: 500px;">
     {% block content %}{% endblock content %}
     </div>
 </div>
@@ -121,13 +118,12 @@
 
 <script src='{% static "js/squad.js" %}'></script>
 <script src='{% static "js/library.js" %}'></script>
-    
-<script src='{% static "js/libs/goog.js" %}'></script>
+<!-- <script src='{% static "js/libs/goog.js" %}'></script> -->
 <script src='{% static "js/plugins.js" %}'></script>
-<script src='{% static "js/Parallax.class.js" %}'></script>
-<script src='{% static "js/ScrollParallax.class.js" %}'></script>
-<script src='{% static "js/Slide.class.js" %}'></script>
-<script src='{% static "js/SlideIntro.class.js" %}'></script> 
+<!-- <script src='{% static "js/Parallax.class.js" %}'></script> -->
+<!-- <script src='{% static "js/ScrollParallax.class.js" %}'></script> -->
+<!-- <script src='{% static "js/Slide.class.js" %}'></script> -->
+<!-- <script src='{% static "js/SlideIntro.class.js" %}'></script>  -->
 <script src='{% static "js/script.js" %}'></script>
 
 </body>

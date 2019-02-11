@@ -4,8 +4,7 @@ a{
 }
 .subtheme_content{
   font-size: 14px;
-  margin-top: 20px;
-  padding: 30px;
+  margin-bottom: 25px;
 }
 .small_avatar{
   width: 28px;
@@ -459,6 +458,14 @@ a{
 .week {
  background: #4A4A4A;
  min-height: 50px;
+}
+.week-days {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  background: #4A4A4A;
 }
 
 .day {

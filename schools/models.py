@@ -58,6 +58,6 @@ class School(models.Model):
         return reverse("schools:list")
     def get_markdown(self):
         return mark_safe(markdown(self.content))
-    def change_curator_url(self):
-        return reverse("schools:change_curator_url")       
+    def register_to_school(self):
+        return reverse("schools:register_to_school")       
 

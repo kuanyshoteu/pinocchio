@@ -113,14 +113,16 @@
                             Ученики <span style="color: #939393;">{{ instance.students_number }}</span>
                             <div style="margin-top: 0;" class="ui grid">
                             {% for student in instance.students.all %}
-                                <div class="five wide column" style="text-align: center;">
+                                <div class="sixteen wide column" style="padding-bottom: 0;text-align: center;">
                                     {% if student.image %}
                                         <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
                                     {% else %}
                                         <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
                                     {% endif %}
                                     <br>
-                                    {{ student.first_name }}
+                                    <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                        {{ student.first_name }}
+                                    </div>
                                 </div>
                             {% endfor %}
                             </div>

@@ -276,6 +276,7 @@ def subject_schedule(request, id=None):
                 for lecture in cell.lectures.filter(subject = subject):
                     if lecture.squad in subject.squads.all():
                         print(timep.start, cell.id,lecture.squad.title)
+                        print("class#####")
                         lectures.append(lecture.squad.title)
                 line.append([cell.id, lectures])
         res.append([timep.start + '-' + timep.end, line])

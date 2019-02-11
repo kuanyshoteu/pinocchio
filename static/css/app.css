@@ -550,6 +550,7 @@ template {
 html,
 body {
   height: 100%;
+  overflow-x: hidden !important;
 }
 
 html {
@@ -558,10 +559,11 @@ html {
 
 body {
   margin: 0px;
-  padding: 0px;
+  padding: 0px;/*
   overflow-x: hidden;
-  min-width: 320px;
-  background: #FFFFFF;
+  min-width: 320px;*/
+  width: 100%;
+  background: black;
   font-family: tahoma, tahoma, verdana, arial, sans-serif;
   font-size: 14px;
   line-height: 1.4285em;
@@ -4993,8 +4995,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
   .ui.container {
     width: auto !important;
-    margin-left: 1em !important;
-    margin-right: 1em !important;
+/*    margin-left: 1em !important;
+    margin-right: 1em !important;*/
   }
 
   .ui.grid.container {
@@ -5015,8 +5017,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.container {
     width: 723px;
-    margin-left: auto !important;
-    margin-right: auto !important;
+/*    margin-left: auto !important;
+    margin-right: auto !important;*/
   }
 
   .ui.grid.container {
@@ -39488,7 +39490,45 @@ body.pushable > .pusher {
   padding: 14px 0;
 }
 
+#profile .coin-icon {
+  width: 40px;
+}
+
+#profile .img {
+  min-height: 200px;
+  width: 100%;
+  -webkit-background-size: cover;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+@media only screen and (max-width: 767px) {
+  #profile #detailed_info .ui.grid {
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    -o-flex-direction: column;
+    flex-direction: column;
+  }  
+  #profile #detailed_info .ui.grid .wide.column {
+    width: 100% !important;
+  }
+  #profile .coin-icon {
+    width: 25px;
+  }
+  #profile .description .ui.grid .wide.column.de {
+    width: 50% !important;
+  }
+  #profile .grid.info > .wide.column {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
 #main-menu {
+  position: fixed;
+  z-index: 2000;
+  width: 100%;
   background-color: #5181b8;
   border: none;
   border-radius: 0;
@@ -39498,6 +39538,33 @@ body.pushable > .pusher {
   position: fixed; 
   z-index: 2000;
   width: 100%;
+}
+
+#main-menu .container {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 40px;
+}
+
+#main-menu .item {
+  padding: 7px;
+}
+
+#main-menu .menu-title {
+  padding: 10px 0 6px 0;
+}
+#main-menu .menu-title a {
+  font-size: 19px;
+}
+
+@media only screen and (min-width: 767px) {
+  #main-menu .menu-title .bars#toggle {
+    display: none;
+  }
 }
 
 #main-menu .main {
@@ -39515,6 +39582,14 @@ body.pushable > .pusher {
 #main-menu .main a {
   color: #fff;
   font-weight: 500;
+}
+
+#main-menu .item img {
+  width: 30px;
+}
+#main-menu .item .image {
+  -webkit-background-size: cover;
+  background-size: cover;
 }
 
 #main-menu .header {

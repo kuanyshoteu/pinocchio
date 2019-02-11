@@ -1,4 +1,5 @@
 {% load tttags %}
+{% load ttttags %}
 {% load staticfiles %}
 <style type="text/css">
     .icon.angle:before{
@@ -19,7 +20,7 @@
         </div>
     </div>
 </div> 
-<div id="calendar" style="min-height: 200px;min-width: 100%;margin-bottom: 14px;">
+<div id="calendar" style="min-height: 200px;min-width: 100%;margin-bottom: 14px;background-color:#4A4A4A">
     <div id="week">   
         <div class="week" id="0">
             <div class="daysmall daysmall_time" style="padding-top: 17px;">
@@ -35,28 +36,20 @@
             {% endfor %}
         </div>
         <div class="ui divider calendar_divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
-        {% for row in hisprofile.hisschedule %}
-            <div class="week" id="{{ forloop.counter }}">
-            {% for cell in row %}
-                {% if forloop.counter == 1 %}
-                <div class="daysmall daysmall_time">
-                    {{ cell.0.0 }}
+        {% for cell in hisprofile.hisschedule.all %}
+            {% if forloop.counter|module_six == 1 %}
+            <div class="daysmall daysmall_time">
+                {{ cell.y|find_time_by_num }}
+            </div>
+            {% endif %}
+            <div class="daysmall other">
+                {% for index in cell.indexes %}
+                <div class="in_schedule" style=" background-color: {{cell.colors|find_by_index:index}}">
+                    {{ cell.subjects|find_by_index:index }}
+                    {{ cell.teachers|find_by_index:index }}
+                    {{ cell.cabinets|find_by_index:index }}
                 </div>
-                {% elif cell.0 != '' %}
-                <div class="daysmall other">
-                    {% for lecture in cell %}
-                    <div class="in_schedule" style="background-color: {{lecture.3}}">
-                        {{ lecture.0 }}
-                        <div class="">
-                            {{ lecture.1 }}
-                            <br>
-                            {{ lecture.2 }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
             </div>
         {% endfor %}
     </div>

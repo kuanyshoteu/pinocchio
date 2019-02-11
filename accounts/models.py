@@ -26,6 +26,19 @@ def upload_location(instance, filename):
         new_id = ProfileModel.objects.order_by("id").last().id + 1
     return "%s" %(filename)
 
+class ProfileScheduleCell(models.Model):
+    x = models.IntegerField(default=0)
+    y = models.IntegerField(default=0)
+    indexes = ArrayField(models.IntegerField(), default = [])
+    subjects = ArrayField(models.TextField(), default = [])
+    squads = ArrayField(models.IntegerField(), default = [])
+    colors = ArrayField(models.TextField(), default = [])
+    teachers = ArrayField(models.TextField(), default = [])
+    cabinets = ArrayField(models.TextField(), default = [])
+    
+    class Meta:
+        ordering = ['y', 'x']
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     coins = models.IntegerField(default=0)
@@ -54,7 +67,7 @@ class Profile(models.Model):
     middle_skills = ArrayField(models.IntegerField(), default = [])
     hard_skills = ArrayField(models.IntegerField(), default = [])
     pro_skills = ArrayField(models.IntegerField(), default = [])
-    hisschedule = ArrayField(ArrayField(ArrayField(ArrayField(models.TextField()))), default = [])
+    hisschedule = models.ManyToManyField(ProfileScheduleCell, related_name='owner')
 
     class Meta:
         ordering = ['-coins', 'first_name']
