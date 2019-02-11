@@ -64,7 +64,8 @@ def manager_page(request):
     profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
-    
+    for profile in Profile.objects.all():
+        print(profile.first_name, profile.user.password)
     context = {
         "profile":profile,
         "instance": profile.school,
@@ -157,8 +158,10 @@ def register_to_school(request):
         password = ''
         for i in range(0, 9):
             password += random.choice(symbols)
-        user = User.objects.create(username='user' + str(new_id), password=password)
+        user = User.objects.create(username='user' + str(new_id))
+        user.set_password(password)
         user.save()
+        print(user.password)
         profile = Profile.objects.get(user = user)
         profile.first_name = request.GET.get('name')
         profile.phone = request.GET.get('phone')
