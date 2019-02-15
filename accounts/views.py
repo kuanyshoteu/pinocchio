@@ -243,7 +243,7 @@ def hisattendance(request):
         }
         return JsonResponse(data)
 
-def more_attendance():
+def more_attendance(): 
     if request.GET.get('subject_id') and request.GET.get('class_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         squad = Squad.objects.get(id = int(request.GET.get('class_id')))
