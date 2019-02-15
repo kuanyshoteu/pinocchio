@@ -81,6 +81,8 @@ class Profile(models.Model):
     # APIs
     def hisattendance(self):
         return reverse("accounts:hisattendance")
+    def more_attendance(self):
+        return reverse("accounts:more_attendance")
     def hislessons(self):
         return reverse("main:hislessons")        
     def get_api_change_url(self):

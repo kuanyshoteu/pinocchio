@@ -25,10 +25,16 @@ def lesson_details(request, lesson_id = None):
         raise Http404
 
     lesson = Lesson.objects.get(id=lesson_id)
-    for paper in lesson.papers.all():
-        if not profile in paper.done_by.all():
-            return redirect(paper.get_absolute_url())
-    return redirect(lesson.papers.last().get_absolute_url())
+    if len(lesson.papers.all()) == 0:
+        context = {
+            "profile": profile,
+            'lesson':lesson,
+        }
+        return render(request, template_name='library/lesson_details.html', context=context)
+    else:
+        for paper in lesson.papers.all():
+            if not profile in paper.done_by.all():
+                return redirect(paper.get_absolute_url())
 
 def estimate_lesson_page(request, lesson_id = None):
     profile = ''
@@ -96,7 +102,7 @@ def paper_details(request, paper_id = None):
         'subtheme_video_form':subtheme_video_form,
         'tasks':Task.objects.all(),
     }
-    return render(request, template_name='library/lesson_details.html', context=context)
+    return render(request, "library/lesson_details.html", context)
 
 
 from rest_framework.views import APIView

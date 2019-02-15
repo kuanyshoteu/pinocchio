@@ -1,6 +1,5 @@
 {% load crispy_forms_tags %}
 {% if paper.author_profile == profile or profile.user.is_superuser %}
-{% include 'library/add_paper.html' %}
 <div class="ui segment" style="display: inline-block;padding: 5px 14px;">
     <div style="display: inline-block;" class="paper_title_l{{ lesson.id }}p{{ paper.id }}">{{ paper.title }}</div>
     <div class="paper_rename_div_l{{ lesson.id }}p{{ paper.id }}" style="display: none;">

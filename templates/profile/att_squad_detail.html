@@ -7,7 +7,7 @@
 		    </div>
 		    <br>
 			{% for student in squad.students.all %}
-				<div style="padding: 10px;text-align: left;color: white;height: 40px;line-height: 25px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
+				<div style="padding: 10px;text-align: left;color: white;height: 40px;line-height: 25px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
 			        {{ student.first_name }}
 			    </div>
 			    <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>

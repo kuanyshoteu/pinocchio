@@ -27,17 +27,19 @@
                 </div>
             </a>
             {% endfor %}
-            <a href="{{ lesson.estimate_lesson_page }}" class="{% if hisestimation or hisestimation == 0 %}switch_btn_active{% endif %} switch_btn" 
+            <a href="{{ lesson.estimate_lesson_page }}" class="{% if not paper or hisestimation or hisestimation == 0 %}switch_btn_active{% endif %} switch_btn" 
             style="width: calc(100%/({{ lesson.papers.all|length }} + 1));">
                 <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: inline-block;width: 90%;">
                     Оцените урок
                 </div>
             </a>
         </div>
-    {% if hisestimation or hisestimation == 0 %}
-        {% include 'library/estimate_lesson.html' %}
-    {% else %}
+    {% include 'library/add_paper.html' %}
+    
+    {% if paper %}
         {% include 'library/paper_detail.html' %}
+    {% else %}
+        {% include 'library/estimate_lesson.html' %}
     {% endif %}
     </div>
 

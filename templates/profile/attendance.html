@@ -17,10 +17,6 @@
             <div class="two wide column" style="line-height: 28px;font-size: 15px;">
                 Журналы
             </div>
-            <!-- <div class="ten wide column" style="padding-left: 0;line-height: 28px;font-size: 12px;">
-                <a class="show_att_chart">Показать графики</a>
-                <a class="show_attendances" style="display: none;">Показать оценки</a>
-            </div> -->
         </div>
     </div> 
         <style>
@@ -43,15 +39,37 @@
             {% for subject in hissubjects %}
                 {% if forloop.counter == 1 %}
                     <div id="subject{{ subject.id }}" class="subject_attendance">
-                    {% include 'profile/att_details.html' %}
+                        <span style="display: none;" class="instance_id" id="{{ subject.id }}"></span>
+                        {% if hisprofile.is_trener %}
+                            <div class="ui grid" style="text-align: center; margin: 14px 0 2px 0;">
+                                {% for squad in subject.squads.all %}
+                                    <a class="{% if forloop.counter == 1 %}switch_att_btn_active{% endif %} switch_att_btn switch_att_btn{{ subject.id }}" style="width: calc(100%/{{ subject.squads.all|length }});" paper_id='{{ squad.id }}sub' lesson_id='{{ subject.id }}'>
+                                        {{ squad.title }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            {% for squad in subject.squads.all %}
+                                {% include 'profile/att_squad_detail.html' %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="ui grid" style="text-align: center; margin: 14px 0 2px 0;">
+                                {% for squad in subject.squads.all %}
+                                    {% if forloop.counter == 1 %}
+                                    <a class="{% if forloop.counter == 1 %}switch_att_btn_active{% endif %} switch_att_btn switch_att_btn{{ subject.id }}" 
+                                    style="width: calc(100%/{{ subject.squads.all|length }});" paper_id='{{ squad.id }}sub'  lesson_id='{{ subject.id }}'>
+                                        {{ squad.title }}
+                                    </a>
+                                    {% endif %} 
+                                {% endfor %}
+                            </div>
+                            {% for squad in hisprofile.squads.all %}
+                                {% include 'profile/att_student_detail.html' %}
+                            {% endfor %}
+                        {% endif %}  
                     </div>
                 {% endif %}
             {% endfor %} 
         </div>
-        <div class="att_charts" style="display: none;"> 
-            <div class="ui segment" style="height: 232px;">
-            </div>
-        </div>    
     </div> 
 {% endif %}
 

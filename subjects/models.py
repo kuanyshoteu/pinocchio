@@ -178,7 +178,7 @@ class Lecture(models.Model):
         ordering = ['cell']
 
 class Attendance(models.Model):
-    teacher = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='madegrades')
+    teacher = models.ForeignKey(Profile, default=119, on_delete = models.CASCADE, related_name='madegrades')
     student = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='hisgrades')
     squad_cell = models.ForeignKey(SquadCell, null=True, on_delete = models.CASCADE, related_name='attendances')
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='subject_attendances')

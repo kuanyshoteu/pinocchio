@@ -210,7 +210,6 @@ def hisattendance(request):
     if request.GET.get('subject_id') and request.GET.get('class_id'):
         subject_id = int(request.GET.get('subject_id'))
         squad_id = int(request.GET.get('class_id'))
-
         subject = Subject.objects.get(id = subject_id)
         squad = Squad.objects.get(id = squad_id)
 
@@ -223,7 +222,40 @@ def hisattendance(request):
             students.append(student.first_name)
             
         columns = []
-        for sm in subject.materials.all():
+        for sm in subject.materials.order_by('-id'):
+            if len(columns) == 4:
+                break
+            if len(sm.material_cells.filter(squad=squad)) > 0:
+                squad_cell = sm.material_cells.filter(squad=squad)[0]
+                grades = [sm.id, squad_cell.date.strftime('%d %B %Y'), squad_cell.time_period.start + '-' + squad_cell.time_period.end]
+                for attendance in squad_cell.attendances.filter(subject=subject, squad=squad):
+                    if attendance.squad_cell.date + timedelta(2) >= timezone.now().date() and attendance.squad_cell.date < timezone.now().date():
+                        grades.append(attendance.id)
+                    if attendance.grade > 0:
+                        grades.append(attendance.grade)
+                    else:
+                        grades.append('')
+                columns.append(grades)
+        data = {
+            'classes':squads,
+            'students':students,
+            'columns':columns,
+        }
+        return JsonResponse(data)
+
+def more_attendance():
+    if request.GET.get('subject_id') and request.GET.get('class_id') and request.GET.get('direction') and request.GET.get('sm_id'):
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
+        squad = Squad.objects.get(id = int(request.GET.get('class_id')))
+        current_sm = int(request.GET.get('sm_id'))
+        columns = []
+        if request.GET.get('direction') == 'left':
+            queryset = subject.materials.filter(id__lt = current_sm)
+        else:
+            queryset = subject.materials.filter(id__gt = current_sm)
+        for sm in queryset:
+            if len(columns) == 4:
+                break
             if len(sm.material_cells.filter(squad=squad)) > 0:
                 squad_cell = sm.material_cells.filter(squad=squad)[0]
                 grades = [squad_cell.date.strftime('%d %B %Y'), squad_cell.time_period.start + '-' + squad_cell.time_period.end]

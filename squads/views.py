@@ -26,7 +26,6 @@ from django.contrib.auth import (
     logout,
     )
 from django.contrib.auth.models import User
-import pandas as pd
 import os
 
 def squad_detail(request, slug=None):

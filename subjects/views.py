@@ -275,8 +275,6 @@ def subject_schedule(request, id=None):
                 lectures = []
                 for lecture in cell.lectures.filter(subject = subject):
                     if lecture.squad in subject.squads.all():
-                        print(timep.start, cell.id,lecture.squad.title)
-                        print("class#####")
                         lectures.append(lecture.squad.title)
                 line.append([cell.id, lectures])
         res.append([timep.start + '-' + timep.end, line])
@@ -295,8 +293,12 @@ def squad_list(request, id=None):
             res.append([squad.id, [squad.title]])
         else:
             res2.append([squad.id, [squad.title]])
+    if len(subject.teacher.all()) > 0:
+        trener = subject.teacher.first().first_name
+    else:
+        trener = 'none'
     data = {
-        'trener':subject.teacher.all()[0].first_name,
+        'trener': trener,
         'groups_in_subject':res2,
         'groups_not_in_subject':res,
     }
@@ -308,7 +310,7 @@ def change_schedule(request, id=None):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         if request.GET.get('cell_id') != 'trash':
             cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
-            if request.GET.get('old_cell') == 'denone':
+            if request.GET.get('old_cell') == 'none':
                 lecture = Lecture.objects.get_or_create(subject=subject,squad=squad,cell=cell)
             else:
                 old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
@@ -319,7 +321,7 @@ def change_schedule(request, id=None):
                 else:
                     lecture.delete()
         else:
-            if request.GET.get('old_cell') != 'denone':
+            if request.GET.get('old_cell') != 'none':
                 old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
                 lecture = Lecture.objects.get(subject=subject,squad=squad,cell=old_cell)
                 lecture.delete()
@@ -380,7 +382,10 @@ def calc_subject_lessons(subject):
         for lecture in Lecture.objects.filter(squad=squad,subject=subject):
             if not lecture.cell in cells:
                 cells.append(lecture.cell)
-        old_sc = SquadCell.objects.filter(squad=squad)[0]
+        if len(squad.cells.all()) > 0:
+            old_sc = squad.cells.first()
+        else:
+            old_sc = 0
         sm_dict[squad.id] = old_sc
         for sc in SquadCell.objects.filter(squad=squad):
             for m in sc.subject_materials.filter(subject=subject):
@@ -398,9 +403,12 @@ def calc_subject_lessons(subject):
                 if len(Lecture.objects.filter(cell = sc.cell,subject=subject,squad=squad)) > 0:
                     if sc.date >= subject.start_date and sc.date <= subject.end_date:
                         sc.subject_materials.add(sm)
-                if sc_dict[sc.id] > 0:
-                    next_sc = SquadCell.objects.filter(id=sc_dict[sc.id])
-                    sm_dict[squad.id] = next_sc[0]
+                if sc.id in sc_dict: 
+                    if sc_dict[sc.id] > 0:
+                        next_sc = SquadCell.objects.filter(id=sc_dict[sc.id])
+                        sm_dict[squad.id] = next_sc[0]
+                    else:
+                        sm_dict[squad.id] = 'ended'
                 else:
                     sm_dict[squad.id] = 'ended'
 
@@ -410,6 +418,7 @@ def calc_subject_lessons(subject):
             for student in squad.students.all():
                 sc = sm.material_cells.filter(squad=squad)
                 if len(sc)>0:
+                    print('ffff')
                     att = Attendance.objects.get_or_create(student=student,subject=subject,squad_cell=sc[0])   
                     att[0].squad = squad
                     att[0].subject_materials = sm
@@ -417,6 +426,7 @@ def calc_subject_lessons(subject):
 
 def update_squad_weeks(instance):
     if int((instance.end_date - instance.start_date).days) > 0:
+        print('eye0')
         new_weeks = True
         number_of_weeks = int((instance.end_date - instance.start_date).days/7) + 1
         if len(instance.weeks.all()) > number_of_weeks:
@@ -437,6 +447,7 @@ def update_squad_weeks(instance):
             before_start = int(instance.start_date.strftime('%w'))
             for i in range(1, before_start + 1):
                 for timep in TimePeriod.objects.all():
+                    print('yey')
                     sc = SquadCell.objects.get_or_create(squad=instance,date=date,time_period=timep)[0]
                     sc.week = week
                     sc.save()
