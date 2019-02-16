@@ -19,7 +19,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="ui segment" style="margin-top: 0;padding: 0">
                     <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;margin: 0;width: 100%;">
                         <thead>
@@ -33,8 +32,10 @@
                             {% for student in all_students %}
                                 <tr style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
                                     <td style="text-align: left;">
-                                        {{ forloop.counter }}. 
-                                        {{ student.first_name }}
+                                        <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                            {{ forloop.counter }}. 
+                                            {{ student.first_name }}
+                                        </div>
                                     </td>
                                     <td>{{ student.coins }}</td>
                                     <td>{{ student.coins }}</td>

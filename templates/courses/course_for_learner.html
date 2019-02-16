@@ -5,11 +5,11 @@
         <div class="ui segment" {% if not course.image %} style="margin-bottom: 0"{% endif %}>
             <div class="ui grid">
                 {% if course.image %}
-                <div class="sixteen wide column" style="padding: 0">
+                <div class="sixteen wide column">
                     <img src="{{ course.image.url }}" style="height: 200px; width: 100%;">
                 </div>
                 {% endif %}
-                <div class="eleven wide column" style="padding: 0">
+                <div class="eleven wide column">
                     <div class="group-name">
                         {% if course.image %}
                             {% if course.school.image_icon %}

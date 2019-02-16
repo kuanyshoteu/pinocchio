@@ -45,15 +45,17 @@
                         {% for student in all_students %}
                             <tr style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
                                 <td style="text-align: left;">
-                                    {{ forloop.counter }}. 
-                                    <a href="{{ student.get_absolute_url }}" style="margin-left: 15px;color:#fff;">
-                                        {% if student.image %}
-                                        <img class="ui avatar image" src="{{ student.image.url }}" > 
-                                        {% else %}
-                                        <img class="ui avatar image" src="{% static 'images/nophoto.png' %}">
-                                        {% endif %}
-                                        {{ student.first_name }}
-                                    </a>
+                                    <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                        {{ forloop.counter }}. 
+                                        <a href="{{ student.get_absolute_url }}" style="margin-left: 15px;color:#fff;">
+                                            {% if student.image %}
+                                            <img class="ui avatar image" src="{{ student.image.url }}" > 
+                                            {% else %}
+                                            <img class="ui avatar image" src="{% static 'images/nophoto.png' %}">
+                                            {% endif %}
+                                                {{ student.first_name }}
+                                        </a>
+                                    </div>
                                 </td>
                                 <td>{{ student.phone }}</td>
                                 <td>{{ student.mail }}</td>
