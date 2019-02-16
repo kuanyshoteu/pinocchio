@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<div class="ui segment" style="margin-bottom: 0;">
+    <div class="group-name">
+        {% if instance.image_banner %}
+            {% if instance.image_icon %}
+            <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
+            {% else %}
+            <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
+            {% endif %}
+        {% endif %}
+        <span class="ui header ava-title">{{ instance.title }}</span>
+    </div>
+</div>
+<div class="ui segment" style="background-color: #fafbfc;margin-top: 0; padding: 18px;">
+    <a href="{{ instance.get_absolute_url }}" class="{% if squads %}current_option{% else %}other_option{% endif %}" name="school_info">
+        Общие 
+    </a>
+    <a href="{{ instance.get_teachers_url }}" class="{% if all_teachers %}current_option{% else %}other_option{% endif %}" name="teachers">
+        Учителя
+    </a>
+    <a href="{{ instance.get_courses_url }}" class="{% if courses %}current_option{% else %}other_option{% endif %}" name="courses">
+        Курсы 
+    </a>
+</div>

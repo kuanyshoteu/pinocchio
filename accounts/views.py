@@ -191,7 +191,9 @@ def update_schedule(request):
                 cell.save()
 
     for subject in hissubjects:
+        print(subject.title)
         for lecture in subject.subject_lectures.all():
+            print(lecture.id)
             if lecture.squad in hissquads and subject.teacher.first():
                 cell = hisprofile.hisschedule.get(x = lecture.cell.day.number,y=lecture.cell.time_period.num)
                 cell.subjects.append(subject.title)
@@ -201,7 +203,6 @@ def update_schedule(request):
                 cell.cabinets.append(subject.cabinet)
                 cell.indexes.append(len(cell.subjects) - 1)
                 cell.save()
-
     data = {
     }
     return JsonResponse(data)

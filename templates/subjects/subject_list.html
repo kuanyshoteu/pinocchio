@@ -12,11 +12,11 @@
             {% include 'left_menu.html' %}
             <div class="eight wide column">
                 <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
-                    <a class="open_allsubjects current_subjects">
+                    <a class="open_option current_option" name='allsubjects'>
                         Все предметы 
                         <span style="font-size: 13px;color: #939393;">{{ subjects|length }}</span>
                     </a>
-                    <a class="open_mysubjects other_subjects">
+                    <a class="open_option other_option" name="mysubjects">
                         Мои предметы 
                         <span style="font-size: 13px;color: #939393;">
                             {% if profile.status == 'trener' %}
@@ -31,12 +31,12 @@
                     {% endif %}
                     
                 </div>
-                <div class="ui segment allsubjects" style="margin-top: 0;">
+                <div class="ui segment option" id="allsubjects" style="margin-top: 0;">
                     {% for sq in subjects %}
                     {% include 'subjects/subject_list_info.html' %}
                     {% endfor %}
                 </div>
-                <div class="ui segment mysubjects" style="margin-top: 0; display: none;">
+                <div class="ui segment option" id="mysubjects" style="margin-top: 0; display: none;">
                     {% if profile.status == 'trener' %}
                         {% for sq in profile.subject_trener.all %}
                             {% include 'subjects/subject_list_info.html' %}

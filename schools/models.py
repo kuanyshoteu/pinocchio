@@ -49,7 +49,21 @@ class School(models.Model):
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
-        return reverse("schools:detail")
+        return reverse("schools:info")
+    def get_requests_url(self):
+        return reverse("schools:requests")
+    def get_recalls_url(self):
+        return reverse("schools:recalls")
+    def get_teachers_url(self):
+        return reverse("schools:teachers")
+    def get_crm_url(self):
+        return reverse("schools:crm")
+    def get_requests_url(self):
+        return reverse("schools:requests")
+    def get_recalls_url(self):
+        return reverse("schools:recalls")
+    def get_courses_url(self):
+        return reverse("schools:courses")
     def get_delete_url(self):
         return reverse("schools:delete", kwargs={"id": self.id})
     def get_update_url(self):

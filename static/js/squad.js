@@ -166,17 +166,23 @@ $(document).ready(function () {
             // $('#iconright' + id).show()
         }
     });
-    $('.open_mysquads').on('click', function(e) {
-        $('.allsquads').hide()
-        $('.mysquads').show()
-        $(this).attr('class', 'open_mysquads current_squads')
-        $('.open_allsquads').attr('class', 'open_allsquads other_squads')
+    $('.open_option').on('click', function(e) {
+        for (var i = 0; i < document.getElementsByClassName("option").length; i++){
+            document.getElementsByClassName("option")[i].setAttribute('style', 'display:none;')
+            document.getElementsByClassName("open_option")[i].setAttribute('class', 'open_option other_option')
+        }
+        var id = $(this).attr('name')
+        $('#' + id).show()
+        $(this).attr('class', 'open_option current_option')
     });
-    $('.open_allsquads').on('click', function(e) {
-        $('.allsquads').show()
-        $('.mysquads').hide()
-        $(this).attr('class', 'open_allsquads current_squads')
-        $('.open_mysquads').attr('class', 'open_mysquads other_squads')
+    $('.open_option2').on('click', function(e) {
+        for (var i = 0; i < document.getElementsByClassName("option2").length; i++){
+            document.getElementsByClassName("option2")[i].setAttribute('style', 'display:none;')
+            document.getElementsByClassName("open_option2")[i].setAttribute('class', 'open_option2 other_option2')
+        }
+        var id = $(this).attr('name')
+        $('#option2' + id).show()
+        $(this).attr('class', 'open_option2 current_option2')
     });
     
     $('.add_paper').on('click', function(e) {

@@ -23,14 +23,12 @@
                 <a class="item lftitem" href='{% url "news:list" %}'>
                     <i class="newspaper icon"></i>Новости
                 </a>
-                {% if profile.is_director %}
-                <a class="item lftitem" href='{% url "schools:detail" %}'>
-                    <i class="chart line icon"></i>Директор
+                {% if profile.is_director or profile.is_manager %}
+                <a class="item lftitem" href='{% url "schools:info" %}'>
+                    <i class="cog icon"></i>Управление
                 </a>
-                {% endif %}
-                {% if profile.is_manager %}
-                <a class="item lftitem" href='{% url "schools:manager_page" %}'>
-                    <i class="cog icon"></i>Менеджер
+                <a class="item lftitem" href='{% url "schools:crm" %}'>
+                    <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>CRM
                 </a>
                 {% endif %}
                 {% if profile.is_director or profile.is_manager %}

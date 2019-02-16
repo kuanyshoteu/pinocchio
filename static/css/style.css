@@ -193,10 +193,16 @@ a{
   background-color: #5181b8;
   width: 100%;
 }
-.other_squads{
+.other_option{
   padding:0 6px 17px 6px;color: #656565;font-size: 14px;
 }
-.current_squads{
+.current_option{
+  border-bottom: 2px solid #5181b8;padding:0 6px 17px 6px;color: #000;font-size: 14px;
+}
+.other_option2{
+  padding:0 6px 17px 6px;color: #656565;font-size: 14px;
+}
+.current_option2{
   border-bottom: 2px solid #5181b8;padding:0 6px 17px 6px;color: #000;font-size: 14px;
 }
 .current_point{

@@ -13,18 +13,21 @@
     </div>
 </div>
 <div class="ui segment" style="margin-top: 0;margin-bottom: 0;padding: 18px;">
-    {% for squad in all_squads %}
-        <a style="margin-right: 14px;" class="open_point {% if forloop.counter == 1 %}current_point{% endif %}">
+    {% for squad in squads %}
+        <a style="margin-right: 14px;" class="open_option {% if forloop.counter == 1 %}current_option{% else %}other_option{% endif %}" name="{{ squad.id }}">
             {{ squad.title }}
         </a>
     {% endfor %}
 </div>
 <div class="ui segment" style="margin-top: 0;">
-
 	<div class="ui segment" style="padding: 3px; background-color: rgba(16,133,135,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
 	<span style="color: #222">Успеваемость </span>
 	<div class="ui segment" style="margin-left: 14px; padding: 3px;background-color: rgba(236,83,62,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
 	<span style="color: #222">Посещаемость </span>
 	<br>
-	<canvas style="padding-right: 25px;" id="canvas" height="100" width="500"></canvas>
+    {% for squad in squads %}    
+        <div class="option" id="{{ squad.id }}" style="{% if forloop.counter > 1 %} display: none;{% endif %}">
+        	<canvas style="padding-right: 25px;" id="canvas" height="100" width="500"></canvas>
+        </div>
+    {% endfor %}
 </div>

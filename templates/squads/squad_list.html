@@ -12,7 +12,7 @@
             {% include 'left_menu.html' %}
             <div class="eight wide column">
                 <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
-                    <a class="open_allsquads current_squads">
+                    <a class="open_option current_option">
                         Все классы 
                         <span style="font-size: 13px;color: #939393;">{{ squads|length }}</span>
                     </a>
@@ -46,14 +46,12 @@
                         {% endfor %}
                     {% else %}
                     <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
-                        <a class="full-w" style="color: black;font-size: 13px;"><b>Все группы</b></a>
+                        <a class="full-w" style="color: black;font-size: 13px;"><b>Все классы</b></a>
                     </div>
                     {% endif %}
                 </div>
             </div>
-
         </div>
-
     </div>
 </div>
 

@@ -131,8 +131,9 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 class Zaiavka(models.Model):
-    name = models.TextField()
-    phone = models.TextField()
+    first_name = models.TextField()
+    mail = models.TextField(default = '')
+    phone = models.TextField(blank = True,null = True, default = '')
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['-timestamp']

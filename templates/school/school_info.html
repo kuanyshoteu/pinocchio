@@ -1,22 +1,5 @@
 {% load staticfiles %}
-<div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
-    <div class="ui grid">
-        <div class="eleven wide column" style="padding: 0">
-            <div class="group-name">
-                {% if instance.image_banner %}
-                    {% if instance.image_icon %}
-                    <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-                    {% else %}
-                    <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
-                    {% endif %}
-                {% endif %}
-                <span class="ui header ava-title">{{ instance.title }}</span>
-            </div>
-        </div>
-        <div class="five wide column" >
-        </div>  
-    </div>
-</div>
+
 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;margin-top: 0">
     Информация
 </div>
@@ -36,3 +19,32 @@
         </div>
     </div>
 </div>
+{% if profile.is_director %}
+<div class="ui grid">
+    <div class="six wide column" style="padding-right: 0">
+        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+            Расходы
+        </div>
+        <div class="ui segment" style="margin-top: 0">
+            {% include 'school/money_circle_chart.html' %}
+        </div>
+    </div>
+    <div class="ten wide column">
+        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+            <div class="ui grid">
+                <div class="nine wide column" style="padding: 14px">
+                    Доходы
+                </div>
+                <div class="seven wide column" style="padding: 10px">
+                    <a class="ui button mini blue">Показать графики за год</a>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment" style="margin-top: 0;height: 273px;">
+            {% include 'school/money_chart.html' %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% include 'school/good_results_chart.html' %}
+{% include 'school/bad_results_chart.html' %}

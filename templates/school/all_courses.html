@@ -10,6 +10,7 @@
 {% endblock head_extra %}
 {% load ttags %}
 {% load ttttags %}
+{% load staticfiles %}
 
 {% block content %}
 <div id="group-details" style="padding-bottom: 200px;">
@@ -17,15 +18,9 @@
         <div class="ui grid">
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
-                <div class="ui grid">
-                    <div class="sixteen wide column" style="padding-bottom: 0;padding-right: 0;">
-                        {% include 'school/school_info.html' %}
-                        {% include 'school/add_students.html' %}
-                        {% include 'school/good_results_chart.html' %}
-                        {% include 'school/bad_results_chart.html' %}
-                        {% include 'school/teachers_rating.html' %}                  
-                    </div>
-                </div>
+                {% include 'school/head.html' %}
+                {% include 'school/course_good_results_chart.html' %}
+                {% include 'school/course_bad_results_chart.html' %}
             </div>
         </div>
     </div>

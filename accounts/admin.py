@@ -22,11 +22,11 @@ class ProfileSchedule(admin.ModelAdmin):
 admin.site.register(ProfileScheduleCell, ProfileSchedule)
 
 class ZaiavkaModelAdmin(admin.ModelAdmin):
-    list_display = ["name", "id", "phone"]
-    list_display_links = ["name"]
-    list_filter = ["name"]
+    list_display = ["first_name", "id", "phone"]
+    list_display_links = ["first_name"]
+    list_filter = ["first_name"]
 
-    search_fields = ["name", "phone"]
+    search_fields = ["first_name", "phone"]
     class Meta:
         model = Zaiavka
 

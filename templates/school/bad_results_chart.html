@@ -9,12 +9,12 @@
     </div>
 </div>
 <div class="ui segment" style="margin-top: 0;margin-bottom: 0;padding: 18px;">
-    {% for squad in all_squads %}
-        <a style="margin-right: 14px;" class="open_point {% if forloop.counter == 1 %}current_point{% endif %}">
+    {% for squad in squads %}
+        <a style="margin-right: 14px;" class="open_option2 {% if forloop.counter == 1 %}current_option2{% else %}other_option2{% endif %}" name="{{ squad.id }}">
             {{ squad.title }}
         </a>
     {% endfor %}
-</div>                        
+</div>                      
 <div class="ui segment" style="margin-top: 0;">
     <div class="ui segment" style="padding: 3px;background-color: rgba(16,133,135,1);width: 40px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Отчисленные </span>
@@ -23,7 +23,11 @@
     <div class="ui segment" style="margin-left: 14px; padding: 3px;background-color: #21BA45;width: 40px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Не сдали экзамен</span>
     <br>
-    <canvas style="padding-right: 25px;" id="canvas2" height="70" width="500"></canvas>
+    {% for squad in squads %}    
+        <div class="option2" id="option2{{ squad.id }}" style="{% if forloop.counter > 1 %} display: none;{% endif %}">
+            <canvas style="padding-right: 25px;" id="canvas2" height="70" width="500"></canvas>
+        </div>
+    {% endfor %}
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
@@ -157,7 +161,6 @@ window.onload = function() {
     window.myLine = new Chart(ctx).Line(lineChartData2, {
         responsive: true
     });
-    {% if manager == 'manager' %}
     var ctx = document.getElementById("canvas_money").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
         responsive: true
@@ -170,6 +173,5 @@ window.onload = function() {
     window.myLine = new Chart(ctx).Line(lineChartData_cb, {
         responsive: true
     });
-    {% endif %}
 }
 </script>

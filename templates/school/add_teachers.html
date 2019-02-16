@@ -1,0 +1,29 @@
+<div class="ui modal" id="add_student_modal">
+    <i class="close icon"></i>
+    <div class="content">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <table class="ui celled table" style="margin: 0">
+                <thead>
+                    <tr>
+                        <th><span>Имя</span></th>
+                        <th><span>Телефон</span></th>
+                        <th><span>Почта</span></th>
+                        <th><span>Пароль</span></th>
+                    </tr>
+                </thead>
+                <tbody id="create_student_rows">
+                    <tr>
+                        <td><textarea class="new_student_name"></textarea></td>
+                        <td><textarea class="new_student_phone"></textarea></td>
+                        <td><textarea class="new_student_mail"></textarea></td>
+                        <td id="password_place"><span style="font-size: 11px;"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+        <div class="ui segment" style="margin-top: 0">
+            <a class="ui button blue tiny add_student">Добавить</a>    
+        </div>
+        </form>
+        <span style="display: none;" class="register_to_school_url" url="{{ instance.register_to_school }}"></span>
+    </div>
+</div>

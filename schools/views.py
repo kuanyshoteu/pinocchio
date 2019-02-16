@@ -16,7 +16,7 @@ from subjects.models import *
 from squads.models import Squad
 from papers.models import *
 from library.models import Folder
-from accounts.models import Profile, Corruption
+from accounts.models import Profile, Corruption, Zaiavka
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -26,24 +26,6 @@ from django.contrib.auth import (
     )
 from django.contrib.auth.models import User
 import os
-
-def school_detail(request, slug=None):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    instance = profile.school
-    time_periods = TimePeriod.objects.all()
-    context = {
-        "instance": instance,
-        "profile":profile,
-        'time_periods':time_periods,
-        "all_teachers":Profile.objects.filter(is_trener = True),
-        "all_students":Profile.objects.filter(is_trener = False),
-        "all_squads":Squad.objects.all(),
-        'courses':Course.objects.all(),
-        'corruptions':Corruption.objects.all(),
-    }
-    return render(request, "school/school_detail.html", context)
 
 def school_rating(request):
     profile = ''
@@ -59,7 +41,7 @@ def school_rating(request):
     }
     return render(request, "school/school_rating.html", context)
 
-def manager_page(request):
+def school_info(request):
     profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
@@ -67,12 +49,67 @@ def manager_page(request):
         "profile":profile,
         "instance": profile.school,
         "squads":Squad.objects.all(),
-        "subjects":Subject.objects.all(),
-        "all_teachers":Profile.objects.filter(is_trener = True),
-        "all_squads":Squad.objects.all(),
-        'manager':'manager',    
+        "subjects":Subject.objects.all(),    
     }
-    return render(request, "school/manager_page.html", context)
+    return render(request, "school/info.html", context)
+
+def school_teachers(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "all_teachers":Profile.objects.filter(is_trener = True),    
+    }
+    return render(request, "school/all_teachers.html", context)
+
+def school_crm(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "all_students":Profile.objects.filter(is_trener = False),
+        "students":"students",
+    }
+    return render(request, "school/all_students.html", context)
+
+def school_requests(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "all_students":Zaiavka.objects.all(),
+        "requests":"requests",
+    }
+    return render(request, "school/all_students.html", context)
+
+def school_recalls(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "all_students":Profile.objects.filter(is_trener = False),
+        "recalls":"recalls"
+    }
+    return render(request, "school/all_students.html", context)
+
+def school_courses(request):
+    profile = ''
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    context = {
+        "profile":profile,
+        "instance": profile.school,
+        "courses":"courses",
+    }
+    return render(request, "school/all_courses.html", context)
 
 def school_list(request):
     if not request.user.is_authenticated:

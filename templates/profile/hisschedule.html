@@ -46,7 +46,9 @@
                 {% for index in cell.indexes %}
                 <div class="in_schedule" style=" background-color: {{cell.colors|find_by_index:index}}">
                     {{ cell.subjects|find_by_index:index }}
+                    <br>
                     {{ cell.teachers|find_by_index:index }}
+                    <br>
                     {{ cell.cabinets|find_by_index:index }}
                 </div>
                 {% endfor %}

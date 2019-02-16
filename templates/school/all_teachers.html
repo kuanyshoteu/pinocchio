@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="group-details" style="padding-bottom: 200px;">
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                {% include 'school/head.html' %}
+                <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+                    <div class="ui grid">
+                        <div class="one wide column">
+                            <i class="icon users" style="font-size: 17px;"></i>
+                        </div>
+                        <div class="eleven wide column" style="padding-right: 25px;">
+                            Все учителя
+                        </div>
+                    </div>
+                </div>
+                <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;margin: 0;width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
+                            <th><span>Номер</span></th>
+                            <th><span>email</span></th>
+                            <th><span>Рейтитнг</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for teacher in all_teachers %}
+                            <tr style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
+                                <td style="text-align: left;">
+                                    {{ forloop.counter }}. 
+                                    <a href="{{ teacher.get_absolute_url }}" style="margin-left: 15px;color:#fff;">
+                                        <img class="ui avatar image" src="{{ teacher.image.url }}" > 
+                                        {{ teacher.first_name }}
+                                    </a>
+                                </td>
+                                <td>{{ teacher.phone }}</td>
+                                <td>{{ teacher.mail }}</td>
+                                <td>{{ teacher.coins }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="day_id" id="" group_id = '{{ instance.id }}'></span>
+{% include 'school/add_teachers.html' %}
+
+{% endblock content %}
