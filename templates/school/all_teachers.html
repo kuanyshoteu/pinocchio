@@ -44,8 +44,12 @@
                                 <td style="text-align: left;">
                                     {{ forloop.counter }}. 
                                     <a href="{{ teacher.get_absolute_url }}" style="margin-left: 15px;color:#fff;">
+                                        {% if teacher.image %}
                                         <img class="ui avatar image" src="{{ teacher.image.url }}" > 
                                         {{ teacher.first_name }}
+                                        {% else %}
+                                        <img class="ui avatar image" src="{% static 'images/nophoto.png' %}">
+                                        {% endif %}                                    
                                     </a>
                                 </td>
                                 <td>{{ teacher.phone }}</td>
