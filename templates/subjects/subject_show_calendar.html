@@ -1,39 +1,4 @@
 {% load ttags %}
-<script>
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-    console.log(ev.target.id)
-}
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    var cell_id = ev.target.getAttribute('id')
-    var squad = document.getElementById(data)
-    console.log(data, squad)
-    var squad_id = squad.getAttribute('squad_id')
-    var old_cell = squad.getAttribute('old_cell')
-    
-    var subject_id = $('.instance_id').attr('id')
-
-    $.ajax({
-        url: $('.change_schedule_url').attr('url'),
-        data: {
-            'squad_id':squad_id,
-            'subject_id':subject_id,
-            'cell_id':cell_id,
-            'old_cell':old_cell,
-        },
-        dataType: 'json',
-        success: function (data) {
-            location.reload()
-        }
-    });
-}
-
-</script>
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
 <div id="calendar" length='7'>           
@@ -59,17 +24,15 @@ function drop(ev) {
             </div>
             {% for cell in timep.time_cell.all %}  
             {% if cell.day.number != 7 %} 
-            <div class="daysmall other" style="padding: 0">                                     
+            <div class="daysmall other" style="padding: 0;">                                     
                 <div {% if page == 'subject_update' %} style=""{% endif %}>
                     {% for lecture in cell|cell_subject_lectures:instance %}
-                        {% if lecture.squad in instance.squads.all %}
-                        <div class="ui segment in_schedule" squad_id='{{ lecture.squad.id }}' id="s{{ lecture.squad.id }}c{{ cell.id }}" old_cell="{{ cell.id }}" {% if page == 'subject_update' %} draggable="true" {% endif %} ondragstart="drag(event)" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:#5181b8;">
+                        {% if teacher or lecture.squad in profile.squads.all %}
+                        <div class="ui segment in_schedule" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:#5181b8;">
                             {{ lecture.squad.title }}
                             {% if cell|cell_subject_lectures:instance|length == 1 %}
                             <br>
-                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ instance.cabinet }}</span>
-                            <br>
-                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ instance.teacher.all.0.first_name }}</span>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">каб {{ instance.cabinet }}</span>
                             {% endif %}
                         </div>
                         {% endif %}
@@ -90,10 +53,5 @@ function drop(ev) {
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% endfor %}
-        {% if page == 'subject_update' %}
-        <div class="daysmall other" id="trash" ondrop="drop(event)" ondragover="allowDrop(event)" style="border: 1px solid grey;height: 40px; background-color: #4A4A4A;float: right;">
-            Удалить
-        </div>
-        {% endif %}
     </div>
 </div>   

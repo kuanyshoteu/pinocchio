@@ -34,13 +34,13 @@ class Task(models.Model):
             height_field="height_field",)
     height_field = models.IntegerField(default=0, null = True)
     width_field = models.IntegerField(default=0, null = True)
-    answer = ArrayField(models.TextField(), default = [''])
+    answer = ArrayField(models.TextField(), default = list)
     parent = models.ForeignKey("self", null=True, blank=True, on_delete = models.CASCADE)
     cost = models.IntegerField(default=1)
 
     is_test = models.BooleanField(default = False)
     is_mult_ans = models.BooleanField(default = False)
-    variants = ArrayField(models.TextField(), default = [''])
+    variants = ArrayField(models.TextField(), default = list)
 
     tags = models.ManyToManyField(ProblemTag, related_name='tasks')
     def __unicode__(self):
@@ -65,7 +65,7 @@ class Task(models.Model):
         ordering = ['id']
 
 class Solver(models.Model):
-    solver_ans = ArrayField(models.TextField(), default = [''])
+    solver_ans = ArrayField(models.TextField(), default = list)
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='check_tasks')
     solver_correctness = models.BooleanField(default=False)
     solver_try_number = models.IntegerField(default=0)

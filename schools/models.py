@@ -23,6 +23,7 @@ def upload_location(instance, filename):
 
 class School(models.Model):
     title = models.CharField(max_length=250)
+    official_school = models.BooleanField(default = False)
     image_icon = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
@@ -42,12 +43,13 @@ class School(models.Model):
     content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')
 
-    address = models.CharField(max_length=250,default='')
+    new_schedule = models.BooleanField(default = False)
 
     class Meta:
         ordering = ['title']
     def __unicode__(self):
         return self.title
+    # School information pages
     def get_absolute_url(self):
         return reverse("schools:info")
     def get_requests_url(self):
@@ -58,20 +60,53 @@ class School(models.Model):
         return reverse("schools:teachers")
     def get_crm_url(self):
         return reverse("schools:crm")
+    def get_students_url(self):
+        return reverse("schools:students")
     def get_requests_url(self):
         return reverse("schools:requests")
     def get_recalls_url(self):
         return reverse("schools:recalls")
     def get_courses_url(self):
         return reverse("schools:courses")
-    def get_delete_url(self):
-        return reverse("schools:delete", kwargs={"id": self.id})
-    def get_update_url(self):
-        return reverse("schools:update", kwargs={"id": self.id})
-    def get_list_url(self):
-        return reverse("schools:list")
     def get_markdown(self):
         return mark_safe(markdown(self.content))
+    # API Registration 
     def register_to_school(self):
-        return reverse("schools:register_to_school")       
+        return reverse("schools:register_to_school")
+    # School objects
+    def get_school_documents(self):
+        return reverse("documents:get_school_documents", kwargs={"school_id": self.id})
+    def get_school_library(self):
+        return reverse("library:get_school_library", kwargs={"school_id": self.id})
+    def get_school_posts(self):
+        return reverse("news:get_school_posts", kwargs={"school_id": self.id})
+    def get_school_squads(self):
+        return reverse("squads:get_school_squads", kwargs={"school_id": self.id})
+    def get_school_subjects(self):
+        return reverse("subjects:get_school_subjects", kwargs={"school_id": self.id})
+    def get_school_ratings(self):
+        return reverse("schools:get_school_ratings", kwargs={"school_id": self.id})
+    def get_school_todolists(self):
+        return reverse("todolist:get_school_todolists", kwargs={"school_id": self.id})
+    def crm_option_url(self):
+        return reverse("schools:crm_option_url")
+
+class SubjectCategory(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subject_categories') 
+    title = models.CharField(max_length=250)
+
+class SubjectAge(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subject_ages')
+    title = models.CharField(max_length=250)
+
+class Office(models.Model):
+    title = models.CharField(max_length=250)
+    address = models.TextField(default='')
+    capacity = models.IntegerField(default=0)
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_offices')
+
+class Cabinet(models.Model):
+    title = models.CharField(max_length=250)
+    capacity = models.IntegerField(default=0)
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_cabinets')
 

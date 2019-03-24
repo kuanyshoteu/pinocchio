@@ -1,6 +1,6 @@
 from django import forms
 from pagedown.widgets import PagedownWidget
-from .models import Profile, Zaiavka
+from .models import Profile, MissLesson
 from django.forms import CharField
 from django.db.models import Q
 from django.contrib.auth import (
@@ -21,6 +21,16 @@ class ProfileForm(forms.ModelForm):
             "image",
             "phone",
             "mail",
+        ]
+
+class MissLessonForm(forms.ModelForm):
+    text = forms.CharField(label='Причина',required=True)
+    image = forms.FileField(label = 'Справка', required = False)
+    class Meta:
+        model = MissLesson
+        fields = [
+            "text",
+            "image",
         ]
 
 class EmptyForm(forms.ModelForm):

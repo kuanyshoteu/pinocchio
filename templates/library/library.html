@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% block head_extra %}
+{{ form.media }}
+{{ comment_form.media }}
+{% endblock head_extra %}
+ <div id="profile">
+    {% if folder %}
+        {% if folder.parent %}
+        <a id="go-back-btn"  href='{{ folder.parent.get_absolute_url }}'>
+            <i class="arrow left icon"></i>Назад
+        </a>
+        {% else %}
+        <a id="go-back-btn"  href='{{ folder.school.get_school_library }}'>
+            <i class="arrow left icon"></i>Назад
+        </a>    
+        {% endif %}
+    {% endif %}
+    <div class="ui container">      
+        <div class="ui stackable grid">
+            {% include 'left_menu.html' %}
+            <div class="eleven wide column" style="margin-bottom: 0"> 
+                <div class="ui tab active" id="detailed_info">
+                  <div class="ui segment" style=";margin-bottom: 0;background-color: #fafbfc;">
+                    <span style="font-size: 15px;">
+                        {% if folder %}
+                            Папка <b>{{ folder.title }}</b>
+                        {% else %}
+                            Уроки
+                        {% endif %}
+                    </span>
+                    {% if profile.is_trener %}
+                    <div style="float: right;">
+                      {% if cache.full %}
+                          <a class="ui button mini blue pastee" data-href='{{ profile.paste_object_url }}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}' school="{{current_school_id}}">Вставить</a>
+                      {% else %}
+                          <a class="ui button mini disabled">Вставить</a>
+                      {% endif %}                      
+                      <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_folder_url }}' >
+                        Создать папку
+                      </a>
+                      <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_lesson_url }}'>
+                        Создать урок
+                      </a>
+                    </div> 
+                    {% endif %}    
+                  </div>
+                {% if hisschools|length >= 1 %}
+                <div class="ui segment" style="margin-top: 0;margin-bottom: 0;padding: 18px;">
+                    {% for school in hisschools %}
+                        <a href="{{ school.get_school_library }}" class="{% if school.id == current_school_id %}current_option{% else %}other_option{% endif %}">{{ school.title }}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}    
+                <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+                    <div id="papers" class="ui grid stackable" style="margin: 0">
+                    {% for lesson in lessons %}
+                        {% if not root or lesson.folder.all|length == 0 %}
+                            {% include "library/lesson_file.html" %}
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+                <div class="ui segment" style="margin-top: 0">
+                    <div id="folders" class="ui grid stackable" style="margin: 0">
+                    {% for folder in folders %}
+                        {% if not root or not folder.parent %}
+                            {% include "library/folder_file.html" %}
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

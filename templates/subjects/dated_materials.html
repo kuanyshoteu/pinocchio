@@ -1,57 +1,49 @@
 {% load ttags %}
-<div class="ui grid segment">
+<div class="ui grid" style="margin-top: 0">
     {% for material in instance.materials.all %}
-    {% if material.number <= instance.number_of_lectures %}
-    {% if material|findorder:profile != 'de' or profile.is_trener %}
-    <div class="four wide column">
-        {% if profile.is_trener %}
-        <a class="ui button full-w open_time_lessons green" status="closed" id="{{ material.id }}">
-            <span>{{ material.number }} урок</span>
-        </a>
-        {% else %}
-        <a class="ui button full-w open_time_lessons {% if material|check_material_date:profile %}green{% endif %}" status="closed" id="{{ material.id }}">
-            {% for x in material|findorder:profile %}
-            <span {% if forloop.counter == 1 %}class="is_homework"{% endif %}>
-                {{ x }}
+    <div class="four wide column" style="padding-bottom: 0;">
+        <div class="ui segment">
+            <a class="ui button full-w open_time_lessons green" status="closed" id="{{ material.id }}">
+                <span class="is_homework">{{ material|get_my_date:profile }}</span>
                 <br>
-            </span>
-            {% endfor %}
-            <br>
-            {% for lesson in material.lessons.all %}
-                {% if profile in lesson.done_by.all %}
-                    <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: yellow !important;"></i>
-                {% else %}
-                    <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;"></i>
-                {% endif%}
-            {% endfor %}
-        </a>
-        {% endif %}
-        <div class="ui divider" style="margin-bottom: 0"></div>
-        <div style="display: none;" id="time_lessons{{ material.id }}"> 
-            {% if material.lessons.all|length == 0 %}
-                <span id="pusto{{ material.id }}" style="color: grey; font-size: 12px;">Пока нет материала</span>
-            {% endif %}
-            <div id="lesson_list{{ material.id }}">
+                <span class="is_homework">{{ material|get_time:profile }}</span>
+                {% if not teacher %}
+                <br>
                 {% for lesson in material.lessons.all %}
-                <div id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
-                    <a href="{{ lesson.get_absolute_url }}">
-                        <span>{{ lesson.title }}</span>
-                    </a>
-                    {% if lesson.is_homework %}
-                        <span style="color: #21BA45; font-size: 10px;">Домашка</span>
-                    {% endif %}
-                    <a class="remove_lesson_from_subject" url="{{ material.remove_lesson }}" material_id="{{ material.id }}" lesson_id="{{ lesson.id }}">Убрать</a>
-                </div>
-                <div class="ui divider" style="margin-bottom: 0"></div>
+                    {% if profile in lesson.done_by.all %}
+                        <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: yellow !important;"></i>
+                    {% else %}
+                        <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;color: white"></i>
+                    {% endif%}
                 {% endfor %}
+                {% endif%}
+            </a>
+            <div style="display: none;margin-top: 15px;" id="time_lessons{{ material.id }}"> 
+                {% if material.lessons.all|length == 0 %}
+                    <span id="pusto{{ material.id }}" style="color: grey; font-size: 12px;">Пока нет материалов</span>
+                {% endif %}
+                <div id="lesson_list{{ material.id }}">
+                    {% for lesson in material.lessons.all %}
+                    <div id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
+                        <a href="{{ lesson.get_absolute_url }}">
+                            <span>{{ lesson.title }}</span>
+                        </a>
+                        {% if lesson.is_homework %}
+                            <span style="color: #21BA45; font-size: 10px;">Домашка</span>
+                        {% endif %}
+                        {% if teacher %}
+                        <a class="remove_lesson_from_subject" url="{{ material.remove_lesson }}" material_id="{{ material.id }}" lesson_id="{{ lesson.id }}">Убрать</a>
+                        {% endif %}
+                    </div>
+                    <div class="ui divider" style="margin-bottom: 0"></div>
+                    {% endfor %}
+                </div>
+                
+                {% if teacher %}
+                <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
+                {% endif %}
             </div>
-            
-            {% if profile.is_trener %}
-            <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
-            {% endif %}
         </div>
     </div>
-    {% endif %}
-    {% endif %}
     {% endfor %}
 </div>

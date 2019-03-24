@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^api/docfile_action_url/$', file_action, name = 'docfile_action_url'),
     url(r'^api/paste_docobject_url/$', paste, name = 'paste_docobject_url'),
     url(r'^api/create_docfolder/$', create_docfolder, name = 'create_docfolder_url'),
-    url(r'^(?P<folder_id>\d+)/$', folder_details, name='get_absolute_url'),
+    url(r'^folder/(?P<folder_id>\d+)/$', folder_details, name='get_absolute_url'),
+    url(r'^(?P<school_id>\d+)/$', school_documents, name='get_school_documents'),
     url(r'^$', documents, name='main'),
 ]

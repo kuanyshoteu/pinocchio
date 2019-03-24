@@ -27,6 +27,77 @@ from squads.models import *
 from todolist.models import *
 from subjects.models import *
 from django.contrib.auth.forms import PasswordChangeForm
+from schools.models import School
+from constants import *
+from subjects.templatetags.ttags import get_date
+
+def account_view(request, user = None):
+    # for lecture in Lecture.objects.all():
+    #     lecture.people.add(lecture.subject.teacher.first())
+    #     lecture.save()
+    profile = get_profile(request)
+    user = user.replace('_', ' ')
+    user = User.objects.get(username = user)
+    hisprofile = Profile.objects.get(user = user)
+    miss_lesson = MissLesson.objects.filter(profile = profile)
+    if len(miss_lesson) > 0:
+        miss_lesson = miss_lesson[0]
+        miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None, instance=miss_lesson)
+    else:
+        miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None)
+    if miss_lesson_form.is_valid():
+        miss_lesson = miss_lesson_form.save()
+        return redirect(profile.get_absolute_url())
+
+    if is_profi(hisprofile, 'Teacher'):
+        hissubjects = hisprofile.teachers_subjects.all()
+        hissquads = hisprofile.curators_squads.all()
+        hiscourses = hisprofile.hiscourses.all()
+        hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+        if hiscacheatt.subject == None and len(hissubjects) > 0:
+            hiscacheatt.subject = hissubjects[0]
+        if hiscacheatt.squad == None and len(hissquads) > 0:
+            hiscacheatt.squad = hissquads[0]
+        hiscacheatt.save()
+    else:
+        hissubjects = hisprofile.hissubjects.all()
+        hissquads = hisprofile.squads.all()
+        hiscourses = hisprofile.courses.all()
+        hiscacheatt = None 
+
+    context = {
+        "profile":profile,
+        "hisprofile": hisprofile,
+        'hisboards':hisboards(hisprofile),
+        'days':Day.objects.all(),
+        'time_periods':hisprofile.histime_periods.all(),
+        'hissubjects':hissubjects,
+        'hissquads':hissquads,
+        'hiscourses':hiscourses,
+        'att_subject':hiscacheatt.subject,
+        'att_squad':hiscacheatt.squad,
+        'today':int(timezone.now().date().strftime('%w')),
+        'miss_lesson_form':miss_lesson_form,
+        'is_trener':is_profi(hisprofile, 'Teacher'),
+    }
+    return render(request, "profile.html", context)
+
+def hisboards(hisprofile):
+    hisboards = []
+    if is_profi(hisprofile, 'Student') == False:
+        for school in hisprofile.schools.all():
+            for board in school.school_boards.all():
+                hiscolumns = []
+                for column in board.columns.all():
+                    hiscards = []
+                    for card in column.cards.all():
+                        if hisprofile in card.user_list.all():
+                            hiscards.append(card)
+                    if len(hiscards) > 0:
+                        hiscolumns.append([column, hiscards])
+                if len(hiscolumns) > 0:
+                    hisboards.append([board, hiscolumns])
+    return(hisboards)
 
 def change_profile(request):
     if not request.user.is_authenticated:
@@ -40,9 +111,7 @@ def change_profile(request):
         hisprofile.save()
 
     if request.method == 'POST':
-        print('de')
         password_form = PasswordChangeForm(request.user, request.POST)
-        print(password_form)
         if password_form.is_valid():
             hisprofile.user = password_form.save()
             update_session_auth_hash(request, hisprofile.user)  # Important!
@@ -61,223 +130,93 @@ def change_profile(request):
     }
     return render(request, "profile/change_profile.html", context)
 
-def test_account(request):
-    user = User.objects.get(id = 1)
-    hisprofile = Profile.objects.get(user = user)
-    if hisprofile.is_trener:
-        hissubjects = hisprofile.teachers_subjects.all()
-        hissquads = hisprofile.curators_squads.all()
-    else:
-        hissubjects = hisprofile.hissubjects.all()
-        hissquads = hisprofile.squads.all()
-    time_periods = TimePeriod.objects.all()
-    form = ProfileForm(request.POST or None, request.FILES or None,instance=hisprofile)
-    if form.is_valid():
-        hisprofile = form.save(commit=False)
-        hisprofile.save()
-        return HttpResponseRedirect(hisprofile.get_absolute_url())
-  
-    context = {
-        "profile":hisprofile,
-        "hisprofile": hisprofile,
-        "hisprofile_list":[hisprofile],
-        'all_squads':Squad.objects.all(),
-        'all_profiles':Profile.objects.all(),
-        'hisboards':hisboards(hisprofile),
-        'hissubjects':hissubjects,
-        'days':Day.objects.all(),
-        'hissquads':hissquads,
-        'time_periods':time_periods,
-    }
-    return render(request, "profile.html", context)
-
-def account_view(request, user = None):
-    if not request.user.is_authenticated:
-        raise Http404
-    user = user.replace('_', ' ')
-    user = User.objects.get(username = user)
-    hisprofile = Profile.objects.get(user = user)
-    if request.user.is_authenticated:
-        yourprofile = Profile.objects.get(user = request.user.id)
-
-    form = ProfileForm(request.POST or None, request.FILES or None,instance=hisprofile)
-    if form.is_valid():
-        hisprofile = form.save(commit=False)
-        hisprofile.save()
-        return HttpResponseRedirect(hisprofile.get_absolute_url())
-
-    time_periods = TimePeriod.objects.all()
-    if hisprofile.is_trener:
-        hissubjects = hisprofile.teachers_subjects.all()
-        hissquads = hisprofile.curators_squads.all()
-    else:
-        hissubjects = hisprofile.hissubjects.all()
-        hissquads = hisprofile.squads.all()
-
-    first_squad = ''
-    first_subject = ''
-    if len(hissquads) > 0:
-        first_squad = hissquads[0].id
-        first_subject = hissubjects[0].id,
-
-    context = {
-        "profile":yourprofile,
-        "hisprofile": hisprofile,
-        "hisprofile_list":[hisprofile],
-        'hisboards':hisboards(hisprofile),
-        'days':Day.objects.all(),
-        'hissubjects':hissubjects,
-        'hissquads':hissquads,
-        'first_squad':first_squad,
-        'first_subject':first_subject,
-        'time_periods':time_periods,
-        #'hisschedule':hisschedule(hissquads, hissubjects),
-    }
-    return render(request, "profile.html", context)
-
-def hisboards(hisprofile):
-    hisboards = []
-    for board in Board.objects.all():
-        hiscolumns = []
-        for column in board.columns.all():
-            hiscards = []
-            for card in column.cards.all():
-                if hisprofile in card.user_list.all():
-                    hiscards.append(card)
-            if len(hiscards) > 0:
-                hiscolumns.append([column, hiscards])
-        if len(hiscolumns) > 0:
-            hisboards.append([board, hiscolumns])
-    return(hisboards)
-
-def login_view(request):
-    next = request.GET.get('next')
-    title = "Login"
-    form = UserLoginForm(request.POST or None)
-    if form.is_valid():
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password")
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        if next:
-            return redirect(next)
-        return redirect("/")
-    return render(request, "form.html", {"form":form, "title": title})
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
-def update_schedule(request):
-    hisprofile = Profile.objects.get(user = request.user)
-    if hisprofile.is_trener:
-        hissubjects = hisprofile.teachers_subjects.all()
-        hissquads = hisprofile.curators_squads.all()
-    else:
-        hissubjects = hisprofile.hissubjects.all()
-        hissquads = hisprofile.squads.all()
-
-    for timep in TimePeriod.objects.all():
-        for day in Day.objects.all():
-            if day.number != 7:
-                cell = hisprofile.hisschedule.get_or_create(x=day.number,y=timep.num)[0]
-                cell.subjects = []
-                cell.squads = []
-                cell.colors = []
-                cell.teachers = []
-                cell.cabinets = []
-                cell.indexes = []
-                cell.save()
-
-    for subject in hissubjects:
-        print(subject.title)
-        for lecture in subject.subject_lectures.all():
-            print(lecture.id)
-            if lecture.squad in hissquads and subject.teacher.first():
-                cell = hisprofile.hisschedule.get(x = lecture.cell.day.number,y=lecture.cell.time_period.num)
-                cell.subjects.append(subject.title)
-                cell.squads.append(lecture.squad.id)
-                cell.colors.append(subject.color_back)
-                cell.teachers.append(subject.teacher.first().first_name)
-                cell.cabinets.append(subject.cabinet)
-                cell.indexes.append(len(cell.subjects) - 1)
-                cell.save()
+def subject_attendance(request):
+    if request.GET.get('subject_id'):
+        profile = Profile.objects.get(user = request.user)
+        cache_att = CacheAttendance.objects.get(profile=profile)
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
+        cache_att.subject = subject
+        cache_att.save()
+    data = {
+    }
+    return JsonResponse(data)
+def squad_attendance(request):
+    if request.GET.get('squad_id'):
+        profile = Profile.objects.get(user = request.user)
+        cache_att = CacheAttendance.objects.get(profile=profile)
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        cache_att.squad = squad
+        cache_att.save()
     data = {
     }
     return JsonResponse(data)
 
-def hisattendance(request):
-    if request.GET.get('subject_id') and request.GET.get('class_id'):
-        subject_id = int(request.GET.get('subject_id'))
-        squad_id = int(request.GET.get('class_id'))
-        subject = Subject.objects.get(id = subject_id)
-        squad = Squad.objects.get(id = squad_id)
-
-        squads = []
-        for sq in subject.squads.all():
-            squads.append(sq.title)
-
-        students = []
-        for student in squad.students.all():
-            students.append(student.first_name)
-            
-        columns = []
-        for sm in subject.materials.order_by('-id'):
-            if len(columns) == 4:
-                break
-            if len(sm.material_cells.filter(squad=squad)) > 0:
-                squad_cell = sm.material_cells.filter(squad=squad)[0]
-                grades = [sm.id, squad_cell.date.strftime('%d %B %Y'), squad_cell.time_period.start + '-' + squad_cell.time_period.end]
-                for attendance in squad_cell.attendances.filter(subject=subject, squad=squad):
-                    if attendance.squad_cell.date + timedelta(2) >= timezone.now().date() and attendance.squad_cell.date < timezone.now().date():
-                        grades.append(attendance.id)
-                    if attendance.grade > 0:
-                        grades.append(attendance.grade)
-                    else:
-                        grades.append('')
-                columns.append(grades)
-        data = {
-            'classes':squads,
-            'students':students,
-            'columns':columns,
-        }
-        return JsonResponse(data)
-
-def more_attendance(): 
-    if request.GET.get('subject_id') and request.GET.get('class_id') and request.GET.get('direction') and request.GET.get('sm_id'):
+def more_attendance(request):
+    if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
-        squad = Squad.objects.get(id = int(request.GET.get('class_id')))
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
         current_sm = int(request.GET.get('sm_id'))
         columns = []
+        last_set = False
+        first_set = False
         if request.GET.get('direction') == 'left':
-            queryset = subject.materials.filter(id__lt = current_sm)
+            queryset = subject.materials.filter(id__lt = current_sm).order_by('-id')
+            if len(queryset) <= 4:
+                first_set = True
+            for sm in queryset:
+                if len(columns) == 4:
+                    break
+                section = [get_date(sm, squad), sm.id]
+                for att in sm.sm_atts.filter(squad = squad):
+                    section.append([att.present, att.grade])
+                columns.append(section)
         else:
             queryset = subject.materials.filter(id__gt = current_sm)
-        for sm in queryset:
-            if len(columns) == 4:
-                break
-            if len(sm.material_cells.filter(squad=squad)) > 0:
-                squad_cell = sm.material_cells.filter(squad=squad)[0]
-                grades = [squad_cell.date.strftime('%d %B %Y'), squad_cell.time_period.start + '-' + squad_cell.time_period.end]
-                for attendance in squad_cell.attendances.filter(subject=subject, squad=squad):
-                    if attendance.squad_cell.date + timedelta(2) >= timezone.now().date() and attendance.squad_cell.date < timezone.now().date():
-                        grades.append(attendance.id)
-                    if attendance.grade > 0:
-                        grades.append(attendance.grade)
-                    else:
-                        grades.append('')
-                columns.append(grades)
+            if len(queryset) <= 4:
+                last_set = True
+            for sm in queryset:
+                if len(columns) == 4:
+                    break
+                section = [get_date(sm, squad), sm.id]
+                columns.append(section)
         data = {
-            'classes':squads,
-            'students':students,
+            'first_set':first_set,
+            'last_set':last_set,
             'columns':columns,
         }
         return JsonResponse(data)
+
+def miss_lecture(request):
+    profile = Profile.objects.get(user = request.user)
+    if request.GET.get('date'):
+        miss_lesson = MissLesson.objects.filter(profile = profile)
+        if len(miss_lesson) > 0:
+            miss_lesson = miss_lesson[0]
+        else:
+            print('new miss')
+            miss_lesson = MissLesson.objects.create(profile=profile)
+        date = datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
+        if date in miss_lesson.dates:
+            action = 'remove'
+            miss_lesson.dates.remove(date)
+        else:
+            action = 'add'
+            miss_lesson.dates.append(date)
+        miss_lesson.save()
+
+    data = {
+        'action':action
+    }
+    return JsonResponse(data)
 
 def att_present(request):
     profile = Profile.objects.get(user = request.user)
-    if request.GET.get('id') and profile.is_trener:
+    if request.GET.get('id') and is_profi(profile, 'Teacher'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
         attendance.present = 'present'
         attendance.save()
@@ -309,7 +248,6 @@ def tell_about_corruption(request):
 class ChangeTimeAPIToggle(APIView):    
     def get(self, request, format=None):
         data = {
-            "like_num":0,
         }
         return Response(data)
 
@@ -318,7 +256,6 @@ class DeleteZaiavkaAPIToggle(APIView):
         zaiavka = Zaiavka.objects.get(id = id)
         zaiavka.delete()
         data = {
-            "like_num":0,
         }
         return Response(data)
 class DeleteFollowAPIToggle(APIView):    
@@ -326,10 +263,39 @@ class DeleteFollowAPIToggle(APIView):
         follow = Follow.objects.get(id = id)
         follow.delete()
         data = {
-            "like_num":0,
         }
         return Response(data)
 
 def logout_view(request):
     logout(request)
     return redirect("/")
+
+def test_account(request):
+    user = User.objects.get(id = 1)
+    hisprofile = Profile.objects.get(user = user)
+    if is_profi(hisprofile, 'Teacher'):
+        hissubjects = hisprofile.teachers_subjects.all()
+        hissquads = hisprofile.curators_squads.all()
+    else:
+        hissubjects = hisprofile.hissubjects.all()
+        hissquads = hisprofile.squads.all()
+    time_periods = TimePeriod.objects.all()
+    form = ProfileForm(request.POST or None, request.FILES or None,instance=hisprofile)
+    if form.is_valid():
+        hisprofile = form.save(commit=False)
+        hisprofile.save()
+        return HttpResponseRedirect(hisprofile.get_absolute_url())
+  
+    context = {
+        "profile":hisprofile,
+        "hisprofile": hisprofile,
+        "hisprofile_list":[hisprofile],
+        'all_squads':Squad.objects.all(),
+        'all_profiles':Profile.objects.all(),
+        'hisboards':hisboards(hisprofile),
+        'hissubjects':hissubjects,
+        'days':Day.objects.all(),
+        'hissquads':hissquads,
+        'time_periods':time_periods,
+    }
+    return render(request, "profile.html", context)

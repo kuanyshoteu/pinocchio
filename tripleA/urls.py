@@ -18,13 +18,12 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
-from accounts.views import (login_view, logout_view)
+from accounts.views import (logout_view)
 from papers.views import courses
 from main.views import(main_view, loaderio)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^login/', login_view, name='login'),
     url(r'^logout/', logout_view, name='logout'),
     url(r'^profile/', include("accounts.urls", namespace='accounts')),
     url(r'^groups/', include("squads.urls", namespace='squads')),
@@ -33,7 +32,6 @@ urlpatterns = [
     url(r'^papers/', include("papers.urls", namespace='papers')),
     url(r'^tasks/', include("tasks.urls", namespace='tasks')),
     url(r'^todolist/', include("todolist.urls", namespace='todolist')),
-    url(r'^clients/', include("clients_base.urls", namespace='clients')),
     url(r'^library/', include("library.urls", namespace='library')),
     url(r'^news/', include("news.urls", namespace='news')),
     url(r'^courses/$', courses, name='courses'),        

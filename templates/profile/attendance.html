@@ -1,15 +1,8 @@
 {% load staticfiles %}
-<style type="text/css">
-    .switch_btn_active{
-        background-color: #5181b8;
-        color: white;
-    }
-    .switch_btn_active:hover{
-        color: white;
-    }
-</style>
 {% if hisprofile == profile or profile.is_manager %}
-    <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+<span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
+<span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
+    <div class="ui segment shapka">
         <div class="ui grid">
             <div class="one wide column">
                 <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
@@ -18,80 +11,69 @@
                 Журналы
             </div>
         </div>
-    </div> 
-        <style>
-        .one.wide.column {
-            margin-right: 14px;
-        }
-        @media only screen and (max-width: 767px) {
-          .one.wide.column {
-            margin-right: 20px;
-          }
-        }
-        </style>
-    <div class="ui segment" style="margin-top: 0">
+    </div>
+    <div class="ui segment" style="margin-top: 0;padding: 18px;">
         {% for subject in hissubjects %}
-        <a style="padding: 14px; font-size: 13px;" class="open_attendance" id="{{ subject.id }}">
-            <i class="icon angle right" style="margin-right: -2px;"></i>{{ subject.title }}
+        <a onclick="load_attendance_subject('{{ subject.id }}')" class="load_attendance_subject {% if subject.id == att_subject.id %}current_option{% else %}other_option{% endif %}" id="subject{{ subject.id }}">
+            {{ subject.title }}
         </a>
         {% endfor %} 
-        <div class="attendances">
-            {% for subject in hissubjects %}
-                {% if forloop.counter == 1 %}
-                    <div id="subject{{ subject.id }}" class="subject_attendance">
-                        <span style="display: none;" class="instance_id" id="{{ subject.id }}"></span>
-                        {% if hisprofile.is_trener %}
-                            <div class="ui grid" style="text-align: center; margin: 14px 0 2px 0;">
-                                {% for squad in subject.squads.all %}
-                                    <a class="{% if forloop.counter == 1 %}switch_att_btn_active{% endif %} switch_att_btn switch_att_btn{{ subject.id }}" style="width: calc(100%/{{ subject.squads.all|length }});" paper_id='{{ squad.id }}sub' lesson_id='{{ subject.id }}'>
-                                        {{ squad.title }}
-                                    </a>
-                                {% endfor %}
-                            </div>
-                            {% for squad in subject.squads.all %}
-                                {% include 'profile/att_squad_detail.html' %}
-                            {% endfor %}
-                        {% else %}
-                            <div class="ui grid" style="text-align: center; margin: 14px 0 2px 0;">
-                                {% for squad in subject.squads.all %}
-                                    {% if forloop.counter == 1 %}
-                                    <a class="{% if forloop.counter == 1 %}switch_att_btn_active{% endif %} switch_att_btn switch_att_btn{{ subject.id }}" 
-                                    style="width: calc(100%/{{ subject.squads.all|length }});" paper_id='{{ squad.id }}sub'  lesson_id='{{ subject.id }}'>
-                                        {{ squad.title }}
-                                    </a>
-                                    {% endif %} 
-                                {% endfor %}
-                            </div>
-                            {% for squad in hisprofile.squads.all %}
-                                {% include 'profile/att_student_detail.html' %}
-                            {% endfor %}
-                        {% endif %}  
-                    </div>
-                {% endif %}
-            {% endfor %} 
-        </div>
-    </div> 
+        <br><br><br>
+        <div id="subject_attendance">
+            <div class="ui stackable grid" style="margin-bottom: 0">
+            {% for squad in att_subject.squads.all %}
+                <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject.squads.all|length }}));">{{ squad.title }}</a>
+            {% endfor %}
+            </div>
+            <div id="squad_attendance">
+                {% include "profile/attendance_squad.html" %}
+            </div>
+        </div>            
+    </div>
+<script type="text/javascript">
+    function load_attendance_subject(subject_id){
+        var url = $('#load_attendance_subject').attr('url');
+        console.log(url)
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'subject_id':subject_id,
+            },
+            success: function (data) {
+                for (var i = 0; i < document.getElementsByClassName("load_attendance_subject").length; i++){
+                    document.getElementsByClassName("load_attendance_subject")[i].setAttribute('class', 'other_option')
+                }
+                $('#subject' + subject_id).attr('class', 'load_attendance_subject current_option')
+                $( "#subject_attendance" ).load(document.URL +  ' #subject_attendance');
+            }, 
+            error: function (error) {
+                console.log('error')
+            }
+        })
+    };
+    function load_attendance_squad(squad_id){
+        var url = $('#load_attendance_squad').attr('url');
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'squad_id':squad_id,
+            },
+            success: function (data) {
+                for (var i = 0; i < document.getElementsByClassName("switch_btn").length; i++){
+                    document.getElementsByClassName("switch_btn")[i].setAttribute('class', 'other_option2 switch_btn')
+                }
+                $('#squad' + squad_id).attr('class', 'load_attendance_squad current_option2 switch_btn_active switch_btn')
+                $( "#squad_attendance" ).load(document.URL +  ' #squad_attendance');
+            }, 
+            error: function (error) {
+                console.log('error')
+            }
+        })
+    };
+</script>
+
 {% endif %}
 
-<script >
-    for(var i = 0; i < document.getElementsByClassName('swiper-container').length; i++){
-        var id = document.getElementsByClassName('swiper-container')[i].getAttribute('id');
-        var swiper = new Swiper('.main-slider' + id, {
-            slidesPerView: 5,
-            spaceBetween: 0,
-            centeredSlides: false,
-            nextButton: '.uploaded-in-next'+id,
-            prevButton: '.uploaded-in-prev'+id 
-        });
-        if ($('.today' + id).attr('number')){
-            number = $('.today' + id).attr('number')
-        }
-        else{
-            number = $('.past' + id).last().attr('number')
-        }
-        if (number){
-            swiper.slideTo(parseInt(number-1))
-        }
-        var mySwiper = document.getElementsByClassName('.main-slider' + id).swiper
-    }
-</script>
+

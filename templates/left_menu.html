@@ -1,21 +1,8 @@
-<div class="one wide column" style="margin-right: -20px;">
-</div>
-<style type="text/css">
-    .lftitem{
-        padding: 8px !important;
-    }
-    .lftitemsmall:hover{
-        background: none !important;
-        text-decoration: underline !important;
-    }
-    .lftitemsmall{
-        padding: 0
-    }
-</style>
 {% if user.is_authenticated %}
-<div style="position: fixed;width: 155px;margin-left: 30px;z-index: 1000">
+<div style="width: 18%;">
+</div>
+<div class="fixed_menu" style="">
     <div id="left-main-menu">
-        <div class="left-main-menu" style="width: 155px;">
             <div class="ui vertical menu" style="background-color: #f4f4f4; border:0; box-shadow: none; ">
                 <a class="item lftitem" href='{{ profile.get_absolute_url }}'>
                     <i class="home icon"></i> Моя страница
@@ -23,37 +10,27 @@
                 <a class="item lftitem" href='{% url "news:list" %}'>
                     <i class="newspaper icon"></i>Новости
                 </a>
-                {% if profile.is_director or profile.is_manager %}
                 <a class="item lftitem" href='{% url "schools:info" %}'>
                     <i class="cog icon"></i>Управление
                 </a>
                 <a class="item lftitem" href='{% url "schools:crm" %}'>
                     <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>CRM
                 </a>
-                {% endif %}
-                {% if profile.is_director or profile.is_manager %}
                 <a class="item lftitem" href='{% url "documents:main" %}'>
                     <i class="folder icon"></i>Документы
                 </a>
-                {% endif %}
                 <a class="item lftitem" href='{% url "schools:rating" %}'>
                     <i class="trophy icon"></i>Рейтинги
                 </a>
-                {% if profile.is_manager or profile.is_director %}
                 <a class="item lftitem" href='{% url "squads:list" %}'>
                     <i class="users icon"></i>Классы
                 </a>
-                {% endif %}
-                {% if profile.is_manager or profile.is_director %}
                 <a class="item lftitem" href='{% url "subjects:list" %}'>
                     <i class="table icon"></i>Предметы
                 </a>
-                {% endif %}
-                {% if profile.is_trener %}
                 <a class="item lftitem" href='{% url "library:main" %}'>
                     <i class="file alternate icon"></i>База уроков
                 </a>
-                {% endif %}
                 <a class="item lftitem" href='{% url "courses" %}'>
                     <i class="rocket icon"></i>Курсы
                 </a>
@@ -68,14 +45,12 @@
             <a class="lftitemsmall" style="color: #939699;font-size: 12px;margin-left: 10px;" href='/contacts/'>
                 Контакты
             </a>
-        </div>
     </div>
 <!--     <br>
     <a class="ui button mini blue" style="margin-left: 20px;" onclick="$('#corruption').modal('show')">
         Заявить о коррупции
     </a>
- --></div>
-<div style="margin-right: 150px;">
+ -->
 </div>
 {% endif %}
 

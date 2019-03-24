@@ -13,32 +13,45 @@ class ProfileModelAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileModelAdmin)
 
-class ProfileSchedule(admin.ModelAdmin):
-    list_display = ["x", "y"]
-    list_display_links = ["x", "y"]
+class ProfessionAdmin(admin.ModelAdmin):
+    list_display = ["title", "id"]
+    list_display_links = ["title"]
     class Meta:
-        model = ProfileScheduleCell
+        model = Profession
+admin.site.register(Profession, ProfessionAdmin)
 
-admin.site.register(ProfileScheduleCell, ProfileSchedule)
+class JobCategoryAdmin(admin.ModelAdmin):
+    list_display = ["title", "salary", "profession"]
+    list_display_links = ["title"]
+    class Meta:
+        model = JobCategory
+admin.site.register(JobCategory, JobCategoryAdmin)
 
 class ZaiavkaModelAdmin(admin.ModelAdmin):
     list_display = ["first_name", "id", "phone"]
     list_display_links = ["first_name"]
     list_filter = ["first_name"]
-
     search_fields = ["first_name", "phone"]
     class Meta:
         model = Zaiavka
 
 admin.site.register(Zaiavka, ZaiavkaModelAdmin)
 
-class MainPageModelAdmin(admin.ModelAdmin):
-    list_display = ["id"]
+class CorruptionAdmin(admin.ModelAdmin):
+    list_display = ["text", "id",]
     list_display_links = ["id"]
-    
+    list_filter = ["text"]
+    search_fields = ["text"]
     class Meta:
-        model = MainPage
+        model = Corruption
 
+admin.site.register(Corruption, CorruptionAdmin)
 
-admin.site.register(MainPage, MainPageModelAdmin)
-
+class MissLessonAdmin(admin.ModelAdmin):
+    list_display = ["profile", "text",]
+    list_display_links = ["profile"]
+    list_filter = ["text"]
+    search_fields = ["text"]
+    class Meta:
+        model = MissLesson
+admin.site.register(MissLesson, MissLessonAdmin)

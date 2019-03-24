@@ -18,7 +18,7 @@ from django.db.models.signals import post_save
 
 from pagedown.widgets import PagedownWidget
 from django.contrib.postgres.fields import ArrayField
-from schools.models import School
+from schools.models import *
 
 def upload_location(instance, filename):
     ProfileModel = instance.__class__
@@ -26,31 +26,24 @@ def upload_location(instance, filename):
         new_id = ProfileModel.objects.order_by("id").last().id + 1
     return "%s" %(filename)
 
-class ProfileScheduleCell(models.Model):
-    x = models.IntegerField(default=0)
-    y = models.IntegerField(default=0)
-    indexes = ArrayField(models.IntegerField(), default = [])
-    subjects = ArrayField(models.TextField(), default = [])
-    squads = ArrayField(models.IntegerField(), default = [])
-    colors = ArrayField(models.TextField(), default = [])
-    teachers = ArrayField(models.TextField(), default = [])
-    cabinets = ArrayField(models.TextField(), default = [])
-    
-    class Meta:
-        ordering = ['y', 'x']
+class Profession(models.Model):
+    title = models.TextField(blank = True,null = True,default='')
+class JobCategory(models.Model):
+    title = models.TextField(blank = True,null = True,default='')
+    salary = models.IntegerField(default=0)
+    profession = models.ForeignKey(Profession, default=1, on_delete = models.CASCADE, related_name='job_categories') 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
-    coins = models.IntegerField(default=0)
     first_name = models.TextField(blank = True,null = True,default='')
-    is_trener = models.BooleanField(default=False)
-    is_manager = models.BooleanField(default=False)
-    is_director = models.BooleanField(default=False)
-    is_creator = models.BooleanField(default=False)
-    is_ceo = models.BooleanField(default=False)
 
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='students')
-    
+    schools = models.ManyToManyField(School, related_name='people')
+    profession = models.ManyToManyField(Profession, related_name='workers')
+    job_categories = models.ManyToManyField(JobCategory, related_name='job_workers')
+    money = models.IntegerField(default=0)
+    is_student = models.BooleanField(default=True)
+
+    coins = models.IntegerField(default=0)
     birthdate = models.DateField(null = True, blank = True) 
     mail = models.TextField(default = '')
     phone = models.TextField(blank = True,null = True, default = '')
@@ -62,12 +55,15 @@ class Profile(models.Model):
     height_field = models.IntegerField(default=0, null = True)
     width_field = models.IntegerField(default=0, null = True)
 
-    tag_ids = ArrayField(models.IntegerField(), default = [])
-    easy_skills = ArrayField(models.IntegerField(), default = [])
-    middle_skills = ArrayField(models.IntegerField(), default = [])
-    hard_skills = ArrayField(models.IntegerField(), default = [])
-    pro_skills = ArrayField(models.IntegerField(), default = [])
-    hisschedule = models.ManyToManyField(ProfileScheduleCell, related_name='owner')
+    tag_ids = ArrayField(models.IntegerField(), default = list)
+    easy_skills = ArrayField(models.IntegerField(), default = list)
+    middle_skills = ArrayField(models.IntegerField(), default = list)
+    hard_skills = ArrayField(models.IntegerField(), default = list)
+    pro_skills = ArrayField(models.IntegerField(), default = list)
+
+    crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    crm_age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
 
     class Meta:
         ordering = ['-coins', 'first_name']
@@ -79,8 +75,10 @@ class Profile(models.Model):
         return reverse("accounts:profile", kwargs={"user": self.user})
 
     # APIs
-    def hisattendance(self):
-        return reverse("accounts:hisattendance")
+    def subject_attendance(self):
+        return reverse("accounts:subject_attendance")
+    def squad_attendance(self):
+        return reverse("accounts:squad_attendance")
     def more_attendance(self):
         return reverse("accounts:more_attendance")
     def hislessons(self):
@@ -99,6 +97,8 @@ class Profile(models.Model):
         return reverse("accounts:change_url")
     def update_schedule_url(self):
         return reverse("accounts:update_schedule_url")
+    def miss_lecture_url(self):
+        return reverse("accounts:miss_lecture_url")
     # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")
@@ -131,6 +131,7 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 class Zaiavka(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='zaiavkas') 
     first_name = models.TextField()
     mail = models.TextField(default = '')
     phone = models.TextField(blank = True,null = True, default = '')
@@ -139,59 +140,7 @@ class Zaiavka(models.Model):
         ordering = ['-timestamp']
     
     def get_api_deletezaiavka_url(self):
-        return reverse("accounts:deletezaiavka-api-toggle", kwargs={"id": self.id})
-    
-class MainPage(models.Model):
-    admin_name = models.TextField(default = 'admin2')
-    title = models.TextField(default = 'Летняя программа')
-    text = models.TextField(default = 'text')
-    schedule_time_periods = ArrayField(models.TextField(), default = [''])
-
-    image = models.ImageField(upload_to=upload_location, 
-            null=True, 
-            blank=True, 
-            width_field="width_field", 
-            height_field="height_field",)
-    height_field = models.IntegerField(default=0, null = True)
-    width_field = models.IntegerField(default=0, null = True)
- 
-    folder_image = models.ImageField(upload_to=upload_location, 
-            null=True, 
-            blank=True, 
-            width_field="width_field2", 
-            height_field="height_field2",)
-    height_field2 = models.IntegerField(default=0, null = True)
-    width_field2 = models.IntegerField(default=0, null = True)
-
-    paper_image = models.ImageField(upload_to=upload_location, 
-            null=True, 
-            blank=True, 
-            width_field="width_field3", 
-            height_field="height_field3",)
-    height_field3 = models.IntegerField(default=0, null = True)
-    width_field3 = models.IntegerField(default=0, null = True)
-
-    squad_image = models.ImageField(upload_to=upload_location, 
-            null=True, 
-            blank=True, 
-            width_field="width_field4", 
-            height_field="height_field4",)
-    height_field4 = models.IntegerField(default=0, null = True)
-    width_field4 = models.IntegerField(default=0, null = True)
-
-    def city_api_url(self):
-        return reverse("main:city_api_url")
-    def filial_api_url(self):
-        return reverse("main:filial_api_url")
-    def subject_api_url(self):
-        return reverse("main:subject_api_url")
-    def main_url(self):
-        return reverse("main:home")
-    def save_zaiavka_url(self):
-        return reverse("main:save_zaiavka_url")
-    def get_markdown(self):
-        return mark_safe(markdown(self.text))
-        
+        return reverse("accounts:deletezaiavka-api-toggle", kwargs={"id": self.id})        
 
 def pre_save_course_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
@@ -201,3 +150,15 @@ class Corruption(models.Model):
     text = models.TextField(default='')
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='his_messages')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='corruptions')
+
+class MissLesson(models.Model):
+    profile = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE) 
+    text = models.TextField(blank = True,null = True,default='')
+    image = models.ImageField(upload_to=upload_location, 
+            null=True, 
+            blank=True, 
+            width_field="width_field", 
+            height_field="height_field",)
+    height_field = models.IntegerField(default=0, null = True)
+    width_field = models.IntegerField(default=0, null = True)
+    dates = ArrayField(models.DateField(null = True, blank = True), default = list)

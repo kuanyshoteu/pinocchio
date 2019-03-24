@@ -14,6 +14,7 @@ from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
 from accounts.models import Profile
+from schools.models import School
 
 def upload_location(instance, filename):
     CourseModel = instance.__class__
@@ -23,10 +24,10 @@ def upload_location(instance, filename):
         new_id=0
     return "%s/%s" %(instance.id, filename)
 
-
 class Squad(models.Model):
     curator = models.ManyToManyField(Profile, default=1, related_name='curators_squads')
     students = models.ManyToManyField(Profile, default=1, related_name='squads')
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='groups')
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)
@@ -51,7 +52,7 @@ class Squad(models.Model):
 
     start_date = models.DateField(auto_now_add=False)
     end_date = models.DateField(auto_now_add=False)
-    cabinet = models.CharField(max_length=250,default='')
+    color_back = models.TextField(default='')
 
     class Meta:
         ordering = ['title']
@@ -87,12 +88,6 @@ class Squad(models.Model):
     def change_curator_url(self):
         return reverse("squads:change_curator_url")       
 
-class SquadWeek(models.Model):
-    squad = models.ForeignKey(Squad, default=1, on_delete = models.CASCADE, related_name='weeks')
-    actual = models.BooleanField(default = False)
-    class Meta:
-        ordering = ['id']
-
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)
     if not slug:
@@ -111,17 +106,3 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
         instance.slug = create_slug(instance)
 
 pre_save.connect(pre_save_course_receiver, sender=Squad)
-
-class Follow(models.Model):
-    author_profile = models.ForeignKey(Profile, default=1, on_delete = models.PROTECT)
-    group = models.ForeignKey(Squad, default=1, on_delete = models.PROTECT)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        ordering = ['-timestamp']
-    
-    def get_api_deletefollow_url(self):
-        return reverse("accounts:deletefollow-api-toggle", kwargs={"id": self.id})
-
-class SquadCategory(models.Model):
-    title = models.TextField(default = '')
-    squads = models.ManyToManyField(Squad, default=1, related_name='squad_categories')

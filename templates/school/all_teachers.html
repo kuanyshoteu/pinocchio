@@ -35,7 +35,7 @@
                             <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
                             <th><span>Номер</span></th>
                             <th><span>email</span></th>
-                            <th><span>Рейтитнг</span></th>
+                            <th><span>Предметы</span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,7 +54,11 @@
                                 </td>
                                 <td>{{ teacher.phone }}</td>
                                 <td>{{ teacher.mail }}</td>
-                                <td>{{ teacher.coins }}</td>
+                                <td>
+                                    {% for subject in teacher.teachers_subjects.all %}
+                                        <a style="color: #fff;text-decoration: underline;" href="{{ subject.get_absolute_url }}">{{ subject.title }}</a>
+                                    {% endfor %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

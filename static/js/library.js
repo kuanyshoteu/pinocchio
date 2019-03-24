@@ -242,6 +242,7 @@ $(document).ready(function(){
         $.ajax({
             url: pageUrl,
             data: {
+              'school_id':this_.attr("school"),
               'new_parent':new_parent,
             },
             dataType: 'json',
@@ -295,7 +296,8 @@ $(document).ready(function(){
         $.ajax({
             url: pageUrl,
             data: {
-                'parent_id':this_.attr("parent_id")
+                'parent_id':this_.attr("parent_id"),
+                'school_id':this_.attr("school"),
             },
             dataType: 'json',
             success: function (data) {
@@ -310,6 +312,7 @@ $(document).ready(function(){
         $.ajax({
             url: pageUrl,
             data: {
+                "school_id":this_.attr("school"),
                 'parent_id':this_.attr("parent_id")
             },
             dataType: 'json',
@@ -343,10 +346,8 @@ $(document).ready(function(){
     });
     $(".change_folder_name").click(function () {
         var this_ = $(this);
-        console.log('f');
         var pageUrl = this_.attr("data-href");
         var name = $('#change_folder_name' + this_.attr('id')).val();
-        console.log('f')
         if (pageUrl) {
             $.ajax({
                 url: pageUrl,
@@ -404,7 +405,8 @@ $(document).ready(function(){
         $.ajax({
             url: pageUrl,
             data: {
-              'parent_id':this_.attr("parent_id")
+                'parent_id':this_.attr("parent_id"),
+                'school_id':this_.attr("school"),
             },
             dataType: 'json',
             success: function (data) {

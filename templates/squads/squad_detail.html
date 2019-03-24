@@ -23,7 +23,7 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 <div class="ui grid">
-                    <div class="{% if instance.image_banner %}fifteen{%else%}eleven{%endif%} wide column" style="padding-bottom: 0;padding-right: 0;">
+                    <div class="{% if instance.image_banner %}sixteen{%else%}twelve{%endif%} wide column" style="padding-bottom: 0;padding-right: 0;">
                         <div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
                             <div class="ui grid">
                                 {% if instance.image_banner %}
@@ -31,7 +31,7 @@
                                     <img src="{{ instance.image_banner.url }}" style="height: 200px; width: 100%;">
                                 </div>
                                 {% endif %}
-                                <div class="eleven wide column">
+                                <div class="twelve wide column">
                                     <div class="group-name">
                                         {% if instance.image_banner %}
                                             {% if instance.image_icon %}
@@ -43,13 +43,13 @@
                                         <span class="ui header ava-title">{{ instance.title }}</span>
                                     </div>
                                 </div>
-                                <div class="five wide column" >
+                                <div class="four wide column" >
                                 </div>  
                             </div>
                         </div>
                     {% if instance.image_banner %}    
                     </div>
-                    <div class="eleven wide column" style="padding-right: 0">
+                    <div class="twelve wide column" style="padding-right: 0">
                     {% endif %}
                         <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;{% if not course.image %}margin-top: 0{% endif %}">
                             Информация

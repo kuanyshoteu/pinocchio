@@ -12,7 +12,10 @@
     </div>
 </div>
 <div class="ui segment" style="background-color: #fafbfc;margin-top: 0; padding: 18px;">
-    <a href="{{ instance.get_crm_url }}" class="{% if students %}current_option{% else %}other_option{% endif %}" name="school_info">
+    <a href="{{ instance.get_crm_url }}" class="{% if registration %}current_option{% else %}other_option{% endif %}" name="school_info">
+        Регистрация
+    </a>
+    <a href="{{ instance.get_students_url }}" class="{% if students %}current_option{% else %}other_option{% endif %}" name="school_info">
         Студенты
     </a>
     <a href="{{ instance.get_requests_url }}" class="{% if requests %}current_option{% else %}other_option{% endif %}" name="teachers">

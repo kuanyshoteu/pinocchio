@@ -10,13 +10,13 @@
             <div class="twelve wide column">
 				<div class="start_urok"">
 					<div class="ui segment" style="background-color:#fafbfc;margin-bottom: 0;padding: 18px;">
-						<a class="open_allsquads current_squads" style="font-size: 15px;">Урок</a>
-						<a class="open_mysquads other_squads">
+						<a class="open_option current_option" name="class">Урок</a>
+						<a class="open_option other_option" name="home">
 				            Домашки 
 				        </a>
 					</div>
 					{% if lesson_now %}
-					<div class="allsquads" style="margin-top: 0">
+					<div class="option" id="class" style="margin-top: 0">
 						<div class="ui segment">
 							<div class="ui grid">
 							{% for subject in classwork %}
@@ -43,17 +43,15 @@
 							{% endfor %}
 							</div>
 						</div>
-
-						
 					</div>
 					{% else %}
-					<div class="ui segment allsquads" style="text-align: center;color: #656565;margin-top: 0;padding-bottom: 50px;">
+					<div class="ui segment option classwork" id="class">
 						<img src="{% static 'images/fun.png' %}" style="height: 200px;">
 						<br>
 						Урок еще не начался
 					</div>
 					{% endif %}	
-					<div class="mysquads" style="margin-top: 0; display: none;">
+					<div class="option" id="home" style="margin-top: 0; display: none;">
 						<div class="ui segment " style="margin-top: 0">
 							<div class="ui grid">
 							{% for subject in homeworks %}

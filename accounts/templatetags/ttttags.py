@@ -1,31 +1,11 @@
 from django import template
-from subjects.models import Attendance,SquadCell,TimePeriod
+from subjects.models import Attendance,TimePeriod
 from papers.models import Comment
 from django.utils import timezone
 from datetime import timedelta
+from subjects.templatetags.ttags import get_date
 
 register = template.Library()
-
-@register.filter
-def day_cells(day, week):
-    res = []
-    for cell in day.day_cell.all():
-        sc = SquadCell.objects.filter(week=week,cell=cell)
-        if len(sc) > 0:
-            res.append(sc)
-    return res
-
-@register.filter
-def find_sc(subject_material, squad):
-    return subject_material.material_cells.filter(squad=squad)
-
-@register.filter
-def find_attendance(squad_cell, subject):
-    return squad_cell.attendances.filter(subject=subject)
-
-@register.filter
-def hisattendance(squad_cell, student):
-    return squad_cell.attendances.filter(student=student)
 
 @register.filter
 def minus(x):
@@ -39,13 +19,15 @@ def is_odd(number):
         return True
 
 @register.filter
-def check_date(date, delta):
+def check_date(material, squad):
+    date = get_date(material, squad)
     if date > timezone.now().date():
         return 'future'
-    elif date + timedelta(int(delta)) >= timezone.now().date():
+    elif date + timedelta(17) >= timezone.now().date():
         return 'now'
     else:
         return 'past'
+    return '_'
         
 @register.filter
 def get_children(comment):

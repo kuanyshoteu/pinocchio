@@ -46,7 +46,7 @@ admin.site.register(Lecture, LectureModelAdmin)
 class SubjectMaterialsAdmin(admin.ModelAdmin):
     list_display = ["id", "subject", "number"]
     list_display_links = ["id"]
-    list_filter = ["id"]
+    list_filter = ["subject"]
 
     class Meta:
         model = SubjectMaterials
@@ -62,3 +62,12 @@ class CellModelAdmin(admin.ModelAdmin):
         model = Cell
 
 admin.site.register(Cell, CellModelAdmin)
+
+class CacheAttendanceModelAdmin(admin.ModelAdmin):
+    list_display = ["id", "profile", "subject"]
+    list_display_links = ["id"]
+
+    class Meta:
+        model = CacheAttendance
+
+admin.site.register(CacheAttendance, CacheAttendanceModelAdmin)

@@ -1,0 +1,24 @@
+{% load staticfiles %}
+{% if hisprofile == profile or profile.is_manager %}
+    <div class="ui segment" style="margin-bottom: 0;font-size: 15px;">
+        Курсы
+    </div> 
+    <div class="ui segment" style="margin-top: 0;padding-bottom: 28px;">        
+        {% for course in hiscourses %}
+        <a class="lftitem item" href="{{ course.get_absolute_url }}">
+            <div class="ui grid">
+                <div class="four wide column" style="padding: 14px 14px 0 0">
+                    {% if course.image %}
+                    <img src="{{ course.image.url }}" style="width: 30px; height: 30px;border-radius: 5px;">
+                    {% else %}
+                    <img src="{% static 'images/books.png' %}" style="width: 30px; height: 30px;border-radius: 5px;">
+                    {% endif %}
+                </div>
+                <div class="twelve wide column" style="padding: 14px 14px 0 0">
+                    <b style="color: black">{{ course.title}}</b>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div> 
+{% endif %}

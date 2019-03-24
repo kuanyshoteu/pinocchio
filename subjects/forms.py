@@ -3,22 +3,23 @@ from pagedown.widgets import PagedownWidget
 from .models import Subject
 from accounts.models import Profile
 from django.forms import CharField
-
+from schools.models import *
+from constants import *
 
 class SubjectForm(forms.ModelForm):
-    title = forms.CharField(label='',required=False)
-    content = forms.CharField(label='', required=False)
-    cabinet = forms.CharField(label='', required=False)
-    image_banner = forms.FileField(label='', required=False)
-    image_icon = forms.FileField(label='', required=False)
-    image_back = forms.FileField(label='', required=False)
-    color_back = forms.CharField(label='', required=False)
+    title = forms.CharField(label='Название',required=False)
+    content = forms.CharField(label='Описание', required=False)
+    cost = forms.IntegerField(label='Цена', required=False)
+    image_banner = forms.FileField(label='Баннер', required=False)
+    image_icon = forms.FileField(label='Иконка', required=False)
+    image_back = forms.FileField(label='Обои', required=False)
+    color_back = forms.CharField(label='Цвет фона', required=False)
     class Meta:
         model = Subject
         fields = [      
             "title",
             "content",
-            "cabinet",
+            "cost",
             "image_banner",
             "image_icon",
             "image_back",

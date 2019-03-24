@@ -11,7 +11,7 @@
 {% load ttags %}
 {% load staticfiles %}
 {% block content %}
-<div id="group-details">
+<div id="group-details" style="padding-bottom: 100px;">
     {% if profile.is_manager %}
     <a id="go-back-btn"  href='{% url "subjects:list" %}'>
         <i class="arrow left icon"></i>Назад
@@ -82,9 +82,7 @@
                                 </div>
                             </div>                            
                         </div>
-                        {% if profile.is_trener %}
-                            {% include 'subjects/subject_show_calendar.html' %}
-                        {% endif %}
+                        {% include 'subjects/subject_show_calendar.html' %}
                         {% include 'subjects/dated_materials.html' %}
                     </div>
                     <div class="four wide column" style="padding: 14px 0;">
@@ -119,47 +117,6 @@
                                     </span>                                    
                                 </div>
                             </a>
-                        </div>
-                        {% endif %}
-                        <div class="ui segment">
-                            <a href="{{ instance.lessons_url }}">
-                                Уроки <span style="color: #939393;"></span>
-                            </a>
-                            <div style="margin-top: 14px;">
-                                {% for material in instance.materials.all %}
-                                    {% for lesson in material.lessons.all %}
-                                        {% if forloop.counter < 4 %}
-                                        <div style="padding-bottom: 10px; font-size: 15px;">
-                                            <a href="{{ lesson.get_absolute_url }}">
-                                                <img src='{% static "images/doc.png" %}' style="height: 15px;">
-                                                {{ lesson.title }}
-                                            </a>
-                                        </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% if videos|length > 0 or youtubes|length > 0 %}
-                        <div class="ui segment">
-                            <a href="{{ instance.videos_url }}">
-                                Видеозаписи
-                            </a>
-                            <div style="margin-top: 14px;padding: 10px;" class="ui grid">
-                            {% for video in videos %}
-                                <div style="padding: 0; margin-bottom: 18px;">
-                                    <video style="width: 100%; height: 112px;border-radius: 5px;padding: 0; border: none;" controls>
-                                        <source src="{{ video.url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                            {% endfor %}
-                            {% for youtube in youtubes %}
-                            <div style="padding: 0; margin-bottom: 18px;">
-                                    <iframe style="width: 100%; height: 112px;border-radius: 5px;padding: 0; border: none;" src="{{ youtube }}" allowfullscreen></iframe>
-                                </div>
-                            </div>
-                            {% endfor %}
                         </div>
                         {% endif %}
                     </div>

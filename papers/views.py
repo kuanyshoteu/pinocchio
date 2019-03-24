@@ -16,14 +16,10 @@ from squads.models import Squad
 from papers.models import Comment
 from library.models import Folder
 from accounts.models import *
+from constants import *
 
 def lesson_details(request, lesson_id = None):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
-
+    profile = get_profile(request)
     lesson = Lesson.objects.get(id=lesson_id)
     if len(lesson.papers.all()) == 0:
         context = {
@@ -37,12 +33,7 @@ def lesson_details(request, lesson_id = None):
                 return redirect(paper.get_absolute_url())
 
 def estimate_lesson_page(request, lesson_id = None):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
-
+    profile = get_profile(request)
     lesson = Lesson.objects.get(id=lesson_id)
     if not profile.id in lesson.estimater_ids:
         lesson.estimater_ids.append(profile.id)
@@ -56,12 +47,7 @@ def estimate_lesson_page(request, lesson_id = None):
     return render(request, template_name='library/lesson_details.html', context=context)
 
 def paper_details(request, paper_id = None):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
-
+    profile = get_profile(request)
     paper = Paper.objects.get(id=paper_id)
     lesson = paper.lessons.first()
 
@@ -101,6 +87,7 @@ def paper_details(request, paper_id = None):
         'subtheme_file_form':subtheme_file_form,
         'subtheme_video_form':subtheme_video_form,
         'tasks':Task.objects.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
     }
     return render(request, "library/lesson_details.html", context)
 
@@ -209,11 +196,14 @@ def AddTask(request):
 
 def create_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
-    if len(Lesson.objects.all()) > 0:
-        name = 'Новый список' + str(Lesson.objects.all()[len(Lesson.objects.all())-1].id + 1)
-    else:
-        name = 'Новая список'
+    name = 'Урок'
+    if request.GET.get('school_id'):
+        school = School.objects.get(id=int(request.GET.get('school_id')))
+        if len(school.lessons.all()) > 0:
+            name += str(school.lessons.all()[len(school.lessons.all())-1].id + 1)
     lesson = Lesson.objects.create(title = name, author_profile = profile)
+    if request.GET.get('school_id'):
+        lesson.school = school
     lesson.save()
     if request.GET.get('parent_id') != 'denone':
         parent = Folder.objects.get(id = int(request.GET.get('parent_id')))
@@ -222,14 +212,10 @@ def create_lesson(request):
     return JsonResponse(data)        
 
 def rename_lesson(request):
-    if request.GET.get('id'):
-        if request.GET.get('id') == 'new_paper':
-            lesson = Lesson.objects.all()[0]
-        else:
-            lesson = Lesson.objects.get(id = int(request.GET.get('id')))
-        if request.GET.get('name'):
-            lesson.title = request.GET.get('name')
-            lesson.save()
+    if request.GET.get('id') and request.GET.get('name'):
+        lesson = Lesson.objects.get(id = int(request.GET.get('id')))
+        lesson.title = request.GET.get('name')
+        lesson.save()
 
     data = {}
     return JsonResponse(data)
@@ -431,11 +417,18 @@ def course_details(request, course_id=None):
         if not profile in course.students.all():
             raise Http404
 
+    lessons = []
+    folders = []
+    for school in profile.schools.all():
+        lessons += list(school.lessons.all())
+        folders += list(school.school_folders.all())
+    lessons += Lesson.objects.filter(access_to_everyone=True)
+    lessons = set(lessons)
     context = {
         "profile": profile,
         "course":course,
-        'lessons':Lesson.objects.all(),
-        "folders":Folder.objects.all(),
+        "lessons":lessons,
+        "folders":folders,
     }
     return render(request, 'courses/course_details.html', context=context)
 
@@ -491,6 +484,7 @@ def course_create(request):
     form = CourseForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         course = form.save(commit=False)
+        course.author_profile = profile
         course.save()
         return HttpResponseRedirect(course.get_absolute_url())
 
@@ -499,19 +493,6 @@ def course_create(request):
         "profile":profile,
     }
     return render(request, "courses/course_create.html", context)
-
-def rename_course(request):
-    if request.GET.get('id'):
-        if request.GET.get('id') == 'new_course':
-            course = Course.objects.all()[0]
-        else:
-            course = Course.objects.get(id = int(request.GET.get('id')))
-        if request.GET.get('name'):
-            course.title = request.GET.get('name')
-            course.save()
-
-    data = {}
-    return JsonResponse(data)
 
 def pay_for_course(request):
     if request.GET.get('course_id'):

@@ -7,11 +7,11 @@ from django.forms import CharField
 
 class SquadForm(forms.ModelForm):
     title = forms.CharField(label='Название')
-    cabinet = forms.CharField(label='Кабинет',required=False)
     content = forms.CharField(label='Описание',required=False)
     slogan = forms.CharField(label='Краткое описание',required=False)
     image_banner = forms.FileField(label='Большая картинка',required=False)
     image_icon = forms.FileField(label='Иконка',required=False)
+    color_back = forms.CharField(label='Цвет в расписании',required=False)
     
     class Meta:
         model = Squad
@@ -20,5 +20,5 @@ class SquadForm(forms.ModelForm):
             "content",
             "image_banner",
             "image_icon",
-            "cabinet",
+            "color_back",
         ]

@@ -12,6 +12,7 @@ from django.urls import reverse
 
 from django.db import models
 from accounts.models import Profile
+from schools.models import School
 
 def upload_location(instance, filename):
     CardModel = instance.__class__
@@ -20,6 +21,7 @@ def upload_location(instance, filename):
     return "%s" %(filename)
 
 class Document(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_docs') 
     file = models.FileField(upload_to=upload_location, null = True)
     object_type = models.CharField(max_length=255, default='')
 
@@ -65,6 +67,7 @@ class Comment(models.Model):
 
 
 class Board(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_boards') 
     name = models.CharField(max_length=255)
 
     def __str__(self):

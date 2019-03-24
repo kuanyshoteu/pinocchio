@@ -16,6 +16,7 @@ from django.contrib.postgres.fields import ArrayField
 from accounts.models import Profile
 from squads.models import Squad
 from tasks.models import Task
+from schools.models import School
 
 def upload_location(instance, filename):
     PaperModel = instance.__class__
@@ -42,6 +43,7 @@ class Subtheme(models.Model):
         return reverse("papers:delete_subtheme_url")
         
 class Paper(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_papers') 
     title = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='paper_author')
@@ -72,15 +74,17 @@ class Paper(models.Model):
         ordering = ['id']
     
 class Lesson(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='lessons') 
     title = models.CharField(max_length=250)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='lesson_author')
     is_homework = models.BooleanField(default=False)
     papers = models.ManyToManyField(Paper, related_name='lessons')
     timestamp = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default = 0)
-    grades = ArrayField(models.IntegerField(), default = [])
-    estimater_ids = ArrayField(models.IntegerField(), default = [])
+    grades = ArrayField(models.IntegerField(), default = list)
+    estimater_ids = ArrayField(models.IntegerField(), default = list)
     done_by = models.ManyToManyField(Profile, related_name='done_lessons')
+    access_to_everyone = models.BooleanField(default=False)
     
     def add_paper_url(self):
         return reverse("papers:add_paper_url")
@@ -118,6 +122,7 @@ class Comment(models.Model):
         return reverse("papers:dislike_url")
 
 class Course(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_courses') 
     title = models.CharField(max_length=250)
     lessons = models.ManyToManyField(Lesson, related_name='courses')
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hiscourses')
@@ -136,7 +141,7 @@ class Course(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
     rating = models.FloatField(default=0)
-    stars = ArrayField(models.IntegerField(), default = [])
+    stars = ArrayField(models.IntegerField(), default = list)
     class Meta:
         ordering = ['rating']
     def get_absolute_url(self):

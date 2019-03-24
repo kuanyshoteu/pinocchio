@@ -6,6 +6,7 @@ from .views import *
 app_name = 'schools'
 urlpatterns = [
     url(r'^crm/$', school_crm, name='crm'),
+    url(r'^students/$', school_students, name='students'),
     url(r'^requests/$', school_requests, name='requests'),
     url(r'^recalls/$', school_recalls, name='recalls'),
     url(r'^info/$', school_info, name='info'),
@@ -13,6 +14,7 @@ urlpatterns = [
     url(r'^courses/$', school_courses, name='courses'),
     url(r'^rating/$', school_rating, name='rating'),
     url(r'^api/register_to_school/$', register_to_school, name='register_to_school'),
+    url(r'^api/crm_option_url/$', crm_option, name='crm_option_url'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

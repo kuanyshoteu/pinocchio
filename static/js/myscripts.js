@@ -1,16 +1,45 @@
 $(document).ready(function () {
+    $('.show_subject_cost').hover(function(e) {
+        cost = $(this).attr('cost')
+        $('.subject_cost').html(cost)
+    })
+    $('.show_subject_cost').click(function(e) {
+        console.log('d')
+        id = $(this).attr("squad_id")
+        $(".current_squad").attr("id", id)
+        $('#add_student_modal').modal('show')
+    })
+    $('.crm_option').on('change', function(e) {
+        id = $(this).attr('id')
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value
+        url = $(this).attr('url')
+        option = $(this).attr('option')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+                'option':option,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $( "#calendar" ).load(document.URL +  ' #calendar');
+            }
+        });
+    }) 
     $('.add_student').on('click', function(e) {
         console.log('d')
         var name = $('.new_student_name').val()
         var phone = $('.new_student_phone').val()
         var mail = $('.new_student_mail').val()
-
+        var squad_id = $('.current_squad').attr("id")
         $.ajax({
             url: $('.register_to_school_url').attr('url'),
             data: {
                 'name':name,
                 'phone':phone,
                 'mail':mail,
+                'squad_id':squad_id,
                 'status':'student',
             },
             dataType: 'json',
@@ -865,13 +894,13 @@ $(document).ready(function () {
         var pageUrl = this_.attr("data-href")
         id = this_.attr("id")
         paper_id = this_.attr("paper_id")
-        var text = document.getElementsByClassName('change_task_text' + paper_id)[1].value
-        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[1].value
+        var text = document.getElementsByClassName('change_task_text' + paper_id)[0].value
+        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[0].value
 
         var answer = ""
         var variant = ""
         if( $(".task_type_" + paper_id).attr("type") == "input" ){
-            answer = answer + document.getElementsByClassName('change_task_answer_' + paper_id)[1].value + "&"
+            answer = answer + document.getElementsByClassName('change_task_answer_' + paper_id)[0].value + "&"
         }
         if( $(".task_type_" + paper_id).attr("type") == "test" ){
             for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){

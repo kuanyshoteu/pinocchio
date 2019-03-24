@@ -61,15 +61,11 @@
             </div>
             <div class="four wide column">
                 <div class="ui segment" style="padding-left: 0; padding-right: 0">
-                    {% if post_categories|length > 0 %}
-                        {% for category in post_categories %}
-                            <a class="full-w">{{ category.title }}</a>
-                        {% endfor %}
-                    {% else %}
-                    <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
-                        <a class="full-w" style="color: black;font-size: 13px;"><b>Новости</b></a>
+                    {% for school in hisschools %}
+                    <div class="{% if school.id == current_school_id %}option_vertical_active{% endif %} option_vertical">
+                        <a href="{{ school.get_school_posts }}" class="full-w" style="color: black;font-size: 13px;"><b>Новости {{ school.title }}</b></a>
                     </div>
-                    {% endif %}
+                    {% endfor %}
                 </div>
             </div>
 

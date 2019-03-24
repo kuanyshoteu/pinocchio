@@ -26,104 +26,104 @@ from django.contrib.auth import (
     )
 from django.contrib.auth.models import User
 import os
+from constants import *
 
 def school_rating(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    
+    profile = get_profile(request)
+    school = profile.schools.first()
     context = {
         "profile":profile,
-        "instance": profile.school,
-        "squads":Squad.objects.all(),
-        "subjects":Subject.objects.all(),
-        "all_students":Profile.objects.filter(is_trener = False),
+        "instance": profile.schools.first(),
+        "squads":school.groups.all(),
+        "subjects":school.school_subjects.all(),
+        "all_students":school.people.filter(),
     }
     return render(request, "school/school_rating.html", context)
 
 def school_info(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
+    school = profile.schools.first()
     context = {
         "profile":profile,
-        "instance": profile.school,
-        "squads":Squad.objects.all(),
-        "subjects":Subject.objects.all(),    
+        "instance": profile.schools.first(),
+        "squads":school.groups.all(),
+        "subjects":school.school_subjects.all(),
     }
     return render(request, "school/info.html", context)
 
 def school_teachers(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
+    school = profile.schools.first()
     context = {
         "profile":profile,
-        "instance": profile.school,
-        "all_teachers":Profile.objects.filter(is_trener = True),    
+        "instance": school,
+        "all_teachers":school.people.filter(),    
     }
     return render(request, "school/all_teachers.html", context)
 
 def school_crm(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
+    school = profile.schools.first()
+    time_periods = school.time_periods.all()
+
     context = {
         "profile":profile,
-        "instance": profile.school,
-        "all_students":Profile.objects.filter(is_trener = False),
+        "instance": profile.schools.first(),
+        "subject_categories":school.school_subject_categories.all(),
+        "ages":school.school_subject_ages.all(),
+        "offices":school.school_offices.all(),
+        'days':Day.objects.all(),
+        'time_periods':time_periods,
+        "registration":"registration",
+    }
+    return render(request, "school/register_students.html", context)
+
+def school_students(request):
+    profile = get_profile(request)
+    school = profile.schools.first()    
+    context = {
+        "profile":profile,
+        "instance": profile.schools.first(),
+        "all_students":school.people.filter(),
         "students":"students",
     }
     return render(request, "school/all_students.html", context)
 
 def school_requests(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
+    school = profile.schools.first()
     context = {
         "profile":profile,
-        "instance": profile.school,
-        "all_students":Zaiavka.objects.all(),
+        "instance": profile.schools.first(),
+        "all_students":school.zaiavkas.all(),
         "requests":"requests",
     }
     return render(request, "school/all_students.html", context)
 
 def school_recalls(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
+    school = profile.schools.first()
     context = {
         "profile":profile,
-        "instance": profile.school,
-        "all_students":Profile.objects.filter(is_trener = False),
+        "instance": school,
+        "all_students":school.people.filter(),
         "recalls":"recalls"
     }
     return render(request, "school/all_students.html", context)
 
 def school_courses(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
     context = {
         "profile":profile,
-        "instance": profile.school,
+        "instance": profile.schools.first(),
         "courses":"courses",
     }
     return render(request, "school/all_courses.html", context)
 
 def school_list(request):
     if not request.user.is_authenticated:
-        raise Http404
-
-    staff = "no"
-    if request.user.is_staff or request.user.is_superuser:
-        staff = "yes"
-        
-    profile = ''
-
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    
+        raise Http404        
+    profile = get_profile(request)
     context = {
         "profile": profile,
         "schools":School.objects.all(),
@@ -145,9 +145,7 @@ def school_update(request, slug=None):
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
         
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
 
     context = {
         "instance": instance,
@@ -186,6 +184,8 @@ import string
 import random
 
 def register_to_school(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    school = manager_profile.schools.first()
     if request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail') and request.GET.get('status'):
         new_id = User.objects.order_by("id").last().id + 1
         symbols = string.ascii_letters + string.digits
@@ -200,8 +200,41 @@ def register_to_school(request):
         profile.phone = request.GET.get('phone')
         profile.mail = request.GET.get('mail')
         profile.save()
-
+        profile.schools.add(school)
+        squad_id = int(request.GET.get('squad_id'))
+        if squad_id > 0:
+            squad = Squad.objects.get(id=squad_id)
+            squad.students.add(profile)
+            for subject in squad.subjects.all():
+                subject.students.add(profile)
     data = {
         'password':password
+    }
+    return JsonResponse(data)
+
+def crm_option(request):
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('object_id') and request.GET.get('option'):
+        print(request.GET.get('object_id') , request.GET.get('option'))
+        if request.GET.get('option') == 'subject':
+            if int(request.GET.get('object_id')) == -1:
+                profile.crm_subject = None
+            else:
+                subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+                profile.crm_subject = subject
+        if request.GET.get('option') == 'age':
+            if int(request.GET.get('object_id')) == -1:
+                profile.crm_age = None
+            else:
+                age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
+                profile.crm_age = age
+        if request.GET.get('option') == 'office':
+            if int(request.GET.get('object_id')) == -1:
+                profile.crm_office = None
+            else:
+                office = Office.objects.get(id = int(request.GET.get('object_id')))
+                profile.crm_office = office
+        profile.save()
+    data = {
     }
     return JsonResponse(data)

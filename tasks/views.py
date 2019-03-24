@@ -16,6 +16,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
+from constants import *
 
 class ChangeTimeAPIToggle(APIView):
     authentication_classes = (authentication.SessionAuthentication,)
@@ -137,7 +138,7 @@ def ChangeAnswer(request):
 
 def ChangeText(request):
     profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('id') and profile.is_trener:
+    if request.GET.get('id') and is_profi(profile, 'Teacher'):
         task = Task.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('text'):
             task.text = request.GET.get('text')

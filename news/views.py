@@ -21,40 +21,38 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from django.template import RequestContext
 
-def post_detail(request, slug=None):
-    instance = get_object_or_404(Post, slug=slug)
-    profile = ''
-    is_auth = False
+def news(request):
+    profile = 'admin'
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
-    context = {
-        "instance": instance,
-        "profile":profile,
-    }
-    return render(request, "news/post_detail.html", context)
+    else:
+        raise Http404    
+    school = profile.schools.first()
+    return redirect(school.get_school_posts())
 
-
-def post_list(request):
+def post_list(request, school_id):
     if not request.user.is_authenticated:
         raise Http404
         
     profile = ''
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
+    school = School.objects.get(id=school_id)
     
     if request.POST: 
         text = request.POST.get('post_text')
-        newpost = Post.objects.create(author_profile=profile,content=text)
+        newpost = Post.objects.create(author_profile=profile,content=text, school=school)
         if len(request.FILES) > 0:
-            print('f', request.FILES)
             file = request.FILES['postfile']
             newpost.image = file
             newpost.save()
-        return HttpResponseRedirect('/news')
+        return redirect(school.get_school_posts())
     
     context = {
         "profile": profile,
-        "posts":Post.objects.all(),
+        "posts": school.school_posts.all(),
+        'hisschools':profile.schools.all(),
+        "current_school_id":school.id,
     }
     return render(request, "news/post_list.html", context)
 

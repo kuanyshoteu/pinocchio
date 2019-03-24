@@ -19,18 +19,29 @@ def library(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
+        raise Http404    
+    school = profile.schools.first()
+    return redirect(school.get_school_library())
+
+def school_library(request, school_id):
+    profile = 'admin'
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    else:
         raise Http404
 
+    school = School.objects.get(id=school_id)
     context = {
         "profile": profile,
         'yourid':profile.id,
         'root':True,
-        'folders':Folder.objects.all(),
-        'lessons':Lesson.objects.all(),
+        "lessons":school.lessons.all(),
+        "folders":school.school_folders.all(),
+        'hisschools':profile.schools.all(),
+        "current_school_id":school.id,
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
-        'tasks':Task.objects.all(),
     }
-    return render(request, template_name='library.html', context=context)
+    return render(request, 'library/library.html', context=context)
 
 def folders():
     folders = []
@@ -59,10 +70,9 @@ def folder_details(request, folder_id=None):
         'folder':folder,
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
         'lessons':folder.lesson_list.all(),
-        'folders':Folder.objects.filter(parent=folder),
-        'tasks':Task.objects.all(),
+        'folders':folder.children.all(),
     }
-    return render(request, template_name='library.html', context=context)
+    return render(request, 'library/library.html', context=context)
 
 from django.http import JsonResponse
 def file_action(request):
@@ -87,6 +97,8 @@ def paste(request):
     link = ''
     if request.GET.get('new_parent') != 'library':
         new_parent = Folder.objects.get(id = int(request.GET.get('new_parent')))
+    elif request.GET.get('school_id'):
+        school = School.objects.get(id=int(request.GET.get('school_id')))
     if cache.object_type == 'folder':    
         folder = Folder.objects.get(id = cache.object_id)
         title = folder.title
@@ -99,6 +111,8 @@ def paste(request):
         if request.GET.get('new_parent') != 'library':
             copy_folder.parent = new_parent
             new_parent.children.add(copy_folder)
+        elif request.GET.get('school_id'):
+            copy_folder.school = school
         copy_folder.save()
 
         if cache.action == 'cut' and cache.previous_parent > 0:
@@ -128,6 +142,9 @@ def paste(request):
 
         if request.GET.get('new_parent') != 'library':
             new_parent.lesson_list.add(new_lesson)
+        elif request.GET.get('school_id'):
+            new_lesson.school = school
+
         if cache.action == 'cut':
             lesson.delete()
                 
@@ -142,12 +159,16 @@ def paste(request):
 
 def create_folder(request):
     profile = Profile.objects.get(user = request.user.id)
-    if len(Folder.objects.all()) > 0:
-        name = 'Новая папка' + str(Folder.objects.all()[len(Folder.objects.all())-1].id + 1)
+    if request.GET.get('school_id'):
+        school = School.objects.get(id=int(request.GET.get('school_id')))
+    if len(school.school_folders.all()) > 0:
+        name = 'Папка' + str(school.school_folders.all()[len(school.school_folders.all())-1].id + 1)
     else:
-        name = 'Новая папка'
+        name = 'Папка'
     folder = Folder.objects.create(title = name)
     folder.author_profile = profile
+    if request.GET.get('school_id'):
+        folder.school = school
     if request.GET.get('parent_id') != 'denone':
         parent = Folder.objects.get(id = int(request.GET.get('parent_id')))
         folder.parent = parent

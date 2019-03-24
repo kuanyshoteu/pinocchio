@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.views.generic import RedirectView
 
 from accounts.models import *
+from schools.models import School
 from papers.models import *
 from .models import *
 from todolist.models import Document
@@ -21,6 +22,15 @@ def documents(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
     else:
+        raise Http404    
+    school = profile.schools.first()
+    return redirect(school.get_school_documents())
+
+def school_documents(request, school_id):
+    profile = 'admin'
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+    else:
         raise Http404
     img = ['png', 'jpg', 'jpeg']
     html = ['html', 'css', 'js', 'py', 'java']
@@ -28,6 +38,7 @@ def documents(request):
     if file_form.is_valid():
         doc = Document.objects.create(file = file_form.cleaned_data.get("file"))
         file = str(file_form.cleaned_data.get("file"))
+
         if file.split('.')[-1] in img:
             doc.object_type = 'img'
         elif file.split('.')[-1] == 'pdf':
@@ -44,15 +55,19 @@ def documents(request):
             doc.object_type = 'ppt'
         elif file.split('.')[-1] in html:
             doc.object_type = 'html'
+        doc.school = school
         doc.save()
         return redirect('/documents')
 
+    school = School.objects.get(id=school_id)
     context = {
         "profile": profile,
         'yourid':profile.id,
         'root':True,
-        'docfolders':DocumentFolder.objects.all(),
-        'documents':Document.objects.all(),
+        "docs":school.school_docs.all(),
+        "docfolders":school.school_docfolders.all(),
+        'hisschools':profile.schools.all(),
+        "current_school_id":school.id,
         'cache':DocumentCache.objects.get_or_create(author_profile = profile)[0],
         'file_form':file_form,
     }
@@ -76,6 +91,7 @@ def folder_details(request, folder_id=None):
     context = {
         "profile": profile,
         'this_folder':folder,
+        'docs_from_schools':[folder.title],
         'cache':DocumentCache.objects.get_or_create(author_profile = profile)[0],
         'folders':DocumentFolder.objects.filter(parent=folder),
         'file_form':file_form,
@@ -102,32 +118,34 @@ def paste(request):
     cache = DocumentCache.objects.get_or_create(author_profile = profile)[0]
     title = ''
     link = ''
-    if request.GET.get('new_parent') != 'documents':
+    if request.GET.get('new_parent') != 'root':
         new_parent = DocumentFolder.objects.get(id = int(request.GET.get('new_parent')))
+    elif request.GET.get('school_id'):
+        school = School.objects.get(id=int(request.GET.get('school_id')))
     if cache.object_type == 'folder':    
         folder = DocumentFolder.objects.get(id = cache.object_id)
         title = folder.title
         link = folder.get_absolute_url()
-
         copy_folder = DocumentFolder.objects.create(author_profile = profile, title=folder.title)
         for doc in folder.files.all():
             copy_folder.files.add(doc)
-
-        if request.GET.get('new_parent') != 'documents':
+        if request.GET.get('new_parent') != 'root':
             copy_folder.parent = new_parent
             new_parent.children.add(copy_folder)
+        elif request.GET.get('school_id'):
+            copy_folder.school = school
         copy_folder.save()
-
         if cache.action == 'cut' and cache.previous_parent > 0:
             folder.delete()
-
     else:
         doc = Document.objects.get(id = cache.object_id)
         new_doc = Document.objects.create(file = doc.file, object_type = doc.object_type)
         link = new_doc.file.url
-        new_doc.save()
-        if request.GET.get('new_parent') != 'documents':
+        if request.GET.get('new_parent') != 'root':
             new_parent.files.add(new_doc)
+        elif request.GET.get('school_id'):
+            new_doc.school = school
+        new_doc.save()
         if cache.action == 'cut' and cache.previous_parent > 0:
             doc.delete()
             cache.action='copy'
@@ -143,13 +161,18 @@ def paste(request):
 
 def create_docfolder(request):
     profile = Profile.objects.get(user = request.user.id)
-    if len(DocumentFolder.objects.all()) > 0:
-        name = 'Новая папка' + str(DocumentFolder.objects.all()[len(DocumentFolder.objects.all())-1].id + 1)
+
+    if request.GET.get('school_id'):
+        school = School.objects.get(id=int(request.GET.get('school_id')))
+    if len(school.school_docfolders.all()) > 0:
+        name = 'Папка' + str(school.school_docfolders.all()[len(school.school_docfolders.all())-1].id + 1)
     else:
-        name = 'Новая папка'
+        name = 'Папка'
     folder = DocumentFolder.objects.create(title = name)
     folder.author_profile = profile
-    if request.GET.get('parent_id') != 'denone':
+    if request.GET.get('school_id'):
+        folder.school = school
+    if request.GET.get('parent_id') != 'none':
         parent = DocumentFolder.objects.get(id = int(request.GET.get('parent_id')))
         folder.parent = parent
         parent.children.add(folder)

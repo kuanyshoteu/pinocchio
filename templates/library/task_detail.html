@@ -1,8 +1,8 @@
 {% load tagss %}
 {% load staticfiles %}
 <div class="ui grid" style="margin: 0 0 20px 0; border-radius: 3px;border: 1px solid #d1d5da">
-    <div class="ten wide column">
-        {% if profile.is_trener == False %}
+    <div class="eleven wide column">
+        {% if is_trener == False %}
             {% if task|is_correct:profile == True %}
                 <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px; ">{{ forloop.counter }}.</span>
             {% else %}
@@ -14,7 +14,7 @@
                 <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
             {% endif %}
         {% endif %}
-        {% if profile.is_trener %}
+        {% if is_trener %}
             <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
             <a class="add_problem" id="l{{ lesson.id }}p{{ paper.id }}s{{subtheme.id}}" subtheme_id='{{ subtheme.id }}' task_id='{{ task.id }}' url="{{ subtheme.add_task_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Убрать</a>
             <br>
@@ -75,7 +75,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="six wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
+    <div class="five wide column" style="font-size: 15px; display: inline-block;padding-bottom: 0">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             {% if task.is_test %}
                 <span class="task_type_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" type="test" style="display: none;"></span>
@@ -84,10 +84,10 @@
                     <label class="test_variant" for="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">
                         {% load tags %}
                         <input {% if task.is_mult_ans %}type="checkbox"{% else %}type="radio"{% endif %}
-                        {% if profile.is_trener == False %}
+                        {% if is_trener == False %}
                             class="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}" value="{{ variant }}" name="selector" 
                             {% if variant in task|hisanswers:profile %}checked{% endif %}
-                        {% elif profile.is_trener %}
+                        {% elif is_trener %}
                             {% if variant in task.answer %}checked{% endif %}
                         {% endif %}
                         > {{ variant }}
@@ -100,7 +100,7 @@
                 {% for ans in task.answer %}
                     <b>Ответ {% if task.answer|length > 1 %}{{ forloop.counter }}{% endif %}:</b>
                     <br>
-                    {% if profile.is_trener %}
+                    {% if is_trener %}
                         <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
                     {% else %}
                         <textarea class="ans_textarea check_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">{{ task|hisanswer:profile }}</textarea>
@@ -113,7 +113,7 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            {% if profile.is_trener == False and task|is_correct:profile == False %}
+            {% if is_trener == False and task|is_correct:profile == False %}
                 <a class="ui button mini blue check_task_answer" style="display: inline-block;" parent_id='-1' id="{{ task.id }}" data-href='{{ task.change_answer_url }}' paper='clsw' paper_id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}'>Отправить</a>
                 <div id='coins_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' class="" style="display: none;">
                     <div class="ui grid" style="width: 100px;">
@@ -128,7 +128,7 @@
             {% endif %}
         </form>
         <div class="ui segment wrong_answer_alert_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" style="display: none;">
-            {% if profile.is_trener == False %}
+            {% if is_trener == False %}
             <span style="color: #DB2828;">
                 Упс! Неверно, попробуйте еще раз!
             </span>

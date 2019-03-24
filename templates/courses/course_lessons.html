@@ -18,7 +18,7 @@
             <div id="lesson_list{{ lesson.id }}">
                 {% for paper in lesson.papers.all %}
                 <div style="padding-top: 10px;">
-                    <a href="{{ lesson.get_absolute_url }}">
+                    <a href="{{ paper.get_absolute_url }}">
                         <span>{{ paper.title }}</span>
                     </a>
                 </div>

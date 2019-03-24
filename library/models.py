@@ -15,8 +15,10 @@ from django.contrib.postgres.fields import ArrayField
 
 from accounts.models import Profile
 from papers.models import Lesson, Course
+from schools.models import School
 
 class Folder(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_folders') 
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='folders')
     title = models.TextField()
     parent = models.ForeignKey("self",  null = True, on_delete = models.CASCADE, related_name = 'childs')
@@ -32,21 +34,6 @@ class Folder(models.Model):
     def change_name_url(self):
         return reverse("library:change_name_url")
 
-class CourseFolder(models.Model):
-    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='course_folders')
-    title = models.TextField()
-    parent = models.ForeignKey("self",  null = True, on_delete = models.CASCADE, related_name = 'childs')
-    children = models.ManyToManyField("self")
-    course_list = models.ManyToManyField(Course, related_name='folders')
-    
-    class Meta:
-        ordering = ['id']
-    def get_absolute_url(self):
-        return reverse("library:get_absolute_url", kwargs={"folder_id": self.id})
-    def delete_folder_url(self):
-        return reverse("library:delete_folder_url")
-    def change_name_url(self):
-        return reverse("library:change_name_url")
 
 class Cache(models.Model):
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='cache')

@@ -15,8 +15,10 @@ from django.contrib.postgres.fields import ArrayField
 
 from accounts.models import Profile
 from todolist.models import Document
+from schools.models import School
 
 class DocumentFolder(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_docfolders') 
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='docfolders')
     title = models.TextField()
     parent = models.ForeignKey("self",  null = True, on_delete = models.CASCADE, related_name = 'docchilds')
@@ -29,7 +31,7 @@ class DocumentFolder(models.Model):
         return reverse("documents:get_absolute_url", kwargs={"folder_id": self.id})
     def delete_folder_url(self):
         return reverse("documents:delete_folder_url")
-    def change_name_url(self):
+    def change_docname_url(self):
         return reverse("documents:change_docname_url")
 
 class DocumentCache(models.Model):

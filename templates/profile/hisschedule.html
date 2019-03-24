@@ -1,26 +1,29 @@
 {% load tttags %}
-{% load ttttags %}
 {% load staticfiles %}
 <style type="text/css">
     .icon.angle:before{
         font-size: 20px;
     }
 </style>
-<span style="display: none;" class="instance_id" id="{{ hissquads.0.id }}"></span>
+<span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
 <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
     <div class="ui grid">
-        <div class="one wide column" style="margin-right: 16px;">
-                <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
+        <div class="one wide column">
+            <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
-        <div class="three wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+        <div class="seven wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
             Расписание
         </div>
-        <div class="three wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
-            <a class="update_schedule" url="{{ profile.update_schedule_url }}"><i class="icon redo"></i></a>
+        <div class="seven wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            {% include 'profile/miss_lecture.html' %}
         </div>
     </div>
-</div> 
-<div id="calendar" style="min-height: 200px;min-width: 100%;margin-bottom: 14px;background-color:#4A4A4A">
+</div>
+
+{% load ttags %}
+<span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
+<span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
+<div id="calendarr" length='7'>           
     <div id="week">   
         <div class="week" id="0">
             <div class="daysmall daysmall_time" style="padding-top: 17px;">
@@ -28,31 +31,51 @@
             {% for day in days %}
             {% if day.number != 7 %} 
             <div class="daysmall">
-                <div class="day-name">
+                <div class="day-name {% if today == day.number %}today{% endif %}">
                     {{ day.title }}
                 </div>
             </div>
             {% endif %}
             {% endfor %}
         </div>
-        <div class="ui divider calendar_divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
-        {% for cell in hisprofile.hisschedule.all %}
-            {% if forloop.counter|module_six == 1 %}
-            <div class="daysmall daysmall_time">
-                {{ cell.y|find_time_by_num }}
+        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
+        {% for timep in time_periods %}
+        <div class="week" id="{{ forloop.counter }}">
+            <div class="daysmall daysmall_time" style="padding-top: 17px;color: white;">
+                {{ timep.start }}-{{ timep.end }}
+            </div>
+            {% for cell in timep.time_cell.all %}  
+            {% if cell.day.number != 7 %} 
+            <div class="daysmall other" style="padding: 0">                                     
+                <div>
+                    {% for lecture in cell|cell_profile_lectures:hisprofile %}
+                        <div class="ui segment in_schedule" squad_id='{{ lecture.squad.id }}' id="s{{ lecture.squad.id }}c{{ cell.id }}" old_cell="{{ cell.id }}" {% if page == 'subject_update' %} draggable="true" {% endif %} ondragstart="drag(event)" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:
+                            {% if is_trener %}
+                                {%if lecture.squad.color_back == ''%}#313a57{%else%}{{ lecture.squad.color_back }}{%endif%};">
+                            {% else %}
+                                {%if lecture.subject.color_back == ''%}#313a57{%else%}{{ lecture.subject.color_back }}{%endif%};">
+                            {% endif %}
+                            {{ lecture.subject.title }}
+                            {% if cell|cell_profile_lectures:hisprofile|length == 1 %}
+                            <br>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.subject.cabinet }}</span>
+                            <br>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">
+                                {% if is_trener %}
+                                {{ lecture.squad.title }}
+                                {% else %}
+                                {{ lecture.subject.teacher.all.0.first_name }}
+                                {% endif %}
+                            </span>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endif %}
-            <div class="daysmall other">
-                {% for index in cell.indexes %}
-                <div class="in_schedule" style=" background-color: {{cell.colors|find_by_index:index}}">
-                    {{ cell.subjects|find_by_index:index }}
-                    <br>
-                    {{ cell.teachers|find_by_index:index }}
-                    <br>
-                    {{ cell.cabinets|find_by_index:index }}
-                </div>
-                {% endfor %}
-            </div>
+            {% endfor %}
+        </div>
+        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% endfor %}
     </div>
 </div>   

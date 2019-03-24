@@ -19,6 +19,9 @@ from django.contrib.auth import (
 
     )
 from django.contrib.auth.models import User
+from constants import *
+
+
 def loaderio(request):
     context = {
     }
@@ -46,15 +49,12 @@ def main_view(request):
     return render(request, "main.html", context)
 
 def hislessons(request):
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
+    profile = get_profile(request)
 
     res = []
     lesson_now = False
     classwork = []
-    if profile.is_trener:
+    if is_profi(profile, 'Teacher'):
         hissubjects = profile.teachers_subjects.all()
     else:
         hissubjects = profile.hissubjects.all()
@@ -64,7 +64,7 @@ def hislessons(request):
             needed_timep = 'none'
             last_lecture = 'none'
             timenow_int = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
-            for timep in TimePeriod.objects.all():
+            for timep in profile.histime_periods.all():
                 tstart = timep.start.split(':')
                 timep_start_int = int(tstart[0]) * 60 + int(tstart[1])
                 tend = timep.end.split(':')
@@ -72,7 +72,7 @@ def hislessons(request):
                 if timenow_int >= timep_start_int and timenow_int <= timep_end_int:
                     needed_timep = timep
 
-            sw = SquadWeek.objects.filter(squad=squad, actual=True)
+            sw = squad.weeks.filter(actual=True)
             if len(sw) > 0:
                 sw = sw[0]
                 if needed_timep != 'none':
@@ -122,12 +122,18 @@ from django.http import JsonResponse
 
 def login_view(request):
     if request.GET.get('username') and request.GET.get('password'):
-        for profile in Profile.objects.all():
-            if profile.mail == request.GET.get('username') or profile.phone == request.GET.get('username'):
-                print(request.GET.get('password'),profile.user.username)
-                user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
-                login(request, user)
-                break
+        found = False
+        if len(Profile.objects.filter(mail=request.GET.get('username'))) > 0:
+            profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
+            found = True
+        elif len(Profile.objects.filter(phone=request.GET.get('username'))) > 0:
+            profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
+            found = True
+
+        if found:
+            print(request.GET.get('password'),profile.user.username)
+            user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
+            login(request, user)
     data = {
     }
     return JsonResponse(data)
@@ -162,7 +168,6 @@ def ChangeSubject(request):
         subject.save()
                     
     data = {
-        "like_num":0,
     }
     return JsonResponse(data)
 
@@ -179,7 +184,6 @@ class CityAPIToggle(APIView):
     def get(self, request, format=None):
         #print("dedede")
         data = {
-            "like_num":0,
         }
         return Response(data)
 
@@ -194,7 +198,6 @@ class SubjectAPIToggle(APIView):
     def get(self, request, format=None):
         #print("dedede")
         data = {
-            "like_num":0,
         }
         return Response(data)
 
@@ -214,11 +217,6 @@ def trener_update(request, slug=None):
         raise Http404
     instance = get_object_or_404(Trener, slug=slug)
     form = TrenerForm(request.POST or None, request.FILES or None, instance=instance)
-    main_page = 'de'
-    if len(MainPage.objects.all()) < 1:
-        main_page = MainPage.objects.create()
-    else:
-        main_page = MainPage.objects.all()[0]
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
@@ -249,11 +247,6 @@ def trener_delete(request, slug=None):
         reponse.status_code = 403 
         return HttpResponse("You do not have permission to do this.")
 
-    main_page = 'de'
-    if len(MainPage.objects.all()) < 1:
-        main_page = MainPage.objects.create()
-    else:
-        main_page = MainPage.objects.all()[0]
     if request.method == "POST":
         instance.delete()
         return HttpResponseRedirect(main_page.main_url())

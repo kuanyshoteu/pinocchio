@@ -57,15 +57,6 @@ def view_card(request, card_id, card_slug):
         profile = Profile.objects.get(user = request.user.id)
 
     card = Card.objects.get(id=int(card_id))
-    staff = "no"
-    if request.user.is_staff or request.user.is_superuser:
-        staff = "yes"
-
-    main_page = 'de'
-    if len(MainPage.objects.all()) < 1:
-        main_page = MainPage.objects.create()
-    else:
-        main_page = MainPage.objects.all()[0]
     
     file_form = FileForm(request.POST or None, request.FILES or None)
     if file_form.is_valid():
@@ -95,10 +86,7 @@ def view_card(request, card_id, card_slug):
         'boards': Board.objects.all(),
         'file_form':file_form,
         'comment_form':comment_form,
-        "staff":staff,
-        "user":request.user,
         "profile":profile,
-        'main_page':main_page,
         'card':card,
         'metkas': Metka.objects.all(),
         'all_profiles':Profile.objects.all(),

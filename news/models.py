@@ -14,6 +14,7 @@ from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
 from accounts.models import Profile
+from schools.models import School
 
 def upload_location(instance, filename):
     CourseModel = instance.__class__
@@ -25,6 +26,7 @@ def upload_location(instance, filename):
 
 
 class Post(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_posts') 
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
 

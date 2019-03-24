@@ -10,7 +10,7 @@
   </div>
   <a href="{{ doc.file.url }}" >
       {% if doc.object_type == 'img' %}
-      <img src="{% static 'images/docs/doc_img.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
+      <img src="{% static 'images/docs/doc_img.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;width: 50px;">
       {% elif doc.object_type == 'pdf' %}
       <img src="{% static 'images/docs/doc_pdf.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;">
       {% elif doc.object_type == 'xls' %}

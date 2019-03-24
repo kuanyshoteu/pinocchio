@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'papers',
     'tasks',
     'todolist',
-    'clients_base',
     'library',
     'subjects',
     'news',
@@ -95,21 +94,21 @@ WSGI_APPLICATION = 'tripleA.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config('DATABASE_URL')
-}
-
+# import dj_database_url
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tripleA',
-#         'USER': 'admin',
-#         'PASSWORD': '031196Kk',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
+#     'default': dj_database_url.config('DATABASE_URL')
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tripleA',
+        'USER': 'admin',
+        'PASSWORD': '031196Kk',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -153,8 +152,8 @@ from tripleA.aws.conf import *
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'    
 
 import datetime
-AWS_ACCESS_KEY_ID = 'AKIAJ6E4OLI7BTPN23XA'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAI2QY4AWO32KO4MWA'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
