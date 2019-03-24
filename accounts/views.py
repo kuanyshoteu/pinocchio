@@ -32,12 +32,6 @@ from constants import *
 from subjects.templatetags.ttags import get_date
 
 def account_view(request, user = None):
-    # allp = Profile.objects.all()
-    # for t in TimePeriod.objects.all():
-    #     t.people.add(*allp)
-    for lecture in Lecture.objects.all():
-        lecture.people.add(lecture.subject.teacher.first())
-        lecture.save()
     profile = get_profile(request)
     user = user.replace('_', ' ')
     user = User.objects.get(username = user)
