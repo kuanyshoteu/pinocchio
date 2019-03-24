@@ -66,6 +66,8 @@ def account_view(request, user = None):
         hissquads = hisprofile.squads.all()
         hiscourses = hisprofile.courses.all()
         hiscacheatt = None 
+        att_subject = None
+        att_squad = None
 
     context = {
         "profile":profile,
