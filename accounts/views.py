@@ -59,6 +59,8 @@ def account_view(request, user = None):
         if hiscacheatt.squad == None and len(hissquads) > 0:
             hiscacheatt.squad = hissquads[0]
         hiscacheatt.save()
+        att_subject = hiscacheatt.subject
+        att_squad = hiscacheatt.squad
     else:
         hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
@@ -74,8 +76,8 @@ def account_view(request, user = None):
         'hissubjects':hissubjects,
         'hissquads':hissquads,
         'hiscourses':hiscourses,
-        'att_subject':hiscacheatt.subject,
-        'att_squad':hiscacheatt.squad,
+        'att_subject':att_subject,
+        'att_squad':att_squad,
         'today':int(timezone.now().date().strftime('%w')),
         'miss_lesson_form':miss_lesson_form,
         'is_trener':is_profi(hisprofile, 'Teacher'),
