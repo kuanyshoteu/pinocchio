@@ -39772,8 +39772,10 @@ a:hover {
 }
 
 #logo{
-  width: 143px !important; height: 25px!important;position: absolute;
+  width: 153px !important; 
+  height: 30px!important;position: absolute;
   padding-left: 25px;
+  margin-top: -5px
 }
 #left-main-menu {
   padding: 1rem 1rem 0 0;
