@@ -27,7 +27,7 @@
                     {% endfor %}
                 </div>
                 <div class="ui segment mysquads" style="margin-top: 0; display: none;">
-                    {% is_manager %}
+                    {% if is_manager %}
                         {% for sq in profile.squad_trener.all %}
                             {% include 'squads/squad_list_info.html' %}
                         {% endfor %}
