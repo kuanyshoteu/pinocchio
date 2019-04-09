@@ -52,6 +52,11 @@ def subject_detail(request, slug=None):
     return render(request, "subjects/subject_detail.html", context)
 
 def subject_list(request):
+    for lecture in Lecture.objects.all():
+        lecture.office = lecture.subject.office
+        lecture.category = lecture.subject.category
+        lecture.age = lecture.subject.age
+        lecture.save()
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()

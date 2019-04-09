@@ -96,7 +96,7 @@
             {% for cell in timep.time_cell.all %}  
             {% if cell.day.number != 7 %} 
             <div class="daysmall other" style="padding: 0">                                     
-                {% for lecture in cell.lectures.all %}
+                {% for lecture in cell|cell_school_lectures:profile %}
                     <div class="ui segment in_schedule show_subject_cost save_card_as_user" squad_id={{lecture.squad.id}} cost="{{lecture.subject.cost}}тг в месяц" style="background-color:{%if lecture.squad.color_back == ''%}#5181b8{%else%}{{ lecture.squad.color_back }}{%endif%};">
                         {{ lecture.subject.title }}
                         <br>

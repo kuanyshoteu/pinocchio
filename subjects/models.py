@@ -175,12 +175,16 @@ class SubjectMaterials(models.Model):
 class Lecture(models.Model):
     cell = models.ForeignKey(Cell, null=True, on_delete = models.CASCADE, related_name='lectures')
     day = models.ForeignKey(Day, null=True, on_delete = models.CASCADE, related_name='lectures')
-    subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='subject_lectures')
+    cabinet = models.ForeignKey(Cabinet,null=True, on_delete = models.CASCADE, related_name='cabinet_lecture')
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='squad_lectures')
-    cabinet = models.ForeignKey(Cabinet,null=True, on_delete = models.CASCADE, related_name='cabinet_lecture') 
-
     people = models.ManyToManyField(Profile, related_name='hislectures')
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_lectures') 
+    subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='subject_lectures')
+
+    office = models.ForeignKey(Office,null=True, on_delete = models.CASCADE, related_name='office_lectures') 
+    category = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='category_lectures') 
+    age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='age_lectures') 
+
     class Meta:
         ordering = ['cell']
 

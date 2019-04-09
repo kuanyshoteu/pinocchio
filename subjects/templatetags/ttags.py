@@ -36,17 +36,14 @@ def cell_profile_lectures(cell, profile):
 
 @register.filter
 def cell_school_lectures(cell, profile):
-    subjects = profile.schools.first().school_subjects.all()
+    lectures = cell.lectures.all()
     if profile.crm_subject:
-        subjects = profile.crm_subject.category_subjects.filter()
+        lectures = lectures.filter(category=profile.crm_subject)
     if profile.crm_age:
-        subjects = subjects.filter(age=profile.crm_age)
+        lectures = lectures.filter(age=profile.crm_age)
     if profile.crm_office:
-        subjects = subjects.filter(office=profile.crm_office)
-    res = []
-    for subject in subjects:
-        res += chain(Lecture.objects.filter(subject = subject, cell = cell))
-    return res
+        lectures = lectures.filter(office=profile.crm_office)
+    return lectures
 
 @register.filter
 def get_date(material, squad):
