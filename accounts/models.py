@@ -105,6 +105,8 @@ class Profile(models.Model):
         return reverse("accounts:change_att_url")
     def attendance_present_url(self):
         return reverse("accounts:present_url")    
+    def hint_url(self):
+        return reverse("accounts:hint_url")    
     # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")

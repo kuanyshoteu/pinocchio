@@ -52,11 +52,6 @@ def subject_detail(request, slug=None):
     return render(request, "subjects/subject_detail.html", context)
 
 def subject_list(request):
-    for lecture in Lecture.objects.all():
-        lecture.office = lecture.subject.office
-        lecture.category = lecture.subject.category
-        lecture.age = lecture.subject.age
-        lecture.save()
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
@@ -282,13 +277,18 @@ def change_schedule(request, id=None):
         if request.GET.get('cell_id') != 'trash':
             cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
             if request.GET.get('old_cell') == 'none':
-                lecture = Lecture.objects.get_or_create(subject=subject,squad=squad,cell=cell, day=cell.day)[0]
+                lecture = Lecture.objects.create(
+                    subject=subject,
+                    squad=squad,
+                    cell=cell, 
+                    day=cell.day,
+                    office=subject.office,
+                    category=subject.category,
+                    age=subject.age)
                 squad_students = squad.students.all()
                 lecture.people.add(*squad_students)
                 subject_teacher = subject.teacher.all()
-                lecture.people.add(*squad_students)
                 lecture.people.add(*subject_teacher)
-                print(lecture.id)
             else:
                 old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
                 lecture = Lecture.objects.get(subject=subject,squad=squad,cell=old_cell)
@@ -364,8 +364,8 @@ def add_squad(request):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         subject.squads.add(squad)
-        for student in squad.students.all():
-            subject.students.add(student)
+        squad_students = squad.students.all()
+        subject.students.add(*squad_students)
     data = {
     }
     return JsonResponse(data)

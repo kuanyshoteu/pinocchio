@@ -125,15 +125,21 @@ def squad_update(request, slug=None):
         for subject in instance.subjects.all():
             for student in instance.students.all():
                 subject.students.remove(student)
+        removed = []
         for student in school.people.filter(is_student=True):
             data_string = request.POST.get('student' + str(student.id))
             if data_string == 'on':
                 instance.students.add(student)
             else:
-                instance.students.remove(student)
+                if student in instance.students.all():
+                    instance.students.remove(student)
+                    removed.append(student)
+                    student.hisgrades.filter(squad = instance).delete()
         for subject in instance.subjects.all():
-            for student in instance.students.all():
-                subject.students.add(student)
+            squad_students = instance.students.all()
+            subject.students.add(*squad_students)
+            for student in removed:
+                subject.students.remove(student)
 
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())        

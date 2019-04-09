@@ -296,26 +296,14 @@ def tell_about_corruption(request):
     }
     return JsonResponse(data)
 
-class ChangeTimeAPIToggle(APIView):    
-    def get(self, request, format=None):
-        data = {
-        }
-        return Response(data)
-
-class DeleteZaiavkaAPIToggle(APIView):    
-    def get(self, request, id=None, format=None):
-        zaiavka = Zaiavka.objects.get(id = id)
-        zaiavka.delete()
-        data = {
-        }
-        return Response(data)
-class DeleteFollowAPIToggle(APIView):    
-    def get(self, request, id=None, format=None):
-        follow = Follow.objects.get(id = id)
-        follow.delete()
-        data = {
-        }
-        return Response(data)
+def another_hint(request):
+    if request.GET.get('dir') == 'next':
+        request.session['hint'] += 1
+    else:
+        request.session['hint'] -= 1
+    data = {
+    }
+    return JsonResponse(data)
 
 def logout_view(request):
     logout(request)
