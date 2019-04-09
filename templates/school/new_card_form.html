@@ -1,0 +1,26 @@
+<div class="ui modal" id="new_card_form{{column.id}}">
+    <i class="close icon"></i>
+    <div class="content">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <table class="ui celled table" style="margin: 0">
+                <thead>
+                    <tr>
+                        <th><span>Имя</span></th>
+                        <th><span>Телефон</span></th>
+                        <th><span>Почта</span></th>
+                        <th><span>Комментарий</span></th>
+                    </tr>
+                </thead>
+                <tbody id="create_student_rows">
+                    <tr>
+                        <td><textarea class="new_card_name{{ column.id }}">{{ card.name }}</textarea></td>
+                        <td><textarea class="new_card_phone{{ column.id }}">{{ card.phone }}</textarea></td>
+                        <td><textarea class="new_card_mail{{ column.id }}">{{ card.mail }}</textarea></td>
+                        <td><textarea class="new_card_comment{{ column.id }}">{{ card.comments }}</textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="ui button blue tiny add_card" id="{{ column.id }}">Сохранить</a>    
+        </form>
+    </div>
+</div>

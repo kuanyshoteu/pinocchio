@@ -62,17 +62,21 @@ class School(models.Model):
         return reverse("schools:crm")
     def get_students_url(self):
         return reverse("schools:students")
-    def get_requests_url(self):
-        return reverse("schools:requests")
-    def get_recalls_url(self):
-        return reverse("schools:recalls")
     def get_courses_url(self):
         return reverse("schools:courses")
+    def move_card_url(self):
+        return reverse("schools:move_card_url")
     def get_markdown(self):
         return mark_safe(markdown(self.content))
     # API Registration 
     def register_to_school(self):
         return reverse("schools:register_to_school")
+    def edit_card_url(self):
+        return reverse("schools:edit_card_url")
+    def add_card_url(self):
+        return reverse("schools:add_card_url")
+    def save_card_as_user(self):
+        return reverse("schools:save_card_as_user")
     # School objects
     def get_school_documents(self):
         return reverse("documents:get_school_documents", kwargs={"school_id": self.id})
@@ -92,21 +96,21 @@ class School(models.Model):
         return reverse("schools:crm_option_url")
 
 class SubjectCategory(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subject_categories') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_categories') 
     title = models.CharField(max_length=250)
 
 class SubjectAge(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subject_ages')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_ages')
     title = models.CharField(max_length=250)
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
     address = models.TextField(default='')
     capacity = models.IntegerField(default=0)
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_offices')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_offices')
 
 class Cabinet(models.Model):
     title = models.CharField(max_length=250)
     capacity = models.IntegerField(default=0)
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_cabinets')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_cabinets')
 

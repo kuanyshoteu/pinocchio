@@ -2,10 +2,10 @@
 <div class="attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
     {% if attendance.subject_materials|check_date:att_squad == 'now' %}
     <div id="grades{{ attendance.id }}" style="{% if attendance.present != 'present' and attendance.present != 'late' %}display: none;{% endif %};height: 100%;">
-        <a class="ui button mini save_grade {% if attendance.grade == 5 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="5">5</a>
-        <a class="ui button mini save_grade {% if attendance.grade == 4 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="4">4</a>
-        <a class="ui button mini save_grade {% if attendance.grade == 3 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="3">3</a>
-        <a class="ui button mini save_grade {% if attendance.grade == 2 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="2">2</a>
+        <a class="ui button mini save_grade {% if attendance.grade == 5 %}green{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="5">5</a>
+        <a class="ui button mini save_grade {% if attendance.grade == 4 %}green{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="4">4</a>
+        <a class="ui button mini save_grade {% if attendance.grade == 3 %}green{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="3">3</a>
+        <a class="ui button mini save_grade {% if attendance.grade == 2 %}green{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="2">2</a>
     </div>
     <div id="attendance{{ attendance.id }}" style="{% if attendance.present == 'present' or attendance.present == 'late' %}display: none;{% endif %}">
         <a url="{{ attendance.present_url }}" class="ui button mini full-w blue att_present" id="{{attendance.id}}">На уроке</a>

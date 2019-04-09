@@ -8,31 +8,31 @@ from django.core.files.storage import FileSystemStorage
 from .models import *
 from accounts.models import *
 from .form import *
+from constants import *
 
 @ensure_csrf_cookie
 def index(request):
-    if not request.user.is_authenticated:
-        raise Http404
-    
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
+    profile = get_profile(request)
+    only_staff(profile)
     return render(request, template_name='kanban/base.html', context={
         'boards': Board.objects.all(),
         "profile":profile,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     })
 
 def new_board(request):
-    if not request.user.is_authenticated:
-        raise Http404
+    profile = get_profile(request)
+    only_staff(profile)
     name = request.POST.get('board_name')
     assert name
     Board.objects.create(name=name)
     return redirect('/todolist')
 
 def new_column(request):
-    if not request.user.is_authenticated:
-        raise Http404
+    profile = get_profile(request)
+    only_staff(profile)
     if request.POST.get('board_id'):
         board_id = int(request.POST.get('board_id'))
     title = request.POST.get('column_title')
@@ -41,8 +41,8 @@ def new_column(request):
     return redirect('/todolist')
 
 def new_card(request):
-    if not request.user.is_authenticated:
-        raise Http404
+    profile = get_profile(request)
+    only_staff(profile)
     column_id = int(request.POST.get('column_id'))
     title = request.POST.get('title')
     assert title and column_id
@@ -50,14 +50,9 @@ def new_card(request):
     return redirect('/todolist')
 
 def view_card(request, card_id, card_slug):
-    if not request.user.is_authenticated:
-        raise Http404
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-
+    profile = get_profile(request)
+    only_staff(profile)
     card = Card.objects.get(id=int(card_id))
-    
     file_form = FileForm(request.POST or None, request.FILES or None)
     if file_form.is_valid():
         doc = Document.objects.create(file = file_form.cleaned_data.get("file"))
@@ -90,10 +85,15 @@ def view_card(request, card_id, card_slug):
         'card':card,
         'metkas': Metka.objects.all(),
         'all_profiles':Profile.objects.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),    
     })
 
 from django.http import JsonResponse
 def ChangeCardText(request):
+    profile = get_profile(request)
+    only_staff(profile)
     if request.GET.get('id'):
         card = Card.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('text'):
@@ -105,6 +105,8 @@ def ChangeCardText(request):
     return JsonResponse(data)
 
 def AddUser(request):
+    profile = get_profile(request)
+    only_staff(profile)
     if request.GET.get('card_id'):
         card = Card.objects.get(id = int(request.GET.get('card_id')))
         if request.GET.get('profile_id'):
@@ -120,6 +122,8 @@ def AddUser(request):
     }
     return JsonResponse(data)
 def AddMetka(request):
+    profile = get_profile(request)
+    only_staff(profile)
     if request.GET.get('card_id'):
         card = Card.objects.get(id = int(request.GET.get('card_id')))
         if request.GET.get('metka_id'):
@@ -136,6 +140,8 @@ def AddMetka(request):
     return JsonResponse(data)
 
 def delete_card(request):
+    profile = get_profile(request)
+    only_staff(profile)
     if not request.user.is_authenticated:
         raise Http404
     card_id = int(request.POST.get('card_delete_id'))
@@ -143,6 +149,8 @@ def delete_card(request):
     return redirect('/todolist')
 
 def delete_column(request):
+    profile = get_profile(request)
+    only_staff(profile)
     if not request.user.is_authenticated:
         raise Http404
     column_id = int(request.POST.get('column_delete_id'))
@@ -150,6 +158,8 @@ def delete_column(request):
     return redirect('/todolist')
 
 def delete_board(request):
+    profile = get_profile(request)
+    only_staff(profile)
     if not request.user.is_authenticated:
         raise Http404
     board_id = int(request.POST.get('board_delete_id'))
@@ -158,8 +168,8 @@ def delete_board(request):
 
 
 def drop(request):
-    if not request.user.is_authenticated:
-        raise Http404
+    profile = get_profile(request)
+    only_staff(profile)
     payload = json.loads(request.body)
     card_id = int(payload.get('card_id'))
     column_id = int(payload.get('column_id'))

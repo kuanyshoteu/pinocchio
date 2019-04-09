@@ -2,38 +2,48 @@
 {% if hisprofile == profile or profile.is_manager %}
 <span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
 <span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
-    <div class="ui segment shapka">
-        <div class="ui grid">
-            <div class="one wide column">
-                <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
-            </div>
-            <div class="two wide column" style="line-height: 28px;font-size: 15px;">
-                Журналы
-            </div>
+<div class="ui segment shapka help2">
+    <div class="hint2 highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
+    <div class="ui grid">
+        <div class="one wide column">
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
+            Журналы
         </div>
     </div>
-    <div class="ui segment" style="margin-top: 0;padding: 18px;">
-        {% for subject in hissubjects %}
-        <a onclick="load_attendance_subject('{{ subject.id }}')" class="load_attendance_subject {% if subject.id == att_subject.id %}current_option{% else %}other_option{% endif %}" id="subject{{ subject.id }}">
-            {{ subject.title }}
-        </a>
-        {% endfor %} 
-        <br><br><br>
-        <div id="subject_attendance">
-            <div class="ui stackable grid" style="margin-bottom: 0">
-            {% for squad in att_subject.squads.all %}
-                <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject.squads.all|length }}));">{{ squad.title }}</a>
-            {% endfor %}
-            </div>
-            <div id="squad_attendance">
-                {% include "profile/attendance_squad.html" %}
-            </div>
-        </div>            
-    </div>
+</div>
+<div class="ui segment help2" style="margin-top: 0;margin-bottom: 0; padding: 18px;">
+    {% for subject in hissubjects %}
+    <a onclick="load_attendance_subject('{{ subject.id }}')" class="load_attendance_subject {% if subject.id == att_subject.id %}current_option{% else %}other_option{% endif %}" id="subject{{ subject.id }}">
+        {{ subject.title }}
+    </a>
+    {% endfor %} 
+</div>
+<div class="ui segment help2" style="margin-top: 0;padding: 0;">
+    <div id="subject_attendance">
+    {% if is_trener %}
+        <div class="ui stackable grid" style="margin-bottom: 0">
+        {% for squad in att_subject.squads.all %}
+            <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject.squads.all|length }}));">{{ squad.title }}</a>
+        {% endfor %}
+        </div>
+        <div id="squad_attendance">
+            {% include "profile/attendance_squad.html" %}
+        </div>
+    {% else %}
+        <div id="squad_attendance">
+            {% include "profile/attendance_student.html" %}
+        </div>
+    {% endif %}  
+    </div>          
+</div>
+<br><br><br>
+<span class="attendance_present_url" url="{{ hisprofile.attendance_present_url }}" style="display: none;"></span>
+<span class="attendance_change_url" url="{{ hisprofile.attendance_change_url }}" style="display: none;"></span>
 <script type="text/javascript">
     function load_attendance_subject(subject_id){
         var url = $('#load_attendance_subject').attr('url');
-        console.log(url)
         $.ajax({
             url: url,
             method: "GET",
@@ -72,6 +82,209 @@
             }
         })
     };
+</script>
+<script type="text/javascript">
+    //$('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
+    function createColumnRight(nextNumber){
+        var url = $('.more_attendance_url').attr('url')
+        var subject_id = $('.more_attendance_url').attr('subject_id')
+        var squad_id = $('.more_attendance_url').attr('squad_id')
+        sm = document.getElementsByClassName('attendance_date')
+        last_sm = sm[document.getElementsByClassName('attendance_date').length-1].getAttribute('id')
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'subject_id':subject_id,
+                'squad_id':squad_id,
+                'direction':'right',
+                'sm_id':last_sm,
+            },
+            success: function (data) {
+                if(data.last_set){
+                    $('#slider').attr('last_set', 'yes')
+                }
+                for (var i = 0; i < data.columns.length; i++){
+                    var section = createEl('section', 'slider__section');
+                    console.log(nextNumber+i)
+                    if (i == 0){
+                        var div = createEl('div', 'attendance_date last_att att' + (nextNumber+i))
+                    }
+                    else{
+                        var div = createEl('div', 'attendance_date att' + (nextNumber+i))                       
+                    }
+                    div.setAttribute('number', nextNumber+i)
+                    div.setAttribute('id', data.columns[i][1])
+                    div.innerHTML = data.columns[i][0]
+                    section.appendChild(div)
+                    document.getElementById('next_atts').appendChild(section)                   
+                }
+            }, error: function (error) {
+                console.log('error')
+            }
+        })
+    }
+    function createColumnLeft(prevNumber){
+        var url = $('.more_attendance_url').attr('url')
+        var subject_id = $('.more_attendance_url').attr('subject_id')
+        var squad_id = $('.more_attendance_url').attr('squad_id')
+        sm = document.getElementsByClassName('attendance_date')
+        first_sm = sm[0].getAttribute('id')
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'subject_id':subject_id,
+                'squad_id':squad_id,
+                'direction':'left',
+                'sm_id':first_sm,
+            },
+            success: function (data) {
+                if(data.first_set){
+                    $('#slider').attr('first_set', 'yes')
+                }               
+                for (var i = 0; i < data.columns.length ; i++){
+                    var section = createEl('section', 'slider__section');
+                    if (i > 0){
+                        section.setAttribute('style', 'display:none;')
+                        section.setAttribute('id', 'section' + (i-prevNumber))
+                    }
+                    var div = createEl('div', 'attendance_date att' + (prevNumber-i))
+                    div.setAttribute('number', prevNumber-i)
+                    div.setAttribute('id', data.columns[i][1])
+                    div.innerHTML = data.columns[i][0]
+                    section.appendChild(div)
+                    if (data.columns[i][2] == 'now'){
+                        for (var j = 3; j < data.columns[i].length; j++){
+                            attendance_block = createEl('div', 'attendance_block')
+                            if(j % 2 == 1){
+                                attendance_block.setAttribute('style', 'background-color: #545454')
+                            }
+                            grades_div = document.createElement('div')
+                            grades_div.setAttribute('id', 'grades' + data.columns[i][j][0])
+                            for(var k = 5; k >= 2; k--){
+                                if(data.columns[i][j][2] == k){
+                                    grade_button = createEl('a', 'ui button mini save_grade green')
+                                }
+                                else{
+                                    grade_button = createEl('a', 'ui button mini save_grade')                                    
+                                }
+                                grade_button.setAttribute('id', data.columns[i][j][0])
+                                grade_button.setAttribute('style', 'margin:0 1px')
+                                grade_button.setAttribute('grade', k)
+                                grade_button.innerHTML = k
+                                grades_div.appendChild(grade_button)
+                            }
+                            attendance = document.createElement('div')
+                            attendance.setAttribute('id', 'attendance' + data.columns[i][j][0])
+                            att_present = createEl('a', 'ui button mini full-w blue att_present')
+                            att_present.setAttribute('id', data.columns[i][j][0])
+                            att_present.innerHTML = 'На уроке'
+                            attendance.appendChild(att_present)
+                            if(data.columns[i][j][1] != 'present' && data.columns[i][j][1] != 'late'){
+                                grades_div.setAttribute('style', 'display:none;')
+                            }
+                            else{
+                                attendance.setAttribute('style', 'display:none;')
+                            }
+                            attendance_block.appendChild(grades_div)
+                            attendance_block.appendChild(attendance)
+                            section.appendChild(attendance_block)
+                            divider = createEl('div', 'ui divider grey_divider')
+                            section.appendChild(divider)
+                        }
+                    }
+                    else if (data.columns[i][2] == 'past') {
+                        for (var j = 3; j < data.columns[i].length; j++){
+                            attendance_block = createEl('div', 'attendance_block')
+                            if(j % 2 == 1){
+                                attendance_block.setAttribute('style', 'background-color: #545454')
+                            }
+                            attendace_grade = createEl('div', 'ui segment attendace_grade')
+                            if (data.columns[i][j][2] > 0){
+                                attendace_grade.innerHTML = data.columns[i][j][2]
+                            }
+                            attendance_block.appendChild(attendace_grade)
+                            section.appendChild(attendance_block)
+                            divider = createEl('div', 'ui divider grey_divider')
+                            section.appendChild(divider)
+                        }
+                    }
+                    prev_atts = document.getElementById('prev_atts')
+                    prev_atts.insertBefore(section, prev_atts.firstChild)                   
+                }
+            }, error: function (error) {
+                console.log('error')
+            }
+        })
+    }
+    function createEl(element, classname){
+        var element = document.createElement(element)
+        element.setAttribute('class', classname)
+        return element
+    }
+    function moverRight() {
+        var slider = $('#slider');
+        var index = parseInt( slider.attr('index') )
+        var length = document.getElementsByClassName('slider__section').length
+        var last_set = $('#slider').attr('last_set')
+        nextNumber = parseInt($('.last_att').attr('number')) + 1
+        if($('.att' + nextNumber).length == 0 && last_set == "no"){
+            createColumnRight(nextNumber);
+            console.log('created', nextNumber)
+        }
+        if($('.att' + nextNumber).length > 0 || last_set == "no"){
+            console.log('moved', nextNumber, 'index', index-130)
+            $('.last_att').attr('class', 'attendance_date att' + (nextNumber-1))
+            index = index - 130;
+            slider.animate({
+                marginLeft:(index) + 'px'
+            } ,200, function(){
+                slider.attr('index', index)
+            });
+            att = $('.att' + nextNumber)
+            oldClass = att.attr('class')
+            att.attr('class', oldClass + ' last_att')
+        }
+    }
+    function moverLeft() {
+        var slider = $('#slider');
+        var index = parseInt( slider.attr('index') )
+        var length = document.getElementsByClassName('slider__section').length
+        var first_set = $('#slider').attr('first_set')
+        prevNumber = parseInt($('.last_att').attr('number')) - 4
+
+        action = false;
+        console.log('length',$('.att' + prevNumber).length)
+        if($('.att' + prevNumber).length == 0 && first_set == "no"){
+            slider.animate({
+                marginLeft:(index) + 'px'
+            } ,200, function(){
+                console.log('created')
+                createColumnLeft(prevNumber);
+            });
+            action = true;
+        }
+        else if($('.att' + (prevNumber)).length > 0 || first_set == "no"){
+            if (index != 0) {
+                index = index + 130;
+                slider.animate({
+                    marginLeft:(index) + 'px'
+                } ,200, function(){
+                });                
+            }
+            console.log('moved left', -prevNumber, 'index', index)
+            action = true       
+        }
+        if (action) {
+            slider.attr('index', index)
+            $("#section" + (-prevNumber)).attr('style', '')
+            $('.last_att').attr('class', 'attendance_date att' + (prevNumber+4))
+            att = $('.att' + (prevNumber+3))
+            oldClass = att.attr('class')
+            att.attr('class', oldClass + ' last_att')            
+        }
+    }
 </script>
 
 {% endif %}

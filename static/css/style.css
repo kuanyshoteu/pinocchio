@@ -1,7 +1,112 @@
+.crmbox{
+  min-height: 60%;
+}
 a{
   cursor: pointer;
   color: #285473;
 }
+.help_right:after {
+    content: "";
+    display: block;
+    border-width: 7px 0 7px 7px;
+    border-style: solid;
+    border-color: transparent transparent transparent #5a9eff;
+    margin-top: -7px;
+    position: absolute;
+    right: -7px;
+    top: 50%;
+}
+.help_left:after {
+    content: "";
+    display: block;
+    border-width: 7px 7px 7px 0;
+    border-style: solid;
+    border-color: transparent #5a9eff transparent transparent;
+    margin-top: -7px;
+    position: absolute;
+    left: -7px;
+    top: 50%;
+}
+.help_left_news:after {
+    content: "";
+    display: block;
+    border-width: 7px 7px 7px 0;
+    border-style: solid;
+    border-color: transparent #5a9eff transparent transparent;
+    margin-top: -17px;
+    position: absolute;
+    left: -7px;
+    top: 50%;
+}
+.help_top:after {
+    content: "";
+    display: block;
+    border-width: 0 7px 7px 7px;
+    border-style: solid;
+    border-color: transparent transparent #5a9eff transparent;
+    margin-left: -7px;
+    position: absolute;
+    top: -7px;
+    left: 50%;
+  }
+.highliter {
+    z-index: 1000;
+}
+.slider {
+  display: flex;
+  width: max-content;
+}
+.slider__section {
+  width: 130px;
+}
+.btn-prev, .btn-next {
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  top: 35px;
+  line-height: 20px;
+  font-size: 11px;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  font-family: monospace;
+  cursor: pointer;
+}
+.btn-prev {
+  left: 22%;
+  background-color: #313a57;
+  color:#fff;
+}
+
+.btn-next {
+  right: 20px;
+  background-color: #313a57;
+  color:#fff;
+}
+.help_button{
+  color: white !important;
+  background-color: #21BA45 !important;
+}
+.help{
+  width: 200px;
+  background: #5a9eff !important;
+  color: #fff;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+}
+.bg-dark:before {
+    content: '';
+    display: block;
+    background: #000;
+    opacity: 0.2 !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+  }
 .student_name{
   font-size: 11px;
   font-weight: 600;
@@ -39,6 +144,9 @@ a{
   margin: 0 !important;
   padding: 2px;background-color:#4A4A4A
 }
+.crm_divider{
+  padding: 0.5px;background-color:#99ccff
+}
 .option_vertical{
   padding: 10px 18px;
 }
@@ -48,6 +156,18 @@ a{
 .ui.fiol {
   background-color: #313a57;
   color: #FFFFFF;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.white {
+  background-color: #fff;
+  color: #222;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.white:hover {
+  background-color: #f1f1f1;
+  color: #222;
   text-shadow: none;
   background-image: none;
 }
@@ -825,7 +945,7 @@ a{
   transform: translateX(0%) !important;
 }
 .save_grade{
-  margin-right: 0px !important;
+  margin-right: 1px !important;
   padding: 0px 5px  !important;
   width: 22%;
   height: 30px;

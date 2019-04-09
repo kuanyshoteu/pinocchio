@@ -2,7 +2,14 @@ from accounts.models import *
 from subjects.models import *
 from schools.models import School
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+import string
+import random
 
+def random_password():
+    symbols = string.ascii_letters + string.digits
+    password = ''
+    for i in range(0, 9):
+        password += random.choice(symbols)
 def get_profile(request):
     profile = ''
     if request.user.is_authenticated:
@@ -10,6 +17,30 @@ def get_profile(request):
     else:
         raise Http404
     return profile
+
+def only_teachers(profile):
+    profession = Profession.objects.get(title = 'Teacher')
+    if not profession in profile.profession.all():
+        raise Http404
+
+def only_managers(profile):
+    profession = Profession.objects.get(title = 'Manager')
+    if not profession in profile.profession.all():
+        raise Http404
+
+def only_directors(profile):
+    profession = Profession.objects.get(title = 'Director')
+    if not profession in profile.profession.all():
+        raise Http404
+
+def only_staff(profile):
+    manager = Profession.objects.get(title = 'Manager')
+    teacher = Profession.objects.get(title = 'Teacher')
+    director = Profession.objects.get(title = 'Director')
+    if manager in profile.profession.all() or teacher in profile.profession.all() or director in profile.profession.all():
+        pass
+    else:
+        raise Http404
 
 def is_profi(profile, job_name):
     profession = Profession.objects.get(title = job_name)

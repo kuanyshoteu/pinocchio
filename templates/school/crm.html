@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    CRM {{ instance.title }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<script src='{% static "js/vue-drag/vue.min.js" %}'></script>
+<script src='{% static "js/vue-drag/axios.min.js" %}'></script>
+<script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
+<script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
+<div id="app">
+    <div class='ui container' id="untouch">
+        <div class="ui grid main_crm" style="margin-top: 0">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                <div class="ui grid segment backg" style="margin-top: 0px;padding-bottom: 50px;">
+                    {% for column in columns %}
+                    <div class="four wide column center aligned">
+                        <span style="font-size: 13px;font-weight: 600;">{{ column.title }}</span>
+                        <br>
+                        <span style="font-size: 13px;color: darkgrey;">Количество: {{ column.cards.all|length }}</span>
+                        <div class="ui divider crm_divider"></div>
+                        <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
+                        {% include 'school/new_card_form.html' %}
+                        <div class="column{{ column.id }}" style="margin-top: 15px;text-align: left;">
+                            <draggable 
+                                    class="crmbox"
+                                    :options="{group:{ name:'people'}}"
+                                    @add="move_card({{ column.id }})">
+                                {% for card in column.cards.all %}
+                                <div id="card{{card.id}}" style="margin-bottom: 10px;" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
+                                    <div class="ui segment full-w" style="cursor: pointer;padding: 3px 7px;">
+                                        <div style="float: right;font-size: 11px;color: #b3b300">
+                                            {{card.timestamp.date|date:"d.m.y"}}
+                                        </div>
+                                        <i class="icon user"></i>
+                                        <a id="{{ card.id }}" onclick="$('#card_form'+$(this).attr('id')).modal('show')" style="font-weight: 600">{{ card.name }}</a>
+                                        <div style="color: darkgrey;font-size: 12px;">
+                                            <i class="icon phone"></i> {{ card.phone }}
+                                            <br>
+                                            <i class="icon envelope"></i> {{ card.mail }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% include 'school/card_form.html' %}
+                                {% endfor %}
+                            </draggable>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="school_schedule" class="school_schedule" status="closed">
+                {% include 'school/register_students.html' %}
+            </div>
+        </div>
+    </div>    
+</div>
+<span style="display: none;" id="0" class="current_card"></span>
+<span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
+<span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
+<span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}"></span>
+<script>
+    $(document.body).on("click", ":not(#school_schedule, #school_schedule *, .main_crm)", function(e){
+        if($(this).attr('id') == 'untouch'){
+            e.stopPropagation();       
+        }
+        else{
+            document.getElementById("school_schedule").style.width = "0";
+            $('.backg').removeClass('darker');
+            e.stopPropagation();            
+        }
+    });
+    function openNav(id) {
+      document.getElementById("school_schedule").style.width = "75%";
+      $('.backg').addClass('darker')
+      $('.school_schedule').attr('attr', 'opened')
+      console.log('ddddd', id)
+      $('.card_for_save').attr('id', id)
+    }
+    function save_card_id(id){
+        console.log(id)
+        $('.current_card').attr('id', id)
+    }
+    new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data() {
+            return {
+                squad: 'Выберите Класс',
+                schedule: null,
+                inSubjectSquads: [],
+                outSubjectSquads: [],
+                trener: ''
+            }
+        },
+        methods: {
+            move_card(column_id) {
+                axios.get('/schools/api/move_card/', {
+                    params: {
+                        'column_id': column_id,
+                        'card_id': $('.current_card').attr('id')
+                    }
+                });
+                if (column_id == '4') {
+                    openNav($('.current_card').attr('id'));                    
+                }
+            },
+        },
+    })
+</script>
+<style type="text/css">
+.darker{
+    opacity: 0.1 !important;
+    background-color: #000 !important;
+}
+.school_schedule {
+  width: 0;
+  padding: 14px 0 !important;
+  position: absolute !important;
+  z-index: 5000;
+  right: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+@media screen and (max-height: 450px) {
+  .school_schedule {padding-top: 15px;}
+  .school_schedule a {font-size: 18px;}
+}
+</style>
+
+{% endblock content %}

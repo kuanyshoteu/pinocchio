@@ -2,6 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import *
+from accounts.models import CRMColumn, CRMCard
 
 class SchoolModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
@@ -12,6 +13,26 @@ class SchoolModelAdmin(admin.ModelAdmin):
     class Meta:
         model = School
 admin.site.register(School, SchoolModelAdmin)
+
+class CRMColumnModelAdmin(admin.ModelAdmin):
+    list_display = ["title", "school", "id", "number_of_cards"]
+    list_display_links = ["title"]
+    list_filter = ["school"]
+
+    search_fields = ["title"]
+    class Meta:
+        model = CRMColumn
+admin.site.register(CRMColumn, CRMColumnModelAdmin)
+
+class CRMCardModelAdmin(admin.ModelAdmin):
+    list_display = ["name","id", "phone", "mail", "author_profile", "timestamp"]
+    list_display_links = ["name"]
+    list_filter = ["author_profile"]
+
+    search_fields = ["name"]
+    class Meta:
+        model = CRMCard
+admin.site.register(CRMCard, CRMCardModelAdmin)
 
 class SubjectCategoryAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]

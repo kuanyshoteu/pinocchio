@@ -39,15 +39,28 @@ def squad_detail(request, slug=None):
         "squad_url":instance.get_absolute_url(),
         "profile":profile,
         'time_periods':time_periods,
-        'days':days
+        'days':days,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "squads/squad_detail.html", context)
 
 def squad_list(request):
     profile = get_profile(request)
+    only_staff(profile)
+    if is_profi(profile, 'Teacher'):
+        hissquads = profile.curators_squads.all()
+    else:
+        hissquads = profile.squads.all()
+    school = profile.schools.first()
     context = {
         "profile": profile,
-        "squads":Squad.objects.all(),
+        "squads":school.groups.all(),
+        "hisschools":profile.schools.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "squads/squad_list.html", context)
 
@@ -57,6 +70,9 @@ def squad_videos(request, slug=None):
     context = {
         "profile": profile,
         "instance": instance,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "squads/squad_videos.html", context)
 
@@ -66,11 +82,15 @@ def squad_lessons(request, slug=None):
     context = {
         "profile": profile,
         "instance": instance,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "squads/squad_lessons.html", context)
 
 def squad_create(request):
     profile = get_profile(request)
+    only_managers(profile)
     form = SquadForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -83,13 +103,15 @@ def squad_create(request):
         "form": form,
         "profile":profile,
         "all_teachers":Profile.objects.filter(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "squads/squad_create.html", context)
 
 def squad_update(request, slug=None):
     profile = get_profile(request)
-    if not is_profi(profile, 'Manager'):
-        raise Http404
+    only_managers(profile)
     instance = get_object_or_404(Squad, slug=slug)
     school = profile.schools.first()
     form = SquadForm(request.POST or None, request.FILES or None, instance=instance)
@@ -121,24 +143,27 @@ def squad_update(request, slug=None):
         "profile":profile,
         "all_teachers":Profile.objects.filter(),
         "all_students":Profile.objects.filter(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "squads/squad_create.html", context)
 
 
 def squad_delete(request, slug=None):
     profile = get_profile(request)
+    only_managers(profile)
     instance = Squad.objects.get(slug=slug)
-
-    if not request.user.is_staff and not request.user.is_superuser:
-        reponse.status_code = 403
-        return HttpResponse("You do not have permission to do this.")
         
     if request.method == "POST":
         instance.delete()
         messages.success(request, "Successfully deleted")
         return redirect("squads:list")
     context = {
-        "object": instance
+        "object": instance,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "confirm_delete.html", context)
 
@@ -166,6 +191,8 @@ def add_paper(request):
     }
     return JsonResponse(data)
 def calendar_change(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('id'):
         squad = Squad.objects.get(id = int(request.GET.get('id')) )
         if request.GET.get('day_of_week'):
@@ -181,6 +208,8 @@ def calendar_change(request):
     return JsonResponse(data)
 
 def set_time(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('instance_id'):
         squad = Squad.objects.get(id = int(request.GET.get('instance_id')) )
         if request.GET.get('day') and request.GET.get('time') and request.GET.get('checked'):
@@ -198,6 +227,8 @@ def set_time(request):
     return JsonResponse(data)
 
 def change_curator(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('teacher_id') and request.GET.get('subject_id'):
         squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
         curator = Profile.objects.get(id = int(request.GET.get('teacher_id')) )

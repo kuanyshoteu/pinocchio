@@ -37,102 +37,132 @@ def school_rating(request):
         "squads":school.groups.all(),
         "subjects":school.school_subjects.all(),
         "all_students":school.people.filter(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/school_rating.html", context)
 
 def school_info(request):
     profile = get_profile(request)
+    only_directors(profile)
     school = profile.schools.first()
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
         "squads":school.groups.all(),
         "subjects":school.school_subjects.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/info.html", context)
 
 def school_teachers(request):
     profile = get_profile(request)
+    only_directors(profile)
     school = profile.schools.first()
     context = {
         "profile":profile,
         "instance": school,
         "all_teachers":school.people.filter(),    
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/all_teachers.html", context)
 
 def school_crm(request):
     profile = get_profile(request)
+    only_managers(profile)
     school = profile.schools.first()
     time_periods = school.time_periods.all()
 
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
+        "columns":school.crm_columns.all(),
         "subject_categories":school.school_subject_categories.all(),
         "ages":school.school_subject_ages.all(),
         "offices":school.school_offices.all(),
         'days':Day.objects.all(),
         'time_periods':time_periods,
-        "registration":"registration",
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
-    return render(request, "school/register_students.html", context)
+    return render(request, "school/crm.html", context)
 
 def school_students(request):
     profile = get_profile(request)
+    only_managers(profile)
     school = profile.schools.first()    
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
         "all_students":school.people.filter(),
         "students":"students",
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/all_students.html", context)
 
 def school_requests(request):
     profile = get_profile(request)
+    only_managers(profile)
     school = profile.schools.first()
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
         "all_students":school.zaiavkas.all(),
         "requests":"requests",
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/all_students.html", context)
 
 def school_recalls(request):
     profile = get_profile(request)
+    only_managers(profile)
     school = profile.schools.first()
     context = {
         "profile":profile,
         "instance": school,
         "all_students":school.people.filter(),
-        "recalls":"recalls"
+        "recalls":"recalls",
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/all_students.html", context)
 
 def school_courses(request):
     profile = get_profile(request)
+    only_managers(profile)
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
         "courses":"courses",
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/all_courses.html", context)
 
 def school_list(request):
-    if not request.user.is_authenticated:
-        raise Http404        
     profile = get_profile(request)
     context = {
         "profile": profile,
         "schools":School.objects.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "schools/school_list.html", context)
 
 def school_update(request, slug=None):
-    if not request.user.is_staff and not request.user.is_superuser:
-        raise Http404
     instance = get_object_or_404(School, slug=slug)
     form = SchoolForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
@@ -151,6 +181,9 @@ def school_update(request, slug=None):
         "instance": instance,
         "form":form,
         "profile":profile,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "schools/school_create.html", context)
 
@@ -180,33 +213,35 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
-import string
-import random
 
-def register_to_school(request):
+def save_card_as_user(request):
     manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
     school = manager_profile.schools.first()
-    if request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail') and request.GET.get('status'):
+    if request.GET.get('id') and request.GET.get('squad_id'):
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
         new_id = User.objects.order_by("id").last().id + 1
-        symbols = string.ascii_letters + string.digits
-        password = ''
-        for i in range(0, 9):
-            password += random.choice(symbols)
+        password = random_password()
         user = User.objects.create(username='user' + str(new_id))
         user.set_password(password)
         user.save()
         profile = Profile.objects.get(user = user)
-        profile.first_name = request.GET.get('name')
-        profile.phone = request.GET.get('phone')
-        profile.mail = request.GET.get('mail')
+        profile.first_name = card.name
+        profile.phone = card.phone
+        profile.mail = card.mail
         profile.save()
         profile.schools.add(school)
+        Profession.objects.get(title = 'Student').workers.add(profile)
         squad_id = int(request.GET.get('squad_id'))
         if squad_id > 0:
             squad = Squad.objects.get(id=squad_id)
             squad.students.add(profile)
             for subject in squad.subjects.all():
                 subject.students.add(profile)
+            for lecture in squad.squad_lectures.all():
+                lecture.people.add(profile)
+            for timep in school.time_periods.all():
+                timep.people.add(profile)
     data = {
         'password':password
     }
@@ -214,6 +249,7 @@ def register_to_school(request):
 
 def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
     if request.GET.get('object_id') and request.GET.get('option'):
         print(request.GET.get('object_id') , request.GET.get('option'))
         if request.GET.get('option') == 'subject':
@@ -235,6 +271,56 @@ def crm_option(request):
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
                 profile.crm_office = office
         profile.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def move_card(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('card_id') and request.GET.get('column_id'):
+        school = profile.schools.first()
+        print('Aaaaa',request.GET.get('card_id'), request.GET.get('column_id'))
+        column = school.crm_columns.get(id = int(request.GET.get('column_id')))
+        card = school.crm_cards.get(id = int(request.GET.get('card_id')))
+        card.column = column
+        card.save()
+        column.number_of_cards += 1
+        column.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def edit_card(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
+        school = profile.schools.first()
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
+        card.name = request.GET.get('name')
+        card.phone = request.GET.get('phone')
+        card.mail = request.GET.get('mail')
+        card.comment = request.GET.get('comment')
+        card.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def add_card(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
+        school = profile.schools.first()
+        column = school.crm_columns.get(id = int(request.GET.get('id')))
+        card = school.crm_cards.create(
+            name = request.GET.get('name'),
+            phone = request.GET.get('phone'),
+            mail = request.GET.get('mail'),
+            comments = request.GET.get('comment'),
+            column = column,
+            school = school,
+        )
+        card.save()
     data = {
     }
     return JsonResponse(data)

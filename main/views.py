@@ -50,7 +50,6 @@ def main_view(request):
 
 def hislessons(request):
     profile = get_profile(request)
-
     res = []
     lesson_now = False
     classwork = []
@@ -58,60 +57,15 @@ def hislessons(request):
         hissubjects = profile.teachers_subjects.all()
     else:
         hissubjects = profile.hissubjects.all()
-    for subject in hissubjects:
-        homeworks = []
-        for squad in subject.squads.all():
-            needed_timep = 'none'
-            last_lecture = 'none'
-            timenow_int = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
-            for timep in profile.histime_periods.all():
-                tstart = timep.start.split(':')
-                timep_start_int = int(tstart[0]) * 60 + int(tstart[1])
-                tend = timep.end.split(':')
-                timep_end_int =   int(tend[0]) * 60 + int(tend[1])
-                if timenow_int >= timep_start_int and timenow_int <= timep_end_int:
-                    needed_timep = timep
-
-            sw = squad.weeks.filter(actual=True)
-            if len(sw) > 0:
-                sw = sw[0]
-                if needed_timep != 'none':
-                    sc = SquadCell.objects.filter(squad=squad,date=timezone.now().date(),time_period = needed_timep)
-                    if len(sc) > 0:
-                        sc = sc[0]
-                        if len(sc.subject_materials.filter(subject=subject)) > 0:
-                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                            lesson_now = True
-                            classwork = [[subject, [last_lecture]]]
-                else:
-                    for sc in sw.week_cells.all():
-                        if sc.date > timezone.now().date():
-                            if len(sc.subject_materials.filter(subject=subject)) > 0:
-                                last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                
-                if last_lecture == 'none' and lesson_now == False:
-                    index = list(squad.weeks.all()).index(sw)
-                    if index+1 < len(squad.weeks.all()):
-                        found_in_this_week = False
-                        for i in range(index+1, len(squad.weeks.all())):
-                            if found_in_this_week:
-                                break
-                            sw = squad.weeks.all()[i]
-                            for sc in sw.week_cells.all():
-                                if sc.date > timezone.now().date():
-                                    if len(sc.subject_materials.filter(subject=subject)) > 0:
-                                        if len(sc.subject_materials.get(subject=subject).lessons.all()) > 0:
-                                            last_lecture = [squad, sc, sc.subject_materials.get(subject=subject)]
-                                            found_in_this_week = True
-                                            break
-                homeworks.append(last_lecture) 
-        res.append([subject, homeworks])
 
     context = {
         "profile":profile,
         'classwork':classwork,
         'homeworks':res,
         'lesson_now':lesson_now,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, "profile/classwork.html", context)
 
@@ -157,6 +111,8 @@ def register_view(request):
     return JsonResponse(data)
 
 def ChangeSubject(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         subject = Subject.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('text'):
@@ -172,6 +128,8 @@ def ChangeSubject(request):
     return JsonResponse(data)
 
 def SaveZaiavka(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('name'):
         if request.GET.get('phone'):
             zaiavka = Zaiavka.objects.create(name=request.GET.get('name'), phone=request.GET.get('phone'))
@@ -179,78 +137,13 @@ def SaveZaiavka(request):
     }
     return JsonResponse(data)
 
-
-class CityAPIToggle(APIView):
-    def get(self, request, format=None):
-        #print("dedede")
-        data = {
-        }
-        return Response(data)
-
-class FilialAPIToggle(APIView):
-    def get(self, request, format=None):
-        data = {
-            "like_num":0,
-        }
-        return Response(data)
-
-class SubjectAPIToggle(APIView):
-    def get(self, request, format=None):
-        #print("dedede")
-        data = {
-        }
-        return Response(data)
-
 def contacts_view(request):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    
+    profile = get_profile(request)
     context = {
         "profile":profile,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, "contacts.html", context)
 
-
-def trener_update(request, slug=None):
-    if not request.user.is_staff and not request.user.is_superuser:
-        raise Http404
-    instance = get_object_or_404(Trener, slug=slug)
-    form = TrenerForm(request.POST or None, request.FILES or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
-        return HttpResponseRedirect(main_page.main_url())
-    
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-
-    context = {
-        "title": instance.title,
-        "instance": instance,
-        "form":form,
-        "user":request.user,
-        "profile":profile,
-    }
-    return HttpResponseRedirect(main_page.main_url())
-
-
-
-def trener_delete(request, slug=None):
-    try:
-        instance = Trener.objects.get(slug=slug)
-    except:
-        raise Http404
-
-    if not request.user.is_staff and not request.user.is_superuser:
-        reponse.status_code = 403 
-        return HttpResponse("You do not have permission to do this.")
-
-    if request.method == "POST":
-        instance.delete()
-        return HttpResponseRedirect(main_page.main_url())
-    context = {
-        "object": instance
-    }
-    return render(request, "confirm_delete.html", context)

@@ -13,23 +13,17 @@ from accounts.models import *
 from papers.models import *
 from .models import *
 from django.contrib.auth.models import User
+from constants import *
 
 def library(request):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404    
+    profile = get_profile(request)
+    only_teachers(profile)
     school = profile.schools.first()
     return redirect(school.get_school_library())
 
 def school_library(request, school_id):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
-
+    profile = get_profile(request)
+    only_teachers(profile)
     school = School.objects.get(id=school_id)
     context = {
         "profile": profile,
@@ -40,6 +34,9 @@ def school_library(request, school_id):
         'hisschools':profile.schools.all(),
         "current_school_id":school.id,
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),   
     }
     return render(request, 'library/library.html', context=context)
 
@@ -58,25 +55,25 @@ def lessons_array():
     return (lessons)
 
 def folder_details(request, folder_id=None):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
+    profile = get_profile(request)
+    only_teachers(profile)
     folder = Folder.objects.get(id=folder_id)
-
     context = {
         "profile": profile,
         'folder':folder,
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
         'lessons':folder.lesson_list.all(),
         'folders':folder.children.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, 'library/library.html', context=context)
 
 from django.http import JsonResponse
 def file_action(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     cache = Cache.objects.get_or_create(author_profile = profile)
     cache = cache[0]
     
@@ -92,6 +89,7 @@ def file_action(request):
 
 def paste(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     cache = Cache.objects.get_or_create(author_profile = profile)[0]
     title = ''
     link = ''
@@ -103,7 +101,6 @@ def paste(request):
         folder = Folder.objects.get(id = cache.object_id)
         title = folder.title
         link = folder.get_absolute_url()
-
         copy_folder = Folder.objects.create(author_profile = profile, title=folder.title)
         for ppr in folder.lesson_list.all():
             copy_folder.lesson_list.add(ppr)
@@ -144,10 +141,8 @@ def paste(request):
             new_parent.lesson_list.add(new_lesson)
         elif request.GET.get('school_id'):
             new_lesson.school = school
-
         if cache.action == 'cut':
             lesson.delete()
-                
     data = {
         'status':'ok',
         'object_type':cache.object_type,
@@ -159,6 +154,7 @@ def paste(request):
 
 def create_folder(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
     if len(school.school_folders.all()) > 0:
@@ -181,6 +177,8 @@ def create_folder(request):
     return JsonResponse(data)
 
 def change_name(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         if request.GET.get('id') == 'new':
             folder = Folder.objects.all()[len(Folder.objects.all())-1]
@@ -194,6 +192,8 @@ def change_name(request):
     return JsonResponse(data)
 
 def delete_folder(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         folder = Folder.objects.get(id = int(request.GET.get('id')))
         folder.delete()

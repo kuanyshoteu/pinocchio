@@ -8,18 +8,40 @@
 {{ form.media }}
 {{ paper_form.media }}
 {% endblock head_extra %}
-
+{% load staticfiles %}
 {% block content %}
 <span class="first_squad" style="display: none;" id='{{ first_squad }}'></span>
 <span class="first_subject" style="display: none;" id='{{ first_subject }}'></span>
 <a id="go-back-btn" class="start_info_btn" style="display: none;">
     <i class="arrow left icon"></i>Назад
 </a>
+<div class="ui modal" id="privet-modal" style="z-index: 4000;">
+    <i class="close icon"></i>
+    <div class="content" style="padding: 0 !important;">
+        <div class="ui grid">
+            <div class="eight wide column" style="padding: 0">
+                <img src="{% static 'images/dude.gif' %}" style="width: 450px;height: 300px;">
+            </div>            
+            <div class="eight wide column" style="font-size: 17px;text-align: center;padding: 70px 15px;">
+                <div style="">
+                    <span style="font-size: 25px;font-weight: 600;color: #506ca9">Добро пожаловать на Pinocchio.kz</span>
+                    <br>
+                    <br>
+                    <span style="font-size: 18px;">Обучаясь у наших партнеров, Вы выбираете лучших!</span>           
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
 
-<div id="profile">
+
+<div id="profile" class="">
     <div class="ui container" >
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
+            <div class="hint5" style="position: absolute;margin-left: 200px;margin-top: 235px;"></div>
+            <div class="hint6" style="position: absolute;margin-left: 200px;"></div>
+            <div class="hint7" style="position: absolute;margin-left: 200px;margin-top: 95px;"></div>
             <div class="twelve wide column">
                 <div class="ui stackable grid info">
                     <div class="sixteen wide column left-side" style="padding: 14px 0;">
@@ -46,18 +68,126 @@
         </div>
     </div>
 </div>
+<span style="display: none;" class="hint_data" id=""></span>
+{% if is_trener %}
 <script type="text/javascript">
-    $('body').click( function(e){
-        if (!$(e.target).is("#schedule") && $("#schedule").has(e.target).length == 0 ) {
-            $('.mitem').stop().animate({opacity: 1}, 300);
-        }
-    });
-    $('.miss_lectures').click(function(){
-        // Make all images (except this) transparent
-        $('.mitem').stop().animate({opacity: 0.1}, 300);
-        // Make this opaque
-        console.log('d')
-    });
+    $(document).ready(function() {
+        $('#privet-modal').modal('show')
+        var element = $('<div class="help ui segment help_right help_div0"><a id="0" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a> Дополните информацию о себе в разделе редактирования страницы<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 1 из 8</span><br><button id="0" class="ui button mini white next">Далее</button></div>').appendTo('.hint0');
+        var element = $('<div class="help ui segment help_right sec help_div1"><a id="1" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будет указано расписание курсов, на которые Вы записаны<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 2 из 8</span><br><button id="1" class="ui button mini prev">Назад</button><button id="1" class="ui button mini white next">Далее</button></div>').appendTo('.hint1');
+        var element = $('<div class="help ui segment help_right sec help_div2"><a id="2" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут показаны Ваши оценки<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 3 из 8</span><br><button id="2" class="ui button mini prev">Назад</button><button id="2" class="ui button mini white next">Далее</button></div>').appendTo('.hint2');
+        var element = $('<div class="help ui segment help_left sec help_div3"><a id="3" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут расположены ссылки на Ваши домашние задания<br>Не забывайте выполнять их!<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 4 из 8</span><br><button id="3" class="ui button mini prev">Назад</button><button id="3" class="ui button mini white next">Далее</button></div>').appendTo('.hint3');
+        var element = $('<div class="help ui segment help_top sec help_div4"><a id="4" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Выполняя домашние задания, Вы зарабатываете внутреннюю валюту "дили"<br><br>Заработав достаточное количество дилей, Вы можете получить скидку или подарок от Вашего образовательного центра, а также купить онлайн-курс на нашем сайте<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 5 из 8</span><br><button id="4" class="ui button mini prev">Назад</button><button id="4" class="ui button mini white next">Далее</button></div>').appendTo('.hint4');
+        var element = $('<div class="help ui segment help_left sec help_div5"><a id="5" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь расположены все онлайн-курсы от учителей и партнеров<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 6 из 8</span><br><button id="5" class="ui button mini prev">Назад</button><button id="5" class="ui button mini white next">Далее</button></div>').appendTo('.hint5');
+        var element = $('<div class="help ui segment help_left_news sec help_div6"><a id="6" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Следите за новостями Вашего центра в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 7 из 8</span><br><button id="6" class="ui button mini prev">Назад</button><button id="6" class="ui button mini white next">Далее</button></div>').appendTo('.hint6');
+        var element = $('<div class="help ui segment help_left sec help_div7"><a id="7" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Решая задачи и получая хорошие оценки на уроке, Вы повышаете свой рейтинг, который можно отследить в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 8 из 8</span><br><button id="7" class="ui button mini prev">Назад</button><button id="7" class="ui button mini green next close_hint">Готово</button></div>').appendTo('.hint7');
+        $('.help' + 0).addClass('highliter');
+        $('.help00').addClass('help_button');
+        $('.sec').css('display', 'none');
+        $('.next').click(function(){
+            id = parseInt($(this).attr('id'))
+            $('.help_div' + id).css('display', 'none');
+            $('.help_div' + (id+1)).css('display', 'block');
+            $('.hint' + id).removeClass('highliter');
+            $('.help' + id).removeClass('highliter');
+            $('.hint' + (id + 1)).addClass('highliter');
+            $('.help' + (id + 1)).addClass('highliter');
+            if (id >= 4 || id == 0){
+                $(('.help'+(id+1)) + (id+1)).addClass('help_button');
+                $(('.help'+id) + id).removeClass('help_button');
+            }
+            if (id == 1){
+                $("html, body").animate({ scrollTop: 500 }, 600)
+            }
+            if (id == 2){
+                $("html, body").animate({ scrollTop: 0 }, 600)                
+            }
+        })
+        $('.prev').click(function(){
+            id = parseInt($(this).attr('id'))
+            $('.help_div' + id).css('display', 'none');
+            $('.help_div' + (id-1)).css('display', 'block');
+            $('.hint' + id).removeClass('highliter');
+            $('.help' + id).removeClass('highliter');
+            $('.hint' + (id - 1)).addClass('highliter');
+            $('.help' + (id - 1)).addClass('highliter');
+            if (id >= 6 || id == 1){
+                $(('.help'+id) + id).removeClass('help_button');
+                $(('.help'+(id-1)) + (id-1)).addClass('help_button');
+            }
+            if (id == 3){
+                $("html, body").animate({ scrollTop: 500 }, 500)
+            }
+            if (id == 2){
+                $("html, body").animate({ scrollTop: 0 }, 500)                
+            }
+        })
+        $('.close_hint').click(function(){
+            $('.bg-dark').removeClass();
+            $('.help_div' + $(this).attr('id')).css('display', 'none')
+        })
 
+    });
 </script>
+{% else %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        //$('#privet-modal').modal('show')
+        var element = $('<div class="help ui segment help_right help_div0"><a id="0" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a> Дополните информацию о себе в разделе редактирования страницы<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 1 из 8</span><br><button id="0" class="ui button mini white next">Далее</button></div>').appendTo('.hint0');
+        var element = $('<div class="help ui segment help_right sec help_div1"><a id="1" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будет указано расписание курсов, на которые Вы записаны<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 2 из 8</span><br><button id="1" class="ui button mini prev">Назад</button><button id="1" class="ui button mini white next">Далее</button></div>').appendTo('.hint1');
+        var element = $('<div class="help ui segment help_right sec help_div2"><a id="2" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут показаны Ваши оценки<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 3 из 8</span><br><button id="2" class="ui button mini prev">Назад</button><button id="2" class="ui button mini white next">Далее</button></div>').appendTo('.hint2');
+        var element = $('<div class="help ui segment help_left sec help_div3"><a id="3" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут расположены ссылки на Ваши домашние задания<br>Не забывайте выполнять их!<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 4 из 8</span><br><button id="3" class="ui button mini prev">Назад</button><button id="3" class="ui button mini white next">Далее</button></div>').appendTo('.hint3');
+        var element = $('<div class="help ui segment help_top sec help_div4"><a id="4" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Выполняя домашние задания, Вы зарабатываете внутреннюю валюту "дили"<br><br>Заработав достаточное количество дилей, Вы можете получить скидку или подарок от Вашего образовательного центра, а также купить онлайн-курс на нашем сайте<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 5 из 8</span><br><button id="4" class="ui button mini prev">Назад</button><button id="4" class="ui button mini white next">Далее</button></div>').appendTo('.hint4');
+        var element = $('<div class="help ui segment help_left sec help_div5"><a id="5" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь расположены все онлайн-курсы от учителей и партнеров<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 6 из 8</span><br><button id="5" class="ui button mini prev">Назад</button><button id="5" class="ui button mini white next">Далее</button></div>').appendTo('.hint5');
+        var element = $('<div class="help ui segment help_left_news sec help_div6"><a id="6" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Следите за новостями Вашего центра в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 7 из 8</span><br><button id="6" class="ui button mini prev">Назад</button><button id="6" class="ui button mini white next">Далее</button></div>').appendTo('.hint6');
+        var element = $('<div class="help ui segment help_left sec help_div7"><a id="7" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Решая задачи и получая хорошие оценки на уроке, Вы повышаете свой рейтинг, который можно отследить в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 8 из 8</span><br><button id="7" class="ui button mini prev">Назад</button><button id="7" class="ui button mini green next close_hint">Готово</button></div>').appendTo('.hint7');
+        $('.help' + 0).addClass('highliter');
+        $('.help00').addClass('help_button');
+        $('.sec').css('display', 'none');
+        $('.next').click(function(){
+            id = parseInt($(this).attr('id'))
+            $('.help_div' + id).css('display', 'none');
+            $('.help_div' + (id+1)).css('display', 'block');
+            $('.hint' + id).removeClass('highliter');
+            $('.help' + id).removeClass('highliter');
+            $('.hint' + (id + 1)).addClass('highliter');
+            $('.help' + (id + 1)).addClass('highliter');
+            if (id >= 4 || id == 0){
+                $(('.help'+(id+1)) + (id+1)).addClass('help_button');
+                $(('.help'+id) + id).removeClass('help_button');
+            }
+            if (id == 1){
+                $("html, body").animate({ scrollTop: 500 }, 600)
+            }
+            if (id == 2){
+                $("html, body").animate({ scrollTop: 0 }, 600)                
+            }
+        })
+        $('.prev').click(function(){
+            id = parseInt($(this).attr('id'))
+            $('.help_div' + id).css('display', 'none');
+            $('.help_div' + (id-1)).css('display', 'block');
+            $('.hint' + id).removeClass('highliter');
+            $('.help' + id).removeClass('highliter');
+            $('.hint' + (id - 1)).addClass('highliter');
+            $('.help' + (id - 1)).addClass('highliter');
+            if (id >= 6 || id == 1){
+                $(('.help'+id) + id).removeClass('help_button');
+                $(('.help'+(id-1)) + (id-1)).addClass('help_button');
+            }
+            if (id == 3){
+                $("html, body").animate({ scrollTop: 500 }, 500)
+            }
+            if (id == 2){
+                $("html, body").animate({ scrollTop: 0 }, 500)                
+            }
+        })
+        $('.close_hint').click(function(){
+            $('.bg-dark').removeClass();
+            $('.help_div' + $(this).attr('id')).css('display', 'none')
+        })
+
+    });
+</script>
+{% endif %}
 {% endblock content %}

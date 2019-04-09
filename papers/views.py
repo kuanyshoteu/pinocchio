@@ -25,6 +25,9 @@ def lesson_details(request, lesson_id = None):
         context = {
             "profile": profile,
             'lesson':lesson,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'), 
         }
         return render(request, template_name='library/lesson_details.html', context=context)
     else:
@@ -43,6 +46,9 @@ def estimate_lesson_page(request, lesson_id = None):
         "profile": profile,
         'lesson':lesson,
         'hisestimation':lesson.grades[index],
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, template_name='library/lesson_details.html', context=context)
 
@@ -88,6 +94,8 @@ def paper_details(request, paper_id = None):
         'subtheme_video_form':subtheme_video_form,
         'tasks':Task.objects.all(),
         'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "library/lesson_details.html", context)
 
@@ -99,6 +107,7 @@ from django.http import JsonResponse
 
 def add_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if profile.is_trener:
         if request.GET.get('paper_id') and request.GET.get('group_id'):
             lesson = Lesson.objects.get(id = int(request.GET.get('paper_id')))
@@ -110,6 +119,7 @@ def add_lesson(request):
 
 def AddPaper(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('title'):
@@ -126,6 +136,7 @@ def AddPaper(request):
 
 def AddSubtheme(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         paper = Paper.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('title'):
@@ -143,6 +154,7 @@ def AddSubtheme(request):
 
 def NewTask(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('text') and request.GET.get('cost') and request.GET.get('subtheme_id'):
         task = Task.objects.create(author_profile=profile, text=request.GET.get('text'))
         if request.GET.get('ans') != '&':
@@ -180,6 +192,7 @@ def NewTask(request):
 def AddTask(request):
     action = ''
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('subtheme_id') and request.GET.get('task_id'):
         subtheme = Subtheme.objects.get(id = int(request.GET.get('subtheme_id')))
         task = Task.objects.get(id = int(request.GET.get('task_id')))
@@ -196,6 +209,7 @@ def AddTask(request):
 
 def create_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     name = 'Урок'
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
@@ -212,6 +226,8 @@ def create_lesson(request):
     return JsonResponse(data)        
 
 def rename_lesson(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id') and request.GET.get('name'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         lesson.title = request.GET.get('name')
@@ -221,6 +237,8 @@ def rename_lesson(request):
     return JsonResponse(data)
 
 def rename_paper(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('new_title') and request.GET.get('id'):
         if len(request.GET.get('new_title')) > 0:
             paper = Paper.objects.get(id = int(request.GET.get('id')))
@@ -231,6 +249,8 @@ def rename_paper(request):
     return JsonResponse(data)
 
 def rewrite_subtheme(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('new_content') and request.GET.get('id'):
         if len(request.GET.get('new_content')) > 0:
             subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
@@ -241,6 +261,8 @@ def rewrite_subtheme(request):
     return JsonResponse(data)
 
 def delete_paper(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         paper = Paper.objects.get(id = int(request.GET.get('id')))
         paper.delete()
@@ -248,6 +270,8 @@ def delete_paper(request):
     return JsonResponse(data)
 
 def rename_subtheme(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('new_title') and request.GET.get('id'):
         if len(request.GET.get('new_title')) > 0:
             subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
@@ -258,6 +282,8 @@ def rename_subtheme(request):
     return JsonResponse(data)
 
 def delete_subtheme(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
         subtheme.delete()
@@ -265,6 +291,8 @@ def delete_subtheme(request):
     return JsonResponse(data)
 
 def delete_lesson(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         lesson.delete()
@@ -272,6 +300,8 @@ def delete_lesson(request):
     return JsonResponse(data)
 
 def delete_course(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('id'):
         course = Course.objects.get(id = int(request.GET.get('id')))
         course.delete()
@@ -279,6 +309,8 @@ def delete_course(request):
     return JsonResponse(data)
 
 def AddGroup(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
     if request.GET.get('paper_id') and request.GET.get('squad_id') and request.GET.get('isin'):
         squad = Squad.objects.get(id = request.GET.get('squad_id')) 
         paper = Paper.objects.get(id = request.GET.get('paper_id'))
@@ -367,16 +399,13 @@ def estimate_lesson(request):
     return JsonResponse(data)
 
 def courses(request):
-    staff = "no"
-    if request.user.is_staff or request.user.is_superuser:
-        staff = "yes"
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    
+    profile = get_profile(request)
     context = {
         "profile": profile,
         "course_sets":course_sets(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, 'courses/course_list.html', context=context)
 
@@ -407,13 +436,9 @@ def package_courses(order_item):
     return sets
 
 def course_details(request, course_id=None):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
+    profile = get_profile(request)
     course = Course.objects.get(id=course_id)
-    if not profile.is_ceo and not profile.is_creator:
+    if not is_profi(profile, 'CEO') and not is_profi(profile, 'Creator'):
         if not profile in course.students.all():
             raise Http404
 
@@ -429,25 +454,26 @@ def course_details(request, course_id=None):
         "course":course,
         "lessons":lessons,
         "folders":folders,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, 'courses/course_details.html', context=context)
 
 def course_seller(request, course_id=None):
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
+    profile = get_profile(request)
    
     context = {
         "profile": profile,
         "course":Course.objects.get(id=course_id),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, 'courses/course_seller.html', context=context)
 
 def course_update(request, course_id=None):
-    if not request.user.is_staff and not request.user.is_superuser:
-        raise Http404
+    profile = get_profile(request)
     course = get_object_or_404(Course, id=course_id)
     form = CourseForm(request.POST or None, request.FILES or None, instance=course)
     if form.is_valid():
@@ -458,29 +484,19 @@ def course_update(request, course_id=None):
             course.width_field = 0
         course.save()
         return HttpResponseRedirect(course.get_update_url())
-        
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-
     context = {
         "course": course,
         "form":form,
         'page':'course_update',
         "profile":profile,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, "courses/course_create.html", context)
 
 def course_create(request):
-    if not request.user.is_authenticated:
-        raise Http404
-
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    if not profile.is_trener:
-        raise Http404
-        
+    profile = get_profile(request)        
     form = CourseForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         course = form.save(commit=False)
@@ -491,6 +507,9 @@ def course_create(request):
     context = {
         "form": form,
         "profile":profile,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, "courses/course_create.html", context)
 

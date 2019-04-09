@@ -6,7 +6,8 @@
     }
 </style>
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
-<div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+<div class="ui segment help1" style="margin-bottom: 0;margin-top: 0">
+    <div class="hint1 highliter" style="position: absolute;margin:-50px 0 0 -225px;"></div>
     <div class="ui grid">
         <div class="one wide column">
             <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
@@ -23,7 +24,7 @@
 {% load ttags %}
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
-<div id="calendarr" length='7'>           
+<div id="calendarr" class="help1" length='7'>           
     <div id="week">   
         <div class="week" id="0">
             <div class="daysmall daysmall_time" style="padding-top: 17px;">

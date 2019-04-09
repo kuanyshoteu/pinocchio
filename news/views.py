@@ -20,25 +20,16 @@ from django.contrib.auth import (
     )
 from django.contrib.auth.models import User
 from django.template import RequestContext
+from constants import *
 
 def news(request):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404    
+    profile = get_profile(request)
     school = profile.schools.first()
     return redirect(school.get_school_posts())
 
 def post_list(request, school_id):
-    if not request.user.is_authenticated:
-        raise Http404
-        
-    profile = ''
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    school = School.objects.get(id=school_id)
-    
+    profile = get_profile(request)
+    school = School.objects.get(id=school_id)    
     if request.POST: 
         text = request.POST.get('post_text')
         newpost = Post.objects.create(author_profile=profile,content=text, school=school)
@@ -53,12 +44,15 @@ def post_list(request, school_id):
         "posts": school.school_posts.all(),
         'hisschools':profile.schools.all(),
         "current_school_id":school.id,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
     }
     return render(request, "news/post_list.html", context)
 
 def post_delete(request):
     profile = Profile.objects.get(user = request.user.id)
-    if profile.is_manager:
+    if is_profi(profile, 'Manager'):
         post = Post.objects.get(id=int(request.GET.get('post_id')))
         post.delete()
     data = {

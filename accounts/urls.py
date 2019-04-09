@@ -2,8 +2,6 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
-
-from main.views import trener_delete
 from django.contrib.auth.models import User
 
 app_name = 'accounts'
@@ -20,5 +18,6 @@ urlpatterns = [
     url(r'^api/squad_attendance/$', squad_attendance, name='squad_attendance'),
     url(r'^api/subject_attendance/$', subject_attendance, name='subject_attendance'),
     url(r'^api/more_attendance/$', more_attendance, name='more_attendance'),
+    url(r'^api/more_attendance_student/$', more_attendance_student, name='more_attendance_student'),
     url(r'^(?P<user>[\w-]+)/$', account_view, name='profile'),
 ]

@@ -16,22 +16,17 @@ from .models import *
 from todolist.models import Document
 from todolist.form import FileForm
 from django.contrib.auth.models import User
+from constants import *
 
 def documents(request):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404    
+    profile = get_profile(request)    
+    only_staff(profile)
     school = profile.schools.first()
     return redirect(school.get_school_documents())
 
 def school_documents(request, school_id):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
+    profile = get_profile(request)
+    only_staff(profile)
     img = ['png', 'jpg', 'jpeg']
     html = ['html', 'css', 'js', 'py', 'java']
     file_form = FileForm(request.POST or None, request.FILES or None)
@@ -70,15 +65,16 @@ def school_documents(request, school_id):
         "current_school_id":school.id,
         'cache':DocumentCache.objects.get_or_create(author_profile = profile)[0],
         'file_form':file_form,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+
     }
     return render(request, 'documents/documents.html', context)
 
 def folder_details(request, folder_id=None):
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    else:
-        raise Http404
+    profile = get_profile(request)
+    only_staff(profile)
     folder = DocumentFolder.objects.get(id=folder_id)
 
     file_form = FileForm(request.POST or None, request.FILES or None)
@@ -95,12 +91,16 @@ def folder_details(request, folder_id=None):
         'cache':DocumentCache.objects.get_or_create(author_profile = profile)[0],
         'folders':DocumentFolder.objects.filter(parent=folder),
         'file_form':file_form,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),        
     }
     return render(request, 'documents/documents.html', context)
 
 from django.http import JsonResponse
 def file_action(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_staff(profile)
     cache = DocumentCache.objects.get_or_create(author_profile = profile)
     cache = cache[0]
     
@@ -115,6 +115,7 @@ def file_action(request):
 
 def paste(request):
     profile = Profile.objects.get(user = request.user.id)
+    only_staff(profile)
     cache = DocumentCache.objects.get_or_create(author_profile = profile)[0]
     title = ''
     link = ''
@@ -161,7 +162,7 @@ def paste(request):
 
 def create_docfolder(request):
     profile = Profile.objects.get(user = request.user.id)
-
+    only_staff(profile)
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
     if len(school.school_docfolders.all()) > 0:
@@ -184,6 +185,8 @@ def create_docfolder(request):
     return JsonResponse(data)
 
 def change_docname(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_staff(profile)
     if request.GET.get('id'):
         if request.GET.get('id') == 'new':
             folder = DocumentFolder.objects.all()[len(DocumentFolder.objects.all())-1]
@@ -197,13 +200,18 @@ def change_docname(request):
     return JsonResponse(data)
 
 def delete_folder(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_staff(profile)
     if request.GET.get('id'):
         folder = DocumentFolder.objects.get(id = int(request.GET.get('id')))
-        folder.delete()
+        if folder.author_profile == profile:
+            folder.delete()
     data = {}
     return JsonResponse(data)
 
 def delete_document(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_staff(profile)
     if request.GET.get('id'):
         doc = Document.objects.get(id = int(request.GET.get('id')))
         doc.delete()

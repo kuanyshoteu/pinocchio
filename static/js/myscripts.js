@@ -1,4 +1,61 @@
 $(document).ready(function () {
+    $('.save_card_as_user').click(function(e) {
+        id = $('.card_for_save').attr('id')
+        squad_id = $(this).attr('squad_id')
+        $.ajax({
+            url: $('.card_for_save').attr('url'),
+            data: {
+                'id':id,
+                'squad_id':squad_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log('ff')
+            }
+        })        
+    });
+    $('.add_card').click(function(e) {
+        var id = $(this).attr("id")
+        var name = $('.new_card_name' + id).val()
+        var phone = $('.new_card_phone' + id).val()
+        var mail = $('.new_card_mail' + id).val()
+        var comment = $('.new_card_comment' + id).val()
+        $.ajax({
+            url: $('.add_card_url').attr('url'),
+            data: {
+                'name':name,
+                'phone':phone,
+                'mail':mail,
+                'comment':comment,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.column' + id).load(document.URL +  ' .column' + id);
+            }
+        })        
+    });
+    $('.edit_card').click(function(e) {
+        var id = $(this).attr("id")
+        var name = $('.card_name' + id).val()
+        var phone = $('.card_phone' + id).val()
+        var mail = $('.card_mail' + id).val()
+        var comment = $('.card_comment' + id).val()
+        $.ajax({
+            url: $('.edit_card_url').attr('url'),
+            data: {
+                'name':name,
+                'phone':phone,
+                'mail':mail,
+                'comment':comment,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#card' + id).load(document.URL +  ' #card' + id);
+            }
+        })        
+    });
     $('.show_subject_cost').hover(function(e) {
         cost = $(this).attr('cost')
         $('.subject_cost').html(cost)
@@ -158,11 +215,11 @@ $(document).ready(function () {
     $('.open_point').click(function (event){
         
     })
-    
-    $('.att_present').click(function (event){
+
+    $(document).on("click", '.att_present', function () {    
         var id = $(this).attr('id')
         $.ajax({
-            url: $(this).attr('url'),
+            url: $('.attendance_present_url').attr('url'),
             data: {
                 'id':id,
             },
@@ -601,10 +658,10 @@ $(document).ready(function () {
             })
         }
     })
-    $(".save_grade").click(function (event) {
+    $(document).on("click", '.save_grade', function () {
         event.preventDefault();
         var this_ = $(this)
-        var pageUrl = this_.attr("url")
+        var pageUrl = $('.attendance_change_url').attr("url")
         var grade = this_.attr('grade')
         var id = this_.attr('id')
         if (pageUrl) {

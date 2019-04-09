@@ -29,7 +29,8 @@ from subjects.models import *
 from django.contrib.auth.forms import PasswordChangeForm
 from schools.models import School
 from constants import *
-from subjects.templatetags.ttags import get_date
+from subjects.templatetags.ttags import get_date, create_atts, create_atts_student
+from .templatetags.ttttags import check_date
 
 def account_view(request, user = None):
     profile = get_profile(request)
@@ -50,21 +51,19 @@ def account_view(request, user = None):
         hissubjects = hisprofile.teachers_subjects.all()
         hissquads = hisprofile.curators_squads.all()
         hiscourses = hisprofile.hiscourses.all()
-        hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
-        if hiscacheatt.subject == None and len(hissubjects) > 0:
-            hiscacheatt.subject = hissubjects[0]
-        if hiscacheatt.squad == None and len(hissquads) > 0:
-            hiscacheatt.squad = hissquads[0]
-        hiscacheatt.save()
-        att_subject = hiscacheatt.subject
-        att_squad = hiscacheatt.squad
     else:
         hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
         hiscourses = hisprofile.courses.all()
-        hiscacheatt = None 
-        att_subject = None
-        att_squad = None
+    hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+    if hiscacheatt.subject == None and len(hissubjects) > 0:
+        hiscacheatt.subject = hissubjects[0]
+    if hiscacheatt.squad == None and len(hissquads) > 0:
+        hiscacheatt.squad = hissquads[0]
+    hiscacheatt.save()
+    if not 'hint' in request.session:
+        request.session['hint'] = 0
+    hint = request.session['hint']
 
     context = {
         "profile":profile,
@@ -75,11 +74,14 @@ def account_view(request, user = None):
         'hissubjects':hissubjects,
         'hissquads':hissquads,
         'hiscourses':hiscourses,
-        'att_subject':att_subject,
-        'att_squad':att_squad,
+        'att_subject':hiscacheatt.subject,
+        'att_squad':hiscacheatt.squad,
         'today':int(timezone.now().date().strftime('%w')),
         'miss_lesson_form':miss_lesson_form,
         'is_trener':is_profi(hisprofile, 'Teacher'),
+        "is_manager":is_profi(hisprofile, 'Manager'),
+        "is_director":is_profi(hisprofile, 'Director'),
+        'hint':hint,
     }
     return render(request, "profile.html", context)
 
@@ -139,9 +141,17 @@ from django.http import JsonResponse
 def subject_attendance(request):
     if request.GET.get('subject_id'):
         profile = Profile.objects.get(user = request.user)
-        cache_att = CacheAttendance.objects.get(profile=profile)
+        cache_att = CacheAttendance.objects.get_or_create(profile=profile)[0]
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         cache_att.subject = subject
+        if not cache_att.squad in subject.squads.all():
+            if is_profi(profile, "Teacher"):
+                cache_att.squad = subject.squads.first()
+            else:
+                for hissquad in profile.squads.all():
+                    if hissquad in subject.squads.all():
+                        cache_att.squad = hissquad
+                        break
         cache_att.save()
     data = {
     }
@@ -172,9 +182,49 @@ def more_attendance(request):
             for sm in queryset:
                 if len(columns) == 4:
                     break
-                section = [get_date(sm, squad), sm.id]
+                if len(sm.sm_atts.filter(squad = squad)) < len(squad.students.all()):
+                    create_atts(squad, sm, subject)
+                section = [get_date(sm, squad), sm.id, check_date(sm, squad)]
                 for att in sm.sm_atts.filter(squad = squad):
-                    section.append([att.present, att.grade])
+                    section.append([att.id, att.present, att.grade])
+                columns.append(section)
+        else:
+            queryset = subject.materials.filter(id__gt = current_sm)
+            if len(queryset) <= 4:
+                last_set = True
+            for sm in queryset:
+                if len(columns) == 4:
+                    break
+                section = [get_date(sm, squad), sm.id]
+                columns.append(section)
+        data = {
+            'first_set':first_set,
+            'last_set':last_set,
+            'columns':columns,
+        }
+        return JsonResponse(data)
+
+def more_attendance_student(request):
+    profile = get_profile(request)
+    if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        current_sm = int(request.GET.get('sm_id'))
+        columns = []
+        last_set = False
+        first_set = False
+        if request.GET.get('direction') == 'left':
+            queryset = subject.materials.filter(id__lt = current_sm).order_by('-id')
+            if len(queryset) <= 4:
+                first_set = True
+            for sm in queryset:
+                if len(columns) == 4:
+                    break
+                if len(sm.sm_atts.filter(student = profile)) < 1:
+                    create_atts_student(sm, profile)
+                section = [get_date(sm, squad), sm.id, 'past']
+                att = sm.sm_atts.get(student = profile)
+                section.append([att.id, att.present, att.grade])
                 columns.append(section)
         else:
             queryset = subject.materials.filter(id__gt = current_sm)

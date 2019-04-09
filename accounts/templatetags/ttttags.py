@@ -27,7 +27,6 @@ def check_date(material, squad):
         return 'now'
     else:
         return 'past'
-    return '_'
         
 @register.filter
 def get_children(comment):

@@ -81,6 +81,8 @@ class Profile(models.Model):
         return reverse("accounts:squad_attendance")
     def more_attendance(self):
         return reverse("accounts:more_attendance")
+    def more_attendance_student(self):
+        return reverse("accounts:more_attendance_student")    
     def hislessons(self):
         return reverse("main:hislessons")        
     def get_api_change_url(self):
@@ -99,6 +101,10 @@ class Profile(models.Model):
         return reverse("accounts:update_schedule_url")
     def miss_lecture_url(self):
         return reverse("accounts:miss_lecture_url")
+    def attendance_change_url(self):
+        return reverse("accounts:change_att_url")
+    def attendance_present_url(self):
+        return reverse("accounts:present_url")    
     # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")
@@ -162,3 +168,20 @@ class MissLesson(models.Model):
     height_field = models.IntegerField(default=0, null = True)
     width_field = models.IntegerField(default=0, null = True)
     dates = ArrayField(models.DateField(null = True, blank = True), default = list)
+
+class CRMColumn(models.Model):
+    title = models.CharField(max_length=250)
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_columns')
+    number_of_cards = models.IntegerField(default=0)
+    class Meta:
+        ordering = ['id']
+
+class CRMCard(models.Model):
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_cards')
+    column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
+    name = models.CharField(max_length=250)
+    phone = models.CharField(max_length=250)
+    mail = models.CharField(max_length=250)
+    comments = models.CharField(max_length=250)
+    timestamp = models.DateTimeField(auto_now_add=True)

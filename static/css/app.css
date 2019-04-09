@@ -5029,7 +5029,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;*/
   }
   .fixed_menu{
-    position: fixed;margin-left: 0;z-index: 1000;padding-left: 0;
+    position: fixed;margin-left: 0;padding-left: 0;
   }
   .twenty{
     width: 30%;
@@ -5059,7 +5059,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;
   }
   .fixed_menu{
-    position: fixed;margin-left: 3%;z-index: 1000;padding-left: 0;
+    position: fixed;margin-left: 3%;z-index: 90;padding-left: 0;
   }
   #logo{
     margin-left: 3%;
@@ -5093,7 +5093,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;
   }
   .fixed_menu{
-    position: fixed;margin-left: 5%;z-index: 1000;padding-left: 0;
+    position: fixed;margin-left: 5%;z-index: 90;padding-left: 0;
   }
   #logo{
     margin-left: 5%;
@@ -39567,12 +39567,12 @@ body.pushable > .pusher {
   position: fixed;
   z-index: 2000;
   width: 100%;
-  background-color: #313a57;
+  background-color: #506ca9;
   border: none;
   border-radius: 0;
   margin-top: 0;
   margin-bottom: 0;
-  border-bottom: 1px solid #313a57;
+  border-bottom: 1px solid #506ca9;
   position: fixed; 
   z-index: 2000;
   width: 100%;
@@ -39772,10 +39772,10 @@ a:hover {
 }
 
 #logo{
-  width: 153px !important; 
-  height: 30px!important;position: absolute;
+  width: 140px !important; 
+  height: 25px!important;position: absolute;
   padding-left: 25px;
-  margin-top: -5px
+  margin-top: -2px
 }
 #left-main-menu {
   padding: 1rem 1rem 0 0;

@@ -7,7 +7,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="group-create">
+<div id="group-create" class="">
 	<a id="go-back-btn"  href='{{ profile.get_absolute_url }}'>
         <i class="arrow left icon"></i>Назад
     </a>
@@ -22,7 +22,8 @@
 				        		Основная информация
 				        	</div>
 				        	<div class="ui segment">
-				        		<form class="ui form" method='POST' enctype="multipart/form-data" class="ui form">{% csrf_token %}
+                                <div class="hint0" style="position: absolute;margin-left: -210px;"></div>
+				        		<form class="ui form help0" method='POST' enctype="multipart/form-data" class="ui form">{% csrf_token %}
 								    {{ form }}
 								    <input type='submit' class='ui button blue mini' value='Сохранить'/>
 								</form>
@@ -68,5 +69,48 @@
 	</div>	
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        var texts = ["Учителям будет легче запомнить Вас, если Вы загрузите настоящую фотографию"]
+        for (var i = 0; i < texts.length; i++){
+            var div_class = "help ui segment sec help_div"+i
+            button_class = "ui button mini white next"
+            button_class_prev = "ui button mini prev"
+            if (i == 0){
+                div_class = "help ui segment help_div"+i
+                $('.help' + i).addClass('highliter');
+            }
+            else if (i == texts.length-1){
+                button_class += " close"
+            }
+            var element = $('<div class="' + div_class + '">' + texts[i] + '</div>').appendTo('.hint' + i);
+            $('.hint' + i).addClass('highliter');
+        }
+        $('.sec').css('display', 'none');
+        $('.next').click(function(){
+            id = parseInt($(this).attr('id'))
+            $('.help_div' + id).css('display', 'none');
+            $('.help_div' + (id+1)).css('display', 'block');
+            $('.hint' + id).removeClass('highliter');
+            $('.hint' + (id + 1)).addClass('highliter');
+            $('.help' + id).removeClass('highliter');
+            $('.help' + (id + 1)).addClass('highliter');
+        })
+        $('.prev').click(function(){
+            id = parseInt($(this).attr('id'))
+            $('.help_div' + id).css('display', 'none');
+            $('.help_div' + (id-1)).css('display', 'block');
+            $('.hint' + id).removeClass('highliter');
+            $('.hint' + (id - 1)).addClass('highliter');
+            $('.help' + id).removeClass('highliter');
+            $('.help' + (id - 1)).addClass('highliter');
+        })
+        $('.close').click(function(){
+            $('.bg-dark').removeClass();
+        })
+
+    });
+
+</script>
 
 {% endblock content %}

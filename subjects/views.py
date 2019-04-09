@@ -44,15 +44,23 @@ def subject_detail(request, slug=None):
         'days':days,
         "teacher":is_profi(profile, 'Teacher'),
         "lessons":profile.lesson_author.all(),
-        "folders":profile.folders.all(),        
+        "folders":profile.folders.all(), 
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),       
     }
     return render(request, "subjects/subject_detail.html", context)
 
 def subject_list(request):
     profile = get_profile(request)
+    only_staff(profile)
+    school = profile.schools.first()
     context = {
         "profile": profile,
-        "subjects":Subject.objects.all(),
+        "subjects":school.school_subjects.all(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_list.html", context)
 
@@ -60,6 +68,9 @@ def subject_videos(request, slug=None):
     instance = get_object_or_404(Subject, slug=slug)
     context = {
         "instance": instance,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_videos.html", context)
 
@@ -98,12 +109,15 @@ def subject_lessons(request, slug=None):
         "user":request.user,
         "profile":profile,
         "instance": instance,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_lessons.html", context)
 
 def subject_create(request):
     profile = get_profile(request)
-        
+    only_managers(profile)
     form = SubjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -114,13 +128,16 @@ def subject_create(request):
         "form": form,
         "profile":profile,
         "all_teachers":all_teachers(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_create.html", context)
 
 def subject_update(request, slug=None):
-    if not request.user.is_staff and not request.user.is_superuser:
-        raise Http404
     instance = get_object_or_404(Subject, slug=slug)
+    profile = get_profile(request)
+    only_managers(profile)
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -132,10 +149,6 @@ def subject_update(request, slug=None):
         subject = Subject.objects.get(slug=slug)
         calc_subject_lessons(subject)
         return HttpResponseRedirect(instance.get_update_url())
-        
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
 
     time_periods = TimePeriod.objects.all()
     days = Day.objects.all()
@@ -154,6 +167,9 @@ def subject_update(request, slug=None):
         'time_periods':time_periods,
         'days':days,
         "all_teachers":all_teachers(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_create.html", context)
 
@@ -161,23 +177,18 @@ def all_teachers():
     return Profile.objects.filter()
 
 def subject_delete(request, slug=None):
-    if not request.user.is_authenticated:
-        raise Http404
-    try:
-        instance = Subject.objects.get(slug=slug)
-    except:
-        raise Http404
-
-    if not request.user.is_staff and not request.user.is_superuser:
-        reponse.status_code = 403
-        return HttpResponse("You do not have permission to do this.")
-        
+    instance = Subject.objects.get(slug=slug)
+    profile = get_profile(request)
+    only_managers(profile)
     if request.method == "POST":
         instance.delete()
         messages.success(request, "Successfully deleted")
         return redirect("subjects:list")
     context = {
-        "object": instance
+        "object": instance,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "confirm_delete.html", context)
 
@@ -187,6 +198,8 @@ from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
 def add_paper(request):
+    profile = get_profile(request)
+    only_teachers(profile)
     if request.GET.get('day_id') and request.GET.get('paper_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('paper_id')))
         subject_materials = SubjectMaterials.objects.get(id=int(request.GET.get('day_id')))
@@ -195,8 +208,22 @@ def add_paper(request):
         'href':lesson.get_absolute_url()
     }
     return JsonResponse(data)
+    
+def remove_lesson(request):
+    profile = get_profile(request)
+    only_teachers(profile)
+    if request.GET.get('material_id') and request.GET.get('lesson_id'):
+        material = SubjectMaterials.objects.get(id=int(request.GET.get('material_id')))
+        lesson = Lesson.objects.get(id=int(request.GET.get('lesson_id')))
+        material.lessons.remove(lesson)
+        print('ok')
+    data = {
+    }
+    return JsonResponse(data)
 
 def subject_schedule(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
     subject = Subject.objects.get(id = id)
     res = []
     for timep in TimePeriod.objects.all():
@@ -216,6 +243,8 @@ def subject_schedule(request, id=None):
     return JsonResponse(data)
 
 def squad_list(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
     subject = Subject.objects.get(id = id)
     res = []
     res2 = []
@@ -236,6 +265,8 @@ def squad_list(request, id=None):
     return JsonResponse(data)
 
 def change_schedule(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
     subject = Subject.objects.get(id = id)
     school = subject.school
     school.new_schedule = True
@@ -322,6 +353,8 @@ def calc_subject_lessons(subject):
             subject.materials.all()[i].delete()
 
 def add_squad(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('squad_id') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
@@ -333,6 +366,8 @@ def add_squad(request):
     return JsonResponse(data)
 
 def delete_squad(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('squad_id') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
@@ -344,6 +379,8 @@ def delete_squad(request):
     return JsonResponse(data)
 
 def change_teacher(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('teacher_id') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
@@ -355,6 +392,8 @@ def change_teacher(request):
     return JsonResponse(data)
 
 def change_start(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('date') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         subject.start_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
@@ -363,17 +402,9 @@ def change_start(request):
     }
     return JsonResponse(data)
 
-def remove_lesson(request):
-    if request.GET.get('material_id') and request.GET.get('lesson_id'):
-        material = SubjectMaterials.objects.get(id=int(request.GET.get('material_id')))
-        lesson = Lesson.objects.get(id=int(request.GET.get('lesson_id')))
-        material.lessons.remove(lesson)
-        print('ok')
-    data = {
-    }
-    return JsonResponse(data)
-
 def change_end(request):
+    profile = get_profile(request)
+    only_managers(profile)
     if request.GET.get('date') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         subject.end_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
