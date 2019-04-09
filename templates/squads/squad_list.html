@@ -16,7 +16,7 @@
                         Все классы 
                         <span style="font-size: 13px;color: #939393;">{{ squads|length }}</span>
                     </a>
-                    {% if profile.is_manager %}
+                    {% if is_manager %}
                         <a class="ui button mini blue mini" style="float: right;" href='{% url "squads:create" %}'>Создать новый класс</a>
                     {% endif %}
                     
@@ -27,7 +27,7 @@
                     {% endfor %}
                 </div>
                 <div class="ui segment mysquads" style="margin-top: 0; display: none;">
-                    {% if profile.is_manager %}
+                    {% is_manager %}
                         {% for sq in profile.squad_trener.all %}
                             {% include 'squads/squad_list_info.html' %}
                         {% endfor %}
