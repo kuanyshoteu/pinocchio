@@ -1,0 +1,38 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log(hint)
+        if(hint == 0){
+            $('#privet-modal').modal('show')
+        }
+        texts = [
+            "Дополните информацию о себе в разделе редактирования страницы",
+            "Здесь будет указано расписание курсов, на которые Вы записаны",
+            "Сообщите о своём пропуске заполнив форму",
+            'Здесь будут показаны Ваши оценки',
+            'Здесь будут расположены ссылки на Ваши домашние задания<br>Не забывайте выполнять их!',
+            'Выполняя домашние задания, Вы зарабатываете внутреннюю валюту "Сольдо"<br><br>Заработав достаточное количество дилей, Вы можете получить скидку или подарок от Вашего образовательного центра, а также купить онлайн-курс на нашем сайте',
+            'Здесь расположены все онлайн-курсы от учителей и партнеров',
+            'Следите за новостями Вашего центра в этом разделе',
+            'Решая задачи и получая хорошие оценки на уроке, Вы повышаете свой рейтинг, который можно отследить в этом разделе',
+        ]
+        for(var i = 0; i < texts.length; i++){
+            arrow = ' help_right'
+            prev_button = ''
+            next_button = '<button id="'+i+'" class="ui button mini white next">Далее</button>'
+            if (i > 0){
+                prev_button = '<button id="'+i+'" class="ui button mini prev">Назад</button>'
+            }
+            if(i == texts.length - 1){
+                next_button = '<button id="'+i+'" class="ui button mini green next close_hint">Готово</button>'
+            }
+            if(i == 4 || i > 5){
+                arrow = ' help_left'
+            }
+            if(i == 5){
+                arrow = ' help_top'
+            }
+            var element = $('<div class="help ui segment sec help_div'+i+arrow+'"><a id="'+i+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>'+ texts[i]+ '<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг '+(i+1)+' из '+texts.length+'</span><br>'+prev_button+next_button+'</div>').appendTo('.hint' + i);
+        }
+    });
+</script>

@@ -27,7 +27,17 @@
                     <span style="font-size: 25px;font-weight: 600;color: #506ca9">Добро пожаловать на Pinocchio.kz</span>
                     <br>
                     <br>
-                    <span style="font-size: 18px;">Обучаясь у наших партнеров, Вы выбираете лучших!</span>           
+                    <span style="font-size: 18px;">
+                        {% if is_director %}
+                            Экономьте время автоматизируя рутинные задачи!
+                        {% elif is_manager %}
+                            Экономьте время автоматизируя рутинные задачи!
+                        {% elif is_trener %}
+                            Экономьте время автоматизируя рутинные задачи!
+                        {% else %}
+                            Обучаясь у наших партнеров, Вы выбираете лучших!
+                        {% endif %}
+                    </span>           
                 </div>
             </div>            
         </div>
@@ -35,13 +45,25 @@
 </div>
 
 
-<div id="profile" class="">
+<div id="profile" class="{% if hint < 100 %}bg-dark{% endif %}">
     <div class="ui container" >
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="hint5" style="position: absolute;margin-left: 200px;margin-top: 235px;"></div>
-            <div class="hint6" style="position: absolute;margin-left: 200px;"></div>
-            <div class="hint7" style="position: absolute;margin-left: 200px;margin-top: 95px;"></div>
+            <div class="hint6 highliter" style="position: absolute;margin-left: 200px;margin-top: {%if profile.is_student%}50px{%else%}235px{%endif%};"></div>
+            <div class="hint7 highliter" style="position: absolute;margin-left: 200px;"></div>
+            <div class="hint8 highliter" style="position: absolute;margin-left: 200px;margin-top: {%if profile.is_student%}5px{%else%}95px{%endif%};"></div>
+            <div class="hint23 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
+            <div class="hint24 highliter" style="position: absolute;margin-left: 200px;margin-top: 325px;"></div>
+            <div class="hint26 hint45 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
+            <div class="hint27 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
+            <div class="hint28 highliter" style="position: absolute;margin-left: 200px;margin-top: 80px;"></div>
+            <div class="hint29 hint47 highliter" style="position: absolute;margin-left: 200px;margin-top: 110px;"></div>
+            <div class="hint30 hint49 highliter" style="position: absolute;margin-left: 200px;margin-top: 155px;"></div>
+            <div class="hint31 highliter" style="position: absolute;margin-left: 200px;margin-top: 225px;"></div>
+            <div class="hint46 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
+            <div class="hint48 highliter" style="position: absolute;margin-left: 200px;margin-top: 125px;"></div>
+            <div class="hint50 highliter" style="position: absolute;margin-left: 200px;margin-top: 200px;"></div>
+            
             <div class="twelve wide column">
                 <div class="ui stackable grid info">
                     <div class="sixteen wide column left-side" style="padding: 14px 0;">
@@ -58,8 +80,12 @@
                             {% include 'profile/courses.html' %}
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
-                            {% include 'profile/hisschedule.html' %}                                         
-                            {% include 'profile/attendance.html' %}
+                            {% if is_trener or profile.is_student %}
+                                {% include 'profile/hisschedule.html' %}
+                                {% include 'profile/attendance.html' %}
+                            {% endif %}
+                            {% include 'profile/chart.html' %}
+                            <br><br><br>
                         </div>
                         <span style="display: none;" class="is_blurred" answer="no"></span>
                     </div>
@@ -69,25 +95,26 @@
     </div>
 </div>
 <span style="display: none;" class="hint_data" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
-{% if is_trener %}
+{% if is_director %}
+    {% include 'hints/director.html' %}
+{% elif is_manager %}
+    {% include 'hints/manager.html' %}
+{% elif is_trener %}
+    {% include 'hints/teacher.html' %}
+{% else %}
+    {% include 'hints/student.html' %}
+{% endif %}
+
 <script type="text/javascript">
     $(document).ready(function() {
         var hint = parseInt( $('.hint_data').attr('id'))
-        console.log(hint)
-        if(hint == 0){
-            $('#privet-modal').modal('show')
-        }
-        var element = $('<div class="help ui segment help_right sec help_div0"><a id="0" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a> Дополните информацию о себе в разделе редактирования страницы<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 1 из 8</span><br><button id="0" class="ui button mini white next">Далее</button></div>').appendTo('.hint0');
-        var element = $('<div class="help ui segment help_right sec help_div1"><a id="1" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будет указано расписание курсов, на которые Вы записаны<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 2 из 8</span><br><button id="1" class="ui button mini prev">Назад</button><button id="1" class="ui button mini white next">Далее</button></div>').appendTo('.hint1');
-        var element = $('<div class="help ui segment help_right sec help_div2"><a id="2" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут показаны Ваши оценки<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 3 из 8</span><br><button id="2" class="ui button mini prev">Назад</button><button id="2" class="ui button mini white next">Далее</button></div>').appendTo('.hint2');
-        var element = $('<div class="help ui segment help_left sec help_div3"><a id="3" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут расположены ссылки на Ваши домашние задания<br>Не забывайте выполнять их!<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 4 из 8</span><br><button id="3" class="ui button mini prev">Назад</button><button id="3" class="ui button mini white next">Далее</button></div>').appendTo('.hint3');
-        var element = $('<div class="help ui segment help_top sec help_div4"><a id="4" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Выполняя домашние задания, Вы зарабатываете внутреннюю валюту "дили"<br><br>Заработав достаточное количество дилей, Вы можете получить скидку или подарок от Вашего образовательного центра, а также купить онлайн-курс на нашем сайте<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 5 из 8</span><br><button id="4" class="ui button mini prev">Назад</button><button id="4" class="ui button mini white next">Далее</button></div>').appendTo('.hint4');
-        var element = $('<div class="help ui segment help_left sec help_div5"><a id="5" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь расположены все онлайн-курсы от учителей и партнеров<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 6 из 8</span><br><button id="5" class="ui button mini prev">Назад</button><button id="5" class="ui button mini white next">Далее</button></div>').appendTo('.hint5');
-        var element = $('<div class="help ui segment help_left_news sec help_div6"><a id="6" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Следите за новостями Вашего центра в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 7 из 8</span><br><button id="6" class="ui button mini prev">Назад</button><button id="6" class="ui button mini white next">Далее</button></div>').appendTo('.hint6');
-        var element = $('<div class="help ui segment help_left sec help_div7"><a id="7" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Решая задачи и получая хорошие оценки на уроке, Вы повышаете свой рейтинг, который можно отследить в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 8 из 8</span><br><button id="7" class="ui button mini prev">Назад</button><button id="7" class="ui button mini green next close_hint">Готово</button></div>').appendTo('.hint7');
         $('.help' + hint).addClass('highliter');
-        if(hint==0){
+        $(('.help' + hint)+hint+'hb').addClass('help_button');
+        if(hint % 10 == 0 && hint!=100){
             $('.help00').addClass('help_button');
+            $('.help200').addClass('help_button');
+            $('.help400').addClass('help_button');
+            $('.help600').addClass('help_button');
         }
         $('.sec').css('display', 'none');
         $('.help_div'+hint).css('display', 'block')
@@ -99,14 +126,14 @@
             $('.help' + id).removeClass('highliter');
             $('.hint' + (id + 1)).addClass('highliter');
             $('.help' + (id + 1)).addClass('highliter');
-            if (id >= 4 || id == 0){
-                $(('.help'+(id+1)) + (id+1)).addClass('help_button');
-                $(('.help'+id) + id).removeClass('help_button');
+            if (id >= 4 || id == 0 || id == 1 || id == 2 || id == 22 || id == 42){
+                $(('.help'+(id+1)) + (id+1)+'hb').addClass('help_button');
+                $(('.help'+id) + id+'hb').removeClass('help_button');
             }
-            if (id == 1){
+            if (id == 2 || id == 21 || id == 41){
                 $("html, body").animate({ scrollTop: 500 }, 600)
             }
-            if (id == 2){
+            if (id == 3 || id == 22 || id == 42){
                 $("html, body").animate({ scrollTop: 0 }, 600)                
             }
             $.ajax({
@@ -127,14 +154,14 @@
             $('.help' + id).removeClass('highliter');
             $('.hint' + (id - 1)).addClass('highliter');
             $('.help' + (id - 1)).addClass('highliter');
-            if (id >= 6 || id == 1){
-                $(('.help'+id) + id).removeClass('help_button');
-                $(('.help'+(id-1)) + (id-1)).addClass('help_button');
+            if (id >= 7 || id == 1  || id == 3 || id == 2 || id == 24 || id == 44){
+                $(('.help'+id) + id+'hb').removeClass('help_button');
+                $(('.help'+(id-1)) + (id-1)+'hb').addClass('help_button');
             }
-            if (id == 3){
+            if (id == 4 || id == 23 || id == 43){
                 $("html, body").animate({ scrollTop: 500 }, 500)
             }
-            if (id == 2){
+            if (id == 3 || id == 21 || id == 42){
                 $("html, body").animate({ scrollTop: 0 }, 500)                
             }
             $.ajax({
@@ -163,65 +190,4 @@
 
     });
 </script>
-{% else %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        //$('#privet-modal').modal('show')
-        var element = $('<div class="help ui segment help_right help_div0"><a id="0" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a> Дополните информацию о себе в разделе редактирования страницы<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 1 из 8</span><br><button id="0" class="ui button mini white next">Далее</button></div>').appendTo('.hint0');
-        var element = $('<div class="help ui segment help_right sec help_div1"><a id="1" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будет указано расписание курсов, на которые Вы записаны<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 2 из 8</span><br><button id="1" class="ui button mini prev">Назад</button><button id="1" class="ui button mini white next">Далее</button></div>').appendTo('.hint1');
-        var element = $('<div class="help ui segment help_right sec help_div2"><a id="2" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут показаны Ваши оценки<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 3 из 8</span><br><button id="2" class="ui button mini prev">Назад</button><button id="2" class="ui button mini white next">Далее</button></div>').appendTo('.hint2');
-        var element = $('<div class="help ui segment help_left sec help_div3"><a id="3" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь будут расположены ссылки на Ваши домашние задания<br>Не забывайте выполнять их!<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 4 из 8</span><br><button id="3" class="ui button mini prev">Назад</button><button id="3" class="ui button mini white next">Далее</button></div>').appendTo('.hint3');
-        var element = $('<div class="help ui segment help_top sec help_div4"><a id="4" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Выполняя домашние задания, Вы зарабатываете внутреннюю валюту "дили"<br><br>Заработав достаточное количество дилей, Вы можете получить скидку или подарок от Вашего образовательного центра, а также купить онлайн-курс на нашем сайте<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 5 из 8</span><br><button id="4" class="ui button mini prev">Назад</button><button id="4" class="ui button mini white next">Далее</button></div>').appendTo('.hint4');
-        var element = $('<div class="help ui segment help_left sec help_div5"><a id="5" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Здесь расположены все онлайн-курсы от учителей и партнеров<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 6 из 8</span><br><button id="5" class="ui button mini prev">Назад</button><button id="5" class="ui button mini white next">Далее</button></div>').appendTo('.hint5');
-        var element = $('<div class="help ui segment help_left_news sec help_div6"><a id="6" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Следите за новостями Вашего центра в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 7 из 8</span><br><button id="6" class="ui button mini prev">Назад</button><button id="6" class="ui button mini white next">Далее</button></div>').appendTo('.hint6');
-        var element = $('<div class="help ui segment help_left sec help_div7"><a id="7" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>Решая задачи и получая хорошие оценки на уроке, Вы повышаете свой рейтинг, который можно отследить в этом разделе<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг 8 из 8</span><br><button id="7" class="ui button mini prev">Назад</button><button id="7" class="ui button mini green next close_hint">Готово</button></div>').appendTo('.hint7');
-        $('.help' + 0).addClass('highliter');
-        $('.help00').addClass('help_button');
-        $('.sec').css('display', 'none');
-        $('.next').click(function(){
-            id = parseInt($(this).attr('id'))
-            $('.help_div' + id).css('display', 'none');
-            $('.help_div' + (id+1)).css('display', 'block');
-            $('.hint' + id).removeClass('highliter');
-            $('.help' + id).removeClass('highliter');
-            $('.hint' + (id + 1)).addClass('highliter');
-            $('.help' + (id + 1)).addClass('highliter');
-            if (id >= 4 || id == 0){
-                $(('.help'+(id+1)) + (id+1)).addClass('help_button');
-                $(('.help'+id) + id).removeClass('help_button');
-            }
-            if (id == 1){
-                $("html, body").animate({ scrollTop: 500 }, 600)
-            }
-            if (id == 2){
-                $("html, body").animate({ scrollTop: 0 }, 600)                
-            }
-        })
-        $('.prev').click(function(){
-            id = parseInt($(this).attr('id'))
-            $('.help_div' + id).css('display', 'none');
-            $('.help_div' + (id-1)).css('display', 'block');
-            $('.hint' + id).removeClass('highliter');
-            $('.help' + id).removeClass('highliter');
-            $('.hint' + (id - 1)).addClass('highliter');
-            $('.help' + (id - 1)).addClass('highliter');
-            if (id >= 6 || id == 1){
-                $(('.help'+id) + id).removeClass('help_button');
-                $(('.help'+(id-1)) + (id-1)).addClass('help_button');
-            }
-            if (id == 3){
-                $("html, body").animate({ scrollTop: 500 }, 500)
-            }
-            if (id == 2){
-                $("html, body").animate({ scrollTop: 0 }, 500)                
-            }
-        })
-        $('.close_hint').click(function(){
-            $('.bg-dark').removeClass();
-            $('.help_div' + $(this).attr('id')).css('display', 'none')
-        })
-
-    });
-</script>
-{% endif %}
 {% endblock content %}

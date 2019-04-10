@@ -61,10 +61,6 @@ def account_view(request, user = None):
     if hiscacheatt.squad == None and len(hissquads) > 0:
         hiscacheatt.squad = hissquads[0]
     hiscacheatt.save()
-    if not 'hint' in request.session:
-        request.session['hint'] = 0
-    hint = request.session['hint']
-
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
@@ -81,7 +77,7 @@ def account_view(request, user = None):
         'is_trener':is_profi(hisprofile, 'Teacher'),
         "is_manager":is_profi(hisprofile, 'Manager'),
         "is_director":is_profi(hisprofile, 'Director'),
-        'hint':hint,
+        'hint':profile.hint,
     }
     return render(request, "profile.html", context)
 
@@ -184,7 +180,7 @@ def more_attendance(request):
                     break
                 if len(sm.sm_atts.filter(squad = squad)) < len(squad.students.all()):
                     create_atts(squad, sm, subject)
-                section = [get_date(sm, squad), sm.id, check_date(sm, squad)]
+                section = [get_date(sm, squad).strftime('%d %B %Y'), sm.id, check_date(sm, squad)]
                 for att in sm.sm_atts.filter(squad = squad):
                     section.append([att.id, att.present, att.grade])
                 columns.append(section)
@@ -195,7 +191,7 @@ def more_attendance(request):
             for sm in queryset:
                 if len(columns) == 4:
                     break
-                section = [get_date(sm, squad), sm.id]
+                section = [get_date(sm, squad).strftime('%d %B %Y'), sm.id]
                 columns.append(section)
         data = {
             'first_set':first_set,
@@ -297,18 +293,28 @@ def tell_about_corruption(request):
     return JsonResponse(data)
 
 def another_hint(request):
+    profile = Profile.objects.get(user = request.user)
     if request.GET.get('dir') == 'next':
-        request.session['hint'] += 1
+        profile.hint += 1
     elif request.GET.get('dir') == 'prev':
-        request.session['hint'] -= 1
+        profile.hint -= 1
     else:
-        request.session['hint'] = 100
+        profile.hint = 100
+    profile.save()
     data = {
     }
     return JsonResponse(data)
 
 def update_hints(request):
-    request.session['hint'] = 0
+    profile = Profile.objects.get(user = request.user)
+    if is_profi(profile, 'Manager'):
+        profile.hint = 20        
+    if is_profi(profile, 'Teacher'):
+        profile.hint = 40
+    if is_profi(profile, 'Director'):
+        profile.hint = 60
+
+    profile.save()
     data = {
     }
     return JsonResponse(data)

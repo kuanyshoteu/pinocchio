@@ -27,6 +27,17 @@ a{
     left: -7px;
     top: 50%;
 }
+.help_left_top:after {
+    content: "";
+    display: block;
+    border-width: 7px 7px 7px 0;
+    border-style: solid;
+    border-color: transparent #5a9eff transparent transparent;
+    margin-top: -7px;
+    position: absolute;
+    left: -7px;
+    top: 20%;
+}
 .help_left_news:after {
     content: "";
     display: block;
@@ -86,7 +97,7 @@ a{
 }
 .help_button{
   color: white !important;
-  background-color: #21BA45 !important;
+  background-color: #5a9eff !important;
 }
 .help{
   width: 200px;

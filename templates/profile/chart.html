@@ -1,11 +1,90 @@
-
-<div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
-<span style="color: #fff">Успеваемость </span>
-<br>
-<div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
-<span style="color: #fff">Посещаемость </span>
-<br>
-<canvas style="padding-right: 25px;" id="canvas" height="150" width="500"></canvas>
+{% load staticfiles %}
+{% if is_trener %}
+<div class="ui segment shapka">
+    <div class="highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
+    <div class="ui grid">
+        <div class="one wide column">
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
+            Результаты
+        </div>
+    </div>
+</div>
+<div class="ui segment " style="margin-top: 0">
+    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Успеваемость </span>
+    <br>
+    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Посещаемость </span>
+    <br>
+    <canvas style="padding-right: 25px;" id="canvas1" height="150" width="500"></canvas>
+</div>
+{% endif %}
+{% if is_manager or is_director %}
+<div class="ui segment shapka help21 help61">
+    <div class="hint21 hint61 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
+    <div class="ui grid">
+        <div class="one wide column">
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
+            Классы
+        </div>
+    </div>
+</div>
+<div class="ui segment help21 help61" style="margin-top: 0">
+    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Успеваемость </span>
+    <br>
+    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Посещаемость </span>
+    <br>
+    <canvas style="padding-right: 25px;" id="canvas2" height="150" width="500"></canvas>
+</div>
+<div class="ui segment shapka help22 help62">
+    <div class="hint22 hint62 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
+    <div class="ui grid">
+        <div class="one wide column">
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
+            Учителя
+        </div>
+    </div>
+</div>
+<div class="ui segment help22 help62" style="margin-top: 0">
+    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Успеваемость </span>
+    <br>
+    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Посещаемость </span>
+    <br>
+    <canvas style="padding-right: 25px;" id="canvas3" height="150" width="500"></canvas>
+</div>
+{% endif %}
+{% if is_director %}
+<div class="ui segment shapka">
+    <div class="highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
+    <div class="ui grid">
+        <div class="one wide column">
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+        </div>
+        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
+            Менеджеры
+        </div>
+    </div>
+</div>
+<div class="ui segment " style="margin-top: 0">
+    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Успеваемость </span>
+    <br>
+    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Посещаемость </span>
+    <br>
+    <canvas style="padding-right: 25px;" id="canvas4" height="150" width="500"></canvas>
+</div>
+{% endif %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript">
   var lineChartData = {
@@ -32,9 +111,27 @@
 }
 
 window.onload = function() {
-    var ctx = document.getElementById("canvas").getContext("2d");
+    {% if is_trener %}
+    var ctx = document.getElementById("canvas1").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartData, {
         responsive: true
     });
+    {% endif %}
+    {% if is_manager or is_director %}
+    var ctx = document.getElementById("canvas2").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+        responsive: true
+    });
+    var ctx = document.getElementById("canvas3").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+        responsive: true
+    });
+    {% endif %}
+    {% if is_director %}
+    var ctx = document.getElementById("canvas4").getContext("2d");
+    window.myLine = new Chart(ctx).Line(lineChartData, {
+        responsive: true
+    });
+    {% endif %}
 }
 </script>

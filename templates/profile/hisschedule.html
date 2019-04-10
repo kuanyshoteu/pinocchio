@@ -6,8 +6,8 @@
     }
 </style>
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
-<div class="ui segment help1" style="margin-bottom: 0;margin-top: 0">
-    <div class="hint1 highliter" style="position: absolute;margin:-50px 0 0 -225px;"></div>
+<div class="ui segment help1 help2 help41 help43" style="margin-bottom: 0;margin-top: 0">
+    <div class="hint1 highliter hint41" style="position: absolute;margin:-50px 0 0 -225px;"></div>
     <div class="ui grid">
         <div class="one wide column">
             <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
@@ -24,7 +24,7 @@
 {% load ttags %}
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
-<div id="calendarr" class="help1" length='7'>           
+<div id="calendarr" class="help1 help41" length='7'>           
     <div id="week">   
         <div class="week" id="0">
             <div class="daysmall daysmall_time" style="padding-top: 17px;">
@@ -51,11 +51,7 @@
                 <div>
                     {% for lecture in cell|cell_profile_lectures:hisprofile %}
                         <div class="ui segment in_schedule" squad_id='{{ lecture.squad.id }}' id="s{{ lecture.squad.id }}c{{ cell.id }}" old_cell="{{ cell.id }}" {% if page == 'subject_update' %} draggable="true" {% endif %} ondragstart="drag(event)" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:
-                            {% if is_trener %}
-                                {%if lecture.squad.color_back == ''%}#313a57{%else%}{{ lecture.squad.color_back }}{%endif%};">
-                            {% else %}
-                                {%if lecture.subject.color_back == ''%}#313a57{%else%}{{ lecture.subject.color_back }}{%endif%};">
-                            {% endif %}
+                            {%if lecture.subject.color_back == ''%}#313a57{%else%}{{ lecture.subject.color_back }}{%endif%};">
                             {{ lecture.subject.title }}
                             {% if cell|cell_profile_lectures:hisprofile|length == 1 %}
                             <br>

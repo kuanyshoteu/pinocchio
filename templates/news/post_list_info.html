@@ -13,7 +13,7 @@
             <br>
             <span style="color: #939393;font-size: 12.5px;">{{ post.timestamp }}</span>
         </div>
-        {% if profile.is_manager %}
+        {% if is_manager %}
         <div class="four wide column" style="padding: 20px 15px;">
             <a class="delete_post" id="{{ post.id }}" url="{{ post.get_delete_url }}" style="float: right;">Удалить</a>
         </div>

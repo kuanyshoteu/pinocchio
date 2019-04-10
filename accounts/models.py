@@ -64,6 +64,7 @@ class Profile(models.Model):
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    hint = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-coins', 'first_name']

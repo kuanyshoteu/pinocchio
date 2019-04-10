@@ -1,0 +1,43 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log(hint)
+        if(hint == 40){
+            $('#privet-modal').modal('show')
+        }
+        texts = [
+            "Дополните информацию о себе в разделе редактирования страницы",
+            "Здесь будет показано расписание предметов, которые Вы ведёте",
+            'В журнале нужно отмечать присутствие студентов, нажав кнопку «На уроке» <br>Далее появится 4 кнопки с соответствующими оценками «5», «4», «3», «2»',
+            'Сообщите о своём пропуске занятий, заполнив форму',
+            'Проверяя домашние задания и создавая курсы и уроки, Вы зарабатываете внутреннюю валюту «Сольдо», которая влияет на Ваш рейтинг и премии',
+            'Следите за событиями и новостями Вашего центра в этом разделе',
+            'Проверить рейтинг Ваших учеников Вы можете в этом разделе',
+            'Редактируйте и проверяйте расписание групп и предметов в соответствующих вкладках',
+            'Создавайте собственные онлайн уроки с заданиями или пользуйтесь готовыми для дополнения Ваших уроков в классе',
+            'Создавайте свои онлайн курсы для продажи или бесплатного пользования студентам и образовательным центрам-партнёрам',
+            'В этом разделе Вы найдете реализуемые проекты и задания от руководства',
+        ]
+        for(var i = 40; i < 40 + texts.length; i++){
+            arrow = ' help_right'
+            prev_button = ''
+            next_button = '<button id="'+i+'" class="ui button mini white next">Далее</button>'
+            if (i > 40){
+                prev_button = '<button id="'+i+'" class="ui button mini prev">Назад</button>'
+            }
+            if(i-40 == texts.length - 1){
+                next_button = '<button id="'+i+'" class="ui button mini green next close_hint">Готово</button>'
+            }
+            if(i > 44){
+                arrow = ' help_left'
+            }
+            if(i == 44){
+                arrow = ' help_top'
+            }
+            if(i == 45){
+                arrow = ' help_left_top'
+            }
+            var element = $('<div class="help ui segment sec help_div'+i+arrow+'"><a id="'+i+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>'+ texts[i-40]+ '<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг '+(i-39)+' из '+texts.length+'</span><br>'+prev_button+next_button+'</div>').appendTo('.hint' + i);
+        }
+    });
+</script>

@@ -2,8 +2,8 @@
 {% if hisprofile == profile or profile.is_manager %}
 <span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
 <span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
-<div class="ui segment shapka help2">
-    <div class="hint2 highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
+<div class="ui segment shapka help3 help42">
+    <div class="hint3 hint42 highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
     <div class="ui grid">
         <div class="one wide column">
             <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
@@ -13,15 +13,16 @@
         </div>
     </div>
 </div>
-<div class="ui segment help2" style="margin-top: 0;margin-bottom: 0; padding: 18px;">
+<div class="ui segment help3 help42" style="margin-top: 0; padding: 18px;{% if not is_trener %}margin-bottom: 0;{% endif %}">
     {% for subject in hissubjects %}
     <a onclick="load_attendance_subject('{{ subject.id }}')" class="load_attendance_subject {% if subject.id == att_subject.id %}current_option{% else %}other_option{% endif %}" id="subject{{ subject.id }}">
         {{ subject.title }}
     </a>
     {% endfor %} 
 </div>
-<div class="ui segment help2" style="margin-top: 0;padding: 0;">
+<div class="ui segment help3 help42" style="margin-top: 0;padding: 0;">
     <div id="subject_attendance">
+    {% if hissubjects|length > 0 %}
     {% if is_trener %}
         <div class="ui stackable grid" style="margin-bottom: 0">
         {% for squad in att_subject.squads.all %}
@@ -35,10 +36,11 @@
         <div id="squad_attendance">
             {% include "profile/attendance_student.html" %}
         </div>
-    {% endif %}  
-    </div>          
+    {% endif %} 
+    {% endif %}   
+    </div>   
 </div>
-<br><br><br>
+
 <span class="attendance_present_url" url="{{ hisprofile.attendance_present_url }}" style="display: none;"></span>
 <span class="attendance_change_url" url="{{ hisprofile.attendance_change_url }}" style="display: none;"></span>
 <script type="text/javascript">
