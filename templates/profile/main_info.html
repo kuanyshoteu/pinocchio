@@ -6,10 +6,10 @@
     </div>
     {% endif %}
 </div>                 
-<div class="ui raised card help5 help25 help44" style="height: 260px;margin: 0">
+<div class="ui raised card help5 help25 help44 help64" style="height: 260px;margin: 0">
     <div class="content">
         <div class="right floated">
-            <div class="hint5 hint25 hint44 highliter" style="position: absolute;margin-left: -80px;margin-top: 40px;"></div>
+            <div class="hint5 hint25 hint44 hint64 highliter" style="position: absolute;margin-left: -80px;margin-top: 40px;"></div>
             <img  src="{% static 'images/coins_gold.png' %}" style="width: 25px;">
             <span id="hiscoins">{{ hisprofile.coins }}</span>
         </div>
@@ -19,13 +19,11 @@
         <div class="meta">
             <a class="open_form_status" style="color: #828282;">
                 <span class="hisstatus">
-                    {% if hisprofile.is_creator %}
-                        Creator
-                    {% elif hisprofile.is_ceo %}
-                        CEO
-                    {% elif hisprofile.is_manager %}
+                    {% if is_director %}
+                        Директор
+                    {% elif is_manager %}
                         Менеджер
-                    {% elif hisprofile.is_trener %}
+                    {% elif is_trener %}
                         Учитель
                     {% else %}
                         Студент

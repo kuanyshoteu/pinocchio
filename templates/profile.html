@@ -52,17 +52,19 @@
             <div class="hint6 highliter" style="position: absolute;margin-left: 200px;margin-top: {%if profile.is_student%}50px{%else%}235px{%endif%};"></div>
             <div class="hint7 highliter" style="position: absolute;margin-left: 200px;"></div>
             <div class="hint8 highliter" style="position: absolute;margin-left: 200px;margin-top: {%if profile.is_student%}5px{%else%}95px{%endif%};"></div>
-            <div class="hint23 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
+            <div class="hint23 hint63 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
             <div class="hint24 highliter" style="position: absolute;margin-left: 200px;margin-top: 325px;"></div>
-            <div class="hint26 hint45 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
-            <div class="hint27 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
+            <div class="hint26 hint45 hint65 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
+            <div class="hint27 hint66 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
             <div class="hint28 highliter" style="position: absolute;margin-left: 200px;margin-top: 80px;"></div>
-            <div class="hint29 hint47 highliter" style="position: absolute;margin-left: 200px;margin-top: 110px;"></div>
-            <div class="hint30 hint49 highliter" style="position: absolute;margin-left: 200px;margin-top: 155px;"></div>
-            <div class="hint31 highliter" style="position: absolute;margin-left: 200px;margin-top: 225px;"></div>
+            <div class="hint29 hint47 hint68 highliter" style="position: absolute;margin-left: 200px;margin-top: 110px;"></div>
+            <div class="hint30 hint49 hint69 highliter" style="position: absolute;margin-left: 200px;margin-top: 155px;"></div>
+            <div class="hint31 hint71 highliter" style="position: absolute;margin-left: 200px;margin-top: 225px;"></div>
             <div class="hint46 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
             <div class="hint48 highliter" style="position: absolute;margin-left: 200px;margin-top: 125px;"></div>
             <div class="hint50 highliter" style="position: absolute;margin-left: 200px;margin-top: 200px;"></div>
+            <div class="hint67 highliter" style="position: absolute;margin-left: 200px;margin-top: 70px;"></div>
+            <div class="hint70 highliter" style="position: absolute;margin-left: 200px;margin-top: 170px;"></div>
             
             <div class="twelve wide column">
                 <div class="ui stackable grid info">
@@ -130,12 +132,9 @@
                 $(('.help'+(id+1)) + (id+1)+'hb').addClass('help_button');
                 $(('.help'+id) + id+'hb').removeClass('help_button');
             }
-            if (id == 2 || id == 21 || id == 41){
-                $("html, body").animate({ scrollTop: 500 }, 600)
-            }
-            if (id == 3 || id == 22 || id == 42){
-                $("html, body").animate({ scrollTop: 0 }, 600)                
-            }
+            if (id == 2 || id == 21 || id == 41){$("html, body").animate({ scrollTop: 500 }, 600)}
+            if (id == 61){$("html, body").animate({ scrollTop: 700 }, 600)}
+            if (id == 3 || id == 22 || id == 42 || id == 62){$("html, body").animate({ scrollTop: 0 }, 600)}
             $.ajax({
                 url: $('.hint_data').attr('url'),
                 data: {
@@ -161,7 +160,8 @@
             if (id == 4 || id == 23 || id == 43){
                 $("html, body").animate({ scrollTop: 500 }, 500)
             }
-            if (id == 3 || id == 21 || id == 42){
+            if (id == 63){$("html, body").animate({ scrollTop: 700 }, 600)}
+            if (id == 3 || id == 21 || id == 42 || id == 62){
                 $("html, body").animate({ scrollTop: 0 }, 500)                
             }
             $.ajax({

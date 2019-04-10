@@ -4,7 +4,7 @@
     <div class="highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
     <div class="ui grid">
         <div class="one wide column">
-            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="two wide column" style="line-height: 28px;font-size: 15px;">
             Результаты
@@ -26,27 +26,33 @@
     <div class="hint21 hint61 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
     <div class="ui grid">
         <div class="one wide column">
-            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="two wide column" style="line-height: 28px;font-size: 15px;">
             Классы
         </div>
     </div>
 </div>
-<div class="ui segment help21 help61" style="margin-top: 0">
-    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
-    <span style="color: #222">Успеваемость </span>
+<div class="ui segment help21 help61" style="margin-top: 0;">
+    <div class="ui segment" style="padding: 2px;background-color: #daec04;width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">1ЛД-1 </span>
+    <br>
+    <div class="ui segment" style="padding: 2px;background-color: #296847;width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">2ЛД-2 </span>
     <br>
     <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
-    <span style="color: #222">Посещаемость </span>
+    <span style="color: #222">2 Прог-1 </span>
+    <br>
+    <div class="ui segment" style="padding: 2px;background-color: #192f54;width: 30px;display: inline-block;margin-bottom: 2px"></div>
+    <span style="color: #222">Класс 4 </span>
     <br>
     <canvas style="padding-right: 25px;" id="canvas2" height="150" width="500"></canvas>
 </div>
 <div class="ui segment shapka help22 help62">
-    <div class="hint22 hint62 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
+    <div class="hint22 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
     <div class="ui grid">
         <div class="one wide column">
-            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="two wide column" style="line-height: 28px;font-size: 15px;">
             Учителя
@@ -64,23 +70,23 @@
 </div>
 {% endif %}
 {% if is_director %}
-<div class="ui segment shapka">
-    <div class="highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
+<div class="ui segment shapka help22 help62">
+    <div class="hint62 highliter" style="position: absolute;margin-left: -225px;margin-top: -200px;"></div>
     <div class="ui grid">
         <div class="one wide column">
-            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="two wide column" style="line-height: 28px;font-size: 15px;">
             Менеджеры
         </div>
     </div>
 </div>
-<div class="ui segment " style="margin-top: 0">
+<div class="ui segment help22 help62" style="margin-top: 0">
     <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
-    <span style="color: #222">Успеваемость </span>
+    <span style="color: #222">Задачи </span>
     <br>
     <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
-    <span style="color: #222">Посещаемость </span>
+    <span style="color: #222">Работа с клиентами </span>
     <br>
     <canvas style="padding-right: 25px;" id="canvas4" height="150" width="500"></canvas>
 </div>
@@ -109,6 +115,90 @@
         data: ["127.283", "125.147", "124.489", "116.783", "111.696", "110.563", "105.469", "104.332"]
     }]
 }
+var squads = {
+    labels: ["0", "5", "7.5", "10", "11", "12", "13", "15"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#daec04",
+        pointColor: "#daec04",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(16,133,135,1)",
+        data: ["28.940", "31.397", "32.235", "58.235", "85.636", "47.271", "95.667", "100.554"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#296847",
+        pointColor: "#296847",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["127.283", "125.147", "124.489", "116.783", "111.696", "110.563", "105.469", "104.332"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "#192f54",
+        pointColor: "#192f54",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["93", "147", "189", "183", "196", "163", "169", "132"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(236,83,62,1)",
+        pointColor: "rgba(236,83,62,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["183", "125", "104.489", "106.783", "101.696", "120.563", "135.469", "114.332"]
+    }]
+}
+var teachers = {
+    labels: ["0", "5", "7.5", "10", "11", "12", "13", "15"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(16,133,135,1)",
+        pointColor: "rgba(16,133,135,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(16,133,135,1)",
+        data: ["125.636", "127.271", "125.667", "129.554", "128.940", "131.397", "132.235", "128.235"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(236,83,62,1)",
+        pointColor: "rgba(236,83,62,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["111.696", "110.563", "105.469", "104.332", "127.283", "125.147", "124.489", "116.783"]
+    }]
+}
+var managers = {
+    labels: ["0", "5", "7.5", "10", "11", "12", "13", "15"],
+    datasets: [{
+        label: "SES 3.4",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(16,133,135,1)",
+        pointColor: "rgba(16,133,135,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(16,133,135,1)",
+        data: ["256", "272", "266", "294", "280", "313", "322", "283"]
+    }, {
+        label: "SES 8.9",
+        fillColor: "rgba(255,255,255,0)",
+        strokeColor: "rgba(236,83,62,1)",
+        pointColor: "rgba(236,83,62,1)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(236,83,62,1)",
+        data: ["276", "292", "276", "304","290", "323", "332", "353"]
+    }]
+}
 
 window.onload = function() {
     {% if is_trener %}
@@ -119,17 +209,17 @@ window.onload = function() {
     {% endif %}
     {% if is_manager or is_director %}
     var ctx = document.getElementById("canvas2").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData, {
+    window.myLine = new Chart(ctx).Line(squads, {
         responsive: true
     });
     var ctx = document.getElementById("canvas3").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData, {
+    window.myLine = new Chart(ctx).Line(teachers, {
         responsive: true
     });
     {% endif %}
     {% if is_director %}
     var ctx = document.getElementById("canvas4").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData, {
+    window.myLine = new Chart(ctx).Line(managers, {
         responsive: true
     });
     {% endif %}
