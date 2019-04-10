@@ -23,7 +23,7 @@ def check_date(material, squad):
     date = get_date(material, squad)
     if date > timezone.now().date():
         return 'future'
-    elif date + timedelta(17) >= timezone.now().date():
+    elif date + timedelta(7) >= timezone.now().date():
         return 'now'
     else:
         return 'past'
