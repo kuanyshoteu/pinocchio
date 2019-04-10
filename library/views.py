@@ -17,13 +17,13 @@ from constants import *
 
 def library(request):
     profile = get_profile(request)
-    only_teachers(profile)
+    only_staff(profile)
     school = profile.schools.first()
     return redirect(school.get_school_library())
 
 def school_library(request, school_id):
     profile = get_profile(request)
-    only_teachers(profile)
+    only_staff(profile)
     school = School.objects.get(id=school_id)
     context = {
         "profile": profile,
