@@ -27,6 +27,7 @@ def documents(request):
 def school_documents(request, school_id):
     profile = get_profile(request)
     only_staff(profile)
+    school = profile.schools.first()
     img = ['png', 'jpg', 'jpeg']
     html = ['html', 'css', 'js', 'py', 'java']
     file_form = FileForm(request.POST or None, request.FILES or None)

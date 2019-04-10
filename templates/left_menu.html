@@ -35,7 +35,9 @@
                 <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "subjects:list" %}'>
                     <i class="table icon"></i>Предметы
                 </a>
-                <a class="item lftitem help30 help3030hb help48 help4848hb help69 help6969hb" href='{% url "library:main" %}'>
+                {% endif %}
+                {% if is_trener  or is_director %}
+                <a class="item lftitem help48 help4848hb help69 help6969hb" href='{% url "library:main" %}'>
                     <i class="file alternate icon"></i>База уроков
                 </a>
                 {% endif %}
@@ -43,7 +45,7 @@
                     <i class="rocket icon"></i>Курсы
                 </a>
                 {% if is_manager or is_trener %}
-                <a class="item lftitem help31 help3131hb help50 help5050hb help71 help7171hb" href='/todolist/'>
+                <a class="item lftitem help30 help3030hb help50 help5050hb help71 help7171hb" href='/todolist/'>
                     <i class="check calendar icon"></i>Задания
                 </a>
                 {% endif %}

@@ -2,10 +2,10 @@
 {% load staticfiles %}
 <div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
     <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
-        {% if profile.is_trener == False %}
+        {% if is_trener == False %}
                 <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">1.</span>
         {% endif %}
-        {% if profile.is_trener %}
+        {% if is_trener %}
             <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
             <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
             <br>
@@ -37,10 +37,10 @@
 
 <div class="ui grid" style="background-color: #F5FFFA;margin-bottom: 15px;border-radius: 10px;">
     <div class="sixteen wide column" style="font-size: 15px;padding-bottom: 0;">
-        {% if profile.is_trener == False %}
+        {% if is_trener == False %}
                 <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved" style="margin-right: 10px; font-size: 16px;">2.</span>
         {% endif %}
-        {% if profile.is_trener %}
+        {% if is_trener %}
             <a class="" onclick="$('#modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}').modal('show')" style="font-size: 10px; cursor: pointer;">Изменить</a>
             <a class="delete_task " id='{{ task.id }}' data-href="{{ task.get_delete_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Удалить</a>
             <br>
