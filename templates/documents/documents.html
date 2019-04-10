@@ -31,7 +31,7 @@
                             Документы
                         {% endif %}
                     </span>
-                    {% if profile.is_trener %}
+                    {% if is_trener %}
                     <div style="float: right;">
                         {% if cache.full %}
                             <a class="ui button mini blue pastee" data-href='{{ profile.paste_docobject_url }}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}root{% endif %}' school="{{current_school_id}}">Вставить</a>

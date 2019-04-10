@@ -74,10 +74,10 @@
                     <label class="test_variant" for="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">
                         {% load tags %}
                         <input {% if task.is_mult_ans %}type="checkbox"{% else %}type="radio"{% endif %}
-                        {% if profile.is_trener == False %}
+                        {% if is_trener == False %}
                             class="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="option_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}" value="{{ variant }}" name="selector" 
                             {% if variant in task|hisanswers:profile %}checked{% endif %}
-                        {% elif profile.is_trener %}
+                        {% elif is_trener %}
                             {% if variant in task.answer %}checked{% endif %}
                         {% endif %}
                         > {{ variant }}
@@ -89,7 +89,7 @@
                 <span class="task_type_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" type="input" style="display: none;"></span>
                 {% for ans in task.answer %}
                     <b>Ответ {% if task.answer|length > 1 %}{{ forloop.counter }}{% endif %}:</b>
-                    {% if profile.is_trener %}
+                    {% if is_trener %}
                         <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
                     {% else %}
                         <br>

@@ -47,12 +47,12 @@
                 </select>
             </div>
             <div class="four wide column">
-                Оффис:
+                Офис:
                 <select class="crm_option" option="office" id="crm_office" url="{{ instance.crm_option_url }}">
                     {% if profile.crm_office %}
                         <option value="{{ profile.crm_office.id }}">{{ profile.crm_office.title }}</option>
                     {% else %}
-                        <option value="-1">Все оффисы</option>
+                        <option value="-1">Все офисы</option>
                     {% endif %}
                     {% for office in offices %}
                         {% if office != profile.crm_office %}
@@ -60,7 +60,7 @@
                         {% endif %}
                     {% endfor %}
                     {% if profile.crm_office %}
-                        <option value="-1">Все оффисы</option>
+                        <option value="-1">Все офисы</option>
                     {% endif %}
                 </select>
             </div>
