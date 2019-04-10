@@ -47,13 +47,18 @@
                     <i class="check calendar icon"></i>Задания
                 </a>
                 {% endif %}
+                {% if is_trener or profile.is_student %}                
                 <div class="ui divider" style="margin: 7px 0 7px 35px;width: 100px;"></div>
                 <a class="item lftitem" href='{{ profile.hislessons }}'>
                     <i class="arrow right icon"></i>Урок
                 </a>
+                {% endif %}
             </div>
             <a class="lftitemsmall" style="color: #939699;font-size: 12px;margin-left: 10px;" href='/contacts/'>
                 Контакты
+            </a>
+            <a class="lftitemsmall update_hints" style="color: #939699;font-size: 12px;margin-left: 10px;" url="{{ profile.update_hints }}">
+                Помощь
             </a>
     </div>
 <!--     <br>
@@ -63,7 +68,7 @@
  -->
     <br>
     {% if is_manager %}
-    <a class="ui button mini red" style="width: 80%;margin-left: 10px; padding: 15px;font-size: 14px;">
+    <a class="ui button mini red" href='{% url "schools:crm_reg" %}' style="width: 80%;margin-left: 10px; padding: 15px;font-size: 14px;">
         Заявка
     </a>
     {% endif %}

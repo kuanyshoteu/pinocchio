@@ -41,6 +41,10 @@
                                     <div class="ui segment full-w" style="cursor: pointer;padding: 3px 7px;">
                                         <div style="float: right;font-size: 11px;color: #b3b300">
                                             {{card.timestamp.date|date:"d.m.y"}}
+                                            <br>
+                                            {% if card.saved %}
+                                                <i class="icon check circle" style="color: #21BA45;font-size: 15px;float: right;"></i>
+                                            {% endif %}
                                         </div>
                                         <i class="icon user"></i>
                                         <a id="{{ card.id }}" onclick="$('#card_form'+$(this).attr('id')).modal('show')" style="font-weight: 600">{{ card.name }}</a>
@@ -69,6 +73,12 @@
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}"></span>
+<span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
+{% if open_form %}
+<script type="text/javascript">
+    $('#new_card_form' + $('.first_column').attr('id')).modal('show')
+</script>
+{% endif %}
 <script>
     $(document.body).on("click", ":not(#school_schedule, #school_schedule *, .main_crm)", function(e){
         if($(this).attr('id') == 'untouch'){

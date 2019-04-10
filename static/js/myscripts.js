@@ -1,4 +1,17 @@
 $(document).ready(function () {
+    $('.update_hints').click(function(e) {
+        url = $(this).attr('url')
+        console.log('de')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    });    
     $('.save_card_as_user').click(function(e) {
         id = $('.card_for_save').attr('id')
         squad_id = $(this).attr('squad_id')
@@ -10,7 +23,9 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                console.log('ff')
+                document.getElementById("school_schedule").style.width = "0";
+                $('.backg').removeClass('darker');
+                $('#saved_modal').modal('show')
             }
         })        
     });

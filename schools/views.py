@@ -93,6 +93,28 @@ def school_crm(request):
     }
     return render(request, "school/crm.html", context)
 
+def school_crm_reg(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = profile.schools.first()
+    time_periods = school.time_periods.all()
+
+    context = {
+        "profile":profile,
+        "instance": profile.schools.first(),
+        "columns":school.crm_columns.all(),
+        "subject_categories":school.school_subject_categories.all(),
+        "ages":school.school_subject_ages.all(),
+        "offices":school.school_offices.all(),
+        'days':Day.objects.all(),
+        'time_periods':time_periods,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "open_form":True,
+    }
+    return render(request, "school/crm.html", context)
+
 def school_students(request):
     profile = get_profile(request)
     only_managers(profile)
@@ -218,30 +240,34 @@ def save_card_as_user(request):
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)
     school = manager_profile.schools.first()
+    password = ''
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
-        new_id = User.objects.order_by("id").last().id + 1
-        password = random_password()
-        user = User.objects.create(username='user' + str(new_id))
-        user.set_password(password)
-        user.save()
-        profile = Profile.objects.get(user = user)
-        profile.first_name = card.name
-        profile.phone = card.phone
-        profile.mail = card.mail
-        profile.save()
-        profile.schools.add(school)
-        Profession.objects.get(title = 'Student').workers.add(profile)
-        squad_id = int(request.GET.get('squad_id'))
-        if squad_id > 0:
-            squad = Squad.objects.get(id=squad_id)
-            squad.students.add(profile)
-            for subject in squad.subjects.all():
-                subject.students.add(profile)
-            for lecture in squad.squad_lectures.all():
-                lecture.people.add(profile)
-            for timep in school.time_periods.all():
-                timep.people.add(profile)
+        if card.saved == False:
+            new_id = User.objects.order_by("id").last().id + 1
+            password = random_password()
+            user = User.objects.create(username='user' + str(new_id))
+            user.set_password(password)
+            user.save()
+            card.saved = True
+            card.save()
+            profile = Profile.objects.get(user = user)
+            profile.first_name = card.name
+            profile.phone = card.phone
+            profile.mail = card.mail
+            profile.save()
+            profile.schools.add(school)
+            Profession.objects.get(title = 'Student').workers.add(profile)
+            squad_id = int(request.GET.get('squad_id'))
+            if squad_id > 0:
+                squad = Squad.objects.get(id=squad_id)
+                squad.students.add(profile)
+                for subject in squad.subjects.all():
+                    subject.students.add(profile)
+                for lecture in squad.squad_lectures.all():
+                    lecture.people.add(profile)
+                for timep in school.time_periods.all():
+                    timep.people.add(profile)
     data = {
         'password':password
     }

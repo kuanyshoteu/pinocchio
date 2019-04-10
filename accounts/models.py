@@ -107,6 +107,8 @@ class Profile(models.Model):
         return reverse("accounts:present_url")    
     def hint_url(self):
         return reverse("accounts:hint_url")    
+    def update_hints(self):
+        return reverse("accounts:update_hints")
     # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")
@@ -187,3 +189,4 @@ class CRMCard(models.Model):
     mail = models.CharField(max_length=250)
     comments = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
+    saved = models.BooleanField(default=False)

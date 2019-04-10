@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^api/more_attendance/$', more_attendance, name='more_attendance'),
     url(r'^api/more_attendance_student/$', more_attendance_student, name='more_attendance_student'),
     url(r'^api/hint_url/$', another_hint, name='hint_url'),
+    url(r'^api/update_hints/$', update_hints, name='update_hints'),
     url(r'^(?P<user>[\w-]+)/$', account_view, name='profile'),
 ]

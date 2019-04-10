@@ -299,8 +299,16 @@ def tell_about_corruption(request):
 def another_hint(request):
     if request.GET.get('dir') == 'next':
         request.session['hint'] += 1
-    else:
+    elif request.GET.get('dir') == 'prev':
         request.session['hint'] -= 1
+    else:
+        request.session['hint'] = 100
+    data = {
+    }
+    return JsonResponse(data)
+
+def update_hints(request):
+    request.session['hint'] = 0
     data = {
     }
     return JsonResponse(data)

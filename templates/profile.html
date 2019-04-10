@@ -150,6 +150,15 @@
         $('.close_hint').click(function(){
             $('.bg-dark').removeClass();
             $('.help_div' + $(this).attr('id')).css('display', 'none')
+            $.ajax({
+                url: $('.hint_data').attr('url'),
+                data: {
+                    'dir':'end',
+                },
+                dataType: 'json',
+                success: function (data) {
+                }
+            })    
         })
 
     });
