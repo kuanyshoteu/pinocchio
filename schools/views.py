@@ -65,7 +65,8 @@ def school_teachers(request):
     context = {
         "profile":profile,
         "instance": school,
-        "all_teachers":school.people.filter(),    
+        "all_teachers":school.people.filter(),   
+        "professions":Profession.objects.all(), 
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -347,6 +348,15 @@ def add_card(request):
             school = school,
         )
         card.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def save_salary(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    if request.GET.get('id'):
+        school = profile.schools.first()
     data = {
     }
     return JsonResponse(data)
