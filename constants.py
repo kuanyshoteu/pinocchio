@@ -21,13 +21,14 @@ def get_profile(request):
 def only_teachers(profile):
     profession = Profession.objects.get(title = 'Teacher')
     profession2 = Profession.objects.get(title = 'Director')
-    if not profession in profile.profession.all() or not profession2 in profile.profession.all():
+    print(profession ,profile.profession.all(), profession in profile.profession.all())
+    if not profession in profile.profession.all() and not profession2 in profile.profession.all():
         raise Http404
 
 def only_managers(profile):
     profession = Profession.objects.get(title = 'Manager')
     profession2 = Profession.objects.get(title = 'Director')
-    if not profession in profile.profession.all() or not profession2 in profile.profession.all():
+    if not profession in profile.profession.all() and not profession2 in profile.profession.all():
         raise Http404
 
 def only_directors(profile):

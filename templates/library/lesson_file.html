@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <div class="two wide column" id="all_lesson{{ lesson.id }}">
-  <a id="{{ lesson.id }}" class="open_lesson_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
+  <a id="{{ lesson.id }}" class="open_lesson_features {%if forloop.counter == 1%}{% if hint == 42 or hint == 62 %}help42 help62 help_big_button{% endif %}{% endif %}" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal {%if forloop.counter == 1%}{% if hint == 42 or hint == 62 %}help42 help62 help_big_button{% endif %}{% endif %}"></i></a>
   <div class="ui segment lesson_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
       <a  class="rename_lesson" id="{{ lesson.id }}"><i class="icon pencil alternate"></i>Переименовать</a>
       <div class="ui divider"></div>

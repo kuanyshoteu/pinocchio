@@ -7,7 +7,7 @@
 {{ form.media }}
 {{ comment_form.media }}
 {% endblock head_extra %}
-<div id="profile">
+<div id="profile" class="">
     {% if this_folder %}
         {% if this_folder.parent %}
         <a id="go-back-btn"  href='{{ this_folder.parent.get_absolute_url }}'>
@@ -31,7 +31,7 @@
                             Документы
                         {% endif %}
                     </span>
-                    {% if is_trener or is_manager %}
+                    {% if is_trener or is_manager or is_director %}
                     <div style="float: right;">
                         {% if cache.full %}
                             <a class="ui button mini blue pastee" data-href='{{ profile.paste_docobject_url }}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}root{% endif %}' school="{{current_school_id}}">Вставить</a>
@@ -55,12 +55,13 @@
                     {% endfor %}
                 </div>
                 {% endif %}
+                <div class="hint20 hint40 hint60 highliter" style="position: absolute;margin-left: 0px;margin-top: -110px;"></div>
                 {% if this_folder %}
                     <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
                         <div id="docs" class="ui grid stackable" style="margin: 0">
-                        {% for doc in this_folder.files.all %}
-                            {% include 'documents/doc_file.html' %}
-                        {% endfor %}
+                            {% for doc in this_folder.files.all %}
+                                {% include 'documents/doc_file.html' %}
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="ui segment" style="margin-top: 0">
@@ -96,4 +97,18 @@
         </div>
     </div>
 </div>
+{% if is_manager or is_director or is_trener %}
+<span style="display: none;" class="hint_data" hint_type="2" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log('h', hint)
+        text = "Перемещайте или удаляйте документы нажав на эту кнопку";
+        close_button = '<a id="'+hint+'" class="ui button mini white next close_hint">Ок</a>'
+        var element = $('<div class="help ui segment sec help_div'+hint+'"><a id="'+hint+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>' + text + '<br><span style="color:lightgrey;font-size:11px;font-weight:600;"></span><br>'+close_button+'</div>').appendTo('.hint' + hint);
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
+{% endif %}
+
 {% endblock %}

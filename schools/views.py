@@ -355,8 +355,25 @@ def add_card(request):
 def save_salary(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
-    if request.GET.get('id'):
-        school = profile.schools.first()
+    if request.GET.get('id') and request.GET.get('salary'):
+        worker = Profile.objects.get(id=int(request.GET.get('id')))
+        worker.salary = int(request.GET.get('salary'))
+        worker.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def save_job_salary(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_directors(profile)
+    if request.GET.get('id') and request.GET.get('salary'):
+        job = JobCategory.objects.get(id=int(request.GET.get('id')))
+        job.salary = int(request.GET.get('salary'))
+        job.save()
+        for worker in job.job_workers.all():
+            worker.salary = job.salary
+            worker.save()
     data = {
     }
     return JsonResponse(data)

@@ -69,7 +69,7 @@ def school_documents(request, school_id):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-
+        'hint':profile.hint_numbers[2],
     }
     return render(request, 'documents/documents.html', context)
 
@@ -203,11 +203,15 @@ def change_docname(request):
 def delete_folder(request):
     profile = Profile.objects.get(user = request.user.id)
     only_staff(profile)
+    deleted = False
     if request.GET.get('id'):
         folder = DocumentFolder.objects.get(id = int(request.GET.get('id')))
         if folder.author_profile == profile:
             folder.delete()
-    data = {}
+            deleted = True
+    data = {
+        'deleted':deleted,
+    }
     return JsonResponse(data)
 
 def delete_document(request):

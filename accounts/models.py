@@ -41,6 +41,7 @@ class Profile(models.Model):
     profession = models.ManyToManyField(Profession, related_name='workers')
     job_categories = models.ManyToManyField(JobCategory, related_name='job_workers')
     money = models.IntegerField(default=0)
+    salary = models.IntegerField(default=0)
     is_student = models.BooleanField(default=True)
 
     coins = models.IntegerField(default=0)
@@ -64,7 +65,7 @@ class Profile(models.Model):
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
-    hint = models.IntegerField(default=0)
+    hint_numbers = ArrayField(models.IntegerField(), default = [0,0,0,0,0,0,0])
 
     class Meta:
         ordering = ['-coins', 'first_name']

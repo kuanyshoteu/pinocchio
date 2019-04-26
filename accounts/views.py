@@ -77,7 +77,7 @@ def account_view(request, user = None):
         'is_trener':is_profi(hisprofile, 'Teacher'),
         "is_manager":is_profi(hisprofile, 'Manager'),
         "is_director":is_profi(hisprofile, 'Director'),
-        'hint':profile.hint,
+        'hint':profile.hint_numbers[0],
     }
     return render(request, "profile.html", context)
 
@@ -126,6 +126,10 @@ def change_profile(request):
         "profile": hisprofile, 
         'form':form,
         'password_form':password_form,
+        'is_trener':is_profi(hisprofile, 'Teacher'),
+        "is_manager":is_profi(hisprofile, 'Manager'),
+        "is_director":is_profi(hisprofile, 'Director'),
+        'hint':hisprofile.hint_numbers[1],
     }
     return render(request, "profile/change_profile.html", context)
 
@@ -294,12 +298,13 @@ def tell_about_corruption(request):
 
 def another_hint(request):
     profile = Profile.objects.get(user = request.user)
+    hint_type = int(request.GET.get('hint_type'))
     if request.GET.get('dir') == 'next':
-        profile.hint += 1
+        profile.hint_numbers[hint_type] += 1
     elif request.GET.get('dir') == 'prev':
-        profile.hint -= 1
+        profile.hint_numbers[hint_type] -= 1
     else:
-        profile.hint = 100
+        profile.hint_numbers[hint_type] = 100
     profile.save()
     data = {
     }
@@ -308,11 +313,11 @@ def another_hint(request):
 def update_hints(request):
     profile = Profile.objects.get(user = request.user)
     if is_profi(profile, 'Manager'):
-        profile.hint = 20        
+        profile.hint_numbers = [20,20,20,20,20,20,20]        
     if is_profi(profile, 'Teacher'):
-        profile.hint = 40
+        profile.hint_numbers = [40,40,40,40,40,40,40]
     if is_profi(profile, 'Director'):
-        profile.hint = 60
+        profile.hint_numbers = [60,60,60,60,60,60,60]
 
     profile.save()
     data = {

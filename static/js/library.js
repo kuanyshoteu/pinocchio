@@ -389,7 +389,12 @@ $(document).ready(function(){
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $('#all_folder' + this_.attr('id')).hide();
+                    if(data.deleted){
+                        $('#all_folder' + this_.attr('id')).hide();                        
+                    }
+                    else{
+                        $('.folder_features' + this_.attr('id')).hide()
+                    }
                 }
             });  
         }

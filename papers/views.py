@@ -96,6 +96,7 @@ def paper_details(request, paper_id = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        'hint':profile.hint_numbers[4],        
     }
     return render(request, "library/lesson_details.html", context)
 
@@ -119,7 +120,9 @@ def add_lesson(request):
 
 def AddPaper(request):
     profile = Profile.objects.get(user = request.user.id)
+    print('fo')
     only_teachers(profile)
+    print('fo2')
     if request.GET.get('id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         if request.GET.get('title'):
@@ -405,7 +408,8 @@ def courses(request):
         "course_sets":course_sets(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'), 
+        "is_director":is_profi(profile, 'Director'),
+        'hint':profile.hint_numbers[5], 
     }
     return render(request, 'courses/course_list.html', context=context)
 

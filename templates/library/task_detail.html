@@ -19,7 +19,7 @@
             <a class="add_problem" id="l{{ lesson.id }}p{{ paper.id }}s{{subtheme.id}}" subtheme_id='{{ subtheme.id }}' task_id='{{ task.id }}' url="{{ subtheme.add_task_url }}" style="font-size: 10px; margin-left: 10px;margin-right: 10px; color: red; cursor: pointer;">Убрать</a>
             <br>
             <span id="{{ task.id }}task_number" style="margin-right: 10px; font-size: 16px;">{{ forloop.counter }}.</span>
-            <div class="ui mini modal" id="modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">
+            <div class="ui small modal" id="modal_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">
                 <i class="close icon"></i>
                 <div class="header text-center">
                     Изменить задачу
@@ -27,7 +27,7 @@
                 <div class="content">
                     <form class="ui form {{ task.id }}edit_text_form" method='POST' enctype='multipart/form-data' style="margin-bottom: 0;">{% csrf_token %}
                         <b>Условие: </b>
-                        <textarea type="text" class='change_task_textl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 60px; margin-bottom: 5px;">{{ task.text }}</textarea>
+                        <textarea type="text" class='change_task_textl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 100px; margin-bottom: 5px;">{{ task.text }}</textarea>
                         {% if task.is_test %}
                             <b>Варианты:</b>
                             <br>

@@ -14,7 +14,8 @@
     <div class="ui container">      
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column"> 
+            <div class="twelve wide column">
+                <div class="hint20 hint40 hint60 highliter" style="position: absolute;margin-left: -200px;margin-top: 0px;"></div>
                 {% for board in boards %}
                 <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
                     <div class="ui grid">
@@ -52,6 +53,9 @@
                                     </div>
                                 </div>
                                 {% for card in column.cards.all %}
+                                {% if forloop.parentloop.parentloop.counter == 1 %}
+                                <div class="hint21 hint41 hint61 highliter" style="position: absolute;margin-left: -210px;margin-top: -110px;"></div>
+                                {% endif %}
                                 <div class="card" draggable="true" data-card-id="{{ card.id }}">
                                  {% if card.metka_list.all|length > 0 %}
                                  <div style="margin-bottom: 2px;">
@@ -246,5 +250,83 @@
    });
   }
  </script>
+{% if is_manager %}
+<span style="display: none;" class="hint_data" hint_type="6" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log('h', hint)
+        texts = [
+            "Задания назначаются по системе <b>Trello</b>:<br>Сперва создаётся Проект, затем внутри Раздел и далее Карточка",
+            "Нажмите на название карточки, чтобы отредактировать описание<br><br>Назначьте ответственных, выберите метку(хэштег) и определите срок выполнения задачи",
+        ]
+        for(var i = 20; i < 20 + texts.length; i++){
+            arrow = ' help_right'
+            prev_button = ''
+            next_button = '<button id="'+i+'" class="ui button mini white next" hint_type="library">Далее</button>'
+            if (i > 20){
+                prev_button = '<button id="'+i+'" class="ui button mini prev" hint_type="library">Назад</button>'
+            }
+            if(i-20 == texts.length - 1){
+                next_button = '<button id="'+i+'" class="ui button mini green next close_hint">Готово</button>'
+            }
+            var element = $('<div class="help ui segment sec help_div'+i+arrow+'"><a id="'+i+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>'+ texts[i-20]+ '<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг '+(i-19)+' из '+texts.length+'</span><br>'+prev_button+next_button+'</div>').appendTo('.hint' + i);
+        }
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
+{% endif %}
+{% if is_director %}
+<span style="display: none;" class="hint_data" hint_type="6" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log('h', hint)
+        texts = [
+            "Задания назначаются по системе <b>Trello</b>:<br>Сперва создаётся Проект, затем внутри Раздел и далее Карточка",
+            "Нажмите на название карточки, чтобы отредактировать описание<br><br>Назначьте ответственных, выберите метку(хэштег) и определите срок выполнения задачи",
+        ]
+        for(var i = 60; i < 60 + texts.length; i++){
+            arrow = ' help_right'
+            prev_button = ''
+            next_button = '<button id="'+i+'" class="ui button mini white next" hint_type="library">Далее</button>'
+            if (i > 60){
+                prev_button = '<button id="'+i+'" class="ui button mini prev" hint_type="library">Назад</button>'
+            }
+            if(i-60 == texts.length - 1){
+                next_button = '<button id="'+i+'" class="ui button mini green next close_hint">Готово</button>'
+            }
+            var element = $('<div class="help ui segment sec help_div'+i+arrow+'"><a id="'+i+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>'+ texts[i-60]+ '<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг '+(i-59)+' из '+texts.length+'</span><br>'+prev_button+next_button+'</div>').appendTo('.hint' + i);
+        }
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
+{% endif %}
+{% if is_trener %}
+<span style="display: none;" class="hint_data" hint_type="6" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log('h', hint)
+        texts = [
+            "Задания назначаются по системе <b>Trello</b>:<br>Сперва создаётся Проект, затем внутри Раздел и далее Карточка",
+            "Нажмите на название карточки, чтобы отредактировать описание<br><br>Назначьте ответственных, выберите метку(хэштег) и определите срок выполнения задачи",
+        ]
+        for(var i = 40; i < 40 + texts.length; i++){
+            arrow = ' help_right'
+            prev_button = ''
+            next_button = '<button id="'+i+'" class="ui button mini white next" hint_type="library">Далее</button>'
+            if (i > 40){
+                prev_button = '<button id="'+i+'" class="ui button mini prev" hint_type="library">Назад</button>'
+            }
+            if(i-40 == texts.length - 1){
+                next_button = '<button id="'+i+'" class="ui button mini green next close_hint">Готово</button>'
+            }
+            var element = $('<div class="help ui segment sec help_div'+i+arrow+'"><a id="'+i+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>'+ texts[i-40]+ '<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг '+(i-39)+' из '+texts.length+'</span><br>'+prev_button+next_button+'</div>').appendTo('.hint' + i);
+        }
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
+{% endif %}
 
 {% endblock %}

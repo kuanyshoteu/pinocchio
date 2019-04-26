@@ -1,4 +1,42 @@
 $(document).ready(function () {
+    $('.save_salary').click(function(e) {
+        url = $('.salary_url').attr('url')
+        id = $(this).attr('id')
+        salary = $('#salary' + id).val();
+        this_ = $(this)
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'salary':salary,
+            },
+            dataType: 'json',
+            success: function (data) {
+                this_.removeClass('blue');
+                this_.addClass('green')
+                $('#input'+id).hide();
+                $('#salary_show'+id).show();
+                $('#salary_show_value'+id).text(salary);
+            }
+        })        
+    });    
+    $('.save_job_salary').click(function(e) {
+        url = $('.save_job_salary_url').attr('url')
+        id = $(this).attr('id')
+        this_ = $(this)
+        salary = $('#job_salary' + id).val();
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'salary':salary,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload();
+            }
+        })        
+    });    
     $('.update_hints').click(function(e) {
         url = $(this).attr('url')
         console.log('de')

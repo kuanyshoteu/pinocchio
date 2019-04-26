@@ -28,6 +28,7 @@
           <div class="fourteen wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
               Мои курсы
               <div style="float: right;">
+                <div class="hint40 hint60 highliter" style="position: absolute;margin-left: -50px;margin-top: 40px;"></div>
                   <a class="ui button mini blue create_paper" href='{{ profile.create_course_url }}'>
                     Создать курс
                   </a>
@@ -35,8 +36,8 @@
           </div>
       </div>
 </div>
-<div class="ui grid">
-    <div class="six wide column" style="padding-right: 0;">
+<div class="ui grid" style="margin: 0">
+    <div class="six wide column" style="padding: 0;">
         <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
             Проданные курсы
         </div>
@@ -44,7 +45,7 @@
             {% include 'courses/money_circle_chart.html' %}
         </div>
     </div>
-    <div class="ten wide column" style="padding-left: 0">
+    <div class="ten wide column" style="padding: 0">
         <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
             <div class="ui grid">
                 <div class="nine wide column" style="padding: 14px">
@@ -91,6 +92,20 @@
 </div>
 {% endfor %}
 
+{% if is_trener %}
+<span style="display: none;" class="hint_data" hint_type="5" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log(hint)
+        text = "Нажмите сюда для создания нового курса";
+        close_button = '<a id="'+hint+'" class="ui button mini white next close_hint">Ок</a>'
+        var element = $('<div class="help ui segment sec help_div'+hint+' help_top"><a id="'+hint+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>' + text + '<br><span style="color:lightgrey;font-size:11px;font-weight:600;"></span><br>'+close_button+'</div>').appendTo('.hint' + hint);
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
+
+{% endif %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jquery.slick/1.5.0/slick.min.js"></script>

@@ -27,6 +27,17 @@ a{
     left: -7px;
     top: 50%;
 }
+.help_down:after {
+    content: "";
+    display: block;
+    border-width: 7px 7px 0 7px;
+    border-style: solid;
+    border-color: #5a9eff transparent transparent transparent;
+    margin-top: -7px;
+    position: absolute;
+    left: 50%;
+    bottom: -7px;
+}
 .help_left_top:after {
     content: "";
     display: block;
@@ -98,6 +109,13 @@ a{
 .help_button{
   color: white !important;
   background-color: #5a9eff !important;
+}
+.help_big_button{
+  color: white !important;
+  background-color: #5a9eff !important;
+  padding: 5px 5px 10px 5px !important;
+  margin-top: -10px;
+  border-radius: 5px;
 }
 .help{
   width: 200px;

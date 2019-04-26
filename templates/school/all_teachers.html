@@ -43,10 +43,10 @@
                                             <form class="ui form" style="margin: 0;">
                                                 <div id="input{{worker.id}}" class="ui grid" style="float: right;">
                                                     <div class="eleven wide column" style="padding: 14px 1px;">
-                                                        <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" name="" value="{{ job.salary }}">                                       
+                                                        <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="job_salary{{job.id}}" value="{{ job.salary }}">                                       
                                                     </div>
                                                     <div class="five wide column" style="padding: 14px 0">
-                                                        <a class="ui button mini blue" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
+                                                        <a class="ui button mini blue save_job_salary" id="{{ job.id }}" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
                                                     </div>
                                                 </div>
                                             </form>
@@ -63,15 +63,15 @@
                                                     <form class="ui form" style="margin: 0;">
                                                         <div id="input{{worker.id}}" class="ui grid" style="float: right;display: none;">
                                                             <div class="eleven wide column" style="padding: 14px 1px;">
-                                                                <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" name="" value="{{ job.salary }}">                                       
+                                                                <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="salary{{worker.id}}" value="{{ worker.salary }}">           
                                                             </div>
                                                             <div class="five wide column" style="padding: 14px 0">
-                                                                <a class="ui button mini blue" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
+                                                                <a class="ui button mini blue save_salary" id="{{worker.id}}" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
                                                             </div>
                                                         </div>
-                                                        <span id="salary{{worker.id}}" style="float: right;">
-                                                            <span>{{ job.salary }}</span>
-                                                            <a onclick="$('#input{{worker.id}}').show();$('#salary{{worker.id}}').hide();"><i class="pen square icon"></i></a>
+                                                        <span id="salary_show{{worker.id}}" style="float: right;">
+                                                            <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
+                                                            <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
                                                         </span>
                                                     </form>
                                                 </div>
@@ -89,6 +89,8 @@
     </div>
 </div>
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>
+<span class="salary_url" url="{{ instance.salary_url }}"></span>
+<span class="save_job_salary_url" url="{{ instance.save_job_salary }}"></span>
 {% include 'school/add_teachers.html' %}
 
 {% endblock content %}

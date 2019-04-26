@@ -36,7 +36,8 @@ def school_library(request, school_id):
         'cache':Cache.objects.get_or_create(author_profile = profile)[0],
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),   
+        "is_director":is_profi(profile, 'Director'),
+        'hint':profile.hint_numbers[3],
     }
     return render(request, 'library/library.html', context=context)
 

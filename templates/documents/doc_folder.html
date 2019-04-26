@@ -7,9 +7,11 @@
         <div class="ui divider"></div>
         <a  class="file_action" object_type='folder' action='copy' data-href='{{ profile.docfile_action_url }}' id="{{ folder.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon copy outline"></i> Копировать</a>
         <div class="ui divider"></div>
-        <a  class="file_action" object_type='folder' action='cut' data-href='{{ profile.docfile_action_url }}' id="{{ folder.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon cut"></i> Вырезать</a>
-        <div class="ui divider"></div>
-        <a class="delete_folder" id="{{ folder.id }}" data-href='{{ folder.delete_folder_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
+        {% if folder.author_profile == profile %}
+            <a  class="file_action" object_type='folder' action='cut' data-href='{{ profile.docfile_action_url }}' id="{{ folder.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon cut"></i> Вырезать</a>
+            <div class="ui divider"></div>
+            <a class="delete_folder" id="{{ folder.id }}" data-href='{{ folder.delete_folder_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
+        {% endif %}
     </div>
     <a href="{{ folder.get_absolute_url }}">
         <img src="{% static 'images/folder.png' %}" id="folder_image{{ folder.id }}" style="height: 50px;">

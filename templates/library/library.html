@@ -7,6 +7,7 @@
 {{ form.media }}
 {{ comment_form.media }}
 {% endblock head_extra %}
+{% load staticfiles %}
  <div id="profile">
     {% if folder %}
         {% if folder.parent %}
@@ -39,9 +40,11 @@
                       {% else %}
                           <a class="ui button mini disabled">Вставить</a>
                       {% endif %}                      
+                      <div class="hint43 hint63 highliter" style="position: absolute;margin-top: 15px;right: 70px;"></div>
                       <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_folder_url }}' >
                         Создать папку
                       </a>
+                      <div class="hint40 hint60 highliter" style="position: absolute;margin-top: 15px;right: -30px"></div>
                       <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_lesson_url }}'>
                         Создать урок
                       </a>
@@ -54,9 +57,11 @@
                         <a href="{{ school.get_school_library }}" class="{% if school.id == current_school_id %}current_option{% else %}other_option{% endif %}">{{ school.title }}</a>
                     {% endfor %}
                 </div>
-                {% endif %}    
+                {% endif %}
                 <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
+                    <div class="hint42 hint62 highliter" style="position: absolute;margin-left: -25px;margin-top: -120px;"></div>
                     <div id="papers" class="ui grid stackable" style="margin: 0">
+                    <div class="hint41 hint61 highliter" style="position: absolute;margin-left: -210px;margin-top: -20px;"></div>
                     {% for lesson in lessons %}
                         {% if not root or lesson.folder.all|length == 0 %}
                             {% include "library/lesson_file.html" %}
@@ -77,5 +82,42 @@
         </div>
     </div>
 </div>
+{% if is_trener %}
+<span style="display: none;" class="hint_data" hint_type="3" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var hint = parseInt( $('.hint_data').attr('id'))
+        console.log('h', hint)
+        texts = [
+            "Нажмите сюда для создания нового урока",
+            "Нажмите на иконку для просмотра данного урока",
+            'Нажмите сюда, чтобы переместить, удалить или переименовать урок',
+            'Создавайте папки для удобного хранения уроков',
+        ]
+        for(var i = 40; i < 40 + texts.length; i++){
+            arrow = ' help_right'
+            prev_button = ''
+            next_button = '<button id="'+i+'" class="ui button mini white next" hint_type="library">Далее</button>'
+            if (i > 40){
+                prev_button = '<button id="'+i+'" class="ui button mini prev" hint_type="library">Назад</button>'
+            }
+            if(i-40 == texts.length - 1){
+                next_button = '<button id="'+i+'" class="ui button mini green next close_hint">Готово</button>'
+            }
+            if(i == 42){
+                arrow = ''
+            }
+            if(i == 40){
+                arrow = ' help_top'
+            }
+            if(i == 43){
+                arrow = ' help_top'
+            }
+            var element = $('<div class="help ui segment sec help_div'+i+arrow+'"><a id="'+i+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>'+ texts[i-40]+ '<br><span style="color:lightgrey;font-size:11px;font-weight:600;">Шаг '+(i-39)+' из '+texts.length+'</span><br>'+prev_button+next_button+'</div>').appendTo('.hint' + i);
+        }
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
+{% endif %}
 
 {% endblock %}
