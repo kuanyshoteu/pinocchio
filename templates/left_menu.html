@@ -15,12 +15,12 @@
                     <i class="cog icon"></i>Управление
                 </a>
                 {% endif %}
-                {% if is_manager %}
+                {% if is_manager or is_director %}
                 <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}'>
                     <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>CRM
                 </a>
                 {% endif %}
-                {% if is_manager or is_trener %}
+                {% if is_manager or is_trener or is_director %}
                 <a class="item lftitem help27 help2727hb help66 help6666hb" href='{% url "documents:main" %}'>
                     <i class="folder icon"></i>Документы
                 </a>
@@ -28,7 +28,7 @@
                 <a class="item lftitem help8 help88hb help28 help2828hb help46 help4646hb help67 help6767hb" href='{% url "schools:rating" %}'>
                     <i class="trophy icon"></i>Рейтинги
                 </a>
-                {% if is_manager or is_trener %}
+                {% if is_manager or is_trener or is_director %}
                 <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "squads:list" %}'>
                     <i class="users icon"></i>Классы
                 </a>
