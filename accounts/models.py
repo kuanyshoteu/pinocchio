@@ -63,7 +63,9 @@ class Profile(models.Model):
     pro_skills = ArrayField(models.IntegerField(), default = list)
 
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
     crm_age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
     crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     hint_numbers = ArrayField(models.IntegerField(), default = [0,0,0,0,0,0,0])
 

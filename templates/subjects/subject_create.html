@@ -38,7 +38,19 @@
 				        	<div class="ui segment" style="line-height: 40px; margin-top: 0">
 			        			<div class="ui grid" style="padding-bottom: 14px;">
 			        				<div class="sixteen wide column" style="text-align: center;padding: 14px 25%;font-weight: 600">
-			        					{{ form|crispy }}	
+			        					{{ form|crispy }}
+			        					Категория предмета
+		                                <select class="change_subject_category" id="change_subject_category" url="{{ instance.change_category }}" option="subject"> 
+		                                    {% if instance.category %}
+		                                        <option value="{{ instance.category.id }}">{{ instance.category.title }}</option>
+		                                    {% endif %}
+		                                    {% for subject_category in subject_categories %}
+		                                        {% if subject_category != instance.category %}
+		                                        <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
+		                                        {% endif %}
+		                                    {% endfor %}
+		                                    <option value="-1">Другое</option>
+		                                </select>
 			        				</div>
 			        			</div>
 							</div>

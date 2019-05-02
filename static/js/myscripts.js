@@ -122,7 +122,7 @@ $(document).ready(function () {
     $('.crm_option').on('change', function(e) {
         id = $(this).attr('id')
         this_ = document.getElementById(id);
-        object_id = this_.options[this_.selectedIndex].value
+        object_id = this_.options[this_.selectedIndex].value;
         url = $(this).attr('url')
         option = $(this).attr('option')
         $.ajax({
@@ -134,6 +134,39 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 $( "#calendar" ).load(document.URL +  ' #calendar');
+            }
+        });
+    }) 
+    $('.change_subject_category').on('change', function(e) {
+        id = $(this).attr('id')
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value;
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        });
+    }) 
+    $('.choose_subject_category').on('click', function(e) {
+        id = $(this).attr('id')
+        url = $(".get_subject_category_url").attr('url')
+        option = $(this).attr('option')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':id,
+                'option':option,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $( "#list" ).load(document.URL +  ' #list');
+                $(".option_vertical").removeClass('option_vertical_active')
+                $('#category'+id).addClass('option_vertical_active')
             }
         });
     }) 

@@ -57,7 +57,7 @@
             $("html, body").animate({ scrollTop: 500 }, 500)
         }
         if (id == 63){$("html, body").animate({ scrollTop: 700 }, 600)}
-        if (id == 3 || id == 21 || id == 42 || id == 62){
+        if (id == 3 || id == 22 || id == 42 || id == 62){
             $("html, body").animate({ scrollTop: 0 }, 500)                
         }
         if (id == 42 || id == 62){

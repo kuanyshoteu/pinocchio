@@ -35,6 +35,12 @@ def cell_profile_lectures(cell, profile):
     return profile.hislectures.filter(cell = cell)
 
 @register.filter
+def rating_filter(profile):
+    squad = profile.rating_squad_choice.first()
+    if squad != None:
+        return squad.students.prefetch_related('crm_subject', 'crm_subject__students')
+
+@register.filter
 def cell_school_lectures(cell, profile):
     if profile.crm_subject==None and profile.crm_age==None and profile.crm_office==None:
         return []

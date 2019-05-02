@@ -23,5 +23,5 @@ class SubjectForm(forms.ModelForm):
             "image_banner",
             "image_icon",
             "image_back",
-            "color_back"
+            "color_back",
         ]

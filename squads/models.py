@@ -28,6 +28,7 @@ class Squad(models.Model):
     curator = models.ManyToManyField(Profile, default=1, related_name='curators_squads')
     students = models.ManyToManyField(Profile, default=1, related_name='squads')
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='groups')
+    rating_choices = models.ManyToManyField(Profile, default=1, related_name='rating_squad_choice')
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)

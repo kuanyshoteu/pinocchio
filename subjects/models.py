@@ -143,6 +143,8 @@ class Subject(models.Model):
         return reverse("subjects:change_start_url")  
     def change_end_url(self):
         return reverse("subjects:change_end_url")       
+    def change_category(self):
+        return reverse("subjects:change_category",kwargs={"id": self.id})       
 
 def create_slug(instance, new_slug=None):
     if len(Subject.objects.all()) > 0:

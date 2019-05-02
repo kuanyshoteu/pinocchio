@@ -44,10 +44,10 @@ def subject_detail(request, slug=None):
         'days':days,
         "teacher":is_profi(profile, 'Teacher'),
         "lessons":profile.lesson_author.all(),
-        "folders":profile.folders.all(), 
+        "folders":profile.folders.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),       
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_detail.html", context)
 
@@ -55,9 +55,15 @@ def subject_list(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
+    if profile.crm_subject:
+        subjects = profile.crm_subject.category_subjects.all()
+    else:
+        subjects = school.school_subjects.all()
     context = {
         "profile": profile,
-        "subjects":school.school_subjects.all(),
+        "subjects":subjects,
+        "subject_categories":school.school_subject_categories.all(),
+        "school":school,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -119,6 +125,7 @@ def subject_create(request):
     profile = get_profile(request)
     only_managers(profile)
     form = SubjectForm(request.POST or None, request.FILES or None)
+    school = profile.schools.first()    
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
@@ -128,6 +135,7 @@ def subject_create(request):
         "form": form,
         "profile":profile,
         "all_teachers":all_teachers(),
+        "subject_categories":school.school_subject_categories.all(),        
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -157,6 +165,7 @@ def subject_update(request, slug=None):
         for day in days:
             for timep in time_periods:
                 new_cell = Cell.objects.get_or_create(day = day, time_period = timep)
+    school = profile.schools.first()    
 
     context = {
         "instance": instance,
@@ -164,6 +173,7 @@ def subject_update(request, slug=None):
         'page':'subject_update',
         "profile":profile,
         'squads':Squad.objects.all(),
+        "subject_categories":school.school_subject_categories.all(),        
         'time_periods':time_periods,
         'days':days,
         "all_teachers":all_teachers(),
@@ -347,6 +357,9 @@ def calc_subject_lessons(subject):
             res = cnt
     subject.number_of_lectures = res
     subject.save()
+    students = subject.students.all()
+    subject.category.choosed_by.add(*students)
+    subject.age.choosed_by.add(*students)
 
     if len(subject.materials.all()) < subject.number_of_lectures:
         for i in range(len(subject.materials.all())+1, res+1):
@@ -417,4 +430,19 @@ def change_end(request):
     data = {
     }
     return JsonResponse(data)
-    
+
+def change_category(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('object_id'):
+        subject = Subject.objects.get(id = id)
+        category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+        if int(request.GET.get('object_id')) == -1:
+            subject.category = None
+        else:
+            subject.category = category
+        subject.save()
+    data = {
+    }
+    return JsonResponse(data)
+        

@@ -22,6 +22,7 @@
         for(var i = 60; i < 60 + texts.length; i++){
             arrow = ' help_right'
             prev_button = ''
+            width = ''
             next_button = '<button id="'+i+'" class="ui button mini white next">Далее</button>'
             if (i > 60){
                 prev_button = '<button id="'+i+'" class="ui button mini prev">Назад</button>'
@@ -34,6 +35,7 @@
             }
             if(i == 64){
                 arrow = ' help_top'
+                width = 'style = width:300px;'
             }
             if(i == 65){
                 arrow = ' help_left_top'

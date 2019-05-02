@@ -31,11 +31,17 @@ from constants import *
 def school_rating(request):
     profile = get_profile(request)
     school = profile.schools.first()
+    for subject in Subject.objects.all():
+        students = subject.students.all()
+        subject.category.students.add(*students)
+        subject.age.students.add(*students)
+
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
         "squads":school.groups.all(),
-        "subjects":school.school_subjects.all(),
+        "subject_categories":school.school_subject_categories.all(),
+        "subject_ages":school.school_subject_ages.all(),
         "all_students":school.people.filter(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -276,7 +282,6 @@ def save_card_as_user(request):
 
 def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
-    only_managers(profile)
     if request.GET.get('object_id') and request.GET.get('option'):
         print(request.GET.get('object_id') , request.GET.get('option'))
         if request.GET.get('option') == 'subject':
@@ -297,6 +302,11 @@ def crm_option(request):
             else:
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
                 profile.crm_office = office
+        if request.GET.get('option') == 'group':
+            profile.rating_squad_choice.clear()
+            if int(request.GET.get('object_id')) != -1:
+                squad = Squad.objects.get(id = int(request.GET.get('object_id')))
+                profile.rating_squad_choice.add(squad)
         profile.save()
     data = {
     }

@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^(?P<slug>[\w-]+)/delete/$', subject_delete, name='delete'),
     url(r'^api/schedule/(?P<id>\d+)/$', subject_schedule, name='subject_schedule_url'),
     url(r'^api/squad_list/(?P<id>\d+)/$', squad_list, name='squad_list'),
+    url(r'^api/change_category/(?P<id>\d+)/$', change_category, name='change_category'),
 ]
