@@ -33,8 +33,9 @@ def school_rating(request):
     school = profile.schools.first()
     for subject in Subject.objects.all():
         students = subject.students.all()
-        subject.category.students.add(*students)
-        subject.age.students.add(*students)
+        if subject.category:
+            subject.category.students.add(*students)
+            subject.age.students.add(*students)
 
     context = {
         "profile":profile,
