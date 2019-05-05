@@ -4983,7 +4983,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 
 @media only screen and (max-width: 767px) {
   .twenty.mitem {
-    padding: 15px;
+    padding:0 15px 0 15px;
   }
   .avatar-phone {
     display: flex;
