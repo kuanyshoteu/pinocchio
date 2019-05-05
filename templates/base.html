@@ -34,6 +34,9 @@
             <a href='{% url "main:home" %}' class="header main">
                 <img src="{% static 'images/logo_clean.png' %}" id="logo">
             </a>
+            <a class="ui button mini red help24 help2424hb" id="request-responsive" href="/schools/crm_reg/" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
+                Заявка
+            </a>
         </div>
         <div class="full-w left-main-menu">
             {% if request.user.is_authenticated %}

@@ -4967,9 +4967,73 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   max-width: 100% !important;
 }
 
+.img-responsive {
+  display: none;
+}
+.coins-responsive {
+  display: none;
+}
+#request-responsive {
+  display: none;
+}
+#main-info-phone {
+    display: none;
+  }
 /* Mobile */
 
 @media only screen and (max-width: 767px) {
+  .twenty.mitem {
+    padding: 15px;
+  }
+  .avatar-phone {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  #main-info-phone {
+    display: flex;
+    justify-content: space-around;
+    width: 50%;
+  }
+  #main-info-desktop {
+    display: none;
+  }
+  .ui.button.mini.red.help24.help2424hb {
+    display: none;
+  }
+  #request-responsive {
+    display: inline-block;
+  }
+  .coins-responsive {
+    display: block;
+  }
+  .name-desktop {
+    display: none;
+  }
+  .right.floated {
+    display: none;
+  }
+  #header-responsive {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1rem;
+  }
+  #responsive-avatar {
+    display: none;
+  }
+  .img-responsive {
+    display: inline-block;
+    border-radius: 50%;
+    min-height: 150px;
+    min-width: 150px;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+  #profile .img {
+    border-radius: 50%;
+  }
   .description .ui.grid {
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
@@ -5016,9 +5080,20 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     width: auto !important;
   }
 }
+@media only screen and (max-width: 530px) {
+  .img-responsive {
+    min-height: 100px;
+    min-width: 100px;
+  }
+  #main-info-phone {
+    font-size: 10px;
+    width: 100%
+  }
+}
   #left-main-menu{
     width: 100%;
   }
+
 
 /* Tablet */
 
@@ -21198,6 +21273,24 @@ ol.ui.horizontal.list li:before,
   .ui.column.grid > [class*="sixteen wide tablet"].column {
     width: 100% !important;
   }
+/* main-info */
+.ui.grid > .row > [class*="four wide"].column,
+.ui.grid > .column.row > [class*="four wide"].column,
+.ui.grid > [class*="four wide"].column,
+.ui.column.grid > [class*="four wide"].column {
+    width: 50% !important;
+  }
+.ui.grid > .row > [class*="five wide"].column,
+.ui.grid > .column.row > [class*="five wide"].column,
+.ui.grid > [class*="five wide"].column,
+.ui.column.grid > [class*="five wide"].column {
+    width: 45% !important;
+  }
+
+.description > .ui.grid {
+  display: block;
+}
+
 }
 
 /* Computer/Desktop Sizing Combinations */
@@ -39541,6 +39634,9 @@ body.pushable > .pusher {
 }
 
 @media only screen and (max-width: 767px) {
+  #profile {
+    padding: 0;
+  }
   #profile #detailed_info .ui.grid {
     -webkit-flex-direction: column;
     -moz-flex-direction: column;
@@ -40259,4 +40355,11 @@ a:hover {
 
 #contacts .ui.list .item {
   margin-bottom: 15px;
+}
+
+
+/* Faisal style includes */
+
+.main-info {
+  min-height: 260px;
 }
