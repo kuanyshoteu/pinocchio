@@ -97,6 +97,7 @@ def squad_create(request):
         instance = form.save(commit=False)
         instance.start_date = timezone.now().date()
         instance.end_date = timezone.now().date()
+        instance.school = school
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
     
