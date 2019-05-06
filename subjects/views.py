@@ -134,7 +134,7 @@ def subject_create(request):
     context = {
         "form": form,
         "profile":profile,
-        "all_teachers":all_teachers(),
+        "all_teachers":all_teachers(school),
         "subject_categories":school.school_subject_categories.all(),        
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),

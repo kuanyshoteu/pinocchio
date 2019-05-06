@@ -102,7 +102,7 @@ def squad_create(request):
     context = {
         "form": form,
         "profile":profile,
-        "all_teachers":Profile.objects.filter(),
+        "all_teachers":all_teachers(school),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -147,7 +147,7 @@ def squad_update(request, slug=None):
         "instance": instance,
         "form":form,
         "profile":profile,
-        "all_teachers":all_teachers(),
+        "all_teachers":all_teachers(school),
         "all_students":school.people.filter(is_student=True),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
