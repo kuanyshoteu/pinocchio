@@ -19,14 +19,14 @@
                     <a class="open_option other_option" name="mysubjects">
                         Мои предметы 
                         <span style="font-size: 13px;color: #939393;">
-                            {% if profile.status == 'trener' %}
+                            {% if is_trener %}
                                 {{ profile.subject_trener.all|length }}
                             {% else %}
                                 {{ profile.subjects.all|length }}
                             {% endif %}
                         </span>
                     </a>
-                    {% if user.is_staff %}
+                    {% if is_manager %}
                         <a class="ui button mini blue mini" style="float: right;" href='{% url "subjects:create" %}'>Создать новый предмет</a>
                     {% endif %}
                 </div>
@@ -36,7 +36,7 @@
                     {% endfor %}
                 </div>
                 <div class="ui segment option" id="mysubjects" style="margin-top: 0; display: none;">
-                    {% if profile.status == 'trener' %}
+                    {% if is_manager %}
                         {% for sq in profile.subject_trener.all %}
                             {% include 'subjects/subject_list_info.html' %}
                         {% endfor %}

@@ -27,9 +27,8 @@
                 $('.help'+(id+1)).addClass('help_big_button');
             }
         }
-        if (id == 2 || id == 21 || id == 41){$("html, body").animate({ scrollTop: 500 }, 600)}
-        if (id == 61){$("html, body").animate({ scrollTop: 700 }, 600)}
-        if (id == 3 || id == 22 || id == 42 || id == 62){$("html, body").animate({ scrollTop: 0 }, 600)}
+        if (id == 60){$("html, body").animate({ scrollTop: $(".help" + (id+1)).offset().top }, 600)}
+        if (id == 61){$("html, body").animate({ scrollTop: $(".help62").offset().top }, 600)}
         $.ajax({
             url: $('.hint_data').attr('url'),
             data: {

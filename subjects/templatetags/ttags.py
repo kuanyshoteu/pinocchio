@@ -95,6 +95,8 @@ def get_date(material, squad):
         if start_day == 0:
             start_day = 7
         start_day_object = Day.objects.get(number = start_day)
+        if len(lectures.filter(day=start_day_object)) == 0:
+            return '_'
         start_day_lecture = lectures.filter(day=start_day_object)[0]
         start_day_index = list(lectures).index(start_day_lecture)
         #print(start_day_index , lecture_index)
