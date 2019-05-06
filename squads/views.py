@@ -92,6 +92,7 @@ def squad_create(request):
     profile = get_profile(request)
     only_managers(profile)
     form = SquadForm(request.POST or None, request.FILES or None)
+    school = profile.schools.first()
     if form.is_valid():
         instance = form.save(commit=False)
         instance.start_date = timezone.now().date()
