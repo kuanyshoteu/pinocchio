@@ -14,8 +14,9 @@ from constants import *
 def index(request):
     profile = get_profile(request)
     only_staff(profile)
+    school = profile.schools.first()
     return render(request, template_name='kanban/base.html', context={
-        'boards': Board.objects.all(),
+        'boards': school.school_boards.all(),
         "profile":profile,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -26,9 +27,10 @@ def index(request):
 def new_board(request):
     profile = get_profile(request)
     only_staff(profile)
+    school = profile.schools.first()
     name = request.POST.get('board_name')
     assert name
-    Board.objects.create(name=name)
+    Board.objects.create(name=name, school=school)
     return redirect('/todolist')
 
 def new_column(request):
