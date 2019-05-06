@@ -77,6 +77,10 @@ def register_by_file():
         profile.phone = str(row[2])
         profile.save()
 
-def all_teachers():
+def all_teachers(school):
+    res = []
     profession = Profession.objects.get(title = 'Teacher')
-    return profession.workers.all()
+    for h in school.people.all():
+        if h in profession.workers.all():
+            res.append(h)
+    return res

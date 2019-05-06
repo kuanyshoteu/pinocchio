@@ -177,7 +177,7 @@ def subject_update(request, slug=None):
         "subject_ages":school.school_subject_ages.all(),        
         'time_periods':time_periods,
         'days':days,
-        "all_teachers":all_teachers(),
+        "all_teachers":all_teachers(school),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
