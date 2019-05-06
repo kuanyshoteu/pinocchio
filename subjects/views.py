@@ -257,10 +257,11 @@ def subject_schedule(request, id=None):
 def squad_list(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
+    school = profile.schools.first()
     subject = Subject.objects.get(id = id)
     res = []
     res2 = []
-    for squad in Squad.objects.all():
+    for squad in school.groups.all():
         if not squad in subject.squads.all():
             res.append([squad.id, [squad.title]])
         else:
