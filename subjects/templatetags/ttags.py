@@ -64,8 +64,8 @@ def rating_filter(profile):
 
 @register.filter
 def cell_school_lectures(cell, profile):
-    if profile.crm_subject==None and profile.crm_age==None and profile.crm_office==None:
-        return []
+    # if profile.crm_subject==None and profile.crm_age==None and profile.crm_office==None:
+    #     return []
     lectures = cell.lectures.all()
     if profile.crm_subject:
         lectures = lectures.filter(category=profile.crm_subject)
