@@ -49,23 +49,6 @@ $(document).ready(function () {
             }
         })        
     });    
-    $('.save_card_as_user').click(function(e) {
-        id = $('.card_for_save').attr('id')
-        squad_id = $(this).attr('squad_id')
-        $.ajax({
-            url: $('.card_for_save').attr('url'),
-            data: {
-                'id':id,
-                'squad_id':squad_id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                document.getElementById("school_schedule").style.width = "0";
-                $('.backg').removeClass('darker');
-                $('#saved_modal').modal('show')
-            }
-        })        
-    });
     $('.open_card_form').click(function(e) {
         $('#card_form'+$(this).attr('id')).modal('show')
     })
@@ -116,16 +99,6 @@ $(document).ready(function () {
             }
         })        
     });
-    $('.show_subject_cost').hover(function(e) {
-        cost = $(this).attr('cost')
-        $('.subject_cost').html(cost)
-    })
-    $('.show_subject_cost').click(function(e) {
-        console.log('d')
-        id = $(this).attr("squad_id")
-        $(".current_squad").attr("id", id)
-        $('#add_student_modal').modal('show')
-    })
     $('.crm_option').on('change', function(e) {
         id = $(this).attr('id')
         this_ = document.getElementById(id);
