@@ -33,13 +33,16 @@
                         {% include 'school/new_card_form.html' %}
                         <div class="column{{ column.id }}" style="margin-top: 15px;text-align: left;">
                             <draggable 
-                                    class="crmbox"
+                                    class="crmbox{{ column.id }} full-h"
                                     :options="{group:{ name:'people'}}"
                                     @add="move_card({{ column.id }})">
                                 {% for card in column.cards.all %}
                                 <div id="card{{card.id}}" style="margin-bottom: 10px;" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
-                                    <div class="ui segment full-w" style="cursor: pointer;padding: 3px 7px;">
-                                        <div style="float: right;font-size: 11px;color: #b3b300">
+                                    <div class="ui segment full-w" style="cursor: grab;padding: 10px 5px;">
+                                        {% if card.saved == False %}
+                                            <a class="delete_card" id="{{ card.id }}"><b>×</b></a>
+                                        {%endif%}
+                                        <div style="float: right;margin-right: 10px; font-size: 11px;color: #b3b300">
                                             {{card.timestamp.date|date:"d.m.y"}}
                                             <br>
                                             {% if card.saved %}
@@ -69,11 +72,21 @@
         </div>
     </div>    
 </div>
+<div class="ui mini modal" id="delete_card_modal">
+    <i class="close icon"></i>
+    <div class="content">
+        Вы уверены, что хотите удалить карточку?
+        <br><br>
+        <a class="yes_delete_card ui button mini green">Да</a>
+        <a class="ui button mini red" onclick="$('#delete_card_modal').modal('hide')">Нет</a>
+    </div>
+</div>
 <span style="display: none;" id="0" class="current_card"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
+<span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 {% if open_form %}
 <script type="text/javascript">
     $('#new_card_form' + $('.first_column').attr('id')).modal('show')
@@ -98,7 +111,7 @@
       $('.card_for_save').attr('id', id)
     }
     function save_card_id(id){
-        console.log(id)
+        console.log('rrr',id)
         $('.current_card').attr('id', id)
     }
     new Vue({
@@ -115,6 +128,7 @@
         },
         methods: {
             move_card(column_id) {
+                console.log('fff')
                 axios.get('/schools/api/move_card/', {
                     params: {
                         'column_id': column_id,

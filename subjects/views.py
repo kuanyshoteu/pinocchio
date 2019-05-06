@@ -174,6 +174,7 @@ def subject_update(request, slug=None):
         "profile":profile,
         'squads':Squad.objects.all(),
         "subject_categories":school.school_subject_categories.all(),        
+        "subject_ages":school.school_subject_ages.all(),        
         'time_periods':time_periods,
         'days':days,
         "all_teachers":all_teachers(),
@@ -182,9 +183,6 @@ def subject_update(request, slug=None):
         "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "subjects/subject_create.html", context)
-
-def all_teachers():
-    return Profile.objects.filter()
 
 def subject_delete(request, slug=None):
     instance = Subject.objects.get(slug=slug)
@@ -234,16 +232,20 @@ def remove_lesson(request):
 def subject_schedule(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
+    school = profile.schools.first()
     subject = Subject.objects.get(id = id)
     res = []
-    for timep in TimePeriod.objects.all():
+    for timep in school.time_periods.all():
         line = []
         for cell in timep.time_cell.all():
             if cell.day.number != 7:
                 lectures = []
                 for lecture in cell.lectures.filter(subject = subject):
                     if lecture.squad in subject.squads.all():
-                        lectures.append(lecture.squad.title)
+                        cabinet=''
+                        if lecture.cabinet:
+                            cabinet = lecture.cabinet.title
+                        lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet])
                 line.append([cell.id, lectures])
         res.append([timep.start + '-' + timep.end, line])
 
@@ -263,12 +265,7 @@ def squad_list(request, id=None):
             res.append([squad.id, [squad.title]])
         else:
             res2.append([squad.id, [squad.title]])
-    if len(subject.teacher.all()) > 0:
-        trener = subject.teacher.first().first_name
-    else:
-        trener = 'none'
     data = {
-        'trener': trener,
         'groups_in_subject':res2,
         'groups_not_in_subject':res,
     }
@@ -284,9 +281,10 @@ def change_schedule(request, id=None):
 
     if request.GET.get('squad_id') and request.GET.get('cell_id') and request.GET.get('old_cell'):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
-        if request.GET.get('cell_id') != 'trash':
-            cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
-            if request.GET.get('old_cell') == 'none':
+        squad_students = squad.students.all()
+        cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
+        if request.GET.get('old_cell') == 'none':
+            if len(Lecture.objects.filter(subject=subject,squad=squad,cell=cell)) == 0:
                 lecture = Lecture.objects.create(
                     subject=subject,
                     squad=squad,
@@ -295,22 +293,16 @@ def change_schedule(request, id=None):
                     office=subject.office,
                     category=subject.category,
                     age=subject.age)
-                squad_students = squad.students.all()
                 lecture.people.add(*squad_students)
                 subject_teacher = subject.teacher.all()
                 lecture.people.add(*subject_teacher)
-            else:
-                old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
-                lecture = Lecture.objects.get(subject=subject,squad=squad,cell=old_cell)
-                if len(Lecture.objects.filter(subject=subject,squad=squad,cell=cell)) == 0:
-                    lecture.cell = cell
-                    lecture.save()
-                else:
-                    lecture.delete()
         else:
-            if request.GET.get('old_cell') != 'none':
-                old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
-                lecture = Lecture.objects.get(subject=subject,squad=squad,cell=old_cell)
+            old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
+            lecture = Lecture.objects.get(subject=subject,squad=squad,cell=old_cell)
+            if len(Lecture.objects.filter(subject=subject,squad=squad,cell=cell)) == 0:
+                lecture.cell = cell
+                lecture.save()
+            else:
                 lecture.delete()
         subject.save()
 
@@ -327,7 +319,7 @@ def calc_subject_lessons(subject):
         start = 7
     if start > finish or finish == 0:
         finish += 7 
-    for squad in subject.squads.all():
+    for squad in subject.squads.prefetch_related('squad_lectures'):
         if not squad.id in subject.squad_ids:
             subject.squad_ids.append(squad.id)
             subject.start_dates.append(timezone.now().date())
@@ -358,8 +350,10 @@ def calc_subject_lessons(subject):
     subject.number_of_lectures = res
     subject.save()
     students = subject.students.all()
-    subject.category.choosed_by.add(*students)
-    subject.age.choosed_by.add(*students)
+    if subject.category:
+        subject.category.choosed_by.add(*students)
+    if subject.age:
+        subject.age.choosed_by.add(*students)
 
     if len(subject.materials.all()) < subject.number_of_lectures:
         for i in range(len(subject.materials.all())+1, res+1):
@@ -435,13 +429,45 @@ def change_category(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
     if request.GET.get('object_id'):
-        subject = Subject.objects.get(id = id)
-        category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+        subject = Subject.objects.select_related('category').get(id = id)
+        students = subject.students.all()
         if int(request.GET.get('object_id')) == -1:
             subject.category = None
         else:
+            category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+            subject.category.students.remove(*students)
             subject.category = category
+            category.students.add(*students)
         subject.save()
+    data = {
+    }
+    return JsonResponse(data)
+        
+def change_age(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('object_id'):
+        subject = Subject.objects.select_related('age').get(id = id)
+        students = subject.students.all()
+        if int(request.GET.get('object_id')) == -1:
+            subject.age = None
+        else:
+            age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
+            subject.age.students.remove(*students)
+            subject.age = age
+            age.students.add(*students)
+        subject.save()
+    data = {
+    }
+    return JsonResponse(data)
+        
+def delete_lesson(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('lecture_id'):
+        subject = Subject.objects.get(id = id)
+        lecture = subject.subject_lectures.get(id=int(request.GET.get('lecture_id')))
+        lecture.delete()
     data = {
     }
     return JsonResponse(data)

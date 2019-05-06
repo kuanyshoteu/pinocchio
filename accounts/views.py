@@ -29,8 +29,7 @@ from subjects.models import *
 from django.contrib.auth.forms import PasswordChangeForm
 from schools.models import School
 from constants import *
-from subjects.templatetags.ttags import get_date, create_atts, create_atts_student
-from .templatetags.ttttags import check_date
+from subjects.templatetags.ttags import get_date, check_date, create_atts, create_atts_student
 
 def account_view(request, user = None):
     profile = get_profile(request)
@@ -168,6 +167,7 @@ def squad_attendance(request):
     return JsonResponse(data)
 
 def more_attendance(request):
+    print(request.GET.get('subject_id'), request.GET.get('squad_id'), request.GET.get('direction'), request.GET.get('sm_id'))
     if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))

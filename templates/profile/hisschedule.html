@@ -53,7 +53,6 @@
                         <div class="ui segment in_schedule" squad_id='{{ lecture.squad.id }}' id="s{{ lecture.squad.id }}c{{ cell.id }}" old_cell="{{ cell.id }}" {% if page == 'subject_update' %} draggable="true" {% endif %} ondragstart="drag(event)" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:
                             {%if lecture.subject.color_back == ''%}#313a57{%else%}{{ lecture.subject.color_back }}{%endif%};">
                             {{ lecture.subject.title }}
-                            {% if cell|cell_profile_lectures:hisprofile|length == 1 %}
                             <br>
                             <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.subject.cabinet }}</span>
                             <br>
@@ -64,7 +63,6 @@
                                 {{ lecture.subject.teacher.all.0.first_name }}
                                 {% endif %}
                             </span>
-                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>

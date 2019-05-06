@@ -1,7 +1,21 @@
 .crmbox{
   min-height: 60%;
 }
-
+.full-h{
+  min-height: 100% !important;
+}
+.delete_card{
+  position: absolute;right: 0;margin: -10px 4px;color: red;font-size: 13px;
+}
+.delete_card:hover{
+  color: red;
+}
+.delete_subject_lesson{
+  position: absolute;right: 0;margin: -3px 4px;color: red;font-size: 13px;
+}
+.delete_subject_lesson:hover{
+  color: red;
+}
 a{
   cursor: pointer;
   color: #285473;
@@ -172,7 +186,7 @@ a{
 }
 .grey_divider{
   margin: 0 !important;
-  padding: 2px;background-color:#4A4A4A
+  padding: 2px;background-color:#4A4A4A;
 }
 .crm_divider{
   padding: 0.5px;background-color:#99ccff
@@ -404,6 +418,14 @@ a{
   padding: 1px !important; 
   margin: 3px 0 !important;
   background-color: #313a57;
+  width: 100%;
+  cursor: pointer;
+}
+.in_subject_schedule{
+  color: #fff; 
+  padding: 1px !important; 
+  margin: 3px 0 !important;
+  background-color: #313a57 !important;
   width: 100%;
   cursor: pointer;
 }

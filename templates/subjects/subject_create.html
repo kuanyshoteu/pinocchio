@@ -15,7 +15,7 @@
 		padding-bottom: 0 !important;
 	}
 </style>
-<div id="profile">
+<div id="profile" style="padding-bottom: 200px;">
 	{% if instance %}
 	<a id="go-back-btn"  href='{{ instance.get_absolute_url }}'>
         <i class="arrow left icon"></i>Назад
@@ -41,6 +41,11 @@
 			        					{{ form|crispy }}
 			        					Категория предмета
 		                                <select class="change_subject_category" id="change_subject_category" url="{{ instance.change_category }}" option="subject"> 
+		                                	{% if instance.age == None %}
+		                                		<option value="-1">Другое</option>
+                                            {% elif instance.age %}
+                                                <option value="{{ instance.age.id }}">{{ instance.age.title }}</option>
+                                            {% endif %}
 		                                    {% if instance.category %}
 		                                        <option value="{{ instance.category.id }}">{{ instance.category.title }}</option>
 		                                    {% endif %}
@@ -49,8 +54,26 @@
 		                                        <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
 		                                        {% endif %}
 		                                    {% endfor %}
+                                            {% if instance.age != None %}
 		                                    <option value="-1">Другое</option>
+		                                    {% endif %}
 		                                </select>
+			        					Возраст
+		                                <select class="change_subject_age" id="change_subject_age" url="{{ instance.change_age }}" option="subject">
+		                                	{% if instance.age == None %}
+		                                		<option value="-1">Другое</option>
+                                            {% elif instance.age %}
+                                                <option value="{{ instance.age.id }}">{{ instance.age.title }}</option>
+                                            {% endif %}
+                                            {% for subject_age in subject_ages %}
+                                                {% if subject_age != instance.age %}
+                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if instance.age != None %}
+                                            <option value="-1">Другое</option>
+                                            {% endif %}
+                                        </select>
 			        				</div>
 			        			</div>
 							</div>
@@ -126,7 +149,7 @@
 								</div>
 			    			</div>
 						</div>
-						<div class="twelve wide column">
+						<div class="twelve wide column" style="padding-bottom: 0">
 			    			{% include 'subjects/subject_calendar.html' %}
 						</div>
 						{% endif %}	

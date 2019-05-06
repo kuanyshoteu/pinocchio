@@ -1,25 +1,24 @@
 $(document).ready(function () {
-    $('.save_salary').click(function(e) {
-        url = $('.salary_url').attr('url')
-        id = $(this).attr('id')
-        salary = $('#salary' + id).val();
-        this_ = $(this)
+    $('.delete_card').click(function(e) {
+        id = $(this).attr('id');
+        $('.delete_card_data').attr('id', id);
+        $('#delete_card_modal').modal('show');
+    })
+    $('.yes_delete_card').click(function(e) {
+        url = $('.delete_card_data').attr('url')
+        id = $('.delete_card_data').attr('id')
         $.ajax({
             url: url,
             data: {
                 'id':id,
-                'salary':salary,
             },
             dataType: 'json',
             success: function (data) {
-                this_.removeClass('blue');
-                this_.addClass('green')
-                $('#input'+id).hide();
-                $('#salary_show'+id).show();
-                $('#salary_show_value'+id).text(salary);
+                $('#delete_card_modal').modal('hide');
+                $('#card' + id).hide('fast');
             }
         })        
-    });    
+    });
     $('.save_job_salary').click(function(e) {
         url = $('.save_job_salary_url').attr('url')
         id = $(this).attr('id')
@@ -67,6 +66,9 @@ $(document).ready(function () {
             }
         })        
     });
+    $('.open_card_form').click(function(e) {
+        $('#card_form'+$(this).attr('id')).modal('show')
+    })
     $('.add_card').click(function(e) {
         var id = $(this).attr("id")
         var name = $('.new_card_name' + id).val()
@@ -84,7 +86,11 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                $('.column' + id).load(document.URL +  ' .column' + id);
+                card_id = data.card_id;
+                                
+                var element = $('<div id="card'+data.card_id+'" style="margin-bottom: 10px;" ondragstart="save_card_id('+data.card_id+')" draggable="true"> <div class="ui segment full-w" style="cursor: pointer;padding: 3px 7px;"> <div style="float: right;font-size: 11px;color: #b3b300"> '+data.card_date+' <br> </div> <i class="icon user"></i> <a class="open_card_form" id="'+card_id+'" onclick="" style="font-weight: 600">'+data.card_name+'</a> <div style="color: darkgrey;font-size: 12px;"> <i class="icon phone"></i> '+data.card_phone+' <br> <i class="icon envelope"></i> '+data.card_mail+' </div> </div> </div>');
+                element.appendTo('.crmbox' + id)
+                $('#new_card_form'+id).modal('hide')
             }
         })        
     });
@@ -106,6 +112,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 $('#card' + id).load(document.URL +  ' #card' + id);
+                $('#card_form'+id).modal('hide')
             }
         })        
     });
@@ -138,6 +145,21 @@ $(document).ready(function () {
         });
     }) 
     $('.change_subject_category').on('change', function(e) {
+        id = $(this).attr('id')
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value;
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        });
+    }) 
+    $('.change_subject_age').on('change', function(e) {
         id = $(this).attr('id')
         this_ = document.getElementById(id);
         object_id = this_.options[this_.selectedIndex].value;
@@ -1032,6 +1054,21 @@ $(document).ready(function () {
             });
         }
     });
+    $(document).on("click", '.delete_subject_lesson', function () {
+        console.log('bb')
+        url = $('.delete_lesson_data').attr('url')
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'lecture_id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#subject_lesson' + id).hide('fast');
+            }
+        })        
+    });    
     $(document).on("click", '.change_task_text', function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")

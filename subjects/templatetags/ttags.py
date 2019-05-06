@@ -32,13 +32,35 @@ def cell_squad_lectures(cell, squad):
 
 @register.filter
 def cell_profile_lectures(cell, profile):
-    return profile.hislectures.filter(cell = cell)
+    return profile.hislectures.filter(cell = cell).select_related('squad').select_related('subject')
 
 @register.filter
 def rating_filter(profile):
+    school = profile.schools.first()
     squad = profile.rating_squad_choice.first()
+    crm_subject_students = None
+    crm_age_students = None
+    if profile.crm_subject:
+        crm_subject_students = profile.crm_subject.students.all()
+    if profile.crm_age:
+        crm_age_students = profile.crm_age.students.all()
     if squad != None:
-        return squad.students.prefetch_related('crm_subject', 'crm_subject__students')
+        students_query = squad.students.all()
+    else:
+        students_query = school.people.filter(is_student=True)
+    res = []
+    for student in students_query:
+        need = True
+        if crm_subject_students != None:
+            if not student in crm_subject_students:
+                need = False
+        if crm_age_students != None:
+            if not student in crm_age_students:
+                need = False
+        if need:
+            res.append(student)
+
+    return res
 
 @register.filter
 def cell_school_lectures(cell, profile):
@@ -174,6 +196,16 @@ def get_material(subject, profile):
     return '_'
 
 @register.filter
+def check_date(material, squad):
+    date = get_date(material, squad)
+    if date > timezone.now().date():
+        return 'future'
+    elif date + timedelta(17) >= timezone.now().date():
+        return 'now'
+    else:
+        return 'past'
+
+@register.filter
 def get_current_attendance(subject, squad):
     if not subject or not squad:
         return '_'
@@ -199,14 +231,18 @@ def get_current_attendance(subject, squad):
         res = []
         i = 0
         counter = 0
+        subject_materials = subject.materials.prefetch_related('sm_atts')
+        len_squad_students = len(squad.students.all())
         while material_number - i > 0:
             if counter == 4:
                 break
-            sm = subject.materials.filter(number = material_number - i)
+            sm = subject_materials.filter(number = material_number - i)
             if len(sm) > 0:
-                if len(sm[0].sm_atts.filter(squad = squad)) < len(squad.students.all()):
-                    create_atts(squad, sm[0], subject)
-                res = [sm[0].sm_atts.filter(squad = squad)] + res
+                sm = sm[0]
+                if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
+                    create_atts(squad, sm, subject)
+                attendances = sm.sm_atts.filter(squad = squad)
+                res = [[attendances, get_date(attendances[0].subject_materials, squad), check_date(attendances[0].subject_materials, squad)]] + res
                 counter += 1
             i += 1
         if counter < 4:

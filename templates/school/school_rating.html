@@ -9,8 +9,8 @@
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="eight wide column">
-                <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
+            <div class="nine wide column">
+                <div class="ui segment" style="margin-bottom: 0;">
                     <div class="ui grid">
                         <div class="one wide column">
                             <i class="icon trophy" style="font-size: 17px;"></i>
@@ -46,7 +46,7 @@
                     </table>
                 </div>
             </div>
-            <div class="three wide column" style="padding:14px 0">
+            <div class="three wide column" style="padding-left: 0;">
                 <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
                     <form class="ui form">  
                         <div style="padding-bottom: 15px;">
@@ -88,7 +88,7 @@
                                     {% if profile.rating_squad_choice.first %}
                                         <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
                                     {% endif %}
-                                    <option value="-1">Все возрасты</option>
+                                    <option value="-1">Все классы</option>
                                     {% for squad in squads %}
                                         {% if squad != profile.rating_squad_choice.first %}
                                         <option value="{{ squad.id }}">{{ squad.title }}</option>

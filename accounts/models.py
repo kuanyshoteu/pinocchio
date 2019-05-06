@@ -194,3 +194,5 @@ class CRMCard(models.Model):
     comments = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
     saved = models.BooleanField(default=False)
+    class Meta:
+        ordering = ['saved', 'timestamp']

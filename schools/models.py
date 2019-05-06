@@ -81,6 +81,8 @@ class School(models.Model):
         return reverse("schools:salary_url")
     def save_job_salary(self):
         return reverse("schools:save_job_salary")
+    def delete_card_url(self):
+        return reverse("schools:delete_card_url")
     # School objects
     def get_school_documents(self):
         return reverse("documents:get_school_documents", kwargs={"school_id": self.id})

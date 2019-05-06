@@ -12,65 +12,76 @@
 </div>
 <div id="app">
     <div class="options">
-        <div class="form">
+        <div class="form"  style="margin-top: 0">
             <form @submit.prevent="addSquad">
                 <select v-model="squad">
                     <option value="Выберите Класс" selected>Выберите Класс</option>
                     <option :value="item" v-for="item in outSubjectSquads">[[ item[1][0] ]]</option>
                 </select>
-                <button @click="addSquad">Добавить<br> класс</button>
+                <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить класс</a>
             </form>
         </div>
 
         <div class="selected-squad-list">
             <draggable 
+                    class="daysmall"
                     v-model="inSubjectSquads[1]" 
                     :options="{group:{ name:'people',  pull:'clone', put:false}}">
-                <button v-for="(element, index) in inSubjectSquads[1]" class="item main">
-                    <p class="dragg">[[ element ]]</p> <br>
+                <div v-for="(element, index) in inSubjectSquads[1]"
+                    :ondragstart="'save_card_id('+inSubjectSquads[0][index]+')'"
+                    class="item ui segment in_subject_schedule" style="cursor: grab;" >
+                    <p class="dragg">[[ element ]]</p>
                     <p class="user">[[ trener ]]</p>
                     <span @click="deleteSquad(index,element)">✖</span>
-                </button>
+                </div>
             </draggable>
         </div>
     </div>
     <div class="table">
         <div class="day-list">
-            <div class="day empty">AA</div>
-            <div class="day">ПН</div>
-            <div class="day">ВТ</div>
-            <div class="day">СР</div>
-            <div class="day">ЧТ</div>
-            <div class="day">ПТ</div>
-            <div class="day">Сб</div>
+            <div class="daysmall"></div>
+            <div class="daysmall day-name">ПН</div>
+            <div class="daysmall day-name">ВТ</div>
+            <div class="daysmall day-name">СР</div>
+            <div class="daysmall day-name">ЧТ</div>
+            <div class="daysmall day-name">ПТ</div>
+            <div class="daysmall day-name">Сб</div>
         </div>
 
         <div class="week-list">
             <div class="week" v-for="(item,i) in schedule">
-                <div class="time">[[ item[0] ]]</div>
-                <div class="boxes">
-                    <draggable 
-                            v-for="(box, i) in item[1]" 
-                            class="box" 
-                            :data-cellid="box[0]"
-                            :list="box[1]"
-                            :options="{group:{ name:'people', put: box[2] }}"
-                            @change="updateSchedule($event, box)"
-                            @add="added($event, box[1])">
-                        <div class="inner"
-                                v-for="(element, index) in box[1]" 
-                                :key="index">
-                            <p>[[ box[1][0] ]]</p>
-                            <p class="user">[[ trener ]]</p>
-                        </div>
-                    </draggable>
-                </div>
+                <div class="daysmall daysmall_time">[[ item[0] ]]</div>
+                <draggable 
+                        v-for="(box, i) in item[1]" 
+                        class="box daysmall" 
+                        :data-cellid="box[0]"
+                        :list="box[1]"
+                        :options="{group:{ name:'people'}}"
+                        @change="updateSchedule($event, box)"
+                        @add="added($event, box[1])">
+                    <div class="ui segment in_subject_schedule"
+                            :ondragstart="'save_card_id('+box[1][index][2]+')'"
+                            style="cursor: grab;" 
+                            v-for="(element, index) in box[1]" 
+                            :key="index"
+                            :id="'subject_lesson' + box[1][index][0]">
+                        <a class="delete_subject_lesson" :id="box[1][index][0]"><b>×</b></a>
+                        <p>[[ box[1][index][1] ]]</p>
+                        <p class="user">[[ box[1][index][3] ]]</p>
+                    </div>
+                </draggable>
+                <div class="ui divider grey_divider"></div>
             </div>
         </div>
     </div>
 </div>
-
+<span style="display: none;" id="-1" class="delete_lesson_data" url="{{ instance.delete_lesson_url }}"></span>
 <script>
+    function save_card_id(id){
+        console.log('rrr',id)
+        $('.delete_lesson_data').attr('id', id)
+    }
+
     new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],
@@ -86,8 +97,10 @@
         methods: {
             addSquad() {
                 console.log('f00')
-                if (this.squad == 'Выберите Класс') return; 
-                console.log('f')
+                if (this.squad == 'Выберите Класс') {
+                    console.log('f')
+                    return
+                }; 
                 if (!this.inSubjectSquads[1].includes(this.squad[1][0])) {
                     console.log('ff')
                     id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
@@ -131,15 +144,17 @@
                 // let squad_id = this.inSubjectSquads[0][this.inSubjectSquads[1].indexOf(box[1][0])]
             },
             added(e, s) {
+                console.log('ddd')
                 if (s.length > 1) {
                     // console.log(e.to.dataset.cellid)
                 }
                 let cell_id = e.to.dataset.cellid
                 let old_cell = "none";
-                let squad_id = this.inSubjectSquads[0][this.inSubjectSquads[1].indexOf(s[0])]
+                let squad_id = $('.delete_lesson_data').attr('id')
                 if (e.from.dataset.cellid) {
                     old_cell = e.from.dataset.cellid
                 }
+                console.log('squad_id',s[0],'xx', this.inSubjectSquads[1].indexOf(s[0][1]), squad_id)
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
                 axios.get('/subjects/api/change_schedule_url/' + id, { 
                     params: {
@@ -213,14 +228,10 @@
 </script>
 
 <style>
-#app {
-    /*margin: 20px;*/
-    border-radius: 4px;
-    border: 1px solid rgba(34, 36, 38, 0.15);
-}
-#app * {
-    box-sizing: border-box;
-    font-family: 'helvetica neue', sans-serif;
+.box{
+    height: 70px;
+    width: 13%;
+    margin: 0 2px;
 }
 #app .form {
     display: -webkit-flex;
@@ -235,17 +246,13 @@
     background-color: #fff;
     font-size: 13px;
     padding: 10px;
-    font-family: Helvetica, sans-serif;
 }
 #app .options p {
     margin: 0;
 }
 #app .options select {
     width: 40%;
-    border: 1px solid rgba(34, 36, 38, 0.15);
     border-radius: 4px;
-    padding: 7px 10px;
-    margin: 5px 0;
     color: #000;
     background-color: #fff;
 }
@@ -253,15 +260,6 @@
     display: flex;
     -ms-align-items: center;
     align-items: center;
-}
-#app .options button {
-    border: none;
-    border-radius: 4px;
-    background-color: #5181b8;
-  color: #FFFFFF;
-  padding: 5px 10px;
-  margin: 0 10px;
-  cursor: pointer;
 }
 
 #app .options .selected-squad-list {
@@ -285,7 +283,7 @@
     top: 0;
     background-color: transparent;
     color: red;
-    font-size: 16px;
+    font-size: 13px;
     cursor: pointer;
 }
 
@@ -301,67 +299,36 @@
 }
 
 #app .table .day {
-    font-size: 9px;
+  font-size: 9px;
   text-transform: uppercase;
-  padding: 15px 10px;
-  padding-bottom: 20px;
-  color: rgba(255, 255, 255, .5);
+  color: #fff;
   letter-spacing: .7px;
   flex-grow: 1;
   text-align: center;
-  font-family: 'helvetica neue', sans-serif;
-  /*border-right: 1px solid #fff;*/
 }
 
-#app .table .week-list {
-    display: flex;
-    flex-direction: column;
-    min-height: 310px;
-}
 #app .table .week {
-    display: flex;
 }
 
 #app .table .week > div {
     text-align: center;
-    flex: 1 1 ;
     color: #fff;
 }
 #app .table .week .time {
-    padding: 17px 3px;
+    padding: 30px 5px;
+    font-size: 11px;
 }
 
 #app .table .week .boxes {
-    width: 100%;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flex;
-    display: -o-flex;
-    display: flex;
+    width: 100%; 
 }
 #app .table .week .boxes .box {
-    flex: 1 1;
     border: 1px solid #887979;
     margin: 3px;
     border-radius: 3px;
 }
-#app .table .week .box .inner {
-    color: #fff;
-    padding: 10px 5px ;
-    margin-top: 3px;
-    background-color: #5181b8;
-}
 #app .table .week .box p {
     padding: 0;
     margin: 0;
-}
-#app .table .week .boxes .box button {
-    border: none;
-    background-color: transparent;
-}
-#app .table .week .time, 
-#app .table .day-list .empty {
-    max-width: 95px;
-    min-width: 95px;
 }
 </style>

@@ -31,11 +31,11 @@ from constants import *
 def school_rating(request):
     profile = get_profile(request)
     school = profile.schools.first()
-    for subject in Subject.objects.all():
-        students = subject.students.all()
-        if subject.category:
-            subject.category.students.add(*students)
-            subject.age.students.add(*students)
+    # for subject in Subject.objects.all():
+    #     students = subject.students.all()
+    #     if subject.category:
+    #         subject.category.students.add(*students)
+    #         subject.age.students.add(*students)
 
     context = {
         "profile":profile,
@@ -360,6 +360,11 @@ def add_card(request):
         )
         card.save()
     data = {
+        "card_id":card.id,
+        "card_name":card.name,
+        "card_date":card.timestamp.date().strftime('%d.%m.%Y'),
+        "card_phone":card.phone,
+        "card_mail":card.mail,
     }
     return JsonResponse(data)
 
@@ -385,6 +390,18 @@ def save_job_salary(request):
         for worker in job.job_workers.all():
             worker.salary = job.salary
             worker.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def delete_card(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = profile.schools.first()
+    if request.GET.get('id'):
+        card = school.crm_cards.get(id=int(request.GET.get('id')))
+        if not card.saved:
+            card.delete()
     data = {
     }
     return JsonResponse(data)
