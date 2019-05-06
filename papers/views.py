@@ -64,7 +64,9 @@ def paper_details(request, paper_id = None):
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
-        return redirect(lesson.get_absolute_url())
+        for paper in lesson.papers.all():
+            if not profile in paper.done_by.all():
+                return redirect(paper.get_absolute_url())
 
     subtheme_file_form = SubthemeFileForm(request.POST or None, request.FILES or None)
     if subtheme_file_form.is_valid():
@@ -73,7 +75,9 @@ def paper_details(request, paper_id = None):
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
-        return redirect(lesson.get_absolute_url())
+        for paper in lesson.papers.all():
+            if not profile in paper.done_by.all():
+                return redirect(paper.get_absolute_url())
 
     subtheme_video_form = SubthemeVideoForm(request.POST or None, request.FILES or None)
     if subtheme_video_form.is_valid():
@@ -83,7 +87,9 @@ def paper_details(request, paper_id = None):
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
-        return redirect(lesson.get_absolute_url())
+        for paper in lesson.papers.all():
+            if not profile in paper.done_by.all():
+                return redirect(paper.get_absolute_url())
 
     context = {
         "profile": profile,

@@ -437,6 +437,8 @@ def change_category(request, id=None):
             subject.category = None
         else:
             category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+            if subject.category:
+                subject.category.students.remove(*students)
             subject.category.students.remove(*students)
             subject.category = category
             category.students.add(*students)
@@ -455,7 +457,8 @@ def change_age(request, id=None):
             subject.age = None
         else:
             age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
-            subject.age.students.remove(*students)
+            if subject.age:
+                subject.age.students.remove(*students)
             subject.age = age
             age.students.add(*students)
         subject.save()
