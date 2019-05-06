@@ -55,6 +55,8 @@ def new_card(request):
 def view_card(request, card_id, card_slug):
     profile = get_profile(request)
     only_staff(profile)
+    school = profile.schools.first()
+
     card = Card.objects.get(id=int(card_id))
     file_form = FileForm(request.POST or None, request.FILES or None)
     if file_form.is_valid():
@@ -81,13 +83,13 @@ def view_card(request, card_id, card_slug):
         return redirect(card.get_absolute_url())
 
     return render(request, template_name='kanban/card_detail.html', context={
-        'boards': Board.objects.all(),
+        'boards': school.school_boards.all(),
         'file_form':file_form,
         'comment_form':comment_form,
         "profile":profile,
         'card':card,
         'metkas': Metka.objects.all(),
-        'all_profiles':Profile.objects.all(),
+        'all_profiles':school.people.filter(is_student=False),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),    
