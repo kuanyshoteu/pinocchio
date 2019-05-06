@@ -128,6 +128,7 @@ def subject_create(request):
     school = profile.schools.first()    
     if form.is_valid():
         instance = form.save(commit=False)
+        instance.school = school
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
 
