@@ -32,7 +32,8 @@ from constants import *
 def squad_detail(request, slug=None):
     instance = get_object_or_404(Squad, slug=slug)
     profile = get_profile(request)
-    time_periods = profile.histime_periods.all()
+    school = instance.school
+    time_periods = school.time_periods.all()
     days = Day.objects.all()
     context = {
         "instance": instance,
