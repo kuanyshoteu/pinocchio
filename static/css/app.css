@@ -40363,3 +40363,46 @@ a:hover {
 #main-info {
   min-height: 260px;
 }
+#search-input {
+  position: relative;
+  height: 25px;
+  padding: 0 0 0 25px;
+  background: url(../images/search.png) no-repeat 1px;
+  background-size: 20px;
+  background-color: #2D437C;
+  outline: none;
+  transition: background-color .2s;
+  transition: color .2s;
+  color: #fff;
+}
+#search-input:focus {
+  background-color: #fff;
+  color: #000;
+}
+.search-bar {
+  display: none;
+  position: absolute;
+  margin-top: 5px;
+  border-radius: 5px;
+  width: 100%;
+  overflow: hidden;
+  background: #fff;
+}
+.search-list {
+  list-style-type: none;
+  padding: 0px 0px 0px 15px;
+}
+.search-item {
+  vertical-align: middle;
+  margin-bottom: 1rem;
+}
+.search-item-link {
+  color: inherit;
+}
+.search-item-img {
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.search-item-name {
+  vertical-align: middle;
+}

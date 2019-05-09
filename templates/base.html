@@ -41,6 +41,69 @@
         <div class="full-w left-main-menu">
             {% if request.user.is_authenticated %}
             <div class="item float_right" style="margin-right: 10%;">
+                <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
+                    <input id="search-input" type="text" style="margin-bottom: 0;" placeholder="Поисковой запрос">
+                    <div class="search-bar">
+                        <ul class="search-list">
+                            <p class="search-list-title">Люди</p>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="search-list">
+                            <p class="search-list-title">Предметы</p>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="search-list">
+                            <p class="search-list-title">Классы</p>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="search-list">
+                            <p class="search-list-title">Курсы</p>
+                            <li class="search-item">
+                                <a class="search-item-link"><img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                <span class="search-item-name">Даулет Семенов</span></a>
+                            </li>
+                            <li class="search-item">
+                                <a class="search-item-link">
+                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
+                                    <span class="search-item-name">Даулет Семенов</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
                 <a class="profile_name">
                     {{ profile.first_name }}
                     {% if profile.image %}
@@ -124,6 +187,7 @@
 <!-- <script src='{% static "js/Slide.class.js" %}'></script> -->
 <!-- <script src='{% static "js/SlideIntro.class.js" %}'></script>  -->
 <script src='{% static "js/script.js" %}'></script>
+<script src='{% static "js/search.js" %}'></script>
 
 </body>
 </html>
