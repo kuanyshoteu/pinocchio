@@ -40366,6 +40366,9 @@ a:hover {
 #main-info {
   min-height: 260px;
 }
+
+/* SEARCH BAR */
+
 #search-input {
   position: relative;
   height: 25px;
@@ -40382,7 +40385,7 @@ a:hover {
   background-color: #fff;
   color: #000;
 }
-.search-bar {
+.search-bar, .notice-bar {
   display: none;
   position: absolute;
   margin-top: 5px;
@@ -40391,21 +40394,40 @@ a:hover {
   overflow: hidden;
   background: #fff;
 }
-.search-list {
+.search-list, .notice-list {
   list-style-type: none;
   padding: 0px 0px 0px 15px;
+  color: #2D437C;
 }
-.search-item {
+.search-item, .notice-item {
   vertical-align: middle;
   margin-bottom: 1rem;
 }
-.search-item-link {
-  color: inherit;
-}
-.search-item-img {
+.search-item-img, .notice-item-img {
   border-radius: 50%;
   vertical-align: middle;
 }
-.search-item-name {
+.search-item-name, .notice-item-name {
   vertical-align: middle;
+}
+
+/* SEARCH BAR FINISH */
+/* NOTICE */
+
+.notice {
+  position: relative;
+  margin-right: 1rem;
+  font-size: 20px;
+  color: #2D437C;
+  transition: .2s;
+}
+.notice:hover {
+  color: #fff;
+  cursor: pointer;
+}
+.notice-bar {
+  font-size: 14px;
+  margin-top: 15px;
+  right: 0px;
+  width: 250px;
 }
