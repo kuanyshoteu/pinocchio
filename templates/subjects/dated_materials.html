@@ -1,32 +1,24 @@
 {% load ttags %}
-<div class="ui grid" style="margin-top: 0">
-    {% for material in instance.materials.all %}
-    <div class="four wide column" style="padding-bottom: 0;">
-        <div class="ui segment">
-            <a class="ui button full-w open_time_lessons green" status="closed" id="{{ material.id }}">
-                <span class="is_homework">{{ material|get_my_date:profile }}</span>
-                <br>
-                <span class="is_homework">{{ material|get_time:profile }}</span>
-                {% if not teacher %}
-                <br>
-                {% for lesson in material.lessons.all %}
-                    {% if profile in lesson.done_by.all %}
-                        <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: yellow !important;"></i>
-                    {% else %}
-                        <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;color: white"></i>
-                    {% endif%}
-                {% endfor %}
-                {% endif%}
+<div class="ui segment" style="margin-bottom: 0">
+    <i class="icon book"></i> Уроки
+</div>
+
+<div class="ui segment" style="background: #4A4A4A;margin: 0">
+    <div class="ui grid" style="margin: 0">
+        {% for material in materials %}
+        <div class="four wide column" style="padding-bottom: 0;">
+            <a class="ui button green full-w open_time_lessons" status="closed" id="{{ material.id }}">
+                <span class="is_homework">{{ forloop.counter }} урок</span>
             </a>
-            <div style="display: none;margin-top: 15px;" id="time_lessons{{ material.id }}"> 
+            <div style="display: none;padding: 15px 5px;background-color: #333333;" id="time_lessons{{ material.id }}"> 
                 {% if material.lessons.all|length == 0 %}
                     <span id="pusto{{ material.id }}" style="color: grey; font-size: 12px;">Пока нет материалов</span>
                 {% endif %}
                 <div id="lesson_list{{ material.id }}">
                     {% for lesson in material.lessons.all %}
                     <div id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
-                        <a href="{{ lesson.get_absolute_url }}">
-                            <span>{{ lesson.title }}</span>
+                        <a href="{{ lesson.get_absolute_url }}" style="color: #fff;">
+                            {{ lesson.title }}
                         </a>
                         {% if lesson.is_homework %}
                             <span style="color: #21BA45; font-size: 10px;">Домашка</span>
@@ -43,7 +35,18 @@
                 <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
                 {% endif %}
             </div>
+            {% if profile.is_student %}
+            <div style="background-color: #333333;height: 20px;border-radius: 0 0 7px 7px;padding: 0 5px 5px;">
+                {% for lesson in material.lessons.all %}
+                    {% if profile in lesson.done_by.all %}
+                        <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: yellow !important;"></i>
+                    {% else %}
+                        <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;color: white"></i>
+                    {% endif%}
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>

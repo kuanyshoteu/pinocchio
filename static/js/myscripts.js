@@ -19,6 +19,25 @@ $(document).ready(function () {
             }
         })        
     });
+    $('.save_salary').click(function(e) {
+        url = $('.salary_url').attr('url')
+        id = $(this).attr('id')
+        this_ = $(this)
+        salary = $('#salary' + id).val();
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'salary':salary,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#input' + id).hide();
+                $('#salary_show' + id).show();
+                $('#salary_show_value'+id).text(salary)
+            }
+        })        
+    });    
     $('.save_job_salary').click(function(e) {
         url = $('.save_job_salary_url').attr('url')
         id = $(this).attr('id')
@@ -754,7 +773,8 @@ $(document).ready(function () {
                     'grade':grade,                        
                 },
                 success: function (data) {
-                    this_.attr('class','ui button mini green save_grade')
+                    $('.grade'+id).removeClass('green')
+                    this_.addClass('green')
                 }, error: function (error) {
                     console.log('error')
                 }

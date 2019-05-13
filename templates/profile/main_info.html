@@ -19,11 +19,11 @@
         <div class="meta">
             <a class="open_form_status" style="color: #828282;">
                 <span class="hisstatus">
-                    {% if is_director %}
+                    {% if is_this_director %}
                         Директор
-                    {% elif is_manager %}
+                    {% elif is_this_manager %}
                         Менеджер
-                    {% elif is_trener %}
+                    {% elif is_this_trener %}
                         Учитель
                     {% else %}
                         Студент

@@ -21,110 +21,76 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 <div class="ui grid">
-                    <div class="{% if instance.image_banner %}sixteen{%else%}twelve{%endif%} wide column" style="padding-bottom: 0;padding-right: 0;">
-                        <div class="ui segment" {% if not instance.image_banner %} style="margin-bottom: 0"{% endif %}>
-                            <div class="ui grid">
+                    <div class="sixteen wide column">
+                        <div class="ui segment" style="margin-bottom: 0;padding: 0;padding-bottom: 15px;">
+                            <div class="ui grid" style="margin: 0">
                                 {% if instance.image_banner %}
-                                <div class="sixteen wide column">
+                                <div class="sixteen wide column" style="padding: 0">
                                     <img src="{{ instance.image_banner.url }}" style="height: 200px; width: 100%;">
                                 </div>
                                 {% endif %}
-                                <div class="twelve wide column">
-                                    <div class="group-name">
-                                        {% if instance.image_banner %}
-                                            {% if instance.image_icon %}
-                                            <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-                                            {% else %}
-                                            <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
-                                            {% endif %}
-                                        {% endif %}
-                                        <span class="ui header ava-title">{{ instance.title }}</span>
-                                    </div>
+                                <div class="group-name" style="padding-top: 15px;">
+                                    {% if instance.image_icon %}
+                                    <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
+                                    {% else %}
+                                    <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
+                                    {% endif %}
+                                    <span class="ui header ava-title">{{ instance.title }}</span>
                                 </div>
-                                <div class="four wide column" >
+                                {% if is_trener or is_manager %}
+                                <div style="padding-top: 23px;">
+                                    <a href="{{ instance.get_update_url }}" style="font-size: 17px;">
+                                        <i class="icon cog blue" ></i>
+                                    </a>
                                 </div>  
+                                {% endif %}                                
                             </div>
                         </div>
                     {% if instance.image_banner %}    
                     </div>
-                    <div class="twelve wide column" style="padding-right: 0">
+                    <div class="sixteen wide column" style="padding-right: 0">
                     {% endif %}
                         <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;{% if not instance.image %}margin-top: 0{% endif %}">
                             Информация
                         </div>
                         <div class="ui segment" style="{% if not instance.image %}margin-top: 0{% endif %}">
                             <div class="ui grid">
+                                {% if instance.get_markdown != '' %}
                                 <div class="one wide column">
                                     <i class="icon list" style="font-size: 17px;"></i>
                                 </div>
                                 <div class="fifteen wide column" style="padding-right: 25px;">
                                     {{ instance.get_markdown }}
                                 </div>
+                                {% endif %}
                                 <div class="one wide column">
                                     <i class="icon id badge" style="font-size: 22px;padding: 0;margin-left: -5px;"></i>
                                 </div>
                                 <div class="fifteen wide column" style="padding-right: 25px;">
-                                    Классный руководитель: 
-                                        <a href='{{ instance.curator.get_absolute_url }}'>{{ instance.curator.all.0.first_name }} {{ instance.curator.all.0.second_name }}</a>
+                                    Учитель: 
+                                        <a href='{{ instance.teacher.get_absolute_url }}'>
+                                            {% if instance.teacher.image %}
+                                            <img class="ui image avatar" src="{{ instance.teacher.image.url }}">
+                                            {% else %}
+                                            <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
+                                            {% endif %}
+                                            {{ instance.teacher.first_name }}
+                                        </a>
                                 </div>
+                                <div class="one wide column" style="padding-top: 0">
+                                    <i class="icon calendar alternate" style="font-size: 20px;padding: 0;margin-left: -5px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-top: 0;">
+                                    Начало курса: {{ instance.start_date }}
+                                    <br>
+                                    Окончание: {{ instance.end_date }}
+                                </div>
+
                             </div>
                         </div>
                         {% include 'squads/squad_calendar.html' %} 
                         <br>
                         {% include 'squads/top_chart.html' %} 
-                    </div>
-                    <div class="four wide column" style="padding-right: 0;">
-                        {% if not instance.image_banner %}
-                        <div class="ui segment">
-                            {% if instance.image_icon %}
-                            <img src="{{ instance.image_icon.url }}" style="width: 100%;">
-                            {% else %}
-                            <img style="width: 100%; " src="{% static 'images/squad.png' %}">
-                            {% endif %}
-                        </div>
-                        {% endif %}
-                        {% if is_manager or profile in instance.curator.all %}
-                        <div class="ui segment" style="color: #67707a;">
-                            <a href="{{ instance.get_update_url }}">
-                                <div class="ui grid">
-                                    <span class="two wide column">
-                                        <i class="icon cog" style="font-size: 20px;"></i>
-                                    </span>
-                                    <span class="thirteen wide column">
-                                        Управление
-                                    </span>                                    
-                                </div>
-                            </a>
-                            <a href="{{ instance.get_delete_url }}">
-                                <div class="ui grid">
-                                    <span class="two wide column">
-                                        <i class="icon x" style="font-size: 20px;"></i>
-                                    </span>
-                                    <span class="thirteen wide column">
-                                        Удалить
-                                    </span>                                    
-                                </div>
-                            </a>
-                        </div>
-                        {% endif %}
-                        <div class="ui segment">
-                            Ученики <span style="color: #939393;">{{ instance.students_number }}</span>
-                            <div style="margin-top: 0;" class="ui grid">
-                            {% for student in instance.students.all %}
-                                <div class="sixteen wide column" style="padding-bottom: 0;text-align: center;">
-                                    {% if student.image %}
-                                        <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
-                                    {% else %}
-                                        <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
-                                    {% endif %}
-                                    <br>
-                                    <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
-                                        {{ student.first_name }}
-                                    </div>
-                                </div>
-                            {% endfor %}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

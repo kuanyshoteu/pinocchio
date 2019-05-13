@@ -14,6 +14,26 @@
 	.six.wide.column{
 		padding-bottom: 0 !important;
 	}
+	.form-group{
+		width: 46%;
+		display: inline-block;
+		position: flex;
+		margin-right: 2%;
+	}
+	.textinput, .numberinput, .clearablefileinput, .change_subject_category,.change_subject_age{
+		margin: -10px 0 0 !important;
+	}
+	#div_id_title{
+		width: 64%;
+	}
+	#div_id_content{
+		width: 100% !important;
+	}
+	#div_id_cost{
+		margin-left: 2%;
+		margin-right: 0;
+		width: 30%;
+	}
 </style>
 <div id="profile" style="padding-bottom: 200px;">
 	{% if instance %}
@@ -29,135 +49,106 @@
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
-            	<form style="margin-bottom: 0" class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+            	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
 	            	<div class="ui grid stackable">
-			            <div class="twelve wide column">
-			            	<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
-				        		Основная информация
+			            <div class="eight wide column" style="padding-right: 0">
+			            	<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+				        		Основная информация <b>{{ instance.title }}</b>
 				        	</div>
-				        	<div class="ui segment" style="line-height: 40px; margin-top: 0">
-			        			<div class="ui grid" style="padding-bottom: 14px;">
-			        				<div class="sixteen wide column" style="text-align: center;padding: 14px 25%;font-weight: 600">
+				        	<div class="ui segment" style="line-height: 40px; margin-top: 0;padding-bottom: 31px;">
+			        			<div class="ui grid">
+			        				<div class="sixteen wide column" style="font-weight: 600;">
 			        					{{ form|crispy }}
-			        					Категория предмета
-		                                <select class="change_subject_category" id="change_subject_category" url="{{ instance.change_category }}" option="subject"> 
-		                                	{% if instance.age == None %}
-		                                		<option value="-1">Другое</option>
-                                            {% elif instance.age %}
-                                                <option value="{{ instance.age.id }}">{{ instance.age.title }}</option>
-                                            {% endif %}
-		                                    {% if instance.category %}
-		                                        <option value="{{ instance.category.id }}">{{ instance.category.title }}</option>
-		                                    {% endif %}
-		                                    {% for subject_category in subject_categories %}
-		                                        {% if subject_category != instance.category %}
-		                                        <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
-		                                        {% endif %}
-		                                    {% endfor %}
-                                            {% if instance.age != None %}
-		                                    <option value="-1">Другое</option>
-		                                    {% endif %}
-		                                </select>
-			        					Возраст
-		                                <select class="change_subject_age" id="change_subject_age" url="{{ instance.change_age }}" option="subject">
-		                                	{% if instance.age == None %}
-		                                		<option value="-1">Другое</option>
-                                            {% elif instance.age %}
-                                                <option value="{{ instance.age.id }}">{{ instance.age.title }}</option>
-                                            {% endif %}
-                                            {% for subject_age in subject_ages %}
-                                                {% if subject_age != instance.age %}
-                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if instance.age != None %}
-                                            <option value="-1">Другое</option>
-                                            {% endif %}
-                                        </select>
+			        					{% if instance %}
+			        						<br>
+				        					Категория предмета
+			                                <select class="change_subject_category" id="change_subject_category" url="{{ instance.change_category }}" option="subject"> 
+			                                	{% if instance.category == None %}
+			                                		<option value="-1">Другое</option>
+	                                            {% elif instance.category %}
+	                                                <option value="{{ instance.age.id }}">{{ instance.category.title }}</option>
+	                                            {% endif %}
+			                                    {% for subject_category in subject_categories %}
+			                                        {% if subject_category != instance.category %}
+			                                        <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
+			                                        {% endif %}
+			                                    {% endfor %}
+	                                            {% if instance.category != None %}
+			                                    <option value="-1">Другое</option>
+			                                    {% endif %}
+			                                </select>
+				        					Возраст
+			                                <select class="change_subject_age" id="change_subject_age" url="{{ instance.change_age }}" option="subject">
+			                                	{% if instance.age == None %}
+			                                		<option value="-1">Другое</option>
+	                                            {% elif instance.age %}
+	                                                <option value="{{ instance.age.id }}">{{ instance.age.title }}</option>
+	                                            {% endif %}
+	                                            {% for subject_age in subject_ages %}
+	                                                {% if subject_age != instance.age %}
+	                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
+	                                                {% endif %}
+	                                            {% endfor %}
+	                                            {% if instance.age != None %}
+	                                            <option value="-1">Другое</option>
+	                                            {% endif %}
+	                                        </select>
+				                        {% endif %}                                        
 			        				</div>
 			        			</div>
 							</div>
 						</div>
-						<div class="four wide column" style="padding: 14px 0;">
-							<div class="ui segment" style="height: 200px;position: fixed;padding: 0 14px 0 0">
-								<a href="{% if instance %}{{ instance.get_absolute_url }}{% else %}{% url "subjects:list" %}{% endif %}" >
-									<div class="ui grid grey_hover" style="margin: 5px 0;">
-										<div class="five wide column" style="padding: 10px 5px 10px 14px;">
-											{% if instance.image_icon %}
-	                                        <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-	                                        {% else %}
-	                                        <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
-	                                        {% endif %}
-										</div>
-										<div class="ten wide column" style="padding: 10px 0 0 5px;">
-											{% if instance %}
-												{{ instance.title }}
-											{% else %}
-												Создать предмет
-											{% endif %}
-											<br>
-											<span style="color: #777e8c;font-size: 12px;">вернуться к странице</span>
-										</div>
-									</div>
-								</a>
-								<div class="ui divider" style="margin: 5px;"></div>
-								<div style="border-left: 2px solid #5181b8;padding: 7px 18px;background-color: #f0f2f5;">
-			                        <a class="full-w" style="color: black;font-size: 13px;"><b>Настройки</b></a>
-			                    </div>
-							</div>
-						</div>
 						{% if instance %}
-						<div class="twelve wide column">
-							<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+						<div class="eight wide column">
+							<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
 				        		Детальная информация
 				        	</div>
-							<div class="ui segment" style="line-height: 40px;margin-top: 0">
+							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
 								<div class="ui grid">
+									<div class="sixteen wide column">
+										{{ form2|crispy }}
+									</div>
 									<div class="six wide column" style="text-align: right;padding-right: 0">
-										<p style="color: #656565;font-size: 13px;margin-bottom: 32px;padding-top: 2px;">
-				        					Предмет ведет:
+										<p style="color: #656565;font-size: 13px;padding-top: 2px;">
+				        					Автор:
 				        				</p>
 									</div>
 									<div class="ten wide column">
 										<select id="change_teacher" class="change_teacher" subject_id="{{ instance.id }}" url="{{ instance.change_teacher_url }}">
-											<option value="{{ instance.teacher.all.0.id }}">{{ instance.teacher.all.0.first_name }}</option>
+											<option value="{{ instance.author.id }}">{{ instance.author.first_name }}</option>
 											{% for teacher in all_teachers %}
-												{% if teacher != instance.teacher.all.0 %}
+												{% if teacher != instance.author %}
 													<option value="{{ teacher.id }}">{{ teacher.first_name }}</option>
 												{% endif %}
 											{% endfor %}
 										</select>
 									</div>
-									<div class="six wide column" style="text-align: right;padding-right: 0">
-										<p style="color: #656565;font-size: 13px;margin-bottom: 32px;padding-top: 2px;">
-				        					Выберите дату <b>начала</b> курса:
-				        				</p>
-									</div>
-									<div class="ten wide column">
-										<input type="date" url="{{ instance.change_start_url }}" subject_id="{{ instance.id }}" name='start' class="start" style="width: 200px;" value="{{ instance.start_date|date:'Y-m-d'}}"> 
-				    					<div class="ui segment warning ws" style="display: none;">Начало курса не может быть позднее конца, выберите другую дату</div>
-									</div>
-									<div class="six wide column" style="text-align: right;padding-right: 0">
-										<p style="color: #656565;font-size: 13px;margin-bottom: 32px;padding-top: 2px;">
-				        					Выберите дату <b>окончания</b> курса:
-				        				</p>
-									</div>
-									<div class="ten wide column">
-										<input type="date" url="{{ instance.change_end_url }}" subject_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
-				    					<div class="ui segment warning we" style="display: none;">Конец курса не может быть раньше начала, выберите другую дату</div>
-									</div>
+									<div class="sixteen wide column">
+			                            <a href="{{ instance.get_delete_url }}" class="ui button red small" style="margin-top: 15px;">
+	                                        <i class="icon trash" style="color: #fff;"></i> Удалить предмет "<b>{{ instance.title }}</b>"
+			                            </a>
+		                            </div>											
 								</div>
 			    			</div>
 						</div>
-						<div class="twelve wide column" style="padding-bottom: 0">
+						<div class="sixteen wide column" style="padding: 0 14px;">
 			    			{% include 'subjects/subject_calendar.html' %}
 						</div>
 						{% endif %}	
-						<div class="twelve wide column" style="padding-top: 0">
+						{% if instance %}
+						<div class="sixteen wide column" style="padding-top: 0;padding-right: 0">
 	        				<div class="ui segment" style="text-align: center;">
 								<input type='submit' class='ui button blue tiny' value='Сохранить' />
 							</div>
 						</div>
+						{% else %}
+							<div class="one wide column"></div>
+							<div class="{% if instance %}sixteen{%else%}eight{% endif %} wide column" style="padding-top: 0;padding-right: 0">
+		        				<div class="ui segment" style="text-align: center;">
+									<input type='submit' class='ui button blue tiny' value='Создать предмет' />
+								</div>
+							</div>
+						{% endif %}
 					</div>
 				</form>
 			</div>

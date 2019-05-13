@@ -22,14 +22,7 @@ def lesson_details(request, lesson_id = None):
     profile = get_profile(request)
     lesson = Lesson.objects.get(id=lesson_id)
     if len(lesson.papers.all()) == 0:
-        context = {
-            "profile": profile,
-            'lesson':lesson,
-            'is_trener':is_profi(profile, 'Teacher'),
-            "is_manager":is_profi(profile, 'Manager'),
-            "is_director":is_profi(profile, 'Director'), 
-        }
-        return render(request, template_name='library/lesson_details.html', context=context)
+        return redirect(lesson.estimate_lesson_page())
     else:
         for paper in lesson.papers.all():
             if not profile in paper.done_by.all():
@@ -64,9 +57,7 @@ def paper_details(request, paper_id = None):
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
-        for paper in lesson.papers.all():
-            if not profile in paper.done_by.all():
-                return redirect(paper.get_absolute_url())
+        return redirect(paper.get_absolute_url())
 
     subtheme_file_form = SubthemeFileForm(request.POST or None, request.FILES or None)
     if subtheme_file_form.is_valid():
@@ -75,9 +66,7 @@ def paper_details(request, paper_id = None):
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
-        for paper in lesson.papers.all():
-            if not profile in paper.done_by.all():
-                return redirect(paper.get_absolute_url())
+        return redirect(paper.get_absolute_url())
 
     subtheme_video_form = SubthemeVideoForm(request.POST or None, request.FILES or None)
     if subtheme_video_form.is_valid():
@@ -87,9 +76,7 @@ def paper_details(request, paper_id = None):
         paper_id = request.POST.get('paper_id')
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
-        for paper in lesson.papers.all():
-            if not profile in paper.done_by.all():
-                return redirect(paper.get_absolute_url())
+        return redirect(paper.get_absolute_url())
 
     context = {
         "profile": profile,

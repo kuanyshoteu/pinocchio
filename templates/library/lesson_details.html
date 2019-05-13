@@ -40,8 +40,9 @@
 			                </div>
 			            </a>
 			        </div>
-			    {% include 'library/add_paper.html' %}
-			    
+			    {% if is_trener and lesson.author_profile == profile %}
+			    	{% include 'library/add_paper.html' %}
+			    {% endif %}
 			    {% if paper %}
 			        {% include 'library/paper_detail.html' %}
 			    {% else %}

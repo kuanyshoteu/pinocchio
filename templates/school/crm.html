@@ -22,9 +22,9 @@
         <div class="ui grid main_crm" style="margin-top: 0">
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
-                <div class="ui grid segment backg" style="margin-top: 0px;padding-bottom: 50px;">
+                <div class="ui grid segment backg" style="margin-top: 0px;padding-bottom: 50px;width: 200%;">
                     {% for column in columns %}
-                    <div class="four wide column center aligned">
+                    <div class="two wide column center aligned">
                         <span style="font-size: 13px;font-weight: 600;">{{ column.title }}</span>
                         <br>
                         <span style="font-size: 13px;color: darkgrey;">Количество: {{ column.cards.all|length }}</span>

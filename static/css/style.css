@@ -163,6 +163,17 @@ a{
   white-space: nowrap;
   overflow: hidden;
 }
+.student_name2{
+  padding-left: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+  color: white;
+  line-height: 25px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .attendance_block{
   width: 100%;
   height: 40px;
@@ -173,13 +184,16 @@ a{
   height: 30px;line-height: 30px; padding-left: 2px;text-align: center;color: lightgrey;
 }
 .attendace_grade{
-  font-size:12px !important;
+  font-size:15px !important;
   width: 30%;
   height: 25px;
   line-height: 27px;
   padding: 0px !important;
   text-align: center;
   margin: auto !important;
+  color: #fff;
+  border-radius: 3px;
+  background-color: #21BA45
 }
 .att_present{
   padding: 7px 5px !important;
@@ -213,6 +227,18 @@ a{
 .ui.white:hover {
   background-color: #f1f1f1;
   color: #222;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.dark {
+  background-color: #4a4a4a;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.dark:hover {
+  background-color: #595959;
+  color: #fff;
   text-shadow: none;
   background-image: none;
 }
@@ -407,11 +433,35 @@ a{
   display: inline-block !important;
 }
 .test_variant{
-  padding: 10px;
+  padding: 7px;
   cursor: pointer; 
   width: 100% !important;
-  border: 2px solid #e4e4e4;
+  border: 2px solid #e4e4e4;  
   position: relative;
+  display: block;
+}
+.test_variant:hover{
+  padding: 7px;
+  cursor: pointer; 
+  width: 100% !important;
+  border: 2px solid #808080;  
+  position: relative;
+  display: block;
+}
+.test_variant2{
+  padding: 6px;
+  width: 100% !important;
+  border: 1px solid #808080;  
+  position: relative;
+  display: flex;
+}
+.test_variant_chosed{
+  padding: 7px;
+  width: 100% !important;
+  border: 1px solid #808080;  
+  color: #fff;
+  position: relative;
+  display: flex;
 }
 .in_schedule{
   color: #fff; 
@@ -419,7 +469,6 @@ a{
   margin: 3px 0 !important;
   background-color: #313a57;
   width: 100%;
-  cursor: pointer;
 }
 .in_subject_schedule{
   color: #fff; 
@@ -446,9 +495,6 @@ a{
   padding:0 6px 8px 6px;
   color: #000;
   font-size: 14px;
-}
-.test_variant:hover{
-  border: 2px solid #313a57;
 }
 .problem_type{
   text-decoration: underline;

@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% if is_trener %}
+{% if is_this_trener %}
 <div class="ui segment shapka">
     <div class="highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
     <div class="ui grid">
@@ -21,7 +21,7 @@
     <canvas style="padding-right: 25px;" id="canvas1" height="150" width="500"></canvas>
 </div>
 {% endif %}
-{% if is_manager or is_director %}
+{% if is_this_manager or is_this_director %}
 <div class="ui segment shapka help21 help61">
     <div class="hint21 hint61 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
     <div class="ui grid">
@@ -69,7 +69,7 @@
     <canvas style="padding-right: 25px;" id="canvas3" height="150" width="500"></canvas>
 </div>
 {% endif %}
-{% if is_director %}
+{% if is_this_director %}
 <div class="ui segment shapka help22 help62">
     <div class="hint62 highliter" style="position: absolute;margin-left: -225px;margin-top: -200px;"></div>
     <div class="ui grid">

@@ -25,6 +25,9 @@ $(document).ready(function () {
                 'subject_id':this_.attr('subject_id'),
             },
             success: function (data) {
+                if (data.warning){
+                    $('.ws').modal('show')
+                }
             }, 
             error: function (error) {
                 console.log('error')
@@ -41,6 +44,9 @@ $(document).ready(function () {
                 'subject_id':this_.attr('subject_id'),
             },
             success: function (data) {
+                if (data.warning){
+                    $('.we').modal('show')
+                }
             }, 
             error: function (error) {
                 console.log('error')

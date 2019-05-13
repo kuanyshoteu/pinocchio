@@ -1,10 +1,11 @@
-
+{% load staticfiles %}
 <style type="text/css">
     #keywords {
-  margin: 0 auto;
+  margin: 0;
   font-size: 13px;
   margin-bottom: 15px;
   color: #fff;
+  width: 100%;
 }
 
 
@@ -39,7 +40,7 @@
           <i class="icon trophy" style="font-size: 17px;"></i>
       </div>
       <div class="fifteen wide column" style="padding-right: 25px;">
-          Самые успешные
+          Рейтинг класса
       </div>
   </div>
 </div>
@@ -50,18 +51,21 @@
                 <th><span>Имя</span></th>
                 <th><span>Дили</span></th>
                 <th><span>Кол-во задач</span></th>
-                <th><span></span></th>
-                <th><span></span></th>
             </tr>
         </thead>
         <tbody>
         {% for student in instance.students.all %}
             <tr>
-                <td class="lalign">
-                    {{ forloop.counter }}. 
-                    <div class="ui segment" style="padding: 5px; background-color: #5181b8;box-shadow: none;margin-bottom: 0;display: inline-block;">
-                        {{ student.first_name }}
-                    </div>
+                <td class="lalign ui grid">
+                    <span class="one wide column">{{ forloop.counter }}.</span> 
+                    <a class="ten wide column" href="{{ student.get_absolute_url }}" style="color: white;padding-top: 8px;">
+                        {% if student.image %}
+                            <img src="{{ student.image.url }}" class="ui avatar image">
+                        {% else %}
+                            <img src="{% static 'images/nophoto.png' %}" class="ui avatar image">
+                        {% endif %}
+                        <span class="student_name">{{ student.first_name }}</span>
+                    </a>
                 </td>
                 <td>{{ student.coins }}</td>
             </tr>

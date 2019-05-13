@@ -51,8 +51,9 @@ class Cell(models.Model):
 
 class Subject(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subjects') 
-    teacher = models.ManyToManyField(Profile, related_name='teachers_subjects')
+    author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='author_subjects') 
     students = models.ManyToManyField(Profile, related_name='hissubjects')
+    teachers = models.ManyToManyField(Profile, related_name='teacher_subjects')
     squads = models.ManyToManyField(Squad, related_name='subjects')
     cost = models.IntegerField(default=0, null = True)
 
@@ -68,6 +69,8 @@ class Subject(models.Model):
     office = models.ForeignKey(Office,null=True, on_delete = models.CASCADE, related_name='office_subjects') 
     category = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='category_subjects') 
     age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='age_subjects') 
+    start_dates = ArrayField(models.DateField(null=True), default=list)
+    squad_ids = ArrayField(models.IntegerField(null=True), default=list)
 
     image_banner = models.ImageField(upload_to=upload_location, 
             null=True,
@@ -87,14 +90,7 @@ class Subject(models.Model):
     color_back = models.TextField(default='')
 
     content = models.TextField()
-    slogan = models.CharField(max_length=250, default='')    
-    
-    start_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField(auto_now_add=True)
-    start_dates = ArrayField(models.DateField(null=True), default=list)
-    squad_ids = ArrayField(models.IntegerField(null=True), default=list)
-
-    number_of_lectures = models.IntegerField(default = 0)
+    slogan = models.CharField(max_length=250, default='')
 
     class Meta:
         ordering = ['id']
@@ -139,10 +135,6 @@ class Subject(models.Model):
         return reverse("subjects:add_squad_url")   
     def change_teacher_url(self):
         return reverse("subjects:change_teacher_url")  
-    def change_start_url(self):
-        return reverse("subjects:change_start_url")  
-    def change_end_url(self):
-        return reverse("subjects:change_end_url")
     def change_category(self):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
     def change_age(self):
@@ -174,7 +166,7 @@ class SubjectMaterials(models.Model):
     done_by = models.ManyToManyField(Profile, related_name='done_subject_materials')
 
     class Meta:
-        ordering = ['number']
+        ordering = ['id']
     def remove_lesson(self):
         return reverse("subjects:remove_lesson")
 

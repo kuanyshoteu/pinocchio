@@ -31,12 +31,6 @@ from constants import *
 def school_rating(request):
     profile = get_profile(request)
     school = profile.schools.first()
-    # for subject in Subject.objects.all():
-    #     students = subject.students.all()
-    #     if subject.category:
-    #         subject.category.students.add(*students)
-    #         subject.age.students.add(*students)
-
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
@@ -50,6 +44,24 @@ def school_rating(request):
     }
     return render(request, "school/school_rating.html", context)
 
+def school_payments(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = profile.schools.first()
+    context = {
+        "profile":profile,
+        "instance": profile.schools.first(),
+        "squads":school.groups.all(),
+        "payments":True,
+        "subject_categories":school.school_subject_categories.all(),
+        "subject_ages":school.school_subject_ages.all(),
+        "all_students":school.people.filter(),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+    }
+    return render(request, "school/school_payments.html", context)
+
 def school_info(request):
     profile = get_profile(request)
     only_directors(profile)
@@ -58,6 +70,7 @@ def school_info(request):
         "profile":profile,
         "instance": profile.schools.first(),
         "squads":school.groups.all(),
+        "main_school":True,
         "subjects":school.school_subjects.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -65,20 +78,20 @@ def school_info(request):
     }
     return render(request, "school/info.html", context)
 
-def school_teachers(request):
+def school_salaries(request):
     profile = get_profile(request)
     only_directors(profile)
     school = profile.schools.first()
     context = {
         "profile":profile,
         "instance": school,
-        "all_teachers":school.people.filter(),   
+        "salaries":True,   
         "professions":Profession.objects.all(), 
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
     }
-    return render(request, "school/all_teachers.html", context)
+    return render(request, "school/salaries.html", context)
 
 def school_crm(request):
     profile = get_profile(request)

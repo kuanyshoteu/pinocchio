@@ -47,14 +47,14 @@ def account_view(request, user = None):
         return redirect(profile.get_absolute_url())
 
     if is_profi(hisprofile, 'Teacher'):
-        hissubjects = hisprofile.teachers_subjects.all()
-        hissquads = hisprofile.curators_squads.all()
+        hissubjects = hisprofile.teacher_subjects.all()
+        hissquads = hisprofile.hissquads.all()
         hiscourses = hisprofile.hiscourses.all()
     else:
         hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
         hiscourses = hisprofile.courses.all()
-    hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+    hiscacheatt = CacheAttendance.objects.get_or_create(profile = profile)[0]
     if hiscacheatt.subject == None and len(hissubjects) > 0:
         hiscacheatt.subject = hissubjects[0]
     if hiscacheatt.squad == None and len(hissquads) > 0:
@@ -73,9 +73,12 @@ def account_view(request, user = None):
         'att_squad':hiscacheatt.squad,
         'today':int(timezone.now().date().strftime('%w')),
         'miss_lesson_form':miss_lesson_form,
-        'is_trener':is_profi(hisprofile, 'Teacher'),
-        "is_manager":is_profi(hisprofile, 'Manager'),
-        "is_director":is_profi(hisprofile, 'Director'),
+        'is_this_trener':is_profi(hisprofile, 'Teacher'),
+        "is_this_manager":is_profi(hisprofile, 'Manager'),
+        "is_this_director":is_profi(hisprofile, 'Director'),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
         'hint':profile.hint_numbers[0],
     }
     return render(request, "profile.html", context)
@@ -167,7 +170,6 @@ def squad_attendance(request):
     return JsonResponse(data)
 
 def more_attendance(request):
-    print(request.GET.get('subject_id'), request.GET.get('squad_id'), request.GET.get('direction'), request.GET.get('sm_id'))
     if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
@@ -184,7 +186,11 @@ def more_attendance(request):
                     break
                 if len(sm.sm_atts.filter(squad = squad)) < len(squad.students.all()):
                     create_atts(squad, sm, subject)
-                section = [get_date(sm, squad).strftime('%d %B %Y'), sm.id, check_date(sm, squad)]
+                get_date_results = get_date(sm, squad)
+                if get_date_results == '_':
+                    section = ['_', sm.id, '_']
+                else:
+                    section = [get_date_results[0].strftime('%d %B %Y'), sm.id, get_date_results[1]]
                 for att in sm.sm_atts.filter(squad = squad):
                     section.append([att.id, att.present, att.grade])
                 columns.append(section)
@@ -195,7 +201,7 @@ def more_attendance(request):
             for sm in queryset:
                 if len(columns) == 4:
                     break
-                section = [get_date(sm, squad).strftime('%d %B %Y'), sm.id]
+                section = [get_date(sm, squad)[0].strftime('%d %B %Y'), sm.id]
                 columns.append(section)
         data = {
             'first_set':first_set,
@@ -222,7 +228,7 @@ def more_attendance_student(request):
                     break
                 if len(sm.sm_atts.filter(student = profile)) < 1:
                     create_atts_student(sm, profile)
-                section = [get_date(sm, squad), sm.id, 'past']
+                section = [get_date(sm, squad)[0], sm.id, 'past']
                 att = sm.sm_atts.get(student = profile)
                 section.append([att.id, att.present, att.grade])
                 columns.append(section)
@@ -233,7 +239,7 @@ def more_attendance_student(request):
             for sm in queryset:
                 if len(columns) == 4:
                     break
-                section = [get_date(sm, squad), sm.id]
+                section = [get_date(sm, squad)[0], sm.id]
                 columns.append(section)
         data = {
             'first_set':first_set,
@@ -312,6 +318,8 @@ def another_hint(request):
 
 def update_hints(request):
     profile = Profile.objects.get(user = request.user)
+    if profile.is_student:
+        profile.hint_numbers = [0,0,0,0,0,0,0]        
     if is_profi(profile, 'Manager'):
         profile.hint_numbers = [20,20,20,20,20,20,20]        
     if is_profi(profile, 'Teacher'):

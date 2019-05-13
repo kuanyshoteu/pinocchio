@@ -80,13 +80,20 @@
                     </div>
                     <div class="sixteen wide column left-side" style="padding: 0;">
                         <div class="twenty mitem" style="padding: 0;float: left;">
-                            {% include 'profile/homeworks.html' %}
+                            {% if is_manager and hisprofile.is_student %}
+                                <div class="ui segment">
+                                    <a class="ui button mini blue paid full-w" id="{{ profile.id }}">Оплатил(а)</a>
+                                </div>
+                            {% endif %}
                             {% include 'profile/courses.html' %}
+                            {% include 'profile/skills_spider.html' %}
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
-                            {% if is_trener or profile.is_student %}
-                                {% include 'profile/hisschedule.html' %}
-                                {% include 'profile/attendance.html' %}
+                            {% if hisprofile == profile or is_trener or is_manager %}
+                                {% if is_this_trener or hisprofile.is_student %}
+                                    {% include 'profile/hisschedule.html' %}
+                                    {% include 'profile/attendance.html' %}
+                                {% endif %}
                             {% endif %}
                             {% include 'profile/chart.html' %}
                             <br><br><br>
@@ -99,14 +106,16 @@
     </div>
 </div>
 <span style="display: none;" class="hint_data" hint_type="0" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
-{% if is_director %}
-    {% include 'hints/director.html' %}
-{% elif is_manager %}
-    {% include 'hints/manager.html' %}
-{% elif is_trener %}
-    {% include 'hints/teacher.html' %}
-{% else %}
-    {% include 'hints/student.html' %}
+{% if hisprofile == profile %}
+    {% if is_director %}
+        {% include 'hints/director.html' %}
+    {% elif is_manager %}
+        {% include 'hints/manager.html' %}
+    {% elif is_trener %}
+        {% include 'hints/teacher.html' %}
+    {% else %}
+        {% include 'hints/student.html' %}
+    {% endif %}
 {% endif %}
 
 <script type="text/javascript" src="{% static 'js/hints.js' %}"></script>

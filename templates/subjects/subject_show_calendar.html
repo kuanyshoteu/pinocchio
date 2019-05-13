@@ -1,6 +1,10 @@
 {% load ttags %}
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
+<div class="ui segment" style="margin-bottom: 0">
+    <i class="icon table"></i> Расписание
+</div>
+
 <div id="calendar" length='7'>           
     <div id="week">   
         <div class="week" id="0">
@@ -28,11 +32,11 @@
                 <div {% if page == 'subject_update' %} style=""{% endif %}>
                     {% for lecture in cell|cell_subject_lectures:instance %}
                         {% if teacher or lecture.squad in profile.squads.all %}
-                        <div class="ui segment in_schedule" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;cursor: pointer;background-color:#5181b8;">
+                        <div class="ui segment in_schedule" style="padding: 0px;margin-bottom: 3px; margin-top: 0px;background-color:#5181b8;">
                             {{ lecture.squad.title }}
-                            {% if cell|cell_subject_lectures:instance|length == 1 %}
+                            {% if instance.cabinet %}
                             <br>
-                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">каб {{ instance.cabinet }}</span>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ instance.cabinet }}</span>
                             {% endif %}
                         </div>
                         {% endif %}

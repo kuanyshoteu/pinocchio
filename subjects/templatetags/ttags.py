@@ -81,9 +81,10 @@ def get_date(material, squad):
         return '_'
     subject = material.subject
     lectures = squad.squad_lectures.filter(subject = subject)
+    material_number = list(subject.materials.all()).index(material)+1
     if len(lectures) > 0:
-        number_of_weeks = int(material.number/len(lectures))
-        lecture_index = material.number % len(lectures)
+        number_of_weeks = int(material_number/len(lectures))
+        lecture_index = material_number % len(lectures)
         if lecture_index == 0:
             number_of_weeks -= 1
             lecture_index = len(lectures)
@@ -91,7 +92,8 @@ def get_date(material, squad):
             squad_index = subject.squad_ids.index(squad.id)
         else:
             return '_'
-        start_day = int(subject.start_dates[squad_index].strftime('%w'))
+        squad_start_day = subject.start_dates[squad_index]
+        start_day = int(squad_start_day.strftime('%w'))
         if start_day == 0:
             start_day = 7
         start_day_object = Day.objects.get(number = start_day)
@@ -99,64 +101,19 @@ def get_date(material, squad):
             return '_'
         start_day_lecture = lectures.filter(day=start_day_object)[0]
         start_day_index = list(lectures).index(start_day_lecture)
-        #print(start_day_index , lecture_index)
         extra = lectures[(start_day_index + lecture_index-1) % len(lectures)].day.number - start_day
         if extra < 0:
             extra += 7
         x = 7 * number_of_weeks + extra
-        date = subject.start_dates[squad_index] + timedelta(x)
-        #print(material.number, date, 'weeks', number_of_weeks, 'extra', extra)
-        return date
-    else:
-        return '_'
-
-@register.filter
-def get_date_student(material, squad):
-    if type(material) is str:
-        return '_'
-    subject = material.subject
-    lectures = squad.squad_lectures.filter(subject = subject)
-    if len(lectures) > 0:
-        number_of_weeks = int(material.number/len(lectures))
-        lecture_index = material.number % len(lectures)
-        if lecture_index == 0:
-            number_of_weeks -= 1
-            lecture_index = len(lectures)
-        if squad.id in subject.squad_ids:
-            squad_index = subject.squad_ids.index(squad.id)
+        date = squad_start_day + timedelta(x)
+        
+        if date > timezone.now().date():
+            check_date = 'future'
+        elif date + timedelta(17) >= timezone.now().date():
+            check_date = 'now'
         else:
-            return '_'
-        start_day = int(subject.start_dates[squad_index].strftime('%w'))
-        if start_day == 0:
-            start_day = 7
-        start_day_object = Day.objects.get(number = start_day)
-        start_day_lecture = lectures.filter(day=start_day_object)[0]
-        start_day_index = list(lectures).index(start_day_lecture)
-        #print(start_day_index , lecture_index)
-        extra = lectures[(start_day_index + lecture_index-1) % len(lectures)].day.number - start_day
-        if extra < 0:
-            extra += 7
-        x = 7 * number_of_weeks + extra
-        date = subject.start_dates[squad_index] + timedelta(x)
-        #print(material.number, date, 'weeks', number_of_weeks, 'extra', extra)
-        return date
-    else:
-        return '_'
-
-@register.filter
-def get_my_date(material, profile):
-    if type(material) is str:
-        return '_'
-    lectures = profile.hislectures.filter(subject = material.subject)
-    if len(lectures) > 0:
-        last_week_days = material.number % len(lectures)
-        number_of_weeks = int(material.number/len(lectures))
-        if last_week_days == 0:
-            number_of_weeks -= 1
-            last_week_days = len(lectures)
-        x = 7 * number_of_weeks + last_week_days
-        date = material.subject.start_date + timedelta(x)
-        return date
+            check_date = 'past'
+        return date, check_date
     else:
         return '_'
 
@@ -176,11 +133,17 @@ def get_time(material, profile):
 def get_material(subject, profile):
     lectures = profile.hislectures.filter(subject = subject)
     num_of_lectures = len(lectures)
-    if num_of_lectures > 0 and  timezone.now().date() > subject.start_date:
-        delta = (timezone.now().date() - subject.start_date).days
+    if profile.is_student:
+        squad = profile.squads.filter(subjects=subject)
+    else:
+        squad = profile.hissquads.filter(subjects=subject)
+    if len(squad) > 0:
+        squad = squad[0]
+    if num_of_lectures > 0 and  timezone.now().date() > squad.start_date:
+        delta = (timezone.now().date() - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7
-        start = int(subject.start_date.strftime('%w'))
+        start = int(squad.start_date.strftime('%w'))
         if start == 0:
             start = 7
         if start > finish or finish == 0:
@@ -213,11 +176,11 @@ def get_current_attendance(subject, squad):
         return '_'
     lectures = squad.squad_lectures.filter(subject = subject)
     num_of_lectures = len(lectures)
-    if num_of_lectures > 0 and  timezone.now().date() > subject.start_date:
-        delta = (timezone.now().date() - subject.start_date).days
+    if num_of_lectures > 0 and  timezone.now().date() > squad.start_date:
+        delta = (timezone.now().date() - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7
-        start = int(subject.start_date.strftime('%w'))
+        start = int(squad.start_date.strftime('%w'))
         if start == 0:
             start = 7
         if start > finish or finish == 0:
@@ -235,28 +198,36 @@ def get_current_attendance(subject, squad):
         counter = 0
         subject_materials = subject.materials.prefetch_related('sm_atts')
         len_squad_students = len(squad.students.all())
+        if material_number > len(subject_materials):
+            material_number = len(subject_materials)
         while material_number - i > 0:
             if counter == 4:
                 break
-            sm = subject_materials.filter(number = material_number - i)
-            if len(sm) > 0:
-                sm = sm[0]
+            sm = list(subject_materials)[material_number - i-1]
+            if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
+                create_atts(squad, sm, subject)
+            attendances = sm.sm_atts.filter(squad = squad)
+            get_date_results = get_date(attendances[0].subject_materials, squad)
+            if get_date_results == '_':
+                res = [[attendances, '_','_']] + res
+            else:
+                res = [[attendances, get_date_results[0], get_date_results[1]]] + res
+            counter += 1
+            i += 1
+        if counter < 4:
+            i = 1
+            while counter < 4 and i < 10:
+                sm = list(subject_materials)[material_number + i-1]
                 if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
                     create_atts(squad, sm, subject)
                 attendances = sm.sm_atts.filter(squad = squad)
-                res = [[attendances, get_date(attendances[0].subject_materials, squad), check_date(attendances[0].subject_materials, squad)]] + res
+                get_date_results = get_date(attendances[0].subject_materials, squad)
+                if get_date_results == '_':
+                    res = [[attendances, '_','_']] + res
+                    res.append([attendances, '_','_'])
+                else:
+                    res.append([attendances, get_date_results[0], get_date_results[1]])
                 counter += 1
-            i += 1
-        if counter < 4:
-            print('ho')
-            i = 1
-            while counter < 4 and i < 10:
-                sm = subject.materials.filter(number = material_number + i)
-                if len(sm) > 0:
-                    if len(sm[0].sm_atts.filter(squad = squad)) < len(squad.students.all()):
-                        create_atts(squad, sm[0], subject)
-                    res.append(sm[0].sm_atts.filter(squad = squad))
-                    counter += 1
                 i += 1
         return res
     return '_'
@@ -265,13 +236,16 @@ def get_current_attendance(subject, squad):
 def get_current_attendance_student(subject, profile):
     if not subject or not profile:
         return '_'
+    squad = profile.squads.filter(subjects=subject)
+    if len(squad)>0:
+        squad = squad[0]
     lectures = profile.hislectures.filter(subject = subject)
     num_of_lectures = len(lectures)
-    if num_of_lectures > 0 and  timezone.now().date() > subject.start_date:
-        delta = (timezone.now().date() - subject.start_date).days
+    if num_of_lectures > 0 and  timezone.now().date() > squad.start_date:
+        delta = (timezone.now().date() - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7
-        start = int(subject.start_date.strftime('%w'))
+        start = int(squad.start_date.strftime('%w'))
         if start == 0:
             start = 7
         if start > finish or finish == 0:
@@ -287,26 +261,37 @@ def get_current_attendance_student(subject, profile):
         res = []
         i = 0
         counter = 0
+        subject_materials = subject.materials.prefetch_related('sm_atts')
+        if material_number > len(subject_materials):
+            material_number = len(subject_materials)
         while material_number - i > 0:
             if counter == 4:
                 break
-            sm = subject.materials.filter(number = material_number - i)
-            if len(sm) > 0:
-                if len(sm[0].sm_atts.filter(student = profile)) < 1:
-                    create_atts_student(sm[0], profile)
-                res = [sm[0].sm_atts.filter(student = profile)] + res
-                counter += 1
+            sm = list(subject_materials)[material_number - i-1]
+            if len(sm.sm_atts.filter(student = profile)) < 1:
+                create_atts_student(sm, profile)
+            attendances = sm.sm_atts.filter(student = profile)
+            get_date_results = get_date(attendances[0].subject_materials, squad)
+            if get_date_results == '_':
+                res = [[attendances, '_','_']] + res
+            else:
+                res = [[attendances, get_date_results[0], get_date_results[1]]] + res
+            counter += 1
             i += 1
         if counter < 4:
-            print('ho')
             i = 1
             while counter < 4 and i < 10:
-                sm = subject.materials.filter(number = material_number + i)
-                if len(sm) > 0:
-                    if len(sm[0].sm_atts.filter(student = profile)) < 1:
-                        create_atts_student(sm[0], profile)
-                    res.append(sm[0].sm_atts.filter(student = profile))
-                    counter += 1
+                sm = list(subject_materials)[material_number + i-1]
+                if len(sm.sm_atts.filter(student = profile)) < 1:
+                    create_atts_student(sm, profile)
+                attendances = sm.sm_atts.filter(student = profile)
+                get_date_results = get_date(attendances[0].subject_materials, squad)
+                if get_date_results == '_':
+                    res = [[attendances, '_','_']] + res
+                    res.append([attendances, '_','_'])
+                else:
+                    res.append([attendances, get_date_results[0], get_date_results[1]])
+                counter += 1
                 i += 1
         return res
     return '_'
@@ -317,7 +302,7 @@ def create_atts(squad, subject_materials, subject):
             Attendance.objects.create(
                 subject_materials = subject_materials,
                 school=subject.school,
-                teacher=subject.teacher.first(), 
+                teacher=squad.teacher, 
                 student=student,
                 subject=subject,
                 squad=squad

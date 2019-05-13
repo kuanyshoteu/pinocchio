@@ -8,12 +8,14 @@
                 <div id="prev_atts" style="width: max-content;display: flex;"></div>
                 {% for date in att_subject|get_current_attendance_student:hisprofile %}
                     <section class="slider__section">
-                        <div class="attendance_date{%if forloop.counter == 4%} last_att{%endif%} att{{forloop.counter}}" number="{{forloop.counter}}" id="{{date.0.subject_materials.id}}">
-                            {{ date.0.subject_materials|get_date:att_squad }}
+                        <div class="attendance_date{%if forloop.counter == 4%} last_att{%endif%} att{{forloop.counter}}" number="{{forloop.counter}}" id="{{date.0.0.subject_materials.id}}">
+                            {{ date.1 }}
                         </div>
-                        {% for attendance in date %}
+                        {% if date.2 == 'now' %}
+                        {% for attendance in date.0 %}
                             {% include 'profile/attendance_block_student.html' %}
                         {% endfor %}
+                        {% endif %}
                     </section>
                 {% endfor %}
                 <div id="next_atts" style="width: max-content;display: flex;"></div>

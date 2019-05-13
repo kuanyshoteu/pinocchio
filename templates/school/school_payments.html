@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="group-details" style="padding-bottom: 200px;">
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="twelve wide column">
+                {% include 'school/head.html' %}
+                <div class="ui grid">
+                    <div class="twelve wide column" style="padding: 14px 0 0;">
+                        <div class="ui segment" style="margin-bottom: 0;">
+                            <div class="ui grid">
+                                <div class="one wide column">
+                                    <i class="icon list" style="font-size: 17px;"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;font-size: 15px;">
+                                    Список студентов
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment" id="calendar" style="margin-top: 0;padding: 0">
+                            <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;margin: 0;width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
+                                        <th><span>Оплата</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in profile|rating_filter %}
+                                        <tr style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
+                                            <td style="text-align: left;padding: 7px 15px;">
+                                                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                                    <span style="margin-right: 15px;">{{ forloop.counter }}.</span>
+                                                    <a href="{{ student.get_absolute_url }}" style="color: #fff;">
+                                                        {% if student.image %}
+                                                        <img class="ui image avatar" src="{{ student.image.url }}">
+                                                        {% else %}
+                                                        <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
+                                                        {% endif %}
+                                                        {{ student.first_name }}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="padding: 7px 15px;"><a class="ui button mini blue paid" id="{{ profile.id }}">Оплатил(а)</a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="four wide column" style="padding-right: 0;">
+                        <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+                            <form class="ui form">  
+                                <div style="padding-bottom: 15px;">
+                                    Выберите <b>предмет</b>:
+                                    <div class="controls" style="margin-top: 10px"> 
+                                        <select class="crm_option" id="crm_subject" url="{{ instance.crm_option_url }}" option="subject"> 
+                                            {% if profile.crm_subject %}
+                                                <option value="{{ profile.crm_subject.id }}">{{ profile.crm_subject.title }}</option>
+                                            {% endif %}
+                                            <option value="-1">Все предметы</option>
+                                            {% for subject_category in subject_categories %}
+                                                {% if subject_category != profile.crm_subject %}
+                                                <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="padding-bottom: 15px;">
+                                    Выберите <b>возраст</b>:
+                                    <div class="controls" style="margin-top: 10px"> 
+                                        <select class="crm_option" id="crm_age" url="{{ instance.crm_option_url }}" option="age"> 
+                                            {% if profile.crm_age %}
+                                                <option value="{{ profile.crm_age.id }}">{{ profile.crm_age.title }}</option>
+                                            {% endif %}
+                                            <option value="-1">Все возрасты</option>
+                                            {% for subject_age in subject_ages %}
+                                                {% if subject_age != profile.crm_age %}
+                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>                            
+                                </div>
+                                <div>
+                                    Выберите <b>класс</b>:
+                                    <div class="controls" style="margin-top: 10px"> 
+                                        <select class="crm_option" id="crm_squad" url="{{ instance.crm_option_url }}" option="group"> 
+                                            {% if profile.rating_squad_choice.first %}
+                                                <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                            {% endif %}
+                                            <option value="-1">Все классы</option>
+                                            {% for squad in squads %}
+                                                {% if squad != profile.rating_squad_choice.first %}
+                                                <option value="{{ squad.id }}">{{ squad.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>                            
+                                </div>
+                            </form>
+                        </div>
+                    </div>            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

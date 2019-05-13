@@ -54,7 +54,7 @@ class SubjectMaterialsAdmin(admin.ModelAdmin):
 admin.site.register(SubjectMaterials, SubjectMaterialsAdmin)
 
 class CellModelAdmin(admin.ModelAdmin):
-    list_display = ["day", "time_period"]
+    list_display = ['id', "day", "time_period"]
     list_display_links = ["day"]
     list_filter = ["day"]
 

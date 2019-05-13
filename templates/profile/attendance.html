@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% if hisprofile == profile or profile.is_manager %}
 <span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
 <span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
 <div class="ui segment shapka help3 help42">
@@ -13,7 +12,7 @@
         </div>
     </div>
 </div>
-<div class="ui segment help3 help42" style="margin-top: 0; padding: 18px;{% if not is_trener %}margin-bottom: 0;{% endif %}">
+<div class="ui segment help3 help42" style="margin-top: 0; padding: 18px;{% if not is_this_trener %}margin-bottom: 0;{% endif %}">
     {% for subject in hissubjects %}
     <a onclick="load_attendance_subject('{{ subject.id }}')" class="load_attendance_subject {% if subject.id == att_subject.id %}current_option{% else %}other_option{% endif %}" id="subject{{ subject.id }}">
         {{ subject.title }}
@@ -23,7 +22,7 @@
 <div class="ui segment help3 help42" style="margin-top: 0;padding: 0;">
     <div id="subject_attendance">
     {% if hissubjects|length > 0 %}
-    {% if is_trener %}
+    {% if is_this_trener %}
         <div class="ui stackable grid" style="margin-bottom: 0">
         {% for squad in att_subject.squads.all %}
             <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject.squads.all|length }}));">{{ squad.title }}</a>
@@ -288,7 +287,5 @@
         }
     }
 </script>
-
-{% endif %}
 
 

@@ -41,6 +41,7 @@ class School(models.Model):
     width_field2 = models.IntegerField(default=0, null=True)
     
     content = models.TextField(default='')
+    money = models.IntegerField(default=0)    
     slogan = models.CharField(max_length=250, default='')
 
     new_schedule = models.BooleanField(default = False)
@@ -56,8 +57,10 @@ class School(models.Model):
         return reverse("schools:requests")
     def get_recalls_url(self):
         return reverse("schools:recalls")
-    def get_teachers_url(self):
-        return reverse("schools:teachers")
+    def get_salaries_url(self):
+        return reverse("schools:salaries")
+    def get_payments_url(self):
+        return reverse("schools:payments")
     def get_crm_url(self):
         return reverse("schools:crm")
     def get_students_url(self):

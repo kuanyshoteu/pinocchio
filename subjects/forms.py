@@ -10,6 +10,15 @@ class SubjectForm(forms.ModelForm):
     title = forms.CharField(label='Название',required=False)
     content = forms.CharField(label='Описание', required=False)
     cost = forms.IntegerField(label='Цена', required=False)
+    class Meta:
+        model = Subject
+        fields = [      
+            "title",
+            "cost",
+            "content",
+        ]
+
+class SubjectForm2(forms.ModelForm):
     image_banner = forms.FileField(label='Баннер', required=False)
     image_icon = forms.FileField(label='Иконка', required=False)
     image_back = forms.FileField(label='Обои', required=False)
@@ -17,9 +26,6 @@ class SubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
         fields = [      
-            "title",
-            "content",
-            "cost",
             "image_banner",
             "image_icon",
             "image_back",

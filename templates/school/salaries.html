@@ -27,7 +27,14 @@
                                     <i class="icon users" style="font-size: 17px;"></i>
                                 </div>
                                 <div class="eleven wide column" style="padding-right: 25px;">
-                                    {{prof.title}}
+                                    <span style="margin-right:25px;font-size: 15px;">{{prof.title}}</span> 
+                                    <span style="background-color: #5181b8;padding: 5 10px;color: #fff;border-radius: 3px;">
+                                        {% if prof.title == 'Teacher' %}
+                                            Зарплата за <b>1</b> урок   
+                                        {% else %}
+                                            Зарплата за месяц
+                                        {% endif %}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -43,7 +50,7 @@
                                             <form class="ui form" style="margin: 0;">
                                                 <div id="input{{worker.id}}" class="ui grid" style="float: right;">
                                                     <div class="eleven wide column" style="padding: 14px 1px;">
-                                                        <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="job_salary{{job.id}}" value="{{ job.salary }}">                                       
+                                                        <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="job_salary{{job.id}}" value="{{ job.salary }}">                         
                                                     </div>
                                                     <div class="five wide column" style="padding: 14px 0">
                                                         <a class="ui button mini blue save_job_salary" id="{{ job.id }}" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
@@ -56,8 +63,15 @@
                                     <div style="margin: 0;">
                                         {% for worker in job.job_workers.all %}
                                             <div class="ui grid" style="margin: 0;{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
-                                                <div class="eleven wide column" style="padding: 14px 14px 5px 14px">
-                                                    {{ worker.first_name }}
+                                                <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
+                                                    <a href="{{ worker.get_absolute_url }}" style="color: #fff;">
+                                                        {% if worker.image %}
+                                                        <img class="ui image avatar" src="{{ worker.image.url }}">
+                                                        {% else %}
+                                                        <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
+                                                        {% endif %}
+                                                        {{ worker.first_name }}
+                                                    </a>
                                                 </div>
                                                 <div class="five wide column" style="padding: 5px 14px">
                                                     <form class="ui form" style="margin: 0;">
@@ -71,6 +85,7 @@
                                                         </div>
                                                         <span id="salary_show{{worker.id}}" style="float: right;">
                                                             <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
+                                                            <span style="font-size: 12px;">тг.</span>
                                                             <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
                                                         </span>
                                                     </form>

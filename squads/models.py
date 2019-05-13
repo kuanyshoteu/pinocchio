@@ -25,7 +25,7 @@ def upload_location(instance, filename):
     return "%s/%s" %(instance.id, filename)
 
 class Squad(models.Model):
-    curator = models.ManyToManyField(Profile, default=1, related_name='curators_squads')
+    teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hissquads') 
     students = models.ManyToManyField(Profile, default=1, related_name='squads')
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='groups')
     rating_choices = models.ManyToManyField(Profile, default=1, related_name='rating_squad_choice')
@@ -87,7 +87,11 @@ class Squad(models.Model):
     def add_paper_url(self):
         return reverse("squads:add_paper_url")   
     def change_curator_url(self):
-        return reverse("squads:change_curator_url")       
+        return reverse("squads:change_curator_url")    
+    def change_start_url(self):
+        return reverse("squads:change_start_url")  
+    def change_end_url(self):
+        return reverse("squads:change_end_url")   
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)

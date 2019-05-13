@@ -10,11 +10,12 @@ from django.utils import timezone
 from django.views.generic import RedirectView
 from datetime import timedelta
 
-from .forms import SquadForm
+from .forms import SquadForm, SquadForm2
 from .table_change_form import TableChangeForm
 from .models import *
 from schools.models import School
 from subjects.models import *
+from subjects.views import update_squad_dates
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
@@ -51,7 +52,7 @@ def squad_list(request):
     profile = get_profile(request)
     only_staff(profile)
     if is_profi(profile, 'Teacher'):
-        hissquads = profile.curators_squads.all()
+        hissquads = profile.hissquads.all()
     else:
         hissquads = profile.squads.all()
     school = profile.schools.first()
@@ -124,34 +125,27 @@ def squad_update(request, slug=None):
             instance.height_field = 0
         if not instance.width_field:
             instance.width_field = 0
-
-        for subject in instance.subjects.all():
-            for student in instance.students.all():
-                subject.students.remove(student)
-        removed = []
-        for student in school.people.filter(is_student=True):
-            data_string = request.POST.get('student' + str(student.id))
-            if data_string == 'on':
-                instance.students.add(student)
-            else:
-                if student in instance.students.all():
-                    instance.students.remove(student)
-                    removed.append(student)
-                    student.hisgrades.filter(squad = instance).delete()
-        for subject in instance.subjects.all():
-            squad_students = instance.students.all()
-            subject.students.add(*squad_students)
-            for student in removed:
-                subject.students.remove(student)
-
+    form2 = SquadForm2(request.POST or None, request.FILES or None, instance=instance)
+    if form2.is_valid():
+        instance = form2.save(commit=False)
+        if not instance.height_field:
+            instance.height_field = 0
+        if not instance.width_field:
+            instance.width_field = 0
         instance.save()
-        return HttpResponseRedirect(instance.get_update_url())        
+        for subject in instance.subjects.all():
+            update_squad_dates(subject, instance)
+            subject.save()
+
+        return HttpResponseRedirect(instance.get_update_url())
     context = {
         "instance": instance,
         "form":form,
+        "form2":form2,
         "profile":profile,
         "all_teachers":all_teachers(school),
-        "all_students":school.people.filter(is_student=True),
+        "squad_students":instance.students.all(),
+        "all_students":school.people.filter(is_student=True).exclude(squads=instance),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -240,10 +234,54 @@ def change_curator(request):
     only_managers(profile)
     if request.GET.get('teacher_id') and request.GET.get('subject_id'):
         squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
-        curator = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
-        for oldteacher in squad.curator.all():
-            squad.curator.remove(oldteacher)
-        squad.curator.add(curator)
+        oldteacher = squad.teacher
+        teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
+        squad.teacher = teacher
+        squad.save()
+        for subject in squad.subjects.prefetch_related('subject_lectures'):
+            subject.teachers.add(teacher)
+            subject.teachers.remove(oldteacher)
+            for lecture in subject.subject_lectures.all():
+                lecture.people.remove(oldteacher)
+                lecture.people.add(teacher)
+
     data = {
+    }
+    return JsonResponse(data)
+
+from datetime import timedelta
+import datetime
+
+def change_start(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    warning = False
+    if request.GET.get('date') and request.GET.get('subject_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
+        start_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
+        if start_date > squad.end_date:
+            warning = True
+        else:
+            squad.start_date = start_date
+            squad.save()
+    data = {
+        'warning':warning,
+    }
+    return JsonResponse(data)
+
+def change_end(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    warning = False
+    if request.GET.get('date') and request.GET.get('subject_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
+        end_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
+        if squad.start_date > end_date:
+            warning = True
+        else:
+            squad.end_date = end_date
+        squad.save()
+    data = {
+        'warning':warning,
     }
     return JsonResponse(data)
