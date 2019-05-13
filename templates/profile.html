@@ -71,7 +71,7 @@
             <div class="twelve wide column">
                 <div class="ui stackable grid info">
                     <div class="sixteen wide column left-side" style="padding: 14px 0;">
-                        <div class="twenty mitem" style="padding: 0;float: left;">
+                        <div class="twenty mitem" style="float: left;">
                             {% include 'profile/avatar.html' %}
                         </div>
                         <div class="eighty mitem" style="padding: 0 14px;float: left;">
@@ -85,8 +85,6 @@
                                     <a class="ui button mini blue paid full-w" id="{{ profile.id }}">Оплатил(а)</a>
                                 </div>
                             {% endif %}
-                            {% include 'profile/courses.html' %}
-                            {% include 'profile/skills_spider.html' %}
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
                             {% if hisprofile == profile or is_trener or is_manager %}

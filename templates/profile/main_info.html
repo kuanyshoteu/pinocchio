@@ -6,15 +6,44 @@
     </div>
     {% endif %}
 </div>                 
-<div class="ui raised card help5 help25 help44 help64" style="height: 260px;margin: 0">
+<div class="ui raised card help5 help25 help44 help64" id="main-info" style="margin: 0">
     <div class="content">
         <div class="right floated">
-            <div class="hint5 hint25 hint44 hint64 highliter" style="position: absolute;margin-left: -80px;margin-top: 40px;"></div>
+            <div class="hint5 hint25 hint44 hint64 highliter"></div>
             <img  src="{% static 'images/coins_gold.png' %}" style="width: 25px;">
             <span id="hiscoins">{{ hisprofile.coins }}</span>
         </div>
-        <div class="header">
-            {{ hisprofile.first_name }}
+        <div class="header" id="header-responsive">
+                <div class="avatar-phone">
+                    {% if hisprofile.image %}
+                    <div class="img-responsive" style="background-image: url({{ hisprofile.image.url }});"></div>
+                    {% else %}
+                    <div class="img-responsive" style="background-image: url({% static 'images/nophoto.png' %});"></div>
+                    {% endif %}
+                    <div class="name-desktop">{{ hisprofile.first_name }}</div>
+                </div>
+                <div id="main-info-phone">
+                    <div class="four wide column de" style="padding-right: 0">
+                        <p style="color: #828282;"><div class="name-responsive">{{ hisprofile.first_name }}</div> </p>
+                        <p style="color: #828282;">День рождения: </p>
+                        <p style="color: #828282;">Место учебы: </p>
+                        {% if hisprofile.phone %}
+                        <p style="color: #828282;">Телефон: </p>
+                        {% endif %}
+                        <p style="color: #828282;">Почта: </p>                   
+                    </div>
+                    <div class="five wide column de" style="padding-left: 0">
+                        <p><div class="coins-responsive">
+                        <div class="hint5 hint25 hint44 hint64 highliter"></div>
+                        <img  src="{% static 'images/coins_gold.png' %}" style="width: 15px;">
+                        <span id="hiscoins">{{ hisprofile.coins }}</span>
+                    </div></p>
+                        <p><a href="">{{ hisprofile.birthdate }}</a></p>
+                        <p><a href="">{{ hisprofile.schools.all.0.title }}</a></p>
+                        <p>{{ hisprofile.phone }}</p>
+                        <p>{{ hisprofile.mail }}</p>
+                    </div>
+                </div>
         </div>
         <div class="meta">
             <a class="open_form_status" style="color: #828282;">
@@ -35,7 +64,7 @@
             
             <div class="ui divider"></div>                                    
             <div class="ui grid" style="margin-top: 10px;">
-                <div class="four wide column de" style="padding-right: 0">
+                <div class="four wide column de" id="main-info-desktop" style="padding-right: 0">
                     <p style="color: #828282;">День рождения: </p>
                     <p style="color: #828282;">Школа: </p>
                     {% if hisprofile.phone %}
@@ -43,7 +72,7 @@
                     {% endif %}
                     <p style="color: #828282;">Почта: </p>                   
                 </div>
-                <div class="five wide column de" style="padding-left: 0">
+                <div class="five wide column de" id="main-info-desktop" style="padding-left: 0">
                     <p><a href="">{{ hisprofile.birthdate }}</a></p>
                     <p><a href="">{{ hisprofile.schools.all.0.title }}</a></p>
                     <p>{{ hisprofile.phone }}</p>
