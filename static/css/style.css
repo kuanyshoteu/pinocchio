@@ -89,6 +89,21 @@ a{
 .highliter {
     z-index: 1000;
 }
+.backg{
+  margin-top: 0px;
+  width: 200%;
+  overflow-x: scroll;
+  z-index: 0;
+}
+.crm_column{
+  padding-top: 15px;text-align: left;
+}
+.crm_time{
+  float: right;margin-right: 10px; font-size: 11px;color: #b3b300
+}
+.crm_icon{
+  color: #21BA45 !important;font-size: 15px !important;float: right;
+}
 .slider {
   display: flex;
   width: max-content;
@@ -203,7 +218,8 @@ a{
   padding: 2px;background-color:#4A4A4A;
 }
 .crm_divider{
-  padding: 0.5px;background-color:#99ccff
+  padding: 0.5px;background-color:#99ccff;
+  padding-bottom: 0;margin-bottom: 0 !important;
 }
 .option_vertical{
   padding: 10px 18px;

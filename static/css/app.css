@@ -5171,7 +5171,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;
   }
   .fixed_menu{
-    position: fixed;margin-left: 5%;z-index: 90;padding-left: 0;
+    position: fixed;margin-left: 2%;z-index: 90;padding-left: 0;
   }
   #logo{
     margin-left: 5%;
@@ -20716,6 +20716,9 @@ ol.ui.horizontal.list li:before,
     margin-left: 0em;
     margin-right: 0em;
   }
+  .not_in_mobile{
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -20725,6 +20728,9 @@ ol.ui.horizontal.list li:before,
     margin-right: 0em;
     padding-left: 2em;
     padding-right: 2em;
+  }
+  .not_in_mobile{
+    display: none;
   }
 }
 

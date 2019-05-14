@@ -17,50 +17,39 @@
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
 <script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
 <script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
-<div id="app">
+<div id="app" style="overflow-y: hidden;">
     <div class='ui container' id="untouch">
         <div class="ui grid main_crm" style="margin-top: 0">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
-                <div class="ui grid segment backg" style="margin-top: 0px;padding-bottom: 50px;width: 200%;">
+            <div class="wide column" style="padding-right: 0;width: 85%;">
+                <div class="ui grid">
                     {% for column in columns %}
-                    <div class="two wide column center aligned">
-                        <span style="font-size: 13px;font-weight: 600;">{{ column.title }}</span>
-                        <br>
-                        <span style="font-size: 13px;color: darkgrey;">Количество: {{ column.cards.all|length }}</span>
-                        <div class="ui divider crm_divider"></div>
-                        <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
-                        {% include 'school/new_card_form.html' %}
-                        <div class="column{{ column.id }}" style="margin-top: 15px;text-align: left;">
-                            <draggable 
-                                    class="crmbox{{ column.id }} full-h"
-                                    :options="{group:{ name:'people'}}"
-                                    @add="move_card({{ column.id }})">
-                                {% for card in column.cards.all %}
-                                <div id="card{{card.id}}" style="margin-bottom: 10px;" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
-                                    <div class="ui segment full-w" style="cursor: grab;padding: 10px 5px;">
-                                        {% if card.saved == False %}
-                                            <a class="delete_card" id="{{ card.id }}"><b>×</b></a>
-                                        {%endif%}
-                                        <div style="float: right;margin-right: 10px; font-size: 11px;color: #b3b300">
-                                            {{card.timestamp.date|date:"d.m.y"}}
-                                            <br>
-                                            {% if card.saved %}
-                                                <i class="icon check circle" style="color: #21BA45;font-size: 15px;float: right;"></i>
-                                            {% endif %}
-                                        </div>
-                                        <i class="icon user"></i>
-                                        <a id="{{ card.id }}" onclick="$('#card_form'+$(this).attr('id')).modal('show')" style="font-weight: 600">{{ card.name }}</a>
-                                        <div style="color: darkgrey;font-size: 12px;">
-                                            <i class="icon phone"></i> {{ card.phone }}
-                                            <br>
-                                            <i class="icon envelope"></i> {{ card.mail }}
-                                        </div>
+                    <div class=" wide column center aligned" style="padding: 5px;width: 16.65%;">
+                        <div class="ui segment" style="padding: 14px 4px;background-color: #{%if forloop.counter == 1%}99ccff{%elif forloop.counter == 2%}99ccff{% endif %};">
+                            <span style="font-size: 13px;font-weight: 600;">{{ column.title }}</span>
+                            <br>
+                            <span style="font-size: 13px;color: darkgrey;">Количество: {{ column.cards.all|length }}</span>
+                            <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
+                            {% include 'school/new_card_form.html' %}
+                            <div class="column{{ column.id }} crm_column">
+                                <draggable 
+                                        class="crmbox{{ column.id }} full-h"
+                                        :options="{group:{ name:'people'}}"
+                                        @add="move_card({{ column.id }})">
+                                    {% for card in column.cards.all %}
+                                    <div id="card{{card.id}}" class=" ui segment full-w" style="margin-bottom: 10px;padding: 12px 5px 4px 5px;" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
+                                            {% if card.saved == False %}
+                                                <a class="delete_card" id="{{ card.id }}"><b>×</b></a>
+                                            {%endif%}
+                                            <a id="{{ card.id }}" onclick="$('#card_form'+$(this).attr('id')).modal('show')" style="font-weight: 600">{{ card.name }}</a>
+                                            <div style="color: darkgrey;font-size: 12px;">
+                                                {{ card.phone }}
+                                            </div>
                                     </div>
-                                </div>
-                                {% include 'school/card_form.html' %}
-                                {% endfor %}
-                            </draggable>
+                                    {% include 'school/card_form.html' %}
+                                    {% endfor %}
+                                </draggable>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -103,6 +92,11 @@
             e.stopPropagation();            
         }
     });
+    // $(document).ready(function () {
+    //     document.getElementById("card").addEventListener("dragend", function(e) {
+    //         this.style.transform='rotate(0deg)'
+    //     }, false);
+    // })
     function openNav(id) {
       document.getElementById("school_schedule").style.width = "75%";
       $('.backg').addClass('darker')
@@ -129,12 +123,15 @@
         methods: {
             move_card(column_id) {
                 console.log('fff')
+                id = $('.current_card').attr('id')
                 axios.get('/schools/api/move_card/', {
                     params: {
                         'column_id': column_id,
-                        'card_id': $('.current_card').attr('id')
+                        'card_id': id
                     }
                 });
+                card = document.getElementById('card'+id)
+                card.style.transform='rotate(0deg)'
                 if (column_id == '4' || column_id == '8') {
                     openNav($('.current_card').attr('id'));                    
                 }
@@ -143,6 +140,12 @@
     })
 </script>
 <style type="text/css">
+.ui-draggable-dragging{
+    opacity: 1;
+    width: 200px;
+    z-index: 1000;
+    transform: rotate(5deg);
+}
 .darker{
     opacity: 0.1 !important;
     background-color: #000 !important;

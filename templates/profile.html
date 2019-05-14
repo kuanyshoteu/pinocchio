@@ -68,7 +68,7 @@
             <div class="hint70  highliter" style="position: absolute;margin-left: 200px;margin-top: 190px;"></div>
             <div class="hint71 highliter" style="position: absolute;margin-left: 200px;margin-top: 245px;"></div>
             
-            <div class="twelve wide column">
+            <div class="thirteen wide column">
                 <div class="ui stackable grid info">
                     <div class="sixteen wide column left-side" style="padding: 14px 0;">
                         <div class="twenty mitem" style="float: left;">
@@ -85,12 +85,16 @@
                                     <a class="ui button mini blue paid full-w" id="{{ profile.id }}">Оплатил(а)</a>
                                 </div>
                             {% endif %}
+                            <div class="not_in_mobile">
+                                {% include 'profile/courses.html' %}
+                                {% include 'profile/skills_spider.html' %}
+                            </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
                             {% if hisprofile == profile or is_trener or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
                                     {% include 'profile/hisschedule.html' %}
-                                    {% include 'profile/attendance.html' %}
+                                    {% include 'profile/attendance.html' %}                                    
                                 {% endif %}
                             {% endif %}
                             {% include 'profile/chart.html' %}
