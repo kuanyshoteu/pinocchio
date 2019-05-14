@@ -47,6 +47,9 @@ def only_staff(profile):
 
 def is_profi(profile, job_name):
     profession = Profession.objects.get(title = job_name)
+    if job_name == 'Director':
+    	if not profile.is_student:
+    		return True
     return profession in profile.profession.all()
 
 def check_cells():
