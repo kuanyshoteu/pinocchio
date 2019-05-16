@@ -104,13 +104,17 @@ a{
 .crm_column{
   padding-top: 0;text-align: left;
 }
+.crm_card{
+  padding: 12px 5px 4px 5px !important;
+  box-shadow: 0 2px 2px 2px #3a3a3a !important;
+}
 .subject_cost{
   height: 33px;line-height: 10px;
 }
 .crm_marker{
   background-color: #21BA45 !important;
   padding: 2px !important;
-  width: 30px;
+  width: 100%;
   border-radius: 2px;
   position: absolute !important;
   margin-top: -13px;

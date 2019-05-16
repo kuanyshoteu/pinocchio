@@ -40,7 +40,7 @@
                                             @add="move_card({{ column.id }})">
                                         {% for card in column.cards.all %}
                                         <div style="padding: 5px 0" id="card_container{{card.id}}">
-                                            <div id="card{{card.id}}" class="ui segment full-w" style="padding: 12px 5px 4px 5px;" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
+                                            <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
                                                     {% if card.saved %}
                                                         <div class="crm_marker">
                                                         </div>
