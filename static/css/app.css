@@ -5137,10 +5137,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;
   }
   .fixed_menu{
-    position: fixed;margin-left: 3%;z-index: 90;padding-left: 0;
+    position: fixed;margin-left: 0%;z-index: 90;padding-left: 0;
   }
   #logo{
-    margin-left: 3%;
+    margin-left: 0%;
   }
   .twenty{
     width: 30%;
@@ -5174,7 +5174,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     position: fixed;margin-left: 2%;z-index: 90;padding-left: 0;
   }
   #logo{
-    margin-left: 5%;
+    margin-left: 2%;
   }
   .twenty{
     width: 20%;

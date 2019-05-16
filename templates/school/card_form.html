@@ -1,26 +1,20 @@
-<div class="ui modal" id="card_form{{ card.id }}">
+<div class="ui modal large" id="card_form{{ card.id }}">
     <i class="close icon"></i>
     <div class="content">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <table class="ui celled table" style="margin: 0">
-                <thead>
-                    <tr>
-                        <th><span>Имя</span></th>
-                        <th><span>Телефон</span></th>
-                        <th><span>Почта</span></th>
-                        <th><span>Комментарий</span></th>
-                    </tr>
-                </thead>
-                <tbody id="create_student_rows">
-                    <tr>
-                        <td><textarea class="card_name{{ card.id }}">{{ card.name }}</textarea></td>
-                        <td><textarea class="card_phone{{ card.id }}">{{ card.phone }}</textarea></td>
-                        <td><textarea class="card_mail{{ card.id }}">{{ card.mail }}</textarea></td>
-                        <td><textarea class="card_comment{{ card.id }}">{{ card.comments }}</textarea></td>
-                    </tr>
-                </tbody>
-            </table>
-            <a class="ui button blue tiny edit_card" id="{{ card.id }}">Сохранить</a>    
+            <div class="ui grid stackable">
+                <div class="six wide column">
+                    <textarea class="card_name{{ card.id }}" placeholder="Имя">{{ card.name }}</textarea> 
+                    <textarea class="card_phone{{ card.id }}" placeholder="Телефон">{{ card.phone }}</textarea> 
+                    <textarea class="card_mail{{ card.id }}" placeholder="Почта">{{ card.mail }}</textarea> 
+                </div>
+                <div class="ten wide column">
+                    <textarea class="card_comment{{ card.id }}" placeholder="Комментарий">{{ card.comments }}</textarea>
+                </div>      
+                <div class="sixteen wide column center aligned">          
+                    <a class="ui button blue tiny edit_card" id="{{ card.id }}">Сохранить</a>    
+                </div>
+            </div>
         </form>
     </div>
 </div>

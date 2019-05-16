@@ -27,7 +27,7 @@
 <div id="calendarr" class="help1 help41" length='7'>           
     <div id="week">   
         <div class="week" id="0">
-            <div class="daysmall daysmall_time" style="padding-top: 17px;">
+            <div class="daysmall daysmall_time">
             </div>
             {% for day in days %}
             {% if day.number != 7 %} 
@@ -42,7 +42,7 @@
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% for timep in time_periods %}
         <div class="week" id="{{ forloop.counter }}">
-            <div class="daysmall daysmall_time" style="padding-top: 17px;color: white;">
+            <div class="daysmall daysmall_time">
                 {{ timep.start }}-{{ timep.end }}
             </div>
             {% for cell in timep.time_cell.all %}  

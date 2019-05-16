@@ -88,9 +88,8 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                card_id = data.card_id;
-                                
-                var element = $('<div id="card'+data.card_id+'" style="margin-bottom: 10px;" ondragstart="save_card_id('+data.card_id+')" draggable="true"> <div class="ui segment full-w" style="cursor: pointer;padding: 3px 7px;"> <div style="float: right;font-size: 11px;color: #b3b300"> '+data.card_date+' <br> </div> <i class="icon user"></i> <a class="open_card_form" id="'+card_id+'" onclick="" style="font-weight: 600">'+data.card_name+'</a> <div style="color: darkgrey;font-size: 12px;"> <i class="icon phone"></i> '+data.card_phone+' <br> <i class="icon envelope"></i> '+data.card_mail+' </div> </div> </div>');
+                card_id = data.card_id;          
+                var element = $('<div id="card'+data.card_id+'" style="margin-bottom: 10px;" ondragstart="save_card_id('+data.card_id+')" draggable="true"> <div class="ui segment full-w" style="cursor: pointer;padding: 3px 7px;"><a class="open_card_form" id="'+card_id+'" onclick="" style="font-weight: 600">'+data.card_name+'</a> <div style="color: darkgrey;font-size: 12px;">'+data.card_phone+' </div> </div> </div>');
                 element.appendTo('.crmbox' + id)
                 $('#new_card_form'+id).modal('hide')
             }
@@ -113,7 +112,7 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                $('#card' + id).load(document.URL +  ' #card' + id);
+                $('#card_container' + id).load(document.URL +  ' #card' + id);
                 $('#card_form'+id).modal('hide')
             }
         })        
