@@ -38,8 +38,8 @@
                         <img  src="{% static 'images/coins_gold.png' %}" style="width: 15px;">
                         <span id="hiscoins">{{ hisprofile.coins }}</span>
                     </div></p>
-                        <p><a href="">{{ hisprofile.birthdate }}</a></p>
-                        <p><a href="">{{ hisprofile.schools.all.0.title }}</a></p>
+                        <p>{{ hisprofile.birthdate }}</p>
+                        <p>{{ hisprofile.schools.all.0.title }}</p>
                         <p>{{ hisprofile.phone }}</p>
                         <p>{{ hisprofile.mail }}</p>
                     </div>
@@ -61,8 +61,7 @@
             </a>
         </div>
         <div class="description">
-            
-            <div class="ui divider"></div>                                    
+            <div class="ui divider not_in_mobile"></div>                                    
             <div class="ui grid" style="margin-top: 10px;">
                 <div class="four wide column de" id="main-info-desktop" style="padding-right: 0">
                     <p style="color: #828282;">День рождения: </p>
@@ -73,8 +72,8 @@
                     <p style="color: #828282;">Почта: </p>                   
                 </div>
                 <div class="five wide column de" id="main-info-desktop" style="padding-left: 0">
-                    <p><a href="">{{ hisprofile.birthdate }}</a></p>
-                    <p><a href="">{{ hisprofile.schools.all.0.title }}</a></p>
+                    <p>{{ hisprofile.birthdate }}</p>
+                    <p>{{ hisprofile.schools.all.0.title }}</p>
                     <p>{{ hisprofile.phone }}</p>
                     <p>{{ hisprofile.mail }}</p>
                 </div>

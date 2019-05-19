@@ -110,6 +110,67 @@ def register_view(request):
     }
     return JsonResponse(data)
 
+from django.contrib.postgres.search import TrigramSimilarity
+def search(request):
+    profile = get_profile(request)
+    school=profile.schools.first()
+    res_profiles = []
+    res_subjects = []
+    res_squads = []
+    res_courses = []
+    text = request.GET.get('text')
+    if text != '':
+        similarity=TrigramSimilarity('first_name', text)
+        profiles = school.people.annotate(similarity=similarity,).filter(similarity__gt=0.3).order_by('-similarity')
+        similarity=TrigramSimilarity('title', text)
+        subjects = school.school_subjects.annotate(similarity=similarity,).filter(similarity__gt=0.3).order_by('-similarity')
+        squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.3).order_by('-similarity')
+        courses = school.school_courses.annotate(similarity=similarity,).filter(similarity__gt=0.3).order_by('-similarity')
+        i = 0
+        for profile in profiles:
+            image_url = ''
+            if profile.image:
+                image_url = profile.image.url
+            res_profiles.append([profile.first_name, profile.get_absolute_url(), image_url])
+            i+=1
+            if i == 4:
+                break
+        i = 0
+        for subject in subjects:
+            image_url = ''
+            if subject.image_icon:
+                image_url = subject.image_icon.url
+            res_subjects.append([subject.title, subject.get_absolute_url(), image_url])
+            i+=1
+            if i == 4:
+                break
+        i = 0
+        for squad in squads:
+            image_url = ''
+            if squad.image_icon:
+                image_url = squad.image_icon.url
+            res_squads.append([squad.title, squad.get_absolute_url(), image_url])
+            i+=1
+            if i == 4:
+                break
+        i = 0
+        for course in courses:
+            image_url = ''
+            if course.image:
+                image_url = course.image.url
+            res_courses.append([course.title, course.get_absolute_url(), image_url])
+            i+=1
+            if i == 4:
+                break
+
+    data = {
+        "res_profiles":res_profiles,
+        "res_subjects":res_subjects,
+        "res_squads":res_squads,
+        "res_courses":res_courses,
+    }
+    return JsonResponse(data)
+
 def ChangeSubject(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
@@ -122,7 +183,6 @@ def ChangeSubject(request):
         if request.GET.get('cost'):
             subject.cost = request.GET.get('cost')
         subject.save()
-                    
     data = {
     }
     return JsonResponse(data)

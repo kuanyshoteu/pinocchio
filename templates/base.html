@@ -23,15 +23,11 @@
 
 </head>
 <body>
-{% include "modals/request_group.html" %}
-{% include "modals/login.html" %}
-{% include "modals/registration.html" %}
-{% include "modals/signup.html" %}
 {% include "modals/confirm_delete.html" %}
 
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
-        <div class="menu-title">
+        <div class="menu-title" style="width: calc(25% + 140px);">
             <i class="icon bars" id="toggle"></i>
             <a href='{% url "main:home" %}' class="header main">
                 <img src="{% static 'images/logo_clean.png' %}" id="logo">
@@ -40,135 +36,46 @@
                 Заявка
             </a>
         </div>
+        {% if request.user.is_authenticated %}
+        <div class="item not_in_mobile">
+            <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
+                <input id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск">
+                <div class="search-bar">
+                    <p class="search-list-title search-list-title-people">Люди</p>
+                    <ul class="search-list-people search-list">
+                    </ul>
+                    <p class="search-list-title search-list-title-subjects">Предметы</p>
+                    <ul class="search-list-subjects search-list">
+                    </ul>
+                    <p class="search-list-title search-list-title-squads">Классы</p>
+                    <ul class="search-list-classes search-list">
+                    </ul>
+                    <p class="search-list-title search-list-title-courses">Курсы</p>
+                    <ul class="search-list-courses search-list">
+                    </ul>
+                </div>
+            </form>
+            <div class="notice "><i class="fas fa-bell"></i>
+                <div class="notice-bar">
+                    <ul class="notice-list">
+                        <li class="notice-item">
+                            <a class="notice-item-link">
+                                <span class="notice-item-name">Даулет Семенов</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {% if is_manager %}
+            <a class="ui button mini help24 help2424hb" id="" href="/schools/crm_reg/" style="padding:6px 10px;background-color: #2D437C;font-size: 14px;color: lightgrey;">
+                Заявка
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
         <div class="full-w left-main-menu">
             {% if request.user.is_authenticated %}
-            <div class="item float_right" style="margin-right: 10%;">
-                <div class="notice"><i class="fas fa-bell"></i>
-                    <div class="notice-bar">
-                        <ul class="notice-list">
-                            <p class="notice-list-title">Люди</p>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="notice-list">
-                            <p class="notice-list-title">Предметы</p>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="notice-list">
-                            <p class="notice-list-title">Классы</p>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="notice-list">
-                            <p class="notice-list-title">Курсы</p>
-                            <li class="notice-item">
-                                <a class="notice-item-link"><img class="notice-item-img" src="{% static 'images/nophoto.png' %}"
-                                        alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span></a>
-                            </li>
-                            <li class="notice-item">
-                                <a class="notice-item-link">
-                                    <img class="notice-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="notice-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
-                    <input id="search-input" type="text" style="margin-bottom: 0;" placeholder="Поисковой запрос">
-                    <div class="search-bar">
-                        <ul class="search-list">
-                            <p class="search-list-title">Люди</p>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="search-list">
-                            <p class="search-list-title">Предметы</p>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="search-list">
-                            <p class="search-list-title">Классы</p>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                        <ul class="search-list">
-                            <p class="search-list-title">Курсы</p>
-                            <li class="search-item">
-                                <a class="search-item-link"><img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                <span class="search-item-name">Даулет Семенов</span></a>
-                            </li>
-                            <li class="search-item">
-                                <a class="search-item-link">
-                                    <img class="search-item-img" src="{% static 'images/nophoto.png' %}" alt="photo">
-                                    <span class="search-item-name">Даулет Семенов</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
+            <div class="item float_right" style="margin-right: 15%;">
                 <a class="profile_name">
                     {{ profile.first_name }}
                     {% if profile.image %}
@@ -245,12 +152,7 @@
 
 <script src='{% static "js/squad.js" %}'></script>
 <script src='{% static "js/library.js" %}'></script>
-<!-- <script src='{% static "js/libs/goog.js" %}'></script> -->
 <script src='{% static "js/plugins.js" %}'></script>
-<!-- <script src='{% static "js/Parallax.class.js" %}'></script> -->
-<!-- <script src='{% static "js/ScrollParallax.class.js" %}'></script> -->
-<!-- <script src='{% static "js/Slide.class.js" %}'></script> -->
-<!-- <script src='{% static "js/SlideIntro.class.js" %}'></script>  -->
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>

@@ -1,11 +1,12 @@
-$('.notice').click(function() {
-    $('.notice-bar').css('display', 'block');
+$('.notice').click(function(event) {
+    $('.notice-bar').fadeToggle('fast');
     $('.notice').css('color', '#fff');
+    $('.search-bar').hide();
+    event.stopPropagation();
 });
-$(document).click(function(e){
+$("body").click(function(e){
+    console.log('body')
+    $('.notice-bar').css('display', 'none');
     var div = $('.notice');
-    if(!div.is(e.target) && div.has(e.target).length === 0) {
-        $('.notice-bar').css('display', 'none');
-        div.css('color', '#2D437C');
-    }
+    div.css('color', '#2D437C');
 });

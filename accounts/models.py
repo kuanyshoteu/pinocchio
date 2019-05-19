@@ -35,7 +35,7 @@ class JobCategory(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
-    first_name = models.TextField(blank = True,null = True,default='')
+    first_name = models.TextField(blank = True,null = True,default='name')
 
     schools = models.ManyToManyField(School, related_name='people')
     profession = models.ManyToManyField(Profession, related_name='workers')

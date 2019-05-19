@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^api/change_subject_url/$', ChangeSubject, name='change_subject_url'),    
     url(r'^save_zaiavka_url/$', SaveZaiavka, name='save_zaiavka_url'),    
     url(r'^lesson/$', hislessons, name='hislessons'),
+    url(r'^search/$', search, name='search'),
 ]
