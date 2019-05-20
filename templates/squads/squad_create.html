@@ -35,6 +35,7 @@
 
 <div id="group-create">
 	{% if instance %}
+	<span class="add_student_url" id="{{instance.id}}" style="display: none;" url="{{ instance.add_student_url }}"></span>
 	<a id="go-back-btn"  href='{{ instance.get_absolute_url }}'>
         <i class="arrow left icon"></i>Назад
     </a>
@@ -136,8 +137,8 @@
 				                            <div style="width: 70%;" class="student_name2">
 				                            	{{ student.first_name }}
 				                            </div>
-			                            	<i id="student{{ student.id }}" class="icon check circle green"></i> 
-				                            <a class="ui button mini blue" style="float: right;padding: 2px 10px;font-size: 18px;height: 23px;">-</a>
+			                            	<i id="studenticon{{ student.id }}" class="icon check circle green"></i> 
+				                            <a class="ui button mini blue add_student" id="{{ student.id }}" style="float: right;padding: 2px 10px;height: 23px;">-</a>
 										</div>
 				                    </div>
 									{% endfor %}
@@ -154,8 +155,8 @@
 				                            <span style="width:70%;" class="student_name2">
 				                            	{{ student.first_name }}
 				                            </span>
-			                            	<i style="display: none;" id="student{{ student.id }}" class="icon check circle green"></i> 
-				                            <a class="ui button mini blue" style="float: right;padding: 6px 10px;height: 23px;">+</a>
+			                            	<i style="display: none;" id="studenticon{{ student.id }}" class="icon check circle green"></i> 
+				                            <a class="ui button mini blue add_student" id="{{ student.id }}" style="float: right;padding: 6px 10px;height: 23px;">+</a>
 				                        </div>
 				                    </div>
 		                            {% endfor %}
@@ -175,6 +176,5 @@
 		</div>
 	</div>	
 </div>
-
 
 {% endblock content %}

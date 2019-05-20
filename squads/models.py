@@ -89,9 +89,11 @@ class Squad(models.Model):
     def change_curator_url(self):
         return reverse("squads:change_curator_url")    
     def change_start_url(self):
-        return reverse("squads:change_start_url")  
+        return reverse("squads:change_start_url")
     def change_end_url(self):
         return reverse("squads:change_end_url")   
+    def add_student_url(self):
+        return reverse("squads:add_student_url")   
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)

@@ -232,22 +232,88 @@ def set_time(request):
 def change_curator(request):
     profile = get_profile(request)
     only_managers(profile)
-    if request.GET.get('teacher_id') and request.GET.get('subject_id'):
-        squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
+    if request.GET.get('teacher_id') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         oldteacher = squad.teacher
         teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
         squad.teacher = teacher
         squad.save()
-        for subject in squad.subjects.prefetch_related('subject_lectures'):
+        # for lecture in Lecture.objects.all():
+        #     lecture.person_id = []
+        #     lecture.person_number = []
+        #     people = lecture.people.all()
+        #     lecture.people.remove(*people)
+        #     lecture.save()
+        for subject in squad.subjects.all():
             subject.teachers.add(teacher)
             subject.teachers.remove(oldteacher)
-            for lecture in subject.subject_lectures.all():
-                lecture.people.remove(oldteacher)
-                lecture.people.add(teacher)
+        for lecture in squad.squad_lectures.all():
+            remove_person_from_lecture(lecture, oldteacher)
+            add_person_to_lecture(lecture, teacher)
+            lecture.save()
+
+    print(lecture.people.all())
 
     data = {
     }
     return JsonResponse(data)
+
+def add_student(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('student_id') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
+        student = Profile.objects.get(id = int(request.GET.get('student_id')) )
+        add = True
+        if student in squad.students.all():
+            squad.students.remove(student)
+            add = False
+            for subject in squad.subjects.all():
+                subject.students.remove(student)
+            for lecture in squad.squad_lectures.all():
+                remove_person_from_lecture(lecture, student)
+                lecture.save()            
+        else:
+            squad.students.add(student)
+            for subject in squad.subjects.all():
+                subject.students.add(student)
+            for lecture in squad.squad_lectures.all():
+                add_person_to_lecture(lecture, student)
+                lecture.save()
+    data = {
+        'add':add,
+    }
+    return JsonResponse(data)
+
+def remove_student(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('student_id') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
+        student = Profile.objects.get(id = int(request.GET.get('student_id')) )
+    data = {
+    }
+    return JsonResponse(data)
+
+def remove_person_from_lecture(lecture, person):
+    if not person.id in lecture.person_id:
+        lecture.person_id.append(person.id)
+        lecture.person_number.append(1)
+    index = lecture.person_id.index(person.id)
+    number = lecture.person_number[index]
+    if number == 1:
+        lecture.people.remove(person)
+    lecture.person_number[index] -= 1
+    if lecture.person_number[index] < 0:
+        lecture.person_number[index] = 0
+def add_person_to_lecture(lecture, person):
+    if not person.id in lecture.person_id:
+        lecture.person_id.append(person.id)
+        lecture.person_number.append(0)
+    index = lecture.person_id.index(person.id)
+    number = lecture.person_number[index]
+    lecture.people.add(person)
+    lecture.person_number[index] += 1
 
 from datetime import timedelta
 import datetime
@@ -256,8 +322,8 @@ def change_start(request):
     profile = get_profile(request)
     only_managers(profile)
     warning = False
-    if request.GET.get('date') and request.GET.get('subject_id'):
-        squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
+    if request.GET.get('date') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         start_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
         if start_date > squad.end_date:
             warning = True
@@ -273,8 +339,8 @@ def change_end(request):
     profile = get_profile(request)
     only_managers(profile)
     warning = False
-    if request.GET.get('date') and request.GET.get('subject_id'):
-        squad = Squad.objects.get(id = int(request.GET.get('subject_id')) )
+    if request.GET.get('date') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         end_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
         if squad.start_date > end_date:
             warning = True

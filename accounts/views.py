@@ -276,7 +276,12 @@ def att_present(request):
     if request.GET.get('id') and is_profi(profile, 'Teacher'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
         attendance.present = 'present'
+        material = attendance.subject_materials
+        if not profile in material.done_by.all():
+            material.done_by.add(profile)
+            profile.money += profile.salary
         attendance.save()
+        profile.save()
     data = {
     }
     return JsonResponse(data)

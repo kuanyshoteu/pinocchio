@@ -159,7 +159,7 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(pre_save_course_receiver, sender=Subject)
 
 class SubjectMaterials(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_materials')     
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_materials')     
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='materials')
     lessons = models.ManyToManyField(Lesson, related_name='subject_materials')
     number = models.IntegerField(default=0)
@@ -176,12 +176,15 @@ class Lecture(models.Model):
     cabinet = models.ForeignKey(Cabinet,null=True, on_delete = models.CASCADE, related_name='cabinet_lecture')
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='squad_lectures')
     people = models.ManyToManyField(Profile, related_name='hislectures')
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_lectures') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_lectures') 
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='subject_lectures')
 
     office = models.ForeignKey(Office,null=True, on_delete = models.CASCADE, related_name='office_lectures') 
     category = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='category_lectures') 
     age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='age_lectures') 
+
+    person_id = ArrayField(models.IntegerField(), default = list)
+    person_number = ArrayField(models.IntegerField(), default = list)
 
     class Meta:
         ordering = ['cell']
@@ -191,9 +194,9 @@ class Attendance(models.Model):
     present = models.TextField(default = '')
     grade = models.IntegerField(default = -1)
 
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_attendances')     
-    teacher = models.ForeignKey(Profile, default=119, on_delete = models.CASCADE, related_name='madegrades')
-    student = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE, related_name='hisgrades')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_attendances')     
+    teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='madegrades')
+    student = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hisgrades')
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='subject_attendances')
     squad = models.ForeignKey(Squad,null=True, on_delete = models.CASCADE, related_name='squad_attendances')
     class Meta:

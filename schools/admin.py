@@ -15,7 +15,7 @@ class SchoolModelAdmin(admin.ModelAdmin):
 admin.site.register(School, SchoolModelAdmin)
 
 class CRMColumnModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "school", "id", "number_of_cards"]
+    list_display = ["title", "school", "id"]
     list_display_links = ["title"]
     list_filter = ["school"]
 

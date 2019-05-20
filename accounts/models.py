@@ -180,12 +180,12 @@ class MissLesson(models.Model):
 class CRMColumn(models.Model):
     title = models.CharField(max_length=250)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_columns')
-    number_of_cards = models.IntegerField(default=0)
     class Meta:
         ordering = ['id']
 
 class CRMCard(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
+    user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_user')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_cards')
     column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
     name = models.CharField(max_length=250)
@@ -196,3 +196,13 @@ class CRMCard(models.Model):
     saved = models.BooleanField(default=False)
     class Meta:
         ordering = ['saved', 'timestamp']
+
+class CRMCardHistory(models.Model):
+    action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_histories')
+    card = models.ForeignKey(CRMCard, null=True, on_delete = models.CASCADE, related_name='history')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    oldcolumn = models.CharField(max_length=250)
+    newcolumn = models.CharField(max_length=250)
+    edit = models.TextField(default='')
+    class Meta:
+        ordering = ['-timestamp']

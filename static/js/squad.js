@@ -1,4 +1,31 @@
 $(document).ready(function () {
+    $('.add_student').on('click', function(e) {
+        this_ = $(this)
+        url = $('.add_student_url').attr('url')
+        student_id = this_.attr('id')
+        squad_id = $('.add_student_url').attr('id')
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'squad_id':squad_id,
+                'student_id':student_id,
+            },
+            success: function (data) {
+                if (data.add) {
+                    this_.text('-')
+                    $('#studenticon'+student_id).show()
+                }
+                else{
+                    this_.text('+')                    
+                    $('#studenticon'+student_id).hide()
+                }
+            }, 
+            error: function (error) {
+                console.log('error')
+            }
+        })
+    });
     $('.det').on('click', function(e) {
         this_ = $(this)
         console.log('work0')
@@ -22,7 +49,7 @@ $(document).ready(function () {
             method: "GET",
             data: {
                 'date':document.getElementsByClassName("start")[0].value,
-                'subject_id':this_.attr('subject_id'),
+                'squad_id':this_.attr('squad_id'),
             },
             success: function (data) {
                 if (data.warning){
@@ -41,7 +68,7 @@ $(document).ready(function () {
             method: "GET",
             data: {
                 'date':document.getElementsByClassName("end")[0].value,
-                'subject_id':this_.attr('subject_id'),
+                'squad_id':this_.attr('squad_id'),
             },
             success: function (data) {
                 if (data.warning){
@@ -61,7 +88,7 @@ $(document).ready(function () {
             method: "GET",
             data: {
                 'teacher_id':teacher_id,
-                'subject_id':this_.getAttribute('subject_id'),
+                'squad_id':this_.getAttribute('squad_id'),
             },
             success: function (data) {
             }, 

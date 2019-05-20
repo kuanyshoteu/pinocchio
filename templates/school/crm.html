@@ -48,7 +48,7 @@
                                                     {% if card.saved == False %}
                                                         <a class="delete_card" id="{{ card.id }}"><b>×</b></a>
                                                     {%endif%}
-                                                    <a id="{{ card.id }}" onclick="$('#card_form'+$(this).attr('id')).modal('show')" style="font-weight: 600">{{ card.name }}</a>
+                                                    <a id="{{ card.id }}" class="open_crmcard" style="font-weight: 600">{{ card.name }}</a>
                                                     <div style="color: darkgrey;font-size: 12px;">
                                                         {{ card.phone }}
                                                     </div>
@@ -79,7 +79,7 @@
         <a class="ui button mini red" onclick="$('#delete_card_modal').modal('hide')">Нет</a>
     </div>
 </div>
-<span style="display: none;" id="0" class="current_card"></span>
+<span style="display: none;" id="0" class="current_card" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}"></span>
@@ -123,7 +123,7 @@
                 });
                 card = document.getElementById('card'+id)
                 card.style.transform='rotate(0deg)'
-                if (column_id == '4' || column_id == '8') {
+                if (parseInt(column_id) > 3 || column_id == '2') {
                     openNav($('.current_card').attr('id'));                    
                 }
             },

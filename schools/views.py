@@ -271,14 +271,14 @@ def save_card_as_user(request):
             user.set_password(password)
             user.save()
             card.saved = True
-            card.save()
             profile = Profile.objects.get(user = user)
             profile.first_name = card.name
             profile.phone = card.phone
             profile.mail = card.mail
             profile.save()
+            card.user = profile
+            card.save()
             profile.schools.add(school)
-            Profession.objects.get(title = 'Student').workers.add(profile)
             squad_id = int(request.GET.get('squad_id'))
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
@@ -289,6 +289,23 @@ def save_card_as_user(request):
                     lecture.people.add(profile)
                 for timep in school.time_periods.all():
                     timep.people.add(profile)
+
+            hist = CRMCardHistory.objects.create(
+                action_author = manager_profile,
+                card = card,
+                edit = '*** Регистрация ***',
+                )
+        else:
+            profile = card.user
+            squad_id = int(request.GET.get('squad_id'))
+            if squad_id > 0:
+                squad = Squad.objects.get(id=squad_id)
+                squad.students.add(profile)
+                for subject in squad.subjects.all():
+                    subject.students.add(profile)
+                for lecture in squad.squad_lectures.all():
+                    lecture.people.add(profile)
+
     data = {
         'password':password
     }
@@ -331,13 +348,17 @@ def move_card(request):
     only_managers(profile)
     if request.GET.get('card_id') and request.GET.get('column_id'):
         school = profile.schools.first()
-        print('Aaaaa',request.GET.get('card_id'), request.GET.get('column_id'))
         column = school.crm_columns.get(id = int(request.GET.get('column_id')))
         card = school.crm_cards.get(id = int(request.GET.get('card_id')))
+        CRMCardHistory.objects.create(
+            action_author = profile,
+            card = card,
+            oldcolumn = card.column.title,
+            newcolumn = column.title,
+            )
         card.column = column
         card.save()
-        column.number_of_cards += 1
-        column.save()
+
     data = {
     }
     return JsonResponse(data)
@@ -348,12 +369,40 @@ def edit_card(request):
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
         school = profile.schools.first()
         card = school.crm_cards.get(id = int(request.GET.get('id')))
+        edit = '***Редактирование*** '
+        if card.name != request.GET.get('name'):
+            edit = edit + "Имя: " + card.name + " -> " + request.GET.get('name') + "; "
+        if card.phone != request.GET.get('phone'):
+            edit = edit + "Номер: " + card.phone + " -> " + request.GET.get('phone') + "; "
+        if card.mail != request.GET.get('mail'):
+            edit = edit + "Почта: " + card.mail + " -> " + request.GET.get('mail') + "; "
+        if card.comments != request.GET.get('comment'):
+            edit = edit + "Коммент: " + card.comments + " -> " + request.GET.get('comment') + "; "
         card.name = request.GET.get('name')
         card.phone = request.GET.get('phone')
         card.mail = request.GET.get('mail')
-        card.comment = request.GET.get('comment')
+        card.comments = request.GET.get('comment')
         card.save()
+        CRMCardHistory.objects.create(
+            action_author = profile,
+            card = card,
+            edit = edit,
+            )
     data = {
+    }
+    return JsonResponse(data)
+
+def open_card(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    if request.GET.get('id'):
+        school = profile.schools.first()
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
+        for history in card.history.all():
+            res.append([history.action_author.first_name, history.action_author.get_absolute_url(), history.timestamp.strftime('%d.%m.%Y %H:%M') ,history.oldcolumn,history.newcolumn, history.edit])
+    data = {
+        'res':res,
     }
     return JsonResponse(data)
 
@@ -372,6 +421,12 @@ def add_card(request):
             school = school,
         )
         card.save()
+        hist = CRMCardHistory.objects.create(
+            action_author = profile,
+            card = card,
+            edit = '***Создание карточки***',
+            )
+        hist.save()
     data = {
         "card_id":card.id,
         "card_name":card.name,
