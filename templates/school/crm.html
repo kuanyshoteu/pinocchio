@@ -25,7 +25,7 @@
                 <div class="ui grid" style="margin-top: -5px;">
                     {% for column in columns %}
                     <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
-                        <div class="margin0" style="padding: 14px 4px;background-color: #4A4A4A;color: #fff;">
+                        <div class="margin0" style="padding: 14px 4px;background-color: #4A4A4A;color: #fff;border-radius: 5px 5px 0 0;">
                             <div class="crm_title">{{ column.title }}</div>
                             <div class="crm_divider"></div>
                             <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
@@ -40,7 +40,7 @@
                                             @add="move_card({{ column.id }})">
                                         {% for card in column.cards.all %}
                                         <div style="padding: 5px 0" id="card_container{{card.id}}">
-                                            <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}')" draggable='true'>
+                                            <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true'>
                                                     {% if card.saved %}
                                                         <div class="crm_marker">
                                                         </div>
@@ -79,7 +79,7 @@
         <a class="ui button mini red" onclick="$('#delete_card_modal').modal('hide')">Нет</a>
     </div>
 </div>
-<span style="display: none;" id="0" class="current_card" url="{{ instance.open_card_url }}"></span>
+<span style="display: none;" id="0" class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}"></span>
@@ -91,13 +91,14 @@
 </script>
 {% endif %}
 <script>
-    function openNav(id) {
+    function openNav(id, name) {
       $('#register_students_calendar').modal('show')
+      $('#current_user_name').text(name)
       $('.card_for_save').attr('id', id)
     }
-    function save_card_id(id){
-        console.log('rrr',id)
+    function save_card_id(id, name){
         $('.current_card').attr('id', id)
+        $('.current_card').attr('name', name)
     }
     new Vue({
         el: '#app',
@@ -121,10 +122,8 @@
                         'card_id': id
                     }
                 });
-                card = document.getElementById('card'+id)
-                card.style.transform='rotate(0deg)'
                 if (parseInt(column_id) > 3 || column_id == '2') {
-                    openNav($('.current_card').attr('id'));                    
+                    openNav($('.current_card').attr('id'), $('.current_card').attr('name'));                    
                 }
             },
         },

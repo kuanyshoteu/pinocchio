@@ -14,6 +14,7 @@ from .forms import SchoolForm
 from .models import *
 from subjects.models import *
 from squads.models import Squad
+from squads.views import add_person_to_lecture
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile, Corruption, Zaiavka
@@ -304,7 +305,8 @@ def save_card_as_user(request):
                 for subject in squad.subjects.all():
                     subject.students.add(profile)
                 for lecture in squad.squad_lectures.all():
-                    lecture.people.add(profile)
+                    add_person_to_lecture(lecture, profile)
+                    lecture.save()
 
     data = {
         'password':password

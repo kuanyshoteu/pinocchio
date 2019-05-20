@@ -269,7 +269,7 @@ def get_current_attendance_student(subject, profile):
                 break
             sm = list(subject_materials)[material_number - i-1]
             if len(sm.sm_atts.filter(student = profile)) < 1:
-                create_atts_student(sm, profile)
+                create_atts_student(squad, sm, profile)
             attendances = sm.sm_atts.filter(student = profile)
             get_date_results = get_date(attendances[0].subject_materials, squad)
             if get_date_results == '_':
@@ -283,7 +283,7 @@ def get_current_attendance_student(subject, profile):
             while counter < 4 and i < 10:
                 sm = list(subject_materials)[material_number + i-1]
                 if len(sm.sm_atts.filter(student = profile)) < 1:
-                    create_atts_student(sm, profile)
+                    create_atts_student(squad, sm, profile)
                 attendances = sm.sm_atts.filter(student = profile)
                 get_date_results = get_date(attendances[0].subject_materials, squad)
                 if get_date_results == '_':
@@ -308,13 +308,13 @@ def create_atts(squad, subject_materials, subject):
                 squad=squad
             )
 
-def create_atts_student(subject_materials, student):
+def create_atts_student(squad, subject_materials, student):
     Attendance.objects.create(
         subject_materials = subject_materials,
         school=subject_materials.school,
-        teacher=subject_materials.subject.teacher.first(), 
+        teacher=squad.teacher, 
         student=student,
         subject=subject_materials.subject,
-        squad=student.hiscache.squad,
+        squad=squad,
     )
 
