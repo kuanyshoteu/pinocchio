@@ -42,13 +42,13 @@
                                         <div style="padding: 5px 0" id="card_container{{card.id}}">
                                             <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true'>
                                                     {% if card.saved %}
-                                                        <div class="crm_marker">
-                                                        </div>
+                                                        <div class="crm_marker"></div>
+                                                        <div class="crm_marker_called"></div>
                                                     {% endif %}
                                                     {% if card.saved == False %}
                                                         <a class="delete_card" id="{{ card.id }}"><b>×</b></a>
                                                     {%endif%}
-                                                    <a id="{{ card.id }}" class="open_crmcard" style="font-weight: 600">{{ card.name }}</a>
+                                                    <a id="{{ card.id }}" onclick="open_crmcard('{{ card.id }}')" style="font-weight: 600">{{ card.name }}</a>
                                                     <div style="color: darkgrey;font-size: 12px;">
                                                         {{ card.phone }}
                                                     </div>
@@ -128,6 +128,58 @@
             },
         },
     })
+    function open_crmcard(id){
+        $('#card_form'+id).modal('show')
+        url = $('.current_card').attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.cardhistory'+id).empty();
+                for (var i = 0; i < data.res.length; i++){
+                    hist = data.res[i]
+                    name = hist[0]
+                    url = hist[1]
+                    time = hist[2]
+                    oldcolumn = hist[3]
+                    newcolumn = hist[4]
+                    if (newcolumn == '') {
+                        edit = hist[5]
+                        text = '<span class="crmhistorynew">'+edit+'</span>'
+                    }
+                    else{
+                        text = '<span class="crmhistoryold">'+oldcolumn+'</span> <i class="icon arrow right blue"></i> <span class="crmhistorynew">'+newcolumn+'</span>'
+                    }
+                    var element = $('<div style="padding-top:10px;">'+time+' <a href="'+url+'">'+name+'</a> '+text+'</div>').appendTo('.cardhistory'+id);
+                }
+            }
+        })
+    };
+    function edit_card(id) {
+        var name = $('.card_name' + id).val()
+        var phone = $('.card_phone' + id).val()
+        var mail = $('.card_mail' + id).val()
+        var comment = $('.card_comment' + id).val()
+        $.ajax({
+            url: $('.edit_card_url').attr('url'),
+            data: {
+                'name':name,
+                'phone':phone,
+                'mail':mail,
+                'comment':comment,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#card_container' + id).load(document.URL +  ' #card' + id);
+                $('#card_form'+id).modal('hide')
+            }
+        })        
+    }
+
 </script>
 <style type="text/css">
 .ui-draggable-dragging{

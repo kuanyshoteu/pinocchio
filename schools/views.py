@@ -435,6 +435,7 @@ def add_card(request):
         "card_date":card.timestamp.date().strftime('%d.%m.%Y'),
         "card_phone":card.phone,
         "card_mail":card.mail,
+        "card_comment":card.comments,
     }
     return JsonResponse(data)
 

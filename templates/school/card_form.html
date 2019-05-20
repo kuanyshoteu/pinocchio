@@ -1,6 +1,6 @@
-<div class="ui modal large" id="card_form{{ card.id }}">
+<div class="ui modal large" style="margin-top: 10%;min-height: 100%;" id="card_form{{ card.id }}">
     <i class="close icon"></i>
-    <div class="content" style="min-height: 100%;">
+    <div class="content">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             <div class="ui grid stackable">
                 <div class="six wide column">
@@ -12,7 +12,7 @@
                     <textarea class="card_comment{{ card.id }}" placeholder="Комментарий">{{ card.comments }}</textarea>
                 </div>
                 <div class="sixteen wide column center aligned">          
-                    <a class="ui button blue tiny edit_card" id="{{ card.id }}">Сохранить</a>    
+                    <a class="ui button blue tiny" onclick="edit_card('{{ card.id }}')" id="{{ card.id }}">Сохранить</a>    
                 </div>
                 <div class="sixteen wide column">
                     <div class="ui divider full-w"></div>
