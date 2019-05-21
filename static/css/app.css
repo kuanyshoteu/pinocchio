@@ -39738,6 +39738,7 @@ body.pushable > .pusher {
 
 #main-menu .item img {
   width: 30px;
+  height: 30px;
 }
 #main-menu .item .image {
   -webkit-background-size: cover;

@@ -22,6 +22,12 @@
         <div class="ui grid main_crm" style="margin-top: 0">
             {% include 'left_menu.html' %}
             <div class="wide column" style="padding-right: 0;width: 85%;">
+                <div style="padding-bottom: 8px;">
+                    <div class="ui toggle checkbox">
+                      <input type="checkbox"  name="public">
+                      <label>Показать карточки для всех</label>
+                    </div> 
+                </div>
                 <div class="ui grid" style="margin-top: -5px;">
                     {% for column in columns %}
                     <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
@@ -38,7 +44,7 @@
                                             class="crmbox{{ column.id }} full-h"
                                             :options="{group:{ name:'people'}}"
                                             @add="move_card({{ column.id }})">
-                                        {% for card in column|filtercards:instance %}
+                                        {% for card in column|filtercards:profile %}
                                         <div style="padding: 5px 0" id="card_container{{card.id}}">
                                             <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true'>
                                                     {% if card.saved %}

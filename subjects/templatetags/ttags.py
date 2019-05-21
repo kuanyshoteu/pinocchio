@@ -319,5 +319,5 @@ def create_atts_student(squad, subject_materials, student):
     )
 
 @register.filter
-def filtercards(column, school):
-    return column.cards.filter(school=school)
+def filtercards(column, profile):
+    return column.cards.filter(author_profile=profile)
