@@ -145,9 +145,6 @@ def subject_create(request):
     return render(request, "subjects/subject_create.html", context)
 
 def subject_update(request, slug=None):
-    for lecture in Lecture.objects.all():
-        lecture.day = lecture.cell.day
-        lecture.save()
     instance = get_object_or_404(Subject, slug=slug)
     profile = get_profile(request)
     only_managers(profile)
