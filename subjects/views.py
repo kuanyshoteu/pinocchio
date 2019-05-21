@@ -146,7 +146,7 @@ def subject_create(request):
 
 def subject_update(request, slug=None):
     for lecture in Lecture.objects.all():
-        lecture.day = lecture.cell.day()
+        lecture.day = lecture.cell.day
         lecture.save()
     instance = get_object_or_404(Subject, slug=slug)
     profile = get_profile(request)
