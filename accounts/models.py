@@ -179,7 +179,7 @@ class MissLesson(models.Model):
 
 class CRMColumn(models.Model):
     title = models.CharField(max_length=250)
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_columns')
+    schools = models.ManyToManyField(School, related_name='crm_columns')
     class Meta:
         ordering = ['id']
 
