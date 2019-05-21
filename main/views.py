@@ -119,13 +119,16 @@ def search(request):
     res_squads = []
     res_courses = []
     text = request.GET.get('text')
+    kef = 1
+    if len(text) > 4:
+        kef = 4
     if text != '':
         similarity=TrigramSimilarity('first_name', text)
-        profiles = school.people.annotate(similarity=similarity,).filter(similarity__gt=0.05).order_by('-similarity')
+        profiles = school.people.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         similarity=TrigramSimilarity('title', text)
-        subjects = school.school_subjects.annotate(similarity=similarity,).filter(similarity__gt=0.05).order_by('-similarity')
-        squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.05).order_by('-similarity')
-        courses = school.school_courses.annotate(similarity=similarity,).filter(similarity__gt=0.05).order_by('-similarity')
+        subjects = school.school_subjects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        courses = school.school_courses.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
         for profile in profiles:
             image_url = ''
