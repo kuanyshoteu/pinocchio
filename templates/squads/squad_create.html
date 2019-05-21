@@ -61,7 +61,7 @@
 			        					{% if instance %}
 				        					<br>
 				        					Учитель:
-											<select id="change_teacher" class="change_teacher" subject_id="{{ instance.id }}" url="{{ instance.change_curator_url }}">
+											<select id="change_teacher" class="change_teacher" squad_id="{{ instance.id }}" url="{{ instance.change_curator_url }}">
 												<option value="{{ instance.teacher.id }}">{{ instance.teacher.first_name }}</option>
 												{% for teacher in all_teachers %}
 													{% if teacher != instance.teacher %}
@@ -75,7 +75,7 @@
 										<p style="font-size: 13px;padding-top: 2px;">
 				        					Выберите дату <b>начала</b> курса:
 				        				</p>
-										<input type="date" url="{{ instance.change_start_url }}" subject_id="{{ instance.id }}" name='start' class="start" style="width: 200px;" value="{{ instance.start_date|date:'Y-m-d'}}"> 
+										<input type="date" url="{{ instance.change_start_url }}" squad_id="{{ instance.id }}" name='start' class="start" style="width: 200px;" value="{{ instance.start_date|date:'Y-m-d'}}"> 
 				    					<div class="ui mini modal ws">
     										<i class="close icon"></i>
 										    <div class="content">
@@ -87,7 +87,7 @@
 										<p style="font-size: 13px;padding-top: 2px;">
 				        					Выберите дату <b>окончания</b> курса:
 				        				</p>
-										<input type="date" url="{{ instance.change_end_url }}" subject_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
+										<input type="date" url="{{ instance.change_end_url }}" squad_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
 				    					<div class="ui mini modal we">
     										<i class="close icon"></i>
 										    <div class="content">
