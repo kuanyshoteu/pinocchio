@@ -266,34 +266,29 @@ def add_student(request):
         student = Profile.objects.get(id = int(request.GET.get('student_id')) )
         add = True
         if student in squad.students.all():
-            squad.students.remove(student)
             add = False
-            for subject in squad.subjects.all():
-                subject.students.remove(student)
-            for lecture in squad.squad_lectures.all():
-                remove_person_from_lecture(lecture, student)
-                lecture.save()            
+            remove_student_from_squad(student, squad)
         else:
-            squad.students.add(student)
-            for subject in squad.subjects.all():
-                subject.students.add(student)
-            for lecture in squad.squad_lectures.all():
-                add_person_to_lecture(lecture, student)
-                lecture.save()
+            add_student_to_squad(student, squad)
     data = {
         'add':add,
     }
     return JsonResponse(data)
 
-def remove_student(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    if request.GET.get('student_id') and request.GET.get('squad_id'):
-        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
-        student = Profile.objects.get(id = int(request.GET.get('student_id')) )
-    data = {
-    }
-    return JsonResponse(data)
+def remove_student_from_squad(student, squad):
+    squad.students.remove(student)
+    for subject in squad.subjects.all():
+        subject.students.remove(student)
+    for lecture in squad.squad_lectures.all():
+        remove_person_from_lecture(lecture, student)
+        lecture.save()            
+def add_student_to_squad(student, squad):
+    squad.students.add(student)
+    for subject in squad.subjects.all():
+        subject.students.add(student)
+    for lecture in squad.squad_lectures.all():
+        add_person_to_lecture(lecture, student)
+        lecture.save()
 
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:

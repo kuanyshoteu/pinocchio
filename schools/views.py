@@ -14,7 +14,7 @@ from .forms import SchoolForm
 from .models import *
 from subjects.models import *
 from squads.models import Squad
-from squads.views import add_person_to_lecture
+from squads.views import remove_student_from_squad, add_student_to_squad
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile, Corruption, Zaiavka
@@ -263,6 +263,7 @@ def save_card_as_user(request):
     only_managers(manager_profile)
     school = manager_profile.schools.first()
     password = ''
+    add = True
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         if card.saved == False:
@@ -301,15 +302,15 @@ def save_card_as_user(request):
             squad_id = int(request.GET.get('squad_id'))
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
-                squad.students.add(profile)
-                for subject in squad.subjects.all():
-                    subject.students.add(profile)
-                for lecture in squad.squad_lectures.all():
-                    add_person_to_lecture(lecture, profile)
-                    lecture.save()
+                if student in squad.students.all():
+                    add = False
+                    remove_student_from_squad(student, squad)
+                else:
+                    add_student_to_squad(student, squad)
 
     data = {
-        'password':password
+        'password':password,
+        'add':add,
     }
     return JsonResponse(data)
 
