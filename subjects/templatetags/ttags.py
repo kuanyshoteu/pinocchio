@@ -318,3 +318,6 @@ def create_atts_student(squad, subject_materials, student):
         squad=squad,
     )
 
+@register.filter
+def filtercards(column, school):
+    return column.cards.filter(school=school)

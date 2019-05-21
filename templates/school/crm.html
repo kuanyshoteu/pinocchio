@@ -38,7 +38,7 @@
                                             class="crmbox{{ column.id }} full-h"
                                             :options="{group:{ name:'people'}}"
                                             @add="move_card({{ column.id }})">
-                                        {% for card in column.cards.all %}
+                                        {% for card in column|filtercards:instance %}
                                         <div style="padding: 5px 0" id="card_container{{card.id}}">
                                             <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true'>
                                                     {% if card.saved %}
