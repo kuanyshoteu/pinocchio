@@ -105,6 +105,8 @@ class School(models.Model):
         return reverse("schools:crm_option_url")
     def open_card_url(self):
         return reverse("schools:open_card_url")
+    def show_free_cards(self):
+        return reverse("schools:show_free_cards")
 
 class SubjectCategory(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_categories') 

@@ -61,7 +61,7 @@
 			        					{% if instance %}
 				        					<br>
 				        					Учитель:
-											<select id="change_teacher" class="change_teacher" squad_id="{{ instance.id }}" url="{{ instance.change_curator_url }}">
+											<select id="change_teacher" class="change_teacher" squad_id="{{ instance.id }}" url="{{ instance.change_curator_url }}" name="change_teacher">
 												<option value="{{ instance.teacher.id }}">{{ instance.teacher.first_name }}</option>
 												{% for teacher in all_teachers %}
 													{% if teacher != instance.teacher %}
@@ -98,7 +98,9 @@
 			        			</div>
 			        		</div>
 			        	</div>
-						{% if instance %}
+						{% if not instance %}
+			    		<input type='submit' style="margin-top: 1rem" class='ui button blue tiny' value='Продолжить создание класса' />
+			        	{% else %}
 						<div class="seven wide column" style="padding-bottom: 0;padding-left: 0">
 							<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
 				        		Детальная информация
@@ -113,11 +115,7 @@
 						</div>
 	        			<div class="sixteen wide column" style="text-align: center;padding-top: 0">
 	        				<div class="ui segment">
-	        					{% if instance %}
 								<input type='submit' class='ui button blue tiny' value='Сохранить' />
-								{% else %}
-			    				<input type='submit' class='ui button blue tiny' value='Продолжить создание класса' />
-				    			{% endif %}	        					
 	        				</div>
         				</div>
         				<div class="sixteen wide column">

@@ -24,50 +24,58 @@
             <div class="wide column" style="padding-right: 0;width: 85%;">
                 <div style="padding-bottom: 8px;">
                     <div class="ui toggle checkbox">
-                      <input type="checkbox"  name="public">
-                      <label>Показать карточки для всех</label>
+                      <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                      <label>Показать свободные карточки</label>
                     </div> 
                 </div>
-                <div class="ui grid" style="margin-top: -5px;">
-                    {% for column in columns %}
-                    <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
-                        <div class="margin0" style="padding: 14px 4px;background-color: #4A4A4A;color: #fff;border-radius: 5px 5px 0 0;">
-                            <div class="crm_title">{{ column.title }}</div>
-                            <div class="crm_divider"></div>
-                            <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
-                            {% include 'school/new_card_form.html' %}
-                        </div>
-                        <div style="height: 70%;overflow-x: scroll;background-color: #4A4A4A;">
-                            <div class="" style="padding: 0 4px;color: #fff;">
-                                <div class="column{{ column.id }} crm_column">
-                                    <draggable 
-                                            class="crmbox{{ column.id }} full-h"
-                                            :options="{group:{ name:'people'}}"
-                                            @add="move_card({{ column.id }})">
-                                        {% for card in column|filtercards:profile %}
-                                        <div style="padding: 5px 0" id="card_container{{card.id}}">
-                                            <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true'>
+                <div id="all_columns">
+                    <div class="ui grid" style="margin-top: -5px;">
+                        {% for column in columns %}
+                        <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
+                            <div class="margin0" style="padding: 14px 4px;background-color: #4A4A4A;color: #fff;border-radius: 5px 5px 0 0;">
+                                <div class="crm_title">{{ column.title }}</div>
+                                <div class="crm_divider"></div>
+                                <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
+                                {% include 'school/new_card_form.html' %}
+                            </div>
+                            <div style="height: 69%;overflow-x: scroll;background-color: #4A4A4A;">
+                                <div class="" style="padding: 0 4px;color: #fff;">
+                                    <div class="column{{ column.id }} crm_column">
+                                        <draggable 
+                                                class="crmbox{{ column.id }} full-h"
+                                                :options="{group:{ name:'people'}}"
+                                                @add="move_card({{ column.id }})">
+                                            {% for card in column|filtercards:profile %}
+                                            <div style="padding: 5px 0" id="card_container{{card.id}}">
+                                                <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
                                                     {% if card.saved %}
                                                         <div class="crm_marker"></div>
-                                                        <div class="crm_marker_called"></div>
                                                     {% endif %}
                                                     {% if card.saved == False %}
-                                                        <a class="delete_card" id="{{ card.id }}"><b>×</b></a>
+                                                        <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
                                                     {%endif%}
                                                     <a id="{{ card.id }}" onclick="open_crmcard('{{ card.id }}')" style="font-weight: 600">{{ card.name }}</a>
-                                                    <div style="color: darkgrey;font-size: 12px;">
+                                                    <a onclick="openNav('{{ card.id }}', '{{ card.name }}')"><i class="icon table blue"></i></a>
+                                                    <div style="color: #707070;font-size: 12px;">
                                                         {{ card.phone }}
                                                     </div>
+                                                    <a href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
+                                                        #{{card.author_profile.first_name}}
+                                                    </a>
+                                                    {% if card.saved %}
+                                                        <div class="crm_marker_down"></div>
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                        </div>
-                                        {% include 'school/card_form.html' %}
-                                        {% endfor %}
-                                    </draggable>
+                                            {% include 'school/card_form.html' %}
+                                            {% endfor %}
+                                        </draggable>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
             </div>
             <div id="school_schedule" class="school_schedule" status="closed">
@@ -128,8 +136,11 @@
                         'card_id': id
                     }
                 });
-                if (parseInt(column_id) > 3 || column_id == '2') {
-                    openNav($('.current_card').attr('id'), $('.current_card').attr('name'));                    
+                oldcolumn_id = $('#card'+id).attr('column_id')
+                if(oldcolumn_id != '4' || column_id != '5'){
+                    if (column_id == '4' || column_id == '2') {
+                        openNav($('.current_card').attr('id'), $('.current_card').attr('name'));
+                    }
                 }
             },
         },
@@ -185,7 +196,10 @@
             }
         })        
     }
-
+    function delete_card(id) {
+        $('.delete_card_data').attr('id', id);
+        $('#delete_card_modal').modal('show');
+    }
 </script>
 <style type="text/css">
 .ui-draggable-dragging{

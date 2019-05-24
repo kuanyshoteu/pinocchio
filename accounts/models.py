@@ -32,7 +32,13 @@ class JobCategory(models.Model):
     title = models.TextField(blank = True,null = True,default='')
     salary = models.IntegerField(default=0)
     profession = models.ForeignKey(Profession, default=1, on_delete = models.CASCADE, related_name='job_categories') 
-
+class Skill(models.Model):
+    tag_ids = ArrayField(models.IntegerField(), default = list)
+    easy_skills = ArrayField(models.IntegerField(), default = list)
+    middle_skills = ArrayField(models.IntegerField(), default = list)
+    hard_skills = ArrayField(models.IntegerField(), default = list)
+    pro_skills = ArrayField(models.IntegerField(), default = list)
+    crm_show_free_cards = models.BooleanField(default=True)
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     first_name = models.TextField(blank = True,null = True,default='name')
@@ -56,18 +62,13 @@ class Profile(models.Model):
     height_field = models.IntegerField(default=0, null = True)
     width_field = models.IntegerField(default=0, null = True)
 
-    tag_ids = ArrayField(models.IntegerField(), default = list)
-    easy_skills = ArrayField(models.IntegerField(), default = list)
-    middle_skills = ArrayField(models.IntegerField(), default = list)
-    hard_skills = ArrayField(models.IntegerField(), default = list)
-    pro_skills = ArrayField(models.IntegerField(), default = list)
-
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
     crm_age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
     crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     hint_numbers = ArrayField(models.IntegerField(), default = [0,0,0,0,0,0,0])
+    skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile') 
 
     class Meta:
         ordering = ['-coins', 'first_name']

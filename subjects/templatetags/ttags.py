@@ -320,4 +320,7 @@ def create_atts_student(squad, subject_materials, student):
 
 @register.filter
 def filtercards(column, profile):
+    if profile.skill:
+        if profile.skill.crm_show_free_cards:
+            return column.cards.filter(author_profile=None)    
     return column.cards.filter(author_profile=profile)

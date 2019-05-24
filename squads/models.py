@@ -88,10 +88,6 @@ class Squad(models.Model):
         return reverse("squads:add_paper_url")   
     def change_curator_url(self):
         return reverse("squads:change_curator_url")    
-    def change_start_url(self):
-        return reverse("squads:change_start_url")
-    def change_end_url(self):
-        return reverse("squads:change_end_url")   
     def add_student_url(self):
         return reverse("squads:add_student_url")   
 

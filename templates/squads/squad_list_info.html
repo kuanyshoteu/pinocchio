@@ -9,13 +9,18 @@
             {% endif %}
         </div>
     </div>
-    <div class="thirteen wide column right-side" style="padding-top: 25px;">
-        <h5 style="font-size: 13px;margin-bottom: 5px">
-        <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
+    <div class="thirteen wide column right-side" style="padding-top: 25px;padding-left: 0">
+        <h5 style="font-size: 13px;margin-bottom: 5px;">
+            <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
+            {% if is_trener or is_manager %}
+            <a href="{{ sq.get_update_url }}" style="font-size: 13px;">
+                <i class="icon cog"></i>
+            </a>
+            {% endif %}
         </h5>
-        
-        <p style="color: grey; font-size: 12px;margin-bottom: 5px">{{ sq.slogan }}</p>
-        <p style="color: grey; font-size: 12px;">{{sq.cabinet}} кабинет, {{ sq.curator.all.0.first_name }}</p>
+        <span style="color: grey; font-size: 12px;margin-bottom: 5px">{{ sq.slogan }}</span>
+        <br>
+        <span style="color: grey; font-size: 12px;">{% if sq.cabinet %}{{sq.cabinet}} кабинет,{%endif%} {{ sq.teacher.first_name }}</span>
     </div>
     
 </div>

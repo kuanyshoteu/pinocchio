@@ -42,44 +42,6 @@ $(document).ready(function () {
             }
         })
     });
-    $('.start').on('change', function(e) {
-        this_ = $(this)
-        $.ajax({
-            url: this_.attr('url'),
-            method: "GET",
-            data: {
-                'date':document.getElementsByClassName("start")[0].value,
-                'squad_id':this_.attr('squad_id'),
-            },
-            success: function (data) {
-                if (data.warning){
-                    $('.ws').modal('show')
-                }
-            }, 
-            error: function (error) {
-                console.log('error')
-            }
-        })
-    });
-    $('.end').on('change', function(e) {
-        this_ = $(this)
-        $.ajax({
-            url: this_.attr('url'),
-            method: "GET",
-            data: {
-                'date':document.getElementsByClassName("end")[0].value,
-                'squad_id':this_.attr('squad_id'),
-            },
-            success: function (data) {
-                if (data.warning){
-                    $('.we').modal('show')
-                }
-            }, 
-            error: function (error) {
-                console.log('error')
-            }
-        })
-    });
     $('.change_teacher').on('change', function(e) {
         this_ = document.getElementById("change_teacher");
         teacher_id = this_.options[this_.selectedIndex].value

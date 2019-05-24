@@ -118,12 +118,22 @@ a{
   height: 33px;line-height: 10px;
 }
 .crm_marker{
-  background-color: #21BA45 !important;
-  padding: 2px !important;
-  width: 30%;
+  background-color: green !important;
+  padding: 2px 2px 4px 2px !important;
+  width: 100%;
   border-radius: 2px;
   position: absolute !important;
   margin-top: -12px;
+  margin-left: -5px;
+  margin-bottom: 0 !important;
+}
+.crm_marker_down{
+  background-color: green !important;
+  padding: 4px 2px 2px 2px !important;
+  width: 100%;
+  border-radius: 2px;
+  position: absolute !important;
+  margin-top: 0px;
   margin-left: -5px;
   margin-bottom: 0 !important;
 }

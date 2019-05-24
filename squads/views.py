@@ -125,6 +125,9 @@ def squad_update(request, slug=None):
             instance.height_field = 0
         if not instance.width_field:
             instance.width_field = 0
+        instance.start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
+        instance.end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
+        instance.save()
     form2 = SquadForm2(request.POST or None, request.FILES or None, instance=instance)
     if form2.is_valid():
         instance = form2.save(commit=False)
@@ -174,6 +177,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
+from datetime import timedelta
+import datetime
 
 def add_paper(request):
     if request.GET.get('group_id'):
@@ -310,39 +315,4 @@ def add_person_to_lecture(lecture, person):
     lecture.people.add(person)
     lecture.person_number[index] += 1
 
-from datetime import timedelta
-import datetime
 
-def change_start(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    warning = False
-    if request.GET.get('date') and request.GET.get('squad_id'):
-        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
-        start_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
-        if start_date > squad.end_date:
-            warning = True
-        else:
-            squad.start_date = start_date
-            squad.save()
-    data = {
-        'warning':warning,
-    }
-    return JsonResponse(data)
-
-def change_end(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    warning = False
-    if request.GET.get('date') and request.GET.get('squad_id'):
-        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
-        end_date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
-        if squad.start_date > end_date:
-            warning = True
-        else:
-            squad.end_date = end_date
-        squad.save()
-    data = {
-        'warning':warning,
-    }
-    return JsonResponse(data)

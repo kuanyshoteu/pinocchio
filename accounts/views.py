@@ -57,9 +57,10 @@ def account_view(request, user = None):
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = profile)[0]
     if hiscacheatt.subject == None and len(hissubjects) > 0:
         hiscacheatt.subject = hissubjects[0]
+        hiscacheatt.save()
     if hiscacheatt.squad == None and len(hissquads) > 0:
         hiscacheatt.squad = hissquads[0]
-    hiscacheatt.save()
+        hiscacheatt.save()
     context = {
         "profile":profile,
         "hisprofile": hisprofile,

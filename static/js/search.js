@@ -108,7 +108,6 @@ $('#search-form').click(function (event){
     div.css('color', '#2D437C');
 })
 $("body").click(function(e){
-    console.log('body')
     $('.search-bar').hide();
 });
 

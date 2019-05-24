@@ -5,7 +5,6 @@ $('.notice').click(function(event) {
     event.stopPropagation();
 });
 $("body").click(function(e){
-    console.log('body')
     $('.notice-bar').css('display', 'none');
     var div = $('.notice');
     div.css('color', '#2D437C');

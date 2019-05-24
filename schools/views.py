@@ -99,7 +99,6 @@ def school_crm(request):
     only_managers(profile)
     school = profile.schools.first()
     time_periods = school.time_periods.all()
-
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
@@ -416,6 +415,7 @@ def add_card(request):
         school = profile.schools.first()
         column = school.crm_columns.get(id = int(request.GET.get('id')))
         card = school.crm_cards.create(
+            author_profile=profile,
             name = request.GET.get('name'),
             phone = request.GET.get('phone'),
             mail = request.GET.get('mail'),
@@ -475,5 +475,26 @@ def delete_card(request):
         if not card.saved:
             card.delete()
     data = {
+    }
+    return JsonResponse(data)
+
+def show_free_cards(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = profile.schools.first()
+    if profile.skill == None:
+        skill = Skill.objects.create()
+        profile.skill = skill
+        profile.save()
+    if request.GET.get('check'):
+        skill = profile.skill
+        print(request.GET.get('check'))
+        if request.GET.get('check') == 'true':
+            skill.crm_show_free_cards = True
+        else:
+            skill.crm_show_free_cards = False  
+        skill.save()          
+    data = {
+        'check':request.GET.get('check')
     }
     return JsonResponse(data)
