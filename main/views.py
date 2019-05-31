@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from itertools import chain
 from django.views.generic import ListView
+from django.utils import timezone
 
 from django.contrib.auth import (
     authenticate,
@@ -20,7 +21,6 @@ from django.contrib.auth import (
     )
 from django.contrib.auth.models import User
 from constants import *
-
 
 def loaderio(request):
     context = {
@@ -54,9 +54,9 @@ def hislessons(request):
     lesson_now = False
     classwork = []
     if is_profi(profile, 'Teacher'):
-        hissubjects = profile.teachers_subjects.all()
+        hissubjects = profile.hissquads.all()
     else:
-        hissubjects = profile.hissubjects.all()
+        hissubjects = profile.squads.all()
 
     context = {
         "profile":profile,
@@ -197,6 +197,24 @@ def SaveZaiavka(request):
         if request.GET.get('phone'):
             zaiavka = Zaiavka.objects.create(name=request.GET.get('name'), phone=request.GET.get('phone'))
     data = {
+    }
+    return JsonResponse(data)
+
+def get_notifications(request):
+    profile = Profile.objects.get(user = request.user.id)
+    timezone.now()
+    res = []
+    i = 0
+    profile.notifications_number = 0
+    profile.save()
+    for school in profile.schools.all():
+        for notif in school.notifications.filter():
+            i += 1
+            res.append([notif.author_profile.first_name, notif.image_url, notif.itstype, notif.url, notif.text, notif.timestamp.strftime('%d %B %Yг. %H:%M')])
+            if i == 4:
+                break
+    data = {
+        'res':res
     }
     return JsonResponse(data)
 

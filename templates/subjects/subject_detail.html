@@ -14,24 +14,24 @@
 <div id="group-details" style="padding-bottom: 100px;">
     {% if profile.is_manager %}
     <a id="go-back-btn"  href='{% url "subjects:list" %}'>
-        <i class="arrow left icon"></i>Назад
+        <i class="check icon" style="color: #5181b8"></i>
     </a>
     {% else %}
     <a id="go-back-btn"  href='{{ profile.get_absolute_url }}'>
-        <i class="arrow left icon"></i>Назад
+        <i class="check icon" style="color: #5181b8"></i>
     </a>
     {% endif %}
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
+            <div class="wide column" style="width: 80%;">
                 <div class="ui grid">
                     <div class="sixteen wide column">
-                        <div class="ui segment" style="margin-bottom: 0;padding: 0;padding-bottom: 15px;">
+                        <div class="ui segment" style="margin-bottom: 0;padding: 0;padding-bottom: 15px;border-radius: 7px 7px 0 0;">
                             <div class="ui grid" style="margin: 0">
                                 {% if instance.image_banner %}
-                                <div class="sixteen wide column" style="padding: 0">
-                                    <img src="{{ instance.image_banner.url }}" style="height: 200px; width: 100%;">
+                                <div class="sixteen wide column" style="padding: 0;">
+                                    <img src="{{ instance.image_banner.url }}" style="height: 200px; width: 100%;border-radius: 7px 7px 0 0;">
                                 </div>
                                 {% endif %}
                                 <div class="group-name" style="padding-top: 15px;">

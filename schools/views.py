@@ -203,6 +203,8 @@ def school_list(request):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
     }
+
+
     return render(request, "schools/school_list.html", context)
 
 def school_update(request, slug=None):
@@ -266,6 +268,7 @@ def save_card_as_user(request):
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         if card.saved == False:
+            print('right')
             new_id = User.objects.order_by("id").last().id + 1
             password = random_password()
             user = User.objects.create(username='user' + str(new_id))
@@ -277,7 +280,8 @@ def save_card_as_user(request):
             profile.phone = card.phone
             profile.mail = card.mail
             profile.save()
-            card.user = profile
+            card.card_user = profile
+            card.author_profile = manager_profile
             card.save()
             profile.schools.add(school)
             squad_id = int(request.GET.get('squad_id'))
@@ -291,21 +295,29 @@ def save_card_as_user(request):
                 for timep in school.time_periods.all():
                     timep.people.add(profile)
 
-            hist = CRMCardHistory.objects.create(
-                action_author = manager_profile,
-                card = card,
-                edit = '*** Регистрация ***',
-                )
+                hist = CRMCardHistory.objects.create(
+                    action_author = manager_profile,
+                    card = card,
+                    edit = '*** Регистрация в ' + squad.title + ' ***',
+                    )
         else:
-            profile = card.user
+            profile = card.card_user
+            card.author_profile = manager_profile
+            card.save()
             squad_id = int(request.GET.get('squad_id'))
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
-                if student in squad.students.all():
+                if profile in squad.students.all():
                     add = False
-                    remove_student_from_squad(student, squad)
+                    remove_student_from_squad(profile, squad)
                 else:
-                    add_student_to_squad(student, squad)
+                    add_student_to_squad(profile, squad)
+
+                hist = CRMCardHistory.objects.create(
+                    action_author = manager_profile,
+                    card = card,
+                    edit = '*** Регистрация в ' + squad.title + ' ***',
+                    )
 
     data = {
         'password':password,
@@ -496,5 +508,17 @@ def show_free_cards(request):
         skill.save()          
     data = {
         'check':request.GET.get('check')
+    }
+    return JsonResponse(data)
+
+def get_card_squads(request):
+    card = CRMCard.objects.get(id=int(request.GET.get('id')))
+    profile = card.card_user
+    res = []
+    if profile:
+        for squad in profile.squads.all():
+            res.append(squad.id)
+    data = {
+        'res':res,
     }
     return JsonResponse(data)

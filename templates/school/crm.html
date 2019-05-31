@@ -46,24 +46,30 @@
                                                 :options="{group:{ name:'people'}}"
                                                 @add="move_card({{ column.id }})">
                                             {% for card in column|filtercards:profile %}
-                                            <div style="padding: 5px 0" id="card_container{{card.id}}">
-                                                <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
+                                            <div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
+                                                <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', '{{ card.saved }}')"><i class="icon table {% if not card.saved %}blue{% endif %}"></i></a>
+
+                                                <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" onclick="open_crmcard('{{ card.id }}')" draggable='true' column_id="{{column.id}}">
                                                     {% if card.saved %}
+                                                        {% if not card.was_called and card.card_user.money < card.card_user.salary %}
                                                         <div class="crm_marker"></div>
-                                                    {% endif %}
-                                                    {% if card.saved == False %}
+                                                        {% endif %}
+                                                    {% else %}
                                                         <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
                                                     {%endif%}
-                                                    <a id="{{ card.id }}" onclick="open_crmcard('{{ card.id }}')" style="font-weight: 600">{{ card.name }}</a>
-                                                    <a onclick="openNav('{{ card.id }}', '{{ card.name }}')"><i class="icon table blue"></i></a>
+                                                    <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
                                                     <div style="color: #707070;font-size: 12px;">
                                                         {{ card.phone }}
                                                     </div>
+                                                    {% if card.author_profile %}
                                                     <a href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
                                                         #{{card.author_profile.first_name}}
                                                     </a>
+                                                    {% endif %}
                                                     {% if card.saved %}
+                                                        {% if not card.was_called and card.card_user.money < card.card_user.salary %}
                                                         <div class="crm_marker_down"></div>
+                                                        {% endif %}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -96,7 +102,7 @@
 <span style="display: none;" id="0" class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
-<span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}"></span>
+<span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 {% if open_form %}
@@ -105,10 +111,26 @@
 </script>
 {% endif %}
 <script>
-    function openNav(id, name) {
-      $('#register_students_calendar').modal('show')
-      $('#current_user_name').text(name)
-      $('.card_for_save').attr('id', id)
+    function openNav(id, name, is_saved) {
+        $('#register_students_calendar').modal('show')
+        $('#current_user_name').text(name)
+        $('.card_for_save').attr('id', id)
+        if (is_saved == 'True') {
+            $.ajax({
+                url: $('.card_for_save').attr('get_card_squads'),
+                data: {
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.insquadicon').hide()
+                    for (var i = 0; i < data.res.length; i++){
+                        squad_id = data.res[i]
+                        $('.squad'+squad_id).show()
+                    }
+                }
+            })
+        }        
     }
     function save_card_id(id, name){
         $('.current_card').attr('id', id)
@@ -139,7 +161,7 @@
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 if(oldcolumn_id != '4' || column_id != '5'){
                     if (column_id == '4' || column_id == '2') {
-                        openNav($('.current_card').attr('id'), $('.current_card').attr('name'));
+                        openNav(id, $('.current_card').attr('name'), $('#card_container'+id).attr('is_saved'));
                     }
                 }
             },

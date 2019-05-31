@@ -1,3 +1,123 @@
+.left_menu_number{
+  color: #5b6e85;
+  padding: 0 6px;
+  height: 29px;
+  line-height: 30px; 
+  font-weight: 700; 
+  float: right;
+  border-radius: 2px;
+  font-size: 11px;
+  background: #d1d9e0;
+  margin-top: -7px;
+  margin-right: -7px;
+}
+#go-back-btn {
+  position: absolute;
+  background-color: #e0e1e2;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  top: 61px;
+  right: 4.5%;
+  height: 90%;
+  padding: 200px 10px;
+  width: 50px;
+  font-size: 20px;
+  z-index: 500;
+  color: #5181b8;
+}
+#go-back-btn-before {
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  top: 61px;
+  left: 14.5%;
+  height: 90%;
+  padding: 15px 10px;
+  width: 50px;
+  font-size: 20px;
+  z-index: 500;
+  color: #5181b8;
+}
+#go-back-btn-before:hover {
+  background-color: #CCE2FF;
+}
+#list{
+  width: 84% !important;
+}
+#go-back-btn:hover {
+  background-color: #CCE2FF;
+}
+.notice-bar{
+  display: none;
+  position: absolute;
+  margin-top: 15px;
+  width: 400px;
+  overflow: hidden;
+  background: #fff;
+  padding: 14px 0;
+  z-index: 1000;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);  
+  font-size: 13px;
+}
+.notice_time{
+  color: #939393;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.notice-item{
+  padding: 0 14px;
+}
+.notice-list{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;  
+  font-size: 13px;
+}
+.notification_title{
+  padding: 0 14px;  
+  font-size: 12px;
+}
+.notice-item-name{
+  vertical-align: top;
+  margin-top: 35px;
+  color: #000;
+  font-size: 13px;  
+}
+.notice-item-link{
+  vertical-align: top;
+  font-size: 13px;  
+  font-weight: 600;
+}
+.notice_item_img {
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-top: -16px;
+  margin-right: 8px;
+  height: 40px !important;
+  width: 40px !important;
+}
+.notice_cont {
+    margin-left:500px;position: absolute;padding-top: 18px;
+}
+.notification_exists{
+  padding: 1px 4px 0 3px;
+    border: 2px solid #4a76a8;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 10px;
+    height: 17px;
+    width: 17px;
+    line-height: 13px;
+    min-width: 5px;
+    top: -7px;
+    left: 10px;
+    background-color: #ff734c;
+    text-align: center;
+    position: absolute;
+}
 .crmhistoryold{
   padding: 5px;background-color: #e5e5e5;border-radius: 5px;
 }
@@ -11,7 +131,10 @@
   min-height: 100% !important;
 }
 .delete_card{
-  position: absolute;right: 0;margin: -10px 4px;color: red;font-size: 13px;
+  position: absolute;right: 0;margin: -10px 4px;color: red;font-size: 14px;
+}
+.show_card_schedule{
+  position: absolute;right: 6px;margin-top: 30px; color: red;font-size: 17px;z-index: 200;
 }
 .delete_card:hover{
   color: red;
@@ -113,12 +236,14 @@ a{
 .crm_card{
   padding: 12px 5px 4px 5px !important;
   box-shadow: 0 2px 2px 2px #3a3a3a !important;
+  cursor: pointer;
+  margin-top: 0 !important;
 }
 .subject_cost{
   height: 33px;line-height: 10px;
 }
 .crm_marker{
-  background-color: green !important;
+  background-color: #21BA45 !important;
   padding: 2px 2px 4px 2px !important;
   width: 100%;
   border-radius: 2px;
@@ -128,7 +253,7 @@ a{
   margin-bottom: 0 !important;
 }
 .crm_marker_down{
-  background-color: green !important;
+  background-color: #21BA45 !important;
   padding: 4px 2px 2px 2px !important;
   width: 100%;
   border-radius: 2px;
@@ -827,30 +952,50 @@ a{
   z-index: 100;
   padding: 3px;
 }
-.daysmall {
-  display: inline-block;
-  width: 13%;
-  text-align: center;
-  vertical-align: top;
-  position: relative;
-  z-index: 100;
-  padding: 0;
-  font-size: 12px;
+@media only screen and (max-width: 1051px) {
+  .daysmall {
+    display: inline-block;
+    width: 11%;
+    text-align: center;
+    vertical-align: top;
+    position: relative;
+    z-index: 100;
+    padding: 0;
+    font-size: 12px;
+  }
+  .daysmall_time {
+    width: 12%;
+    font-size: 11px;
+    line-height: 30px;
+    padding-top: 10px;
+    color: white;
+  }
 }
-
+@media only screen and (min-width: 1052px) and (max-width: 1919px) {
+  .daysmall {
+    display: inline-block;
+    width: 12%;
+    text-align: center;
+    vertical-align: top;
+    position: relative;
+    z-index: 100;
+    padding: 0;
+    font-size: 12px;
+  }
+  .daysmall_time {
+    width: 9%;
+    font-size: 11px;
+    line-height: 30px;
+    padding-top: 10px;
+    color: white;
+  }
+}
 .today{
   background-color: #16ab39;
   color: white !important;
 }
 .shapka{
   margin-bottom: 0 !important;
-}
-.daysmall_time {
-  width: 12%;
-  font-size: 11px;
-  line-height: 30px;
-  padding-top: 10px;
-  color: white;
 }
 .day.other {
  color: rgba(255, 255, 255, .3);

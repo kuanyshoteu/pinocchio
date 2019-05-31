@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^api/delete_card/$', delete_card, name='delete_card_url'),
     url(r'^api/open_card_url/$', open_card, name='open_card_url'),
     url(r'^api/show_free_cards/$', show_free_cards, name='show_free_cards'),
+    url(r'^api/get_card_squads/$', get_card_squads, name='get_card_squads'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

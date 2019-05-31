@@ -5108,6 +5108,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   }
   .fixed_menu{
     position: fixed;margin-left: 0;padding-left: 0;
+    padding-right: 0 !important;margin-right: 1rem;
   }
   .twenty{
     width: 20%;
@@ -5138,6 +5139,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   }
   .fixed_menu{
     position: fixed;margin-left: 0%;z-index: 90;padding-left: 0;
+    padding-right: 0 !important;margin-right: 1rem;
   }
   #logo{
     margin-left: 0%;
@@ -5172,6 +5174,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   }
   .fixed_menu{
     position: fixed;margin-left: 2%;z-index: 90;padding-left: 0;
+    padding-right: 0 !important;margin-right: 1rem;
   }
   #logo{
     margin-left: 2%;
@@ -39963,24 +39966,6 @@ a:hover {
     width: 100% !important;
   }
 }
-
-#go-back-btn {
-  font-size: 11px;
-  position: fixed;
-  background-color: transparent;
-  border: none;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  top: 40px;
-  height: 100vh;
-  padding: 15px;
-  width: 80px;
-}
-
-#go-back-btn:hover {
-  background-color: #dce2e8;
-}
-
 #submit-problem {
   width: 50%;
 }
@@ -40385,7 +40370,7 @@ a:hover {
 #search-input {
   position: relative;
   height: 27px;
-  padding: 3px 0 0 27px;
+  padding: 6px 0 0 27px;
   font-size: 13px;
   background: url(../images/search.png) no-repeat 7px;
   background-size: 14px;
@@ -40401,7 +40386,7 @@ a:hover {
   background-color: #fff;
   color: #000;
 }
-.search-bar, .notice-bar {
+.search-bar {
   display: none;
   position: absolute;
   margin-top: 5px;
@@ -40413,7 +40398,7 @@ a:hover {
   z-index: 1000;
   box-shadow: 0 1px 4px rgba(0,0,0,.2);
 }
-.search-list, .notice-list {
+.search-list {
   list-style-type: none;
   padding: 0;
   color: #2D437C;
@@ -40431,12 +40416,12 @@ a:hover {
 .search-item:hover{
   background-color: #f0f2f5;
 }
-.search-item-img, .notice-item-img {
+.search-item-img {
   border-radius: 50%;
   vertical-align: middle;
   margin-right: 8px;
 }
-.search-item-name, .notice-item-name {
+.search-item-name {
   vertical-align: middle;
   color: #42648b;
   font-size: 12px;
@@ -40457,7 +40442,6 @@ a:hover {
   cursor: pointer;
 }
 .notice-bar {
-  font-size: 14px;
   margin-top: 15px;
   right: -125px;
   width: 250px;

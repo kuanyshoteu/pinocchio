@@ -86,6 +86,8 @@ class School(models.Model):
         return reverse("schools:save_job_salary")
     def delete_card_url(self):
         return reverse("schools:delete_card_url")
+    def get_card_squads(self):
+        return reverse("schools:get_card_squads")
     # School objects
     def get_school_documents(self):
         return reverse("documents:get_school_documents", kwargs={"school_id": self.id})
@@ -126,4 +128,3 @@ class Cabinet(models.Model):
     title = models.CharField(max_length=250)
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_cabinets')
-

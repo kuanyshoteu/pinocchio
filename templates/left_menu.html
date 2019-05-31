@@ -17,7 +17,11 @@
                 {% endif %}
                 {% if is_manager or is_director %}
                 <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}'>
-                    <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>CRM
+                    <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>
+                    CRM
+                    {% if profile.skill.need_actions > 0 %}
+                    <span class="left_menu_number">{{profile.skill.need_actions}}</span>
+                    {% endif %}                    
                 </a>
                 {% endif %}
                 {% if is_manager or is_trener or is_director %}

@@ -3,7 +3,10 @@
     <div class="ui segment" style="margin-bottom: 0;font-size: 15px;">
         Курсы
     </div> 
-    <div class="ui segment" style="margin-top: 0;padding-bottom: 28px;">        
+    <div class="ui segment" style="margin-top: 0;padding-bottom: 28px;">
+        {% if hiscourses|length == 0 %}
+            <i>Еще не подписан на курсы</i>
+        {% else %}
         {% for course in hiscourses %}
         <a class="lftitem item" href="{{ course.get_absolute_url }}">
             <div class="ui grid">
@@ -20,5 +23,6 @@
             </div>
         </a>
         {% endfor %}
+        {% endif %}
     </div> 
 {% endif %}

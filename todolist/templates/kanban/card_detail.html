@@ -15,18 +15,16 @@
   }
 </style>
  <div id="profile">
-    <div class="one wide column">
-        <a id="go-back-btn" href='/todolist/'>
-            <i class="arrow left icon"></i>Назад
+        <a id="go-back-btn-before" href='/todolist/'>
+            <i class="arrow left icon"></i>
         </a>
-    </div>
     <div class="ui container">      
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column"> 
+            <div class="twelve wide column" style="margin-left: 50px;"> 
                 <div class="content">
                   <div class="ui grid stackable">
-                    <div class="eleven wide column" style="padding-right: 0">                
+                    <div class="eleven wide column" style="padding-right: 0;padding-left: 0">                
                       <div class="ui segment" style="margin-bottom: 0">
                           <h3>
                               <span style="margin-left: 10px;">{{ card.title }}</span>

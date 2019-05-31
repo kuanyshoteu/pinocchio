@@ -17,12 +17,12 @@
 </style>
 <div id="profile">
 	{% if course %}
-	<a id="go-back-btn"  href='{{ course.get_absolute_url }}'>
-        <i class="arrow left icon"></i>Назад
+	<a id="go-back-btn" style="right: 30%;"  href='{{ course.get_absolute_url }}'>
+        <i class="check icon" style="color: #5181b8"></i>
     </a>
 	{% else %}
-	<a id="go-back-btn"  href='{% url "courses" %}'>
-        <i class="arrow left icon"></i>Назад
+	<a id="go-back-btn" style="right: 30%;"  href='{% url "courses" %}'>
+        <i class="check icon" style="color: #5181b8"></i>
     </a>
     {% endif %}
 	<div class='ui container'>
@@ -54,7 +54,12 @@
 			        				<div class="ten wide column" >
 			        					{{ form|crispy }}	
 			        				</div>
-			        				<div class="sixteen wide column" style="margin: 0;padding: 0">
+									<div class="sixteen wide column center aligned">
+			                            <a href="{{ course.get_delete_url }}" class="ui button red small">
+	                                        <i class="icon trash" style="color: #fff;"></i> Удалить курс "<b>{{ course.title }}</b>"
+			                            </a>
+		                            </div>				        				
+		                            <div class="sixteen wide column" style="margin: 0;padding: 0">
 				        				<div class="ui divider" style="margin: 0"></div>
 				        			</div>
 			        				<div class="six wide column">
@@ -63,30 +68,6 @@
 										<input type='submit' class='ui button blue tiny' value='Сохранить' />
 									</div>
 			        			</div>
-							</div>
-						</div>
-						<div class="four wide column" style="padding: 14px 0;">
-							<div class="ui segment" style="height: 200px;position: fixed;width: 18%;padding: 0">
-								<a href="{{ course.get_absolute_url }}" >
-									<div class="ui grid grey_hover" style="margin: 5px 0;">
-										<div class="four wide column" style="padding: 10px 5px 10px 14px;">
-											{% if course.image_icon %}
-	                                        <img src="{{ course.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-	                                        {% else %}
-	                                        <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
-	                                        {% endif %}
-										</div>
-										<div class="ten wide column" style="padding: 10px 0 0 5px;">
-											{{ course.title }}
-											<br>
-											<span style="color: #777e8c;font-size: 12px;">вернуться к странице</span>
-										</div>
-									</div>
-								</a>
-								<div class="ui divider" style="margin: 5px;"></div>
-								<div style="border-left: 2px solid #5181b8;padding: 7px 18px;background-color: #f0f2f5;">
-			                        <a class="full-w" style="color: black;font-size: 13px;"><b>Настройки</b></a>
-			                    </div>
 							</div>
 						</div>
 					</div>

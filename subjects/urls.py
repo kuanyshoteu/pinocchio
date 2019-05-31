@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^api/add_paper_url/$', add_paper, name='add_paper_url'),
     url(r'^api/add_squad_url/$', add_squad, name='add_squad_url'),
     url(r'^api/remove_lesson/$', remove_lesson, name='remove_lesson'),
-    url(r'^api/change_teacher_url/$', change_teacher, name='change_teacher_url'),
     url(r'^(?P<slug>[\w-]+)/edit/$', subject_update, name='update'),
     url(r'^(?P<slug>[\w-]+)/videos/$', subject_videos, name='videos_url'),
     url(r'^(?P<slug>[\w-]+)/lessons/$', subject_lessons, name='lessons_url'),

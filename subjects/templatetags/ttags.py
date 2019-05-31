@@ -7,22 +7,6 @@ from itertools import chain
 from subjects.models import Day, Cell,Attendance
 
 @register.filter
-def findorder(material, profile):
-    # llist = profile.curators_squads.first().cells.filter(subject_materials=material)
-    # if len(llist)>0:
-    #     return [llist[0].date, ' ' + llist[0].time_period.start +'-'+ llist[0].time_period.end]
-    return 'de'
-
-@register.filter
-def check_material_date(material, profile):
-    # llist = profile.squads.first().cells.filter(subject_materials=material)
-    # if len(llist)>0:
-    #     date = llist[0].date
-    #     if date < timezone.now().date():
-    #         return True
-    return False
-
-@register.filter
 def cell_subject_lectures(cell, subject):
     return Lecture.objects.filter(subject = subject, cell = cell)
 
@@ -221,6 +205,7 @@ def get_current_attendance(subject, squad):
                 if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
                     create_atts(squad, sm, subject)
                 attendances = sm.sm_atts.filter(squad = squad)
+                print()
                 get_date_results = get_date(attendances[0].subject_materials, squad)
                 if get_date_results == '_':
                     res = [[attendances, '_','_']] + res
@@ -298,7 +283,8 @@ def get_current_attendance_student(subject, profile):
 
 def create_atts(squad, subject_materials, subject):
     for student in squad.students.all():
-        if len(subject_materials.sm_atts.filter(student=student)) == 0:
+        qs = subject_materials.sm_atts.filter(student=student)
+        if len(qs) == 0:
             Attendance.objects.create(
                 subject_materials = subject_materials,
                 school=subject.school,
@@ -307,6 +293,9 @@ def create_atts(squad, subject_materials, subject):
                 subject=subject,
                 squad=squad
             )
+        else:
+            qs[0].squad = squad
+            qs[0].save()
 
 def create_atts_student(squad, subject_materials, student):
     Attendance.objects.create(

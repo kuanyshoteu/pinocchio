@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'main',
     'schools',
     'documents',
+    'channels',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -88,9 +89,18 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tripleA.wsgi.application'
+ASGI_APPLICATION = "tripleA.routing.application"
+#WSGI_APPLICATION = 'tripleA.wsgi.application'
 
-
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+#            "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')]
+        },
+    },
+}
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 

@@ -26,13 +26,11 @@
             <div class="daysmall daysmall_time" style="padding-top: 17px;">
             </div>
             {% for day in days %}
-            {% if day.number != 7 %} 
             <div class="daysmall">
                 <div class="day-name">
                     {{ day.title }}
                 </div>
             </div>
-            {% endif %}
             {% endfor %}
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
@@ -42,7 +40,6 @@
                 {{ timep.start }}-{{ timep.end }}
             </div>
             {% for cell in timep.time_cell.all %}  
-            {% if cell.day.number != 7 %} 
             <div class="daysmall other" style="padding: 0">                                     
                 <div>
                     {% for lecture in cell|cell_squad_lectures:instance %}
@@ -58,7 +55,6 @@
                     {% endfor %}
                 </div>
             </div>
-            {% endif %}
             {% endfor %}
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>

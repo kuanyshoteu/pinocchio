@@ -6,14 +6,14 @@
 {% load staticfiles %}
 
 {% block content %}
-<a id="go-back-btn" href="{% if lesson.folder.all.0 %}{{ lesson.folder.all.0.get_absolute_url }}{% else %}{% url 'library:main' %}{% endif %}">
-    <i class="arrow left icon"></i>Назад
+<a id="go-back-btn-before" href="{% if is_trener %}{% if lesson.folder.all.0 %}{{ lesson.folder.all.0.get_absolute_url }}{% else %}{% url 'library:main' %}{% endif %}{%else%}{{ lesson.subject_materials.first.subject.get_absolute_url }}{% endif %}">
+    <i class="arrow left icon"></i>
 </a>
 <div id="profile">
     <div class="ui container" >
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="ten wide column">
+            <div class="ten wide column" style="margin-left: 50px;">
 			    <div class="ui segment" style="padding-bottom: 20px;margin-bottom: 0">
 			        <h3 style="margin-bottom: 0;text-align: center; color: #696969;font-size: 30px;font-weight: 500">
 			            {{ lesson.title }}
@@ -50,7 +50,7 @@
 			    {% endif %}
 			    </div>
 
-			    <div class="ui segment" style="margin-bottom: 0;background-color: #f9f9fb;color: #757575;">
+			    <div class="ui segment" style="margin-top: 0;background-color: #f9f9fb;color: #757575;">
 			        <span>
 			            <i class="icon comment"></i>
 			            {{ lesson.comments.all|length }}

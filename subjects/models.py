@@ -91,6 +91,7 @@ class Subject(models.Model):
 
     content = models.TextField()
     slogan = models.CharField(max_length=250, default='')
+    number_of_materials = models.IntegerField(default=0, null=True)
 
     class Meta:
         ordering = ['id']
@@ -133,8 +134,6 @@ class Subject(models.Model):
         return reverse("subjects:add_paper_url")        
     def add_squad_url(self):
         return reverse("subjects:add_squad_url")   
-    def change_teacher_url(self):
-        return reverse("subjects:change_teacher_url")  
     def change_category(self):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
     def change_age(self):

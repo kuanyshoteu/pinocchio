@@ -80,20 +80,40 @@
                     </div>
                     <div class="sixteen wide column left-side" style="padding: 0 !important;">
                         <div class="twenty mitem" style="padding: 0;float: left;">
-                            {% if is_manager and hisprofile.is_student %}
-                                <div class="ui segment">
-                                    <a class="ui button mini blue paid full-w" id="{{ profile.id }}">Оплатил(а)</a>
-                                </div>
-                            {% endif %}
                             <div class="not_in_mobile">
-                                {% include 'profile/courses.html' %}
                                 {% include 'profile/skills_spider.html' %}
+                                {% include 'profile/courses.html' %}
                             </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
-                            {% if hisprofile == profile or is_trener or is_manager %}
+                            {% if is_manager and hisprofile.is_student %}
+                                <div class="ui segment">
+                                    <div class="ui grid stackable">
+                                        <div class="four wide column">
+                                            <div style="margin-bottom: 15px;"> На счету: <b style="{%if hisprofile.money < 0%}color: red;{%endif%}">{{ hisprofile.money}}тг.</b></div>
+                                            <form class="ui form" style="margin-bottom: 5px;">
+                                                <input style="margin-bottom: 0;" class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
+                                            </form>
+                                            <a class="ui button mini blue make_payment full-w" url="{{ profile.make_payment }}" id="{{ hisprofile.id }}">Оплатил(а)</a>
+                                        </div>
+                                        <div class="twelve wide column">
+                                            {% for payment in hisprofile.payment_history.all %}
+                                                {{payment.manager.first_name}}
+                                                {{payment.timestamp}}
+                                                {{payment.amount}}тг.
+                                                <br>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
                                     {% include 'profile/hisschedule.html' %}
+                                {% endif %}
+                            {% endif %}
+                            {% if hisprofile == profile %}
+                                {% if is_this_trener or hisprofile.is_student %}
                                     {% include 'profile/attendance.html' %}                                    
                                 {% endif %}
                             {% endif %}

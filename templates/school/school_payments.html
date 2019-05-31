@@ -55,7 +55,16 @@
                                                     </a>
                                                 </div>
                                             </td>
-                                            <td style="padding: 7px 15px;"><a class="ui button mini blue paid" id="{{ profile.id }}">Оплатил(а)</a></td>
+                                            <td style="padding: 7px 15px;">
+                                                <form class="ui form grid" >
+                                                    <div class="twelve wide column">
+                                                        <input style="margin-bottom: 0;" class="payment_amount{{ student.id }}" placeholder="Сумма" type="number" name="">
+                                                    </div>    
+                                                    <div class="four wide column">
+                                                        <a class="ui button mini blue make_payment" url="{{ profile.make_payment }}" id="{{ student.id }}">Оплатил(а)</a>
+                                                    </div>
+                                                </form>
+                                            </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

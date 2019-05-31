@@ -10,19 +10,19 @@
 <div id="profile" class="">
     {% if this_folder %}
         {% if this_folder.parent %}
-        <a id="go-back-btn"  href='{{ this_folder.parent.get_absolute_url }}'>
-            <i class="arrow left icon"></i>Назад
+        <a id="go-back-btn-before"  href='{{ this_folder.parent.get_absolute_url }}'>
+            <i class="arrow left icon"></i>
         </a>
         {% else %}
-        <a id="go-back-btn"  href='/documents/'>
-            <i class="arrow left icon"></i>Назад
+        <a id="go-back-btn-before"  href='/documents/'>
+            <i class="arrow left icon"></i>
         </a>    
         {% endif %}
     {% endif %}
     <div class="ui container">      
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
+            <div class="twelve wide column" style="margin-left: 50px;">
                 <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
                     <span style="font-size: 15px;">
                         {% if this_folder %}

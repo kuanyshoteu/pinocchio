@@ -27,4 +27,7 @@ def hisanswers(task, profile):
 
 @register.filter
 def hisanswer(task, profile):
-    return task.solver_checks.get_or_create(author_profile=profile)[0].solver_ans[0]
+    ans = task.solver_checks.get_or_create(author_profile=profile)[0].solver_ans
+    if len(ans) == 0:
+        return ''
+    return ans[0]

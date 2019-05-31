@@ -1,4 +1,20 @@
 $(document).ready(function () {
+    $('.make_payment').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        amount = $('.payment_amount'+id).val()
+        $.ajax({
+            url: url,
+            data: {
+                'amount':amount,
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    });
     $('.show_free_cards').click(function(e) {
         url = $(this).attr('url')
         checked = $(this).prop('checked')
@@ -151,24 +167,6 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-            }
-        });
-    }) 
-    $('.choose_subject_category').on('click', function(e) {
-        id = $(this).attr('id')
-        url = $(".get_subject_category_url").attr('url')
-        option = $(this).attr('option')
-        $.ajax({
-            url: url,
-            data: {
-                'object_id':id,
-                'option':option,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $( "#list" ).load(document.URL +  ' #list');
-                $(".option_vertical").removeClass('option_vertical_active')
-                $('#category'+id).addClass('option_vertical_active')
             }
         });
     }) 
