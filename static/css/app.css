@@ -40462,3 +40462,36 @@ a:hover {
   width: 250px;
   padding: 14px;
 }
+
+/* card_form.html*/
+
+.card_comment-helper {
+  display: block;
+}
+.card_comment-item {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429rem;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.card_comment-item:hover {
+  border-color: #85B7D9;
+}
+#card_form-select {
+  padding: 0 1rem 0 0;
+}
+#card_form-select:last-child {
+  padding: 0;
+}
+.card_form-days {
+  padding: 10px;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429rem;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.card_form-days:hover {
+  border-color: #85B7D9;
+}
