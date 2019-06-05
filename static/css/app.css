@@ -40495,3 +40495,39 @@ a:hover {
 .card_form-days:hover {
   border-color: #85B7D9;
 }
+
+/* school/school_info.html */
+
+.school-schedule {
+  position: relative;
+  height: 200px;
+  width: 500px;
+}
+
+.schedule-column {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-right: 1rem;
+  width: 50px;
+  height: 100%;
+  vertical-align: middle;
+}
+.schedule-column:last-child {
+  margin-right: 0;
+}
+
+.schedule-item-light, .schedule-item-dark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  width: 100%;
+}
+
+.schedule-item-light {
+  background-color: #EF2A34;
+}
+.schedule-item-dark {
+  background-color: #C80029;
+}
