@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block content %}
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU" type="text/javascript"></script>
+<div class="ui container">
+    <div class="ui grid stackable" style="margin-top: 0;">
+        <div class="sixteen wide column" style="padding-bottom: 0">
+            <div class="ui segment"></div>
+        </div>
+        <div class="four wide column">
+            <div class="ui segment"></div>
+        </div>
+        <div class="twelve wide column">
+            <div id="map" style="width: 100%; height: 80%;"></div>            
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    ymaps.ready(init);
+    function init(){ 
+        var myMap = new ymaps.Map("map", {
+            center: [43.25654, 76.92848],
+            zoom: 12
+        }),
+        myPlacemarkWithContent = new ymaps.Placemark([43.25654, 76.94848], {
+            hintContent: 'Собственный значок метки с контентом',
+            balloonContent: 'А эта — новогодняя',
+            iconContent: '12',
+            id:111
+        });
+        myGeoObject = new ymaps.GeoObject({
+            geometry: {
+                type: "Point",
+                coordinates: [43.25654, 76.92848],
+            },
+        },{
+            id:1,
+        })
+        myPlacemarkWithContent.events
+        .add('click', function (e) {
+            console.log('12',e.get('target').properties._data.id)
+        })
+        myGeoObject.events
+        .add('click', function (e) {
+            console.log('ahahha',e.get('target'))
+        })
+        .add('mouseenter', function (e) {
+            e.get('target').options.set('preset', 'islands#greenIcon');
+        })
+        .add('mouseleave', function (e) {
+            e.get('target').options.unset('preset');
+        });
+        myMap.geoObjects.add(myGeoObject)
+        myMap.geoObjects.add(myPlacemarkWithContent)
+    }
+</script>
+<style type="text/css">
+    .ymaps-2-1-74-search{
+        display: none;
+    }
+    .ymaps-2-1-74-traffic{
+        display: none;
+    }
+    .ymaps-2-1-74-listbox__button{
+        display: none;
+    }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

@@ -70,3 +70,11 @@ class SkillAdmin(admin.ModelAdmin):
     class Meta:
         model = Skill
 admin.site.register(Skill, SkillAdmin)
+
+class HashtagAdmin(admin.ModelAdmin):
+    list_display = ["id", "title"]
+    list_display_links = ["id"]
+    list_filter = ['schools']
+    class Meta:
+        model = Hashtag
+admin.site.register(Hashtag, HashtagAdmin)

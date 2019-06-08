@@ -232,8 +232,7 @@ def school_update(request, slug=None):
     }
     return render(request, "schools/school_create.html", context)
 
-
-def school_delete(request, slug=None):
+def school_delete(request):
     if not request.user.is_authenticated:
         raise Http404
     try:
@@ -254,6 +253,141 @@ def school_delete(request, slug=None):
     }
     return render(request, "confirm_delete.html", context)
 
+def subject_create(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    if request.GET.get('id') and request.GET.get('title'):
+        school = manager_profile.schools.first()
+        if school.school_subject_categories.filter(title = request.GET.get('title')):
+            return JsonResponse({'taken_name':True})
+        if request.GET.get('id') == '_new':
+            subject = school.school_subject_categories.create(school = school, title=request.GET.get('title'))
+            school.hashtags.create(title = request.GET.get('title').replace(' ', '_'))
+        else:
+            subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
+            hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
+            if len(hashtag) > 0:
+                hashtag.title = request.GET.get('title').replace(' ', '_')
+                hashtag.save()
+            else:
+                school.hashtags.create(title=request.GET.get('title').replace(' ', '_'))
+            subject.title = request.GET.get('title')
+        subject.save()
+        create_url = subject.create_url()
+        delete_url = subject.delete_url()
+    data = {
+        'taken_name':False,
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'idd':subject.id,
+    }
+    return JsonResponse(data)
+
+def subject_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_managers(profile)
+    subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
+    hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
+    if len(hashtag) > 0:
+        hashtag.delete()
+    subject.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
+def age_create(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    if request.GET.get('id') and request.GET.get('title'):
+        school = manager_profile.schools.first()
+        if school.school_subject_ages.filter(title = request.GET.get('title')):
+            return JsonResponse({'taken_name':True})
+        if request.GET.get('id') == '_new':
+            age = school.school_subject_ages.create(school = school, title=request.GET.get('title'))
+            school.hashtags.create(title = request.GET.get('title').replace(' ', '_'))
+        else:
+            age = school.school_subject_ages.get(id=int(request.GET.get('id')))
+            hashtag = school.hashtags.filter(title = age.title.replace(' ', '_'))
+            if len(hashtag) > 0:
+                hashtag.title = request.GET.get('title').replace(' ', '_')
+                hashtag.save()
+            else:
+                school.hashtags.create(title=request.GET.get('title').replace(' ', '_'))
+            age.title = request.GET.get('title')
+        age.save()
+        create_url = age.create_url()
+        delete_url = age.delete_url()
+    data = {
+        'taken_name':False,
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'idd':age.id,
+    }
+    return JsonResponse(data)
+
+def age_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_managers(profile)
+    age = school.school_subject_ages.get(id=int(request.GET.get('id')))
+    hashtag = school.hashtags.filter(title = age.title.replace(' ', '_'))
+    if len(hashtag) > 0:
+        hashtag.delete()
+    age.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
+def office_create(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    if request.GET.get('id') and request.GET.get('title'):
+        school = manager_profile.schools.first()
+        if school.school_offices.filter(title = request.GET.get('title')):
+            return JsonResponse({'taken_name':True})
+        if request.GET.get('id') == '_new':
+            office = school.school_offices.create(school = school, title=request.GET.get('title'))
+            school.hashtags.create(title = request.GET.get('title').replace(' ', '_'))
+        else:
+            office = school.school_offices.get(id=int(request.GET.get('id')))
+            hashtag = school.hashtags.filter(title = office.title.replace(' ', '_'))
+            if len(hashtag) > 0:
+                hashtag.title = request.GET.get('title').replace(' ', '_')
+                hashtag.save()
+            else:
+                school.hashtags.create(title=request.GET.get('title').replace(' ', '_'))
+            office.title = request.GET.get('title')
+        office.save()
+        create_url = office.create_url()
+        delete_url = office.delete_url()
+    data = {
+        'taken_name':False,
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'idd':office.id,
+    }
+    return JsonResponse(data)
+
+def office_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_managers(profile)
+    office = school.school_offices.get(id=int(request.GET.get('id')))
+    hashtag = school.hashtags.filter(title = office.title.replace(' ', '_'))
+    if len(hashtag) > 0:
+        hashtag.delete()
+    office.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -268,7 +402,6 @@ def save_card_as_user(request):
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         if card.saved == False:
-            print('right')
             new_id = User.objects.order_by("id").last().id + 1
             password = random_password()
             user = User.objects.create(username='user' + str(new_id))
@@ -318,7 +451,6 @@ def save_card_as_user(request):
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
-
     data = {
         'password':password,
         'add':add,
@@ -328,7 +460,6 @@ def save_card_as_user(request):
 def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('object_id') and request.GET.get('option'):
-        print(request.GET.get('object_id') , request.GET.get('option'))
         if request.GET.get('option') == 'subject':
             if int(request.GET.get('object_id')) == -1:
                 profile.crm_subject = None
@@ -396,6 +527,25 @@ def edit_card(request):
         card.phone = request.GET.get('phone')
         card.mail = request.GET.get('mail')
         card.comments = request.GET.get('comment')
+        crnt_tag = ''
+        wright = False
+        hashtags = school.hashtags.all()
+        for l in request.GET.get('comment')+' ':
+            if wright:
+                crnt_tag += l
+            if l == '!':
+                wright = True
+            elif l == ' ':
+                if wright:
+                    crnt_tag = crnt_tag.replace(' ','')
+                    founttag = hashtags.filter(title=crnt_tag)
+                    if len(founttag) > 0:
+                        card.hashtags.add(founttag[0])
+                    else:
+                        founttag = school.hashtags.create(title=crnt_tag)
+                        card.hashtags.add(founttag)                        
+                wright = False
+                crnt_tag = ''
         card.save()
         CRMCardHistory.objects.create(
             action_author = profile,
@@ -500,7 +650,6 @@ def show_free_cards(request):
         profile.save()
     if request.GET.get('check'):
         skill = profile.skill
-        print(request.GET.get('check'))
         if request.GET.get('check') == 'true':
             skill.crm_show_free_cards = True
         else:
@@ -512,12 +661,77 @@ def show_free_cards(request):
     return JsonResponse(data)
 
 def get_card_squads(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)    
     card = CRMCard.objects.get(id=int(request.GET.get('id')))
     profile = card.card_user
     res = []
     if profile:
         for squad in profile.squads.all():
             res.append(squad.id)
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def take_card(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)    
+    card = CRMCard.objects.get(id=int(request.GET.get('id')))
+    ok = False
+    if not card.author_profile:
+        card.author_profile = profile
+        ok = True
+    else:
+        card.author_profile = None
+    card.save()
+    data = {
+        'ok':ok,
+        "manager":profile.first_name,
+        "manager_url":profile.get_absolute_url(),
+    }
+    return JsonResponse(data)
+
+def change_day_of_week(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    status = 'no'
+    card = CRMCard.objects.get(id=int(request.GET.get('card')))
+    if len(card.days_of_weeks) < 7:
+        card.days_of_weeks = [False,False,False,False,False,False,False]
+    if card.days_of_weeks[int(request.GET.get('id'))]:
+        card.days_of_weeks[int(request.GET.get('id'))] = False
+    else:
+        card.days_of_weeks[int(request.GET.get('id'))] = True
+        status = 'yes'
+    card.save()
+
+    data = {
+        'status':status,
+    }
+    return JsonResponse(data)
+
+from django.contrib.postgres.search import TrigramSimilarity
+def call_helper(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    text = request.GET.get('text')
+    res = 'empty'
+    if text != '':
+        text = text[::-1]
+        res = []
+        school = profile.schools.first()
+        kef = 1
+        if len(text) > 4:
+            kef = 4
+        similarity=TrigramSimilarity('title', text)
+        hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for hashtag in hashtags:
+            res.append(hashtag.title)
+            i+=1
+            if i == 5:
+                break
     data = {
         'res':res,
     }

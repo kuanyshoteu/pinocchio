@@ -23,10 +23,49 @@
             {% include 'left_menu.html' %}
             <div class="wide column" style="padding-right: 0;width: 85%;">
                 <div style="padding-bottom: 8px;">
-                    <div class="ui toggle checkbox">
-                      <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
-                      <label>Показать свободные карточки</label>
-                    </div> 
+                    <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+                        <div class="ui grid">
+                            <div class="filter wide column">
+                                <div class="ui toggle checkbox segment" style="padding: 4px 12px;margin-top: 1px;">
+                                  <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                                  <label>Свободные</label>
+                                </div>
+                            </div>
+                            <div class="filter wide column">
+                                <select style="padding: 7px 14px;" class="filtercrm" id="subjectfilter">
+                                    <option value="-1">Все предметы</option>
+                                    {% for subject_category in subject_categories %}
+                                        <option value="{{ subject_category.title }}">{{subject_category.title}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="filter wide column">
+                                <select style="padding: 7px 14px;" class="filtercrm" id="agefilter">
+                                    <option value="-1">Все возрасты</option>
+                                    {% for age in ages %}
+                                        <option value="{{ age.title }}">{{age.title}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="filter wide column">
+                                <select style="padding: 7px 14px;" class="filtercrm" id="officefilter">
+                                    <option value="-1">Все офисы</option>
+                                    {% for office in offices %}
+                                        <option value="{{ office.title }}">{{office.title}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="filter wide column">
+                                <a class="ui button mini white full-w">По дням недели</a>
+                            </div>
+                            <div class="filter wide column" style="padding-right: 0 !important;">
+                                <textarea id="search_text" style="margin: 0;border-radius: 3px 0 0 3px;height: 31px;overflow-y: hidden;" placeholder="Поиск оп хештегам"></textarea>
+                            </div>
+                            <div class="wide column" style="padding:14px 0 0 0 !important;width: 28.13px;">
+                                <a class="ui button small blue search_by_tags" style="padding-right: 1px;padding-left: 9px;height: 31px;border-radius: 0 3px 3px 0 ;"><i class="icon search" style="color: white;"></i></a>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <div id="all_columns">
                     <div class="ui grid" style="margin-top: -5px;">
@@ -38,7 +77,7 @@
                                 <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
                                 {% include 'school/new_card_form.html' %}
                             </div>
-                            <div style="height: 69%;overflow-x: scroll;background-color: #4A4A4A;">
+                            <div style="height: 67%;overflow-x: scroll;background-color: #4A4A4A;">
                                 <div class="" style="padding: 0 4px;color: #fff;">
                                     <div class="column{{ column.id }} crm_column">
                                         <draggable 
@@ -47,9 +86,7 @@
                                                 @add="move_card({{ column.id }})">
                                             {% for card in column|filtercards:profile %}
                                             <div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
-                                                <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', '{{ card.saved }}')"><i class="icon table {% if not card.saved %}blue{% endif %}"></i></a>
-
-                                                <div id="card{{card.id}}" class="ui segment full-w crm_card" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" onclick="open_crmcard('{{ card.id }}')" draggable='true' column_id="{{column.id}}">
+                                                <div id="card{{card.id}}" class="ui segment full-w crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" onclick="open_crmcard('{{ card.id }}')" draggable='true' column_id="{{column.id}}">
                                                     {% if card.saved %}
                                                         {% if not card.was_called and card.card_user.money < card.card_user.salary %}
                                                         <div class="crm_marker"></div>
@@ -60,11 +97,14 @@
                                                     <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
                                                     <div style="color: #707070;font-size: 12px;">
                                                         {{ card.phone }}
+                                                    <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', '{{ card.saved }}')"><i class="icon table {% if not card.saved %}blue{% endif %}"></i></a>                                                    
                                                     </div>
                                                     {% if card.author_profile %}
-                                                    <a href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
-                                                        #{{card.author_profile.first_name}}
+                                                    <a class="nouser{{card.id}}" href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
+                                                        {{card.author_profile.first_name}}
                                                     </a>
+                                                    {% else %}
+                                                    <a class="nouser{{card.id}}" style="color: darkblue;font-size: 11px"></a>
                                                     {% endif %}
                                                     {% if card.saved %}
                                                         {% if not card.was_called and card.card_user.money < card.card_user.salary %}
@@ -201,7 +241,7 @@
         var name = $('.card_name' + id).val()
         var phone = $('.card_phone' + id).val()
         var mail = $('.card_mail' + id).val()
-        var comment = $('.card_comment' + id).val()
+        var comment = $('.card_comment' + id).text()
         $.ajax({
             url: $('.edit_card_url').attr('url'),
             data: {
@@ -224,6 +264,10 @@
     }
 </script>
 <style type="text/css">
+.filter.wide.column{
+    padding: 14px 4px 0 4px !important;
+    width: 15% !important;
+}
 .ui-draggable-dragging{
     opacity: 1;
     width: 200px;

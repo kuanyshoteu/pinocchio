@@ -40447,3 +40447,27 @@ a:hover {
   width: 250px;
   padding: 14px;
 }
+
+/* card_form.html*/
+
+.card_comment-helper {
+  display: block;
+  padding: 0;
+  margin-right: 5px;
+  width: 200px;
+}
+.card_comment-item {
+  text-align: left !important;
+  width: 100% !important;
+  padding: 8px 8px !important;
+  margin-bottom: 3px !important;
+}
+.card_comment-item:hover {
+  border-color: #85B7D9;
+}
+#card_form-select {
+  padding: 0 1rem 0 0;
+}
+#card_form-select:last-child {
+  padding: 0;
+}

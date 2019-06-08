@@ -37,7 +37,7 @@
                     <i class="users icon"></i>Классы
                 </a>
                 <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "subjects:list" %}'>
-                    <i class="table icon"></i>Предметы
+                    <i class="table icon"></i>Курсы
                 </a>
                 {% endif %}
                 {% if is_trener or is_director %}
@@ -46,7 +46,7 @@
                 </a>
                 {% endif %}
                 <a class="item lftitem help6 help66hb help49 help4949hb help70 help7070hb" href='{% url "courses" %}'>
-                    <i class="rocket icon"></i>Курсы
+                    <i class="rocket icon"></i>Курс store
                 </a>
                 {% if is_manager or is_trener or is_director %}
                 <a class="item lftitem help30 help3030hb help50 help5050hb help71 help7171hb" href='/todolist/'>
@@ -60,11 +60,15 @@
                 </a>
                 {% endif %}
             </div>
-            <a class="lftitemsmall" style="color: #939699;font-size: 12px;margin-left: 10px;" href='/contacts/'>
-                Контакты
+            <a class="lftitemsmall update_hints" style="color: #939699;font-size: 12px;margin-left: 10px;" href="{% url 'main:map' %}">
+                Карта
             </a>
             <a class="lftitemsmall update_hints" style="color: #939699;font-size: 12px;margin-left: 10px;" url="{{ profile.update_hints }}">
                 Помощь
+            </a>
+            <br>
+            <a class="lftitemsmall" style="color: #939699;font-size: 12px;margin-left: 10px;" href='/contacts/'>
+                Контакты
             </a>
     </div>
 <!--     <br>

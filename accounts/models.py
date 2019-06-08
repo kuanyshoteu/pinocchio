@@ -199,6 +199,12 @@ class CRMColumn(models.Model):
     class Meta:
         ordering = ['id']
 
+class Hashtag(models.Model):
+    title = models.CharField(max_length=250)
+    schools = models.ManyToManyField(School, related_name='hashtags')
+    class Meta:
+        ordering = ['-id']
+
 class CRMCard(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
     card_user = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='card')
@@ -211,8 +217,17 @@ class CRMCard(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     saved = models.BooleanField(default=False)
     was_called = models.BooleanField(default=False)
+    days_of_weeks = ArrayField(models.BooleanField(), default = list)
+    action = models.CharField(max_length=250, default='')
+    hashtags = models.ManyToManyField(Hashtag, related_name='cards')
     class Meta:
         ordering = ['saved', 'timestamp']
+    def call_helper(self):
+        return reverse("schools:call_helper")
+    def change_day_of_week(self):
+        return reverse("schools:change_day_of_week")
+    def take_url(self):
+        return reverse("schools:take_url")
 
 class CRMCardHistory(models.Model):
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_histories')

@@ -311,5 +311,5 @@ def create_atts_student(squad, subject_materials, student):
 def filtercards(column, profile):
     if profile.skill:
         if profile.skill.crm_show_free_cards:
-            return column.cards.filter(author_profile=None)    
-    return column.cards.filter(author_profile=profile)
+            return column.cards.filter(author_profile=None).prefetch_related('hashtags')
+    return column.cards.filter(author_profile=profile).prefetch_related('hashtags')

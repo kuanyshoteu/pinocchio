@@ -15,11 +15,11 @@
                     <div class="twelve wide column" style="padding-right: 0">
                         <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
                             <a class="open_option current_option" name='allsubjects'>
-                                Все предметы 
+                                Все курсы 
                                 <span style="font-size: 13px;color: #939393;">{{ subjects|length }}</span>
                             </a>
                             <a class="open_option other_option" name="mysubjects">
-                                Мои предметы 
+                                Мои курсы 
                                 <span style="font-size: 13px;color: #939393;">
                                     {% if is_trener %}
                                         {{ profile.subject_trener.all|length }}
@@ -35,7 +35,7 @@
                             {% endfor %}
                             {% if is_director or is_manager%}
                             <div class="eight wide column" style="padding: 0">
-                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "subjects:create" %}'>+ Создать новый предмет</a>
+                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "subjects:create" %}'>+ Создать новый курс</a>
                             </div>
                             {% endif %}
                         </div>
@@ -54,7 +54,7 @@
                     <div class="four wide column">
                         <div class="ui segment" style="padding-left: 0; padding-right: 0">
                             <div class="option_vertical {% if not profile.crm_subject %}option_vertical_active{% endif %}" id="category-1">
-                                <a class="full-w choose_subject_category" onclick="choose_subject_category('-1', 'subject')" id="-1" option="subject" style="color: black;font-size: 13px;">Все предметы</a>
+                                <a class="full-w choose_subject_category" onclick="choose_subject_category('-1', 'subject')" id="-1" option="subject" style="color: black;font-size: 13px;">Все курсы</a>
                             </div>
                             {% for category in subject_categories %}
                             <div class="option_vertical {% if category == profile.crm_subject %}option_vertical_active{% endif %}" id="category{{category.id}}">

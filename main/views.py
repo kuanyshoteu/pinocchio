@@ -228,3 +228,20 @@ def contacts_view(request):
     }
     return render(request, "contacts.html", context)
 
+def map_view(request):
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = 'None'
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+    context = {
+        "profile":profile,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'), 
+    }
+    return render(request, "map.html", context)

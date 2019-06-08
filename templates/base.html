@@ -15,7 +15,7 @@
     <script src='{% static "js/myscripts.js" %}'></script>
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
-
+    <script src='{% static "js/cardForm.js" %}'></script>
     {% block head_extra %} {% endblock head_extra %}
 
 </head>
@@ -130,9 +130,6 @@
                     <a class="item" href='/contacts/'>
                         <i class="address book icon"></i>Контакты
                     </a>  
-                    <a class="item ui button mini blue" onclick="toggleModal('#corruption.modal')">
-                        Заявить о коррупции
-                    </a>
                 </div>
                 {% else %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">

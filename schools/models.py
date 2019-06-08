@@ -113,16 +113,28 @@ class School(models.Model):
 class SubjectCategory(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_categories') 
     title = models.CharField(max_length=250)
+    def delete_url(self):
+        return reverse("schools:subject_delete_url")
+    def create_url(self):
+        return reverse("schools:subject_create_url")
 
 class SubjectAge(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_ages')
     title = models.CharField(max_length=250)
+    def delete_url(self):
+        return reverse("schools:age_delete_url")
+    def create_url(self):
+        return reverse("schools:age_create_url")
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
     address = models.TextField(default='')
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_offices')
+    def delete_url(self):
+        return reverse("schools:office_delete_url")
+    def create_url(self):
+        return reverse("schools:office_create_url")
 
 class Cabinet(models.Model):
     title = models.CharField(max_length=250)

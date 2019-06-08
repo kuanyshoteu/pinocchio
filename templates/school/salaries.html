@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="eleven wide column" style="padding-right: 25px;">
                                     <span style="margin-right:25px;font-size: 15px;">{{prof.title}}</span> 
-                                    <span style="background-color: #5181b8;padding: 5 10px;color: #fff;border-radius: 3px;">
+                                    <span class="highlight">
                                         {% if prof.title == 'Teacher' %}
                                             Зарплата за <b>1</b> урок   
                                         {% else %}
@@ -106,6 +106,5 @@
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>
 <span class="salary_url" url="{{ instance.salary_url }}"></span>
 <span class="save_job_salary_url" url="{{ instance.save_job_salary }}"></span>
-{% include 'school/add_teachers.html' %}
 
 {% endblock content %}
