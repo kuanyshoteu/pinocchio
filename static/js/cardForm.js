@@ -23,5 +23,18 @@ $(document).ready(function () {
 
     text.on('input', function () {
         closeBlock();
-    })
+    });
+
+    let cardFormSelect = $('#card_form-select-contact');
+    let cardFormSelectBtn = $('#card_form-select-contact-btn');
+
+    cardFormSelect.on('change', function(){
+        cardFormSelect.css('display', 'none');
+        cardFormSelectBtn.css('display', 'block');
+    });
+
+    $('#card_form-select').on('click', '#card_form-select-contact-btn', function(){
+        cardFormSelect.css('display', 'block');
+        cardFormSelectBtn.css('display', 'none');
+    });
 });

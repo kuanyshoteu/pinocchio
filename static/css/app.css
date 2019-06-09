@@ -40590,3 +40590,9 @@ a:hover {
 .schedule-item-dark {
   background-color: #C80029;
 }
+
+/* card_form btn */
+
+#card_form-select-contact-btn {
+  display: block;
+}
