@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
+from main.views import get_landing
 
 app_name = 'schools'
 urlpatterns = [
@@ -33,6 +34,7 @@ urlpatterns = [
     url(r'^api/age_create_url/$', age_create, name='age_create_url'),
     url(r'^api/office_delete_url/$', office_delete, name='office_delete_url'),
     url(r'^api/office_create_url/$', office_create, name='office_create_url'),
+    url(r'^api/get_landing/$', get_landing, name='get_landing'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

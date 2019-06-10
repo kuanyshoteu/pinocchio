@@ -1,6 +1,44 @@
 .highlight{
   background-color: #21BA45;padding: 5 10px;color: #fff;border-radius: 3px;
 }
+.school_name{
+  font-size: 15px;
+  font-weight: 600;
+}
+.school_name_big{
+  font-size: 19px;
+  padding-top: 14px;
+}
+.school_address{
+  color: #555;
+}
+.no_padding_side{
+  padding:14px 0 !important;
+}
+.no_padding{
+  padding: 0 !important;
+}
+.no_margin{
+  margin: 0 !important;
+}
+.school_div:hover{
+  background-color: #f7f7f7;
+  cursor: pointer;
+}
+.school_landing{
+  position: absolute;
+  height: 95%;
+  width: 100%;
+  z-index: 1000;
+  display: none;
+  background-color: #fff;
+  margin-left: 50px;
+  border-radius: 3px;
+  border: 1px solid #CCE2FF;
+  box-shadow: 0 0px 7px lightgrey;
+  margin-top: 14px;
+  overflow-y: scroll;
+}
 .left_menu_number{
   color: #5b6e85;
   padding: 0 6px;

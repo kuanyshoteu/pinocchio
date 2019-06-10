@@ -1,0 +1,78 @@
+{% load staticfiles %}
+
+<div class="ui segment" style="margin-bottom: 0;padding-left: 17px;margin-top: 0">
+    Информация
+</div>
+<div class="ui segment" style="margin-top: 0">
+    <div class="ui grid">
+        <div class="one wide column" style="padding-bottom: 0">
+            <i class="icon info" style="font-size: 17px;"></i>
+        </div>
+        <div class="fifteen wide column" style="padding-right: 25px;padding-bottom: 0">
+            {{ instance.get_markdown }}
+        </div>
+        <div class="one wide column">
+            <i class="icon id badge" style="font-size: 22px;padding: 0;margin-left: -5px;"></i>
+        </div>
+        <div class="fifteen wide column" style="padding-right: 25px;">
+            Контакты: {{ instance.address }}
+        </div>
+    </div>
+</div>
+<div class="ui segment">
+    <div class="ui grid">
+        <div class="sixteen wide column">
+            <div class="school-schedule">
+                <div class="schedule-scale">
+                    <div class="schedule-scale-num"></div>
+                    <div class="schedule-scale-num"></div>
+                    <div class="schedule-scale-num"></div>
+                    <div class="schedule-scale-num"></div>
+                    <div class="schedule-scale-num"></div>
+                    <div class="schedule-scale-num"></div>
+                </div>
+                <div class="schedule-column">
+                    <div style="height: 30%" class="schedule-item-light">30</div>
+                    <div style="height: 20%" class="schedule-item-dark">20</div>
+                </div>
+                <div class="schedule-column">
+                    <div style="height: 50%" class="schedule-item-light">50</div>
+                    <div style="height: 30%" class="schedule-item-dark">30</div>
+                </div>
+                <div class="schedule-column">
+                    <div style="height: 30%" class="schedule-item-light">30</div>
+                    <div style="height: 70%" class="schedule-item-dark">70</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if profile.is_director %}
+<div class="ui grid">
+    <div class="six wide column" style="padding-right: 0">
+        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+            Расходы
+        </div>
+        <div class="ui segment" style="margin-top: 0">
+            {% include 'school/money_circle_chart.html' %}
+        </div>
+    </div>
+    <div class="ten wide column">
+        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+            <div class="ui grid">
+                <div class="nine wide column" style="padding: 14px">
+                    Доходы
+                </div>
+                <div class="seven wide column" style="padding: 10px">
+                    <a class="ui button mini blue">Показать графики за год</a>
+                </div>
+            </div>
+        </div>
+        <div class="ui segment" style="margin-top: 0;height: 273px;">
+            {% include 'school/money_chart.html' %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% include 'school/good_results_chart.html' %}
+{% include 'school/bad_results_chart.html' %}

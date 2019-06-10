@@ -250,3 +250,13 @@ class Notification(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['-timestamp']
+
+class Review(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='reviews') 
+    title = models.CharField(max_length=250)
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_reviews')
+    rating = models.IntegerField(default=0, null = True)
+    def delete_url(self):
+        return reverse("schools:subject_delete_url")
+    def create_url(self):
+        return reverse("schools:subject_create_url")

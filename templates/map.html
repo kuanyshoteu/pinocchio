@@ -4,47 +4,132 @@
 {% block content %}
 
 <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU" type="text/javascript"></script>
-<div class="ui container">
-    <div class="ui grid stackable" style="margin-top: 0;">
-        <div class="sixteen wide column" style="padding-bottom: 0">
-            <div class="ui segment"></div>
+<div class="ui container" style="overflow-y: hidden;">
+    <div class="ui grid stackable" style="margin-top: 0;padding-left: 0">
+        <div class="sixteen wide column" style="padding: 14px 0 0 0;">
+            <form class="ui form" style="margin: 0">
+                <div class="ui grid">
+                    <div class="four wide column" style="padding-right: 0 !important;display: flex;padding-left: 28px;">
+                        <textarea id="search_text" style=" margin: 0;border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
+                        <a class="ui button small blue search_by_tags" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;margin: 0"><i class="icon search" style="color: white;"></i></a>
+                    </div>
+                    <div class="filter wide column">
+                        <div class="ui toggle checkbox segment" style="padding: 6px 12px;margin-top: 1px;">
+                          <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                          <label style="padding-left: 55px;">По рейтингу</label>
+                        </div>
+                    </div>
+                    <div class="filter2 wide column" style="padding-left: 0;">
+                        <div class="ui toggle checkbox segment" style="padding: 6px 12px;margin-top: 1px;">
+                          <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                          <label style="padding-left: 55px;">Pinocchio</label>
+                        </div>
+                    </div>
+                    <div class="two wide column left_p">
+                        <select>
+                            <option>Предмет</option>
+                        </select>                    
+                    </div>
+                    <div class="two wide column left_p">
+                        <select>
+                            <option>Предмет</option>
+                        </select>                    
+                    </div>
+                    <div class="two wide column left_p">
+                        <select>
+                            <option>Возраст</option>
+                        </select>                    
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="four wide column">
-            <div class="ui segment"></div>
+        <div class="four wide column" style="padding: 0 0 0 29px;">
+            <div class="school_landing" id="school_landing">
+                <div class="ui grid no_margin">
+                    <div class="two wide column">
+                        <a class="back_to_schools" onclick="$('#school_landing').hide()">
+                            <i class="icon arrow left blue" style="font-size: 17px;"></i>
+                        </a>
+                    </div>
+                    <div class="twelve wide column" style="padding-top: 0">
+                        <div class="school_start_landing"></div>
+                        <div class="school_name_big"></div>
+                    </div>
+                    <div class="sixteen wide column no_padding">
+                        <div class="ui divider no_margin"></div>
+                    </div>
+                    <div class="sixteen wide column">
+                        <a class="school_address_landing"></a>
+                        Часы работы:
+                        <div class="school_worktime_landing"></div>
+                        <div class="school_phone_landing"></div>
+                        <div class="school_photos_landing"></div>
+                        <div class="school_social_landing"></div>
+                        <div class="school_reviews_landing"></div>
+                        <div class="school_start_big"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment no_padding" style="overflow-y: scroll;height: 80%;margin: 14px 0 0 0;">
+                {% for school in schools %}
+                <div class="ui grid no_margin school_div" url='{{ school.get_landing }}' id="{{ school.id }}">
+                    <div class="two wide column">
+                        <i class="icon certificate blue no_padding"></i>    
+                    </div>
+                    <div class="fourteen wide column no_padding_side">
+                        <a class="school_name">{{ school.title }}</a>
+                        <div class="school_address">{{ school.address }}</div>
+                    </div>
+                </div>
+                <div class="ui divider" style="margin: 0"></div>
+                {% endfor %}
+            </div>
         </div>
-        <div class="twelve wide column">
+        <div class="twelve wide column" style="padding-left: 0;padding-right: 28px;">
             <div id="map" style="width: 100%; height: 80%;"></div>            
         </div>
     </div>
 </div>
+<span style="display: none;" class="show_url" url="{{url}}"></span>
 <script type="text/javascript">
+    function show_school(id){
+        url = $('.show_url').attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.school_name_big').text(data.title)
+                $('.school_worktime_landing').text(data.worktime)
+                $('.school_address_landing').text(data.address)
+                $('.school_phone_landing').text(data.phones[0])
+                $('#school_landing').show()
+            }
+        })        
+    }
+    $('.school_div').on('click', function (e) {
+        id = $(this).attr('id')
+        show_school(id)
+    })
     ymaps.ready(init);
     function init(){ 
         var myMap = new ymaps.Map("map", {
             center: [43.25654, 76.92848],
             zoom: 12
         }),
-        myPlacemarkWithContent = new ymaps.Placemark([43.25654, 76.94848], {
-            hintContent: 'Собственный значок метки с контентом',
-            balloonContent: 'А эта — новогодняя',
-            iconContent: '12',
-            id:111
+        {% for school in schools %}
+        x = parseFloat('{{school.latitude}}')
+        y = parseFloat('{{school.longtude}}')
+        console.log(x, y)
+        myPlacemarkWithContent = new ymaps.Placemark([x, y], {
+            id:'{{school.id}}'
         });
-        myGeoObject = new ymaps.GeoObject({
-            geometry: {
-                type: "Point",
-                coordinates: [43.25654, 76.92848],
-            },
-        },{
-            id:1,
-        })
         myPlacemarkWithContent.events
         .add('click', function (e) {
-            console.log('12',e.get('target').properties._data.id)
-        })
-        myGeoObject.events
-        .add('click', function (e) {
-            console.log('ahahha',e.get('target'))
+            console.log('id:',e.get('target').properties._data.id)
+            show_school(e.get('target').properties._data.id)
         })
         .add('mouseenter', function (e) {
             e.get('target').options.set('preset', 'islands#greenIcon');
@@ -52,8 +137,8 @@
         .add('mouseleave', function (e) {
             e.get('target').options.unset('preset');
         });
-        myMap.geoObjects.add(myGeoObject)
-        myMap.geoObjects.add(myPlacemarkWithContent)
+        myMap.geoObjects.add(myPlacemarkWithContent);
+        {% endfor %}
     }
 </script>
 <style type="text/css">
@@ -66,16 +151,16 @@
     .ymaps-2-1-74-listbox__button{
         display: none;
     }
+    .left_p{
+        padding-left: 0 !important;
+    }
+    .filter{
+        padding-right: 0 !important;
+        width: 180px !important;
+    }
+    .filter2{
+        padding-right: 0 !important;
+        width: 150px !important;
+    }
 </style>
-
-
-
-
-
-
-
-
-
-
-
 {% endblock content %}
