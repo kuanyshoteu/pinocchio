@@ -15,5 +15,6 @@ urlpatterns = [
     url(r'^save_zaiavka_url/$', SaveZaiavka, name='save_zaiavka_url'),    
     url(r'^lesson/$', hislessons, name='hislessons'),
     url(r'^search/$', search, name='search'),
+    url(r'^api/map_search/$', map_search, name='map_search'),
     url(r'^notifications/$', get_notifications, name='get_notifications'),
 ]

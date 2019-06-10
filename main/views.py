@@ -54,7 +54,7 @@ def main_view(request):
         is_director = is_profi(profile, 'Director')
     context = {
         "profile":profile,
-        "schools":School.objects.all(),
+        "schools":EliteSchools.objects.first().schools.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
         "is_manager":is_manager,
@@ -127,6 +127,36 @@ def register_view(request):
     return JsonResponse(data)
 
 from django.contrib.postgres.search import TrigramSimilarity
+def map_search(request):
+    text = request.GET.get('text')
+    res = []
+    if text != '':
+        kef = 1
+        if len(text) > 4:
+            kef = 4
+        similarity=TrigramSimilarity('title', text)
+        schools = School.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for school in schools:
+            image_url = ''
+            if school.image_icon:
+                image_url = school.image_icon.url
+            res.append([school.id, school.title, image_url, school.address])
+            i+=1
+            if i == 10:
+                break
+    else:
+        schools = EliteSchools.objects.first().schools.all()
+        for school in schools:
+            image_url = ''
+            if school.image_icon:
+                image_url = school.image_icon.url
+            res.append([school.id, school.title, image_url, school.address])
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)
+
 def search(request):
     profile = get_profile(request)
     school=profile.schools.first()
@@ -256,7 +286,7 @@ def map_view(request):
         is_director = is_profi(profile, 'Director')
     context = {
         "profile":profile,
-        "schools":School.objects.all(),
+        "schools":EliteSchools.objects.first().schools.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
         "is_manager":is_manager,

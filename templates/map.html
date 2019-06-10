@@ -10,7 +10,7 @@
             <form class="ui form" style="margin: 0">
                 <div class="ui grid">
                     <div class="four wide column" style="padding-right: 0 !important;display: flex;padding-left: 28px;">
-                        <textarea id="search_text" style=" margin: 0;border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
+                        <textarea class="map_search_input" url="/api/map_search/" style=" margin: 0;border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
                         <a class="ui button small blue search_by_tags" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;margin: 0"><i class="icon search" style="color: white;"></i></a>
                     </div>
                     <div class="filter wide column">
@@ -70,9 +70,9 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment no_padding" style="overflow-y: scroll;height: 80%;margin: 14px 0 0 0;">
+            <div class="ui segment no_padding school_list" style="overflow-y: scroll;height: 80%;margin: 14px 0 0 0;">
                 {% for school in schools %}
-                <div class="ui grid no_margin school_div" url='{{ school.get_landing }}' id="{{ school.id }}">
+                <div class="ui grid no_margin school_div" onclick="school_div('{{ school.id }}')" url='{{ school.get_landing }}' id="{{ school.id }}">
                     <div class="two wide column">
                         <i class="icon certificate blue no_padding"></i>    
                     </div>
@@ -109,11 +109,10 @@
             }
         })        
     }
-    $('.school_div').on('click', function (e) {
-        id = $(this).attr('id')
+    function school_div(id){
         show_school(id)
-    })
-    ymaps.ready(init);
+    }
+    //ymaps.ready(init);
     function init(){ 
         var myMap = new ymaps.Map("map", {
             center: [43.25654, 76.92848],
@@ -140,8 +139,55 @@
         myMap.geoObjects.add(myPlacemarkWithContent);
         {% endfor %}
     }
+
+
+
+    //**************************************************
+    $('.map_search_input').on('input', function(e) {
+        text = $(this).val()
+        url = $(this).attr('url')
+        console.log(url, text)
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.res.length == 0){
+                }
+                else{
+                    $('.school_list').empty();
+                    url = $('.show_url').attr('url')
+                        console.log('www')
+                    for(var i = 0; i < data.res.length; i++){
+                        id = data.res[i][0]
+                        name = data.res[i][1]
+                        image_url = data.res[i][2]
+                        address = data.res[i][3]
+                        if (image_url == ''){
+                            image_url = "/static/images/nophoto.png"
+                        }
+                        var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon certificate blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
+                    }
+                }
+            }
+        });
+    })
+    $("body").click(function(e){
+        $('.map_search_bar').hide();
+    });
+    //***************************************************
+
 </script>
 <style type="text/css">
+    .ymaps-2-1-74-controls__control_toolbar{
+
+    }
+    .ymaps-2-1-74-controls__control{
+        right: 10px !important;
+        left: auto !important;
+    }
     .ymaps-2-1-74-search{
         display: none;
     }

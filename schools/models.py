@@ -119,6 +119,9 @@ class School(models.Model):
     def get_landing(self):
         return reverse("schools:get_landing")    
 
+class EliteSchools(models.Model):
+    schools = models.ManyToManyField(School, related_name='elite')
+
 class SubjectCategory(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_categories') 
     title = models.CharField(max_length=250)
