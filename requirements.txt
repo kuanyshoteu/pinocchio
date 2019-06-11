@@ -54,3 +54,4 @@ gunicorn==19.6.0
 djangorestframework==3.8.1
 xlrd==1.1.0
 django_cors_headers==2.4.0
+channels==2.2.0
