@@ -560,6 +560,7 @@ def open_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     res = []
+    print(request.GET.get('id'), profile.schools.first().title)
     if request.GET.get('id'):
         school = profile.schools.first()
         card = school.crm_cards.get(id = int(request.GET.get('id')))

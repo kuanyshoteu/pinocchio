@@ -53,7 +53,7 @@ class School(models.Model):
     longtude = models.CharField(max_length=250, default='0.0')
     
     class Meta:
-        ordering = ['title']
+        ordering = ['id']
     def __unicode__(self):
         return self.title
     # School information pages

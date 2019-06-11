@@ -24,7 +24,7 @@
                 </div>
                 <div class="ui segment" style="margin: 0;font-size: 15px;">
                     {% if is_director %}
-                    <div style="margin-bottom: 5px;">На счету: <b>{{ instance.money }}тг.</b></div>
+                    <div style="margin-bottom: 5px;">На счету: <b id="number-counter">{{ instance.money }}тг.</b></div>
                     {% endif %}
                     <span style="display: inline-block;">{{ instance.get_markdown }}</span> 
                     <a style="margin-left: 15px;" href=""><i class="icon pen square blue" style="font-size: 15px"></i></a>

@@ -126,17 +126,15 @@ $(document).ready(function () {
         closeHelper();
     })
 
-    let cardFormSelect = $('#card_form-select-contact');
-    let cardFormSelectBtn = $('#card_form-select-contact-btn');
-
-    cardFormSelect.on('change', function(){
-        cardFormSelect.css('display', 'none');
-        cardFormSelectBtn.css('display', 'block');
+    $('.card_form-select-contact').on('change', function(){
+        $(this).hide();
+        console.log($(this).attr('id'))
+        $('.card_form-select-contact-btn'+$(this).attr('id')).show();
     });
 
-    $('#card_form-select').on('click', '#card_form-select-contact-btn', function(){
-        cardFormSelect.css('display', 'block');
-        cardFormSelectBtn.css('display', 'none');
+    $('.card_form-select-contact-btn').on('click', function(){
+        $('.card_form-select-contact'+$(this).attr('id')).show();
+        $(this).hide();
     });
 
  

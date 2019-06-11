@@ -29,14 +29,14 @@
                     </div>
                     <div class="ui grid stackable" style="margin-top: 1rem;">
                         <div class="eight wide column" id="card_form-select">
-                            <select>
+                            <select class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}">
                                 <option value="-1">Как связываться</option>
                                 <option value="call">Позвонить</option>
                                 <option value="whatsapp">Whats app</option>
                                 <option value="sms">СМС</option>
                                 <option value="mail">Почта</option>
                             </select>
-                            <a style="display: none" class="ui button blue" id="card_form-select-contact-btn">Связался</a>
+                            <a style="display: none" class="ui button blue small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался</a>
                         </div>
                         <div class="eight wide column" id="card_form-select">
                             {% if is_director %}

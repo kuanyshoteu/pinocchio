@@ -32,13 +32,21 @@
                                 </div>
                             </div>
                             <div class="filter wide column">
-                                <select style="padding: 7px 14px;" class="filtercrm" id="subjectfilter">
+                                <div class="filter-element">
+                                    <div class="filter-title">Все предметы <i class="icon caret down"></i></div>
+                                    <ul class="filter-list filter-list-hide">
+                                        {% for subject_category in subject_categories %}
+                                        <li class="filter-item" id="{{ subject_category.title }}"><i class="icon check"></i>{{subject_category.title}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+<!--                                 <select style="padding: 7px 14px;" class="filtercrm" id="subjectfilter">
                                     <option value="-1">Все предметы</option>
                                     {% for subject_category in subject_categories %}
                                         <option value="{{ subject_category.title }}">{{subject_category.title}}</option>
                                     {% endfor %}
                                 </select>
-                            </div>
+ -->                            </div>
                             <div class="filter wide column">
                                 <select style="padding: 7px 14px;" class="filtercrm" id="agefilter">
                                     <option value="-1">Все возрасты</option>
