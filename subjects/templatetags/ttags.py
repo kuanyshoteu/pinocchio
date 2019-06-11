@@ -5,6 +5,7 @@ from django.utils import timezone
 from datetime import timedelta
 from itertools import chain
 from subjects.models import Day, Cell,Attendance
+from accounts.models import Profession
 
 @register.filter
 def cell_subject_lectures(cell, subject):
@@ -313,3 +314,11 @@ def filtercards(column, profile):
         if profile.skill.crm_show_free_cards:
             return column.cards.filter(author_profile=None).prefetch_related('hashtags')
     return column.cards.filter(author_profile=profile).prefetch_related('hashtags')
+
+@register.filter
+def get_professions(school):
+    return Profession.objects.all()
+
+@register.filter
+def get_school_workers(job,school):
+    return job.job_workers.filter(schools = school)

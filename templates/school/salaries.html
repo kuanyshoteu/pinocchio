@@ -19,7 +19,7 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 {% include 'school/head.html' %}
-                {% for prof in professions %}
+                {% for prof in instance|get_professions %}
                     {% if prof.title == "Manager" or prof.title == "Teacher" %}
                         <div class="ui segment" style="margin-bottom: 0">
                             <div class="ui grid">
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="ui divider grey_divider"></div>
                                     <div style="margin: 0;">
-                                        {% for worker in job.job_workers.all %}
+                                        {% for worker in job|get_school_workers:instance %}
                                             <div class="ui grid" style="margin: 0;{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
                                                 <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
                                                     <a href="{{ worker.get_absolute_url }}" style="color: #fff;">

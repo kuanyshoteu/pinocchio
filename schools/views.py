@@ -86,8 +86,7 @@ def school_salaries(request):
     context = {
         "profile":profile,
         "instance": school,
-        "salaries":True,   
-        "professions":Profession.objects.all(), 
+        "salaries":True,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
