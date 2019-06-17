@@ -29,21 +29,31 @@
                     </div>
                     <div class="ui grid stackable" style="margin-top: 1rem;">
                         <div class="eight wide column" id="card_form-select">
-                            <select class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}">
+                            <select {%if not card.was_called%}style="display: none"{%endif%} class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}">
                                 <option value="-1">Как связываться</option>
                                 <option value="call">Позвонить</option>
                                 <option value="whatsapp">Whats app</option>
                                 <option value="sms">СМС</option>
                                 <option value="mail">Почта</option>
                             </select>
-                            <a style="display: none" class="ui button blue small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался</a>
+                            <a {%if card.was_called%}style="display: none"{%endif%} class="ui button green small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался</a>
                         </div>
                         <div class="eight wide column" id="card_form-select">
                             {% if is_director %}
-                            <select>
-                                <option value="-1">{%if card.author_profile%}{{ card.author_profile.first_name }}{%else%}Менеджера{%endif%}</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
+                            <select class="change_manager change_manager{{card.id}}" url="/schools/api/change_manager/" id="{{card.id}}">
+                                {% if card.author_profile %}
+                                    <option value="-1">{{ card.author_profile.first_name }}</option>
+                                {% else %}
+                                    <option value="-1">Менеджера</option>
+                                {% endif %}
+                                {% for manager in managers %}
+                                    {% if card.author_profile != manager %}
+                                    <option value="{{ manager.id }}">{{ manager.first_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if card.author_profile %}
+                                    <option value="-1">Без менеджера</option>
+                                {% endif %}
                             </select>
                             {% else %}
                                 {%if card.author_profile%}

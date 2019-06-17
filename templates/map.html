@@ -11,33 +11,29 @@
                 <div class="ui grid">
                     <div class="four wide column" style="padding-right: 0 !important;display: flex;padding-left: 28px;">
                         <textarea class="map_search_input" url="/api/map_search/" style=" margin: 0;border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
-                        <a class="ui button small blue search_by_tags" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;margin: 0"><i class="icon search" style="color: white;"></i></a>
+                        <a class="ui button small blue map_search_by_tags" url="/api/map_search_show/" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;margin: 0"><i class="icon search" style="color: white;"></i></a>
+                        <div class="map_search_hint ui segment" style="display: none;"></div>
                     </div>
-                    <div class="filter wide column">
-                        <div class="ui toggle checkbox segment" style="padding: 6px 12px;margin-top: 1px;">
-                          <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
-                          <label style="padding-left: 55px;">По рейтингу</label>
-                        </div>
-                    </div>
-                    <div class="filter2 wide column" style="padding-left: 0;">
-                        <div class="ui toggle checkbox segment" style="padding: 6px 12px;margin-top: 1px;">
-                          <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
-                          <label style="padding-left: 55px;">Pinocchio</label>
+                    <div class="wide column" style="margin-right: 15px;margin-left: 10px;width: 15%;padding: 14px 0">
+                        <div class="ui segment" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
+                            <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;margin-bottom: 0;height: 20px; margin-left: -7px; font-size: 12px;font-weight: 600;color: #7e7e7e;background-color: transparent;">
+                            <div id="slider-range"></div>                            
                         </div>
                     </div>
                     <div class="two wide column left_p">
-                        <select>
-                            <option>Предмет</option>
+                        <select class="map_subject_filter map_filter" url='/api/map_filter/'>
+                            <option value="">Все предметы</option>
+                            {% for subject in subjects %}
+                            <option value="{{subject.title}}">{{subject.title}}</option>
+                            {% endfor %}
                         </select>                    
                     </div>
-                    <div class="two wide column left_p">
+                    <div class="two wide column left_p map_age_filter map_filter" url='/api/map_filter/'>
                         <select>
-                            <option>Предмет</option>
-                        </select>                    
-                    </div>
-                    <div class="two wide column left_p">
-                        <select>
-                            <option>Возраст</option>
+                            <option value="">Все уровни</option>
+                            {% for age in ages %}
+                            <option value="{{age.title}}">{{age.title}}</option>
+                            {% endfor %}
                         </select>                    
                     </div>
                 </div>
@@ -90,7 +86,10 @@
         </div>
     </div>
 </div>
-<span style="display: none;" class="show_url" url="{{url}}"></span>
+<span style="display: none;" class="show_url" url="{{url}}" slider_status="0"></span>
+<link rel="stylesheet" href="{% static 'css/price-slider.css' %}">
+<script src="{% static 'js/price-slider.js' %}"></script>
+
 <script type="text/javascript">
     function show_school(id){
         url = $('.show_url').attr('url')
@@ -112,41 +111,148 @@
     function school_div(id){
         show_school(id)
     }
-    //ymaps.ready(init);
+    ymaps.ready(init);
     function init(){ 
         var myMap = new ymaps.Map("map", {
             center: [43.25654, 76.92848],
-            zoom: 12
-        }),
-        {% for school in schools %}
-        x = parseFloat('{{school.latitude}}')
-        y = parseFloat('{{school.longtude}}')
-        console.log(x, y)
-        myPlacemarkWithContent = new ymaps.Placemark([x, y], {
-            id:'{{school.id}}'
-        });
-        myPlacemarkWithContent.events
-        .add('click', function (e) {
-            console.log('id:',e.get('target').properties._data.id)
-            show_school(e.get('target').properties._data.id)
+            zoom: 13
+        },{
+            restrictMapArea: [
+                [42.8, 76.02848],
+                [44.25654, 77.92848]
+            ]
         })
-        .add('mouseenter', function (e) {
-            e.get('target').options.set('preset', 'islands#greenIcon');
-        })
-        .add('mouseleave', function (e) {
-            e.get('target').options.unset('preset');
-        });
-        myMap.geoObjects.add(myPlacemarkWithContent);
+        firstCollection = new ymaps.GeoObjectCollection(null)
+        {% for school in schools_all %}
+            x = parseFloat('{{school.latitude}}')
+            y = parseFloat('{{school.longtude}}')
+            firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
+                {
+                    iconLayout: 'default#imageWithContent',
+                    iconImageHref: '{%static "images/circle.png" %}',
+                    iconImageSize: [10, 10],
+                    iconImageOffset: [-5, -5],
+                    iconContentOffset: [15, 15],
+                }
+            ));
+            firstCollection.events
+            .add('click', function (e) {
+                show_school(e.get('target').properties._data.id)
+            })
+            .add('mouseenter', function (e) {
+                e.get('target').options.set('preset', 'islands#greenIcon');
+            })
+            .add('mouseleave', function (e) {
+                e.get('target').options.unset('preset');
+            });
+            myMap.geoObjects.add(firstCollection);
         {% endfor %}
+        $( function() {
+            $( "#slider-range" ).slider({
+                range: true,
+                min: 0,
+                max: 100,
+                values: [ 0, 100 ],
+                slide: function( event, ui ) {
+                    $('.show_url').attr('slider_status', '1')
+                    addzero1 = 'тг'
+                    addzero2 = 'тг'
+                    if(ui.values[0] > 0){addzero1 = ' 000тг'}
+                    if(ui.values[1] > 0){addzero2 = ' 000тг'}
+                    $( "#amount" ).val(ui.values[ 0 ]+addzero1 + " - " + ui.values[ 1 ]+addzero2);
+                    $( "#amount" ).attr( "mincost", ui.values[ 0 ])
+                    $( "#amount" ).attr( "maxcost", ui.values[ 1 ])
+                    update_map(myMap)
+                }
+            });
+        });
+        $('.map_filter').on('change', function(e) {
+            update_map(myMap)
+        })
     }
-
-
-
-    //**************************************************
+    function update_map(myMap, url, subject, age, mincost, maxcost) {
+        url = $('.map_filter').attr('url')
+        subjectfilter = document.getElementsByClassName('map_subject_filter')[0];
+        subject = subjectfilter.options[subjectfilter.selectedIndex].value;            
+        agefilter = document.getElementsByClassName('map_subject_filter')[0];
+        age = agefilter.options[agefilter.selectedIndex].value;       
+        mincost = $( "#amount" ).attr( "mincost")
+        maxcost = $( "#amount" ).attr( "maxcost")             
+        $.ajax({
+            url: url,
+            data: {
+                'subject':subject,
+                'age':'',
+                'mincost':mincost,
+                'maxcost':maxcost,
+            },
+            dataType: 'json',
+            success: function (data) {
+                update_list(data.res)
+                myMap.geoObjects.removeAll();
+                newCollection = new ymaps.GeoObjectCollection(null)
+                for (var i = 0; i < data.coordinates.length; i++) {
+                    newCollection.add(new ymaps.Placemark(data.coordinates[i], data.options[i], 
+                        {
+                            iconLayout: 'default#imageWithContent',
+                            iconImageHref: '{%static "images/circle.png" %}',
+                            iconImageSize: [10, 10],
+                            iconImageOffset: [-5, -5],
+                            iconContentOffset: [15, 15],
+                        }
+                    ));
+                }
+                newCollection.events
+                .add('click', function (e) {
+                    show_school(e.get('target').properties._data.properties.id)
+                })
+                myMap.geoObjects.add(newCollection)
+            }
+        })    
+    }
+    function map_hint_item(text){
+        $('.map_search_input').val(text)
+        map_search_by_tags(text);
+    }
     $('.map_search_input').on('input', function(e) {
-        text = $(this).val()
+        text = $('.map_search_input').val()
         url = $(this).attr('url')
-        console.log(url, text)
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.res.length == 0){
+                    $('.map_search_hint').hide();
+                }
+                else{
+                    $('.map_search_hint').empty();
+                    url = $('.show_url').attr('url')
+                    for(var i = 0; i < data.res.length; i++){
+                        if (data.res[i][1] == 'category') {
+                            icon = '<b style="font-size:11px;color:grey;">Предмет:</b> '
+                        }
+                        else if(data.res[i][1] == 'age'){
+                            icon = '<b style="font-size:11px;color:grey;">Возраст:</b> '
+                        }
+                        else 
+                            icon = ''
+                        var element = $('<div class="map_hint_item" onclick="map_hint_item('+"'"+data.res[i][0]+"'"+')">'+icon+data.res[i][0]+'</div>').appendTo('.map_search_hint');
+                    }
+                    $('.map_search_hint').show();
+                }
+            }
+        });
+    })
+    $('.map_search_by_tags').on('click',function(e) {
+        text = $('.map_search_input').val()
+        map_search_by_tags(text)
+    })
+    function map_search_by_tags(text){
+        $('.map_search_hint').hide();
+        url = $('.map_search_by_tags').attr('url')
         $.ajax({
             url: url,
             data: {
@@ -157,28 +263,28 @@
                 if(data.res.length == 0){
                 }
                 else{
-                    $('.school_list').empty();
-                    url = $('.show_url').attr('url')
-                        console.log('www')
-                    for(var i = 0; i < data.res.length; i++){
-                        id = data.res[i][0]
-                        name = data.res[i][1]
-                        image_url = data.res[i][2]
-                        address = data.res[i][3]
-                        if (image_url == ''){
-                            image_url = "/static/images/nophoto.png"
-                        }
-                        var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon certificate blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
-                    }
+                    update_list(data.res)
                 }
             }
         });
-    })
+    }
+    function update_list(res){
+        $('.school_list').empty();
+        url = $('.show_url').attr('url')
+        for(var i = 0; i < res.length; i++){
+            id = res[i][0]
+            name = res[i][1]
+            image_url = res[i][2]
+            address = res[i][3]
+            if (image_url == ''){
+                image_url = "/static/images/nophoto.png"
+            }
+            var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon certificate blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
+        }        
+    }
     $("body").click(function(e){
         $('.map_search_bar').hide();
     });
-    //***************************************************
-
 </script>
 <style type="text/css">
     .ymaps-2-1-74-controls__control_toolbar{

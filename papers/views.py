@@ -394,14 +394,24 @@ def estimate_lesson(request):
     return JsonResponse(data)
 
 def courses(request):
-    profile = get_profile(request)
+    profile = ''
+    is_trener = ''
+    is_manager = ''
+    is_director = ''
+    hint = 0
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        hint = profile.hint_numbers[5]
     context = {
         "profile": profile,
         "course_sets":course_sets(),
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        'hint':profile.hint_numbers[5], 
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director,
+        'hint':hint, 
     }
     return render(request, 'courses/course_list.html', context=context)
 

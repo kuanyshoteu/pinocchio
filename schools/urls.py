@@ -35,6 +35,9 @@ urlpatterns = [
     url(r'^api/office_delete_url/$', office_delete, name='office_delete_url'),
     url(r'^api/office_create_url/$', office_create, name='office_create_url'),
     url(r'^api/get_landing/$', get_landing, name='get_landing'),
+    url(r'^api/search_url/$', search_title, name='search_url'),
+    url(r'^api/card_called/$', card_called, name='card_called'),
+    url(r'^api/change_manager/$', change_manager, name='change_manager'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

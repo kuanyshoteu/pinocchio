@@ -16,5 +16,7 @@ urlpatterns = [
     url(r'^lesson/$', hislessons, name='hislessons'),
     url(r'^search/$', search, name='search'),
     url(r'^api/map_search/$', map_search, name='map_search'),
+    url(r'^api/map_search_show/$', map_search_show, name='map_search_show'),
+    url(r'^api/map_filter/$', map_filter, name='map_filter'),
     url(r'^notifications/$', get_notifications, name='get_notifications'),
 ]

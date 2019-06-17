@@ -1,38 +1,4 @@
 $(document).ready(function () {
-    $('.search_by_tags').click(function(e) {
-        filtercrm()
-    })
-    function filtercrm(){
-        search_text = $('#search_text').val()
-        subjectfilter = document.getElementById('subjectfilter');
-        title_subjectfilter = subjectfilter.options[subjectfilter.selectedIndex].value.replace(/ /g, '_');
-        agefilter = document.getElementById('agefilter');
-        title_agefilter = agefilter.options[agefilter.selectedIndex].value.replace(/ /g, '_');
-        officefilter = document.getElementById('officefilter');
-        title_officefilter = officefilter.options[officefilter.selectedIndex].value.replace(/ /g, '_');
-        $('.crm_card').hide()
-        filterstring = ''
-        if (search_text != '') {
-            filterstring = filterstring + '.'+search_text.replace(' ', '.')
-        }
-        if (title_subjectfilter != '-1') {
-            filterstring = filterstring + '.'+title_subjectfilter
-        }
-        if (title_agefilter != '-1') {
-            filterstring = filterstring + '.'+title_agefilter
-        }
-        if (title_officefilter != '-1') {
-            filterstring = filterstring + '.'+title_officefilter
-        }
-        console.log('d',filterstring)
-        $(filterstring).show()
-        if (title_subjectfilter == '-1' && title_agefilter == '-1' && title_officefilter == '-1' && search_text == '') {
-            $('.crm_card').show()
-        }
-    }
-    $('.filtercrm').on('change', function(e) {
-        filtercrm()
-    })     
     $('.make_payment').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')

@@ -16,6 +16,7 @@ class ChatConsumer(AsyncConsumer):
                 self.channel_name
             )
         self.chat_room = "school_" + str(profile.schools.first().id)
+        self.my_room = "school_" + str(profile.schools.first().id)
         await self.send({
             "type":"websocket.accept",
         })

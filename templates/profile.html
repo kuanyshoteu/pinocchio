@@ -82,11 +82,14 @@
                         <div class="twenty mitem" style="padding: 0;float: left;">
                             <div class="not_in_mobile">
                                 {% include 'profile/skills_spider.html' %}
-                                {% include 'profile/courses.html' %}
+                                {% if not is_manager %}
+                                    {% include 'profile/courses.html' %}
+                                {% endif %}
                             </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
-                            {% if is_manager and hisprofile.is_student %}
+                            {% if is_manager %}
+                                {% if hisprofile.is_student %}
                                 <div class="ui segment">
                                     <div class="ui grid stackable">
                                         <div class="four wide column">
@@ -106,6 +109,10 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% else %}
+                                <div class="ui segment" style="min-height: 200px;">
+                                </div>
+                                {% endif %}
                             {% endif %}
                             {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}

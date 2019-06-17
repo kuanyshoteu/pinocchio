@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>{% block head_title %}Pinocchio{% endblock head_title %}</title>
-
     <!-- CSS -->
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="shortcut icon" href='{% static "images/fav2.ico" %}' type="image/png">
@@ -17,9 +16,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/cardForm.js" %}'></script>
     <script src='{% static "js/faisalIncludes.js" %}'></script>
-
     {% block head_extra %} {% endblock head_extra %}
-
 </head>
 <body>
 {% include "modals/confirm_delete.html" %}
@@ -82,7 +79,7 @@
         </div>
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left: -100px;margin-top: 5px;">
-            Платформа учебных центров
+            - Платформа учебных центров
         </div>
         {% endif %}
         <div class="full-w left-main-menu">
@@ -99,6 +96,7 @@
             </div>
             {% else %}            
             <div class="item float_right" style="margin-right: 15%;">
+                <span style="margin-right: 30px;"><a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a></span>
                 <a class="open_login" style="color: #fff;" onclick="$('#login-modal').modal('show')">
                     Войти
                     <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/rocket.png' %}">
@@ -181,7 +179,6 @@
         wsStart = 'wss://'
     }
     var endpoint = wsStart + loc.host + '/notifications/'
-    console.log(loc.host, 'f', loc.pathname)
     var socket = new WebSocket(endpoint)
     socket.onmessage = function(e){
         data = JSON.parse(e.data)
@@ -194,6 +191,7 @@
     socket.onopen = function(e){
         $('.create_post').click(function(event) {
             data = {
+                'action_type':'create_post',
                 'text':$('.new_post_area').val()
             }
             socket.send(JSON.stringify(data))
