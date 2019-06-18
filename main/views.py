@@ -34,16 +34,6 @@ def main_view(request):
         profile = Profile.objects.get(user = request.user.id)
         return redirect(profile.get_absolute_url())    
 
-    form = EmptyForm(request.POST or None)
-    if form.is_valid():
-        if request.POST.get('username') and request.POST.get('password'):
-            for profile in Profile.objects.all():
-                if profile.mail == request.POST.get('username') or profile.phone == request.POST.get('username'):
-                    user = authenticate(username=str(profile.user.username), password=str(request.POST.get('password')))
-                    if user:
-                        login(request, user)
-                        return HttpResponseRedirect(profile.get_absolute_url())
-
     is_trener = False
     is_manager = False
     is_director = False
@@ -62,7 +52,6 @@ def main_view(request):
         "is_manager":is_manager,
         "is_director":is_director, 
         'main':True,
-        'form':form,
         "subjects":SubjectCategory.objects.all(),
         "ages":SubjectAge.objects.all(),        
     }
@@ -95,6 +84,7 @@ from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
 def login_view(request):
+    res = 'error'
     if request.GET.get('username') and request.GET.get('password'):
         found = False
         if len(Profile.objects.filter(mail=request.GET.get('username'))) > 0:
@@ -103,30 +93,38 @@ def login_view(request):
         elif len(Profile.objects.filter(phone=request.GET.get('username'))) > 0:
             profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
             found = True
-
         if found:
-            print(request.GET.get('password'),profile.user.username)
+            res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
             login(request, user)
     data = {
+        'res':res,
     }
     return JsonResponse(data)
 
 def register_view(request):
-    if request.GET.get('first_name') and request.GET.get('second_name') and request.GET.get('school') and request.GET.get('phone') and request.GET.get('mail') and request.GET.get('password1') and request.GET.get('password2'):
+    res = 'ok'
+    if request.GET.get('name')and request.GET.get('phone') and request.GET.get('password1') and request.GET.get('password2'):
         if request.GET.get('password1') == request.GET.get('password2'):
-            new_id = User.objects.order_by("id").last().id + 1
-            user = User.objects.create(username='user' + str(new_id), password=request.GET.get('password1'))
-            new_user = authenticate(username = user.username, password=request.GET.get('password1'))
-            login(request, user)
-            profile = Profile.objects.get(user = user)
-            profile.first_name = request.GET.get('first_name')
-            profile.second_name = request.GET.get('second_name')
-            profile.school = request.GET.get('school')
-            profile.phone = request.GET.get('phone')
-            profile.mail = request.GET.get('mail')
-            profile.save()
+            if len(Profile.objects.filter(mail=request.GET.get('phone'))) == 0 and len(Profile.objects.filter(phone=request.GET.get('phone'))) == 0:
+                new_id = User.objects.order_by("id").last().id + 1
+                user = User.objects.create(username='user' + str(new_id), password=request.GET.get('password1'))
+                new_user = authenticate(username = user.username, password=request.GET.get('password1'))
+                login(request, user)
+                profile = Profile.objects.get(user = user)
+                profile.first_name = request.GET.get('name')
+                if '@' in request.GET.get('phone'):
+                    profile.phone = request.GET.get('mail')
+                else:
+                    profile.mail = request.GET.get('phone')
+                profile.save()
+            else:
+                res = 'second_user'
+        else:
+            res = 'not_equal_password'
+
     data = {
+        'res':res,
     }
     return JsonResponse(data)
 
@@ -166,6 +164,7 @@ def map_filter(request):
     schools = School.objects.all()
     subject = False
     age = False
+    print(request.GET.get('age'), request.GET.get('subject'))
     if len(request.GET.get('subject')) > 0:
         subject = SubjectCategory.objects.get(title = request.GET.get('subject'))
     if len(request.GET.get('age')) > 0:

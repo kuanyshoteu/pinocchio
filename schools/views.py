@@ -31,19 +31,33 @@ from constants import *
 
 def school_rating(request):
     profile = get_profile(request)
-    school = profile.schools.first()
-    context = {
-        "profile":profile,
-        "instance": profile.schools.first(),
-        "squads":school.groups.all(),
-        "subject_categories":school.school_subject_categories.all(),
-        "subject_ages":school.school_subject_ages.all(),
-        "all_students":school.people.filter(),
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "school/school_rating.html", context)
+    if len(profile.schools.all()) == 0:
+        context = {
+            "profile":profile,
+            "instance": None,
+            "squads":[],
+            "subject_categories":[],
+            "subject_ages":[],
+            "all_students":[],
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+        }
+        return render(request, "school/school_rating.html", context)
+    else:
+        school = profile.schools.first()
+        context = {
+            "profile":profile,
+            "instance": profile.schools.first(),
+            "squads":school.groups.all(),
+            "subject_categories":school.school_subject_categories.all(),
+            "subject_ages":school.school_subject_ages.all(),
+            "all_students":school.people.filter(),
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+        }
+        return render(request, "school/school_rating.html", context)
 
 def school_payments(request):
     profile = get_profile(request)
@@ -275,7 +289,7 @@ def subject_create(request):
                 school.school_subject_categories.add(qs[0])
                 subject = qs[0]
             else:
-                subject = school.school_subject_categories.create(school = school, title=title)
+                subject = school.school_subject_categories.create(title=title)
             school.hashtags.get_or_create(title = title.replace(' ', '_'))
         else:
             subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
@@ -326,7 +340,7 @@ def age_create(request):
                 school.school_subject_ages.add(qs[0])
                 age = qs[0]
             else:
-                age = school.school_subject_ages.create(school = school, title=title)
+                age = school.school_subject_ages.create(title=title)
             school.hashtags.create(title = title.replace(' ', '_'))
         else:
             age = school.school_subject_ages.get(id=int(request.GET.get('id')))
@@ -377,7 +391,7 @@ def office_create(request):
                 school.school_offices.add(qs[0])
                 office = qs[0]
             else:
-                office = school.school_offices.create(school = school, title=title)
+                office = school.school_offices.create(title=title)
             school.hashtags.create(title = title.replace(' ', '_'))
         else:
             office = school.school_offices.get(id=int(request.GET.get('id')))

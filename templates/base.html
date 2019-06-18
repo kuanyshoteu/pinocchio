@@ -34,6 +34,7 @@
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
+            {% if profile.schools.all > 0 %}
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
                 <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
@@ -51,6 +52,7 @@
                     </ul>
                 </div>
             </form>
+            {% endif %}
             <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
                 {% if profile.notifications_number == 0 %}
                 <i class="icon bell" style="color: #2D437C;"></i>
@@ -97,12 +99,15 @@
             {% else %}            
             <div class="item float_right" style="margin-right: 15%;">
                 <span style="margin-right: 30px;"><a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a></span>
+                <a class="open_login" style="color: #fff;margin-right: 25px;" onclick="$('#signup-modal').modal('show')">
+                    Регистрация
+                </a>
                 <a class="open_login" style="color: #fff;" onclick="$('#login-modal').modal('show')">
                     Войти
-                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/rocket.png' %}">
                 </a>
             </div>
             {% include 'modals/login.html' %}
+            {% include 'modals/signup.html' %}
             {% endif %}
         </div>
     </div>
@@ -172,6 +177,8 @@
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
+{% if profile.schools.all.length > 0 %}
+<!-- <script src="https://cndjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
 <script type="text/javascript">
     var wsStart = 'ws://'
     var loc = window.location
@@ -204,5 +211,6 @@
     }
 
 </script>
+ -->{% endif %}
 </body>
 </html>

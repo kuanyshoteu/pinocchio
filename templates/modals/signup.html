@@ -1,18 +1,25 @@
-
-<div class="ui tiny modal" id="signup-modal">
+{% load staticfiles %}
+<div class="ui small modal" id="signup-modal">
     <i class="close icon"></i>
-    <div class="header text-center">
-        Запись на урок
-    </div>
-    <div class="content">
-        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
-            <div class="ui input text-center" id="go-ahead-r">
-                {{ signup_form }}
-                {{ signup_form2 }}
-                <br><br>
-                <input type='submit' class='ui button green btn-go text-center' value='Записаться' />
+    <div class="content" style="padding: 0">
+        <div class="ui grid">
+            <div class="eight wide column" style="padding: 0">
+                <img src="{% static 'images/dude.gif' %}" style="width: 100%;">
             </div>
-        </form>
+            <div class="eight wide column">
+                <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
+                <form method='POST' style="margin-bottom: 0" enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+                    <input class="new_name" placeholder="Имя Фамилия">
+                    <input class="new_username" placeholder="Номер телефона или еmail">
+                    <div style="display: none;" class="highlight_red reg_wrong_pass">Пароли не совпадают</div>
+                    <input class="new_password" type="password" placeholder="Пароль">
+                    <input class="new_password2" type="password" placeholder="Повторите пароль">
+                    <div style="text-align: center;">
+                        <a class="ui button green register-btn" style="margin-right: 15px;">Зарегистрироваться</a>
+                    </div>
+                </form>                
+            </div>
+        </div>
     </div>
 </div>
 

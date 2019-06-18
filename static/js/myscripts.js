@@ -1,4 +1,57 @@
 $(document).ready(function () {
+    $('.login-btn').click(function(e) {
+        url = '/api/login/'
+        username = $('.username').val()
+        password = $('.password').val()
+        $.ajax({
+            url: url,
+            data: {
+                'username':username,
+                'password':password
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.res == 'login') {
+                    $('.wrong_login').hide()
+                    location.reload()
+                }
+                else if (data.res == 'error'){
+                    $('.wrong_login').show()
+                }
+            }
+        })        
+    });
+    $('.register-btn').click(function(e) {
+        url = '/api/register/'
+        name = $('.new_name').val()
+        phone = $('.new_username').val()
+        new_password = $('.new_password').val()
+        new_password2 = $('.new_password2').val()
+        $.ajax({
+            url: url,
+            data: {
+                'name':name,
+                'phone':phone,
+                'password1':new_password,
+                'password2':new_password2,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.res)
+                if (data.res == 'ok') {
+                    $('.reg_wrong_phone').hide()
+                    $('.reg_wrong_pass').hide()
+                    location.reload()
+                }
+                else if (data.res == 'second_user'){
+                    $('.reg_wrong_phone').show()
+                }
+                else if (data.res == 'not_equal_password'){
+                    $('.reg_wrong_pass').show()
+                }
+            }
+        })        
+    });    
     $('.make_payment').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
