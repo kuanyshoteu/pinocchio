@@ -34,7 +34,7 @@
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
-            {% if profile.schools.all > 0 %}
+            {% if profile.schools.all.length > 0 %}
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
                 <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
