@@ -34,7 +34,6 @@
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
-            {% if profile.schools.all.length > 0 %}
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
                 <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
@@ -52,7 +51,6 @@
                     </ul>
                 </div>
             </form>
-            {% endif %}
             <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
                 {% if profile.notifications_number == 0 %}
                 <i class="icon bell" style="color: #2D437C;"></i>
