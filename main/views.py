@@ -96,7 +96,11 @@ def login_view(request):
         if found:
             res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
+        try:
             login(request, user)
+        except Exception as e:
+            res = 'error'
+
     data = {
         'res':res,
     }
