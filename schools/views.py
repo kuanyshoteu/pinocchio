@@ -31,19 +31,33 @@ from constants import *
 
 def school_rating(request):
     profile = get_profile(request)
-    school = profile.schools.first()
-    context = {
-        "profile":profile,
-        "instance": profile.schools.first(),
-        "squads":school.groups.all(),
-        "subject_categories":school.school_subject_categories.all(),
-        "subject_ages":school.school_subject_ages.all(),
-        "all_students":school.people.filter(),
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "school/school_rating.html", context)
+    if len(profile.schools.all()) == 0:
+        context = {
+            "profile":profile,
+            "instance": None,
+            "squads":[],
+            "subject_categories":[],
+            "subject_ages":[],
+            "all_students":[],
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+        }
+        return render(request, "school/school_rating.html", context)
+    else:
+        school = profile.schools.first()
+        context = {
+            "profile":profile,
+            "instance": profile.schools.first(),
+            "squads":school.groups.all(),
+            "subject_categories":school.school_subject_categories.all(),
+            "subject_ages":school.school_subject_ages.all(),
+            "all_students":school.people.filter(),
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+        }
+        return render(request, "school/school_rating.html", context)
 
 def school_payments(request):
     profile = get_profile(request)
@@ -98,6 +112,11 @@ def school_crm(request):
     only_managers(profile)
     school = profile.schools.first()
     time_periods = school.time_periods.all()
+    managers = None
+    is_director = is_profi(profile, 'Director')
+    if is_director:
+        manager_prof = Profession.objects.get(title='Manager')
+        managers = school.people.filter(profession=manager_prof)
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
@@ -109,7 +128,8 @@ def school_crm(request):
         'time_periods':time_periods,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
+        "is_director":is_director,
+        'managers':managers
     }
     return render(request, "school/crm.html", context)
 
@@ -258,21 +278,28 @@ def subject_create(request):
     create_url = ''
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
+        title = request.GET.get('title')
         school = manager_profile.schools.first()
-        if school.school_subject_categories.filter(title = request.GET.get('title')):
+        if school.school_subject_categories.filter(title = title):
             return JsonResponse({'taken_name':True})
+        print(request.GET.get('id'))
         if request.GET.get('id') == '_new':
-            subject = school.school_subject_categories.create(school = school, title=request.GET.get('title'))
-            school.hashtags.create(title = request.GET.get('title').replace(' ', '_'))
+            qs = SubjectCategory.objects.filter(title=title)
+            if len(qs) > 0:
+                school.school_subject_categories.add(qs[0])
+                subject = qs[0]
+            else:
+                subject = school.school_subject_categories.create(title=title)
+            school.hashtags.get_or_create(title = title.replace(' ', '_'))
         else:
             subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
             if len(hashtag) > 0:
-                hashtag.title = request.GET.get('title').replace(' ', '_')
+                hashtag.title = title.replace(' ', '_')
                 hashtag.save()
             else:
-                school.hashtags.create(title=request.GET.get('title').replace(' ', '_'))
-            subject.title = request.GET.get('title')
+                school.hashtags.create(title=title.replace(' ', '_'))
+            subject.title = title
         subject.save()
         create_url = subject.create_url()
         delete_url = subject.delete_url()
@@ -292,7 +319,7 @@ def subject_delete(request):
     hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
     if len(hashtag) > 0:
         hashtag.delete()
-    subject.delete()
+    school.school_subject_categories.remove(subject)
     data = {
     }
     return JsonResponse(data)
@@ -303,21 +330,27 @@ def age_create(request):
     create_url = ''
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
+        title = request.GET.get('title')
         school = manager_profile.schools.first()
-        if school.school_subject_ages.filter(title = request.GET.get('title')):
+        if school.school_subject_ages.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            age = school.school_subject_ages.create(school = school, title=request.GET.get('title'))
-            school.hashtags.create(title = request.GET.get('title').replace(' ', '_'))
+            qs = SubjectAge.objects.filter(title=title)
+            if len(qs) > 0:
+                school.school_subject_ages.add(qs[0])
+                age = qs[0]
+            else:
+                age = school.school_subject_ages.create(title=title)
+            school.hashtags.create(title = title.replace(' ', '_'))
         else:
             age = school.school_subject_ages.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = age.title.replace(' ', '_'))
             if len(hashtag) > 0:
-                hashtag.title = request.GET.get('title').replace(' ', '_')
+                hashtag.title = title.replace(' ', '_')
                 hashtag.save()
             else:
-                school.hashtags.create(title=request.GET.get('title').replace(' ', '_'))
-            age.title = request.GET.get('title')
+                school.hashtags.create(title=title.replace(' ', '_'))
+            age.title = title
         age.save()
         create_url = age.create_url()
         delete_url = age.delete_url()
@@ -348,21 +381,27 @@ def office_create(request):
     create_url = ''
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
+        title = request.GET.get('title')
         school = manager_profile.schools.first()
-        if school.school_offices.filter(title = request.GET.get('title')):
+        if school.school_offices.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            office = school.school_offices.create(school = school, title=request.GET.get('title'))
-            school.hashtags.create(title = request.GET.get('title').replace(' ', '_'))
+            qs = Office.objects.filter(title=title)
+            if len(qs) > 0:
+                school.school_offices.add(qs[0])
+                office = qs[0]
+            else:
+                office = school.school_offices.create(title=title)
+            school.hashtags.create(title = title.replace(' ', '_'))
         else:
             office = school.school_offices.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = office.title.replace(' ', '_'))
             if len(hashtag) > 0:
-                hashtag.title = request.GET.get('title').replace(' ', '_')
+                hashtag.title = title.replace(' ', '_')
                 hashtag.save()
             else:
-                school.hashtags.create(title=request.GET.get('title').replace(' ', '_'))
-            office.title = request.GET.get('title')
+                school.hashtags.create(title=title.replace(' ', '_'))
+            office.title = title
         office.save()
         create_url = office.create_url()
         delete_url = office.delete_url()
@@ -570,6 +609,26 @@ def open_card(request):
     }
     return JsonResponse(data)
 
+def card_called(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('id'):
+        school = profile.schools.first()
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
+        skill = profile.skill
+        if card.was_called:
+            card.was_called = False
+            skill.need_actions += 1
+        else:
+            card.was_called = True
+            skill.need_actions -= 1
+        skill.save()
+        card.save()
+    data = {
+        'is_called':card.was_called
+    }
+    return JsonResponse(data)
+
 def add_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -592,6 +651,9 @@ def add_card(request):
             edit = '***Создание карточки***',
             )
         hist.save()
+        skill = profile.skill
+        skill.need_actions += 1
+        skill.save()
     data = {
         "card_id":card.id,
         "card_name":card.name,
@@ -599,6 +661,28 @@ def add_card(request):
         "card_phone":card.phone,
         "card_mail":card.mail,
         "card_comment":card.comments,
+    }
+    return JsonResponse(data)
+
+def change_manager(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    if request.GET.get('manager') and request.GET.get('card'):
+        manager = Profile.objects.get(id=int(request.GET.get('manager')))
+        school = profile.schools.first()
+        card = school.crm_cards.get(id = int(request.GET.get('card')))
+        card.author_profile = manager
+        card.save()
+        text = 'У вас новый клиент в CRM'
+        Notification.objects.create(
+            text = text,
+            author_profile = manager,
+            school = profile.schools.first(),
+            itstype = 'crm',
+            url = '',
+            image_url = 'crm'
+        )
+    data = {
     }
     return JsonResponse(data)
 
@@ -716,19 +800,46 @@ def call_helper(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     text = request.GET.get('text')
-    res = 'empty'
+    res = ''
     if text != '':
-        text = text[::-1]
+        if not request.GET.get('reverse'):
+            text = text[::-1]
         res = []
         school = profile.schools.first()
         kef = 1
-        if len(text) > 4:
-            kef = 4
         similarity=TrigramSimilarity('title', text)
         hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
+        print(hashtags)
         for hashtag in hashtags:
             res.append(hashtag.title)
+            i+=1
+            if i == 5:
+                break
+    
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def search_title(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    res = []
+    if request.GET.get('status') and request.GET.get('text'):
+        similarity=TrigramSimilarity('title', request.GET.get('text'))
+        kef = 1
+        if len(request.GET.get('text')) > 4:
+            kef = 4
+        if request.GET.get('status') == 'subject':
+            objects = SubjectCategory.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        elif request.GET.get('status') == 'age':
+            objects = SubjectAge.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        else:
+            objects = Office.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')            
+        i = 0
+        for obj in objects:
+            res.append(obj.title)
             i+=1
             if i == 5:
                 break

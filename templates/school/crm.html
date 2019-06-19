@@ -1,17 +1,14 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
 {% block head_title %}
     CRM {{ instance.title }}
 {% endblock head_title %}
-
 {% block head_extra %}
     {{ form.media }}
 {% endblock head_extra %}
 {% load ttags %}
 {% load ttttags %}
 {% load staticfiles %}
-
 {% block content %}
 <script src='{% static "js/vue-drag/vue.min.js" %}'></script>
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
@@ -33,44 +30,62 @@
                             </div>
                             <div class="filter wide column">
                                 <div class="filter-element">
-                                    <div class="filter-title">Все предметы <i class="icon caret down"></i></div>
+                                    <div class="filter-title">Предметы <i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                         {% for subject_category in subject_categories %}
-                                        <li class="filter-item" id="{{ subject_category.title }}"><i class="icon check"></i>{{subject_category.title}}</li>
+                                        <li class="filter-item" status="0" id="{{ subject_category.title }}">
+                                            <i class="icon check green" id="check_subject_category{{ subject_category.title }}"></i>
+                                            {{subject_category.title}}
+                                        </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
-<!--                                 <select style="padding: 7px 14px;" class="filtercrm" id="subjectfilter">
-                                    <option value="-1">Все предметы</option>
-                                    {% for subject_category in subject_categories %}
-                                        <option value="{{ subject_category.title }}">{{subject_category.title}}</option>
-                                    {% endfor %}
-                                </select>
- -->                            </div>
+                            </div>
                             <div class="filter wide column">
-                                <select style="padding: 7px 14px;" class="filtercrm" id="agefilter">
-                                    <option value="-1">Все возрасты</option>
+                                <div class="filter-element">
+                                    <div class="filter-title">Возрасты <i class="icon caret down" style="float: right;"></i></div>
+                                    <ul class="filter-list filter-list-hide">
                                     {% for age in ages %}
-                                        <option value="{{ age.title }}">{{age.title}}</option>
+                                        <li class="filter-item" status="0" id="{{ age.title }}">
+                                            <i class="icon check green" id="check_age{{ age.title }}"></i>
+                                            {{age.title}}
+                                        </li>
                                     {% endfor %}
-                                </select>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="filter wide column">
-                                <select style="padding: 7px 14px;" class="filtercrm" id="officefilter">
-                                    <option value="-1">Все офисы</option>
+                                <div class="filter-element">
+                                    <div class="filter-title">Офисы<i class="icon caret down" style="float: right;"></i></div>
+                                    <ul class="filter-list filter-list-hide">
                                     {% for office in offices %}
-                                        <option value="{{ office.title }}">{{office.title}}</option>
+                                        <li class="filter-item" status="0" id="{{ office.title }}">
+                                            <i class="icon check green" id="check_office{{ office.title }}"></i>
+                                            {{office.title}}
+                                        </li>
                                     {% endfor %}
-                                </select>
+                                    </ul>
+                                </div>
                             </div>
                             <div class="filter wide column">
-                                <a class="ui button mini white full-w">По дням недели</a>
+                                <div class="filter-element">
+                                    <div class="filter-title">По дням недели<i class="icon caret down" style="float: right;"></i></div>
+                                    <ul class="filter-list filter-list-hide">
+                                    {% for day in days %}
+                                        <li class="filter-item" status="0" id="{{ day.title }}">
+                                            <i class="icon check green" id="check_day{{ day.title }}"></i>
+                                            {{day.title}}
+                                        </li>
+                                    {% endfor %}
+                                    </ul>
+                                </div>
                             </div>
                             <div class="filter wide column" style="padding-right: 0 !important;">
-                                <textarea id="search_text" style="margin: 0;border-radius: 3px 0 0 3px;height: 31px;overflow-y: hidden;" placeholder="Поиск оп хештегам"></textarea>
+                                <textarea id="search_text" placeholder="Поиск оп хештегам"></textarea>
+                                <div class="search_hint ui segment" style="display: none;"></div>                               
                             </div>
                             <div class="wide column" style="padding:14px 0 0 0 !important;width: 28.13px;">
-                                <a class="ui button small blue search_by_tags" style="padding-right: 1px;padding-left: 9px;height: 31px;border-radius: 0 3px 3px 0 ;"><i class="icon search" style="color: white;"></i></a>
+                                <a class="ui button small blue search_by_tags"><i class="icon search" style="color: white;"></i></a>
                             </div>
                         </div>
                     </form>
@@ -94,18 +109,14 @@
                                                 @add="move_card({{ column.id }})">
                                             {% for card in column|filtercards:profile %}
                                             <div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
-                                                <div id="card{{card.id}}" class="ui segment full-w crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" onclick="open_crmcard('{{ card.id }}')" draggable='true' column_id="{{column.id}}">
-                                                    {% if card.saved %}
-                                                        {% if not card.was_called and card.card_user.money < card.card_user.salary %}
-                                                        <div class="crm_marker"></div>
-                                                        {% endif %}
-                                                    {% else %}
+                                                <div id="card{{card.id}}" class="ui segment full-w crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%} {% if card.saved and card.card_user.money < card.card_user.salary %}warning_card{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" onclick="open_crmcard('{{ card.id }}')" draggable='true' column_id="{{column.id}}">
+                                                    {% if not card.saved %}
                                                         <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
                                                     {%endif%}
                                                     <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
                                                     <div style="color: #707070;font-size: 12px;">
                                                         {{ card.phone }}
-                                                    <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', '{{ card.saved }}')"><i class="icon table {% if not card.saved %}blue{% endif %}"></i></a>                                                    
+                                                    <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', '{{ card.saved }}')"><i class="icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>                                                    
                                                     </div>
                                                     {% if card.author_profile %}
                                                     <a class="nouser{{card.id}}" href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
@@ -113,11 +124,6 @@
                                                     </a>
                                                     {% else %}
                                                     <a class="nouser{{card.id}}" style="color: darkblue;font-size: 11px"></a>
-                                                    {% endif %}
-                                                    {% if card.saved %}
-                                                        {% if not card.was_called and card.card_user.money < card.card_user.salary %}
-                                                        <div class="crm_marker_down"></div>
-                                                        {% endif %}
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -270,6 +276,47 @@
         $('.delete_card_data').attr('id', id);
         $('#delete_card_modal').modal('show');
     }
+    function hint_item(text){
+        $('#search_text').val(text)
+        $('.search_hint').hide();
+        filtercrm();
+    }
+    function filtercrm(){
+        $('.crm_card').hide()
+        search_text = $('#search_text').val()
+        filterstring = ''
+        if (search_text != '') {
+            filterstring = filterstring + '.'+search_text.replace(' ', '.')
+        }
+        set = document.getElementsByClassName('filter-item')
+        for (var i = set.length - 1; i >= 0; i--) {
+          if (set[i].getAttribute('status') != '0'){
+            title = set[i].getAttribute('id')
+            filterstring = filterstring + '.'+title.replace(' ', '.')
+          }
+        }
+        $(filterstring).show()
+        if (filterstring == '') {
+            $('.crm_card').show()
+        }
+    }
+    $('.change_manager').on('change', function(){
+        id = $(this).attr('id')
+        url = $(this).attr('url')
+        this_ = document.getElementsByClassName('change_manager'+id)[0];
+        manager = this_.options[this_.selectedIndex].value;
+        $.ajax({
+            url: url,
+            data: {
+                'manager':manager,
+                'card':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        })        
+    })
+
 </script>
 <style type="text/css">
 .filter.wide.column{

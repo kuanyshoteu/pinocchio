@@ -24,8 +24,20 @@ from constants import *
 
 def news(request):
     profile = get_profile(request)
-    school = profile.schools.first()
-    return redirect(school.get_school_posts())
+    if len(profile.schools.all()) == 0:
+        context = {
+            "profile": profile,
+            "posts": [],
+            'hisschools':[],
+            "current_school_id":0,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'), 
+        }
+        return render(request, "news/post_list.html", context)        
+    else:
+        school = profile.schools.first()
+        return redirect(school.get_school_posts())
 
 def post_list(request, school_id):
     profile = get_profile(request)

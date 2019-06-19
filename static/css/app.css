@@ -40588,12 +40588,15 @@ a:hover {
 .filter-element {
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .filter-title {
+  background-color: #fff;
   display: inline-block;
   border-radius: 5px;
   padding: 5px 10px;
+  width: 100%;
   cursor: pointer;
   border: 1px solid #ccc;
 }

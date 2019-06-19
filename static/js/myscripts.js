@@ -1,38 +1,57 @@
 $(document).ready(function () {
-    $('.search_by_tags').click(function(e) {
-        filtercrm()
-    })
-    function filtercrm(){
-        search_text = $('#search_text').val()
-        subjectfilter = document.getElementById('subjectfilter');
-        title_subjectfilter = subjectfilter.options[subjectfilter.selectedIndex].value.replace(/ /g, '_');
-        agefilter = document.getElementById('agefilter');
-        title_agefilter = agefilter.options[agefilter.selectedIndex].value.replace(/ /g, '_');
-        officefilter = document.getElementById('officefilter');
-        title_officefilter = officefilter.options[officefilter.selectedIndex].value.replace(/ /g, '_');
-        $('.crm_card').hide()
-        filterstring = ''
-        if (search_text != '') {
-            filterstring = filterstring + '.'+search_text.replace(' ', '.')
-        }
-        if (title_subjectfilter != '-1') {
-            filterstring = filterstring + '.'+title_subjectfilter
-        }
-        if (title_agefilter != '-1') {
-            filterstring = filterstring + '.'+title_agefilter
-        }
-        if (title_officefilter != '-1') {
-            filterstring = filterstring + '.'+title_officefilter
-        }
-        console.log('d',filterstring)
-        $(filterstring).show()
-        if (title_subjectfilter == '-1' && title_agefilter == '-1' && title_officefilter == '-1' && search_text == '') {
-            $('.crm_card').show()
-        }
-    }
-    $('.filtercrm').on('change', function(e) {
-        filtercrm()
-    })     
+    $('.login-btn').click(function(e) {
+        url = '/api/login/'
+        username = $('.username').val()
+        password = $('.password').val()
+        $.ajax({
+            url: url,
+            data: {
+                'username':username,
+                'password':password
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.res == 'login') {
+                    $('.wrong_login').hide()
+                    location.reload()
+                }
+                else if (data.res == 'error'){
+                    $('.wrong_login').show()
+                }
+            }
+        })        
+    });
+    $('.register-btn').click(function(e) {
+        url = '/api/register/'
+        name = $('.new_name').val()
+        phone = $('.new_username').val()
+        new_password = $('.new_password').val()
+        new_password2 = $('.new_password2').val()
+        $.ajax({
+            url: url,
+            data: {
+                'name':name,
+                'phone':phone,
+                'password1':new_password,
+                'password2':new_password2,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.res)
+                if (data.res == 'ok') {
+                    $('.reg_wrong_phone').hide()
+                    $('.reg_wrong_pass').hide()
+                    location.reload()
+                }
+                else if (data.res == 'second_user'){
+                    $('.reg_wrong_phone').show()
+                }
+                else if (data.res == 'not_equal_password'){
+                    $('.reg_wrong_pass').show()
+                }
+            }
+        })        
+    });    
     $('.make_payment').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')

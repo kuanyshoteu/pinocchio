@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>{% block head_title %}Pinocchio{% endblock head_title %}</title>
-
     <!-- CSS -->
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="shortcut icon" href='{% static "images/fav2.ico" %}' type="image/png">
@@ -17,9 +16,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/cardForm.js" %}'></script>
     <script src='{% static "js/faisalIncludes.js" %}'></script>
-
     {% block head_extra %} {% endblock head_extra %}
-
 </head>
 <body>
 {% include "modals/confirm_delete.html" %}
@@ -37,6 +34,7 @@
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
+            {% if profile.schools.all > 0 %}
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
                 <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
@@ -54,6 +52,7 @@
                     </ul>
                 </div>
             </form>
+            {% endif %}
             <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
                 {% if profile.notifications_number == 0 %}
                 <i class="icon bell" style="color: #2D437C;"></i>
@@ -82,7 +81,7 @@
         </div>
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left: -100px;margin-top: 5px;">
-            Платформа учебных центров
+            - Платформа учебных центров
         </div>
         {% endif %}
         <div class="full-w left-main-menu">
@@ -99,12 +98,16 @@
             </div>
             {% else %}            
             <div class="item float_right" style="margin-right: 15%;">
+                <span style="margin-right: 30px;"><a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a></span>
+                <a class="open_login" style="color: #fff;margin-right: 25px;" onclick="$('#signup-modal').modal('show')">
+                    Регистрация
+                </a>
                 <a class="open_login" style="color: #fff;" onclick="$('#login-modal').modal('show')">
                     Войти
-                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/rocket.png' %}">
                 </a>
             </div>
             {% include 'modals/login.html' %}
+            {% include 'modals/signup.html' %}
             {% endif %}
         </div>
     </div>
@@ -174,14 +177,18 @@
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
-<!-- <script type="text/javascript">
+<<<<<<< 
+=======
+{% if profile.schools.all.length > 0 %}
+<!-- <script src="https://cndjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
+<script type="text/javascript">
+>>>>>>> 
     var wsStart = 'ws://'
     var loc = window.location
     if (loc.protocol == 'https:'){
         wsStart = 'wss://'
     }
     var endpoint = wsStart + loc.host + '/notifications/'
-    console.log(loc.host, 'f', loc.pathname)
     var socket = new WebSocket(endpoint)
     socket.onmessage = function(e){
         data = JSON.parse(e.data)
@@ -194,6 +201,7 @@
     socket.onopen = function(e){
         $('.create_post').click(function(event) {
             data = {
+                'action_type':'create_post',
                 'text':$('.new_post_area').val()
             }
             socket.send(JSON.stringify(data))
@@ -206,5 +214,9 @@
     }
 
 </script>
- --></body>
+<<<<<<< 
+=======
+ -->{% endif %}
+</body>
+>>>>>>> 
 </html>

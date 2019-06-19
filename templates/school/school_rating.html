@@ -30,6 +30,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% if instance %}
                             {% for student in profile|rating_filter %}
                                 <tr style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
                                     <td style="text-align: left;">
@@ -42,6 +43,7 @@
                                     <td>{{ student.coins }}</td>
                                 </tr>
                             {% endfor %}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

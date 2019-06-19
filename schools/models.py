@@ -48,12 +48,13 @@ class School(models.Model):
     phones = ArrayField(models.TextField(), default = list)
     social_networks = ArrayField(models.TextField(), default = list)
     offices = models.IntegerField(default=0)
+    average_cost = models.IntegerField(default=0)
 
     latitude = models.CharField(max_length=250, default='0.0')
     longtude = models.CharField(max_length=250, default='0.0')
     
     class Meta:
-        ordering = ['id']
+        ordering = ['rating']
     def __unicode__(self):
         return self.title
     # School information pages
@@ -123,20 +124,24 @@ class EliteSchools(models.Model):
     schools = models.ManyToManyField(School, related_name='elite')
 
 class SubjectCategory(models.Model):
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_categories') 
+    schools = models.ManyToManyField(School, related_name='school_subject_categories')
     title = models.CharField(max_length=250)
     def delete_url(self):
         return reverse("schools:subject_delete_url")
     def create_url(self):
         return reverse("schools:subject_create_url")
+    def search_url(self):
+        return reverse("schools:search_url")
 
 class SubjectAge(models.Model):
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_ages')
+    schools = models.ManyToManyField(School, related_name='school_subject_ages')
     title = models.CharField(max_length=250)
     def delete_url(self):
         return reverse("schools:age_delete_url")
     def create_url(self):
         return reverse("schools:age_create_url")
+    def search_url(self):
+        return reverse("schools:search_url")
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
@@ -147,6 +152,8 @@ class Office(models.Model):
         return reverse("schools:office_delete_url")
     def create_url(self):
         return reverse("schools:office_create_url")
+    def search_url(self):
+        return reverse("schools:search_url")
 
 class Cabinet(models.Model):
     title = models.CharField(max_length=250)
