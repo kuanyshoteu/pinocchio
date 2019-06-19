@@ -7,7 +7,7 @@
 		    </div>
 			{% for student in att_squad.students.all %}
 				<div class="student_name" style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
-			        {{ student.first_name }}
+			        <a href="{{student.get_absolute_url}}" style="color: #fff;">{{ student.first_name }}</a>
 			    </div>
 			    <div class="ui divider grey_divider"></div>
 			{% endfor %}

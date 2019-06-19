@@ -24,7 +24,7 @@
                                 {% endif %}
                             </div>
                             <div class="fifteen wide column">
-                                <input type="text" class="new_post_area" name="post_text" placeholder="Что у вас нового?">
+                                <textarea type="text" class="new_post_area" name="post_text" placeholder="Что у вас нового?"></textarea>
                             </div>
                             <div class="sixteen wide column new_post_details" style="display: none;padding-top: 0">
                                 <div class="ui divider" style="margin-bottom: 8px;"></div>
@@ -38,7 +38,7 @@
                     <div class="ui segment new_post_details" style="display: none;margin-top: 0;background: #fafbfc;height: 50px;">
                         <input type="file" name="postfile" id="postfile" class="postfile">
                         <label class="file_post" for="postfile"><i class="icon camera"></i></label>
-                        <input type="submit" class="ui button blue mini" value="Отправить">
+                        <input type="submit" class="create_post ui button blue mini" value="Отправить">
                     </div>
                 </form>                 
                 {% endif %}
@@ -59,7 +59,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="four wide column">
+            <div class="three wide column">
                 <div class="ui segment" style="padding-left: 0; padding-right: 0">
                     {% for school in hisschools %}
                     <div class="{% if school.id == current_school_id %}option_vertical_active{% endif %} option_vertical">

@@ -23,7 +23,6 @@ def upload_location(instance, filename):
 
 class School(models.Model):
     title = models.CharField(max_length=250)
-    official_school = models.BooleanField(default = False)
     image_icon = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
@@ -39,15 +38,22 @@ class School(models.Model):
             height_field="height_field2")
     height_field2 = models.IntegerField(default=0, null=True)
     width_field2 = models.IntegerField(default=0, null=True)
-    
+
     content = models.TextField(default='')
-    money = models.IntegerField(default=0)    
+    money = models.IntegerField(default=0)
     slogan = models.CharField(max_length=250, default='')
+    rating = models.FloatField(default=0)
+    address = models.CharField(max_length=250, default='')
+    worktime = models.CharField(max_length=250, default='')
+    phones = ArrayField(models.TextField(), default = list)
+    social_networks = ArrayField(models.TextField(), default = list)
+    offices = models.IntegerField(default=0)
 
-    new_schedule = models.BooleanField(default = False)
-
+    latitude = models.CharField(max_length=250, default='0.0')
+    longtude = models.CharField(max_length=250, default='0.0')
+    
     class Meta:
-        ordering = ['title']
+        ordering = ['id']
     def __unicode__(self):
         return self.title
     # School information pages
@@ -86,6 +92,8 @@ class School(models.Model):
         return reverse("schools:save_job_salary")
     def delete_card_url(self):
         return reverse("schools:delete_card_url")
+    def get_card_squads(self):
+        return reverse("schools:get_card_squads")
     # School objects
     def get_school_documents(self):
         return reverse("documents:get_school_documents", kwargs={"school_id": self.id})
@@ -107,23 +115,40 @@ class School(models.Model):
         return reverse("schools:open_card_url")
     def show_free_cards(self):
         return reverse("schools:show_free_cards")
+    # School map
+    def get_landing(self):
+        return reverse("schools:get_landing")    
+
+class EliteSchools(models.Model):
+    schools = models.ManyToManyField(School, related_name='elite')
 
 class SubjectCategory(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_categories') 
     title = models.CharField(max_length=250)
+    def delete_url(self):
+        return reverse("schools:subject_delete_url")
+    def create_url(self):
+        return reverse("schools:subject_create_url")
 
 class SubjectAge(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_subject_ages')
     title = models.CharField(max_length=250)
+    def delete_url(self):
+        return reverse("schools:age_delete_url")
+    def create_url(self):
+        return reverse("schools:age_create_url")
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
     address = models.TextField(default='')
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_offices')
+    def delete_url(self):
+        return reverse("schools:office_delete_url")
+    def create_url(self):
+        return reverse("schools:office_create_url")
 
 class Cabinet(models.Model):
     title = models.CharField(max_length=250)
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_cabinets')
-

@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block content %}
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU" type="text/javascript"></script>
+<div class="ui container" style="overflow-y: hidden;">
+    <div class="ui grid stackable" style="margin-top: 0;padding-left: 0">
+        <div class="sixteen wide column" style="padding: 14px 0 0 0;">
+            <form class="ui form" style="margin: 0">
+                <div class="ui grid">
+                    <div class="four wide column" style="padding-right: 0 !important;display: flex;padding-left: 28px;">
+                        <textarea class="map_search_input" url="/api/map_search/" style=" margin: 0;border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
+                        <a class="ui button small blue search_by_tags" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;margin: 0"><i class="icon search" style="color: white;"></i></a>
+                    </div>
+                    <div class="filter wide column">
+                        <div class="ui toggle checkbox segment" style="padding: 6px 12px;margin-top: 1px;">
+                          <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                          <label style="padding-left: 55px;">По рейтингу</label>
+                        </div>
+                    </div>
+                    <div class="filter2 wide column" style="padding-left: 0;">
+                        <div class="ui toggle checkbox segment" style="padding: 6px 12px;margin-top: 1px;">
+                          <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                          <label style="padding-left: 55px;">Pinocchio</label>
+                        </div>
+                    </div>
+                    <div class="two wide column left_p">
+                        <select>
+                            <option>Предмет</option>
+                        </select>                    
+                    </div>
+                    <div class="two wide column left_p">
+                        <select>
+                            <option>Предмет</option>
+                        </select>                    
+                    </div>
+                    <div class="two wide column left_p">
+                        <select>
+                            <option>Возраст</option>
+                        </select>                    
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="four wide column" style="padding: 0 0 0 29px;">
+            <div class="school_landing" id="school_landing">
+                <div class="ui grid no_margin">
+                    <div class="two wide column">
+                        <a class="back_to_schools" onclick="$('#school_landing').hide()">
+                            <i class="icon arrow left blue" style="font-size: 17px;"></i>
+                        </a>
+                    </div>
+                    <div class="twelve wide column" style="padding-top: 0">
+                        <div class="school_start_landing"></div>
+                        <div class="school_name_big"></div>
+                    </div>
+                    <div class="sixteen wide column no_padding">
+                        <div class="ui divider no_margin"></div>
+                    </div>
+                    <div class="sixteen wide column">
+                        <a class="school_address_landing"></a>
+                        Часы работы:
+                        <div class="school_worktime_landing"></div>
+                        <div class="school_phone_landing"></div>
+                        <div class="school_photos_landing"></div>
+                        <div class="school_social_landing"></div>
+                        <div class="school_reviews_landing"></div>
+                        <div class="school_start_big"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment no_padding school_list" style="overflow-y: scroll;height: 500px;margin: 14px 0 0 0;">
+                {% for school in schools %}
+                <div class="ui grid no_margin school_div" onclick="school_div('{{ school.id }}')" url='{{ school.get_landing }}' id="{{ school.id }}">
+                    <div class="two wide column">
+                        <i class="icon certificate blue no_padding"></i>    
+                    </div>
+                    <div class="fourteen wide column no_padding_side">
+                        <a class="school_name">{{ school.title }}</a>
+                        <div class="school_address">{{ school.address }}</div>
+                    </div>
+                </div>
+                <div class="ui divider" style="margin: 0"></div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="twelve wide column" style="padding-left: 0;padding-right: 28px;">
+            <div id="map" style="width: 100%; height: 500px;"></div>            
+        </div>
+    </div>
+</div>
+<span style="display: none;" class="show_url" url="{{url}}"></span>
+<script type="text/javascript">
+    function show_school(id){
+        url = $('.show_url').attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.school_name_big').text(data.title)
+                $('.school_worktime_landing').text(data.worktime)
+                $('.school_address_landing').text(data.address)
+                $('.school_phone_landing').text(data.phones[0])
+                $('#school_landing').show()
+            }
+        })        
+    }
+    function school_div(id){
+        show_school(id)
+    }
+    ymaps.ready(init);
+    function init(){ 
+        var myMap = new ymaps.Map("map", {
+            center: [43.25654, 76.92848],
+            zoom: 12
+        }),
+        {% for school in schools %}
+        x = parseFloat('{{school.latitude}}')
+        y = parseFloat('{{school.longtude}}')
+        console.log(x, y)
+        myPlacemarkWithContent = new ymaps.Placemark([x, y], {
+            id:'{{school.id}}'
+        });
+        myPlacemarkWithContent.events
+        .add('click', function (e) {
+            console.log('id:',e.get('target').properties._data.id)
+            show_school(e.get('target').properties._data.id)
+        })
+        .add('mouseenter', function (e) {
+            e.get('target').options.set('preset', 'islands#greenIcon');
+        })
+        .add('mouseleave', function (e) {
+            e.get('target').options.unset('preset');
+        });
+        myMap.geoObjects.add(myPlacemarkWithContent);
+        {% endfor %}
+    }
+
+
+
+    //**************************************************
+    $('.map_search_input').on('input', function(e) {
+        text = $(this).val()
+        url = $(this).attr('url')
+        console.log(url, text)
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.res.length == 0){
+                }
+                else{
+                    $('.school_list').empty();
+                    url = $('.show_url').attr('url')
+                        console.log('www')
+                    for(var i = 0; i < data.res.length; i++){
+                        id = data.res[i][0]
+                        name = data.res[i][1]
+                        image_url = data.res[i][2]
+                        address = data.res[i][3]
+                        if (image_url == ''){
+                            image_url = "/static/images/nophoto.png"
+                        }
+                        var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon certificate blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
+                    }
+                }
+            }
+        });
+    })
+    $("body").click(function(e){
+        $('.map_search_bar').hide();
+    });
+    //***************************************************
+
+</script>
+<style type="text/css">
+    .ymaps-2-1-74-controls__control_toolbar{
+
+    }
+    .ymaps-2-1-74-controls__control{
+        right: 10px !important;
+        left: auto !important;
+    }
+    .ymaps-2-1-74-search{
+        display: none;
+    }
+    .ymaps-2-1-74-traffic{
+        display: none;
+    }
+    .ymaps-2-1-74-listbox__button{
+        display: none;
+    }
+    .left_p{
+        padding-left: 0 !important;
+    }
+    .filter{
+        padding-right: 0 !important;
+        width: 180px !important;
+    }
+    .filter2{
+        padding-right: 0 !important;
+        width: 150px !important;
+    }
+</style>
+{% endblock content %}

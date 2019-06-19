@@ -1,14 +1,16 @@
 <div class="ui mini modal" id="login-modal">
     <i class="close icon"></i>
-    <div class="header text-center">
-        Login
+    <div class="header text-center" style="color: #222">
+        Вход
     </div>
     <div class="content">
         <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
-            <div class="ui input text-center" id="go-ahead">
-                {{ log_form }}
+            <input name="username" placeholder="Номер телефона">
+            <input type="password" name="password" placeholder="Пароль">
+            {{form}}
+            <div style="text-align: center;">
+                <input type="submit" class="ui button green" style="margin-right: 15px;" value="Войти">                
             </div>
-            <input type='submit' class='ui button green btn-go' value='Login'/>
         </form>
     </div>
 </div>

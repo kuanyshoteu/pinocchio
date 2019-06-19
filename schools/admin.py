@@ -4,6 +4,12 @@ from django.contrib import admin
 from .models import *
 from accounts.models import CRMColumn, CRMCard
 
+class EliteSchoolsModelAdmin(admin.ModelAdmin):
+    list_display = ["id"]
+    class Meta:
+        model = EliteSchools
+admin.site.register(EliteSchools, EliteSchoolsModelAdmin)
+
 class SchoolModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
     list_display_links = ["title"]

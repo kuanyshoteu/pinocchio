@@ -10,53 +10,59 @@
     <div class='ui container'>
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="eight wide column" id="list">
-                <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
-                    <a class="open_option current_option" name='allsubjects'>
-                        Все предметы 
-                        <span style="font-size: 13px;color: #939393;">{{ subjects|length }}</span>
-                    </a>
-                    <a class="open_option other_option" name="mysubjects">
-                        Мои предметы 
-                        <span style="font-size: 13px;color: #939393;">
-                            {% if is_trener %}
-                                {{ profile.subject_trener.all|length }}
-                            {% else %}
-                                {{ profile.subjects.all|length }}
+            <div class="wide column" id="list">
+                <div class="ui grid" id="updater">
+                    <div class="twelve wide column" style="padding-right: 0">
+                        <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
+                            <a class="open_option current_option" name='allsubjects'>
+                                Все курсы 
+                                <span style="font-size: 13px;color: #939393;">{{ subjects|length }}</span>
+                            </a>
+                            <a class="open_option other_option" name="mysubjects">
+                                Мои курсы 
+                                <span style="font-size: 13px;color: #939393;">
+                                    {% if is_trener %}
+                                        {{ profile.subject_trener.all|length }}
+                                    {% else %}
+                                        {{ profile.subjects.all|length }}
+                                    {% endif %}
+                                </span>
+                            </a>
+                        </div>
+                        <div class="ui option grid" id="allsubjects" style="margin-top: 0;">
+                            {% for sq in subjects %}
+                                {% include 'subjects/subject_list_info.html' %}
+                            {% endfor %}
+                            {% if is_director or is_manager%}
+                            <div class="eight wide column" style="padding: 0">
+                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "subjects:create" %}'>+ Создать новый курс</a>
+                            </div>
                             {% endif %}
-                        </span>
-                    </a>
-                    {% if is_director %}
-                        <a class="ui button mini blue mini" style="float: right;" href='{% url "subjects:create" %}'>Создать новый предмет</a>
-                    {% endif %}
-                </div>
-                <div class="ui segment option" id="allsubjects" style="margin-top: 0;">
-                    {% for sq in subjects %}
-                    {% include 'subjects/subject_list_info.html' %}
-                    {% endfor %}
-                </div>
-                <div class="ui segment option" id="mysubjects" style="margin-top: 0; display: none;">
-                    {% if is_manager %}
-                        {% for sq in profile.subject_trener.all %}
-                            {% include 'subjects/subject_list_info.html' %}
-                        {% endfor %}
-                    {% else %}
-                        {% for sq in profile.subjects.all %}
-                            {% include 'subjects/subject_list_info.html' %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="four wide column">
-                <div class="ui segment" style="padding-left: 0; padding-right: 0">
-                    <div class="option_vertical {% if not profile.crm_subject %}option_vertical_active{% endif %}" id="category-1">
-                        <a class="full-w choose_subject_category" id="-1" option="subject" style="color: black;font-size: 13px;">Все предметы</a>
+                        </div>
+                        <div class="ui segment option" id="mysubjects" style="margin-top: 0; display: none;">
+                            {% if is_manager %}
+                                {% for sq in profile.subject_trener.all %}
+                                    {% include 'subjects/subject_list_info.html' %}
+                                {% endfor %}
+                            {% else %}
+                                {% for sq in profile.subjects.all %}
+                                    {% include 'subjects/subject_list_info.html' %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
-                    {% for category in subject_categories %}
-                    <div class="option_vertical {% if category == profile.crm_subject %}option_vertical_active{% endif %}" id="category{{category.id}}">
-                        <a class="full-w choose_subject_category" id="{{ category.id }}" option="subject" style="color: black;font-size: 13px;">{{ category.title }}</a>
+                    <div class="four wide column">
+                        <div class="ui segment" style="padding-left: 0; padding-right: 0">
+                            <div class="option_vertical {% if not profile.crm_subject %}option_vertical_active{% endif %}" id="category-1">
+                                <a class="full-w choose_subject_category" onclick="choose_subject_category('-1', 'subject')" id="-1" option="subject" style="color: black;font-size: 13px;">Все курсы</a>
+                            </div>
+                            {% for category in subject_categories %}
+                            <div class="option_vertical {% if category == profile.crm_subject %}option_vertical_active{% endif %}" id="category{{category.id}}">
+                                <a class="full-w choose_subject_category" onclick="choose_subject_category('{{ category.id }}', 'subject')" id="{{ category.id }}" option="subject" style="color: black;font-size: 13px;">{{ category.title }}</a>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -64,6 +70,23 @@
 </div>
 <span style="display: none;" class="get_subject_category_url" url="{{ school.crm_option_url }}"></span>
 <script>
+    function choose_subject_category(id, option){
+        url = $(".get_subject_category_url").attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':id,
+                'option':option,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $( "#list" ).load(document.URL +  ' #updater');
+                $(".option_vertical").removeClass('option_vertical_active')
+                $('#category'+id).addClass('option_vertical_active')
+            }
+        });
+    } 
+
     $(document).ready(function(){
       $(".group_action").click(function (event) {
         event.preventDefault();

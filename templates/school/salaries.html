@@ -19,7 +19,7 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 {% include 'school/head.html' %}
-                {% for prof in professions %}
+                {% for prof in instance|get_professions %}
                     {% if prof.title == "Manager" or prof.title == "Teacher" %}
                         <div class="ui segment" style="margin-bottom: 0">
                             <div class="ui grid">
@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="eleven wide column" style="padding-right: 25px;">
                                     <span style="margin-right:25px;font-size: 15px;">{{prof.title}}</span> 
-                                    <span style="background-color: #5181b8;padding: 5 10px;color: #fff;border-radius: 3px;">
+                                    <span class="highlight">
                                         {% if prof.title == 'Teacher' %}
                                             Зарплата за <b>1</b> урок   
                                         {% else %}
@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="ui divider grey_divider"></div>
                                     <div style="margin: 0;">
-                                        {% for worker in job.job_workers.all %}
+                                        {% for worker in job|get_school_workers:instance %}
                                             <div class="ui grid" style="margin: 0;{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
                                                 <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
                                                     <a href="{{ worker.get_absolute_url }}" style="color: #fff;">
@@ -106,6 +106,5 @@
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>
 <span class="salary_url" url="{{ instance.salary_url }}"></span>
 <span class="save_job_salary_url" url="{{ instance.save_job_salary }}"></span>
-{% include 'school/add_teachers.html' %}
 
 {% endblock content %}

@@ -19,11 +19,301 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 {% include 'school/head.html' %}
-                {% include 'school/school_info.html' %}                    
+                <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;margin-top: 0">
+                    Информация
+                </div>
+                <div class="ui segment" style="margin: 0;font-size: 15px;">
+                    {% if is_director %}
+                    <div style="margin-bottom: 5px;">На счету: <b id="number-counter">{{ instance.money }}тг.</b></div>
+                    {% endif %}
+                    <span style="display: inline-block;">{{ instance.get_markdown }}</span> 
+                    <a style="margin-left: 15px;" href=""><i class="icon pen square blue" style="font-size: 15px"></i></a>
+                    <br>
+                    <span style="display: inline-block;">Контакты:</span>
+                    <span style="display: inline-block;">{{ instance.address }}</span>
+                    <a style="margin-left: 15px;" href=""><i class="icon pen square blue" style="font-size: 15px"></i></a>
+                </div>
+                {% if is_director %}
+                <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                    Предметы школы:
+                    <div class="school_subject_list" style="display: inline-block;">
+                    {% for subject in instance.school_subject_categories.all %}
+                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject.category_subjects.all|length}} курсов)</a>
+                        <div class="ui modal mini" id="subject_form{{ subject.id }}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <form class="ui form">
+                                    <textarea id="subject_title{{subject.id}}">{{subject.title}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_subject('{{subject.create_url}}', '{{subject.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_subject('{{subject.delete_url}}', '{{subject.id}}')" style="float: right;">Удалить</a>
+                                </form>
+                                <div class="errorsubject{{subject.id}} highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
+                    <div class="ui modal mini" id="subject_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <textarea id="subject_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_subject('/schools/api/subject_create_url/', '_new')">Создать</a>
+                            </form>
+                            <div class="errorsubject_new highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment" style="margin: 0;padding-left: 17px;">
+                    Возрасты учеников:
+                    <div class="school_age_list" style="display: inline-block;">
+                    {% for age in instance.school_subject_ages.all %}
+                        <a class="ui button mini green age_object{{age.id}}" onclick="$('#age_form{{age.id}}').modal('show')" id="{{age.id}}" style="padding: 7px 10px;">{{ age.title }} ({{ age.category_age.all|length}} курсов)</a>
+                        <div class="ui modal mini" id="age_form{{ age.id }}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <form class="ui form">
+                                    <textarea id="age_title{{age.id}}">{{age.title}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_age('{{age.create_url}}', '{{age.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_age('{{age.delete_url}}', '{{age.id}}')" style="float: right;">Удалить</a>
+                                </form>
+                                <div class="errorage{{age.id}} highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#age_form_new').modal('show')">Добавить предмет</a>
+                    <div class="ui modal mini" id="age_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <textarea id="age_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_age('/schools/api/age_create_url/', '_new')">Создать</a>
+                            </form>
+                            <div class="errorage_new highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment" style="margin-top: 0;padding-left: 17px;">
+                    Офисы:
+                    <div class="school_office_list" style="display: inline-block;">
+                    {% for office in instance.school_offices.all %}
+                        <a class="ui button mini green office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.category_office.all|length}} курсов)</a>
+                        <div class="ui modal mini" id="office_form{{ office.id }}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <form class="ui form">
+                                    <textarea id="office_title{{office.id}}">{{office.title}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_office('{{office.create_url}}', '{{office.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_office('{{office.delete_url}}', '{{office.id}}')" style="float: right;">Удалить</a>
+                                </form>
+                                <div class="erroroffice{{office.id}} highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#office_form_new').modal('show')">Добавить предмет</a>
+                    <div class="ui modal mini" id="office_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <textarea id="office_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_office('/schools/api/office_create_url/', '_new')">Создать</a>
+                            </form>
+                            <div class="erroroffice_new highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
+                    На счету: <b>{{ instance.money }}тг.</b>
+                </div>
+                <div class="ui grid" style="margin-bottom: 30px;">
+                    <div class="six wide column" style="padding: 15px 0 0 0">
+                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                            Расходы
+                        </div>
+                        <div class="ui segment" style="margin-top: 0">
+                            {% include 'school/money_circle_chart.html' %}
+                        </div>
+                    </div>
+                    <div class="ten wide column"  style="padding: 15px 0 0 0">
+                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                            <div class="ui grid">
+                                <div class="nine wide column" style="padding: 14px">
+                                    Доходы
+                                </div>
+                                <div class="seven wide column" style="padding: 9px">
+                                    <a class="ui button mini blue">Показать графики за год</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui segment" style="margin-top: 0;height: 273px;">
+                            {% include 'school/money_chart.html' %}
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <div class="ui grid">
+                        <div class="sixteen wide column">
+                            <div class="school-schedule">
+                                <div class="schedule-scale">
+                                    <div class="schedule-scale-num"></div>
+                                    <div class="schedule-scale-num"></div>
+                                    <div class="schedule-scale-num"></div>
+                                    <div class="schedule-scale-num"></div>
+                                    <div class="schedule-scale-num"></div>
+                                    <div class="schedule-scale-num"></div>
+                                </div>
+                                <div class="schedule-column">
+                                    <div style="height: 30%" class="schedule-item-light">30</div>
+                                    <div style="height: 20%" class="schedule-item-dark">20</div>
+                                </div>
+                                <div class="schedule-column">
+                                    <div style="height: 50%" class="schedule-item-light">50</div>
+                                    <div style="height: 30%" class="schedule-item-dark">30</div>
+                                </div>
+                                <div class="schedule-column">
+                                    <div style="height: 30%" class="schedule-item-light">30</div>
+                                    <div style="height: 70%" class="schedule-item-dark">70</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% include 'school/good_results_chart.html' %}
+                {% include 'school/bad_results_chart.html' %}                
             </div>
         </div>
     </div>
 </div>
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>
 
+<script type="text/javascript">
+   function create_subject(url, id) {
+        title = $('#subject_title'+id).val()
+        if (title != '') {
+            $.ajax({
+                url: url,
+                data: {
+                    'id':id,
+                    'title':title,                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.errorsubject'+id).hide()
+                    if (data.taken_name) {
+                        $('.errorsubject'+id).show()
+                    }
+                    else{
+                        if (id == '_new') {
+                            $('<a class="ui button mini green subject_object'+data.idd+'" onclick="$('+"'#subject_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="subject_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="subject_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_subject('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_subject('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsubject'+data.idd+' highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_subject_list'))
+                        }
+                        else{
+                            $('.subject_object'+id).text(title);
+                        }
+                        $('#subject_form'+id).modal('hide')
+                    }
+                }
+            })
+        }
+    };
+    function delete_subject(url, id) {
+        $.ajax({
+            url: url,
+            data: {
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.subject_object'+id).hide('fast');
+                $('#subject_form'+id).modal('hide')
+            }
+        })        
+    };
+   function create_age(url, id) {
+        title = $('#age_title'+id).val()
+        if (title != '') {
+            $.ajax({
+                url: url,
+                data: {
+                    'id':id,
+                    'title':title,                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.errorage'+id).hide()
+                    if (data.taken_name) {
+                        $('.errorage'+id).show()
+                    }
+                    else{
+                        if (id == '_new') {
+                            $('<a class="ui button mini green age_object'+data.idd+'" onclick="$('+"'#age_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="age_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="age_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_age('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_age('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorage'+data.idd+' highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_age_list'))
+                        }
+                        else{
+                            $('.age_object'+id).text(title);
+                        }
+                        $('#age_form'+id).modal('hide')
+                    }
+                }
+            })
+        }
+    };
+    function delete_age(url, id) {
+        $.ajax({
+            url: url,
+            data: {
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.age_object'+id).hide('fast');
+                $('#age_form'+id).modal('hide')
+            }
+        })        
+    };
+   function create_office(url, id) {
+        title = $('#office_title'+id).val()
+        if (title != '') {
+            $.ajax({
+                url: url,
+                data: {
+                    'id':id,
+                    'title':title,                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.erroroffice'+id).hide()
+                    if (data.taken_name) {
+                        $('.erroroffice'+id).show()
+                    }
+                    else{
+                        if (id == '_new') {
+                            $('<a class="ui button mini green office_object'+data.idd+'" onclick="$('+"'#office_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="office_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="office_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_office('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_office('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="erroroffice'+data.idd+' highlight" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_office_list'))
+                        }
+                        else{
+                            $('.office_object'+id).text(title);
+                        }
+                        $('#office_form'+id).modal('hide')
+                    }
+                }
+            })
+        }
+    };
+    function delete_office(url, id) {
+        $.ajax({
+            url: url,
+            data: {
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.office_object'+id).hide('fast');
+                $('#office_form'+id).modal('hide')
+            }
+        })        
+    };
+
+</script>
 {% endblock content %}

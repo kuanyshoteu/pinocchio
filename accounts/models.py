@@ -39,6 +39,8 @@ class Skill(models.Model):
     hard_skills = ArrayField(models.IntegerField(), default = list)
     pro_skills = ArrayField(models.IntegerField(), default = list)
     crm_show_free_cards = models.BooleanField(default=True)
+    need_actions = models.IntegerField(default=0)
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     first_name = models.TextField(blank = True,null = True,default='name')
@@ -69,6 +71,7 @@ class Profile(models.Model):
     crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     hint_numbers = ArrayField(models.IntegerField(), default = [0,0,0,0,0,0,0])
     skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile') 
+    notifications_number = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-coins', 'first_name']
@@ -114,6 +117,10 @@ class Profile(models.Model):
         return reverse("accounts:hint_url")    
     def update_hints(self):
         return reverse("accounts:update_hints")
+    def get_notifications(self):
+        return reverse('main:get_notifications')
+    def make_payment(self):
+        return reverse('accounts:make_payment')
     # Actions with lessons
     def create_folder_url(self):
         return reverse("library:create_folder_url")
@@ -144,6 +151,14 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class PaymentHistory(models.Model):
+    user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='payment_history') 
+    manager = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_payments') 
+    amount = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-timestamp']
 
 class Zaiavka(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='zaiavkas') 
@@ -184,9 +199,15 @@ class CRMColumn(models.Model):
     class Meta:
         ordering = ['id']
 
+class Hashtag(models.Model):
+    title = models.CharField(max_length=250)
+    schools = models.ManyToManyField(School, related_name='hashtags')
+    class Meta:
+        ordering = ['-id']
+
 class CRMCard(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
-    user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_user')
+    card_user = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='card')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_cards')
     column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
     name = models.CharField(max_length=250)
@@ -195,8 +216,18 @@ class CRMCard(models.Model):
     comments = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
     saved = models.BooleanField(default=False)
+    was_called = models.BooleanField(default=False)
+    days_of_weeks = ArrayField(models.BooleanField(), default = list)
+    action = models.CharField(max_length=250, default='')
+    hashtags = models.ManyToManyField(Hashtag, related_name='cards')
     class Meta:
         ordering = ['saved', 'timestamp']
+    def call_helper(self):
+        return reverse("schools:call_helper")
+    def change_day_of_week(self):
+        return reverse("schools:change_day_of_week")
+    def take_url(self):
+        return reverse("schools:take_url")
 
 class CRMCardHistory(models.Model):
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_histories')
@@ -207,3 +238,25 @@ class CRMCardHistory(models.Model):
     edit = models.TextField(default='')
     class Meta:
         ordering = ['-timestamp']
+
+class Notification(models.Model):
+    text = models.TextField(default='')
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_notifications')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='notifications')
+    itstype = models.CharField(max_length=25)
+    profession = models.ManyToManyField(Profession, related_name='notifications')
+    url = models.TextField(default='')
+    image_url = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-timestamp']
+
+class Review(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='reviews') 
+    title = models.CharField(max_length=250)
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_reviews')
+    rating = models.IntegerField(default=0, null = True)
+    def delete_url(self):
+        return reverse("schools:subject_delete_url")
+    def create_url(self):
+        return reverse("schools:subject_create_url")

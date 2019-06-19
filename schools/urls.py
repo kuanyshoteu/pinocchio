@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
+from main.views import get_landing
 
 app_name = 'schools'
 urlpatterns = [
@@ -23,6 +24,17 @@ urlpatterns = [
     url(r'^api/delete_card/$', delete_card, name='delete_card_url'),
     url(r'^api/open_card_url/$', open_card, name='open_card_url'),
     url(r'^api/show_free_cards/$', show_free_cards, name='show_free_cards'),
+    url(r'^api/get_card_squads/$', get_card_squads, name='get_card_squads'),
+    url(r'^api/call_helper/$', call_helper, name='call_helper'),
+    url(r'^api/change_day_of_week/$', change_day_of_week, name='change_day_of_week'),
+    url(r'^api/take_url/$', take_card, name='take_url'),
+    url(r'^api/subject_delete_url/$', subject_delete, name='subject_delete_url'),
+    url(r'^api/subject_create_url/$', subject_create, name='subject_create_url'),
+    url(r'^api/age_delete_url/$', age_delete, name='age_delete_url'),
+    url(r'^api/age_create_url/$', age_create, name='age_create_url'),
+    url(r'^api/office_delete_url/$', office_delete, name='office_delete_url'),
+    url(r'^api/office_create_url/$', office_create, name='office_create_url'),
+    url(r'^api/get_landing/$', get_landing, name='get_landing'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

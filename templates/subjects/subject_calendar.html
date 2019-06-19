@@ -8,7 +8,7 @@
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
  
 <div class="ui segment" style="margin: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
-    Расписание
+    Расписание <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 </div>
 <div id="app">
     <div class="options">
@@ -39,13 +39,14 @@
     </div>
     <div class="table">
         <div class="day-list">
-            <div class="daysmall"></div>
+            <div class="daysmall daysmall_time"></div>
             <div class="daysmall day-name">ПН</div>
             <div class="daysmall day-name">ВТ</div>
             <div class="daysmall day-name">СР</div>
             <div class="daysmall day-name">ЧТ</div>
             <div class="daysmall day-name">ПТ</div>
             <div class="daysmall day-name">Сб</div>
+            <div class="daysmall day-name">Вс</div>
         </div>
 
         <div class="week-list">
@@ -228,9 +229,11 @@
 </script>
 
 <style>
+.day-name{
+    margin: 0 2px;
+}
 .box{
-    height: 70px;
-    width: 13%;
+    height: 50px;
     margin: 0 2px;
 }
 #app .form {

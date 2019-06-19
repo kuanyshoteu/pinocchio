@@ -17,7 +17,7 @@ class PaperForm(forms.ModelForm):
         ]
 
 class SubthemeTextForm(forms.ModelForm):
-    content = forms.CharField(label='', widget=PagedownWidget(show_preview = False), required=True)    
+    content = forms.CharField(label='', required=True)    
     class Meta:
         model = Subtheme
         fields = [
@@ -43,7 +43,7 @@ class SubthemeVideoForm(forms.ModelForm):
 
 class CourseForm(forms.ModelForm):
     title = forms.CharField(label='',required=False)
-    content = forms.CharField(label='', widget=PagedownWidget(show_preview = False), required=False)
+    content = forms.CharField(label='', required=False)
     cost = forms.IntegerField(label='', required=False)
     image = forms.FileField(label='',required=False)
     

@@ -1,13 +1,14 @@
 {% load ttags %}
 <div class="ui segment" style="margin-bottom: 0">
-    <i class="icon book"></i> Уроки
+    <span style="font-size: 15px;"><i class="icon book blue" style="font-size: 17px;"></i> Уроки</span>
 </div>
 
 <div class="ui segment" style="background: #4A4A4A;margin: 0">
     <div class="ui grid" style="margin: 0">
         {% for material in materials %}
-        <div class="four wide column" style="padding-bottom: 0;">
-            <a class="ui button green full-w open_time_lessons" status="closed" id="{{ material.id }}">
+        {% if forloop.counter <= instance.number_of_materials %}
+        <div class="four wide column" style="padding-bottom:0;">
+            <a class="ui button green open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
                 <span class="is_homework">{{ forloop.counter }} урок</span>
             </a>
             <div style="display: none;padding: 15px 5px;background-color: #333333;" id="time_lessons{{ material.id }}"> 
@@ -23,15 +24,14 @@
                         {% if lesson.is_homework %}
                             <span style="color: #21BA45; font-size: 10px;">Домашка</span>
                         {% endif %}
-                        {% if teacher %}
+                        {% if is_trener %}
                         <a class="remove_lesson_from_subject" url="{{ material.remove_lesson }}" material_id="{{ material.id }}" lesson_id="{{ lesson.id }}">Убрать</a>
                         {% endif %}
                     </div>
                     <div class="ui divider" style="margin-bottom: 0"></div>
                     {% endfor %}
                 </div>
-                
-                {% if teacher %}
+                {% if is_trener %}
                 <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
                 {% endif %}
             </div>
@@ -47,6 +47,7 @@
             </div>
             {% endif %}
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </div>

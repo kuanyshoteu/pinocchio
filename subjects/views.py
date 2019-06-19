@@ -43,7 +43,6 @@ def subject_detail(request, slug=None):
         'time_periods':time_periods,
         'days':days,
         'materials':instance.materials.prefetch_related('lessons'),
-        "teacher":is_profi(profile, 'Teacher'),
         "lessons":profile.lesson_author.all(),
         "folders":profile.folders.all(),
         'is_trener':is_profi(profile, 'Teacher'),
@@ -147,16 +146,16 @@ def subject_create(request):
 def subject_update(request, slug=None):
     instance = get_object_or_404(Subject, slug=slug)
     profile = get_profile(request)
-    only_managers(profile)
+    only_staff(profile)
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        if not instance.height_field:
-            instance.height_field = 0
-        if not instance.width_field:
-            instance.width_field = 0
-        instance.save()
-
+    if is_profi(profile, 'Manager'):
+        if form.is_valid():
+            instance = form.save(commit=False)
+            if not instance.height_field:
+                instance.height_field = 0
+            if not instance.width_field:
+                instance.width_field = 0
+            instance.save()
     form2 = SubjectForm2(request.POST or None, request.FILES or None, instance=instance)
     if form2.is_valid():
         instance = form2.save(commit=False)
@@ -164,6 +163,14 @@ def subject_update(request, slug=None):
             instance.height_field = 0
         if not instance.width_field:
             instance.width_field = 0
+        get_number_of_materials = int(request.POST.get('number_of_materials'))
+        if instance.number_of_materials < get_number_of_materials:
+            if get_number_of_materials < 100:
+                for i in range(0, get_number_of_materials - instance.number_of_materials):
+                    instance.materials.create(
+                        school=instance.school
+                    )
+        instance.number_of_materials = int(request.POST.get('number_of_materials'))
         for squad in instance.squads.all():
             update_squad_dates(instance, squad)
         instance.save()
@@ -268,15 +275,14 @@ def subject_schedule(request, id=None):
     for timep in school.time_periods.all():
         line = []
         for cell in timep.time_cell.all():
-            if cell.day.number != 7:
-                lectures = []
-                for lecture in cell.lectures.filter(subject = subject):
-                    if lecture.squad in subject.squads.all():
-                        cabinet=''
-                        if lecture.cabinet:
-                            cabinet = lecture.cabinet.title
-                        lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet])
-                line.append([cell.id, lectures])
+            lectures = []
+            for lecture in cell.lectures.filter(subject = subject):
+                if lecture.squad in subject.squads.all():
+                    cabinet=''
+                    if lecture.cabinet:
+                        cabinet = lecture.cabinet.title
+                    lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet])
+            line.append([cell.id, lectures])
         res.append([timep.start + '-' + timep.end, line])
 
     data = {
@@ -366,18 +372,6 @@ def delete_squad(request):
         squad_students = squad.students.all()
         subject.students.remove(*squad_students)
         subject.teachers.remove(squad.teacher)
-    data = {
-    }
-    return JsonResponse(data)
-
-def change_teacher(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    if request.GET.get('teacher_id') and request.GET.get('subject_id'):
-        subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
-        teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
-        subject.author = teacher
-        subject.save()
     data = {
     }
     return JsonResponse(data)

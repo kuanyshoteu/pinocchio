@@ -10,45 +10,50 @@
     <div class='ui container'>
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="eight wide column">
-                <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
-                    <a class="open_option current_option">
-                        Все классы 
-                        <span style="font-size: 13px;color: #939393;">{{ squads|length }}</span>
-                    </a>
-                    {% if is_director %}
-                        <a class="ui button mini blue mini" style="float: right;" href='{% url "squads:create" %}'>Создать новый класс</a>
-                    {% endif %}
-                    
-                </div>
-                <div class="ui segment allsquads" style="margin-top: 0;">
-                    {% for sq in squads %}
-                        {% include 'squads/squad_list_info.html' %}
-                    {% endfor %}
-                </div>
-                <div class="ui segment mysquads" style="margin-top: 0; display: none;">
-                    {% if is_manager %}
-                        {% for sq in profile.squad_trener.all %}
-                            {% include 'squads/squad_list_info.html' %}
-                        {% endfor %}
-                    {% else %}
-                        {% for sq in profile.squads.all %}
-                            {% include 'squads/squad_list_info.html' %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-            </div>
-            <div class="four wide column">
-                <div class="ui segment" style="padding-left: 0; padding-right: 0">
-                    {% if squad_categories|length > 0 %}
-                        {% for category in squad_categories %}
-                            <a class="full-w">{{ category.title }}</a>
-                        {% endfor %}
-                    {% else %}
-                    <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
-                        <a class="full-w" style="color: black;font-size: 13px;"><b>Все классы</b></a>
+            <div class="wide column" id="list" style="width: 84%;">
+                <div class="ui grid">
+                    <div class="twelve wide column" style="padding-right: 0">
+                        <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
+                            <span style="font-size: 16px;">
+                                Классы 
+                                <span style="color: #939393;">{{ squads|length }}</span>
+                            </span>
+                        </div>
+                        <div class="ui grid allsquads" style="margin-top: 0;">
+                            {% for sq in squads %}
+                                {% include 'squads/squad_list_info.html' %}
+                            {% endfor %}
+                            {% if is_director or is_manager%}
+                            <div class="eight wide column" style="padding: 0">
+                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "squads:create" %}'>+ Создать новый класс</a>
+                            </div>
+                            {% endif %}                            
+                        </div>
+                        <div class="ui segment mysquads" style="margin-top: 0; display: none;">
+                            {% if is_manager %}
+                                {% for sq in profile.squad_trener.all %}
+                                    {% include 'squads/squad_list_info.html' %}
+                                {% endfor %}
+                            {% else %}
+                                {% for sq in profile.squads.all %}
+                                    {% include 'squads/squad_list_info.html' %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
                     </div>
-                    {% endif %}
+                    <div class="four wide column">
+                        <div class="ui segment" style="padding-left: 0; padding-right: 0">
+                            {% if squad_categories|length > 0 %}
+                                {% for category in squad_categories %}
+                                    <a class="full-w">{{ category.title }}</a>
+                                {% endfor %}
+                            {% else %}
+                            <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
+                                <a class="full-w" style="color: black;font-size: 13px;"><b>Все классы</b></a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

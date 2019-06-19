@@ -1,22 +1,92 @@
-<div class="ui modal large" style="margin-top: 10%;min-height: 100%;" id="card_form{{ card.id }}">
+<div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_form{{ card.id }}">
     <i class="close icon"></i>
     <div class="content">
+        <div class="card_head">
+            Карточка {{ card.name }}
+        </div>
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             <div class="ui grid stackable">
-                <div class="six wide column">
-                    <textarea class="card_name{{ card.id }}" placeholder="Имя">{{ card.name }}</textarea> 
-                    <textarea class="card_phone{{ card.id }}" placeholder="Телефон">{{ card.phone }}</textarea> 
-                    <textarea class="card_mail{{ card.id }}" placeholder="Почта">{{ card.mail }}</textarea> 
+                <div class="six wide column" style="padding-top: 5px;">
+                    <div style="height: 15px;"></div>
+                    <textarea class="card_name{{ card.id }}" placeholder="Имя">{{ card.name }}</textarea>
+                    <textarea class="card_phone{{ card.id }}" placeholder="Телефон">{{ card.phone }}</textarea>
+                    <textarea class="card_mail{{ card.id }}" placeholder="Почта">{{ card.mail }}</textarea>
                 </div>
-                <div class="ten wide column">
-                    <textarea class="card_comment{{ card.id }}" placeholder="Комментарий">{{ card.comments }}</textarea>
+                <div class="ten wide column" style="padding-top: 5px;">
+                    <div style="height: 14px;">
+                    </div>
+                    <div style="height: 85px;margin-bottom: 0;">
+                        <div contenteditable="true" id="{{ card.id }}" class="card_comment-textarea card_comment{{ card.id }}"
+                        placeholder="Комментарий" url="{{ card.call_helper }}" status="stop" position="0">{{ card.comments }}
+                        </div>
+                        <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper{{card.id}}">
+                            <a class="card_comment-item ui button mini card{{ card.id }}helper1" id="{{ card.id }}"> </a><br>
+                            <a class="card_comment-item ui button mini card{{ card.id }}helper2" id="{{ card.id }}"> </a><br>
+                            <a class="card_comment-item ui button mini card{{ card.id }}helper3" id="{{ card.id }}"> </a><br>
+                            <a class="card_comment-item ui button mini card{{ card.id }}helper4" id="{{ card.id }}"> </a><br>
+                            <a class="card_comment-item ui button mini card{{ card.id }}helper5" id="{{ card.id }}"> </a><br>
+                        </div>
+                    </div>
+                    <div class="ui grid stackable" style="margin-top: 1rem;">
+                        <div class="eight wide column" id="card_form-select">
+                            <select class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}">
+                                <option value="-1">Как связываться</option>
+                                <option value="call">Позвонить</option>
+                                <option value="whatsapp">Whats app</option>
+                                <option value="sms">СМС</option>
+                                <option value="mail">Почта</option>
+                            </select>
+                            <a style="display: none" class="ui button blue small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался</a>
+                        </div>
+                        <div class="eight wide column" id="card_form-select">
+                            {% if is_director %}
+                            <select>
+                                <option value="-1">{%if card.author_profile%}{{ card.author_profile.first_name }}{%else%}Менеджера{%endif%}</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                            </select>
+                            {% else %}
+                                {%if card.author_profile%}
+                                    <a class="ui button mini takecard" style="float: right;" id="{{card.id}}" url="{{card.take_url}}">Отказаться от карточки</a>
+                                {% else %}
+                                    <a class="ui button mini small green full-w takecard" id="{{card.id}}" url="{{card.take_url}}">Взять себе</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-                <div class="sixteen wide column center aligned">          
-                    <a class="ui button blue tiny" onclick="edit_card('{{ card.id }}')" id="{{ card.id }}">Сохранить</a>    
+                <div class="sixteen wide column" style="text-align: center;">
+                    <div class="ui grid">
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.0%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="0">Понедельник</a>
+                        </div>
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.1%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="1">Вторник</a>
+                        </div>
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.2%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="2">Среда</a>
+                        </div>
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.3%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="3">Четверг</a>
+                        </div>
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.4%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="4">Пятница</a>
+                        </div>
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.5%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="5">Суббота</a>
+                        </div>
+                        <div class="wide column" style="padding: 0 3px;width: 14%;">
+                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.6%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="6">Воскресенье</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="sixteen wide column center aligned">
+                    <a class="ui button blue tiny" onclick="edit_card('{{ card.id }}')" id="{{ card.id }}">Сохранить</a>
                 </div>
                 <div class="sixteen wide column">
                     <div class="ui divider full-w"></div>
-                    <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений</div>
+                    <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений
+                    </div>
                 </div>
                 <div class="sixteen wide column cardhistory{{ card.id }}" style="color: #6b6d72;font-size: 12px;">
                 </div>

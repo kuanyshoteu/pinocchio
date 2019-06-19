@@ -30,13 +30,11 @@
             <div class="daysmall daysmall_time">
             </div>
             {% for day in days %}
-            {% if day.number != 7 %} 
             <div class="daysmall">
                 <div class="day-name {% if today == day.number %}today{% endif %}">
                     {{ day.title }}
                 </div>
             </div>
-            {% endif %}
             {% endfor %}
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
@@ -46,7 +44,6 @@
                 {{ timep.start }}-{{ timep.end }}
             </div>
             {% for cell in timep.time_cell.all %}  
-            {% if cell.day.number != 7 %} 
             <div class="daysmall other" style="padding: 0">                                     
                 <div>
                     {% for lecture in cell|cell_profile_lectures:hisprofile %}
@@ -56,11 +53,11 @@
                             {{ lecture.subject.title }}
                             <br>
                             {% if lecture.cabinet %}
-                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.cabinet.title }}</span>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.cabinet.title }} каб.</span>
                             <br>
                             {% endif %}
                             <span style="color: rgba(255, 255, 255, .5);font-size: 11px">
-                                {% if is_trener %}
+                                {% if is_trener or is_manager %}
                                 {{ lecture.squad.title }}
                                 {% else %}
                                 {{ lecture.subject.teacher.all.0.first_name }}
@@ -71,7 +68,6 @@
                     {% endfor %}
                 </div>
             </div>
-            {% endif %}
             {% endfor %}
         </div>
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>

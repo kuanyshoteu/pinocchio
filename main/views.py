@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from itertools import chain
 from django.views.generic import ListView
+from django.utils import timezone
 
 from django.contrib.auth import (
     authenticate,
@@ -20,7 +21,7 @@ from django.contrib.auth import (
     )
 from django.contrib.auth.models import User
 from constants import *
-
+from schools.models import School
 
 def loaderio(request):
     context = {
@@ -42,11 +43,26 @@ def main_view(request):
                         login(request, user)
                         return HttpResponseRedirect(profile.get_absolute_url())
 
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = None
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
     context = {
+        "profile":profile,
+        "schools":EliteSchools.objects.first().schools.all(),
+        "url":School.objects.first().get_landing(),
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
         'main':True,
         'form':form,
     }
-    return render(request, "main.html", context)
+    return render(request, "map.html", context)
 
 def hislessons(request):
     profile = get_profile(request)
@@ -54,9 +70,9 @@ def hislessons(request):
     lesson_now = False
     classwork = []
     if is_profi(profile, 'Teacher'):
-        hissubjects = profile.teachers_subjects.all()
+        hissubjects = profile.hissquads.all()
     else:
-        hissubjects = profile.hissubjects.all()
+        hissubjects = profile.squads.all()
 
     context = {
         "profile":profile,
@@ -111,6 +127,36 @@ def register_view(request):
     return JsonResponse(data)
 
 from django.contrib.postgres.search import TrigramSimilarity
+def map_search(request):
+    text = request.GET.get('text')
+    res = []
+    if text != '':
+        kef = 1
+        if len(text) > 4:
+            kef = 4
+        similarity=TrigramSimilarity('title', text)
+        schools = School.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for school in schools:
+            image_url = ''
+            if school.image_icon:
+                image_url = school.image_icon.url
+            res.append([school.id, school.title, image_url, school.address])
+            i+=1
+            if i == 10:
+                break
+    else:
+        schools = EliteSchools.objects.first().schools.all()
+        for school in schools:
+            image_url = ''
+            if school.image_icon:
+                image_url = school.image_icon.url
+            res.append([school.id, school.title, image_url, school.address])
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)
+
 def search(request):
     profile = get_profile(request)
     school=profile.schools.first()
@@ -200,6 +246,24 @@ def SaveZaiavka(request):
     }
     return JsonResponse(data)
 
+def get_notifications(request):
+    profile = Profile.objects.get(user = request.user.id)
+    timezone.now()
+    res = []
+    i = 0
+    profile.notifications_number = 0
+    profile.save()
+    for school in profile.schools.all():
+        for notif in school.notifications.filter():
+            i += 1
+            res.append([notif.author_profile.first_name, notif.image_url, notif.itstype, notif.url, notif.text, notif.timestamp.strftime('%d %B %Yг. %H:%M')])
+            if i == 4:
+                break
+    data = {
+        'res':res
+    }
+    return JsonResponse(data)
+
 def contacts_view(request):
     profile = get_profile(request)
     context = {
@@ -210,3 +274,35 @@ def contacts_view(request):
     }
     return render(request, "contacts.html", context)
 
+def map_view(request):
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = None
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+    context = {
+        "profile":profile,
+        "schools":EliteSchools.objects.first().schools.all(),
+        "url":School.objects.first().get_landing(),
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
+    }
+    return render(request, "map.html", context)
+
+def get_landing(request):
+    if request.GET.get('id'):
+        school = School.objects.get(id=int(request.GET.get('id')))
+        data = {
+            'title':school.title,
+            'address':school.address,
+            'phones':school.phones,
+            'worktime':school.worktime,
+        }
+        return JsonResponse(data)
+    else:
+        return 0

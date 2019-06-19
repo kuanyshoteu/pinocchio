@@ -1,4 +1,54 @@
 $(document).ready(function () {
+    $('.search_by_tags').click(function(e) {
+        filtercrm()
+    })
+    function filtercrm(){
+        search_text = $('#search_text').val()
+        subjectfilter = document.getElementById('subjectfilter');
+        title_subjectfilter = subjectfilter.options[subjectfilter.selectedIndex].value.replace(/ /g, '_');
+        agefilter = document.getElementById('agefilter');
+        title_agefilter = agefilter.options[agefilter.selectedIndex].value.replace(/ /g, '_');
+        officefilter = document.getElementById('officefilter');
+        title_officefilter = officefilter.options[officefilter.selectedIndex].value.replace(/ /g, '_');
+        $('.crm_card').hide()
+        filterstring = ''
+        if (search_text != '') {
+            filterstring = filterstring + '.'+search_text.replace(' ', '.')
+        }
+        if (title_subjectfilter != '-1') {
+            filterstring = filterstring + '.'+title_subjectfilter
+        }
+        if (title_agefilter != '-1') {
+            filterstring = filterstring + '.'+title_agefilter
+        }
+        if (title_officefilter != '-1') {
+            filterstring = filterstring + '.'+title_officefilter
+        }
+        console.log('d',filterstring)
+        $(filterstring).show()
+        if (title_subjectfilter == '-1' && title_agefilter == '-1' && title_officefilter == '-1' && search_text == '') {
+            $('.crm_card').show()
+        }
+    }
+    $('.filtercrm').on('change', function(e) {
+        filtercrm()
+    })     
+    $('.make_payment').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        amount = $('.payment_amount'+id).val()
+        $.ajax({
+            url: url,
+            data: {
+                'amount':amount,
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    });
     $('.show_free_cards').click(function(e) {
         url = $(this).attr('url')
         checked = $(this).prop('checked')
@@ -151,24 +201,6 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-            }
-        });
-    }) 
-    $('.choose_subject_category').on('click', function(e) {
-        id = $(this).attr('id')
-        url = $(".get_subject_category_url").attr('url')
-        option = $(this).attr('option')
-        $.ajax({
-            url: url,
-            data: {
-                'object_id':id,
-                'option':option,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $( "#list" ).load(document.URL +  ' #list');
-                $(".option_vertical").removeClass('option_vertical_active')
-                $('#category'+id).addClass('option_vertical_active')
             }
         });
     }) 

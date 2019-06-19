@@ -21,10 +21,8 @@ from constants import *
 class ChangeTimeAPIToggle(APIView):
     authentication_classes = (authentication.SessionAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
-
     def get(self, request, slug=None, format=None):
         data = {
-            "like_num":0,
         }
         return Response(data)
                 
@@ -41,7 +39,7 @@ def ChangeAnswer(request):
             answer = request.GET.get('answer').split('&')
             del answer[-1]
             answer = sorted(answer)
-            if profile.is_trener:
+            if is_profi(profile, 'Teacher'):
                 task.answer = answer
                 task.save()
             else:
@@ -69,22 +67,26 @@ def ChangeAnswer(request):
                                 del tags[-1]
                                 for tag_id in tags:
                                     tag_id = int(tag_id)
-                                    if not tag_id in profile.tag_ids:
-                                        profile.tag_ids.append(tag_id)
-                                        profile.easy_skills.append(0)
-                                        profile.middle_skills.append(0)
-                                        profile.hard_skills.append(0)
-                                        profile.pro_skills.append(0)
-                                    index = profile.tag_ids.index(tag_id)
-                                    print(profile.tag_ids, index)
+                                    if not profile.skill:
+                                        skill = Skill.objects.create()
+                                        skill.save()
+                                        skill.profile.add(profile)
+                                    if not tag_id in profile.skill.tag_ids:
+                                        profile.skill.tag_ids.append(tag_id)
+                                        profile.skill.easy_skills.append(0)
+                                        profile.skill.middle_skills.append(0)
+                                        profile.skill.hard_skills.append(0)
+                                        profile.skill.pro_skills.append(0)
+                                    index = profile.skill.tag_ids.index(tag_id)
+                                    print(profile.skill.tag_ids, index)
                                     if task.cost <= 2:
-                                        profile.easy_skills[index] += task.cost
+                                        profile.skill.easy_skills[index] += task.cost
                                     elif task.cost <= 10:
-                                        profile.middle_skills[index] += task.cost
+                                        profile.skill.middle_skills[index] += task.cost
                                     elif task.cost <= 25:
-                                        profile.hard_skills[index] += task.cost
+                                        profile.skill.hard_skills[index] += task.cost
                                     else:
-                                        profile.pro_skills[index] += task.cost
+                                        profile.skill.pro_skills[index] += task.cost
                                     profile.save()
                 else:
                     if was_solved:

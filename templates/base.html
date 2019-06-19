@@ -12,12 +12,11 @@
     <script src='{% static "js/scripts.js" %}'></script>
     <link rel="stylesheet" href='{% static "css/slider.css" %}'>
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
-        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <script src='{% static "js/myscripts.js" %}'></script>
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
-    <script src='{% static "js/slider.js" %}'></script>
+    <script src='{% static "js/cardForm.js" %}'></script>
+    <script src='{% static "js/faisalIncludes.js" %}'></script>
 
     {% block head_extra %} {% endblock head_extra %}
 
@@ -39,7 +38,7 @@
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
-                <input id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск">
+                <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
                     <p class="search-list-title search-list-title-people">Люди</p>
                     <ul class="search-list-people search-list">
@@ -55,15 +54,24 @@
                     </ul>
                 </div>
             </form>
-            <div class="notice "><i class="fas fa-bell"></i>
+            <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
+                {% if profile.notifications_number == 0 %}
+                <i class="icon bell" style="color: #2D437C;"></i>
+                <span class="notification_exists" style="display: none;"></span>
+                {% else %}
+                <i class="icon bell" style="color: #fff;"></i>
+                <span class="notification_exists">{{ profile.notifications_number }}</span>
+                {% endif %}
+            </div>
+            <div class="notice_cont">
                 <div class="notice-bar">
+                    <b class="notification_title">Уведомления</b>
+                    <div class="ui divider"></div>
                     <ul class="notice-list">
-                        <li class="notice-item">
-                            <a class="notice-item-link">
-                                <span class="notice-item-name">Даулет Семенов</span>
-                            </a>
-                        </li>
                     </ul>
+                    <div style="text-align: center;">
+                        <a class="full-w">Показать все</a>                        
+                    </div>
                 </div>
             </div>
             {% if is_manager %}
@@ -71,6 +79,10 @@
                 Заявка
             </a>
             {% endif %}
+        </div>
+        {% else %}
+        <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left: -100px;margin-top: 5px;">
+            Платформа учебных центров
         </div>
         {% endif %}
         <div class="full-w left-main-menu">
@@ -85,6 +97,14 @@
                     {% endif %}
                 </a>
             </div>
+            {% else %}            
+            <div class="item float_right" style="margin-right: 15%;">
+                <a class="open_login" style="color: #fff;" onclick="$('#login-modal').modal('show')">
+                    Войти
+                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/rocket.png' %}">
+                </a>
+            </div>
+            {% include 'modals/login.html' %}
             {% endif %}
         </div>
     </div>
@@ -124,9 +144,6 @@
                     <a class="item" href='/contacts/'>
                         <i class="address book icon"></i>Контакты
                     </a>  
-                    <a class="item ui button mini blue" onclick="toggleModal('#corruption.modal')">
-                        Заявить о коррупции
-                    </a>
                 </div>
                 {% else %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
@@ -148,14 +165,46 @@
     </div>
 </div>
 
-
-
+<audio id="notification_audio" style="display: none;" controls>
+    <source src='{% static "notification.mp3" %}' type="audio/mpeg">
+</audio>
 <script src='{% static "js/squad.js" %}'></script>
 <script src='{% static "js/library.js" %}'></script>
 <script src='{% static "js/plugins.js" %}'></script>
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
+<!-- <script type="text/javascript">
+    var wsStart = 'ws://'
+    var loc = window.location
+    if (loc.protocol == 'https:'){
+        wsStart = 'wss://'
+    }
+    var endpoint = wsStart + loc.host + '/notifications/'
+    console.log(loc.host, 'f', loc.pathname)
+    var socket = new WebSocket(endpoint)
+    socket.onmessage = function(e){
+        data = JSON.parse(e.data)
+        $('.notification_exists').show()
+        $('.notification_exists').text('1')
+        $('.bell').attr('style', 'color:#fff;')
+        document.getElementById('notification_audio').play();
+        $('<li class="notice-item"> <a class="notice-item-link"> <img class="notice_item_img" src='+data.image_url+' alt="photo"> </a> <div style="display: inline-block;"> <a class="notice-item-link"> '+data.author+' </a> <span class="notice-item-name"> опубликовал новость </span> <a href="">"'+ data.message+'"</a> <br> <div class="notice_time">'+data.time+'</div> </div> </li> <div class="ui divider" style="margin: 10px 0;"></div>').appendTo('.notice-list');
+    }
+    socket.onopen = function(e){
+        $('.create_post').click(function(event) {
+            data = {
+                'text':$('.new_post_area').val()
+            }
+            socket.send(JSON.stringify(data))
+        })
+    }
+    socket.onerror = function(e){
+        console.log('error', e)
+    }
+    socket.onclose = function(e){
+    }
 
-</body>
+</script>
+ --></body>
 </html>

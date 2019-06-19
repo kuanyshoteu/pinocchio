@@ -102,11 +102,10 @@ from django.http import JsonResponse
 def add_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if profile.is_trener:
-        if request.GET.get('paper_id') and request.GET.get('group_id'):
-            lesson = Lesson.objects.get(id = int(request.GET.get('paper_id')))
-            course = Course.objects.get(id = int(request.GET.get('group_id')))
-            course.lessons.add(lesson)
+    if request.GET.get('paper_id') and request.GET.get('group_id'):
+        lesson = Lesson.objects.get(id = int(request.GET.get('paper_id')))
+        course = Course.objects.get(id = int(request.GET.get('group_id')))
+        course.lessons.add(lesson)
     data = {
     }
     return JsonResponse(data)

@@ -277,10 +277,34 @@ def att_present(request):
     if request.GET.get('id') and is_profi(profile, 'Teacher'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
         attendance.present = 'present'
+        if len(CRMCard.objects.filter(card_user=attendance.student)) > 0:
+            if attendance.student.card.column.id == 2:
+                attendance.student.card.column = CRMColumn.objects.get(id=3)
+                attendance.student.card.save()
+        else:
+            CRMCard.objects.create(
+                card_user=attendance.student,
+                column=CRMColumn.objects.get(id=1),
+                name=attendance.student.first_name,
+                phone=attendance.student.phone,
+                mail=attendance.student.mail,
+                saved=True
+            )   
         material = attendance.subject_materials
         if not profile in material.done_by.all():
             material.done_by.add(profile)
             profile.money += profile.salary
+            school = attendance.subject.school
+            school.money -= profile.salary
+            school.save()
+            for student in attendance.squad.students.all():
+                student.money -= attendance.subject.cost
+                student.save()
+                if student.money < student.salary:
+                    skill = student.card.author_profile.skill
+                    skill.need_actions += 1
+                    skill.save()
+            print(school.title)
         attendance.save()
         profile.save()
     data = {
@@ -371,3 +395,38 @@ def test_account(request):
         'time_periods':time_periods,
     }
     return render(request, "profile.html", context)
+
+def make_payment(request):
+    manager = Profile.objects.get(user = request.user)
+    only_managers(manager)
+    amount = int(request.GET.get('amount'))
+    if amount > 0 and request.GET.get('id'):
+        profile = Profile.objects.get(id = int(request.GET.get('id')))
+        profile.money += amount
+        profile.payment_history.create(
+            manager = manager,
+            amount = amount,
+        )
+        school = manager.schools.first()
+        school.money += amount
+        school.save()
+        if profile.money > profile.salary:
+            if not profile.card:
+                card = CRMCard.objects.create(
+                    author_profile=manager,
+                    card_user = profile,
+                    school = school,
+                    column = CRMColumn.objects.get(id = 5),
+                    name = profile.first_name,
+                    phone = profile.phone,
+                    mail = profile.mail,
+                    saved = True,
+                    was_called = True
+                )[0]
+            else:
+                card = profile.card            
+            card.was_called = True
+        profile.save()
+    data = {
+    }
+    return JsonResponse(data)

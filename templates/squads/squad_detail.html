@@ -14,12 +14,12 @@
 {% block content %}
 <div id="group-details" style="padding-bottom: 200px;">
     <a id="go-back-btn"  href='{% url "squads:list" %}'>
-        <i class="arrow left icon"></i>Назад
+        <i class="check icon" style="color: #5181b8"></i>
     </a>
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
+            <div class="wide column" style="width: 80%;">
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment" style="margin-bottom: 0;padding: 0;padding-bottom: 15px;">
@@ -81,8 +81,7 @@
                                     <i class="icon calendar alternate" style="font-size: 20px;padding: 0;margin-left: -5px;"></i>
                                 </div>
                                 <div class="fifteen wide column" style="padding-top: 0;">
-                                    Начало курса: {{ instance.start_date }}
-                                    <br>
+                                    Начало курса: {{ instance.start_date }} | 
                                     Окончание: {{ instance.end_date }}
                                 </div>
 

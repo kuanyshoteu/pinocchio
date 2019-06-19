@@ -37,22 +37,22 @@
 	{% if instance %}
 	<span class="add_student_url" id="{{instance.id}}" style="display: none;" url="{{ instance.add_student_url }}"></span>
 	<a id="go-back-btn"  href='{{ instance.get_absolute_url }}'>
-        <i class="arrow left icon"></i>Назад
+        <i class="check icon" style="color: #5181b8"></i>
     </a>
 	{% else %}
-	<a id="go-back-btn"  href='{% url "squads:list" %}'>
-        <i class="arrow left icon"></i>Назад
+	<a id="go-back-btn" style="width: 100px;font-size: 13px;right: 30%;" href='{% url "squads:list" %}'>
+        <i class="arrow left icon" style="color: #5181b8;"></i>Назад
     </a>
     {% endif %}
 	<div class='ui container'>
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
+            <div class="wide column" style="width: 80%;">
             	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
 	            	<div class="ui grid stackable">
 	            		<div class="nine wide column" style="padding-right: 0;padding-bottom: 0">
 		    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
-				        		Основная информация <b>{{ instance.title }}</b>
+				        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
 				        	<div class="ui segment" style="margin-top: 0;height: 297px;">
 				        		<div class="ui grid">
@@ -99,17 +99,26 @@
 			        		</div>
 			        	</div>
 						{% if not instance %}
-			    		<input type='submit' style="margin-top: 1rem" class='ui button blue tiny' value='Продолжить создание класса' />
+						<div class="nine wide column" style="padding-right: 0;text-align: center;">
+							<div class="ui segment">
+					    		<input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание класса' />								
+							</div>
+			    		</div>
 			        	{% else %}
 						<div class="seven wide column" style="padding-bottom: 0;padding-left: 0">
 							<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
-				        		Детальная информация
+				        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
 							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
 								<div class="ui grid">
 									<div class="sixteen wide column">
 										{{ form2|crispy }}
 									</div>
+									<div class="sixteen wide column">
+			                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
+	                                        <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"
+			                            </a>
+		                            </div>	
 								</div>
 							</div>
 						</div>
@@ -120,7 +129,7 @@
         				</div>
         				<div class="sixteen wide column">
 		    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;f">
-				        		Студенты
+				        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
 				        	<div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
 				        		<div class="ui grid stackable" style="margin-top: 0">
