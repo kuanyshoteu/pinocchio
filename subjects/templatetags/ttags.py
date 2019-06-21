@@ -201,12 +201,11 @@ def get_current_attendance(subject, squad):
             i += 1
         if counter < 4:
             i = 1
-            while counter < 4 and i < 10:
+            while counter < 4 and i < 10 and len(subject_materials) > material_number + i-1:
                 sm = list(subject_materials)[material_number + i-1]
                 if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
                     create_atts(squad, sm, subject)
                 attendances = sm.sm_atts.filter(squad = squad)
-                print()
                 get_date_results = get_date(attendances[0].subject_materials, squad)
                 if get_date_results == '_':
                     res = [[attendances, '_','_']] + res

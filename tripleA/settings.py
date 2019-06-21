@@ -57,8 +57,8 @@ INSTALLED_APPS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-SECURE_SSL_REDIRECT = True # [1]
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True # [1]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -69,7 +69,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'tripleA.urls'
@@ -92,12 +91,12 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "tripleA.routing.application"
 #WSGI_APPLICATION = 'tripleA.wsgi.application'
-
+REDIS_URL='redis://h:p04805ed78b5ba825c92c34d209a538835bbbb5eddce36ec7a904974cc76fcbd4@ec2-108-129-69-107.eu-west-1.compute.amazonaws.com:14599'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('127.0.0.1', 6379), (REDIS_URL, 6379)],
 #            "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
@@ -105,21 +104,21 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config('DATABASE_URL')
-}
-
+# import dj_database_url
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tripleA',
-#         'USER': 'admin',
-#         'PASSWORD': '031196Kk',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
+#     'default': dj_database_url.config('DATABASE_URL')
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tripleA',
+        'USER': 'admin',
+        'PASSWORD': '031196Kk',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

@@ -443,6 +443,9 @@ def timep_create(request):
             timep = school.time_periods.get(id=int(request.GET.get('id')))
             timep.start = start
             timep.end = end
+        if len(timep.time_cell.all()) == 0:
+            for day in Day.objects.all():
+                timep.time_cell.create(day=day, school=school)
         timep.save()
         create_url = timep.create_url()
         delete_url = timep.delete_url()
