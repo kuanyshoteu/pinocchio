@@ -29,8 +29,8 @@
                             {% endfor %}
                         </select>                    
                     </div>
-                    <div class="two wide column left_p map_age_filter map_filter" url='/api/map_filter/'>
-                        <select>
+                    <div class="two wide column left_p">
+                        <select class="map_age_filter map_filter" url='/api/map_filter/'>
                             <option value="">Все уровни</option>
                             {% for age in ages %}
                             <option value="{{age.title}}">{{age.title}}</option>
@@ -308,7 +308,7 @@
         url = $('.map_filter').attr('url')
         subjectfilter = document.getElementsByClassName('map_subject_filter')[0];
         subject = subjectfilter.options[subjectfilter.selectedIndex].value;            
-        agefilter = document.getElementsByClassName('map_subject_filter')[0];
+        agefilter = document.getElementsByClassName('map_age_filter')[0];
         age = agefilter.options[agefilter.selectedIndex].value;       
         mincost = $( "#amount" ).attr( "mincost")
         maxcost = $( "#amount" ).attr( "maxcost")             
