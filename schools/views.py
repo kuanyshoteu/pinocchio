@@ -386,7 +386,7 @@ def office_create(request):
         if school.school_offices.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            qs = Office.objects.filter(title=title)
+            qs = school.school_offices.filter(title=title)
             if len(qs) > 0:
                 school.school_offices.add(qs[0])
                 office = qs[0]
@@ -425,6 +425,45 @@ def office_delete(request):
     data = {
     }
     return JsonResponse(data)
+    
+def timep_create(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    if request.GET.get('id') and request.GET.get('start') and request.GET.get('end'):
+        start = request.GET.get('start')
+        end = request.GET.get('end')
+        school = manager_profile.schools.first()
+        if school.time_periods.filter(start = start, end=end):
+            return JsonResponse({'taken_name':True})
+        if request.GET.get('id') == '_new':
+            timep = school.time_periods.create(start = start, end=end)
+        else:
+            timep = school.time_periods.get(id=int(request.GET.get('id')))
+            timep.start = start
+            timep.end = end
+        timep.save()
+        create_url = timep.create_url()
+        delete_url = timep.delete_url()
+    data = {
+        'taken_name':False,
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'idd':timep.id,
+    }
+    return JsonResponse(data)
+
+def timep_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_managers(profile)
+    timep = school.time_periods.get(id=int(request.GET.get('id')))
+    timep.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
 
 from rest_framework.views import APIView
 from rest_framework.response import Response

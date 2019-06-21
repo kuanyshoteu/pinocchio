@@ -258,6 +258,7 @@
 }
 .delete_subject_lesson{
   right: 0;margin: -3px 4px;color: red;font-size: 13px;
+  position: absolute;
 }
 .delete_subject_lesson:hover{
   color: red;
