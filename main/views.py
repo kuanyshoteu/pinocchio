@@ -31,6 +31,10 @@ def certificate(request):
     context = {
     }
     return render(request, "certificate.txt", context)
+def certificate2(request):
+    context = {
+    }
+    return render(request, "certificate2.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:
