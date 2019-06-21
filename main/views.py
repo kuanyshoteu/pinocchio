@@ -27,6 +27,10 @@ def loaderio(request):
     context = {
     }
     return render(request, "loaderio.txt", context)
+def certificate(request):
+    context = {
+    }
+    return render(request, "certificate.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:

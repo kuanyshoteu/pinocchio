@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'main',
     'schools',
     'documents',
-    'channels',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -104,20 +103,20 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# import dj_database_url
-# DATABASES = {
-#     'default': dj_database_url.config('DATABASE_URL')
-# }
-
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tripleA',
-        'USER': 'admin',
-        'PASSWORD': '031196Kk',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    'default': dj_database_url.config('DATABASE_URL')
+}
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tripleA',
+#         'USER': 'admin',
+#         'PASSWORD': '031196Kk',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
 }
 
 # Password validation

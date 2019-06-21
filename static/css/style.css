@@ -81,7 +81,7 @@
 .school_landing{
   position: absolute;
   height: 95%;
-  width: 100%;
+  width: 400px;
   z-index: 1000;
   display: none;
   background-color: #fff;
