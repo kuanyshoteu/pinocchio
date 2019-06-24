@@ -21,7 +21,7 @@ def index(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.hint_numbers[6],
+        'hint':profile.skill.hint_numbers[6],
     })
 
 def new_board(request):

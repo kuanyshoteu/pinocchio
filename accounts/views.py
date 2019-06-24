@@ -80,7 +80,7 @@ def account_view(request, user = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.hint_numbers[0],
+        'hint':profile.skill.hint_numbers[0],
     }
     return render(request, "profile.html", context)
 

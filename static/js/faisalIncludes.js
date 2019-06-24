@@ -33,9 +33,9 @@ $(document).ready(function(){
 // map_phone-close script start
 
   $('.map_phone-main').on('click', function () {
-    console.log('WTF')
-    $('.map_phone-more').toggleClass('map_phone-nonactive');
-    $('.map_phone-other').toggleClass('map_phone-active');
+    $('.map_phone-main').hide();
+    $('.map_phone-other').show();
+    $(this).hide()
   });
 // map_phone-close script end
 // Number counter start

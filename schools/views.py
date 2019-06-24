@@ -76,11 +76,20 @@ def school_payments(request):
         "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/school_payments.html", context)
+from django.core.mail import send_mail
 
 def school_info(request):
     profile = get_profile(request)
     only_directors(profile)
     school = profile.schools.first()
+
+    # send_mail(
+    #     'Subject here',
+    #     'Here is the message.',
+    #     'kuanyshoteu@gmail.com',
+    #     ['canstri03@gmail.com'],
+    # )
+
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
@@ -392,6 +401,8 @@ def office_create(request):
                 office = qs[0]
             else:
                 office = school.school_offices.create(title=title)
+                school.offices += 1
+                school.save()
             school.hashtags.create(title = title.replace(' ', '_'))
         else:
             office = school.school_offices.get(id=int(request.GET.get('id')))
@@ -422,6 +433,8 @@ def office_delete(request):
     if len(hashtag) > 0:
         hashtag.delete()
     office.delete()
+    school.offices -= 1
+    school.save()
     data = {
     }
     return JsonResponse(data)
@@ -540,30 +553,62 @@ def save_card_as_user(request):
 def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('object_id') and request.GET.get('option'):
+        skill = profile.skill
         if request.GET.get('option') == 'subject':
             if int(request.GET.get('object_id')) == -1:
-                profile.crm_subject = None
+                skill.crm_subject = None
             else:
                 subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                profile.crm_subject = subject
+                skill.crm_subject = subject
         if request.GET.get('option') == 'age':
             if int(request.GET.get('object_id')) == -1:
-                profile.crm_age = None
+                skill.crm_age = None
             else:
                 age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
-                profile.crm_age = age
+                skill.crm_age = age
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
-                profile.crm_office = None
+                skill.crm_office = None
             else:
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
-                profile.crm_office = office
+                skill.crm_office = office
         if request.GET.get('option') == 'group':
             profile.rating_squad_choice.clear()
             if int(request.GET.get('object_id')) != -1:
                 squad = Squad.objects.get(id = int(request.GET.get('object_id')))
                 profile.rating_squad_choice.add(squad)
-        profile.save()
+        skill.save()
+    data = {
+    }
+    return JsonResponse(data)
+def crm_option2(request):
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('object_id') and request.GET.get('option'):
+        skill = profile.skill
+        if request.GET.get('option') == 'subject':
+            if int(request.GET.get('object_id')) == -1:
+                skill.crm_subject2 = None
+            else:
+                subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+                skill.crm_subject2 = subject
+        if request.GET.get('option') == 'age':
+            if int(request.GET.get('object_id')) == -1:
+                skill.crm_age2 = None
+            else:
+                age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
+                skill.crm_age2 = age
+        if request.GET.get('option') == 'office':
+            if int(request.GET.get('object_id')) == -1:
+                skill.crm_office2 = None
+            else:
+                office = Office.objects.get(id = int(request.GET.get('object_id')))
+                skill.crm_office2 = office
+        if request.GET.get('option') == 'group':
+            profile.rating_squad_choice.clear()
+            if int(request.GET.get('object_id')) != -1:
+                squad = Squad.objects.get(id = int(request.GET.get('object_id')))
+                profile.rating_squad_choice.add(squad)
+        skill.save()
     data = {
     }
     return JsonResponse(data)

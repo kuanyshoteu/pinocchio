@@ -42,16 +42,14 @@ class School(models.Model):
     content = models.TextField(default='')
     money = models.IntegerField(default=0)
     slogan = models.CharField(max_length=250, default='')
+    site = models.CharField(max_length=250, default='')
     rating = models.FloatField(default=0)
-    address = models.CharField(max_length=250, default='')
     worktime = models.CharField(max_length=250, default='')
     phones = ArrayField(models.TextField(), default = list)
     social_networks = ArrayField(models.TextField(), default = list)
     offices = models.IntegerField(default=0)
     average_cost = models.IntegerField(default=0)
 
-    latitude = models.CharField(max_length=250, default='0.0')
-    longtude = models.CharField(max_length=250, default='0.0')
     
     class Meta:
         ordering = ['rating']
@@ -112,6 +110,8 @@ class School(models.Model):
         return reverse("todolist:get_school_todolists", kwargs={"school_id": self.id})
     def crm_option_url(self):
         return reverse("schools:crm_option_url")
+    def crm_option_url2(self):
+        return reverse("schools:crm_option_url2")
     def open_card_url(self):
         return reverse("schools:open_card_url")
     def show_free_cards(self):
@@ -145,7 +145,10 @@ class SubjectAge(models.Model):
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
+    latitude = models.CharField(max_length=250, default='0.0')
+    longtude = models.CharField(max_length=250, default='0.0')
     address = models.TextField(default='')
+    region = models.CharField(max_length=250, default='')
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_offices')
     def delete_url(self):

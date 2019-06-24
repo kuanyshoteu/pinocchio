@@ -52,12 +52,12 @@
                 </div>
             </form>
             <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
-                {% if profile.notifications_number == 0 %}
+                {% if profile.skill.notifications_number == 0 %}
                 <i class="icon bell" style="color: #2D437C;"></i>
                 <span class="notification_exists" style="display: none;"></span>
                 {% else %}
                 <i class="icon bell" style="color: #fff;"></i>
-                <span class="notification_exists">{{ profile.notifications_number }}</span>
+                <span class="notification_exists">{{ profile.skill.notifications_number }}</span>
                 {% endif %}
             </div>
             <div class="notice_cont">

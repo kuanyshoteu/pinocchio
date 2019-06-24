@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^api/move_card/$', move_card, name='move_card_url'),
     url(r'^api/save_card_as_user/$', save_card_as_user, name='save_card_as_user'),
     url(r'^api/crm_option_url/$', crm_option, name='crm_option_url'),
+    url(r'^api/crm_option_url2/$', crm_option2, name='crm_option_url2'),
     url(r'^api/salary_url/$', save_salary, name='salary_url'),
     url(r'^api/save_job_salary/$', save_job_salary, name='save_job_salary'),
     url(r'^api/delete_card/$', delete_card, name='delete_card_url'),

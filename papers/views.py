@@ -89,7 +89,7 @@ def paper_details(request, paper_id = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.hint_numbers[4],        
+        'hint':profile.skill.hint_numbers[4],        
     }
     return render(request, "library/lesson_details.html", context)
 
@@ -404,7 +404,7 @@ def courses(request):
         is_trener = is_profi(profile, 'Teacher')
         is_manager = is_profi(profile, 'Manager')
         is_director = is_profi(profile, 'Director')
-        hint = profile.hint_numbers[5]
+        hint = profile.skill.hint_numbers[5]
     context = {
         "profile": profile,
         "course_sets":course_sets(),

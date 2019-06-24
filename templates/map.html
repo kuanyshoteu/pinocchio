@@ -5,7 +5,7 @@
 
 <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
     type="text/javascript"></script>
-<div class="ui container" style="overflow-y: hidden; height: 100%;">
+<div class="ui container" style="overflow-y: hidden;">
     <div class="ui grid stackable" style="margin-top: 0;padding-left: 0; height: 90%">
         <div class="sixteen wide column" style="padding: 14px 0 0 0;">
             <form class="ui form" style="margin: 0">
@@ -43,12 +43,12 @@
         <div class="four wide column" style="padding: 0 0 0 29px;">
             <div class="school_landing" id="school_landing">
                 <div class="ui grid no_margin no_padding">
-                    <div class="two wide column">
+                    <div class="two wide column" style="padding-top: 20px;">
                         <a class="back_to_schools" onclick="$('#school_landing').hide()">
                             <i class="icon arrow left blue" style="font-size: 17px;"></i>
                         </a>
                     </div>
-                    <div class="twelve wide column" style="padding-top: 0">
+                    <div class="fourteen wide column" style="padding-top: 0;">
                         <div class="school_start_landing"></div>
                         <div class="school_name_big"></div>
                     </div>
@@ -58,18 +58,16 @@
                     <div class="sixteen wide column map_block">
                         <div class="map_address">
                             <div class="map_address-text">
-                                <a class="map_address-title">
-                                    БЦ Сары-Арка <br> Сейфулина проспект, 531
-                                </a>
-                                <div class="map_address-subtitle">
-                                    Алмалинский район, Алматы
-                                </div>
+                                <a class="map_address-title school_address_landing"></a>
+                                <div class="map_address-subtitle"></div>
                             </div>
                         </div>
                         <div class="map_worktime">
                             <i class="icon clock map_worktime-icon"></i>
-                            <div class="map_worktime-today">Сегодня 14:00-20:00</div>
-                            <div class="map_worktime-now">Откроется в 14:00</div>
+                            <div class="map_worktime-today school_worktime_landing"></div>
+                        </div>
+                        <div class="map_aboutpayment">
+                            <div class="map_aboutpayment-text"></div>
                         </div>
                         <ul class="map_icon-list">
                             <li class="map_icon-item">
@@ -77,16 +75,8 @@
                                 Телефон
                             </li>
                             <li class="map_icon-item">
-                                <div class="map_icon-item-i"><i class="icon whatsapp"></i></div>
-                                Чат
-                            </li>
-                            <li class="map_icon-item">
-                                <div class="map_icon-item-i"><i class="icon arrow circle down"></i></div>
-                                Вход
-                            </li>
-                            <li class="map_icon-item">
-                                <div class="map_icon-item-i"><i class="icon subway"></i></div>
-                                Маршрут
+                                <div class="map_icon-item-i"><i class="icon map marker alternate"></i></div>
+                                На карте
                             </li>
                             <li class="map_icon-item">
                                 <div class="map_icon-item-i"><i class="icon heart"></i></div>
@@ -95,42 +85,38 @@
                         </ul>
                         <div class="map_photo-wrapper" style="background-color: #ccc;">
                             <div class="map_photo-label">
-                                <div class="map_photo-label-title">8</div>
-                                <div class="map_photo-label-subtitle">фото</div>
+                                Подробнее
                             </div>
-                        </div>
-                        <div class="map_addphoto">
-                            <i class="icon camera"></i>
-                            <a class="map_addphoto-link">Добавить фото</a>
-                        </div>
-                        <div class="map_aboutpayment">
-                            <div class="map_aboutpayment-text">Наличный расчет</div>
                         </div>
                         <div class="map_worktime_main">
                             <i class="icon clock map_wt_mn-close"></i>
-                            <span class="map_worktime_main-text">Сегодня 14:00-20:00</span>
+                            <span class="map_worktime_main-text school_worktime_landing"></span>
                             <span class="map_worktime_main-status map_wt_mn-close">Закрыто</span>
                             <!-- mp_wt_mn-open Если организация открыта-->
                         </div>
                         <div class="map_phone map_phone-main">
-                            <div class="map_phone-number">
-                                <i class="icon phone"></i>
-                                +7-777-704-45-51
-                            </div>
-                            <div class="map_phone-more">
-                                Другие телефоны
-                                <i class="icon angle down"></i>
+                            <div class="map_phone-number ui grid">
+                                <div class="eight wide column no_padding_side">
+                                    <i class="icon phone"></i>
+                                    <span class="school_phone_landing"></span>                                    
+                                </div>
+                                <div class="eight wide column no_padding_side">
+                                    <span class="map_phone-more">
+                                        Показать телефоны
+                                        <i class="icon angle down" style="font-size: 13px;"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="map_phone map_phone-other">
                             <div class="map_phone-number">
                                 <i class="icon phone"></i>
-                                +7-777-389-00-99
+                                <span class="all_phones"></span>
                             </div>
                         </div>
                         <div class="map_site">
                             <i class="icon globe"></i>
-                            <a class="map_site-link">altyn-bilim.kz</a>
+                            <a class="map_site-link"></a>
                         </div>
                         <div class="map_social">
                             <span class="map_social-title">Организация в социальных сетях</span>
@@ -157,25 +143,9 @@
                                 <div class="map_other-address">
                                     <i class="icon map marker alternate"></i>
                                     <div class="map_other-info-text">
-                                        <span class="map_other-info-title">
-                                            Бц Сары-Арка, <br>
-                                            Сейфулина проспект, 531
-                                        </span>
-                                        <span class="map_other-info-subtext">
-                                            7 этаж, 705 офис
-                                        </span>
-                                        <span class="map_other-info-subtext">
-                                            Алмалинский район, Алматы, 050000/A05A6M4
-                                        </span>
+                                        <span class="map_other-info-title school_address_landing"></span>
+                                        <span class="map_other-info-subtext2"></span>
                                     </div>
-                                </div>
-                                <div class="map_other-metro">
-                                    <i class="icon subway"></i>
-                                    <a class="map_other-metro-link">Жибек жолы</a> — 1,4км
-                                </div>
-                                <div class="map_other-parking">
-                                    <i class="icon car"></i>
-                                    <a class="map_other-parking-link">Найти парковки рядом</a>
                                 </div>
                             </div>
                             <div style="background: #ccc;" class="map_other-img"></div>
@@ -189,26 +159,26 @@
                                 <li class="map_rating-item"><i class="icon star"></i></li>
                             </ul>
                         </div>
+                        <br><br><br>
                         <!-- Часы работы: -->
-                        <div class="school_worktime_landing"></div>
-                        <div class="school_phone_landing"></div>
-                        <div class="school_photos_landing"></div>
-                        <div class="school_social_landing"></div>
-                        <div class="school_reviews_landing"></div>
-                        <div class="school_start_big"></div>
                     </div>
                 </div>
             </div>
-            <div class="ui segment no_padding school_list" style="overflow-y: scroll;height: 80%;margin: 14px 0 0 0;">
+            <div class="ui segment no_padding school_list" style="overflow-y: scroll;height: 90%;">
                 {% for school in schools %}
                 <div class="ui grid no_margin school_div" onclick="school_div('{{ school.id }}')"
                     url='{{ school.get_landing }}' id="{{ school.id }}">
                     <div class="two wide column">
-                        <i class="icon certificate blue no_padding"></i>
+                        <i class="icon map marker blue no_padding"></i>
                     </div>
                     <div class="fourteen wide column no_padding_side">
                         <a class="school_name">{{ school.title }}</a>
-                        <div class="school_address">{{ school.address }}</div>
+                        {% if school.offices == 1 %}
+                        <div class="school_address">{{ school.school_offices.first.address }}</div>
+                        {% else %}
+                        <div class="school_address">{{ school.offices }} филиалов</div>
+                        {% endif %}
+                        <div class="school_slogan">{{ school.slogan }}</div>
                     </div>
                 </div>
                 <div class="ui divider" style="margin: 0"></div>
@@ -216,7 +186,7 @@
             </div>
         </div>
         <div class="twelve wide column" style="padding-left: 0;padding-right: 28px;">
-            <div id="map" style="width: 100%; height: 80%;"></div>
+            <div id="map" style="width: 100%; height: 90%;"></div>
         </div>
     </div>
 </div>
@@ -237,7 +207,29 @@
                 $('.school_name_big').text(data.title)
                 $('.school_worktime_landing').text(data.worktime)
                 $('.school_address_landing').text(data.address)
-                $('.school_phone_landing').text(data.phones[0])
+                $('.school_phone_landing').text(data.phone+'...')
+                console.log(data.site)
+                if (data.site == '') {
+                    $('.map_site').hide()
+                }
+                else{
+                    $('.map_site-link').text(data.site)
+                }
+                $('.all_phones').empty()
+                for (var i = 0; i < data.phones.length; i++) {
+                    $('<span class="school_phone_landing">'+data.phones[0]+'</span><br>').appendTo('.all_phones')
+                }
+                comma=', '
+                $('.map_aboutpayment-text').empty()
+                for (var i = 0; i < data.subjects.length; i++) {
+                    if(i == data.subjects.length-1){comma = ''}
+                    $('<span>'+data.subjects[i]+comma+'</span>').appendTo('.map_aboutpayment-text')
+                }
+                end='ов'
+                if(data.offices == 1){end=''}
+                else if(data.offices % 10 < 5 && parseInt((data.offices % 100)/10) != 1){end='а'}
+                $('.map_address-subtitle').text(data.offices + ' филиал'+end)
+                $('.map_other-info-subtext2').text(data.region)
                 $('#school_landing').show()
             }
         })
@@ -245,7 +237,7 @@
     function school_div(id) {
         show_school(id)
     }
-    ymaps.ready(init);
+    //ymaps.ready(init);
     function init(){ 
         var myMap = new ymaps.Map("map", {
             center: [43.25654, 76.92848],
@@ -360,6 +352,7 @@
             success: function (data) {
                 if(data.res.length == 0){
                     $('.map_search_hint').hide();
+                    map_search_by_tags(text);
                 }
                 else{
                     $('.map_search_hint').empty();
@@ -410,10 +403,11 @@
             name = res[i][1]
             image_url = res[i][2]
             address = res[i][3]
+            slogan = res[i][4]
             if (image_url == ''){
                 image_url = "/static/images/nophoto.png"
             }
-            var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon certificate blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
+            var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon map marker blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div><div class="school_slogan">'+slogan+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
         }        
     }
     $("body").click(function(e){
