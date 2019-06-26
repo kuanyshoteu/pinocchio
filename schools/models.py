@@ -55,6 +55,17 @@ class School(models.Model):
         ordering = ['rating']
     def __unicode__(self):
         return self.title
+    def landing(self):
+        return reverse("schools:landing", kwargs={"school_id": self.id})
+    # Edit API's
+    def change_title_url(self):
+        return reverse("schools:change_title_url")
+    def change_slogan_url(self):
+        return reverse("schools:change_slogan_url")
+    def change_content_url(self):
+        return reverse("schools:change_content_url")
+    def change_site_url(self):
+        return reverse("schools:change_site_url")    
     # School information pages
     def get_absolute_url(self):
         return reverse("schools:info")

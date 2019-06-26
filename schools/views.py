@@ -76,8 +76,20 @@ def school_payments(request):
         "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "school/school_payments.html", context)
-from django.core.mail import send_mail
 
+def school_landing(request, school_id=None):
+    school = School.objects.get(id=school_id)
+    profile = None
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+
+    context = {
+        "profile":profile,
+        "school": school,
+    }
+    return render(request, "school/landing.html", context)
+
+from django.core.mail import send_mail
 def school_info(request):
     profile = get_profile(request)
     only_directors(profile)
@@ -87,7 +99,7 @@ def school_info(request):
     #     'Subject here',
     #     'Here is the message.',
     #     'kuanyshoteu@gmail.com',
-    #     ['canstri03@gmail.com'],
+    #     ['abilhanov6@gmail.com'],
     # )
 
     context = {

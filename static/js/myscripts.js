@@ -1,4 +1,26 @@
 $(document).ready(function () {
+    $('.save_school_title').click(function(e) {
+        // url = '/api/login/'
+        // username = $('.username').val()
+        // password = $('.password').val()
+        // $.ajax({
+        //     url: url,
+        //     data: {
+        //         'username':username,
+        //         'password':password
+        //     },
+        //     dataType: 'json',
+        //     success: function (data) {
+        //         if (data.res == 'login') {
+        //             $('.wrong_login').hide()
+        //             location.reload()
+        //         }
+        //         else if (data.res == 'error'){
+        //             $('.wrong_login').show()
+        //         }
+        //     }
+        // })        
+    });
     $('.login-btn').click(function(e) {
         url = '/api/login/'
         username = $('.username').val()

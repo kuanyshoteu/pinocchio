@@ -61,6 +61,12 @@ def account_view(request, user = None):
     if hiscacheatt.squad == None and len(hissquads) > 0:
         hiscacheatt.squad = hissquads[0]
         hiscacheatt.save()
+    if not profile.skill:
+        skill = Skill.objects.create()
+        profile.skill = skill
+        profile.save()
+    else:
+        skill = profile.skill
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
@@ -80,7 +86,7 @@ def account_view(request, user = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.skill.hint_numbers[0],
+        'hint':skill.hint_numbers[0],
     }
     return render(request, "profile.html", context)
 
@@ -132,7 +138,7 @@ def change_profile(request):
         'is_trener':is_profi(hisprofile, 'Teacher'),
         "is_manager":is_profi(hisprofile, 'Manager'),
         "is_director":is_profi(hisprofile, 'Director'),
-        'hint':hisprofile.hint_numbers[1],
+        'hint':hisprofile.skill.hint_numbers[1],
     }
     return render(request, "profile/change_profile.html", context)
 
@@ -336,12 +342,12 @@ def another_hint(request):
     profile = Profile.objects.get(user = request.user)
     hint_type = int(request.GET.get('hint_type'))
     if request.GET.get('dir') == 'next':
-        profile.hint_numbers[hint_type] += 1
+        profile.skill.hint_numbers[hint_type] += 1
     elif request.GET.get('dir') == 'prev':
-        profile.hint_numbers[hint_type] -= 1
+        profile.skill.hint_numbers[hint_type] -= 1
     else:
-        profile.hint_numbers[hint_type] = 100
-    profile.save()
+        profile.skill.hint_numbers[hint_type] = 100
+    profile.skill.save()
     data = {
     }
     return JsonResponse(data)
@@ -349,15 +355,15 @@ def another_hint(request):
 def update_hints(request):
     profile = Profile.objects.get(user = request.user)
     if profile.is_student:
-        profile.hint_numbers = [0,0,0,0,0,0,0]        
+        profile.skill.hint_numbers = [0,0,0,0,0,0,0]        
     if is_profi(profile, 'Manager'):
-        profile.hint_numbers = [20,20,20,20,20,20,20]        
+        profile.skill.hint_numbers = [20,20,20,20,20,20,20]        
     if is_profi(profile, 'Teacher'):
-        profile.hint_numbers = [40,40,40,40,40,40,40]
+        profile.skill.hint_numbers = [40,40,40,40,40,40,40]
     if is_profi(profile, 'Director'):
-        profile.hint_numbers = [60,60,60,60,60,60,60]
+        profile.skill.hint_numbers = [60,60,60,60,60,60,60]
 
-    profile.save()
+    profile.skill.save()
     data = {
     }
     return JsonResponse(data)

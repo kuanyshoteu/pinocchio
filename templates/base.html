@@ -122,47 +122,83 @@
 <br><br>
 
 <div class='content-container' style="background-color: #f4f4f4;">
-    <div class="vmenu ui grid " id='vmenu2' stage='passive' style="margin: 0;padding: 0; width: 100%; height: 100%; z-index: 3000; position: fixed; margin-top: 5px;">
-        <div class="eleven wide column" style="padding: 0;">
-            <div class="ui segment" style="height: 100%; padding: 0; background-color: #f4f4f4; z-index: 3000;">
+    <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' stage='passive' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
+        <div class="eleven wide column no_padding">
+            <div class="ui segment no_padding full-h" style="background-color: #f4f4f4; z-index: 3000;">
                 {% if user.is_authenticated %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item" href='{{ profile.get_absolute_url }}'>
-                        <i class="home icon"></i> Моя страница
+                    <a class="item mobmenu" href='{{ profile.get_absolute_url }}'>
+                        <i class="home icon blue"></i> Моя страница
                     </a>
-                    <a class="item" href='{% url "library:main" %}'>
-                        <i class="file alternate icon"></i>База знаний
+                    <a class="item mobmenu" href='{% url "news:list" %}'>
+                        <i class="newspaper icon blue"></i>Новости
                     </a>
-                    <a class="item" href='{% url "squads:list" %}'>
-                        <i class="book icon"></i>Группы
+                    {% if is_director %}
+                    <a class="item mobmenu" href='{% url "schools:info" %}'>
+                        <i class="cog icon blue"></i>Управление
                     </a>
-                    <a class="item" href='/clients/'>
-                        <i class="users icon"></i>База клиентов
+                    {% endif %}
+                    {% if is_manager or is_director %}
+                    <a class="item mobmenu" href='{% url "schools:crm" %}'>
+                        <i class="list alternate icon blue"></i>
+                        CRM
+                        {% if profile.skill.need_actions > 0 %}
+                        <span class="left_menu_number">{{profile.skill.need_actions}}</span>
+                        {% endif %}
                     </a>
-                    <a class="item" href='/docs/'>
-                        <i class="check square icon"></i>Документооборот
+                    {% endif %}
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="item mobmenu" href='{% url "documents:main" %}'>
+                        <i class="folder icon blue"></i>Документы
                     </a>
-                    <a class="item" href='/contacts/'>
-                        <i class="address book icon"></i>Контакты
+                    {% endif %}
+                    <a class="item mobmenu" href='{% url "schools:rating" %}'>
+                        <i class="trophy icon blue"></i>Рейтинги
+                    </a>
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="item mobmenu" href='{% url "squads:list" %}'>
+                        <i class="users icon blue"></i>Классы
+                    </a>
+                    <a class="item mobmenu" href='{% url "subjects:list" %}'>
+                        <i class="table icon blue"></i>Курсы
+                    </a>
+                    {% endif %}
+                    {% if is_trener or is_director %}
+                    <a class="item mobmenu" href='{% url "library:main" %}'>
+                        <i class="file alternate icon blue"></i>База уроков
+                    </a>
+                    {% endif %}
+                    <a class="item mobmenu" href='{% url "courses" %}'>
+                        <i class="rocket icon blue"></i>Курс store
+                    </a>
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="item mobmenu" href='/todolist/'>
+                        <i class="check calendar icon blue"></i>Задания
                     </a>  
+                    {% endif %}
+                    {% if is_trener or profile.is_student and profile.schools.all > 0 %}   
+                    <a class="item mobmenu" href='{{ profile.hislessons }}'>
+                        <i class="arrow right icon blue"></i>Урок
+                    </a>  
+                    {% endif %}
                 </div>
                 {% else %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item" href='/contacts/' style="background-color: #fff">
+                    <a class="item mobmenu" href='/contacts/' style="background-color: #fff">
                         <i class="address book icon"></i>Контакты
                     </a>
-                    <a class="item" href='{% url "squads:list" %}' style="background-color: #fff">
+                    <a class="item mobmenu" href='{% url "squads:list" %}' style="background-color: #fff">
                         <i class="users icon"></i>Группы
                     </a>
                 </div>
                 {% endif %}           
             </div>
         </div>
-        <div class="five wide column menu_back" style="padding: 0;">
-            </div>
+        <div class="five wide column menu_back no_padding">
+        </div>
     </div>
     <div style="padding-top: 10px;min-height: calc(100% - 40px) ;">
-    {% block content %}{% endblock content %}
+        {% block content %}{% endblock content %}
     </div>
 </div>
 

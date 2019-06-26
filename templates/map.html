@@ -42,7 +42,7 @@
         </div>
         <div class="four wide column" style="padding: 0 0 0 29px;">
             <div class="school_landing" id="school_landing">
-                <div class="ui grid no_margin no_padding">
+                <div class="ui grid no_margin no_padding" style="overflow-x: hidden">
                     <div class="two wide column" style="padding-top: 20px;">
                         <a class="back_to_schools" onclick="$('#school_landing').hide()">
                             <i class="icon arrow left blue" style="font-size: 17px;"></i>
@@ -83,11 +83,11 @@
                                 Избранное
                             </li>
                         </ul>
-                        <div class="map_photo-wrapper" style="background-color: #ccc;">
+                        <a href="" class="map_photo-wrapper" style="background-color: #ccc;">
                             <div class="map_photo-label">
                                 Подробнее
                             </div>
-                        </div>
+                        </a>
                         <div class="map_worktime_main">
                             <i class="icon clock map_wt_mn-close"></i>
                             <span class="map_worktime_main-text school_worktime_landing"></span>
@@ -158,9 +158,32 @@
                                 <li class="map_rating-item"><i class="icon star"></i></li>
                                 <li class="map_rating-item"><i class="icon star"></i></li>
                             </ul>
+                            <div style="text-align: center;">Оставьте отзыв</div>
+                            <br>
+                        </div>
+
+                        <div class="map_sameorg">
+                            <div class="map_sameorg-title">
+                                <div class="map_sameorg-title__text">Похожие организации</div>
+                                <div class="map_sameorg-title__selector">
+                                    <i class="icon angle left select__prev"></i>
+                                    <i class="icon angle right select__next"></i>
+                                </div>
+                            </div>
+                            <ul class="map_sameorg-list">
+                                {% for school in schools %}
+                                <li class="map_sameorg-item" id="addvert{{ school.id }}">
+                                    <h5 class="map_sameorg-item__title">
+                                        {{ school.title }}, {{ school.slogan }}
+                                    </h5>
+                                    <div class="map_sameorg-item__subtitle">
+                                        {{ school.content }}
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                         <br><br><br>
-                        <!-- Часы работы: -->
                     </div>
                 </div>
             </div>
@@ -204,10 +227,13 @@
             },
             dataType: 'json',
             success: function (data) {
+                $('.map_sameorg-item').show()
+                $('#addvert'+id).hide()
                 $('.school_name_big').text(data.title)
                 $('.school_worktime_landing').text(data.worktime)
                 $('.school_address_landing').text(data.address)
                 $('.school_phone_landing').text(data.phone+'...')
+                $('.map_photo-wrapper').attr('href', data.landing_url)
                 console.log(data.site)
                 if (data.site == '') {
                     $('.map_site').hide()

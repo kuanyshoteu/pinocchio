@@ -11,7 +11,7 @@
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" id="list">
-                <div class="ui grid" id="updater">
+                <div class="ui grid stackable" id="updater">
                     <div class="twelve wide column" style="padding-right: 0">
                         <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
                             <a class="open_option current_option" name='allsubjects'>
@@ -29,7 +29,7 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="ui option grid" id="allsubjects" style="margin-top: 0;">
+                        <div class="ui option grid stackable" id="allsubjects" style="margin-top: 0;">
                             {% for sq in subjects %}
                                 {% include 'subjects/subject_list_info.html' %}
                             {% endfor %}

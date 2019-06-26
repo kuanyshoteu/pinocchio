@@ -201,7 +201,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
 # EMAIL
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'kuanyshoteu@gmail.com'
+EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
 EMAIL_HOST_PASSWORD = ''
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True

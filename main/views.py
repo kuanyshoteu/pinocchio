@@ -418,6 +418,7 @@ def get_landing(request):
             'worktime':school.worktime,
             'subjects':subjects,
             'site':school.site,
+            'landing_url':school.landing(),
         }
         return JsonResponse(data)
     else:

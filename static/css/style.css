@@ -1379,6 +1379,11 @@ a{
   -webkit-transform: translateX(-150%);
   transform: translateX(-150%);
   position: absolute;
+  font-size: 16px;
+}
+.mobmenu{
+  font-size: 18px;
+  padding: 14px !important;
 }
 .menu_active {
   -webkit-transform: translateX(0%) !important;

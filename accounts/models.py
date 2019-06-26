@@ -28,10 +28,14 @@ def upload_location(instance, filename):
 
 class Profession(models.Model):
     title = models.TextField(blank = True,null = True,default='')
+    class Meta:
+        ordering = ['title']
 class JobCategory(models.Model):
     title = models.TextField(blank = True,null = True,default='')
     salary = models.IntegerField(default=0)
     profession = models.ForeignKey(Profession, default=1, on_delete = models.CASCADE, related_name='job_categories') 
+    class Meta:
+        ordering = ['title']
 class Skill(models.Model):
     tag_ids = ArrayField(models.IntegerField(), default = list)
     easy_skills = ArrayField(models.IntegerField(), default = list)

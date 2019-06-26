@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^crm_reg/$', school_crm_reg, name='crm_reg'),
     url(r'^students/$', school_students, name='students'),
     url(r'^info/$', school_info, name='info'),
+    url(r'^landing/(?P<school_id>\d+)/$', school_landing, name='landing'),
     url(r'^salaries/$', school_salaries, name='salaries'),
     url(r'^courses/$', school_courses, name='courses'),
     url(r'^rating/$', school_rating, name='rating'),

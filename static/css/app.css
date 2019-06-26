@@ -40962,3 +40962,67 @@ i.map_worktime-icon {
 .map_rating-text, .map_rating-text-default {
   text-align: center;
 }
+.map_sameorg {
+  border-top: 1px solid rgba(0,0,0,.1);
+  border-bottom: 1px solid rgba(0,0,0,.1);
+  background-color: #f4f4f4;
+  padding-bottom: 12px;
+  overflow: hidden;
+}
+.map_sameorg-title {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+}
+.map_sameorg-title__text {
+  display: inline-block;
+  margin-left: 16px;
+  line-height: 22px;
+}
+.map_sameorg-title__selector {
+  display: inline-block;
+}
+.map_sameorg-title__selector i {
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+  margin: 0;
+  cursor: pointer;
+}
+.map_sameorg-title__selector .select__next {
+  color: #285c8a;
+}
+.map_sameorg-list {
+  display: inline-block;
+  position: relative;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 0 0 15px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  word-break: normal;
+  word-wrap: normal;
+}
+.map_sameorg-item {
+  display: inline-block;
+  position: relative;
+  flex-shrink: 1;
+  background-color: #fff;
+  width: 80%;
+  max-width: 303px;
+  max-height: 128px;
+  padding: 12px 0 12px 20px;
+  margin: 0 4px 0 0;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: normal;
+  left: 0;
+  transition: left .5s;
+}
+.map_sameorg-item:hover {
+  background-color: #f7f7f7;
+}
+.map_sameorg-item__title {
+  color: #007bab;
+  font-weight: 400;
+  font-size: 14px;
+}
