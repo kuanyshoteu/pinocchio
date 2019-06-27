@@ -3,7 +3,7 @@
 {{ subtheme_file_form.media }}
 {{ subtheme_video_form.media }}
 {% load tagss %}
-
+{% if paper.author_profile == profile %}
 <div style="text-align: center;margin-top: 80px;">
     <span style="font-size: 16px;font-weight: 600;color: darkgreen">Добавить</span>
     <br><br>
@@ -68,3 +68,4 @@
         </form>
     </div>
 </div>
+{% endif %}

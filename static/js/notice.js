@@ -32,9 +32,15 @@ $('.notice').click(function(event) {
         $('.bell').attr('style', 'color:#2D437C;')
     }
 });
+$('.school_landing').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
     $('.notice-bar').css('display', 'none');
     var div = $('.notice');
     div.css('color', '#2D437C');
     $(this).attr('status', 'hide')
+    $('.school_landing').hide()
+    $('.map_phone-main').show();
+    $('.map_phone-other').hide();
 });

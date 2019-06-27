@@ -27,24 +27,24 @@ from constants import *
 def subject_detail(request, slug=None):
     instance = get_object_or_404(Subject, slug=slug)   
     profile = get_profile(request)
-    time_periods = TimePeriod.objects.all()
     days = Day.objects.all()
     cells = Cell.objects.all()
+    school = instance.school
+    time_periods = school.time_periods.all()
     if len(cells) < len(days) * len(time_periods):
         for day in days:
             for timep in time_periods:
-                new_cell = Cell.objects.get_or_create(day = day, time_period = timep)
+                new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
     if profile.is_student:
         profile.squads
-
     context = {
         "instance": instance,
         "profile":profile,
         'time_periods':time_periods,
         'days':days,
         'materials':instance.materials.prefetch_related('lessons'),
-        "lessons":profile.lesson_author.all(),
-        "folders":profile.folders.all(),
+        "lessons":school.lessons.all(),
+        "folders":school.school_folders.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -55,8 +55,8 @@ def subject_list(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
-    if profile.crm_subject:
-        subjects = profile.crm_subject.category_subjects.all()
+    if profile.skill.crm_subject:
+        subjects = profile.skill.crm_subject.category_subjects.all()
     else:
         subjects = school.school_subjects.all()
     context = {
@@ -183,7 +183,7 @@ def subject_update(request, slug=None):
     if len(cells) < len(days) * len(time_periods):
         for day in days:
             for timep in time_periods:
-                new_cell = Cell.objects.get_or_create(day = day, time_period = timep)
+                new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
 
     context = {
         "instance": instance,
@@ -326,6 +326,7 @@ def change_schedule(request, id=None):
                     subject=subject,
                     squad=squad,
                     cell=cell, 
+                    school=school,
                     day=cell.day,
                     office=subject.office,
                     category=subject.category,

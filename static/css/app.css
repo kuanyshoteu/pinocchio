@@ -40588,12 +40588,15 @@ a:hover {
 .filter-element {
   position: relative;
   display: inline-block;
+  width: 100%;
 }
 
 .filter-title {
+  background-color: #fff;
   display: inline-block;
   border-radius: 5px;
   padding: 5px 10px;
+  width: 100%;
   cursor: pointer;
   border: 1px solid #ccc;
 }
@@ -40667,7 +40670,6 @@ a:hover {
 i.map_worktime-icon {
   position: absolute;
   left: 0;
-  top: 13px;
   font-size: 9px;
   color: #bbb;
 }
@@ -40688,7 +40690,7 @@ i.map_worktime-icon {
   font-size: 12px;
   color: #000;
   cursor: pointer;
-  width: 60px;
+  width: 50px;
 }
 .map_icon-item:hover .map_icon-item-i {
   border-color: #007bab;
@@ -40698,8 +40700,8 @@ i.map_worktime-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px;
-  font-size: 24px;
+  height: 50px;
+  font-size: 20px;
   border: 3px solid #b1d4e3;
   border-radius: 50%;
   margin-bottom: 1rem;
@@ -40709,7 +40711,10 @@ i.map_worktime-icon {
   color: #007bab;
   transform: translate(8%,8%);
 }
-
+.map_icon_green{
+  border-color: #21BA45 !important;
+  color: #21BA45 !important;
+}
 .map_photo-wrapper {
   display: flex;
   justify-content: center;
@@ -40724,16 +40729,16 @@ i.map_worktime-icon {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 64px;
-  height: 64px;
-  background-color: #fff;
-  border-radius: 50%;
+  width: 100px;
+  height: 50px;
+  background-color: #21BA45 !important;
+  color: #fff;
   transition: .2s;
   box-shadow: 0 0 1px 1px rgba(0,0,0,.1);
 }
 .map_photo-wrapper:hover .map_photo-label {
-  width: 74px;
-  height: 74px;
+  width: 110px;
+  height: 55px;
 }
 .map_photo-label-title {
   font-size: 22px;
@@ -40810,7 +40815,7 @@ i.map_worktime-icon {
   cursor: pointer;
 }
 .map_phone-number {
-  display: inline-block;
+  width: 100%;
 }
 .map_phone-number i {
   font-size: 11px;
@@ -40826,7 +40831,8 @@ i.map_worktime-icon {
   color: #222;
 }
 .map_phone-more {
-  display: flex;
+  font-size: 13px;
+  display: block;
   align-items: center;
 }
 .map_phone-nonactive {
@@ -40888,8 +40894,11 @@ i.map_worktime-icon {
 .map_other-address {
   display: flex;
 }
+.map_other-left{
+  width: calc(100% - 70px);
+}
 .map_other-info-title {
-  font-size: 22px;
+  font-size: 17px;
   line-height: 25px;
   color: #007bab;
 }
@@ -40953,7 +40962,10 @@ i.map_worktime-icon {
 .map_rating-text, .map_rating-text-default {
   text-align: center;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 10dbfbef331f321254f476b86ac022c55e41a118
 .map_sameorg {
   border-top: 1px solid rgba(0,0,0,.1);
   border-bottom: 1px solid rgba(0,0,0,.1);
@@ -41011,10 +41023,18 @@ i.map_worktime-icon {
   transition: left .5s;
 }
 .map_sameorg-item:hover {
+<<<<<<< HEAD
   border: 1px solid #aaa;
+=======
+  background-color: #f7f7f7;
+>>>>>>> 10dbfbef331f321254f476b86ac022c55e41a118
 }
 .map_sameorg-item__title {
   color: #007bab;
   font-weight: 400;
+<<<<<<< HEAD
   font-size: 1.4rem;
+=======
+  font-size: 14px;
+>>>>>>> 10dbfbef331f321254f476b86ac022c55e41a118
 }

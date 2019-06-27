@@ -121,23 +121,25 @@ $(document).ready(function () {
         textarea.text(newtext);
         $('.card_comment-helper').hide()
     });
-
     text.on('input', function () {
         closeHelper();
     })
-
     $('.card_form-select-contact').on('change', function(){
-        $(this).hide();
-        console.log($(this).attr('id'))
-        $('.card_form-select-contact-btn'+$(this).attr('id')).show();
+        url = '/schools/api/card_called/'
+        id = $(this).attr('id')
+        this_ = $(this)
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                this_.hide();
+                $('.card_form-select-contact-btn'+this_.attr('id')).show();                    
+            }
+        })          
     });
-
-    $('.card_form-select-contact-btn').on('click', function(){
-        $('.card_form-select-contact'+$(this).attr('id')).show();
-        $(this).hide();
-    });
-
- 
     function getSelectionCoords(win) {
         win = win || window;
         var doc = win.document;

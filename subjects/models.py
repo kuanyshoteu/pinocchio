@@ -39,7 +39,11 @@ class TimePeriod(models.Model):
     end = models.TextField(default = '')
     num =  models.IntegerField(default = 0)
     class Meta:
-        ordering = ['num']
+        ordering = ['id']
+    def create_url(self):
+        return reverse("schools:timep_create_url")
+    def delete_url(self):
+        return reverse("schools:timep_delete_url")
 
 class Cell(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_cells') 

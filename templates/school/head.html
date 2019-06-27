@@ -9,7 +9,19 @@
             {% endif %}
         {% endif %}
         <span class="ui header ava-title">{{ instance.title }}</span>
-        <a href=""><i class="icon pen square blue" style="font-size: 17px"></i></a>
+        {% if is_director %}
+        <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
+        <form class="ui form no_margin school_title_form" style="width: 400px;display: none;">
+            <div class="ui grid">
+                <div class="twelve wide column no_padding_side">
+                    <textarea id="school_title_edit no_margin" style="margin-bottom: 0;">{{ instance.title }}</textarea>
+                </div>
+                <div class="four wide column">
+                    <a class="save_school_title ui button mini blue">Сохранить</a>                    
+                </div>
+            </div>
+        </form>
+        {% endif %}
     </div>
 </div>
 <div class="ui segment" style="background-color: #fafbfc;margin-top: 0; padding: 18px;">

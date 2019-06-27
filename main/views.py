@@ -27,21 +27,20 @@ def loaderio(request):
     context = {
     }
     return render(request, "loaderio.txt", context)
+def certificate(request):
+    context = {
+    }
+    return render(request, "certificate.txt", context)
+def certificate2(request):
+    context = {
+    }
+    return render(request, "certificate2.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:
+        print(request.user.id)
         profile = Profile.objects.get(user = request.user.id)
         return redirect(profile.get_absolute_url())    
-
-    form = EmptyForm(request.POST or None)
-    if form.is_valid():
-        if request.POST.get('username') and request.POST.get('password'):
-            for profile in Profile.objects.all():
-                if profile.mail == request.POST.get('username') or profile.phone == request.POST.get('username'):
-                    user = authenticate(username=str(profile.user.username), password=str(request.POST.get('password')))
-                    if user:
-                        login(request, user)
-                        return HttpResponseRedirect(profile.get_absolute_url())
 
     is_trener = False
     is_manager = False
@@ -55,12 +54,14 @@ def main_view(request):
     context = {
         "profile":profile,
         "schools":EliteSchools.objects.first().schools.all(),
+        "schools_all":School.objects.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
         "is_manager":is_manager,
         "is_director":is_director, 
         'main':True,
-        'form':form,
+        "subjects":SubjectCategory.objects.all(),
+        "ages":SubjectAge.objects.all(),        
     }
     return render(request, "map.html", context)
 
@@ -91,6 +92,7 @@ from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
 def login_view(request):
+    res = 'error'
     if request.GET.get('username') and request.GET.get('password'):
         found = False
         if len(Profile.objects.filter(mail=request.GET.get('username'))) > 0:
@@ -99,30 +101,42 @@ def login_view(request):
         elif len(Profile.objects.filter(phone=request.GET.get('username'))) > 0:
             profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
             found = True
-
         if found:
-            print(request.GET.get('password'),profile.user.username)
+            res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
+        try:
             login(request, user)
+        except Exception as e:
+            res = 'error'
+
     data = {
+        'res':res,
     }
     return JsonResponse(data)
 
 def register_view(request):
-    if request.GET.get('first_name') and request.GET.get('second_name') and request.GET.get('school') and request.GET.get('phone') and request.GET.get('mail') and request.GET.get('password1') and request.GET.get('password2'):
+    res = 'ok'
+    if request.GET.get('name')and request.GET.get('phone') and request.GET.get('password1') and request.GET.get('password2'):
         if request.GET.get('password1') == request.GET.get('password2'):
-            new_id = User.objects.order_by("id").last().id + 1
-            user = User.objects.create(username='user' + str(new_id), password=request.GET.get('password1'))
-            new_user = authenticate(username = user.username, password=request.GET.get('password1'))
-            login(request, user)
-            profile = Profile.objects.get(user = user)
-            profile.first_name = request.GET.get('first_name')
-            profile.second_name = request.GET.get('second_name')
-            profile.school = request.GET.get('school')
-            profile.phone = request.GET.get('phone')
-            profile.mail = request.GET.get('mail')
-            profile.save()
+            if len(Profile.objects.filter(mail=request.GET.get('phone'))) == 0 and len(Profile.objects.filter(phone=request.GET.get('phone'))) == 0:
+                new_id = User.objects.order_by("id").last().id + 1
+                user = User.objects.create(username='user' + str(new_id), password=request.GET.get('password1'))
+                new_user = authenticate(username = user.username, password=request.GET.get('password1'))
+                login(request, user)
+                profile = Profile.objects.get(user = user)
+                profile.first_name = request.GET.get('name')
+                if '@' in request.GET.get('phone'):
+                    profile.phone = request.GET.get('mail')
+                else:
+                    profile.mail = request.GET.get('phone')
+                profile.save()
+            else:
+                res = 'second_user'
+        else:
+            res = 'not_equal_password'
+
     data = {
+        'res':res,
     }
     return JsonResponse(data)
 
@@ -135,13 +149,96 @@ def map_search(request):
         if len(text) > 4:
             kef = 4
         similarity=TrigramSimilarity('title', text)
+        i = 0
+        categories = SubjectCategory.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        ages = SubjectAge.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         schools = School.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        for category in categories:
+            res.append([category.title, 'category'])
+            i+=1
+            if i == 10:
+                break
+        for age in ages:
+            res.append([age.title, 'age'])
+            i+=1
+            if i == 10:
+                break
+        for school in schools:
+            res.append([school.title, 'school'])
+            i+=1
+            if i == 10:
+                break
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)
+def map_filter(request):
+    schools = School.objects.all()
+    subject = False
+    age = False
+    print(request.GET.get('age'), request.GET.get('subject'))
+    if len(request.GET.get('subject')) > 0:
+        subject = SubjectCategory.objects.get(title = request.GET.get('subject'))
+    if len(request.GET.get('age')) > 0:
+        age = SubjectAge.objects.get(title = request.GET.get('age'))
+    mincost = int(request.GET.get('mincost')) - 1
+    maxcost = int(request.GET.get('maxcost')) + 1
+    if subject and age:
+        schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost,school_subject_categories=subject,school_subject_ages=age)
+    elif subject:
+        schools = schools.filter(school_subject_categories=subject,average_cost__gt=mincost,average_cost__lt=maxcost)
+    elif age:
+        schools = schools.filter(school_subject_ages=age,average_cost__gt=mincost,average_cost__lt=maxcost)
+    else:
+        schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost)
+
+    options = []
+    coordinates = []
+    res = []
+    i = 0
+    for school in schools:
+        coordinates.append([float(school.latitude), float(school.longtude)])
+        point = {
+            "properties": {"id":school.id,},
+        }
+        options.append(point)
+        image_url = ''
+        if school.image_icon:
+            image_url = school.image_icon.url
+        res.append([school.id, school.title, image_url, school.school_offices.first().address])
+        i+=1
+        if i == 15:
+            break
+    data = {
+        'options':options,
+        'coordinates':coordinates,
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def map_search_show(request):
+    text = request.GET.get('text')
+    res = []
+    if text != '':
+        qs = SubjectCategory.objects.filter(title=text)
+        if len(qs) > 0:
+            schools = qs[0].schools.all()
+        else:
+            qs = SubjectAge.objects.filter(title=text)
+            if len(qs) > 0:
+                schools = qs[0].schools.all()
+            else:
+                kef = 1
+                if len(text) > 6:
+                    kef = 4
+                similarity=TrigramSimilarity('title', text)
+                schools = School.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
         for school in schools:
             image_url = ''
             if school.image_icon:
                 image_url = school.image_icon.url
-            res.append([school.id, school.title, image_url, school.address])
+            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
             i+=1
             if i == 10:
                 break
@@ -151,7 +248,7 @@ def map_search(request):
             image_url = ''
             if school.image_icon:
                 image_url = school.image_icon.url
-            res.append([school.id, school.title, image_url, school.address])
+            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
     data = {
         "res":res,
     }
@@ -251,7 +348,7 @@ def get_notifications(request):
     timezone.now()
     res = []
     i = 0
-    profile.notifications_number = 0
+    profile.skill.notifications_number = 0
     profile.save()
     for school in profile.schools.all():
         for notif in school.notifications.filter():
@@ -284,24 +381,54 @@ def map_view(request):
         is_trener = is_profi(profile, 'Teacher')
         is_manager = is_profi(profile, 'Manager')
         is_director = is_profi(profile, 'Director')
+
     context = {
         "profile":profile,
         "schools":EliteSchools.objects.first().schools.all(),
+        "schools_all":School.objects.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
         "is_manager":is_manager,
         "is_director":is_director, 
+        "subjects":SubjectCategory.objects.all(),
+        "ages":SubjectAge.objects.all(),
     }
     return render(request, "map.html", context)
 
 def get_landing(request):
     if request.GET.get('id'):
         school = School.objects.get(id=int(request.GET.get('id')))
+        subjects = []
+        for subject in school.school_subject_categories.all():
+            subjects.append(subject.title)
+        phone = ''
+        i = 0
+        for p in school.phones[0]:
+            phone += p
+            if i == 10:
+                break
+            i += 1
         data = {
             'title':school.title,
-            'address':school.address,
+            'address':school.school_offices.first().address,
+            'region':school.school_offices.first().region,
+            'offices':school.offices,
+            'phone':phone,
             'phones':school.phones,
             'worktime':school.worktime,
+            'subjects':subjects,
+            'site':school.site,
+            'landing_url':school.landing(),
+        }
+        return JsonResponse(data)
+    else:
+        return 0
+
+def get_phone(request):
+    if request.GET.get('id'):
+        school = School.objects.get(id=int(request.GET.get('id')))
+        data = {
+            'phone':school.phones,
         }
         return JsonResponse(data)
     else:

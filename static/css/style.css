@@ -1,13 +1,69 @@
 .highlight{
   background-color: #21BA45;padding: 5 10px;color: #fff;border-radius: 3px;
 }
+.highlight_red{
+  background-color: #DB2828;padding: 5 10px;color: #fff;border-radius: 3px;
+}
+#search_text{
+  margin: 0;border-radius: 3px 0 0 3px;height: 31px;overflow-y: hidden;
+}
+.search_by_tags{
+  padding-right: 1px !important;padding-left: 9px !important;height: 31px;border-radius: 0 3px 3px 0 !important;
+}
+.search_hint{
+  position: absolute !important;
+  margin-top:0px !important;
+  margin-left:1px !important;
+  z-index: 500;
+  width: calc(100% + 22px);
+  min-height:10px;
+  background-color: #fff;
+  padding: 0 !important; 
+  color: darkblue;
+  border-radius: 0 !important;
+}
+.map_search_hint{
+  position: absolute !important;
+  margin-top: 34px !important;
+  margin-left: 1px !important;
+  z-index: 500;
+  width: calc(100% - 56px);
+  min-height:10px;
+  background-color: #fff;
+  padding: 0 !important; 
+  color: darkblue;
+}
+.map_hint_item{
+  padding: 6px 10px !important;
+  cursor: pointer;
+  width: 100%;
+  border-bottom: 1px solid #f3f3f3;
+}
+.map_hint_item:hover{
+  background-color: #f3f3f3;
+}
+.hint_item{
+  padding: 6px 10px !important;
+  cursor: pointer;
+  width: 100%;
+  border-bottom: 1px solid #f3f3f3;
+}
+.hint_item:hover{
+  background-color: #f3f3f3;
+}
+.subject_hint{
+  padding: 3px 5px !important;
+}
 .school_name{
   font-size: 15px;
   font-weight: 600;
 }
 .school_name_big{
-  font-size: 19px;
-  padding-top: 14px;
+  font-size: 22px;
+  padding: 20px 0px 10px 0px;
+}
+.map_address-subtitle{
+  color: #a0a0a0;
 }
 .school_address{
   color: #555;
@@ -25,10 +81,16 @@
   background-color: #f7f7f7;
   cursor: pointer;
 }
+.school_phone_landing{
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .school_landing{
   position: absolute;
   height: 95%;
-  width: 400px;
+  width: 100%;
   z-index: 1000;
   display: none;
   background-color: #fff;
@@ -198,13 +260,14 @@
   position: absolute;right: 0;margin: -10px 4px;color: red;font-size: 14px;
 }
 .show_card_schedule{
-  right: 6px;margin-top: 30px; color: red;font-size: 17px;z-index: 200;
+  float: right; color: red;font-size: 17px;z-index: 200;
 }
 .delete_card:hover{
   color: red;
 }
 .delete_subject_lesson{
   right: 0;margin: -3px 4px;color: red;font-size: 13px;
+  position: absolute;
 }
 .delete_subject_lesson:hover{
   color: red;
@@ -302,6 +365,10 @@ a{
   box-shadow: 0 2px 2px 2px #3a3a3a !important;
   cursor: pointer;
   margin-top: 0 !important;
+}
+.warning_card{
+  border: 5px solid #ff5828;
+  padding: 7px 5px 0px 5px !important;
 }
 .subject_cost{
   height: 33px;line-height: 10px;
@@ -1312,6 +1379,11 @@ a{
   -webkit-transform: translateX(-150%);
   transform: translateX(-150%);
   position: absolute;
+  font-size: 16px;
+}
+.mobmenu{
+  font-size: 18px;
+  padding: 14px !important;
 }
 .menu_active {
   -webkit-transform: translateX(0%) !important;

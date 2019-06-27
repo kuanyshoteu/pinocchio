@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from accounts.views import (logout_view)
 from papers.views import courses
-from main.views import(main_view, loaderio)
+from main.views import(main_view, loaderio, certificate, certificate2)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'^api/squads/', include('squads.api.urls', namespace='api-squads')),
     url(r'^documents/', include("documents.urls", namespace='documents')),
     url(r'^loaderio-3614d85f1228305eef28963b2654a5ae', loaderio, name='loaderio'),
+    url(r'^.well-known/acme-challenge/CgZMJqReVRcN_-rCMbWxvPqzXXE0VwZty8cvmvOIuZY', certificate, name='certificate'),
+    url(r'^.well-known/acme-challenge/6q7vn8DJekFduNZLAC7cq0QSihn-e-STHSBp_ydpiiw', certificate2, name='certificate2'),
     url(r'^', include("main.urls", namespace='main')),
 ]
 if settings.DEBUG:

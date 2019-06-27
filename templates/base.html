@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <title>{% block head_title %}Pinocchio{% endblock head_title %}</title>
-
     <!-- CSS -->
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="shortcut icon" href='{% static "images/fav2.ico" %}' type="image/png">
@@ -17,9 +16,7 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/cardForm.js" %}'></script>
     <script src='{% static "js/faisalIncludes.js" %}'></script>
-
     {% block head_extra %} {% endblock head_extra %}
-
 </head>
 <body>
 {% include "modals/confirm_delete.html" %}
@@ -55,12 +52,12 @@
                 </div>
             </form>
             <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
-                {% if profile.notifications_number == 0 %}
+                {% if profile.skill.notifications_number == 0 %}
                 <i class="icon bell" style="color: #2D437C;"></i>
                 <span class="notification_exists" style="display: none;"></span>
                 {% else %}
                 <i class="icon bell" style="color: #fff;"></i>
-                <span class="notification_exists">{{ profile.notifications_number }}</span>
+                <span class="notification_exists">{{ profile.skill.notifications_number }}</span>
                 {% endif %}
             </div>
             <div class="notice_cont">
@@ -82,7 +79,7 @@
         </div>
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left: -100px;margin-top: 5px;">
-            Платформа учебных центров
+            - Платформа учебных центров
         </div>
         {% endif %}
         <div class="full-w left-main-menu">
@@ -99,12 +96,16 @@
             </div>
             {% else %}            
             <div class="item float_right" style="margin-right: 15%;">
+                <span style="margin-right: 30px;"><a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a></span>
+                <a class="open_login" style="color: #fff;margin-right: 25px;" onclick="$('#signup-modal').modal('show')">
+                    Регистрация
+                </a>
                 <a class="open_login" style="color: #fff;" onclick="$('#login-modal').modal('show')">
                     Войти
-                    <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/rocket.png' %}">
                 </a>
             </div>
             {% include 'modals/login.html' %}
+            {% include 'modals/signup.html' %}
             {% endif %}
         </div>
     </div>
@@ -121,47 +122,83 @@
 <br><br>
 
 <div class='content-container' style="background-color: #f4f4f4;">
-    <div class="vmenu ui grid " id='vmenu2' stage='passive' style="margin: 0;padding: 0; width: 100%; height: 100%; z-index: 3000; position: fixed; margin-top: 5px;">
-        <div class="eleven wide column" style="padding: 0;">
-            <div class="ui segment" style="height: 100%; padding: 0; background-color: #f4f4f4; z-index: 3000;">
+    <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' stage='passive' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
+        <div class="eleven wide column no_padding">
+            <div class="ui segment no_padding full-h" style="background-color: #f4f4f4; z-index: 3000;">
                 {% if user.is_authenticated %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item" href='{{ profile.get_absolute_url }}'>
-                        <i class="home icon"></i> Моя страница
+                    <a class="item mobmenu" href='{{ profile.get_absolute_url }}'>
+                        <i class="home icon blue"></i> Моя страница
                     </a>
-                    <a class="item" href='{% url "library:main" %}'>
-                        <i class="file alternate icon"></i>База знаний
+                    <a class="item mobmenu" href='{% url "news:list" %}'>
+                        <i class="newspaper icon blue"></i>Новости
                     </a>
-                    <a class="item" href='{% url "squads:list" %}'>
-                        <i class="book icon"></i>Группы
+                    {% if is_director %}
+                    <a class="item mobmenu" href='{% url "schools:info" %}'>
+                        <i class="cog icon blue"></i>Управление
                     </a>
-                    <a class="item" href='/clients/'>
-                        <i class="users icon"></i>База клиентов
+                    {% endif %}
+                    {% if is_manager or is_director %}
+                    <a class="item mobmenu" href='{% url "schools:crm" %}'>
+                        <i class="list alternate icon blue"></i>
+                        CRM
+                        {% if profile.skill.need_actions > 0 %}
+                        <span class="left_menu_number">{{profile.skill.need_actions}}</span>
+                        {% endif %}
                     </a>
-                    <a class="item" href='/docs/'>
-                        <i class="check square icon"></i>Документооборот
+                    {% endif %}
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="item mobmenu" href='{% url "documents:main" %}'>
+                        <i class="folder icon blue"></i>Документы
                     </a>
-                    <a class="item" href='/contacts/'>
-                        <i class="address book icon"></i>Контакты
+                    {% endif %}
+                    <a class="item mobmenu" href='{% url "schools:rating" %}'>
+                        <i class="trophy icon blue"></i>Рейтинги
+                    </a>
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="item mobmenu" href='{% url "squads:list" %}'>
+                        <i class="users icon blue"></i>Классы
+                    </a>
+                    <a class="item mobmenu" href='{% url "subjects:list" %}'>
+                        <i class="table icon blue"></i>Курсы
+                    </a>
+                    {% endif %}
+                    {% if is_trener or is_director %}
+                    <a class="item mobmenu" href='{% url "library:main" %}'>
+                        <i class="file alternate icon blue"></i>База уроков
+                    </a>
+                    {% endif %}
+                    <a class="item mobmenu" href='{% url "courses" %}'>
+                        <i class="rocket icon blue"></i>Курс store
+                    </a>
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="item mobmenu" href='/todolist/'>
+                        <i class="check calendar icon blue"></i>Задания
                     </a>  
+                    {% endif %}
+                    {% if is_trener or profile.is_student and profile.schools.all > 0 %}   
+                    <a class="item mobmenu" href='{{ profile.hislessons }}'>
+                        <i class="arrow right icon blue"></i>Урок
+                    </a>  
+                    {% endif %}
                 </div>
                 {% else %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item" href='/contacts/' style="background-color: #fff">
+                    <a class="item mobmenu" href='/contacts/' style="background-color: #fff">
                         <i class="address book icon"></i>Контакты
                     </a>
-                    <a class="item" href='{% url "squads:list" %}' style="background-color: #fff">
+                    <a class="item mobmenu" href='{% url "squads:list" %}' style="background-color: #fff">
                         <i class="users icon"></i>Группы
                     </a>
                 </div>
                 {% endif %}           
             </div>
         </div>
-        <div class="five wide column menu_back" style="padding: 0;">
-            </div>
+        <div class="five wide column menu_back no_padding">
+        </div>
     </div>
     <div style="padding-top: 10px;min-height: calc(100% - 40px) ;">
-    {% block content %}{% endblock content %}
+        {% block content %}{% endblock content %}
     </div>
 </div>
 
@@ -174,14 +211,15 @@
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
-<!-- <script type="text/javascript">
+{% if profile.schools.all.length > 0 %}
+<script src="https://cndjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
+<script type="text/javascript">
     var wsStart = 'ws://'
     var loc = window.location
     if (loc.protocol == 'https:'){
         wsStart = 'wss://'
     }
     var endpoint = wsStart + loc.host + '/notifications/'
-    console.log(loc.host, 'f', loc.pathname)
     var socket = new WebSocket(endpoint)
     socket.onmessage = function(e){
         data = JSON.parse(e.data)
@@ -194,6 +232,7 @@
     socket.onopen = function(e){
         $('.create_post').click(function(event) {
             data = {
+                'action_type':'create_post',
                 'text':$('.new_post_area').val()
             }
             socket.send(JSON.stringify(data))
@@ -205,6 +244,7 @@
     socket.onclose = function(e){
     }
 
-</script> -->
+</script>
+{% endif %}
 </body>
 </html>

@@ -14,17 +14,17 @@
                     <div class="four wide column">
                         Предмет:
                         <select class="crm_option" option="subject" id="crm_subject" url="{{ instance.crm_option_url }}">
-                            {% if profile.crm_subject %}
-                                <option value="{{ profile.crm_subject.id }}">{{ profile.crm_subject.title }}</option>
+                            {% if profile.skill.crm_subject %}
+                                <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
                             {% else %}
                                 <option value="-1">Все предметы</option>
                             {% endif %}
                             {% for subject in subject_categories %}
-                                {% if subject != profile.crm_subject %}
+                                {% if subject != profile.skill.crm_subject %}
                                 <option value="{{ subject.id }}">{{ subject.title }}</option>
                                 {% endif %}
                             {% endfor %}
-                            {% if profile.crm_subject %}
+                            {% if profile.skill.crm_subject %}
                                 <option value="-1">Все предметы</option>
                             {% endif %}
                         </select>

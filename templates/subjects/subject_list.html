@@ -11,7 +11,7 @@
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" id="list">
-                <div class="ui grid" id="updater">
+                <div class="ui grid stackable" id="updater">
                     <div class="twelve wide column" style="padding-right: 0">
                         <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
                             <a class="open_option current_option" name='allsubjects'>
@@ -29,7 +29,7 @@
                                 </span>
                             </a>
                         </div>
-                        <div class="ui option grid" id="allsubjects" style="margin-top: 0;">
+                        <div class="ui option grid stackable" id="allsubjects" style="margin-top: 0;">
                             {% for sq in subjects %}
                                 {% include 'subjects/subject_list_info.html' %}
                             {% endfor %}
@@ -53,11 +53,11 @@
                     </div>
                     <div class="four wide column">
                         <div class="ui segment" style="padding-left: 0; padding-right: 0">
-                            <div class="option_vertical {% if not profile.crm_subject %}option_vertical_active{% endif %}" id="category-1">
+                            <div class="option_vertical {% if not profile.skill.crm_subject2 %}option_vertical_active{% endif %}" id="category-1">
                                 <a class="full-w choose_subject_category" onclick="choose_subject_category('-1', 'subject')" id="-1" option="subject" style="color: black;font-size: 13px;">Все курсы</a>
                             </div>
                             {% for category in subject_categories %}
-                            <div class="option_vertical {% if category == profile.crm_subject %}option_vertical_active{% endif %}" id="category{{category.id}}">
+                            <div class="option_vertical {% if category == profile.skill.crm_subject2 %}option_vertical_active{% endif %}" id="category{{category.id}}">
                                 <a class="full-w choose_subject_category" onclick="choose_subject_category('{{ category.id }}', 'subject')" id="{{ category.id }}" option="subject" style="color: black;font-size: 13px;">{{ category.title }}</a>
                             </div>
                             {% endfor %}
@@ -68,7 +68,7 @@
         </div>
     </div>
 </div>
-<span style="display: none;" class="get_subject_category_url" url="{{ school.crm_option_url }}"></span>
+<span style="display: none;" class="get_subject_category_url" url="{{ school.crm_option_url2 }}"></span>
 <script>
     function choose_subject_category(id, option){
         url = $(".get_subject_category_url").attr('url')

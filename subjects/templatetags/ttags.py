@@ -25,10 +25,10 @@ def rating_filter(profile):
     squad = profile.rating_squad_choice.first()
     crm_subject_students = None
     crm_age_students = None
-    if profile.crm_subject:
-        crm_subject_students = profile.crm_subject.students.all()
-    if profile.crm_age:
-        crm_age_students = profile.crm_age.students.all()
+    if profile.skill.crm_subject:
+        crm_subject_students = profile.skill.crm_subject.students.all()
+    if profile.skill.crm_age:
+        crm_age_students = profile.skill.crm_age.students.all()
     if squad != None:
         students_query = squad.students.all()
     else:
@@ -49,15 +49,15 @@ def rating_filter(profile):
 
 @register.filter
 def cell_school_lectures(cell, profile):
-    # if profile.crm_subject==None and profile.crm_age==None and profile.crm_office==None:
+    # if profile.skill.crm_subject==None and profile.skill.crm_age==None and profile.skill.crm_office==None:
     #     return []
     lectures = cell.lectures.all()
-    if profile.crm_subject:
-        lectures = lectures.filter(category=profile.crm_subject)
-    if profile.crm_age:
-        lectures = lectures.filter(age=profile.crm_age)
-    if profile.crm_office:
-        lectures = lectures.filter(office=profile.crm_office)
+    if profile.skill.crm_subject:
+        lectures = lectures.filter(category=profile.skill.crm_subject)
+    if profile.skill.crm_age:
+        lectures = lectures.filter(age=profile.skill.crm_age)
+    if profile.skill.crm_office:
+        lectures = lectures.filter(office=profile.skill.crm_office)
     return lectures
 
 @register.filter
@@ -201,12 +201,11 @@ def get_current_attendance(subject, squad):
             i += 1
         if counter < 4:
             i = 1
-            while counter < 4 and i < 10:
+            while counter < 4 and i < 10 and len(subject_materials) > material_number + i-1:
                 sm = list(subject_materials)[material_number + i-1]
                 if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
                     create_atts(squad, sm, subject)
                 attendances = sm.sm_atts.filter(squad = squad)
-                print()
                 get_date_results = get_date(attendances[0].subject_materials, squad)
                 if get_date_results == '_':
                     res = [[attendances, '_','_']] + res

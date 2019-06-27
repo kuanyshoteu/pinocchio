@@ -251,9 +251,11 @@ def change_curator(request):
         #     lecture.save()
         for subject in squad.subjects.all():
             subject.teachers.add(teacher)
-            subject.teachers.remove(oldteacher)
+            if oldteacher:
+                subject.teachers.remove(oldteacher)
         for lecture in squad.squad_lectures.all():
-            remove_person_from_lecture(lecture, oldteacher)
+            if oldteacher:
+                remove_person_from_lecture(lecture, oldteacher)
             add_person_to_lecture(lecture, teacher)
             lecture.save()
 
@@ -310,6 +312,7 @@ def add_person_to_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.append(person.id)
         lecture.person_number.append(0)
+    lecture.cell.time_period.people.add(person)
     index = lecture.person_id.index(person.id)
     number = lecture.person_number[index]
     lecture.people.add(person)

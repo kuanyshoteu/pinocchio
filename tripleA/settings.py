@@ -57,7 +57,8 @@ INSTALLED_APPS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-
+# SECURE_SSL_REDIRECT = True # [1]
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -90,12 +91,12 @@ TEMPLATES = [
 
 ASGI_APPLICATION = "tripleA.routing.application"
 #WSGI_APPLICATION = 'tripleA.wsgi.application'
-
+REDIS_URL='redis://h:p04805ed78b5ba825c92c34d209a538835bbbb5eddce36ec7a904974cc76fcbd4@ec2-108-129-69-107.eu-west-1.compute.amazonaws.com:14599'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('127.0.0.1', 6379), (REDIS_URL, 6379)],
 #            "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
@@ -111,9 +112,9 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'pinocchio',
-        'USER': 'postgres',
-        'PASSWORD': 'fais646493',
+        'NAME': 'tripleA',
+        'USER': 'admin',
+        'PASSWORD': '031196Kk',
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -198,3 +199,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 
 
+# EMAIL
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False

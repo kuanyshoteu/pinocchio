@@ -7,6 +7,7 @@ $(document).ready(function(){
   let filterItem = $('.filter-item');
 
   $(document.body).on('click', function(e){
+    $('.search_hint').hide();
     if($(e.target).closest(filterElement).length === 0) {
       filterList.addClass('filter-list-hide');
     }
@@ -19,15 +20,22 @@ $(document).ready(function(){
 
   filterItem.on('click', function(){
     $(this).children('i').toggleClass('show-icon');
+    if ($(this).attr('status') == '0') {
+      $(this).attr('status', '1')
+    }
+    else{
+      $(this).attr('status', '0')      
+    }
+    filtercrm()
   });
 
 // Filter-list end
 // map_phone-close script start
 
   $('.map_phone-main').on('click', function () {
-    console.log('WTF')
-    $('.map_phone-more').toggleClass('map_phone-nonactive');
-    $('.map_phone-other').toggleClass('map_phone-active');
+    $('.map_phone-main').hide();
+    $('.map_phone-other').show();
+    $(this).hide()
   });
 // map_phone-close script end
 // map_someorg start
@@ -44,6 +52,7 @@ $(document).ready(function(){
       $('.select__prev').css('color', '#99b1c6')
     }
   });
+<<<<<<< HEAD
 
   $('.select__next').on('click', function() {
     var itemWeight = $('.map_sameorg-item').outerWidth();
@@ -76,20 +85,125 @@ $(document).ready(function(){
   }
 
   randomNumbers.sort((a, b) => { return a - b });
+=======
+>>>>>>> 10dbfbef331f321254f476b86ac022c55e41a118
 
-  console.log(randomNumbers.length)
+  $('.select__next').on('click', function() {
+    var itemWeight = $('.map_sameorg-item').outerWidth();
+    if(summWeight !== summSlides * itemWeight - itemWeight) {
+      summWeight += itemWeight;
+      $('.map_sameorg-item').css('left', '-' + summWeight + 'px')
+    }
+    if (summWeight === summSlides * itemWeight - itemWeight) {
+      $('.select__next').css('color', '#99b1c6')
+      $('.select__prev').css('color', '#285c8a')
+    }
+  });
 
-  let x = 0;
-  let interval = setInterval(function () {
+// map_someorg end
+// Number counter start
 
-    number.innerHTML = randomNumbers.shift();
+  let number = document.getElementById('number-counter');
+  let start = 0;
+  if (number){
+    let end = +number.textContent;
+    let ticks = 20;
+    let speed = 70;
 
-    if (++x === ticks) {
-      window.clearInterval(interval);
+    let randomNumbers = [end]
+
+    for (let i = 0; i < ticks - 1; i++) {
+      randomNumbers.unshift(
+        Math.floor(Math.random() * (end - start + 1) + start)
+      );
     }
 
-  }, speed);
+    randomNumbers.sort((a, b) => { return a - b });
+
+    let x = 0;
+    let interval = setInterval(function () {
+
+      number.innerHTML = randomNumbers.shift();
+
+      if (++x === ticks) {
+        window.clearInterval(interval);
+      }
+
+    }, speed);
+}
+    $('.search_by_tags').click(function(e) {
+        filtercrm()
+    })
+    function filtercrm(){
+        $('.crm_card').hide()
+        search_text = $('#search_text').val()
+        filterstring = ''
+        if (search_text != '') {
+            filterstring = filterstring + '.'+search_text.replace(' ', '.')
+        }
+        set = document.getElementsByClassName('filter-item')
+        for (var i = set.length - 1; i >= 0; i--) {
+          if (set[i].getAttribute('status') != '0'){
+            title = set[i].getAttribute('id')
+            filterstring = filterstring + '.'+title.replace(' ', '.')
+          }
+        }
+        $(filterstring).show()
+        if (filterstring == '') {
+            $('.crm_card').show()
+        }
+    }
+    $('.card_form-select-contact-btn').on('click', function(){
+        url = '/schools/api/card_called/'
+        id = $(this).attr('id')
+        this_ = $(this)
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                this_.hide();
+                $('.card_form-select-contact'+this_.attr('id')).show();
+            }
+        })
+    });
+    $('#search_text').on('input', function(e) {
+        text = $(this).val()
+        if (text.length == 0) {
+            filtercrm()
+            $('.search_hint').hide();
+        }
+        else{
+            url = '/schools/api/call_helper/'
+            $.ajax({
+                url: url,
+                data: {
+                    'text':text,
+                    'reverse':'no',
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.res.length == 0){
+                        $('.search_hint').hide();
+                    }
+                    else{
+                        $('.search_hint').empty();
+                        url = $('.show_url').attr('url')
+                        for(var i = 0; i < data.res.length; i++){
+                            var element = $('<div class="hint_item" onclick="hint_item('+"'"+data.res[i]+"'"+')">'+data.res[i]+'</div>').appendTo('.search_hint');
+                        }
+                        $('.search_hint').show();
+                    }                
+                }
+            })
+        }
+    })
+    $('.search_by_tags').on('click',function(e) {
+        filtercrm()
+    })
+
 
 // Number counter end
-
 });

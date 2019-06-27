@@ -69,7 +69,7 @@ def school_documents(request, school_id):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.hint_numbers[2],
+        'hint':profile.skill.hint_numbers[2],
     }
     return render(request, 'documents/documents.html', context)
 
