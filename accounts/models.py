@@ -19,6 +19,7 @@ from django.db.models.signals import post_save
 from pagedown.widgets import PagedownWidget
 from django.contrib.postgres.fields import ArrayField
 from schools.models import *
+import datetime
 
 def upload_location(instance, filename):
     ProfileModel = instance.__class__
@@ -37,6 +38,9 @@ class JobCategory(models.Model):
     class Meta:
         ordering = ['title']
 class Skill(models.Model):
+    confirmed = models.BooleanField(default=False)    
+    confirmation_code = models.CharField(default='', max_length=250)
+    confirmation_time = models.DateTimeField(auto_now_add=False, default=datetime.datetime.strptime('2000-01-01', "%Y-%m-%d"))
     tag_ids = ArrayField(models.IntegerField(), default = list)
     easy_skills = ArrayField(models.IntegerField(), default = list)
     middle_skills = ArrayField(models.IntegerField(), default = list)

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'main',
     'schools',
     'documents',
+    'social_django',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -69,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'tripleA.urls'
@@ -84,10 +86,18 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  # <--
+                'social_django.context_processors.login_redirect', # <--
             ],
         },
     },
 ]
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 ASGI_APPLICATION = "tripleA.routing.application"
 #WSGI_APPLICATION = 'tripleA.wsgi.application'
@@ -202,7 +212,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 # EMAIL
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'Siski1zhopa$'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = '2392044301038148'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '494684c0aa2bcf8ac943467a1d8ef3f0'  # App Secret

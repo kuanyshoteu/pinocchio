@@ -4,12 +4,36 @@ from schools.models import School
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 import string
 import random
+from django.core.mail import send_mail
+import requests
+from django.core.mail import EmailMultiAlternatives
+
+def send_sms(phones, message, time):
+    login = 'Pinocchio'
+    password = 'Siski11zhopa'
+    url = 'https://smsc.kz/sys/send.php?login='+login+'&psw='+password+'&phones='+phones+'&mes='+message+'&time='+time+'&sender=Pinocchiokz'
+    requests.post(url)
+
+def send_email(subject, html_content, send_to):
+    msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
+    msg.attach_alternative(html_content, "text/html")
+    print(msg)
+    msg.send()
 
 def random_password():
     symbols = string.ascii_letters + string.digits
     password = ''
     for i in range(0, 9):
         password += random.choice(symbols)
+    return password
+
+def random_secrete_confirm():
+    symbols = string.ascii_letters + string.digits
+    password = ''
+    for i in range(0, 20):
+        password += random.choice(symbols)
+    return password
+
 def get_profile(request):
     profile = ''
     if request.user.is_authenticated:

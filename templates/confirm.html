@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+{% load staticfiles %}
+<div class="ui container">
+    <div style="text-align: center;margin-top: 10%;">
+        <div class="ui huge label blue">
+            Письмо с подтверждением было выслано вам на почту,
+            <br><br>нажмите на ссылку чтобы подтвердить свой Email
+        </div>
+        <div>
+            <img src="{% static 'images/log1.png' %}" style="width: 400px;">
+        </div>
+    </div>
+</div>
+{% endblock content %}

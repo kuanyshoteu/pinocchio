@@ -1,25 +1,23 @@
 $(document).ready(function () {
     $('.save_school_title').click(function(e) {
-        // url = '/api/login/'
-        // username = $('.username').val()
-        // password = $('.password').val()
-        // $.ajax({
-        //     url: url,
-        //     data: {
-        //         'username':username,
-        //         'password':password
-        //     },
-        //     dataType: 'json',
-        //     success: function (data) {
-        //         if (data.res == 'login') {
-        //             $('.wrong_login').hide()
-        //             location.reload()
-        //         }
-        //         else if (data.res == 'error'){
-        //             $('.wrong_login').show()
-        //         }
-        //     }
-        // })        
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        status = $(this).attr('status')
+        text = $('.school_'+status+'_edit').val()
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+                'id':id,
+                'status':status
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.school_'+status+'_form')
+                $('.school_'+status+'_form').hide();
+                $('.school_'+status).text(text);
+            }
+        })        
     });
     $('.login-btn').click(function(e) {
         url = '/api/login/'
@@ -413,61 +411,9 @@ $(document).ready(function () {
         }
         document.getElementById('subject' + id).setAttribute('style', 'display:block')
     })
-    $('.login_btn').click(function (event){
-        var username = document.getElementsByClassName('username')[0].value
-        var password = document.getElementsByClassName('password')[0].value
-        $.ajax({
-            url: $(this).attr('url'),
-            data: {
-                'username':username,
-                'password':password,
-            },
-            dataType: 'json',
-            success: function (data) {
-                location.reload()
-            }
-        });
-    })
     $('.continue').click(function (event){
         $(this).hide()
         $(".continue_div").show()
-    })
-    $('.register_btn').click(function (event){
-        var first_name = document.getElementsByClassName('reg_first_name')[0].value
-        var second_name = document.getElementsByClassName('reg_second_name')[0].value
-        var school = document.getElementsByClassName('reg_school')[0].value
-        var phone = document.getElementsByClassName('reg_phone')[0].value
-        var mail = document.getElementsByClassName('reg_mail')[0].value
-        if(first_name != '' && second_name != '' && school != '' && phone != '' && mail != ''){
-            var password1 = document.getElementsByClassName('reg_password1')[0].value
-            var password2 = document.getElementsByClassName('reg_password2')[0].value
-            if(password1 == password2){
-                $(".match_pass_message").hide()
-                if(password1.length > 6){
-                    $(".short_pass_message").hide()
-                    $.ajax({
-                        url: $(this).attr('url'),
-                        data: {
-                            'first_name':first_name,
-                            'second_name':second_name,
-                            'school':school,
-                            'phone':phone,
-                            'mail':mail,  
-                            'password1':password1,
-                            'password2':password2,              
-                        },
-                        dataType: 'json',
-                        success: function (data) {
-                            location.reload()
-                        }
-                    });
-                }
-                else{$(".short_pass_message").show()}
-            }
-            else{$(".match_pass_message").show()}
-        }
-        else{$(".fill_message").show()}
-        
     })
     $('.openchart').on('click', function(e) {
         id = $(this).attr('id')

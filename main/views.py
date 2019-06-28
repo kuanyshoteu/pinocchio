@@ -140,6 +140,14 @@ def register_view(request):
     }
     return JsonResponse(data)
 
+def login_social(request):
+    if request.GET.get('status'):
+        if request.GET.get('status') == 'facebook':
+            pass
+    data = {
+    }
+    return JsonResponse(data)
+
 from django.contrib.postgres.search import TrigramSimilarity
 def map_search(request):
     text = request.GET.get('text')

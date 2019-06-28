@@ -36,6 +36,9 @@ def account_view(request, user = None):
     user = user.replace('_', ' ')
     user = User.objects.get(username = user)
     hisprofile = Profile.objects.get(user = user)
+    if hisprofile.first_name == 'name':
+        hisprofile.first_name = user.first_name + ' ' + user.last_name
+        hisprofile.save()
     miss_lesson = MissLesson.objects.filter(profile = profile)
     if len(miss_lesson) > 0:
         miss_lesson = miss_lesson[0]
@@ -67,6 +70,19 @@ def account_view(request, user = None):
         profile.save()
     else:
         skill = profile.skill
+    if profile == hisprofile and skill.confirmed == False:
+        if timezone.now() - skill.confirmation_time > timedelta(1):
+            skill.confirmation_code = random_secrete_confirm()
+            skill.confirmation_time = timezone.now()
+            skill.save()
+            url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/confirm/?confirm='+profile.skill.confirmation_code
+            text = "Здравствуйте "+profile.first_name+ "! Вы зарегестрировались на сайте Pinocchio.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
+            html_content = text + "<a href='"+url+"'>подтвердить</a><br><br>С уважением, команда Pinocchio.kz"
+            send_email("Подтверждение", html_content, ['kuanyshoteu@gmail.com', 'canstri03@gmail.com'])
+        context = {
+            "profile": profile,
+        }
+        return render(request, "confirm.html", context)
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
@@ -141,6 +157,16 @@ def change_profile(request):
         'hint':hisprofile.skill.hint_numbers[1],
     }
     return render(request, "profile/change_profile.html", context)
+
+def confirm_email(request):
+    if request.GET.get('confirm'):
+        profile = Profile.objects.get(user = request.user)
+        skill = profile.skill
+        if skill.confirmation_code == request.GET.get('confirm'):
+            skill.confirmed = True
+            print('yoyoyo')
+            skill.save()
+    return redirect(profile.get_absolute_url())
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
