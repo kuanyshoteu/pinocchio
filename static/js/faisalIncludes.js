@@ -33,11 +33,39 @@ $(document).ready(function(){
 // map_phone-close script start
 
   $('.map_phone-main').on('click', function () {
-    console.log('WTF')
-    $('.map_phone-more').toggleClass('map_phone-nonactive');
-    $('.map_phone-other').toggleClass('map_phone-active');
+    $('.map_phone-main').hide();
+    $('.map_phone-other').show();
+    $(this).hide()
   });
 // map_phone-close script end
+// map_someorg start
+  var summWeight = 0;
+  var summSlides = $('.map_sameorg-item').length;
+  $('.select__prev').on('click', function() {
+    if(summWeight !== 0) {
+      var itemWeight = $('.map_sameorg-item:first-child').outerWidth();
+      summWeight -= itemWeight;
+      $('.map_sameorg-item').css('left', '-' + summWeight + 'px');
+    }
+    if(summWeight === 0) {
+      $('.select__next').css('color', '#285c8a')
+      $('.select__prev').css('color', '#99b1c6')
+    }
+  });
+
+  $('.select__next').on('click', function() {
+    var itemWeight = $('.map_sameorg-item').outerWidth();
+    if(summWeight !== summSlides * itemWeight - itemWeight) {
+      summWeight += itemWeight;
+      $('.map_sameorg-item').css('left', '-' + summWeight + 'px')
+    }
+    if (summWeight === summSlides * itemWeight - itemWeight) {
+      $('.select__next').css('color', '#99b1c6')
+      $('.select__prev').css('color', '#285c8a')
+    }
+  });
+
+// map_someorg end
 // Number counter start
 
   let number = document.getElementById('number-counter');

@@ -11,7 +11,7 @@
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" id="list" style="width: 84%;">
-                <div class="ui grid">
+                <div class="ui grid stackable">
                     <div class="twelve wide column" style="padding-right: 0">
                         <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
                             <span style="font-size: 16px;">
@@ -19,7 +19,7 @@
                                 <span style="color: #939393;">{{ squads|length }}</span>
                             </span>
                         </div>
-                        <div class="ui grid allsquads" style="margin-top: 0;">
+                        <div class="ui grid stackable allsquads" style="margin-top: 0;">
                             {% for sq in squads %}
                                 {% include 'squads/squad_list_info.html' %}
                             {% endfor %}

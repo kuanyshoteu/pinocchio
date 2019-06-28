@@ -37,7 +37,7 @@ def school_library(request, school_id):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.hint_numbers[3],
+        'hint':profile.skill.hint_numbers[3],
     }
     return render(request, 'library/library.html', context=context)
 

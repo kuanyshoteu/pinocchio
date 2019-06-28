@@ -205,7 +205,7 @@ def map_filter(request):
         image_url = ''
         if school.image_icon:
             image_url = school.image_icon.url
-        res.append([school.id, school.title, image_url, school.address])
+        res.append([school.id, school.title, image_url, school.school_offices.first().address])
         i+=1
         if i == 15:
             break
@@ -238,7 +238,7 @@ def map_search_show(request):
             image_url = ''
             if school.image_icon:
                 image_url = school.image_icon.url
-            res.append([school.id, school.title, image_url, school.address])
+            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
             i+=1
             if i == 10:
                 break
@@ -248,7 +248,7 @@ def map_search_show(request):
             image_url = ''
             if school.image_icon:
                 image_url = school.image_icon.url
-            res.append([school.id, school.title, image_url, school.address])
+            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
     data = {
         "res":res,
     }
@@ -348,7 +348,7 @@ def get_notifications(request):
     timezone.now()
     res = []
     i = 0
-    profile.notifications_number = 0
+    profile.skill.notifications_number = 0
     profile.save()
     for school in profile.schools.all():
         for notif in school.notifications.filter():
@@ -398,11 +398,37 @@ def map_view(request):
 def get_landing(request):
     if request.GET.get('id'):
         school = School.objects.get(id=int(request.GET.get('id')))
+        subjects = []
+        for subject in school.school_subject_categories.all():
+            subjects.append(subject.title)
+        phone = ''
+        i = 0
+        for p in school.phones[0]:
+            phone += p
+            if i == 10:
+                break
+            i += 1
         data = {
             'title':school.title,
-            'address':school.address,
+            'address':school.school_offices.first().address,
+            'region':school.school_offices.first().region,
+            'offices':school.offices,
+            'phone':phone,
             'phones':school.phones,
             'worktime':school.worktime,
+            'subjects':subjects,
+            'site':school.site,
+            'landing_url':school.landing(),
+        }
+        return JsonResponse(data)
+    else:
+        return 0
+
+def get_phone(request):
+    if request.GET.get('id'):
+        school = School.objects.get(id=int(request.GET.get('id')))
+        data = {
+            'phone':school.phones,
         }
         return JsonResponse(data)
     else:

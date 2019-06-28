@@ -59,8 +59,11 @@
   font-weight: 600;
 }
 .school_name_big{
-  font-size: 19px;
-  padding-top: 14px;
+  font-size: 22px;
+  padding: 20px 0px 10px 0px;
+}
+.map_address-subtitle{
+  color: #a0a0a0;
 }
 .school_address{
   color: #555;
@@ -78,10 +81,16 @@
   background-color: #f7f7f7;
   cursor: pointer;
 }
+.school_phone_landing{
+  font-size: 17px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 .school_landing{
   position: absolute;
   height: 95%;
-  width: 400px;
+  width: 100%;
   z-index: 1000;
   display: none;
   background-color: #fff;
@@ -1370,6 +1379,11 @@ a{
   -webkit-transform: translateX(-150%);
   transform: translateX(-150%);
   position: absolute;
+  font-size: 16px;
+}
+.mobmenu{
+  font-size: 18px;
+  padding: 14px !important;
 }
 .menu_active {
   -webkit-transform: translateX(0%) !important;

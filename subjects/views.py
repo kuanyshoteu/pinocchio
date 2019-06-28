@@ -43,8 +43,8 @@ def subject_detail(request, slug=None):
         'time_periods':time_periods,
         'days':days,
         'materials':instance.materials.prefetch_related('lessons'),
-        "lessons":profile.lesson_author.all(),
-        "folders":profile.folders.all(),
+        "lessons":school.lessons.all(),
+        "folders":school.school_folders.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -55,8 +55,8 @@ def subject_list(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
-    if profile.crm_subject:
-        subjects = profile.crm_subject.category_subjects.all()
+    if profile.skill.crm_subject:
+        subjects = profile.skill.crm_subject.category_subjects.all()
     else:
         subjects = school.school_subjects.all()
     context = {
