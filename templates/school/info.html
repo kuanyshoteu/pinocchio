@@ -35,6 +35,38 @@
                 </div>
                 {% if is_director %}
                 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                    Время уроков:
+                    <div class="school_timep_list" style="display: inline-block;">
+                    {% for timep in instance.time_periods.all %}
+                        <a class="ui button mini green timep_object{{timep.id}}" onclick="$('#timep_form{{timep.id}}').modal('show')" id="{{timep.id}}" style="padding: 7px 10px;">{{ timep.start }}-{{ timep.end }}</a>
+                        <div class="ui modal mini" id="timep_form{{ timep.id }}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <form class="ui form">
+                                    <textarea id="timep_start{{timep.id}}" status='timep'>{{timep.start}}</textarea>
+                                    <textarea id="timep_end{{timep.id}}" status='timep'>{{timep.end}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_timep('{{timep.create_url}}', '{{timep.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_timep('{{timep.delete_url}}', '{{timep.id}}')" style="float: right;">Удалить</a>
+                                </form>
+                                <div class="errortimep{{timep.id}} highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#timep_form_new').modal('show')">Добавить время</a>
+                    <div class="ui modal mini" id="timep_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <textarea id="timep_start_new" status='timep' placeholder="Название"></textarea>
+                                <textarea id="timep_end_new" status='timep' placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new')">Создать</a>
+                            </form>
+                            <div class="errortimep_new highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment" style="margin: 0;padding-left: 17px;">
                     Предметы школы:
                     <div class="school_subject_list" style="display: inline-block;">
                     {% for subject in instance.school_subject_categories.all %}
@@ -321,7 +353,7 @@
             }
         })        
     };
-   function create_office(url, id) {
+    function create_office(url, id) {
         title = $('#office_title'+id).val()
         if (title != '') {
             $.ajax({
@@ -359,6 +391,50 @@
             success: function (data) {
                 $('.office_object'+id).hide('fast');
                 $('#office_form'+id).modal('hide')
+            }
+        })        
+    };
+
+    function create_timep(url, id) {
+        start = $('#timep_start'+id).val()
+        end = $('#timep_end'+id).val()
+        if (start != '' && end != '') {
+            $.ajax({
+                url: url,
+                data: {
+                    'id':id,
+                    'start':start,
+                    'end':end,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.errortimep'+id).hide()
+                    if (data.taken_name) {
+                        $('.errortimep'+id).show()
+                    }
+                    else{
+                        if (id == '_new') {
+                            $('<a class="ui button mini green timep_object'+data.idd+'" onclick="$('+"'#timep_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+start+'-'+end+'</a> <div class="ui modal mini" id="timep_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="timep_title'+data.idd+'">'+start+'-'+end+'</textarea> <a class="ui button mini blue" onclick="create_timep('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_timep('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errortimep'+data.idd+' highlight_red" style="display: none;">Предмет с таким промежутком уже сущетсвует</div></div> </div>').appendTo($('.school_timep_list'))
+                        }
+                        else{
+                            $('.timep_object'+id).text(start+'-'+end);
+                        }
+                        $('#timep_form'+id).modal('hide')
+                    }
+                }
+            })
+        }
+    };
+    function delete_timep(url, id) {
+        $.ajax({
+            url: url,
+            data: {
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.timep_object'+id).hide('fast');
+                $('#timep_form'+id).modal('hide')
             }
         })        
     };

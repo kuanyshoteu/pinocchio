@@ -27,6 +27,14 @@ def loaderio(request):
     context = {
     }
     return render(request, "loaderio.txt", context)
+def certificate(request):
+    context = {
+    }
+    return render(request, "certificate.txt", context)
+def certificate2(request):
+    context = {
+    }
+    return render(request, "certificate2.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:
@@ -96,7 +104,11 @@ def login_view(request):
         if found:
             res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
+        try:
             login(request, user)
+        except Exception as e:
+            res = 'error'
+
     data = {
         'res':res,
     }

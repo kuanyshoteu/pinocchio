@@ -34,7 +34,6 @@
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
-            {% if profile.schools.all > 0 %}
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
                 <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
@@ -52,7 +51,6 @@
                     </ul>
                 </div>
             </form>
-            {% endif %}
             <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
                 {% if profile.notifications_number == 0 %}
                 <i class="icon bell" style="color: #2D437C;"></i>
@@ -177,12 +175,9 @@
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
-<<<<<<< 
-=======
 {% if profile.schools.all.length > 0 %}
 <!-- <script src="https://cndjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
 <script type="text/javascript">
->>>>>>> 
     var wsStart = 'ws://'
     var loc = window.location
     if (loc.protocol == 'https:'){
@@ -214,9 +209,6 @@
     }
 
 </script>
-<<<<<<< 
-=======
  -->{% endif %}
 </body>
->>>>>>> 
 </html>

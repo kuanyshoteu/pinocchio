@@ -27,16 +27,16 @@ from constants import *
 def subject_detail(request, slug=None):
     instance = get_object_or_404(Subject, slug=slug)   
     profile = get_profile(request)
-    time_periods = TimePeriod.objects.all()
     days = Day.objects.all()
     cells = Cell.objects.all()
+    school = instance.school
+    time_periods = school.time_periods.all()
     if len(cells) < len(days) * len(time_periods):
         for day in days:
             for timep in time_periods:
-                new_cell = Cell.objects.get_or_create(day = day, time_period = timep)
+                new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
     if profile.is_student:
         profile.squads
-
     context = {
         "instance": instance,
         "profile":profile,
@@ -183,7 +183,7 @@ def subject_update(request, slug=None):
     if len(cells) < len(days) * len(time_periods):
         for day in days:
             for timep in time_periods:
-                new_cell = Cell.objects.get_or_create(day = day, time_period = timep)
+                new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
 
     context = {
         "instance": instance,
@@ -326,6 +326,7 @@ def change_schedule(request, id=None):
                     subject=subject,
                     squad=squad,
                     cell=cell, 
+                    school=school,
                     day=cell.day,
                     office=subject.office,
                     category=subject.category,
