@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^$', main_view, name='home'),
     url(r'^about/$', main_view, name='about'),
     url(r'^api/login/$', login_view, name='login'),
+    url(r'^api/login_social/$', login_social, name='login_social'),
     url(r'^api/register/$', register_view, name='register'),
     url(r'^contacts/$', contacts_view, name='contacts'),
     url(r'^map/$', map_view, name='map'),

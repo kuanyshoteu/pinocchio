@@ -76,6 +76,9 @@
                 Заявка
             </a>
             {% endif %}
+            {% if is_director %}
+                <span style="margin-left: 30px;color: #fff;margin-right: 5px;">На счету: </span> <b style="color: #e0f310;" id="number-counter">{{ instance.money }}</b> <span style="color: #e0f310;">тг.</span>
+            {% endif %} 
         </div>
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left: -100px;margin-top: 5px;">

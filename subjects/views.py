@@ -55,7 +55,7 @@ def subject_list(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
-    if profile.skill.crm_subject:
+    if profile.skill.crm_subject2:
         subjects = profile.skill.crm_subject.category_subjects.all()
     else:
         subjects = school.school_subjects.all()

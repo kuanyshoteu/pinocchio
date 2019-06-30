@@ -89,22 +89,15 @@ def school_landing(request, school_id=None):
     }
     return render(request, "school/landing.html", context)
 
-from django.core.mail import send_mail
 def school_info(request):
     profile = get_profile(request)
     only_directors(profile)
     school = profile.schools.first()
-
-    # send_mail(
-    #     'Subject here',
-    #     'Here is the message.',
-    #     'kuanyshoteu@gmail.com',
-    #     ['abilhanov6@gmail.com'],
-    # )
-
+    if is_profi(profile, 'Director'):
+        money = school.money
     context = {
         "profile":profile,
-        "instance": profile.schools.first(),
+        "instance": school,
         "squads":school.groups.all(),
         "main_school":True,
         "subjects":school.school_subjects.all(),
@@ -944,5 +937,29 @@ def search_title(request):
                 break
     data = {
         'res':res,
+    }
+    return JsonResponse(data)
+
+def change_title(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    if request.GET.get('id') and request.GET.get('text') and request.GET.get('status') and request.GET.get('text') != "":
+        school = School.objects.get(id = int(request.GET.get('id')))
+        if request.GET.get('status') == 'title':
+            school.title = request.GET.get('text') 
+        if request.GET.get('status') == 'slogan':
+            school.slogan = request.GET.get('text') 
+        if request.GET.get('status') == 'content':
+            school.content = request.GET.get('text') 
+        if request.GET.get('status') == 'site':
+            school.site = request.GET.get('text') 
+        if request.GET.get('status') == 'worktime':
+            school.worktime = request.GET.get('text') 
+        if request.GET.get('status') == 'phones':
+            school.phones = request.GET.get('text') 
+        if request.GET.get('status') == 'social_networks':
+            school.social_networks = request.GET.get('text') 
+        school.save()
+    data = {
     }
     return JsonResponse(data)

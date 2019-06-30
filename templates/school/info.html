@@ -23,15 +23,69 @@
                     Информация
                 </div>
                 <div class="ui segment" style="margin: 0;font-size: 15px;">
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Описание (для рекламной страницы): </span> 
+                    <span style="display: inline-block;" class="school_content">{{ instance.content }}</span> 
                     {% if is_director %}
-                    <div style="margin-bottom: 5px;">На счету: <b style="color: #e09310;" id="number-counter">{{ instance.money }}</b> тг.</div>
+                    <a onclick="$('.school_content_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
+                    <form class="ui form no_margin school_content_form" style="width: 800px; display: none;">
+                        <div class="ui grid">
+                            <div class="twelve wide column no_padding_side">
+                                <textarea class="school_content_edit no_margin" style="margin-bottom: 0;height: 70px;">{{ instance.content }}</textarea>
+                            </div>
+                            <div class="four wide column">
+                                <a status="content" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                            </div>
+                        </div>
+                    </form>
                     {% endif %}
-                    <span style="display: inline-block;">{{ instance.get_markdown }}</span> 
-                    <a style="margin-left: 15px;" href=""><i class="icon pen square blue" style="font-size: 15px"></i></a>
                     <br>
-                    <span style="display: inline-block;">Контакты:</span>
-                    <span style="display: inline-block;">{{ instance.address }}</span>
-                    <a style="margin-left: 15px;" href=""><i class="icon pen square blue" style="font-size: 15px"></i></a>
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Короткий слоган (для карты):</span>
+                    <span style="display: inline-block;" class="school_slogan">{{ instance.slogan }}</span>
+                    {% if is_director %}
+                    <a onclick="$('.school_slogan_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
+                    <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
+                        <div class="ui grid">
+                            <div class="twelve wide column no_padding_side">
+                                <textarea class="school_slogan_edit no_margin" style="margin-bottom: 0;">{{ instance.slogan }}</textarea>
+                            </div>
+                            <div class="four wide column">
+                                <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %} 
+                    <br>                   
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Сайт (если есть):</span>
+                    <span style="display: inline-block;" class="school_site">{{ instance.site }}</span>
+                    {% if is_director %}
+                    <a onclick="$('.school_site_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
+                    <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
+                        <div class="ui grid">
+                            <div class="twelve wide column no_padding_side">
+                                <textarea class="school_site_edit no_margin" style="margin-bottom: 0;">{{ instance.site }}</textarea>
+                            </div>
+                            <div class="four wide column">
+                                <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %} 
+                    <br>                   
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Время работы (для карты):</span>
+                    <span style="display: inline-block;" class="school_worktime">{{ instance.worktime }}</span>
+                    {% if is_director %}
+                    <a onclick="$('.school_worktime_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
+                    <form class="ui form no_margin school_worktime_form" style="width: 400px;display: none;">
+                        <div class="ui grid">
+                            <div class="twelve wide column no_padding_side">
+                                <textarea class="school_worktime_edit no_margin" style="margin-bottom: 0;">{{ instance.worktime }}</textarea>
+                            </div>
+                            <div class="four wide column">
+                                <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}                    
                 </div>
                 {% if is_director %}
                 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">

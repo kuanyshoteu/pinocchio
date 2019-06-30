@@ -177,7 +177,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
-from datetime import timedelta
 import datetime
 
 def add_paper(request):
@@ -293,9 +292,36 @@ def add_student_to_squad(student, squad):
     squad.students.add(student)
     for subject in squad.subjects.all():
         subject.students.add(student)
+    today = int(timezone.now().strftime('%w'))
+    needed_day = 8
+    lecture_time = ''
     for lecture in squad.squad_lectures.all():
+        print('day', lecture.day.number, today, needed_day)
+        lecture_day_number = lecture.day.number
+        if lecture_day_number - today < 0:
+            lecture_day_number + 7 
+        if lecture_day_number - today < needed_day:
+            needed_day = lecture_day_number
+            lecture_time = lecture.cell.time_period.start
+            if '8:' in lecture.cell.time_period.start or '9:' in lecture.cell.time_period.start:
+                needed_day -= 1
+                time = '20:00'
+            elif '10:' in lecture.cell.time_period.start:
+                time = '09:00'
+            else:
+                timestr = str(int(lecture.cell.time_period.start.split(':')[0])-2)
+                if int(lecture.cell.time_period.start.split(':')[0])-2 < 10:
+                    timestr = '0' + str(int(lecture.cell.time_period.start.split(':')[0])-2)
+                time = timestr+str(lecture.cell.time_period.start.split(':')[1])
         add_person_to_lecture(lecture, student)
         lecture.save()
+    send_date = (timezone.now().date() + timedelta(needed_day)).strftime('%d%m%y')+time
+    if lecture.office:
+        address = lecture.office.address
+    else:
+        address = squad.school.school_offices.first().address
+    print(send_date, lecture_time, address)
+#    send_sms(student.phone, 'Здравствуйте '+student.first_name+'! в '+lecture_time+' у Вас состоится пробный урок по адресу '+address, send_date)
 
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:

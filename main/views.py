@@ -99,7 +99,7 @@ def login_view(request):
             profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
             found = True
         elif len(Profile.objects.filter(phone=request.GET.get('username'))) > 0:
-            profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
+            profile = Profile.objects.filter(phone=request.GET.get('username'))[0]
             found = True
         if found:
             res = 'login'
@@ -116,12 +116,13 @@ def login_view(request):
 
 def register_view(request):
     res = 'ok'
-    if request.GET.get('name')and request.GET.get('phone') and request.GET.get('password1') and request.GET.get('password2'):
+    if request.GET.get('name') and request.GET.get('phone') and request.GET.get('password1') and request.GET.get('password2'):
         if request.GET.get('password1') == request.GET.get('password2'):
             if len(Profile.objects.filter(mail=request.GET.get('phone'))) == 0 and len(Profile.objects.filter(phone=request.GET.get('phone'))) == 0:
                 new_id = User.objects.order_by("id").last().id + 1
                 user = User.objects.create(username='user' + str(new_id), password=request.GET.get('password1'))
-                new_user = authenticate(username = user.username, password=request.GET.get('password1'))
+                user = authenticate(username = user.username, password=request.GET.get('password1'))
+                #print(new_user, user)
                 login(request, user)
                 profile = Profile.objects.get(user = user)
                 profile.first_name = request.GET.get('name')
@@ -137,6 +138,14 @@ def register_view(request):
 
     data = {
         'res':res,
+    }
+    return JsonResponse(data)
+
+def login_social(request):
+    if request.GET.get('status'):
+        if request.GET.get('status') == 'facebook':
+            pass
+    data = {
     }
     return JsonResponse(data)
 

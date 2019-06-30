@@ -39,17 +39,18 @@ class School(models.Model):
     height_field2 = models.IntegerField(default=0, null=True)
     width_field2 = models.IntegerField(default=0, null=True)
 
-    content = models.TextField(default='')
     money = models.IntegerField(default=0)
+    
+    content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')
     site = models.CharField(max_length=250, default='')
-    rating = models.FloatField(default=0)
     worktime = models.CharField(max_length=250, default='')
     phones = ArrayField(models.TextField(), default = list)
     social_networks = ArrayField(models.TextField(), default = list)
     offices = models.IntegerField(default=0)
-    average_cost = models.IntegerField(default=0)
 
+    average_cost = models.IntegerField(default=0)
+    rating = models.FloatField(default=0)
     
     class Meta:
         ordering = ['rating']

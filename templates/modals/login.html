@@ -1,15 +1,26 @@
 <div class="ui mini modal" id="login-modal">
     <i class="close icon"></i>
-    <div class="header text-center" style="color: #fff;background-color: #506ca9;">
-        Вход
-    </div>
     <div class="content">
         <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
             <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
-            <input class="username" name="username" placeholder="Номер телефона">
+            <input class="username" name="username" placeholder="Номер телефона или Email">
             <input class="password" type="password" name="password" placeholder="Пароль">
             <div style="text-align: center;">
-                <a class="ui button blue login-btn" style="margin-right: 15px;">Войти</a>
+                <a class="ui button green login-btn">Войти</a>
+            </div>
+            <div style="text-align: center;margin-top: 10px;">или</div>
+            <div style="margin-top: 10px;">
+                <a href="{% url 'social:begin' 'facebook' %}" class="ui button red full-w">
+                    <i class="icon google" style="color: #fff;"></i> Войти через gmail
+                </a>
+            </div>
+            <div style="margin-top: 10px;">
+                <a href="{% url 'social:begin' 'facebook' %}" class="ui button blue full-w">
+                    <i class="icon facebook f" style="color: #fff;"></i> Войти через facebook
+                </a>
+            </div>
+            <div style="margin-top: 20px;text-align: center;">
+                <a onclick="$('#signup-modal').modal('show')">Еще нет аккаунта? Создать аккаунт</a>
             </div>
         </form>
     </div>
