@@ -144,6 +144,8 @@ class SubjectCategory(models.Model):
         return reverse("schools:subject_create_url")
     def search_url(self):
         return reverse("schools:search_url")
+    class Meta:
+        ordering = ['id']
 
 class SubjectAge(models.Model):
     schools = models.ManyToManyField(School, related_name='school_subject_ages')
@@ -154,6 +156,8 @@ class SubjectAge(models.Model):
         return reverse("schools:age_create_url")
     def search_url(self):
         return reverse("schools:search_url")
+    class Meta:
+        ordering = ['id']
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
@@ -163,14 +167,19 @@ class Office(models.Model):
     region = models.CharField(max_length=250, default='')
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_offices')
+    class Meta:
+        ordering = ['id']
     def delete_url(self):
         return reverse("schools:office_delete_url")
     def create_url(self):
         return reverse("schools:office_create_url")
     def search_url(self):
         return reverse("schools:search_url")
+    def create_cabinet_url(self):
+        return reverse("schools:create_cabinet_url")
 
 class Cabinet(models.Model):
     title = models.CharField(max_length=250)
     capacity = models.IntegerField(default=0)
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_cabinets')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='cabinets')
+    office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='cabinets')    

@@ -142,8 +142,12 @@ class Subject(models.Model):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
     def change_age(self):
         return reverse("subjects:change_age",kwargs={"id": self.id})       
+    def change_office(self):
+        return reverse("subjects:change_office",kwargs={"id": self.id})       
     def delete_lesson_url(self):
         return reverse("subjects:delete_lesson_url",kwargs={"id": self.id})       
+    def change_lecture_cabinet(self):
+        return reverse("subjects:change_lecture_cabinet")       
 
 def create_slug(instance, new_slug=None):
     if len(Subject.objects.all()) > 0:

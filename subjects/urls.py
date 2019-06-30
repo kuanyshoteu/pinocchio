@@ -21,5 +21,7 @@ urlpatterns = [
     url(r'^api/squad_list/(?P<id>\d+)/$', squad_list, name='squad_list'),
     url(r'^api/change_category/(?P<id>\d+)/$', change_category, name='change_category'),
     url(r'^api/change_age/(?P<id>\d+)/$', change_age, name='change_age'),
+    url(r'^api/change_office/(?P<id>\d+)/$', change_office, name='change_office'),
     url(r'^api/delete_lesson_url/(?P<id>\d+)/$', delete_lesson, name='delete_lesson_url'),
+    url(r'^api/change_lecture_cabinet/$', change_lecture_cabinet, name='change_lecture_cabinet'),
 ]

@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'^api/card_called/$', card_called, name='card_called'),
     url(r'^api/change_manager/$', change_manager, name='change_manager'),
     url(r'^api/change_title_url/$', change_title, name='change_title_url'),
+    url(r'^api/create_cabinet_url/$', create_cabinet, name='create_cabinet_url'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

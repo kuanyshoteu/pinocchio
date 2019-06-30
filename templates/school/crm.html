@@ -14,9 +14,9 @@
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
 <script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
 <script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
-<div id="app" style="overflow-y: hidden;">
-    <div class='ui container' id="untouch">
-        <div class="ui grid main_crm" style="margin-top: 0">
+<div id="app" style="overflow-y: hidden;height: 90%;">
+    <div class='ui container' id="untouch" style="height: 100%;">
+        <div class="ui grid main_crm" style="margin-top: 0;height: 100%;">
             {% include 'left_menu.html' %}
             <div class="wide column" style="padding-right: 0;width: 85%;">
                 <div style="padding-bottom: 8px;">
@@ -72,7 +72,7 @@
                                     <div class="filter-title">По дням недели<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                     {% for day in days %}
-                                        <li class="filter-item" status="0" id="{{ day.title }}">
+                                        <li class="filter-item" status="0" id="day{{ day.id }}">
                                             <i class="icon check green" id="check_day{{ day.title }}"></i>
                                             {{day.title}}
                                         </li>
@@ -90,17 +90,17 @@
                         </div>
                     </form>
                 </div>
-                <div id="all_columns">
-                    <div class="ui grid" style="margin-top: -5px;">
+                <div id="all_columns" style="height: 100%;">
+                    <div class="ui grid" style="margin-top: -5px;height: 100%;">
                         {% for column in columns %}
-                        <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
+                        <div class="wide column center aligned" style="padding: 3px;width: 16.65%;height: 100%;">
                             <div class="margin0" style="padding: 14px 4px;background-color: #4A4A4A;color: #fff;border-radius: 5px 5px 0 0;">
                                 <div class="crm_title">{{ column.title }}</div>
                                 <div class="crm_divider"></div>
                                 <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
                                 {% include 'school/new_card_form.html' %}
                             </div>
-                            <div style="height: 67%;overflow-x: scroll;background-color: #4A4A4A;">
+                            <div style="height: 100%;overflow-x: scroll;background-color: #4A4A4A;">
                                 <div class="" style="padding: 0 4px;color: #fff;">
                                     <div class="column{{ column.id }} crm_column">
                                         <draggable 
@@ -109,22 +109,28 @@
                                                 @add="move_card({{ column.id }})">
                                             {% for card in column|filtercards:profile %}
                                             <div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
-                                                <div id="card{{card.id}}" class="ui segment full-w crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%} {% if card.saved and card.card_user.money < card.card_user.salary %}warning_card{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" onclick="open_crmcard('{{ card.id }}')" draggable='true' column_id="{{column.id}}">
-                                                    {% if not card.saved %}
-                                                        <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
-                                                    {%endif%}
-                                                    <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
-                                                    <div style="color: #707070;font-size: 12px;">
-                                                        {{ card.phone }}
-                                                    <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', '{{ card.saved }}')"><i class="icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>                                                    
+                                                <div id="card{{card.id}}" class="ui segment crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%} {% if card.saved and card.card_user.money < card.card_user.salary %}warning_card{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
+                                                    <div onclick="open_crmcard('{{ card.id }}')" style="width: 80%;display: inline-block;">
+                                                        <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
+                                                        <div style="color: #707070;font-size: 12px;">
+                                                            {{ card.phone }}                                                    
+                                                        </div>
                                                     </div>
-                                                    {% if card.author_profile %}
-                                                    <a class="nouser{{card.id}}" href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
-                                                        {{card.author_profile.first_name}}
-                                                    </a>
-                                                    {% else %}
-                                                    <a class="nouser{{card.id}}" style="color: darkblue;font-size: 11px"></a>
-                                                    {% endif %}
+                                                    <div style="width: 20%;display: inline-block;float: right;margin-top: 20px;">
+                                                        {% if not card.saved %}
+                                                            <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
+                                                        {%endif%}
+                                                        <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}')"><i class="icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>     
+                                                    </div>
+                                                    <div style="width: 100%;">
+                                                        {% if card.author_profile %}
+                                                        <a class="nouser{{card.id}}" href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
+                                                            {{card.author_profile.first_name}}
+                                                        </a>
+                                                        {% else %}
+                                                        <a class="nouser{{card.id}}" style="color: darkblue;font-size: 11px">Свободная</a>
+                                                        {% endif %}
+                                                    </div>
                                                 </div>
                                             </div>
                                             {% include 'school/card_form.html' %}
@@ -165,26 +171,24 @@
 </script>
 {% endif %}
 <script>
-    function openNav(id, name, is_saved) {
+    function openNav(id, name) {
         $('#register_students_calendar').modal('show')
         $('#current_user_name').text(name)
         $('.card_for_save').attr('id', id)
-        if (is_saved == 'True') {
-            $.ajax({
-                url: $('.card_for_save').attr('get_card_squads'),
-                data: {
-                    'id':id,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('.insquadicon').hide()
-                    for (var i = 0; i < data.res.length; i++){
-                        squad_id = data.res[i]
-                        $('.squad'+squad_id).show()
-                    }
+        $('.insquadicon').hide()
+        $.ajax({
+            url: $('.card_for_save').attr('get_card_squads'),
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.res.length; i++){
+                    squad_id = data.res[i]
+                    $('.squad'+squad_id).show()
                 }
-            })
-        }        
+            }
+        })
     }
     function save_card_id(id, name){
         $('.current_card').attr('id', id)
@@ -215,7 +219,7 @@
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 if(oldcolumn_id != '4' || column_id != '5'){
                     if (column_id == '4' || column_id == '2') {
-                        openNav(id, $('.current_card').attr('name'), $('#card_container'+id).attr('is_saved'));
+                        openNav(id, $('.current_card').attr('name'));
                     }
                 }
             },
