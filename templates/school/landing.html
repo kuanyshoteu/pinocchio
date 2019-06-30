@@ -1,5 +1,314 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+
 {% block content %}
+
+  <header class="schoolLanding__header-wrapper">
+    <div style="background: url(https://zapis.kz/data/pics/salon/pic-4019.jpg?v=0);" class="schoolLanding__header-img"></div>
+    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4020.jpg?v=0');" class="schoolLanding__header-img"></div>
+    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4010.jpg?v=0');" class="schoolLanding__header-img"></div>
+  </header>
+
+  <main class="schoolLanding__container">
+
+    <div class="schoolLanding__content-header">
+      <div class="schoolLanding__content-headerLeft">
+        <div class="organization__info-top-part">
+          <div class="organization__info-left-part">
+            <div style="background: url('https://png.pngtree.com/element_pic/00/16/07/115783931601b5c.jpg'); background-position: center; background-size: contain;background-color: #fff;" class="organization__info-photo"></div>
+            <div class="organization__info-main">
+              <h2 class="organization__info-title">AVESSA на Пушкина</h2>
+              <p class="organization__info-subtitle">Салон красоты</p>
+              <p class="organization__info-buttons">
+                <span class="organization__info-buttons-call">
+                  <i class="icon phone"></i>
+                </span>
+                <span class="organization__info-buttons-about">
+                  Об организации
+                </span>
+              </p>
+            </div>
+          </div>
+          <div class="organization__info-middle-part">
+            <div class="organization__info-middle-part__wrap">
+              <span class="organization__info-rating">
+                <span class="organization__info-rating-avg">4</span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon">
+                  <i class="icon star"></i>
+                </span>
+              </span>
+              <p class="organization__info-rating-desc">
+                38 отзывов
+              </p>
+            </div>
+          </div>
+          <div class="organization__info-right-part">
+            <p class="organization__info-address">
+              г.Алматы
+              <br>ул. Пушкина 35
+              <br>ниже ул. Макатаева
+            </p>
+          </div>
+          <div class="organization__info-bottom-part">
+            <div class="organization__info-list">
+              <span class="organization__info-item">
+                <i class="icon user"></i>
+                81
+              </span>
+              <span class="organization__info-item">
+                <i class="icon clock outline"></i>
+                08:00 - 21:00 <span class="open">Открыто</span>
+              </span>
+              <span class="organization__info-item">
+                <i class="icon instagram"></i>
+                Salon_avessa
+              </span>
+            </div>
+            <a class="organization__info-button">Записаться</a>
+          </div>
+        </div>
+      </div>
+      <div class="schoolLanding__content-headerMap"></div>
+    </div>
+
+    <div class="schoolLanding__content-category">
+      <ul class="schoolLanding__content-category__list">
+        <li class="schoolLanding__content-category__item active">
+          <i class="icon spinner"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+        <li class="schoolLanding__content-category__item">
+          <i class="icon spinner"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+        <li class="schoolLanding__content-category__item">
+          <i class="icon spinner"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+        <li class="schoolLanding__content-category__item">
+          <i class="icon spinner"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+        <li class="schoolLanding__content-category__item">
+          <i class="icon spinner"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+        <li class="schoolLanding__content-category__item">
+          <i class="icon spinner"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="schoolLanding__content-services">
+
+      <h3 class="schoolLanding__content-services__title">70 Услуг</h3>
+      <section class="schoolLanding__content-services__item">
+        <div class="schoolLanding__content-services__item-left">
+          <h2 class="schoolLanding__content-services__item-title">Услуга номер 1</h2>
+          <span class="schoolLanding__content-services__item-time">60 минут</span>
+        </div>
+        <div class="schoolLanding__content-services__item-right">
+          <span class="schoolLanding__content-services__item-price">4800 т - 5500 т</span>
+          <span class="schoolLanding__content-services__item-icon">
+            <i class="icon angle right"></i>
+          </span>
+        </div>
+      </section>
+      <section class="schoolLanding__content-services__item">
+        <div class="schoolLanding__content-services__item-left">
+          <h2 class="schoolLanding__content-services__item-title">Услуга номер 1</h2>
+          <span class="schoolLanding__content-services__item-time">60 минут</span>
+        </div>
+        <div class="schoolLanding__content-services__item-right">
+          <span class="schoolLanding__content-services__item-price">4800 т - 5500 т</span>
+          <span class="schoolLanding__content-services__item-icon">
+            <i class="icon angle right"></i>
+          </span>
+        </div>
+      </section>
+    </div>
+
+    <div class="schoolLanding__content-teachers owl-carousel owl-theme">
+      <div class="schoolLanding__content-teacher">
+        <div style="background: #ccc;" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">Касанова Айгуль Абильхановна</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+      <div class="schoolLanding__content-teacher">
+        <div style="background: #ccc;" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">Касанова Айгуль Абильхановна</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+      <div class="schoolLanding__content-teacher">
+        <div style="background: #ccc;" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">Касанова Айгуль Абильхановна</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+      <div class="schoolLanding__content-teacher">
+        <div style="background: #ccc;" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">Касанова Айгуль Абильхановна</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+      <div class="schoolLanding__content-teacher">
+        <div style="background: #ccc;" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">Касанова Айгуль Абильхановна</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+      <div class="schoolLanding__content-teacher">
+        <div style="background: #ccc;" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">Касанова Айгуль Абильхановна</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+    </div>
+
+    <div class="schoolLanding__content-review">
+      <div class="schoolLanding__content-review__left">
+        <div class="schoolLanding__content-review-rate">
+          <span class="schoolLanding__content-review-ratenum">4</span>
+          <span class="schoolLanding__content-review-ratecount">38 оценок</span>
+        </div>
+        <div class="schoolLanding__content-review-ratestar">
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">31</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">20</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">15</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">10</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">5</span>
+          </div>
+        </div>
+      </div>
+      <div class="schoolLanding__content-review__right">
+        <div class="schoolLanding__content-review-comments__header">
+          Отзывы 10
+        </div>
+        <div class="schoolLanding__content-review-comment">
+          <div class="schoolLanding__content-review-comment__rating">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+            </span>
+          </div>
+          <div class="schoolLanding__content-review-comment__text">
+            Отвратительные локоны сделала моей маме. Придётся переделывать. Содрали за это уродство 3500. Это жесть. Больше шанса этому салону не дам. Обслуживание никакое
+          </div>
+          <div class="schoolLanding__content-review-comment__about">
+            <span class="schoolLanding__content-review-comment__about-left">
+              <span class="schoolLanding__content-review-comment__about-name">Алина</span>
+              <span class="schoolLanding__content-review-comment__about-date">16 дней назад</span>
+            </span>
+            <span class="schoolLanding__content-review-comment__about-right">
+              Мастеру
+              <span class="schoolLanding__content-review-comment__about-nameteacher">Вера</span>
+              <span style="background-color: #ccc;" class="schoolLanding__content-review-comment__about-photo"></span>
+            </span>
+          </div>
+        </div>
+
+        <div class="schoolLanding__content-review-comment">
+          <div class="schoolLanding__content-review-comment__rating">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+            </span>
+          </div>
+          <div class="schoolLanding__content-review-comment__text">
+            Отвратительные локоны сделала моей маме. Придётся переделывать. Содрали за это уродство 3500. Это жесть. Больше шанса этому салону не дам. Обслуживание никакое
+          </div>
+          <div class="schoolLanding__content-review-comment__about">
+            <span class="schoolLanding__content-review-comment__about-left">
+              <span class="schoolLanding__content-review-comment__about-name">Алина</span>
+              <span class="schoolLanding__content-review-comment__about-date">16 дней назад</span>
+            </span>
+            <span class="schoolLanding__content-review-comment__about-right">
+              Мастеру
+              <span class="schoolLanding__content-review-comment__about-nameteacher">Вера</span>
+              <span style="background-color: #ccc;" class="schoolLanding__content-review-comment__about-photo"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
 {% endblock content %}
