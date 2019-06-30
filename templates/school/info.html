@@ -112,9 +112,9 @@
                         <i class="close icon"></i>
                         <div class="content">
                             <form class="ui form">
-                                <textarea id="timep_start_new" status='timep' placeholder="Название"></textarea>
-                                <textarea id="timep_end_new" status='timep' placeholder="Название"></textarea>
-                                <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new')">Создать</a>
+                                <textarea class="need_clear" id="timep_start_new" status='timep' placeholder="Название"></textarea>
+                                <textarea class="need_clear" id="timep_end_new" status='timep' placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new');clear_textareas()">Создать</a>
                             </form>
                             <div class="errortimep_new highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
                         </div>
@@ -149,8 +149,8 @@
                                 <div style="height: 20px;">
                                     <div class="hint_subject_title_new" style="display: none;"></div>
                                 </div>
-                                <textarea class="object_textarea" id="subject_title_new" status='subject' placeholder="Название"></textarea>
-                                <a class="ui button mini blue" onclick="create_subject('/schools/api/subject_create_url/', '_new')">Создать</a>
+                                <textarea class="object_textarea need_clear" id="subject_title_new" status='subject' placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_subject('/schools/api/subject_create_url/', '_new');clear_textareas()">Создать</a>
                             </form>
                             <div class="errorsubject_new highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
                         </div>
@@ -185,8 +185,8 @@
                                 <div style="height: 20px;">
                                     <div class="hint_age_title_new" style="display: none;"></div>
                                 </div>
-                                <textarea class="object_textarea" status='age' id="age_title_new" placeholder="Название"></textarea>
-                                <a class="ui button mini blue" onclick="create_age('/schools/api/age_create_url/', '_new')">Создать</a>
+                                <textarea class="object_textarea need_clear" status='age' id="age_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_age('/schools/api/age_create_url/', '_new');clear_textareas();">Создать</a>
                             </form>
                             <div class="errorage_new highlight_red" style="display: none;">Такой возраст уже есть</div>
                         </div>
@@ -205,10 +205,28 @@
                                         <div class="hint_office_title{{office.id}}" style="display: none;"></div>
                                     </div>
                                     <textarea class="object_textarea" status='office' id="office_title{{office.id}}">{{office.title}}</textarea>
-                                    <a class="ui button mini blue" onclick="create_office('{{office.create_url}}', '{{office.id}}')">Сохранить</a>
+                                    <a class="ui button mini blue" onclick="create_office('{{office.create_url}}', '{{office.id}}');clear_textareas();">Сохранить</a>
                                     <a class="ui button mini red" onclick="delete_office('{{office.delete_url}}', '{{office.id}}')" style="float: right;">Удалить</a>
                                 </form>
                                 <div class="erroroffice{{office.id}} highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
+                                <div class="ui grid office_cabinets{{office.id}}" style="margin: 25px 0 0 0">
+                                    <div class="sixteen wide column no_padding">
+                                        Кабинеты:
+                                    </div>
+                                    {% for cabinet in office.cabinets.all %}
+                                        <div class="three wide column highlight" style="margin-right: 7px;margin-bottom: 7px;">
+                                        {{cabinet.title}}
+                                        </div>
+                                    {% endfor %}                                    
+                                </div>
+                                <a class="ui button mini blue" style="margin-top: 15px;" onclick="$('#office_cabinet_create{{office.id}}').show();$(this).hide()">Добавить кабинет</a>                                
+                                <form style="display: none;margin-top: 15px;" id="office_cabinet_create{{ office.id }}" class="ui form">
+                                    <div style="display: flex;">
+                                        <textarea class="no_margin need_clear office_cabinet_create_title office_cabinet_create_title{{ office.id }}" placeholder="Название кабинета"></textarea>
+                                        <input placeholder="Вместимость" type="number" class="office_cabinet_create_capacity office_cabinet_create_capacity{{ office.id }}">
+                                    </div>
+                                    <a class="ui button mini green save_office_cabinet" url="{{office.create_cabinet_url}}" id="{{office.id}}" onclick="clear_textareas();">Создать</a>
+                                </form>
                             </div>
                         </div>
                     {% endfor %}
@@ -221,8 +239,8 @@
                                 <div style="height: 20px;">
                                     <div class="hint_office_title_new" style="display: none;"></div>
                                 </div>
-                                <textarea class="object_textarea" status='office' id="office_title_new" placeholder="Название"></textarea>
-                                <a class="ui button mini blue" onclick="create_office('/schools/api/office_create_url/', '_new')">Создать</a>
+                                <textarea class="object_textarea need_clear" status='office' id="office_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_office('/schools/api/office_create_url/', '_new');clear_textareas()">Создать</a>
                             </form>
                             <div class="erroroffice_new highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
                         </div>
@@ -284,8 +302,8 @@
                         </div>
                     </div>
                 </div>
+                    {% include 'school/voronka_chart.html' %}
                 {% endif %}
-
                 {% include 'school/good_results_chart.html' %}
                 {% include 'school/bad_results_chart.html' %}                
             </div>
@@ -295,6 +313,9 @@
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>
 
 <script type="text/javascript">
+    function clear_textareas(){
+        $('.need_clear').val('')
+    }
     function use_hint(id, name) {
         $(id).val(name);
     }

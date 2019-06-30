@@ -1,0 +1,63 @@
+{% load staticfiles %}
+<div class="ui segment">
+    <script src="{% static 'js/voronka.js' %}"></script>
+    <script src="https://www.amcharts.com/lib/3/funnel.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <div id="chartdiv"></div>
+    <div class="container-fluid">
+      <div class="row text-center" style="overflow:hidden;">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var chart = AmCharts.makeChart( "chartdiv", {
+  "type": "funnel",
+  "theme": "light",
+  "dataProvider": [ 
+  {% for column in instance.crm_columns.all %}
+  {
+    "title": "{{column.title}}",
+    "value": "{{ column.cards.all|length }}"
+  },
+  {% endfor %}
+  ],
+  "balloon": {
+    "fixedPosition": true
+  },
+  "valueField": "value",
+  "titleField": "title",
+  "marginRight": 240,
+  "marginLeft": 50,
+  "startX": -500,
+  "depth3D": 100,
+  "angle": 40,
+  "outlineAlpha": 1,
+  "outlineColor": "#FFFFFF",
+  "outlineThickness": 2,
+  "labelPosition": "right",
+  "balloonText": "[[title]]: [[value]]n[[description]]",
+  "export": {
+    "enabled": true
+  }
+} );
+jQuery( '.chart-input' ).off().on( 'input change', function() {
+  var property = jQuery( this ).data( 'property' );
+  var target = chart;
+  var value = Number( this.value );
+  chart.startDuration = 0;
+
+  if ( property == 'innerRadius' ) {
+    value += "%";
+  }
+
+  target[ property ] = value;
+  chart.validateNow();
+} );
+</script>
+<style type="text/css">
+    #chartdiv {
+        width       : 70%;
+        height      : 300px;
+        font-size   : 13px;
+    }
+</style>

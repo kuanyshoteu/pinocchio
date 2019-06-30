@@ -68,7 +68,14 @@
                             :id="'subject_lesson' + box[1][index][0]">
                         <a class="delete_subject_lesson" :id="box[1][index][0]"><b>×</b></a>
                         <p>[[ box[1][index][1] ]]</p>
-                        <p class="user">[[ box[1][index][3] ]]</p>
+                        <select class="no_padding change_lecture_cabinet" onchange="change_cabinet('change_lecture_cabinet', '{{ instance.change_lecture_cabinet }}')" id="change_lecture_cabinet" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
+                            {% if instance.office %}
+                                <option value="">[[ box[1][index][3] ]]</option>
+                                {% for cabinet in instance.school.cabinets.all %}
+                                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
                     </div>
                 </draggable>
                 <div class="ui divider grey_divider"></div>
@@ -78,8 +85,24 @@
 </div>
 <span style="display: none;" id="-1" class="delete_lesson_data" url="{{ instance.delete_lesson_url }}"></span>
 <script>
+    function change_cabinet(id, url){
+        this_ = document.getElementById(id);
+        cabinet_id = this_.options[this_.selectedIndex].value;
+        lecture_id = $('#'+id).attr('lecture_id')
+        $.ajax({
+            url: url,
+            data: {
+                'cabinet_id':cabinet_id,
+                'lecture_id':lecture_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log('ffff1')
+            }
+        });
+    }
+
     function save_card_id(id){
-        console.log('rrr',id)
         $('.delete_lesson_data').attr('id', id)
     }
 
@@ -136,18 +159,12 @@
                 axios.get('/subjects/api/schedule/' + id)
                     .then( (res) => {
                         this.schedule = res.data.calendar
-                        // console.log(this.schedule)
                     })
             },
             updateSchedule(e, box) {
-                // http://www.pinocchio.kz/subjects/api/change_schedule_url/9/
-                // let cell_id = box[0];
-                // let squad_id = this.inSubjectSquads[0][this.inSubjectSquads[1].indexOf(box[1][0])]
             },
             added(e, s) {
-                console.log('ddd')
                 if (s.length > 1) {
-                    // console.log(e.to.dataset.cellid)
                 }
                 let cell_id = e.to.dataset.cellid
                 let old_cell = "none";
@@ -155,7 +172,6 @@
                 if (e.from.dataset.cellid) {
                     old_cell = e.from.dataset.cellid
                 }
-                console.log('squad_id',s[0],'xx', this.inSubjectSquads[1].indexOf(s[0][1]), squad_id)
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
                 axios.get('/subjects/api/change_schedule_url/' + id, { 
                     params: {
@@ -165,7 +181,6 @@
                     }
                 })
                 .then(res => {
-                    // console.log(res)
                     id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
                     axios.get('/subjects/api/schedule/' + id)
                     .then( (res) => {
@@ -179,19 +194,13 @@
                                 item.push(true)
                             })
                         })
-                        // console.log(this.schedule)
                     })
                 })
             },
             log: function (e){
-                // console.log(this.schedule)
             }
         },
         created() {
-            // axios.get('/profile/api/attendance/')
-            // .then(res => {
-            //     console.log(res)
-            // })
         },
         beforeCreate() {
             id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
@@ -207,7 +216,6 @@
                             item.push(true)
                         })
                     })
-                    // console.log(this.schedule)
                 })
             axios.get('/subjects/api/squad_list/' + id)
                 .then( (res) => {
@@ -221,8 +229,6 @@
                         classes.push(item[1][0])
                     })
                     this.inSubjectSquads = [] = [ids, classes]
-                    // console.log(this.inSubjectSquads)
-                    // console.log(this.outSubjectSquads)
                 })
         }
     })

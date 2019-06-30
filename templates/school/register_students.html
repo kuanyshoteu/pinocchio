@@ -32,17 +32,17 @@
                     <div class="four wide column">
                         Возраст:
                         <select class="crm_option" option="age" id="crm_age" url="{{ instance.crm_option_url }}">
-                            {% if profile.crm_age %}
-                                <option value="{{ profile.crm_age.id }}">{{ profile.crm_age.title }}</option>
+                            {% if profile.skill.crm_age %}
+                                <option value="{{ profile.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
                             {% else %}
                                 <option value="-1">Все возрасты</option>
                             {% endif %}
                             {% for age in ages %}
-                                {% if age != profile.crm_age %}
+                                {% if age != profile.skill.crm_age %}
                                 <option value="{{ age.id }}">{{ age.title }}</option>
                                 {% endif %}
                             {% endfor %}
-                            {% if profile.crm_age %}
+                            {% if profile.skill.crm_age %}
                                 <option value="-1">Все возрасты</option>
                             {% endif %}
                         </select>
@@ -50,17 +50,17 @@
                     <div class="four wide column">
                         Офис:
                         <select class="crm_option" option="office" id="crm_office" url="{{ instance.crm_option_url }}">
-                            {% if profile.crm_office %}
-                                <option value="{{ profile.crm_office.id }}">{{ profile.crm_office.title }}</option>
+                            {% if profile.skill.crm_office %}
+                                <option value="{{ profile.crm_office.id }}">{{ profile.skill.crm_office.title }}</option>
                             {% else %}
                                 <option value="-1">Все офисы</option>
                             {% endif %}
                             {% for office in offices %}
-                                {% if office != profile.crm_office %}
+                                {% if office != profile.skill.crm_office %}
                                 <option value="{{ office.id }}">{{ office.title }}</option>
                                 {% endif %}
                             {% endfor %}
-                            {% if profile.crm_office %}
+                            {% if profile.skill.crm_office %}
                                 <option value="-1">Все офисы</option>
                             {% endif %}
                         </select>

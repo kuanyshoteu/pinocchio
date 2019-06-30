@@ -14,6 +14,7 @@ from .models import *
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
+from schools.models import Cabinet
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -147,6 +148,7 @@ def subject_update(request, slug=None):
     instance = get_object_or_404(Subject, slug=slug)
     profile = get_profile(request)
     only_staff(profile)
+    school = instance.school
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
     if is_profi(profile, 'Manager'):
         if form.is_valid():
@@ -156,13 +158,22 @@ def subject_update(request, slug=None):
             if not instance.width_field:
                 instance.width_field = 0
             instance.save()
-    form2 = SubjectForm2(request.POST or None, request.FILES or None, instance=instance)
-    if form2.is_valid():
-        instance = form2.save(commit=False)
-        if not instance.height_field:
-            instance.height_field = 0
-        if not instance.width_field:
-            instance.width_field = 0
+        cost = 0
+        for subject in school.school_subjects.all():
+            cost += subject.cost
+        school.average_cost = int(cost / len(school.school_subjects.all()))
+        school.save()
+    if request.POST: 
+        if len(request.FILES) > 0:
+            if 'subject_banner' in request.FILES:
+                file = request.FILES['subject_banner']
+                instance.image_banner = file
+            if 'subject_icon' in request.FILES:
+                file = request.FILES['subject_icon']
+                instance.image_icon = file
+            if 'subject_backg' in request.FILES:
+                file = request.FILES['subject_backg']
+                instance.image_back = file
         get_number_of_materials = int(request.POST.get('number_of_materials'))
         if instance.number_of_materials < get_number_of_materials:
             if get_number_of_materials < 100:
@@ -171,12 +182,13 @@ def subject_update(request, slug=None):
                         school=instance.school
                     )
         instance.number_of_materials = int(request.POST.get('number_of_materials'))
+        instance.color_back = request.POST.get('color_back')
         for squad in instance.squads.all():
             update_squad_dates(instance, squad)
         instance.save()
+
         return HttpResponseRedirect(instance.get_update_url())
 
-    school = profile.schools.first()
     time_periods = school.time_periods.all()
     days = Day.objects.all()
     cells = school.school_cells.all()
@@ -188,7 +200,6 @@ def subject_update(request, slug=None):
     context = {
         "instance": instance,
         "form":form,
-        "form2":form2,
         'page':'subject_update',
         "profile":profile,
         'squads':Squad.objects.all(),
@@ -200,6 +211,7 @@ def subject_update(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "offices":school.school_offices.all()
     }
     return render(request, "subjects/subject_create.html", context)
 from datetime import timedelta
@@ -278,10 +290,12 @@ def subject_schedule(request, id=None):
             lectures = []
             for lecture in cell.lectures.filter(subject = subject):
                 if lecture.squad in subject.squads.all():
-                    cabinet=''
+                    cabinet='каб.'
+                    cabinet_id = '-1'
                     if lecture.cabinet:
                         cabinet = lecture.cabinet.title
-                    lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet])
+                        cabinet_id = lecture.cabinet.id
+                    lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet, cabinet_id])
             line.append([cell.id, lectures])
         res.append([timep.start + '-' + timep.end, line])
 
@@ -387,9 +401,11 @@ def change_category(request, id=None):
             subject.category.students.remove(*students)
         if int(request.GET.get('object_id')) == -1:
             subject.category = None
+            change_lecture_options(subject, 'subject', None)
         else:
             category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
             subject.category = category
+            change_lecture_options(subject, 'subject', category)
             category.students.add(*students)
         subject.save()
     data = {
@@ -406,14 +422,47 @@ def change_age(request, id=None):
             subject.age.students.remove(*students)
         if int(request.GET.get('object_id')) == -1:
             subject.age = None
+            change_lecture_options(subject, 'age', None)
         else:
             age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
             subject.age = age
+            change_lecture_options(subject, 'age', age)
             age.students.add(*students)
         subject.save()
     data = {
     }
     return JsonResponse(data)
+
+def change_office(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('object_id'):
+        subject = Subject.objects.select_related('office').get(id = id)
+        if int(request.GET.get('object_id')) == -1:
+            subject.office = None
+            change_lecture_options(subject, 'office', None)
+        else:
+            office = Office.objects.get(id = int(request.GET.get('object_id')))
+            subject.office = office
+            change_lecture_options(subject, 'office', office)
+        subject.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def change_lecture_options(subject, option, objectt):
+    if option == 'subject':
+        for lecture in subject.subject_lectures.all():
+            lecture.category = objectt
+            lecture.save()
+    elif option == 'age':
+        for lecture in subject.subject_lectures.all():
+            lecture.age = objectt
+            lecture.save()
+    if option == 'office':
+        for lecture in subject.subject_lectures.all():
+            lecture.office = objectt
+            lecture.save()
         
 def delete_lesson(request, id=None):
     profile = get_profile(request)
@@ -426,3 +475,14 @@ def delete_lesson(request, id=None):
     }
     return JsonResponse(data)
         
+def change_lecture_cabinet(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('cabinet_id') and request.GET.get('lecture_id'):
+        lecture = Lecture.objects.get(id=int(request.GET.get('lecture_id')))
+        cabinet = Cabinet.objects.get(id=int(request.GET.get('cabinet_id')))
+        lecture.cabinet = cabinet
+        lecture.save()
+    data = {
+    }
+    return JsonResponse(data)

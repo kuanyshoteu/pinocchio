@@ -1,4 +1,23 @@
 $(document).ready(function () {
+    $('.save_office_cabinet').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        title = $('.office_cabinet_create_title'+id).val()
+        capacity = $('.office_cabinet_create_capacity'+id).val()
+        $.ajax({
+            url: url,
+            data: {
+                'title':title,
+                'id':id,
+                'capacity':capacity,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log('ffff')
+                $('<div class="four wide column highlight" style="margin-right: 7px;margin-bottom: 7px;">'+title+' </div>').appendTo('.office_cabinets'+id)
+            }
+        })        
+    });
     $('.save_school_title').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
@@ -186,12 +205,24 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                card_id = data.card_id;          
-                var element = $('<div style="padding: 5px 0" id="card_container'+data.card_id+'"><div id="card'+data.card_id+'" class="ui segment full-w crm_card" ondragstart="save_card_id('+data.card_id+')" draggable="true" column_id="'+id+'"> <a onclick="delete_card('+card_id+')" class="delete_card" id="'+card_id+'"><b>×</b></a><a id="'+card_id+'" onclick="open_crmcard('+"'"+card_id+"'"+')" style="font-weight: 600">'+data.card_name+'</a> <a onclick="openNav('+"'"+data.card_id+"'"+', '+"'"+data.card_name+"'"+')"><i class="icon table blue"></i></a> <div style="color: darkgrey;font-size: 12px;">'+data.card_phone+' </div> </div> </div>');
-                element.appendTo('.crmbox' + id)
-                $('#new_card_form'+id).modal('hide')
-                var form = $('<div class="ui modal large" style="margin-top: 10%;min-height: 100%;" id="card_form'+data.card_id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form" method="POST" enctype="multipart/form-data"> <div class="ui grid stackable"> <div class="six wide column"> <textarea class="card_name'+data.card_id+'" placeholder="Имя">'+data.card_name+'</textarea> <textarea class="card_phone'+data.card_id+'" placeholder="Телефон">'+data.card_phone+'</textarea> <textarea class="card_mail'+data.card_id+'" placeholder="Почта">'+data.card_mail+'</textarea> </div> <div class="ten wide column"> <textarea class="card_comment'+data.card_id+'" placeholder="Комментарий">'+data.card_comment+'</textarea> </div> <div class="sixteen wide column center aligned"> <a class="ui button blue tiny" onclick="edit_card('+data.card_id+')" id="'+data.card_id+'">Сохранить</a> </div> <div class="sixteen wide column"> <div class="ui divider full-w"></div> <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений</div> </div> <div class="sixteen wide column cardhistory'+data.card_id+'" style="color: #6b6d72;font-size: 12px;"> </div> </div> </form> </div> </div>');
-                form.appendTo('.crmbox' + id)
+                location.reload()
+                // card_id = data.card_id; 
+                // var element = $('<div style="padding: 5px 0" id="card_container'+card_id+'" is_saved="'+data.is_saved+
+                //     '"><div id="card'+card_id+'" class="ui segment full-w crm_card mine" ondragstart="save_card_id('
+                //     +"'"+card_id+"'"+", "+"'"+data.card_name+"'"+')" draggable="true" column_id="'
+                //     +id+'"> <div onclick="open_crmcard('+"'"+card_id+"'"+')" style="width: 80%;display: inline-block;">'+
+                //     '<a onclick="delete_card('+"'"+card_id+"'"+')" class="delete_card" id="'
+                //     +card_id+'"><b>×</b></a><span style="font-weight: 600;color:#285473;">'
+                //     +data.card_name+'</span><div style="color: darkgrey;font-size: 12px;">'
+                //     +data.card_phone+' </div></div><div style="width: 20%;display: inline-block;float: right;margin-top: 20px;">'+
+                //     '<a class="show_card_schedule" onclick="openNav('+"'"+card_id+"'"+', '+"'"+data.card_name+
+                //     "'"+')"><i class="icon table green"></i></a></div>'+
+                //     '<div style="width: 100%;"><a class="nouser{{card.id}}" href="'+
+                //     data.author_url+'" style="color: darkblue;font-size: 11px">'+data.author_profile+'</a> </div></div></div>');
+                // element.appendTo('.crmbox' + id)
+                // $('#new_card_form'+id).modal('hide')
+                // var form = $('<div class="ui modal large" style="margin-top: 10%;min-height: 100%;" id="card_form'+data.card_id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form" method="POST" enctype="multipart/form-data"> <div class="ui grid stackable"> <div class="six wide column"> <textarea class="card_name'+data.card_id+'" placeholder="Имя">'+data.card_name+'</textarea> <textarea class="card_phone'+data.card_id+'" placeholder="Телефон">'+data.card_phone+'</textarea> <textarea class="card_mail'+data.card_id+'" placeholder="Почта">'+data.card_mail+'</textarea> </div> <div class="ten wide column"> <textarea class="card_comment'+data.card_id+'" placeholder="Комментарий">'+data.card_comment+'</textarea> </div> <div class="sixteen wide column center aligned"> <a class="ui button blue tiny" onclick="edit_card('+data.card_id+')" id="'+data.card_id+'">Сохранить</a> </div> <div class="sixteen wide column"> <div class="ui divider full-w"></div> <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений</div> </div> <div class="sixteen wide column cardhistory'+data.card_id+'" style="color: #6b6d72;font-size: 12px;"> </div> </div> </form> </div> </div>');
+                // form.appendTo('.crmbox' + id)
             }
         })        
     });
@@ -229,6 +260,21 @@ $(document).ready(function () {
         });
     }) 
     $('.change_subject_age').on('change', function(e) {
+        id = $(this).attr('id')
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value;
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        });
+    }) 
+    $('.change_subject_office').on('change', function(e) {
         id = $(this).attr('id')
         this_ = document.getElementById(id);
         object_id = this_.options[this_.selectedIndex].value;

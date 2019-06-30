@@ -19460,7 +19460,7 @@ ol.ui.horizontal.list li:before,
   font-size: 14px;
   height: 35px;
   width: 100%;  
-  margin-bottom: 15px;
+  margin-bottom: 0;
   outline: none;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);

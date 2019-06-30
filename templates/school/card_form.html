@@ -4,8 +4,8 @@
         <div class="card_head">
             Карточка {{ card.name }}
         </div>
-        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <div class="ui grid stackable">
+        <form class="ui form card_form_update_here" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <div class="ui grid stackable card_form_update">
                 <div class="six wide column" style="padding-top: 5px;">
                     <div style="height: 15px;"></div>
                     <textarea class="card_name{{ card.id }}" placeholder="Имя">{{ card.name }}</textarea>

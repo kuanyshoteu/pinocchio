@@ -413,6 +413,7 @@ def office_create(request):
             office = school.school_offices.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = office.title.replace(' ', '_'))
             if len(hashtag) > 0:
+                hashtag = hashtag[0]
                 hashtag.title = title.replace(' ', '_')
                 hashtag.save()
             else:
@@ -444,6 +445,21 @@ def office_delete(request):
     }
     return JsonResponse(data)
     
+def create_cabinet(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('title') != '':
+        school = profile.schools.first()
+        office = school.school_offices.get(id=int(request.GET.get('id')))
+        office.cabinets.create(
+            school=school,
+            title=request.GET.get('title'),
+            capacity=int(request.GET.get('capacity')),
+            )
+    data = {
+    }
+    return JsonResponse(data)
+
 def timep_create(request):
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)
@@ -753,6 +769,11 @@ def add_card(request):
         "card_phone":card.phone,
         "card_mail":card.mail,
         "card_comment":card.comments,
+        "is_saved":card.saved,
+        "author_profile":profile.first_name,
+        "author_url":profile.get_absolute_url(),
+        "call_helper":card.call_helper(),
+        "is_director":is_profi(profile, 'Director'),
     }
     return JsonResponse(data)
 
@@ -760,20 +781,23 @@ def change_manager(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     if request.GET.get('manager') and request.GET.get('card'):
-        manager = Profile.objects.get(id=int(request.GET.get('manager')))
         school = profile.schools.first()
         card = school.crm_cards.get(id = int(request.GET.get('card')))
-        card.author_profile = manager
+        if request.GET.get('manager') == '-1':
+            card.author_profile = None
+        else:
+            manager = Profile.objects.get(id=int(request.GET.get('manager')))
+            card.author_profile = manager
+            text = 'У вас новый клиент в CRM'
+            Notification.objects.create(
+                text = text,
+                author_profile = manager,
+                school = profile.schools.first(),
+                itstype = 'crm',
+                url = '',
+                image_url = 'crm'
+            )
         card.save()
-        text = 'У вас новый клиент в CRM'
-        Notification.objects.create(
-            text = text,
-            author_profile = manager,
-            school = profile.schools.first(),
-            itstype = 'crm',
-            url = '',
-            image_url = 'crm'
-        )
     data = {
     }
     return JsonResponse(data)
@@ -873,13 +897,18 @@ def change_day_of_week(request):
     only_managers(profile)
     status = 'no'
     card = CRMCard.objects.get(id=int(request.GET.get('card')))
+    school = card.school
     if len(card.days_of_weeks) < 7:
         card.days_of_weeks = [False,False,False,False,False,False,False]
+    tag = Hashtag.objects.get_or_create(title='day'+str(int(request.GET.get('id'))+1))[0]
+    school.hashtags.add(tag)
     if card.days_of_weeks[int(request.GET.get('id'))]:
         card.days_of_weeks[int(request.GET.get('id'))] = False
+        card.hashtags.remove(tag)
     else:
         card.days_of_weeks[int(request.GET.get('id'))] = True
         status = 'yes'
+        card.hashtags.add(tag)
     card.save()
 
     data = {

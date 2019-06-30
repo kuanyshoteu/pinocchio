@@ -309,10 +309,11 @@ def create_atts_student(squad, subject_materials, student):
 
 @register.filter
 def filtercards(column, profile):
+    school = profile.schools.first()
     if profile.skill:
         if profile.skill.crm_show_free_cards:
-            return column.cards.filter(author_profile=None).prefetch_related('hashtags')
-    return column.cards.filter(author_profile=profile).prefetch_related('hashtags')
+            return column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
+    return column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
 
 @register.filter
 def get_professions(school):

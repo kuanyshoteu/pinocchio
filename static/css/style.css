@@ -1,5 +1,18 @@
+.change_lecture_cabinet{
+  width: 50% !important;
+  background-color: #313a57 !important;
+  color: #fff !important;
+  border-color: grey !important;
+}
+.office_cabinet_create_capacity{
+  width: 40% !important;height: 30px !important;
+  font-size: 12px !important;
+}
+.office_cabinet_create_title{
+  width: 60% !important;height: 30px !important;overflow-y: hidden;
+}
 .highlight{
-  background-color: #21BA45;padding: 5 10px;color: #fff;border-radius: 3px;
+  background-color: #21BA45;padding: 5 10px !important;color: #fff;border-radius: 3px;
 }
 .highlight_red{
   background-color: #DB2828;padding: 5 10px;color: #fff;border-radius: 3px;
@@ -257,7 +270,7 @@
   min-height: 100% !important;
 }
 .delete_card{
-  position: absolute;right: 0;margin: -10px 4px;color: red;font-size: 14px;
+  position: absolute;right: 0;margin: -30px 4px 0 4px;color: red;font-size: 14px;
 }
 .show_card_schedule{
   float: right; color: red;font-size: 17px;z-index: 200;
@@ -364,7 +377,7 @@ a{
   padding: 12px 5px 4px 5px !important;
   box-shadow: 0 2px 2px 2px #3a3a3a !important;
   cursor: pointer;
-  margin-top: 0 !important;
+  margin: 0 !important;
 }
 .warning_card{
   border: 5px solid #ff5828;
@@ -607,7 +620,7 @@ a{
   color: #b2b2ff !important;
 }
 .postfile{
-  width: 0.1px;
+  width: 25% !important;
   height: 0.1px;
   opacity: 0;
   overflow: hidden;

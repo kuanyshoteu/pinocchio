@@ -66,7 +66,7 @@
 			                                	{% if instance.category == None %}
 			                                		<option value="-1">Другое</option>
 	                                            {% elif instance.category %}
-	                                                <option value="{{ instance.age.id }}">{{ instance.category.title }}</option>
+	                                                <option value="{{ instance.category.id }}">{{ instance.category.title }}</option>
 	                                            {% endif %}
 			                                    {% for subject_category in subject_categories %}
 			                                        {% if subject_category != instance.category %}
@@ -78,7 +78,7 @@
 			                                    {% endif %}
 			                                </select>
 				        					Возраст
-			                                <select class="change_subject_age" id="change_subject_age" url="{{ instance.change_age }}" option="subject">
+			                                <select class="change_subject_age" id="change_subject_age" url="{{ instance.change_age }}" option="age">
 			                                	{% if instance.age == None %}
 			                                		<option value="-1">Другое</option>
 	                                            {% elif instance.age %}
@@ -106,13 +106,44 @@
 							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
 								<div class="ui grid">
 									<div class="sixteen wide column">
-										{{ form2|crispy }}
+										<input type="file" name="subject_banner" id="subject_banner" class="postfile">
+				                        <label class="file_post" for="subject_banner">
+				                        	<a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
+				                        </label>
+										<input type="file" name="subject_icon" id="subject_icon" class="postfile">
+				                        <label class="file_post" for="subject_icon">
+				                        	<a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
+				                        </label>
+										<input type="file" name="subject_backg" id="subject_backg" class="postfile">
+				                        <label class="file_post" for="subject_backg">
+				                        	<a class="ui button mini"><i class="icon image blue"></i>Обои</a>
+				                        </label>
 									</div>
-									<div class="six wide column" style="padding-right: 0;text-align: right;">
+									<div class="eight wide column" style="padding:0 0 0 14px;">
 			        					Количество уроков:
+									    <input type="number" style="width:70px;" name="number_of_materials" value="{{instance.number_of_materials}}">
 									</div>
-									<div class="ten wide column">
-									    <input type="number" name="number_of_materials" value="{{instance.number_of_materials}}">
+									<div class="eight wide column no_padding">
+			        					Цвет:
+			        					<textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
+									</div>
+									<div class="sixteen wide column" style="padding-top: 0">
+			        					<b>Офис:</b>
+		                                <select class="change_subject_office" id="change_subject_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
+		                                	{% if instance.office == None %}
+		                                		<option value="-1">Другое</option>
+                                            {% elif instance.office %}
+                                                <option value="{{ instance.office.id }}">{{ instance.office.title }}</option>
+                                            {% endif %}
+		                                    {% for office in offices %}
+		                                        {% if office != instance.office %}
+		                                        <option value="{{ office.id }}">{{ office.title }}</option>
+		                                        {% endif %}
+		                                    {% endfor %}
+                                            {% if instance.office != None %}
+			                                    <option value="-1">Другое</option>
+		                                    {% endif %}
+		                                </select>			        					
 									</div>
 									<div class="sixteen wide column">
 			                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
