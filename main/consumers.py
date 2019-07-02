@@ -34,6 +34,7 @@ class ChatConsumer(AsyncConsumer):
                 'image_url':profile.image.url,
                 'time':timezone.now().strftime('%d %B %Yг. %H:%M'),
             }
+            print(self.chat_room, 'fm')
             self.create_notification(profile, text, '')
             await self.channel_layer.group_send(
                 self.chat_room,

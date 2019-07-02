@@ -14,6 +14,17 @@ def send_sms(phones, message, time):
     url = 'https://smsc.kz/sys/send.php?login='+login+'&psw='+password+'&phones='+phones+'&mes='+message+'&time='+time+'&sender=Pinocchiokz'
     requests.post(url)
 
+def send_hello_email(profile, password):
+    text = "Здравствуйте "+profile.first_name+ "! Вас зарегестрировали на сайте Pinocchio.kz<br>Расписание можете посмотреть в личной странице"
+    login_text="<br>Ваш логин: "+profile.phone+" или "+profile.mail
+    password_text = "<br>Ваш пароль (не говорите никому): "+password
+    html_content = text+login_text+password_text+" <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
+
+    msg = EmailMultiAlternatives("Добро пожаловать на Pinocchio.kz", 'q', 'aaa.academy.kz@gmail.com', [profile.mail])
+    msg.attach_alternative(html_content, "text/html")
+    print(msg)
+    msg.send()
+
 def send_email(subject, html_content, send_to):
     msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
     msg.attach_alternative(html_content, "text/html")

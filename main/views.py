@@ -104,6 +104,7 @@ def login_view(request):
         if found:
             res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
+            print('yo',user)
         try:
             login(request, user)
         except Exception as e:
@@ -119,11 +120,23 @@ def register_view(request):
     if request.GET.get('name') and request.GET.get('phone') and request.GET.get('password1') and request.GET.get('password2'):
         if request.GET.get('password1') == request.GET.get('password2'):
             if len(Profile.objects.filter(mail=request.GET.get('phone'))) == 0 and len(Profile.objects.filter(phone=request.GET.get('phone'))) == 0:
-                new_id = User.objects.order_by("id").last().id + 1
-                user = User.objects.create(username='user' + str(new_id), password=request.GET.get('password1'))
-                user = authenticate(username = user.username, password=request.GET.get('password1'))
+                new_id = str(User.objects.order_by("id").last().id + 1)
+                new_name = request.GET.get('name').replace(' ', '')+new_id
+                user = User.objects.create(username=new_name, password=request.GET.get('password1'))
+                user.save()
+                print(user.username,request.GET.get('password1'))
+                user2 = authenticate(username = str(user.username), password=str(request.GET.get('password1')))
+                print(user, user2)
                 #print(new_user, user)
-                login(request, user)
+                try:
+                    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+                except Exception as e:
+                    res = 'er'
+                    print('reg_er', e)
+                    data = {
+                        'res':res,
+                    }
+                    return JsonResponse(data)
                 profile = Profile.objects.get(user = user)
                 profile.first_name = request.GET.get('name')
                 if '@' in request.GET.get('phone'):

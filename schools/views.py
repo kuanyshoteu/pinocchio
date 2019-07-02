@@ -532,16 +532,16 @@ def save_card_as_user(request):
             card.save()
             profile.schools.add(school)
             squad_id = int(request.GET.get('squad_id'))
+            profile.save()
+            skill = Skill.objects.create()
+            profile.skill = skill
+            skill.confirmation_time = timezone.now()
+            skill.confirmed = True
+            skill.save()
+            send_hello_email(profile,password)
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
-                squad.students.add(profile)
-                for subject in squad.subjects.all():
-                    subject.students.add(profile)
-                for lecture in squad.squad_lectures.all():
-                    lecture.people.add(profile)
-                for timep in school.time_periods.all():
-                    timep.people.add(profile)
-
+                add_student_to_squad(profile, squad)
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,
@@ -559,7 +559,6 @@ def save_card_as_user(request):
                     remove_student_from_squad(profile, squad)
                 else:
                     add_student_to_squad(profile, squad)
-
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,

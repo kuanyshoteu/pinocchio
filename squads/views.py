@@ -292,11 +292,13 @@ def add_student_to_squad(student, squad):
     squad.students.add(student)
     for subject in squad.subjects.all():
         subject.students.add(student)
+    school = squad.school
+    for timep in school.time_periods.all():
+        timep.people.add(student)
     today = int(timezone.now().strftime('%w'))
     needed_day = 8
     lecture_time = ''
     for lecture in squad.squad_lectures.all():
-        print('day', lecture.day.number, today, needed_day)
         lecture_day_number = lecture.day.number
         if lecture_day_number - today < 0:
             lecture_day_number + 7 

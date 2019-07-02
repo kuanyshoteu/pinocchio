@@ -106,7 +106,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379), (REDIS_URL, 6379)],
+            "hosts": [('127.0.0.1', 6379)],
 #            "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
@@ -125,9 +125,6 @@ DATABASES = {
         'NAME': 'tripleA',
         'USER': 'admin',
         'PASSWORD': '031196Kk',
-        'NAME': 'pinocchio',
-        'USER': 'postgres',
-        'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '',
     }
