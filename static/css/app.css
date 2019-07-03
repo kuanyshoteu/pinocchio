@@ -40962,6 +40962,10 @@ i.map_worktime-icon {
 .map_rating-text, .map_rating-text-default {
   text-align: center;
 }
+<<<<<<< HEAD
+
+=======
+>>>>>>> 10dbfbef331f321254f476b86ac022c55e41a118
 .map_sameorg {
   border-top: 1px solid rgba(0,0,0,.1);
   border-bottom: 1px solid rgba(0,0,0,.1);
@@ -41026,3 +41030,472 @@ i.map_worktime-icon {
   font-weight: 400;
   font-size: 14px;
 }
+
+
+/*********** schoolLanding start**************/
+
+.schoolLanding__header-wrapper {
+  display: flex;
+}
+
+.schoolLanding__header-img {
+  height: 80vh;
+  width: 100%;
+}
+.schoolLanding__header-img:first-child {
+  width: 25%;
+  margin-right: 3px;
+}
+.schoolLanding__header-img:nth-child(2) {
+  width: 50%;
+  margin-right: 3px;
+}
+.schoolLanding__header-img:last-child {
+  width: 25%;
+}
+.schoolLanding__container {
+  max-width: 85%;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  position: relative;
+}
+.schoolLanding__content-header {
+  display: flex;
+  background-color: #fff;
+  margin-top: -80px;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
+}
+.schoolLanding__content-headerLeft {
+  display: flex;
+  flex-wrap: wrap;
+  width: 80%;
+}
+.organization__info-top-part {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 35px 0 0 0;
+  height: 100%;
+  width: 100%;
+}
+.organization__info-left-part {
+  display: flex;
+  width: 50%;
+  margin-left: 35px;
+}
+.organization__info-photo {
+  width: 150px;
+  height: 150px;
+  margin: -100px 1rem 0 0;
+  border: 2px solid #fff;
+  border-radius: 4px;
+}
+.organization__info-title {
+  font-weight: 400;
+  margin: 0 0 5px;
+}
+.organization__info-subtitle {
+  color: #929292;
+  margin: 0 0 22px;
+}
+.organization__info-buttons-call {
+  padding: 8px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  margin-right: 1rem;
+}
+.organization__info-buttons-call i {
+  margin: 0;
+  font-size: 12px;
+  color: #808080;
+}
+.organization__info-buttons-about {
+  padding: 8px 1rem;
+  background: #f5f5f5;
+  border-radius: 16px;
+  color: #808080;
+}
+.organization__info-buttons-about:hover, .organization__info-buttons-call:hover {
+  background-color: #F0F0F0;
+  cursor: pointer;
+}
+
+.organization__info-middle-part {
+  width: 20%;
+  padding-top: 6px;
+  cursor: pointer;
+}
+.organization__info-middle-part:hover .organization__info-rating-desc {
+  border-bottom: 1px solid black;
+}
+
+.organization__info-rating-avg {
+  vertical-align: middle;
+  margin-right: .5rem;
+  font-weight: 500;
+  font-size: 1.7rem;
+  line-height: 1rem;
+  color: #D4C14A;
+}
+
+.organization__info-rating-icon {
+  margin: 0;
+  vertical-align: middle;
+  font-size: 1.2rem;
+}
+.organization__info-rating-icon.active i {
+  color: #D4C14A;
+}
+.organization__info-rating-desc {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #808080;
+}
+.organization__info-middle-part__wrap {
+  width: 100%;
+  text-align: right;
+}
+
+.organization__info-right-part {
+  width: 25%;
+}
+
+.organization__info-address {
+  text-align: right;
+  color: #808080;
+}
+
+.organization__info-bottom-part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-top: 1px solid #f1f1f1;
+  background-color: #fff;
+  border-bottom-left-radius: 5px;
+  margin-top: 3rem;
+  padding: 10px 25px;
+}
+.oraginzation__info-bottom-part:before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background-color: red;
+}
+
+.organization__info-item {
+  border-right: 1px solid #d1d1d1;
+  padding: 5px 15px;
+  font-size: 1rem;
+}
+.organization__info-item:first-child {
+  color: #4337D5;
+}
+.organization__info-item:first-child i {
+  margin-right: 0;
+  color: #4337D5;
+  vertical-align: middle;
+  font-size: 1rem;
+  line-height: 1rem;
+}
+.organization__info-item:last-child {
+  cursor: pointer;
+}
+.organization__info-item i {
+  color: inherit;
+}
+.organization__info-item i.icon.instagram {
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+  margin: 0;
+  vertical-align: middle;
+}
+.organization__info-item .open {
+  color: #21D05D;
+}
+
+.organization__info-button {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  border-radius: 5px;
+  background-color: #46D878;
+}
+.organization__info-button:hover {
+  color: #fff;
+}
+
+.schoolLanding__content-category {
+  padding: 30px 0;
+}
+
+.schoolLanding__content-category__list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.schoolLanding__content-category__item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 140px;
+  height: 140px;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 2px 0 rgb(220, 220, 220);
+  transition: background .2s;
+}
+.schoolLanding__content-category__item.active {
+  background-color: #9C5FE3;
+  box-shadow: 0 15px 15px rgba(156, 95, 227, 0.35);
+}
+.schoolLanding__content-category__item i {
+  color: #4e4e4e;
+  line-height: 100%;
+  margin: 0 0 1rem 0;
+  font-size: 3rem;
+}
+.schoolLanding__content-category__item.active i {
+  color: #fff;
+}
+.schoolLanding__content-category__item.active p {
+  color: #fff;
+}
+
+.schoolLanding__content-services {
+  padding: 15px 40px 15px 60px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+.schoolLanding__content-services__title {
+  padding: 25px 0;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #A9A9A9;
+  border-bottom: 1px solid #F4F4F4;
+  margin: 0;
+}
+.schoolLanding__content-services__item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #f4f4f4;
+  padding: 25px 0;
+}
+.schoolLanding__content-services__item-left {
+  display: flex;
+  align-items: center;
+}
+.schoolLanding__content-services__item-title {
+  font-size: 1rem;
+  margin: 0 1rem 0 0;
+  line-height: 1rem;
+}
+.schoolLanding__content-services__item-time {
+  font-size: 1rem;
+  line-height: 1rem;
+}
+
+.schoolLanding__content-services__item-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.schoolLanding__content-services__item-price {
+  font-size: 1.3rem;
+  margin-right: 1rem;
+}
+.schoolLanding__content-services__item-icon {
+  cursor: pointer;
+  padding: 3px;
+  border: 1px solid black;
+  border-radius: 4px;
+  transition: .2s;
+}
+.schoolLanding__content-services__item-icon:hover{
+  background-color: #46D878;
+  border-color: #fff;
+}
+.schoolLanding__content-services__item-icon:hover i {
+  color: #fff;
+}
+.schoolLanding__content-services__item-icon i {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #000;
+}
+
+.schoolLanding__content-teachers {
+  padding: 2rem 0;
+}
+
+.schoolLanding__content-teacher__photo {
+  min-height: 300px;
+}
+.schoolLanding__content-teacher__name {
+  margin: 1rem 0;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.schoolLanding__content-review {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.schoolLanding__content-review__left {
+  max-width: 363px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 4px;
+  height: 100%;
+}
+.schoolLanding__content-review__right {
+  background-color: #fff;
+  max-width: 756px;
+  width: 100%;
+  border-radius: 4px;
+}
+
+.schoolLanding__content-review-rate {
+  display: flex;
+  justify-content: space-between;
+  line-height: 64px;
+  padding: 0 40px;
+  border-bottom: 1px solid #F4F4F4;
+}
+.schoolLanding__content-review-ratenum {
+  font-size: 2.5rem;
+  color: #000;
+}
+.schoolLanding__content-review-ratecount {
+  font-size: 1.2rem;
+  color: #B3B3B3;
+}
+.schoolLanding__content-review-ratestar {
+  padding: 30px 40px;
+}
+.schoolLanding__content-review-ratestar__row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.schoolLanding__content-review-ratestar__row .organization__info-rating-icon {
+  line-height: 1.2rem;
+}
+.schoolLanding__content-review-ratestar__row .organization__info-rating-icon.active {
+  margin-right: .33rem;
+}
+.schoolLanding__content-review-ratestar__row:first-child .organization__info-rating-icon.active {
+  margin-right: 0;
+}
+.schoolLanding__content-review-ratestar__scale {
+  position: relative;
+  margin-left: 1rem;
+  display: inline-block;
+  width: 45px;
+  height: 5px;
+  background-color: #ccc;
+}
+.schoolLanding__content-review-ratestar__scale:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #D4C14A;
+}
+.schoolLanding__content-review-ratestar__row:nth-child(1) 
+.schoolLanding__content-review-ratestar__scale:before {
+  width: 80%;
+}
+.schoolLanding__content-review-ratestar__row:nth-child(2) 
+.schoolLanding__content-review-ratestar__scale:before {
+  width: 50%;
+}
+.schoolLanding__content-review-ratestar__row:nth-child(3) 
+.schoolLanding__content-review-ratestar__scale:before {
+  width: 30%;
+}
+.schoolLanding__content-review-ratestar__row:nth-child(4) 
+.schoolLanding__content-review-ratestar__scale:before {
+  width: 20%;
+}
+.schoolLanding__content-review-ratestar__row:nth-child(5) 
+.schoolLanding__content-review-ratestar__scale:before {
+  width: 10%;
+}
+.schoolLanding__content-review-ratestar__num {
+  color: #929292;
+  margin-left: 1rem;
+}
+
+.schoolLanding__content-review-comments__header {
+  padding: 0 40px;
+  line-height: 64px;
+  border-bottom: 1px solid #F4F4F4;
+  font-weight: 600;
+}
+.schoolLanding__content-review-comment {
+  padding: 15px 40px;
+}
+.schoolLanding__content-review-comment__rating {
+  padding: 25px 0 0 0;
+  margin-bottom: 15px;
+}
+.schoolLanding__content-review-comment__text {
+  line-height: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.schoolLanding__content-review-comment__about {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #F4F4F4;
+}
+.schoolLanding__content-review-comment__about-left {
+  display: inline-flex;
+  align-items: center;
+}
+.schoolLanding__content-review-comment__about-right {
+  display: inline-flex;
+  align-items: center;
+  color: #BDBDBD;
+}
+
+.schoolLanding__content-review-comment__about-name {
+  color: blue;
+  margin-right: .7rem;
+}
+.schoolLanding__content-review-comment__about-date {
+  color: #A8A8A8;
+}
+.schoolLanding__content-review-comment__about-nameteacher {
+  margin-left: .5rem;
+  color: #000;
+}
+.schoolLanding__content-review-comment__about-photo {
+  display: inline-block;
+  margin-left: .5rem;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.schoolLanding__content-headerMap {
+  background-color: #ccc;
+  border-radius: 0 4px 4px 0;
+  width: 20%;
+}
+
+/*********** School/landing end ***********************/
