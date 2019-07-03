@@ -61,7 +61,7 @@ def main_view(request):
         "is_director":is_director, 
         'main':True,
         "subjects":SubjectCategory.objects.all(),
-        "ages":SubjectAge.objects.all(),        
+        "ages":SubjectAge.objects.all(),
     }
     return render(request, "map.html", context)
 
@@ -83,6 +83,7 @@ def hislessons(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
+        "school_money":profile.schools.first().money,
     }
     return render(request, "profile/classwork.html", context)
 
@@ -139,10 +140,8 @@ def register_view(request):
                     return JsonResponse(data)
                 profile = Profile.objects.get(user = user)
                 profile.first_name = request.GET.get('name')
-                if '@' in request.GET.get('phone'):
-                    profile.phone = request.GET.get('mail')
-                else:
-                    profile.mail = request.GET.get('phone')
+                profile.phone = request.GET.get('phone')
+                profile.mail = request.GET.get('mail')
                 profile.save()
             else:
                 res = 'second_user'
@@ -390,6 +389,7 @@ def contacts_view(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
+        "school_money":profile.schools.first().money,
     }
     return render(request, "contacts.html", context)
 
@@ -414,6 +414,7 @@ def map_view(request):
         "is_director":is_director, 
         "subjects":SubjectCategory.objects.all(),
         "ages":SubjectAge.objects.all(),
+        "school_money":profile.schools.first().money,
     }
     return render(request, "map.html", context)
 

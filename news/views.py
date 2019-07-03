@@ -59,6 +59,7 @@ def post_list(request, school_id):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
+        "school_money":school.money,
     }
     return render(request, "news/post_list.html", context)
 

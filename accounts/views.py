@@ -72,12 +72,11 @@ def account_view(request, user = None):
         skill = profile.skill
     if profile == hisprofile and skill.confirmed == False:
         if timezone.now() - skill.confirmation_time > timedelta(1):
-            print('totot')
             skill.confirmation_code = random_secrete_confirm()
             skill.confirmation_time = timezone.now()
             skill.save()
             url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/confirm/?confirm='+profile.skill.confirmation_code
-            text = "Здравствуйте "+profile.first_name+ "! Вы зарегестрировались на сайте Pinocchio.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
+            text = "Здравствуйте "+profile.first_name+ "!<br><br> Вы зарегестрировались на сайте Pinocchio.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
             html_content = text + "<br><a href='"+url+"'>подтвердить</a><br><br>С уважением, команда Pinocchio.kz"
             send_email("Подтверждение", html_content, [profile.mail])
         context = {
@@ -104,6 +103,7 @@ def account_view(request, user = None):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         'hint':skill.hint_numbers[0],
+        "school_money":profile.schools.first().money,
     }
     return render(request, "profile.html", context)
 
@@ -211,10 +211,14 @@ def more_attendance(request):
         columns = []
         last_set = False
         first_set = False
+        stopleft = False
+        stopright = False
         if request.GET.get('direction') == 'left':
             queryset = subject.materials.filter(id__lt = current_sm).order_by('-id')
             if len(queryset) <= 4:
                 first_set = True
+                if len(queryset) == 0:
+                    stopleft = True
             for sm in queryset:
                 if len(columns) == 4:
                     break
@@ -232,6 +236,8 @@ def more_attendance(request):
             queryset = subject.materials.filter(id__gt = current_sm)
             if len(queryset) <= 4:
                 last_set = True
+                if len(queryset) == 0:
+                    stopright = True                
             for sm in queryset:
                 if len(columns) == 4:
                     break
@@ -241,6 +247,8 @@ def more_attendance(request):
             'first_set':first_set,
             'last_set':last_set,
             'columns':columns,
+            'stopleft':stopleft,
+            'stopright':stopright,
         }
         return JsonResponse(data)
 
@@ -331,9 +339,12 @@ def att_present(request):
             school.money -= profile.salary
             school.save()
             for student in attendance.squad.students.all():
+                was_minus = False
+                if student.money < student.salary:
+                    was_minus = True
                 student.money -= attendance.subject.cost
                 student.save()
-                if student.money < student.salary:
+                if student.money < student.salary and was_minus == False:
                     skill = student.card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()

@@ -11,15 +11,19 @@
     <script src='{% static "js/scripts.js" %}'></script>
     <link rel="stylesheet" href='{% static "css/slider.css" %}'>
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
+    <link rel="stylesheet" href='{% static "OwlCarousel/owl.carousel.min.css" %}'>
+    <link rel="stylesheet" href='{% static "OwlCarousel/owl.theme.default.min.css" %}'>
     <script src='{% static "js/myscripts.js" %}'></script>
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/cardForm.js" %}'></script>
+    <script src='{% static "js/OwlCarousel/owl.carousel.min.js" %}'></script>
     <script src='{% static "js/faisalIncludes.js" %}'></script>
     {% block head_extra %} {% endblock head_extra %}
 </head>
 <body>
 {% include "modals/confirm_delete.html" %}
+{% include "modals/new_card_crm.html" %}
 
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
@@ -28,7 +32,7 @@
             <a href='{% url "main:home" %}' class="header main">
                 <img src="{% static 'images/logo_clean.png' %}" id="logo">
             </a>
-            <a class="ui button mini red help24 help2424hb" id="request-responsive" href="/schools/crm_reg/" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
+            <a class="ui button mini red help24 help2424hb" id="request-responsive" onclick="$('#new_card_form1').modal('show')" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
                 Заявка
             </a>
         </div>
@@ -72,12 +76,12 @@
                 </div>
             </div>
             {% if is_manager %}
-            <a class="ui button mini help24 help2424hb" id="" href="/schools/crm_reg/" style="padding:6px 10px;background-color: #2D437C;font-size: 14px;color: lightgrey;">
+            <a class="ui button mini help24 help2424hb" id="" onclick="$('#new_card_form1').modal('show')" style="padding:6px 10px;background-color: #2D437C;font-size: 14px;color: lightgrey;">
                 Заявка
             </a>
             {% endif %}
             {% if is_director %}
-                <span style="margin-left: 30px;color: #fff;margin-right: 5px;">На счету: </span> <b style="color: #e0f310;" id="number-counter">{{ instance.money }}</b> <span style="color: #e0f310;">тг.</span>
+                <span style="margin-left: 30px;color: #fff;margin-right: 5px;">На счету: </span> <b style="color: #e0f310;" id="number-counter">{{ school_money }}</b> <span style="color: #e0f310;">тг.</span>
             {% endif %} 
         </div>
         {% else %}
@@ -214,7 +218,6 @@
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
-{{profile.schools.all|length}}
 {% if profile.schools.all|length > 0 %}
 <script src="https://cndjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
 <!-- <script type="text/javascript">

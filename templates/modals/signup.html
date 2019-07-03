@@ -8,6 +8,7 @@
             </div>
             <div class="eight wide column">
                 <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
+                <div style="display: none;" class="highlight_red reg_fill_all">Заполните все</div>
                 <form method='POST' style="margin-bottom: 0" enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
                     <input class="new_name" placeholder="Имя Фамилия">
                     <input class="new_username" placeholder="Номер телефона">
@@ -16,7 +17,7 @@
                     <input class="new_password" type="password" placeholder="Пароль">
                     <input class="new_password2" type="password" placeholder="Повторите пароль">
                     <div style="text-align: center;">
-                        <a class="ui button green register-btn" style="margin-right: 15px;">Зарегистрироваться</a>
+                        <input class="ui button green register-btn" style="margin-right: 15px;" value="Зарегистрироваться" type="submit" onclick="return false">
                     </div>
                 </form>                
             </div>

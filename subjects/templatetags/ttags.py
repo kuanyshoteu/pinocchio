@@ -322,3 +322,21 @@ def get_professions(school):
 @register.filter
 def get_school_workers(job,school):
     return job.job_workers.filter(schools = school)
+
+@register.filter
+def rating_empty_stars(review):
+    res = []
+    for i in range(0, 5-review.rating):
+        res.append(i)
+    return res
+
+@register.filter
+def rating_empty_stars(review):
+    res = []
+    for i in range(0, 5-review.rating):
+        res.append(i)
+    return res
+
+@register.filter
+def get_ratings(school, number):
+    return len(school.reviews.filter(rating=number))

@@ -56,6 +56,7 @@ def school_rating(request):
             'is_trener':is_profi(profile, 'Teacher'),
             "is_manager":is_profi(profile, 'Manager'),
             "is_director":is_profi(profile, 'Director'),
+            "school_money":school.money,
         }
         return render(request, "school/school_rating.html", context)
 
@@ -74,8 +75,30 @@ def school_payments(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/school_payments.html", context)
+
+def school_schedule(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = profile.schools.first()
+    time_periods = school.time_periods.all()
+    print(is_profi(profile, 'Manager'))
+    context = {
+        "profile":profile,
+        "instance": school,
+        "subject_categories":school.school_subject_categories.all(),
+        "ages":school.school_subject_ages.all(),
+        "offices":school.school_offices.all(),
+        'days':Day.objects.all(),
+        'time_periods':time_periods,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
+    }
+    return render(request, "school/schedule.html", context)
 
 def school_landing(request, school_id=None):
     school = School.objects.get(id=school_id)
@@ -86,6 +109,12 @@ def school_landing(request, school_id=None):
     context = {
         "profile":profile,
         "school": school,
+        "all_teachers":all_teachers(school),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "school_money":profile.schools.first().money,
+        "five":[1,2,3,4,5],
     }
     return render(request, "school/landing.html", context)
 
@@ -104,6 +133,7 @@ def school_info(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/info.html", context)
 
@@ -118,6 +148,7 @@ def school_salaries(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/salaries.html", context)
 
@@ -133,7 +164,7 @@ def school_crm(request):
         managers = school.people.filter(profession=manager_prof)
     context = {
         "profile":profile,
-        "instance": profile.schools.first(),
+        "instance": school,
         "columns":school.crm_columns.all(),
         "subject_categories":school.school_subject_categories.all(),
         "ages":school.school_subject_ages.all(),
@@ -143,29 +174,8 @@ def school_crm(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_director,
-        'managers':managers
-    }
-    return render(request, "school/crm.html", context)
-
-def school_crm_reg(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = profile.schools.first()
-    time_periods = school.time_periods.all()
-
-    context = {
-        "profile":profile,
-        "instance": profile.schools.first(),
-        "columns":school.crm_columns.all(),
-        "subject_categories":school.school_subject_categories.all(),
-        "ages":school.school_subject_ages.all(),
-        "offices":school.school_offices.all(),
-        'days':Day.objects.all(),
-        'time_periods':time_periods,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "open_form":True,
+        'managers':managers,
+        "school_money":school.money,
     }
     return render(request, "school/crm.html", context)
 
@@ -181,6 +191,7 @@ def school_students(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/all_students.html", context)
 
@@ -196,6 +207,7 @@ def school_requests(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/all_students.html", context)
 
@@ -211,6 +223,7 @@ def school_recalls(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/all_students.html", context)
 
@@ -224,6 +237,7 @@ def school_courses(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "school/all_courses.html", context)
 
@@ -236,8 +250,6 @@ def school_list(request):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
     }
-
-
     return render(request, "schools/school_list.html", context)
 
 def school_update(request, slug=None):
@@ -532,16 +544,15 @@ def save_card_as_user(request):
             card.save()
             profile.schools.add(school)
             squad_id = int(request.GET.get('squad_id'))
-            profile.save()
             skill = Skill.objects.create()
             profile.skill = skill
+            profile.save()
             skill.confirmation_time = timezone.now()
             skill.confirmed = True
             skill.save()
-            send_hello_email(profile,password)
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
-                add_student_to_squad(profile, squad)
+                add_student_to_squad(profile, squad,password, True)
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,
@@ -558,7 +569,7 @@ def save_card_as_user(request):
                     add = False
                     remove_student_from_squad(profile, squad)
                 else:
-                    add_student_to_squad(profile, squad)
+                    add_student_to_squad(profile, squad,None,False)
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,
@@ -989,5 +1000,27 @@ def change_title(request):
             school.social_networks = request.GET.get('text') 
         school.save()
     data = {
+    }
+    return JsonResponse(data)
+
+def save_review(request, school_id=None):
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('number'):
+        school = School.objects.get(id = school_id)
+        if request.GET.get('number') != '':
+            review = school.reviews.create(
+                text=request.GET.get('text'),
+                author_profile=profile,
+                rating=int(request.GET.get('number')),
+                )
+            rating = 0
+            for review in school.reviews.all():
+                rating += review.rating
+            rating = rating/len(school.reviews.all())
+            school.rating = rating 
+            school.save()
+    data = {
+        "name":profile.first_name,
+        "timestamp":review.timestamp.strftime('%d %m %Y %H:%M'),
     }
     return JsonResponse(data)

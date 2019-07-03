@@ -45,6 +45,7 @@ def squad_detail(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "squads/squad_detail.html", context)
 
@@ -63,32 +64,9 @@ def squad_list(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "squads/squad_list.html", context)
-
-def squad_videos(request, slug=None):
-    instance = get_object_or_404(Squad, slug=slug)
-    profile = get_profile(request)
-    context = {
-        "profile": profile,
-        "instance": instance,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "squads/squad_videos.html", context)
-
-def squad_lessons(request, slug=None):
-    instance = get_object_or_404(Squad, slug=slug)
-    profile = get_profile(request)
-    context = {
-        "profile": profile,
-        "instance": instance,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "squads/squad_lessons.html", context)
 
 def squad_create(request):
     profile = get_profile(request)
@@ -110,6 +88,7 @@ def squad_create(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -152,6 +131,7 @@ def squad_update(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -170,6 +150,7 @@ def squad_delete(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":profile.schools.first().money,
     }
     return render(request, "confirm_delete.html", context)
 
@@ -275,7 +256,7 @@ def add_student(request):
             add = False
             remove_student_from_squad(student, squad)
         else:
-            add_student_to_squad(student, squad)
+            add_student_to_squad(student, squad,None,False)
     data = {
         'add':add,
     }
@@ -288,7 +269,7 @@ def remove_student_from_squad(student, squad):
     for lecture in squad.squad_lectures.all():
         remove_person_from_lecture(lecture, student)
         lecture.save()            
-def add_student_to_squad(student, squad):
+def add_student_to_squad(student, squad, password, send_mail):
     squad.students.add(student)
     for subject in squad.subjects.all():
         subject.students.add(student)
@@ -296,13 +277,13 @@ def add_student_to_squad(student, squad):
     for timep in school.time_periods.all():
         timep.people.add(student)
     today = int(timezone.now().strftime('%w'))
-    needed_day = 8
+    needed_day = 14
     lecture_time = ''
     for lecture in squad.squad_lectures.all():
         lecture_day_number = lecture.day.number
         if lecture_day_number - today < 0:
-            lecture_day_number + 7 
-        if lecture_day_number - today < needed_day:
+            lecture_day_number += 7 
+        if lecture_day_number - today < needed_day-today:
             needed_day = lecture_day_number
             lecture_time = lecture.cell.time_period.start
             if '8:' in lecture.cell.time_period.start or '9:' in lecture.cell.time_period.start:
@@ -317,12 +298,14 @@ def add_student_to_squad(student, squad):
                 time = timestr+str(lecture.cell.time_period.start.split(':')[1])
         add_person_to_lecture(lecture, student)
         lecture.save()
-    send_date = (timezone.now().date() + timedelta(needed_day)).strftime('%d%m%y')+time
+    send_date = (timezone.now().date() + timedelta(needed_day - today)).strftime('%d%m%y')+time
     if lecture.office:
         address = lecture.office.address
     else:
         address = squad.school.school_offices.first().address
     print(send_date, lecture_time, address)
+    if send_mail:
+        send_hello_email(student,password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
 #    send_sms(student.phone, 'Здравствуйте '+student.first_name+'! в '+lecture_time+' у Вас состоится пробный урок по адресу '+address, send_date)
 
 def remove_person_from_lecture(lecture, person):

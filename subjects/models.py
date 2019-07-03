@@ -30,7 +30,7 @@ class Day(models.Model):
     title = models.TextField(default = '')
     number = models.IntegerField(default=0)
     class Meta:
-        ordering = ['number']
+        ordering = ['id']
 
 class TimePeriod(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='time_periods') 

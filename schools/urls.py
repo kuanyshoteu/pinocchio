@@ -7,7 +7,7 @@ from main.views import get_landing
 app_name = 'schools'
 urlpatterns = [
     url(r'^crm/$', school_crm, name='crm'),
-    url(r'^crm_reg/$', school_crm_reg, name='crm_reg'),
+    url(r'^schedule/$', school_schedule, name='schedule'),
     url(r'^students/$', school_students, name='students'),
     url(r'^info/$', school_info, name='info'),
     url(r'^landing/(?P<school_id>\d+)/$', school_landing, name='landing'),
@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^api/change_manager/$', change_manager, name='change_manager'),
     url(r'^api/change_title_url/$', change_title, name='change_title_url'),
     url(r'^api/create_cabinet_url/$', create_cabinet, name='create_cabinet_url'),
+    url(r'^api/save_review_url/(?P<school_id>\d+)/$', save_review, name='save_review_url'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
 ]

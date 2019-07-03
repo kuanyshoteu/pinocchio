@@ -264,10 +264,10 @@ class Notification(models.Model):
 
 class Review(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='reviews') 
-    title = models.CharField(max_length=250)
-    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_reviews')
+    text = models.CharField(max_length=400)
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='reviews')
+    to_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='to_reviews')
     rating = models.IntegerField(default=0, null = True)
-    def delete_url(self):
-        return reverse("schools:subject_delete_url")
-    def create_url(self):
-        return reverse("schools:subject_create_url")
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['timestamp']

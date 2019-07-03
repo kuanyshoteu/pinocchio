@@ -16,6 +16,12 @@
                 </a>
                 {% endif %}
                 {% if is_manager or is_director %}
+                <a class="item lftitem" href='{% url "schools:schedule" %}'>
+                    <i class="table icon"></i>Расписание
+                </a>
+                <a class="item lftitem" href='{% url "schools:payments" %}'>
+                    <i class="dollar sign icon"></i>Оплата
+                </a>
                 <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}'>
                     <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>
                     CRM
@@ -37,7 +43,7 @@
                     <i class="users icon"></i>Классы
                 </a>
                 <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "subjects:list" %}'>
-                    <i class="table icon"></i>Курсы
+                    <i class="book icon"></i>Курсы
                 </a>
                 {% endif %}
                 {% if is_trener or is_director %}

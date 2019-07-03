@@ -1,4 +1,44 @@
 $(document).ready(function () {
+    $('.save_review').click(function(e) {
+        number = $('.result_rating').attr('number')
+        url = $(this).attr('url')
+        text = $('.review_text').val()
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+                'number':number,
+            },
+            dataType: 'json',
+            success: function (data) {
+                number = parseInt(number)
+                stars = ''
+                notstars = ''
+                for (var i = 1; i <= number; i++) {
+                    stars += '<i class="icon star"></i>'
+                }
+                for (var i = number+1; i <= 5; i++) {
+                    notstars += '<i class="icon star"></i>'
+                }
+                rev='<div class="schoolLanding__content-review-comment__rating"> <span class="organization__info-rating-icon active">'+
+                stars+'</span> <span class="organization__info-rating-icon"> '+notstars+
+                ' </span> </div> <div class="schoolLanding__content-review-comment__text"> '+text+
+                ' </div> <div class="schoolLanding__content-review-comment__about"> <span class="schoolLanding__content-review-comment__about-left"> <span class="schoolLanding__content-review-comment__about-name">'+data.name+'</span> <span class="schoolLanding__content-review-comment__about-date">'+data.timestamp+'</span> </span> </div>'
+                $(rev).appendTo('.schoolLanding__content-review-comment')
+            }
+        })
+    })
+    $('.make_review').click(function(e) {
+        number = parseInt($(this).attr('number'))
+        $('.result_rating').attr('number', number)
+        for (var i = 0; i <= number; i++) {
+            $('#star'+i).attr('style', 'color: #D4C14A;')
+        }
+        for (var i = number+1; i <= 5; i++) {
+            $('#star'+i).attr('style', '')
+        }
+        $('.wright_review').show()
+    })
     $('.save_office_cabinet').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
@@ -64,32 +104,40 @@ $(document).ready(function () {
         url = '/api/register/'
         name = $('.new_name').val()
         phone = $('.new_username').val()
+        mail = $('.new_mail').val()
         new_password = $('.new_password').val()
         new_password2 = $('.new_password2').val()
-        $.ajax({
-            url: url,
-            data: {
-                'name':name,
-                'phone':phone,
-                'password1':new_password,
-                'password2':new_password2,
-            },
-            dataType: 'json',
-            success: function (data) {
-                console.log(data.res)
-                if (data.res == 'ok') {
-                    $('.reg_wrong_phone').hide()
-                    $('.reg_wrong_pass').hide()
-                    location.reload()
+        if (name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2) {        
+            $.ajax({
+                url: url,
+                data: {
+                    'name':name,
+                    'phone':phone,
+                    'mail':mail,
+                    'password1':new_password,
+                    'password2':new_password2,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data.res)
+                    if (data.res == 'ok') {
+                        $('.reg_wrong_phone').hide()
+                        $('.reg_fill_all').hide()
+                        $('.reg_wrong_pass').hide()
+                        location.reload()
+                    }
+                    else if (data.res == 'second_user'){
+                        $('.reg_wrong_phone').show()
+                    }
+                    else if (data.res == 'not_equal_password'){
+                        $('.reg_wrong_pass').show()
+                    }
                 }
-                else if (data.res == 'second_user'){
-                    $('.reg_wrong_phone').show()
-                }
-                else if (data.res == 'not_equal_password'){
-                    $('.reg_wrong_pass').show()
-                }
-            }
-        })        
+            })
+        }
+        else{
+            $('.reg_fill_all').show()
+        }
     });    
     $('.make_payment').click(function(e) {
         url = $(this).attr('url')

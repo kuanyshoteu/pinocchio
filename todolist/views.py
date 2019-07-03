@@ -22,6 +22,7 @@ def index(request):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         'hint':profile.skill.hint_numbers[6],
+        "school_money":school.money,
     })
 
 def new_board(request):
@@ -92,7 +93,8 @@ def view_card(request, card_id, card_slug):
         'all_profiles':school.people.filter(is_student=False),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),    
+        "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,            
     })
 
 from django.http import JsonResponse

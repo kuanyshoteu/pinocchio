@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div id="group-details" >
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="wide column" style="padding-right: 0;width: 85%;">
+                <div class="ui segment margin0" style="font-size: 15px;">
+                    <b>Расписание школы</b>
+                </div>
+                <div class="ui segment margin0">
+                    <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
+                        <div class="ui grid">
+                            <div class="four wide column">
+                                Предмет:
+                                <select class="crm_option" option="subject" id="crm_subject" url="{{ instance.crm_option_url }}">
+                                    {% if profile.skill.crm_subject %}
+                                        <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                                    {% else %}
+                                        <option value="-1">Все предметы</option>
+                                    {% endif %}
+                                    {% for subject in subject_categories %}
+                                        {% if subject != profile.skill.crm_subject %}
+                                        <option value="{{ subject.id }}">{{ subject.title }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if profile.skill.crm_subject %}
+                                        <option value="-1">Все предметы</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="four wide column">
+                                Возраст:
+                                <select class="crm_option" option="age" id="crm_age" url="{{ instance.crm_option_url }}">
+                                    {% if profile.skill.crm_age %}
+                                        <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
+                                    {% else %}
+                                        <option value="-1">Все возрасты</option>
+                                    {% endif %}
+                                    {% for age in ages %}
+                                        {% if age != profile.skill.crm_age %}
+                                        <option value="{{ age.id }}">{{ age.title }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if profile.skill.crm_age %}
+                                        <option value="-1">Все возрасты</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="four wide column">
+                                Офис:
+                                <select class="crm_option" option="office" id="crm_office" url="{{ instance.crm_option_url }}">
+                                    {% if profile.skill.crm_office %}
+                                        <option value="{{ profile.skill.crm_office.id }}">{{ profile.skill.crm_office.title }}</option>
+                                    {% else %}
+                                        <option value="-1">Все офисы</option>
+                                    {% endif %}
+                                    {% for office in offices %}
+                                        {% if office != profile.skill.crm_office %}
+                                        <option value="{{ office.id }}">{{ office.title }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if profile.skill.crm_office %}
+                                        <option value="-1">Все офисы</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="four wide column">
+                                Цена:
+                                <div class="ui segment subject_cost">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="calendar" length='7'>
+                    <div id="week">   
+                        <div class="week" id="0">
+                            <div class="daysmall daysmall_time">
+                            </div>
+                            {% for day in days %}
+                            <div class="daysmall">
+                                <div class="day-name">
+                                    {{ day.title }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="ui divider margin0" style="padding: 2px;background-color:#4A4A4A "></div>
+                        {% for timep in time_periods %}
+                        <div class="week" id="{{ forloop.counter }}">
+                            <div class="daysmall daysmall_time" style="padding-top: 17px;">
+                                {{ timep.start }}-{{ timep.end }}
+                            </div>
+                            {% for cell in timep.time_cell.all %}  
+                            <div class="daysmall other" style="padding: 0">                                     
+                                {% for lecture in cell|cell_school_lectures:profile %}
+                                    <div class="ui segment in_schedule show_subject_cost" onmouseover="show_subject_cost('{{lecture.subject.cost}}тг в месяц')" squad_id={{lecture.squad.id}} cost="{{lecture.subject.cost}}тг в месяц" style="background-color:{%if lecture.squad.color_back == ''%}#5181b8{%else%}{{ lecture.squad.color_back }}{%endif%};">
+                                        {{ lecture.subject.title }}
+                                        <i class="icon check circle white insquadicon squad{{lecture.squad.id}}" style="font-size: 12px;position: absolute;right: 0;display: none;"></i>
+                                        <br>
+                                        <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.squad.title }}, {{ lecture.squad.teacher.first_name }}</span>
+                                        {% if lecture.cabinet %}
+                                        <br>
+                                        <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.squad.students.all|length }} из {{lecture.cabinet.capacity}}</span>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+<script type="text/javascript">
+    function show_subject_cost(cost){
+        $('.subject_cost').html(cost)
+    }
+</script>
+{% endblock content %}

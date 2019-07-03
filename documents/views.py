@@ -70,6 +70,7 @@ def school_documents(request, school_id):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         'hint':profile.skill.hint_numbers[2],
+        "school_money":school.money,
     }
     return render(request, 'documents/documents.html', context)
 
@@ -94,7 +95,8 @@ def folder_details(request, folder_id=None):
         'file_form':file_form,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),        
+        "is_director":is_profi(profile, 'Director'),  
+        "school_money":profile.schools.first().money,      
     }
     return render(request, 'documents/documents.html', context)
 

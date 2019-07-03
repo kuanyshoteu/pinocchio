@@ -30,17 +30,7 @@ class School(models.Model):
             height_field="height_field")
     height_field = models.IntegerField(default=0, null=True)
     width_field = models.IntegerField(default=0, null=True)
-
-    image_banner = models.ImageField(upload_to=upload_location, 
-            null=True,
-            blank=True, 
-            width_field="width_field2", 
-            height_field="height_field2")
-    height_field2 = models.IntegerField(default=0, null=True)
-    width_field2 = models.IntegerField(default=0, null=True)
-
     money = models.IntegerField(default=0)
-    
     content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')
     site = models.CharField(max_length=250, default='')
@@ -51,7 +41,7 @@ class School(models.Model):
 
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
-    
+
     class Meta:
         ordering = ['rating']
     def __unicode__(self):
@@ -131,6 +121,18 @@ class School(models.Model):
     # School map
     def get_landing(self):
         return reverse("schools:get_landing")    
+    def save_review_url(self):
+        return reverse("schools:save_review_url", kwargs={"school_id": self.id})
+
+class SchoolBanner(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
+    image_banner = models.ImageField(upload_to=upload_location, 
+            null=True,
+            blank=True, 
+            width_field="width_field2", 
+            height_field="height_field2")
+    height_field2 = models.IntegerField(default=0, null=True)
+    width_field2 = models.IntegerField(default=0, null=True)
 
 class EliteSchools(models.Model):
     schools = models.ManyToManyField(School, related_name='elite')

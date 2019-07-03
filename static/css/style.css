@@ -1,3 +1,8 @@
+.make_review{
+  font-size: 25px !important;
+  cursor: pointer;
+}
+
 .change_lecture_cabinet{
   width: 50% !important;
   background-color: #313a57 !important;

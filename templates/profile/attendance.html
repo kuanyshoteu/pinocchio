@@ -86,7 +86,7 @@
 </script>
 <script type="text/javascript">
     //$('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
-    function createColumnRight(nextNumber){
+    function createColumnRight(nextNumber, index){
         var url = $('.more_attendance_url').attr('url')
         var subject_id = $('.more_attendance_url').attr('subject_id')
         var squad_id = $('.more_attendance_url').attr('squad_id')
@@ -102,6 +102,16 @@
                 'sm_id':last_sm,
             },
             success: function (data) {
+                if (data.stopright == false){
+                    index = index - 130;
+                    $('#slider').animate({
+                        marginLeft:(index) + 'px'
+                    } ,200, function(){
+                        $('#slider').attr('index', index)
+                    });
+                    $('.last_att').removeClass('last_att')
+                    $('.att' + nextNumber).addClass('last_att')                    
+                }
                 if(data.last_set){
                     $('#slider').attr('last_set', 'yes')
                 }
@@ -125,7 +135,7 @@
             }
         })
     }
-    function createColumnLeft(prevNumber){
+    function createColumnLeft(prevNumber, index){
         var url = $('.more_attendance_url').attr('url')
         var subject_id = $('.more_attendance_url').attr('subject_id')
         var squad_id = $('.more_attendance_url').attr('squad_id')
@@ -141,9 +151,15 @@
                 'sm_id':first_sm,
             },
             success: function (data) {
+                if (data.stopleft == false){
+                    $('#slider').attr('index', index)
+                    $("#section" + (-prevNumber)).attr('style', '')
+                    $('.last_att').removeClass('last_att')
+                    $('.att' + (prevNumber+3)).addClass('last_att')                    
+                }
                 if(data.first_set){
                     $('#slider').attr('first_set', 'yes')
-                }               
+                }
                 for (var i = 0; i < data.columns.length ; i++){
                     var section = createEl('section', 'slider__section');
                     if (i > 0){
@@ -231,21 +247,19 @@
         var last_set = $('#slider').attr('last_set')
         nextNumber = parseInt($('.last_att').attr('number')) + 1
         if($('.att' + nextNumber).length == 0 && last_set == "no"){
-            createColumnRight(nextNumber);
+            createColumnRight(nextNumber, index);
             console.log('created', nextNumber)
         }
-        if($('.att' + nextNumber).length > 0 || last_set == "no"){
+        else if($('.att' + nextNumber).length > 0 || last_set == "no"){
             console.log('moved', nextNumber, 'index', index-130)
-            $('.last_att').attr('class', 'attendance_date att' + (nextNumber-1))
             index = index - 130;
             slider.animate({
                 marginLeft:(index) + 'px'
             } ,200, function(){
                 slider.attr('index', index)
             });
-            att = $('.att' + nextNumber)
-            oldClass = att.attr('class')
-            att.attr('class', oldClass + ' last_att')
+            $('.last_att').removeClass('last_att')
+            $('.att' + nextNumber).addClass('last_att')
         }
     }
     function moverLeft() {
@@ -262,7 +276,7 @@
                 marginLeft:(index) + 'px'
             } ,200, function(){
                 console.log('created')
-                createColumnLeft(prevNumber);
+                createColumnLeft(prevNumber,index);
             });
             action = true;
         }
@@ -275,15 +289,10 @@
                 });                
             }
             console.log('moved left', -prevNumber, 'index', index)
-            action = true       
-        }
-        if (action) {
             slider.attr('index', index)
             $("#section" + (-prevNumber)).attr('style', '')
-            $('.last_att').attr('class', 'attendance_date att' + (prevNumber+4))
-            att = $('.att' + (prevNumber+3))
-            oldClass = att.attr('class')
-            att.attr('class', oldClass + ' last_att')            
+            $('.last_att').removeClass('last_att')
+            $('.att' + (prevNumber+3)).addClass('last_att')        
         }
     }
 </script>

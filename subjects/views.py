@@ -49,6 +49,7 @@ def subject_detail(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "subjects/subject_detail.html", context)
 
@@ -57,7 +58,7 @@ def subject_list(request):
     only_staff(profile)
     school = profile.schools.first()
     if profile.skill.crm_subject2:
-        subjects = profile.skill.crm_subject.category_subjects.all()
+        subjects = profile.skill.crm_subject2.category_subjects.all()
     else:
         subjects = school.school_subjects.all()
     context = {
@@ -68,59 +69,9 @@ def subject_list(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "subjects/subject_list.html", context)
-
-def subject_videos(request, slug=None):
-    instance = get_object_or_404(Subject, slug=slug)
-    context = {
-        "instance": instance,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "subjects/subject_videos.html", context)
-
-def get_videos(instance):
-    found = False
-    youtubes = []
-    videos = []
-    cnt = 0
-    for sm in instance.materials.all():
-        if found:
-            break
-        for lesson in sm.lessons.all():
-            if found:
-                break
-            for paper in lesson.papers.all():
-                if found:
-                    break
-                for subtheme in paper.subthemes.all():
-                    if cnt >= 2:
-                        found = True
-                        break
-                    if subtheme.video:
-                        videos.append(subtheme.video)
-                        cnt += 1
-                    if subtheme.youtube_video_link:
-                        youtubes.append(subtheme.youtube_video_link)
-                        cnt += 1
-
-    return videos, youtubes
-def subject_lessons(request, slug=None):
-    instance = get_object_or_404(Subject, slug=slug)
-    profile = 'admin'
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-    context = {
-        "user":request.user,
-        "profile":profile,
-        "instance": instance,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "subjects/subject_lessons.html", context)
 
 def subject_create(request):
     profile = get_profile(request)
@@ -141,6 +92,7 @@ def subject_create(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":school.money,
     }
     return render(request, "subjects/subject_create.html", context)
 
@@ -211,7 +163,8 @@ def subject_update(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        "offices":school.school_offices.all()
+        "offices":school.school_offices.all(),
+        "school_money":school.money,
     }
     return render(request, "subjects/subject_create.html", context)
 from datetime import timedelta
@@ -246,6 +199,7 @@ def subject_delete(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":profile.schools.first().money,
     }
     return render(request, "confirm_delete.html", context)
 

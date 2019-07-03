@@ -42,6 +42,7 @@ def estimate_lesson_page(request, lesson_id = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":profile.schools.first().money,
     }
     return render(request, template_name='library/lesson_details.html', context=context)
 
@@ -89,7 +90,8 @@ def paper_details(request, paper_id = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        'hint':profile.skill.hint_numbers[4],        
+        'hint':profile.skill.hint_numbers[4],
+        "school_money":profile.schools.first().money,
     }
     return render(request, "library/lesson_details.html", context)
 
@@ -412,6 +414,7 @@ def courses(request):
         "is_manager":is_manager,
         "is_director":is_director,
         'hint':hint, 
+        "school_money":profile.schools.first().money,
     }
     return render(request, 'courses/course_list.html', context=context)
 
@@ -463,6 +466,7 @@ def course_details(request, course_id=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "school_money":profile.schools.first().money,
     }
     return render(request, 'courses/course_details.html', context=context)
 
@@ -475,6 +479,7 @@ def course_seller(request, course_id=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
+        "school_money":profile.schools.first().money,
     }
     return render(request, 'courses/course_seller.html', context=context)
 
@@ -498,6 +503,7 @@ def course_update(request, course_id=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
+        "school_money":profile.schools.first().money,
     }
     return render(request, "courses/course_create.html", context)
 
@@ -516,6 +522,7 @@ def course_create(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
+        "school_money":profile.schools.first().money,
     }
     return render(request, "courses/course_create.html", context)
 

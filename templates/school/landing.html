@@ -1,9 +1,247 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+{% load ttags %}
 {% block content %}
+  <header class="schoolLanding__header-wrapper">
+    <div style="background: url(https://zapis.kz/data/pics/salon/pic-4019.jpg?v=0);" class="schoolLanding__header-img"></div>
+    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4020.jpg?v=0');" class="schoolLanding__header-img"></div>
+    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4010.jpg?v=0');" class="schoolLanding__header-img"></div>
+  </header>
 
+  <main class="schoolLanding__container">
 
+    <div class="schoolLanding__content-header">
+      <div class="schoolLanding__content-headerLeft">
+        <div class="organization__info-top-part">
+          <div class="organization__info-left-part">
+            <div style="background: url({% if school.image_icon %}'{{ school.image_icon.url }}'{% else %}{% static 'images/nophoto.png' %}{% endif %}); background-position: center; background-size: contain;background-color: #fff;" class="organization__info-photo"></div>
+            <div class="organization__info-main">
+              <h2 class="organization__info-title">{{ school.title }}</h2>
+              <p class="organization__info-subtitle">{{ school.slogan }}</p>
+              <p class="organization__info-buttons">
+                <span class="organization__info-buttons-call">
+                  <i class="icon phone"></i>
+                </span>
+                {% for phone in school.phones %}{{phone}} {% if forloop.counter < school.phones|length %},{%endif%}{% endfor %}
+              </p>
+            </div>
+          </div>
+          <div class="organization__info-middle-part">
+            <div class="organization__info-middle-part__wrap">
+              <span class="organization__info-rating">
+                <span class="organization__info-rating-avg">4</span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon active">
+                  <i class="icon star"></i>
+                </span>
+                <span class="organization__info-rating-icon">
+                  <i class="icon star"></i>
+                </span>
+              </span>
+              <p class="organization__info-rating-desc">
+                38 отзывов
+              </p>
+            </div>
+          </div>
+          <div class="organization__info-right-part">
+            <p class="organization__info-address">
+              {{ school.school_offices.first.address }}
+            </p>
+          </div>
+          <div class="organization__info-bottom-part">
+            <div class="organization__info-list">
+              <span class="organization__info-item">
+                <i class="icon clock outline"></i>
+                {{school.worktime}}
+              </span>
+              <span class="organization__info-item">
+                <i class="icon instagram"></i>
+                {{school.social_networks}}
+              </span>
+            </div>
+            <a class="organization__info-button">Записаться</a>
+          </div>
+        </div>
+      </div>
+      <div class="schoolLanding__content-headerMap"></div>
+    </div>
 
+    <div class="schoolLanding__content-category">
+      <ul class="schoolLanding__content-category__list">
+        <li class="schoolLanding__content-category__item">
+          <i class="icon list ul"></i>
+          <p class="schoolLanding__content-category__item__title">Все</p>
+        </li>
+        {% for subject in school.school_subject_categories.all %}
+        <li class="schoolLanding__content-category__item">
+          <i class="icon book"></i>
+          <p class="schoolLanding__content-category__item__title">{{ subject.title }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="schoolLanding__content-services">
+      <h3 class="schoolLanding__content-services__title">Курсы</h3>
+      {% for course in school.school_subjects.all %}
+      <section class="schoolLanding__content-services__item">
+        <div class="schoolLanding__content-services__item-left">
+          <h2 class="schoolLanding__content-services__item-title">{{ course.title }}</h2>
+          <span class="schoolLanding__content-services__item-time">{{ course.content }}</span>
+        </div>
+        <div class="schoolLanding__content-services__item-right">
+          <span class="schoolLanding__content-services__item-price">{{ course.cost }} тенге</span>
+          <span class="schoolLanding__content-services__item-icon">
+            <i class="icon angle right"></i>
+          </span>
+        </div>
+      </section>
+      {% endfor %}
+    </div>
+
+    <div class="schoolLanding__content-teachers owl-carousel owl-theme">
+      {% for teacher in all_teachers %}
+      <div class="schoolLanding__content-teacher">
+        <div style="background: url({% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %});" class="schoolLanding__content-teacher__photo"></div>
+        <div class="schoolLanding__content-teacher__name">{{teacher.first_name}}</div>
+        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="schoolLanding__content-review">
+      <div class="schoolLanding__content-review__left">
+        <div class="schoolLanding__content-review-rate">
+          <span class="schoolLanding__content-review-ratenum">{{ school.rating }}</span>
+          <span class="schoolLanding__content-review-ratecount">{{ school.reviews.all|length }} оценок</span>
+        </div>
+        <div class="schoolLanding__content-review-ratestar">
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">{{ school|get_ratings:5 }}</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">{{ school|get_ratings:4 }}</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">{{ school|get_ratings:3 }}</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">{{ school|get_ratings:2 }}</span>
+          </div>
+          <div class="schoolLanding__content-review-ratestar__row">
+            <span class="organization__info-rating-icon active">
+              <i class="icon star"></i>
+            </span>
+            <span class="organization__info-rating-icon">
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+              <i class="icon star"></i>
+            </span>
+            <div class="schoolLanding__content-review-ratestar__scale"></div>
+            <span class="schoolLanding__content-review-ratestar__num">{{ school|get_ratings:1 }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="schoolLanding__content-review__right">
+        <div class="schoolLanding__content-review-comments__header">
+          Отзывы {{ school.reviews.all|length }}
+        </div>
+        <div class="schoolLanding__content-review-comment">
+          {% for review in school.reviews.all %}
+          <div class="schoolLanding__content-review-comment__rating">
+            <span class="organization__info-rating-icon active">
+              {% for star in five %}
+                  {% if forloop.counter <= review.rating %}
+                      <i class="icon star"></i>
+                  {% endif %}
+              {% endfor %}
+            </span>
+            <span class="organization__info-rating-icon">
+              {% for star in review|rating_empty_stars %}
+                  <i class="icon star"></i>
+              {% endfor %}
+            </span>
+          </div>
+          <div class="schoolLanding__content-review-comment__text">
+              {{review.text}}
+          </div>
+          <div class="schoolLanding__content-review-comment__about">
+            <span class="schoolLanding__content-review-comment__about-left">
+              <span class="schoolLanding__content-review-comment__about-name">{{review.author_profile.first_name}}</span>
+              <span class="schoolLanding__content-review-comment__about-date">{{ review.timestamp }}</span>
+            </span>
+          </div>
+          {% endfor %}
+        </div>
+        <div style="text-align: center;margin-top: 15px;margin-bottom: 50px;">
+            <span style="font-size: 17px;" class="highlight">Оставьте отзыв:</span>
+            <br><br>
+            <span class="organization__info-rating-icon result_rating" number="">
+              <i class="icon star make_review" id="star1" number="1"></i>
+              <i class="icon star make_review" id="star2" number="2"></i>
+              <i class="icon star make_review" id="star3" number="3"></i>
+              <i class="icon star make_review" id="star4" number="4"></i>
+              <i class="icon star make_review" id="star5" number="5"></i>
+            </span>
+
+            <form class="ui form wright_review" style="width: 80%;margin: auto;margin-top: 15px;display: none;">
+              <textarea class="review_text" placeholder="Напишите отзыв" style="height: 80px;"></textarea>
+              <div style="text-align: center;">
+                <input class="ui button green save_review" url="{{school.save_review_url}}" value="Отправить" type="submit" onclick="return false">                
+              </div>
+            </form>          
+        </div>
+      </div>
+    </div>
+
+  </main>
 
 {% endblock content %}

@@ -81,11 +81,23 @@
                                 <textarea class="school_worktime_edit no_margin" style="margin-bottom: 0;">{{ instance.worktime }}</textarea>
                             </div>
                             <div class="four wide column">
-                                <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
                             </div>
                         </div>
                     </form>
-                    {% endif %}                    
+                    {% endif %} 
+                    <br>
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Фотографии (для рекламной страницы):</span> 
+                    <div style="display: inline-block;">
+                        {% for banner in school.banners.all %}
+                            <img src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;">
+                        {% endfor %}
+                        <input type="file" name="new_banner" id="new_banner" class="postfile">
+                        <label class="file_post" for="new_banner">
+                            <a class="ui button mini"><i class="icon image blue"></i>Выбрать картинку</a>
+                        </label>
+                        <a class="ui button mini blue save_banner">Сохранить</a>
+                    </div>
                 </div>
                 {% if is_director %}
                 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">

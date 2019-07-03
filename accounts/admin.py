@@ -78,3 +78,11 @@ class HashtagAdmin(admin.ModelAdmin):
     class Meta:
         model = Hashtag
 admin.site.register(Hashtag, HashtagAdmin)
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ["id", "school", "author_profile", "text", "rating"]
+    list_display_links = ["id"]
+    list_filter = ['school', 'author_profile']
+    class Meta:
+        model = Review
+admin.site.register(Review, ReviewAdmin)

@@ -1,0 +1,27 @@
+<div class="ui modal" id="new_card_form1">
+    <i class="close icon"></i>
+    <div class="content">
+        <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <table class="ui celled table" style="margin: 0">
+                <thead>
+                    <tr>
+                        <th><span>Имя</span></th>
+                        <th><span>Телефон</span></th>
+                        <th><span>Почта</span></th>
+                        <th><span>Комментарий</span></th>
+                    </tr>
+                </thead>
+                <tbody id="create_student_rows">
+                    <tr>
+                        <td><textarea class="new_card_name1"></textarea></td>
+                        <td><textarea class="new_card_phone1"></textarea></td>
+                        <td><textarea class="new_card_mail1"></textarea></td>
+                        <td><textarea class="new_card_comment1"></textarea></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a class="ui button blue tiny add_card" id="1">Сохранить</a>    
+        </form>
+    </div>
+</div>
+<span style="display: none;" class="add_card_url" url="{{ profile.schools.first.add_card_url }}"></span>
