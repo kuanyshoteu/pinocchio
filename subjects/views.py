@@ -160,6 +160,9 @@ def subject_update(request, slug=None):
             instance.save()
         cost = 0
         for subject in school.school_subjects.all():
+            if not subject.cost:
+                subject.cost = 0
+                subject.save()
             cost += subject.cost
         school.average_cost = int(cost / len(school.school_subjects.all()))
         school.save()

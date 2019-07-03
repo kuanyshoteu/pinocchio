@@ -15,10 +15,12 @@
   "theme": "light",
   "dataProvider": [ 
   {% for column in instance.crm_columns.all %}
+  {% if forloop.counter < 6 %}
   {
     "title": "{{column.title}}",
     "value": "{{ column.cards.all|length }}"
   },
+  {% endif %}
   {% endfor %}
   ],
   "balloon": {

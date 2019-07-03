@@ -315,13 +315,14 @@ def add_student_to_squad(student, squad):
                 time = timestr+str(lecture.cell.time_period.start.split(':')[1])
         add_person_to_lecture(lecture, student)
         lecture.save()
-    send_date = (timezone.now().date() + timedelta(needed_day)).strftime('%d%m%y')+time
-    if lecture.office:
-        address = lecture.office.address
-    else:
-        address = squad.school.school_offices.first().address
-    print(send_date, lecture_time, address)
-#    send_sms(student.phone, 'Здравствуйте '+student.first_name+'! в '+lecture_time+' у Вас состоится пробный урок по адресу '+address, send_date)
+    if len(squad.squad_lectures.all()):
+        send_date = (timezone.now().date() + timedelta(needed_day)).strftime('%d%m%y')+time
+        if lecture.office:
+            address = lecture.office.address
+        else:
+            address = squad.school.school_offices.first().address
+        print(send_date, lecture_time, address)
+    #    send_sms(student.phone, 'Здравствуйте '+student.first_name+'! в '+lecture_time+' у Вас состоится пробный урок по адресу '+address, send_date)
 
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:
