@@ -78,12 +78,12 @@
                                     Выберите <b>предмет</b>:
                                     <div class="controls" style="margin-top: 10px"> 
                                         <select class="crm_option" id="crm_subject" url="{{ instance.crm_option_url }}" option="subject"> 
-                                            {% if profile.crm_subject %}
-                                                <option value="{{ profile.crm_subject.id }}">{{ profile.crm_subject.title }}</option>
+                                            {% if profile.skill.crm_subject %}
+                                                <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
                                             {% endif %}
                                             <option value="-1">Все предметы</option>
                                             {% for subject_category in subject_categories %}
-                                                {% if subject_category != profile.crm_subject %}
+                                                {% if subject_category != profile.skill.crm_subject %}
                                                 <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
                                                 {% endif %}
                                             {% endfor %}
@@ -94,12 +94,12 @@
                                     Выберите <b>возраст</b>:
                                     <div class="controls" style="margin-top: 10px"> 
                                         <select class="crm_option" id="crm_age" url="{{ instance.crm_option_url }}" option="age"> 
-                                            {% if profile.crm_age %}
-                                                <option value="{{ profile.crm_age.id }}">{{ profile.crm_age.title }}</option>
+                                            {% if profile.skill.crm_age %}
+                                                <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
                                             {% endif %}
                                             <option value="-1">Все возрасты</option>
                                             {% for subject_age in subject_ages %}
-                                                {% if subject_age != profile.crm_age %}
+                                                {% if subject_age != profile.skill.crm_age %}
                                                 <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
                                                 {% endif %}
                                             {% endfor %}

@@ -68,9 +68,9 @@
                             :id="'subject_lesson' + box[1][index][0]">
                         <a class="delete_subject_lesson" :id="box[1][index][0]"><b>×</b></a>
                         <p>[[ box[1][index][1] ]]</p>
-                        <select class="no_padding change_lecture_cabinet" onchange="change_cabinet('change_lecture_cabinet', '{{ instance.change_lecture_cabinet }}')" id="change_lecture_cabinet" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
+                        <select class="no_padding change_lecture_cabinet" @change="change_cabinet('change_lecture_cabinet'+[[ box[1][index][0] ]], '{{ instance.change_lecture_cabinet }}')" :id="'change_lecture_cabinet'+[[ box[1][index][0] ]]" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
                             {% if instance.office %}
-                                <option value="">[[ box[1][index][3] ]]</option>
+                                <option value="-1">[[ box[1][index][3] ]]</option>
                                 {% for cabinet in instance.school.cabinets.all %}
                                 <option value="{{cabinet.id}}">{{cabinet.title}}</option>
                                 {% endfor %}
@@ -86,9 +86,10 @@
 <span style="display: none;" id="-1" class="delete_lesson_data" url="{{ instance.delete_lesson_url }}"></span>
 <script>
     function change_cabinet(id, url){
-        this_ = document.getElementById(id);
-        cabinet_id = this_.options[this_.selectedIndex].value;
+        this_ = $('#'+id);
+        cabinet_id = this_.children("option:selected").val()
         lecture_id = $('#'+id).attr('lecture_id')
+        console.log('a', cabinet_id, id, lecture_id)
         $.ajax({
             url: url,
             data: {

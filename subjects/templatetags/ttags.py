@@ -265,7 +265,7 @@ def get_current_attendance_student(subject, profile):
             i += 1
         if counter < 4:
             i = 1
-            while counter < 4 and i < 10:
+            while counter < 4 and i < 10 and material_number + i-1<len(subject_materials):
                 sm = list(subject_materials)[material_number + i-1]
                 if len(sm.sm_atts.filter(student = profile)) < 1:
                     create_atts_student(squad, sm, profile)

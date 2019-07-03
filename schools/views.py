@@ -30,6 +30,10 @@ import os
 from constants import *
 
 def school_rating(request):
+    # for sch in School.objects.all():
+    #     ppp = sch.people.all()
+    #     for tp in sch.time_periods.all():
+    #         tp.people.add(*ppp)
     profile = get_profile(request)
     if len(profile.schools.all()) == 0:
         context = {
@@ -495,6 +499,8 @@ def timep_create(request):
         timep.save()
         create_url = timep.create_url()
         delete_url = timep.delete_url()
+        school_people = school.people.all()
+        timep.people.add(*school_people)
     data = {
         'taken_name':False,
         'create_url':create_url,
