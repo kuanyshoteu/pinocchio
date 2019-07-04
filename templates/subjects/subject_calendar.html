@@ -16,7 +16,8 @@
             <form @submit.prevent="addSquad">
                 <select v-model="squad">
                     <option value="Выберите Класс" selected>Выберите Класс</option>
-                    <option :value="item" v-for="item in outSubjectSquads">[[ item[1][0] ]]</option>
+                    <option :value="[outSubjectSquads[0][index],element]" :id="'select_squad'+outSubjectSquads[0][index]" v-for="(element, index) in outSubjectSquads[1]">[[ element ]]</option>
+                    <option :value="[inSubjectSquads[0][index],element]" :id="'select_squad'+inSubjectSquads[0][index]" style="display: none;" v-for="(element, index) in inSubjectSquads[1]">[[ element ]]</option>
                 </select>
                 <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить класс</a>
             </form>
@@ -69,12 +70,7 @@
                         <a class="delete_subject_lesson" :id="box[1][index][0]"><b>×</b></a>
                         <p>[[ box[1][index][1] ]]</p>
                         <select class="no_padding change_lecture_cabinet" @change="change_cabinet('change_lecture_cabinet'+[[ box[1][index][0] ]], '{{ instance.change_lecture_cabinet }}')" :id="'change_lecture_cabinet'+[[ box[1][index][0] ]]" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
-                            {% if instance.office %}
-                                <option value="-1">[[ box[1][index][3] ]]</option>
-                                {% for cabinet in instance.school.cabinets.all %}
-                                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
-                                {% endfor %}
-                            {% endif %}
+                            <option v-for="(element, index) in box[1][index][5]" :value="element[0]">[[ element[1] ]]</option>
                         </select>
                     </div>
                 </draggable>
@@ -104,6 +100,7 @@
     }
 
     function save_card_id(id){
+        console.log(id)
         $('.delete_lesson_data').attr('id', id)
     }
 
@@ -121,13 +118,10 @@
         },
         methods: {
             addSquad() {
-                console.log('f00')
                 if (this.squad == 'Выберите Класс') {
-                    console.log('f')
                     return
                 }; 
                 if (!this.inSubjectSquads[1].includes(this.squad[1][0])) {
-                    console.log('ff')
                     id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
                     axios.get('/subjects/api/add_squad_url', {
                         params: {
@@ -138,14 +132,23 @@
                     .then((res) => {
                         // console.log(res)
                     })
-                    this.inSubjectSquads[1].push(this.squad[1][0]);
+                    axios.get('/subjects/api/schedule/' + id)
+                        .then( (res) => {
+                            this.schedule = res.data.calendar
+                    })
+                    this.inSubjectSquads[1].push(this.squad[1]);
+                    this.inSubjectSquads[0].push(this.squad[0]);
+                    indexx = this.outSubjectSquads[0].indexOf(this.squad[0])
+                    console.log(indexx)
+                    this.outSubjectSquads[0].splice(indexx, 1);
+                    this.outSubjectSquads[1].splice(indexx, 1);
+                    //this.outSubjectSquads.splice();
                 }
-
                 this.squad = 'Выберите Класс';
             },
             deleteSquad(i, id) {
                 let squad_id = this.inSubjectSquads[0][this.inSubjectSquads[1].indexOf(id)]
-                // console.log(squad_id)
+                let squad_title = this.inSubjectSquads[1][this.inSubjectSquads[1].indexOf(id)]
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
                 axios.get('/subjects/api/delete_squad_url/', {
                     params: {
@@ -153,8 +156,12 @@
                         'squad_id': squad_id
                     }
                 })
+                console.log('#select_squad', squad_id, squad_title)
                 this.inSubjectSquads[0].splice(i, 1)
                 this.inSubjectSquads[1].splice(i, 1)
+                console.log(this.outSubjectSquads)
+                this.outSubjectSquads[0].push(squad_id);
+                this.outSubjectSquads[1].push(squad_title);
                 https://www.pinocchio.kz/subjects/api/delete_squad_url/ 
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
                 axios.get('/subjects/api/schedule/' + id)
@@ -230,6 +237,13 @@
                         classes.push(item[1][0])
                     })
                     this.inSubjectSquads = [] = [ids, classes]
+                    var ids = [];
+                    var classes = [];
+                    this.outSubjectSquads.map((item, i) => {
+                        ids.push(item[0])
+                        classes.push(item[1][0])
+                    })
+                    this.outSubjectSquads = [] = [ids, classes]
                 })
         }
     })
@@ -240,7 +254,7 @@
     margin: 0 2px;
 }
 .box{
-    height: 50px;
+    min-height: 50px;
     margin: 0 2px;
 }
 #app .form {

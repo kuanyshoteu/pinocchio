@@ -27,7 +27,8 @@ def documents(request):
 def school_documents(request, school_id):
     profile = get_profile(request)
     only_staff(profile)
-    school = profile.schools.first()
+    school = School.objects.get(id=school_id)
+    is_in_school(profile, school)
     img = ['png', 'jpg', 'jpeg']
     html = ['html', 'css', 'js', 'py', 'java']
     file_form = FileForm(request.POST or None, request.FILES or None)
@@ -55,7 +56,6 @@ def school_documents(request, school_id):
         doc.save()
         return redirect('/documents')
 
-    school = School.objects.get(id=school_id)
     context = {
         "profile": profile,
         'yourid':profile.id,
@@ -78,7 +78,8 @@ def folder_details(request, folder_id=None):
     profile = get_profile(request)
     only_staff(profile)
     folder = DocumentFolder.objects.get(id=folder_id)
-
+    school = folder.school
+    is_in_school(profile, school)    
     file_form = FileForm(request.POST or None, request.FILES or None)
     if file_form.is_valid():
         doc = Document.objects.create(file = file_form.cleaned_data.get("file"))
@@ -106,7 +107,6 @@ def file_action(request):
     only_staff(profile)
     cache = DocumentCache.objects.get_or_create(author_profile = profile)
     cache = cache[0]
-    
     cache.object_type = request.GET.get('object_type')
     cache.object_id = int(request.GET.get('object_id'))
     cache.action = request.GET.get('action')
@@ -124,8 +124,10 @@ def paste(request):
     link = ''
     if request.GET.get('new_parent') != 'root':
         new_parent = DocumentFolder.objects.get(id = int(request.GET.get('new_parent')))
+        school = new_parent.school
     elif request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
+    is_in_school(profile, school)
     if cache.object_type == 'folder':    
         folder = DocumentFolder.objects.get(id = cache.object_id)
         title = folder.title
@@ -168,19 +170,20 @@ def create_docfolder(request):
     only_staff(profile)
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
-    if len(school.school_docfolders.all()) > 0:
-        name = 'Папка' + str(school.school_docfolders.all()[len(school.school_docfolders.all())-1].id + 1)
-    else:
-        name = 'Папка'
-    folder = DocumentFolder.objects.create(title = name)
-    folder.author_profile = profile
-    if request.GET.get('school_id'):
-        folder.school = school
-    if request.GET.get('parent_id') != 'none':
-        parent = DocumentFolder.objects.get(id = int(request.GET.get('parent_id')))
-        folder.parent = parent
-        parent.children.add(folder)
-    folder.save()
+        is_in_school(profile, school)
+        if len(school.school_docfolders.all()) > 0:
+            name = 'Папка' + str(school.school_docfolders.all()[len(school.school_docfolders.all())-1].id + 1)
+        else:
+            name = 'Папка'
+        folder = DocumentFolder.objects.create(title = name)
+        folder.author_profile = profile
+        if request.GET.get('school_id'):
+            folder.school = school
+        if request.GET.get('parent_id') != 'none':
+            parent = DocumentFolder.objects.get(id = int(request.GET.get('parent_id')))
+            folder.parent = parent
+            parent.children.add(folder)
+        folder.save()
     data = {
         'name':name,
         'url':folder.get_absolute_url(),
@@ -195,6 +198,8 @@ def change_docname(request):
             folder = DocumentFolder.objects.all()[len(DocumentFolder.objects.all())-1]
         else:
             folder = DocumentFolder.objects.get(id = int(request.GET.get('id')))
+        school = folder.school
+        is_in_school(profile, school)
         if request.GET.get('name'):
             folder.title = request.GET.get('name')
             folder.save()
@@ -208,6 +213,8 @@ def delete_folder(request):
     deleted = False
     if request.GET.get('id'):
         folder = DocumentFolder.objects.get(id = int(request.GET.get('id')))
+        school = folder.school
+        is_in_school(profile, school)
         if folder.author_profile == profile:
             folder.delete()
             deleted = True
@@ -221,6 +228,8 @@ def delete_document(request):
     only_staff(profile)
     if request.GET.get('id'):
         doc = Document.objects.get(id = int(request.GET.get('id')))
+        school = doc.school
+        is_in_school(profile, school)
         doc.delete()
     data = {}
     return JsonResponse(data)

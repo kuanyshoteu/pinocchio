@@ -23,29 +23,15 @@ def cell_profile_lectures(cell, profile):
 def rating_filter(profile):
     school = profile.schools.first()
     squad = profile.rating_squad_choice.first()
-    crm_subject_students = None
-    crm_age_students = None
-    if profile.skill.crm_subject:
-        crm_subject_students = profile.skill.crm_subject.students.all()
-    if profile.skill.crm_age:
-        crm_age_students = profile.skill.crm_age.students.all()
     if squad != None:
         students_query = squad.students.all()
     else:
         students_query = school.people.filter(is_student=True)
-    res = []
-    for student in students_query:
-        need = True
-        if crm_subject_students != None:
-            if not student in crm_subject_students:
-                need = False
-        if crm_age_students != None:
-            if not student in crm_age_students:
-                need = False
-        if need:
-            res.append(student)
-
-    return res
+    if profile.skill.crm_subject:
+        students_query.filter(crm_subject_connect=profile.skill.crm_subject)
+    if profile.skill.crm_age:
+        students_query.filter(crm_age_connect=profile.skill.crm_age)
+    return students_query
 
 @register.filter
 def cell_school_lectures(cell, profile):

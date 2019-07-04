@@ -179,6 +179,8 @@ def subject_attendance(request):
         profile = Profile.objects.get(user = request.user)
         cache_att = CacheAttendance.objects.get_or_create(profile=profile)[0]
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
+        school = subject.school
+        is_in_school(profile, school)
         cache_att.subject = subject
         if not cache_att.squad in subject.squads.all():
             if is_profi(profile, "Teacher"):
@@ -197,6 +199,8 @@ def squad_attendance(request):
         profile = Profile.objects.get(user = request.user)
         cache_att = CacheAttendance.objects.get(profile=profile)
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        school = squad.school
+        is_in_school(profile, school)
         cache_att.squad = squad
         cache_att.save()
     data = {
@@ -204,9 +208,12 @@ def squad_attendance(request):
     return JsonResponse(data)
 
 def more_attendance(request):
+    profile = Profile.objects.get(user = request.user)
     if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        school = subject.school
+        is_in_school(profile, school)
         current_sm = int(request.GET.get('sm_id'))
         columns = []
         last_set = False
@@ -257,6 +264,8 @@ def more_attendance_student(request):
     if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        school = subject.school
+        is_in_school(profile, school)
         current_sm = int(request.GET.get('sm_id'))
         columns = []
         last_set = False
@@ -317,6 +326,8 @@ def att_present(request):
     profile = Profile.objects.get(user = request.user)
     if request.GET.get('id') and is_profi(profile, 'Teacher'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
+        school = attendance.school
+        is_in_school(profile, school)        
         attendance.present = 'present'
         if len(CRMCard.objects.filter(card_user=attendance.student)) > 0:
             if attendance.student.card.column.id == 2:
@@ -348,7 +359,6 @@ def att_present(request):
                     skill = student.card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()
-            print(school.title)
         attendance.save()
         profile.save()
     data = {
@@ -356,8 +366,11 @@ def att_present(request):
     return JsonResponse(data)
 
 def ChangeAttendance(request):
+    profile = Profile.objects.get(user = request.user)
     if request.GET.get('id'):
         attendance = Attendance.objects.get(id = int(request.GET.get('id')))
+        school = attendance.school
+        is_in_school(profile, school)        
         if request.GET.get('grade'):
             attendance.grade = int(request.GET.get('grade'))
         attendance.save()
@@ -446,12 +459,13 @@ def make_payment(request):
     amount = int(request.GET.get('amount'))
     if amount > 0 and request.GET.get('id'):
         profile = Profile.objects.get(id = int(request.GET.get('id')))
+        school = manager.schools.first()
+        is_in_school(profile, school)        
         profile.money += amount
         profile.payment_history.create(
             manager = manager,
             amount = amount,
         )
-        school = manager.schools.first()
         school.money += amount
         school.save()
         if profile.money > profile.salary:

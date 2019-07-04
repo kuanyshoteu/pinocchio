@@ -15,7 +15,7 @@ from .table_change_form import TableChangeForm
 from .models import *
 from schools.models import School
 from subjects.models import *
-from subjects.views import update_squad_dates
+from subjects.views import update_squad_dates,change_lecture_options
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
@@ -34,6 +34,7 @@ def squad_detail(request, slug=None):
     instance = get_object_or_404(Squad, slug=slug)
     profile = get_profile(request)
     school = instance.school
+    is_in_school(profile, school)
     time_periods = school.time_periods.all()
     days = Day.objects.all()
     context = {
@@ -96,7 +97,8 @@ def squad_update(request, slug=None):
     profile = get_profile(request)
     only_managers(profile)
     instance = get_object_or_404(Squad, slug=slug)
-    school = profile.schools.first()
+    school = instance.school
+    is_in_school(profile, school)
     form = SquadForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -107,23 +109,24 @@ def squad_update(request, slug=None):
         instance.start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
         instance.end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
         instance.save()
-    form2 = SquadForm2(request.POST or None, request.FILES or None, instance=instance)
-    if form2.is_valid():
-        instance = form2.save(commit=False)
-        if not instance.height_field:
-            instance.height_field = 0
-        if not instance.width_field:
-            instance.width_field = 0
+    if request.POST: 
+        if len(request.FILES) > 0:
+            if 'squad_banner' in request.FILES:
+                file = request.FILES['squad_banner']
+                instance.image_banner = file
+            if 'squad_icon' in request.FILES:
+                file = request.FILES['squad_icon']
+                instance.image_icon = file
+        instance.color_back = request.POST.get('color_back')
         instance.save()
         for subject in instance.subjects.all():
             update_squad_dates(subject, instance)
             subject.save()
-
         return HttpResponseRedirect(instance.get_update_url())
+
     context = {
         "instance": instance,
         "form":form,
-        "form2":form2,
         "profile":profile,
         "all_teachers":all_teachers(school),
         "squad_students":instance.students.all(),
@@ -132,6 +135,7 @@ def squad_update(request, slug=None):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         "school_money":school.money,
+        "offices":school.school_offices.all(),        
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -140,6 +144,8 @@ def squad_delete(request, slug=None):
     profile = get_profile(request)
     only_managers(profile)
     instance = Squad.objects.get(slug=slug)
+    school = instance.school
+    is_in_school(profile, school)
         
     if request.method == "POST":
         instance.delete()
@@ -163,6 +169,8 @@ import datetime
 def add_paper(request):
     if request.GET.get('group_id'):
         squad = Squad.objects.get(id = int(request.GET.get('group_id')) )
+        school = squad.school
+        is_in_school(profile, school)
         if request.GET.get('day_id'):
             if request.GET.get('paper_id'):
                 try:
@@ -178,11 +186,14 @@ def add_paper(request):
         'href':lesson.get_absolute_url()
     }
     return JsonResponse(data)
+
 def calendar_change(request):
     profile = get_profile(request)
     only_managers(profile)
     if request.GET.get('id'):
         squad = Squad.objects.get(id = int(request.GET.get('id')) )
+        school = squad.school
+        is_in_school(profile, school)
         if request.GET.get('day_of_week'):
             day_of_week = request.GET.get('day_of_week')
             if day_of_week in squad.days:
@@ -200,6 +211,8 @@ def set_time(request):
     only_managers(profile)
     if request.GET.get('instance_id'):
         squad = Squad.objects.get(id = int(request.GET.get('instance_id')) )
+        school = squad.school
+        is_in_school(profile, school)
         if request.GET.get('day') and request.GET.get('time') and request.GET.get('checked'):
             index = squad.days.index("day_of_week" + request.GET.get('day'))
             x = []
@@ -219,16 +232,12 @@ def change_curator(request):
     only_managers(profile)
     if request.GET.get('teacher_id') and request.GET.get('squad_id'):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
+        school = squad.school
+        is_in_school(profile, school)
         oldteacher = squad.teacher
         teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
         squad.teacher = teacher
         squad.save()
-        # for lecture in Lecture.objects.all():
-        #     lecture.person_id = []
-        #     lecture.person_number = []
-        #     people = lecture.people.all()
-        #     lecture.people.remove(*people)
-        #     lecture.save()
         for subject in squad.subjects.all():
             subject.teachers.add(teacher)
             if oldteacher:
@@ -250,6 +259,8 @@ def add_student(request):
     only_managers(profile)
     if request.GET.get('student_id') and request.GET.get('squad_id'):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
+        school = squad.school
+        is_in_school(profile, school)        
         student = Profile.objects.get(id = int(request.GET.get('student_id')) )
         add = True
         if student in squad.students.all():
@@ -319,6 +330,7 @@ def remove_person_from_lecture(lecture, person):
     lecture.person_number[index] -= 1
     if lecture.person_number[index] < 0:
         lecture.person_number[index] = 0
+
 def add_person_to_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.append(person.id)
@@ -329,4 +341,21 @@ def add_person_to_lecture(lecture, person):
     lecture.people.add(person)
     lecture.person_number[index] += 1
 
-
+def change_office(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('object_id'):
+        squad = Squad.objects.select_related('office').get(id = id)
+        school = squad.school
+        is_in_school(profile, school)
+        if int(request.GET.get('object_id')) == -1:
+            squad.office = None
+            change_lecture_options(squad, 'office', None)
+        else:
+            office = Office.objects.get(id = int(request.GET.get('object_id')))
+            squad.office = office
+            change_lecture_options(squad, 'office', office)
+        squad.save()
+    data = {
+    }
+    return JsonResponse(data)

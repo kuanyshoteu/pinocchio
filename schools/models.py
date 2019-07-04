@@ -185,3 +185,5 @@ class Cabinet(models.Model):
     capacity = models.IntegerField(default=0)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='cabinets')
     office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='cabinets')    
+    class Meta:
+        ordering = ['id']

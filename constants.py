@@ -53,6 +53,10 @@ def get_profile(request):
         raise Http404
     return profile
 
+def is_in_school(profile, school):
+    if not school in profile.schools.all():
+        raise Http404
+
 def only_teachers(profile):
     profession = Profession.objects.get(title = 'Teacher')
     profession2 = Profession.objects.get(title = 'Director')
@@ -83,7 +87,7 @@ def only_staff(profile):
 def is_profi(profile, job_name):
     profession = Profession.objects.get(title = job_name)
     director = Profession.objects.get(title = 'Director')
-    if job_name != 'Director' and director in profile.profession.all():
+    if job_name != 'Teacher' and director in profile.profession.all():
     	if not profile.is_student:
     		return True
     return profession in profile.profession.all()
@@ -117,9 +121,6 @@ def register_by_file():
         profile.save()
 
 def all_teachers(school):
-    res = []
     profession = Profession.objects.get(title = 'Teacher')
-    for h in school.people.all():
-        if h in profession.workers.all():
-            res.append(h)
-    return res
+    return profession.workers.filter(schools=school)
+

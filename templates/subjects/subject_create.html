@@ -114,10 +114,6 @@
 				                        <label class="file_post" for="subject_icon">
 				                        	<a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
 				                        </label>
-										<input type="file" name="subject_backg" id="subject_backg" class="postfile">
-				                        <label class="file_post" for="subject_backg">
-				                        	<a class="ui button mini"><i class="icon image blue"></i>Обои</a>
-				                        </label>
 									</div>
 									<div class="eight wide column" style="padding:0 0 0 14px;">
 			        					Количество уроков:
@@ -126,24 +122,6 @@
 									<div class="eight wide column no_padding">
 			        					Цвет:
 			        					<textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
-									</div>
-									<div class="sixteen wide column" style="padding-top: 0">
-			        					<b>Офис:</b>
-		                                <select class="change_subject_office" id="change_subject_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
-		                                	{% if instance.office == None %}
-		                                		<option value="-1">Другое</option>
-                                            {% elif instance.office %}
-                                                <option value="{{ instance.office.id }}">{{ instance.office.title }}</option>
-                                            {% endif %}
-		                                    {% for office in offices %}
-		                                        {% if office != instance.office %}
-		                                        <option value="{{ office.id }}">{{ office.title }}</option>
-		                                        {% endif %}
-		                                    {% endfor %}
-                                            {% if instance.office != None %}
-			                                    <option value="-1">Другое</option>
-		                                    {% endif %}
-		                                </select>			        					
 									</div>
 									<div class="sixteen wide column">
 			                            <a href="{{ instance.get_delete_url }}" class="ui button red small">

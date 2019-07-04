@@ -27,10 +27,10 @@ def upload_location(instance, filename):
 class Squad(models.Model):
     teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hissquads') 
     students = models.ManyToManyField(Profile, default=1, related_name='squads')
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='groups')
-    office = models.ForeignKey(Office, default=1, on_delete = models.CASCADE, related_name='groups')
-    age = models.ForeignKey(SubjectAge, default=1, on_delete = models.CASCADE, related_name='groups')
-    rating_choices = models.ManyToManyField(Profile, default=1, related_name='rating_squad_choice')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='groups')
+    office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='groups')
+    age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='groups')
+    rating_choices = models.ManyToManyField(Profile, related_name='rating_squad_choice')
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)
@@ -92,6 +92,8 @@ class Squad(models.Model):
         return reverse("squads:change_curator_url")    
     def add_student_url(self):
         return reverse("squads:add_student_url")   
+    def change_office(self):
+        return reverse("squads:change_office",kwargs={"id": self.id})       
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)

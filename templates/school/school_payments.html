@@ -61,7 +61,7 @@
                                                         <input style="margin-bottom: 0;" class="payment_amount{{ student.id }}" placeholder="Сумма" type="number" name="">
                                                     </div>    
                                                     <div class="four wide column">
-                                                        <a class="ui button mini blue make_payment" url="{{ profile.make_payment }}" id="{{ student.id }}">Оплатил(а)</a>
+                                                        <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ student.id }}')">Оплатил(а)</a>
                                                     </div>
                                                 </form>
                                             </td>
@@ -131,4 +131,21 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    function make_payment(url, id) {
+        amount = $('.payment_amount'+id).val()
+        $.ajax({
+            url: url,
+            data: {
+                'amount':amount,
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    };
+
+</script>
 {% endblock content %}
