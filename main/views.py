@@ -361,8 +361,9 @@ def get_notifications(request):
     timezone.now()
     res = []
     i = 0
-    profile.skill.notifications_number = 0
-    profile.save()
+    skill = profile.skill
+    skill.notifications_number = 0
+    skill.save()
     for school in profile.schools.all():
         for notif in school.notifications.filter():
             i += 1

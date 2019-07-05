@@ -256,7 +256,7 @@ class Notification(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='notifications')
     itstype = models.CharField(max_length=25)
     profession = models.ManyToManyField(Profession, related_name='notifications')
-    url = models.TextField(default='')
+    url = models.TextField(default='', null=True)
     image_url = models.TextField(default='')
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:

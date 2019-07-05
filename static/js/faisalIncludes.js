@@ -102,7 +102,6 @@ $(document).ready(function () {
   // Number counter start
 
   let number = document.getElementById('number-counter');
-  console.log('yeeeym',number)
   let start = 0;
   if (number && parseInt(number.textContent > 0)) {
     let end = +number.textContent;
