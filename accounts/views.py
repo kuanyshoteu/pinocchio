@@ -348,7 +348,6 @@ def att_present(request):
                     skill = student.card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()
-            print(school.title)
         attendance.save()
         profile.save()
     data = {

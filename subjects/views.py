@@ -329,7 +329,8 @@ def add_squad(request):
         subject.squads.add(squad)
         squad_students = squad.students.all()
         subject.students.add(*squad_students)
-        subject.teachers.add(squad.teacher)
+        if squad.teacher:
+            subject.teachers.add(squad.teacher)
     data = {
     }
     return JsonResponse(data)
