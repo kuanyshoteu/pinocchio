@@ -84,7 +84,7 @@ def account_view(request, user = None):
         }
         return render(request, "confirm.html", context)
     school_money = 0
-    is_director = is_profi(hisprofile, 'Director')
+    is_director = is_profi(profile, 'Director')
     if is_director:
         school_money = profile.schools.first().money
     context = {
@@ -359,7 +359,7 @@ def att_present(request):
                     was_minus = True
                 student.money -= attendance.subject.cost
                 student.save()
-                if student.money < student.salary and was_minus == False:
+                if student.money < student.salary and was_minus == False and student.card.was_called == True:
                     skill = student.card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()
