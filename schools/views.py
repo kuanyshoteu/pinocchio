@@ -103,17 +103,25 @@ def school_schedule(request):
 def school_landing(request, school_id=None):
     school = School.objects.get(id=school_id)
     profile = None
+    is_trener = False
+    is_manager = False
+    is_director = False
+    school_money = 0
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
-
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        if len(profile.schools.all()):
+            school_money = profile.schools.first().money
     context = {
         "profile":profile,
         "school": school,
         "all_teachers":all_teachers(school),
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "school_money":profile.schools.first().money,
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director   ,
+        "school_money":school_money,
         "five":[1,2,3,4,5],
     }
     return render(request, "school/landing.html", context)
