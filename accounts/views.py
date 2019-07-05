@@ -83,6 +83,10 @@ def account_view(request, user = None):
             "profile": profile,
         }
         return render(request, "confirm.html", context)
+    school_money = 0
+    is_director = is_profi(hisprofile, 'Director')
+    if is_director:
+        school_money = profile.schools.first().money
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
@@ -101,9 +105,9 @@ def account_view(request, user = None):
         "is_this_director":is_profi(hisprofile, 'Director'),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
+        "is_director":is_director,
         'hint':skill.hint_numbers[0],
-        "school_money":profile.schools.first().money,
+        "school_money":school_money,
     }
     return render(request, "profile.html", context)
 
