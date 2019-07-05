@@ -452,6 +452,6 @@ def get_phone(request):
 def adilmed(request):
     print(request.GET)
     if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
-        send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['aaa.academy.kz@gmail.com'])
+        send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['adilmedmk@mail.ru'])
     data={}
     return JsonResponse(data)
