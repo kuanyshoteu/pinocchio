@@ -4,11 +4,17 @@
 {% load ttags %}
 {% block content %}
   <header class="schoolLanding__header-wrapper" style="display: block;">
+    {% if school.banners.all|length %}
     {% for banner in school.banners.all %}
-        {% if banner.image_banner and forloop.counter < 3 %}
-          <div style="width: 33%;display: inline-block;background: url({{banner.image_banner.url}});" class="schoolLanding__header-img"></div>
+        {% if banner.image_banner and forloop.counter < 4 %}
+          <div style="width: 30%;display: inline-block;background: url({{banner.image_banner.url}});" class="schoolLanding__header-img"></div>
         {% endif %}
     {% endfor %}
+    {% else %}
+          <div style="width: 30%;display: inline-block;background: url({% static 'images/fon1.png' %});" class="schoolLanding__header-img"></div>
+          <div style="width: 30%;display: inline-block;background: url({% static 'images/fon1.png' %});" class="schoolLanding__header-img"></div>
+          <div style="width: 30%;display: inline-block;background: url({% static 'images/fon1.png' %});" class="schoolLanding__header-img"></div>
+    {% endif %}
   </header>
   
   <main class="schoolLanding__container">
