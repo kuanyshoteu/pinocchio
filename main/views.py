@@ -27,14 +27,6 @@ def loaderio(request):
     context = {
     }
     return render(request, "loaderio.txt", context)
-def certificate(request):
-    context = {
-    }
-    return render(request, "certificate.txt", context)
-def certificate2(request):
-    context = {
-    }
-    return render(request, "certificate2.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:
@@ -456,3 +448,10 @@ def get_phone(request):
         return JsonResponse(data)
     else:
         return 0
+
+def adilmed(request):
+    print(request.GET)
+    if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
+        send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['aaa.academy.kz@gmail.com'])
+    data={}
+    return JsonResponse(data)

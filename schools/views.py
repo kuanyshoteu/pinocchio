@@ -1017,7 +1017,6 @@ def save_review(request, school_id=None):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('number'):
         school = School.objects.get(id = school_id)
-        is_in_school(profile, school)
         if request.GET.get('number') != '':
             review = school.reviews.create(
                 text=request.GET.get('text'),

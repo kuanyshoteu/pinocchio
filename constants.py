@@ -26,6 +26,7 @@ def send_hello_email(profile, password, timeaddress):
     msg.send()
 
 def send_email(subject, html_content, send_to):
+    print(subject, html_content, send_to)
     msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
     msg.attach_alternative(html_content, "text/html")
     print(msg)
