@@ -326,3 +326,11 @@ def rating_empty_stars(review):
 @register.filter
 def get_ratings(school, number):
     return len(school.reviews.filter(rating=number))
+
+@register.filter
+def get_subject_courses_len(subject, school):
+    return len(school.school_subjects.filter(category=subject))
+
+@register.filter
+def get_age_courses_len(age, school):
+    return len(school.school_subjects.filter(age=age))

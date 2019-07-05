@@ -136,7 +136,7 @@
                     Предметы школы:
                     <div class="school_subject_list" style="display: inline-block;">
                     {% for subject in instance.school_subject_categories.all %}
-                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject.category_subjects.all|length}} курсов)</a>
+                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
                         <div class="ui modal mini" id="subject_form{{ subject.id }}">
                             <i class="close icon"></i>
                             <div class="content">
@@ -172,7 +172,7 @@
                     Возрасты учеников:
                     <div class="school_age_list" style="display: inline-block;">
                     {% for age in instance.school_subject_ages.all %}
-                        <a class="ui button mini green age_object{{age.id}}" onclick="$('#age_form{{age.id}}').modal('show')" id="{{age.id}}" style="padding: 7px 10px;">{{ age.title }} ({{ age.category_age.all|length}} курсов)</a>
+                        <a class="ui button mini green age_object{{age.id}}" onclick="$('#age_form{{age.id}}').modal('show')" id="{{age.id}}" style="padding: 7px 10px;">{{ age.title }} ({{ age|get_age_courses_len:instance}} курсов)</a>
                         <div class="ui modal mini" id="age_form{{ age.id }}">
                             <i class="close icon"></i>
                             <div class="content">
