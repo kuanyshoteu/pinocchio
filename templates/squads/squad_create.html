@@ -112,8 +112,37 @@
 							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
 								<div class="ui grid">
 									<div class="sixteen wide column">
-										{{ form2|crispy }}
+                                        <input type="file" name="squad_banner" id="squad_banner" class="postfile">
+                                        <label class="file_post" for="squad_banner">
+                                            <a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
+                                        </label>
+                                        <input type="file" name="squad_icon" id="squad_icon" class="postfile">
+                                        <label class="file_post" for="squad_icon">
+                                            <a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
+                                        </label>
 									</div>
+                                    <div class="seven wide column">
+                                        Цвет:
+                                        <textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
+                                    </div>
+                                    <div class="sixteen wide column" style="padding-top: 0">
+                                        <b>Офис:</b>
+                                        <select class="change_squad_office" id="change_squad_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
+                                            {% if instance.office == None %}
+                                                <option value="-1">Другое</option>
+                                            {% elif instance.office %}
+                                                <option value="{{ instance.office.id }}">{{ instance.office.title }}</option>
+                                            {% endif %}
+                                            {% for office in offices %}
+                                                {% if office != instance.office %}
+                                                <option value="{{ office.id }}">{{ office.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if instance.office != None %}
+                                                <option value="-1">Другое</option>
+                                            {% endif %}
+                                        </select>                                       
+                                    </div>
 									<div class="sixteen wide column">
 			                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
 	                                        <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"

@@ -70,7 +70,6 @@ class Subject(models.Model):
             height_field="height_field")
     height_field = models.IntegerField(default=0, null=True)
     width_field = models.IntegerField(default=0, null=True)
-    office = models.ForeignKey(Office,null=True, on_delete = models.CASCADE, related_name='office_subjects') 
     category = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='category_subjects') 
     age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='age_subjects') 
     start_dates = ArrayField(models.DateField(null=True), default=list)
@@ -142,8 +141,6 @@ class Subject(models.Model):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
     def change_age(self):
         return reverse("subjects:change_age",kwargs={"id": self.id})       
-    def change_office(self):
-        return reverse("subjects:change_office",kwargs={"id": self.id})       
     def delete_lesson_url(self):
         return reverse("subjects:delete_lesson_url",kwargs={"id": self.id})       
     def change_lecture_cabinet(self):

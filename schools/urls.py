@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
-from main.views import get_landing
+from main.views import get_landing,adilmed
 
 app_name = 'schools'
 urlpatterns = [
@@ -47,4 +47,5 @@ urlpatterns = [
     url(r'^api/save_review_url/(?P<school_id>\d+)/$', save_review, name='save_review_url'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
+    url(r'^adilmed/', adilmed, name="adilmed"),
 ]

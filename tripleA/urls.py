@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from accounts.views import (logout_view, confirm_email)
 from papers.views import courses
-from main.views import(main_view, loaderio, certificate, certificate2)
+from main.views import(main_view, loaderio)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

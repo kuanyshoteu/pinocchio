@@ -15,6 +15,7 @@ def index(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
+    is_in_school(profile, school)    
     return render(request, template_name='kanban/base.html', context={
         'boards': school.school_boards.all(),
         "profile":profile,
@@ -29,6 +30,7 @@ def new_board(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
+    is_in_school(profile, school)
     name = request.POST.get('board_name')
     assert name
     Board.objects.create(name=name, school=school)
@@ -56,9 +58,9 @@ def new_card(request):
 def view_card(request, card_id, card_slug):
     profile = get_profile(request)
     only_staff(profile)
-    school = profile.schools.first()
-
     card = Card.objects.get(id=int(card_id))
+    school = card.column.board.school
+    is_in_school(profile, school)
     file_form = FileForm(request.POST or None, request.FILES or None)
     if file_form.is_valid():
         doc = Document.objects.create(file = file_form.cleaned_data.get("file"))
@@ -103,6 +105,8 @@ def ChangeCardText(request):
     only_staff(profile)
     if request.GET.get('id'):
         card = Card.objects.get(id = int(request.GET.get('id')))
+        school = card.column.board.school
+        is_in_school(profile, school)
         if request.GET.get('text'):
             card.description = request.GET.get('text')
             card.save()    
@@ -116,6 +120,8 @@ def AddUser(request):
     only_staff(profile)
     if request.GET.get('card_id'):
         card = Card.objects.get(id = int(request.GET.get('card_id')))
+        school = card.column.board.school
+        is_in_school(profile, school)
         if request.GET.get('profile_id'):
             profile = Profile.objects.get(id = int(request.GET.get('profile_id')))
             if request.GET.get('user_in'):
@@ -133,6 +139,8 @@ def AddMetka(request):
     only_staff(profile)
     if request.GET.get('card_id'):
         card = Card.objects.get(id = int(request.GET.get('card_id')))
+        school = card.column.board.school
+        is_in_school(profile, school)
         if request.GET.get('metka_id'):
             metka = Metka.objects.get(id = int(request.GET.get('metka_id')))
             if request.GET.get('metka_in'):
@@ -152,7 +160,10 @@ def delete_card(request):
     if not request.user.is_authenticated:
         raise Http404
     card_id = int(request.POST.get('card_delete_id'))
-    Card.objects.get(id = card_id).delete()
+    card = Card.objects.get(id = card_id)
+    school = card.column.board.school
+    is_in_school(profile, school)
+    card.delete()
     return redirect('/todolist')
 
 def delete_column(request):
@@ -161,7 +172,10 @@ def delete_column(request):
     if not request.user.is_authenticated:
         raise Http404
     column_id = int(request.POST.get('column_delete_id'))
-    Column.objects.get(id = column_id).delete()
+    column = Column.objects.get(id = column_id)
+    school = column.board.school
+    is_in_school(profile, school)
+    column.delete()
     return redirect('/todolist')
 
 def delete_board(request):
@@ -170,7 +184,10 @@ def delete_board(request):
     if not request.user.is_authenticated:
         raise Http404
     board_id = int(request.POST.get('board_delete_id'))
-    Board.objects.get(id = board_id).delete()
+    board = Board.objects.get(id = board_id)
+    school = board.school
+    is_in_school(profile, school)
+    board.delete()
     return redirect('/todolist')
 
 
@@ -182,6 +199,8 @@ def drop(request):
     column_id = int(payload.get('column_id'))
     assert card_id and column_id
     card = Card.objects.get(id=card_id)
+    school = board.school
+    is_in_school(profile, school)
     card.column = Column.objects.get(id=column_id)
     card.save()
     return redirect('/todolist')

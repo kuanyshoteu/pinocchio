@@ -25,6 +25,8 @@ def school_library(request, school_id):
     profile = get_profile(request)
     only_staff(profile)
     school = School.objects.get(id=school_id)
+    is_in_school(profile, school)        
+
     context = {
         "profile": profile,
         'yourid':profile.id,
@@ -42,24 +44,11 @@ def school_library(request, school_id):
     }
     return render(request, 'library/library.html', context=context)
 
-def folders():
-    folders = []
-    for folder in Folder.objects.all():
-        if not folder.parent:
-            folders.append(folder)
-    return (folders)
-
-def lessons_array():
-    lessons = []
-    for lesson in Lesson.objects.all():
-        if len(lesson.folder.all()) == 0:
-            lessons.append(lesson)
-    return (lessons)
-
 def folder_details(request, folder_id=None):
     profile = get_profile(request)
     only_teachers(profile)
     folder = Folder.objects.get(id=folder_id)
+    is_in_school(profile, folder.school)        
     context = {
         "profile": profile,
         'folder':folder,
@@ -86,7 +75,6 @@ def file_action(request):
     cache.previous_parent = int(request.GET.get('parent'))
     cache.full = True
     cache.save()
-    print(cache.object_id)
     data = {'status':'ok'}
     return JsonResponse(data)
 
@@ -98,8 +86,10 @@ def paste(request):
     link = ''
     if request.GET.get('new_parent') != 'library':
         new_parent = Folder.objects.get(id = int(request.GET.get('new_parent')))
+        school = new_parent.school
     elif request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
+    is_in_school(profile, school)
     if cache.object_type == 'folder':    
         folder = Folder.objects.get(id = cache.object_id)
         title = folder.title
@@ -160,24 +150,25 @@ def create_folder(request):
     only_teachers(profile)
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
-    if len(school.school_folders.all()) > 0:
-        name = 'Папка' + str(school.school_folders.all()[len(school.school_folders.all())-1].id + 1)
-    else:
-        name = 'Папка'
-    folder = Folder.objects.create(title = name)
-    folder.author_profile = profile
-    if request.GET.get('school_id'):
-        folder.school = school
-    if request.GET.get('parent_id') != 'denone':
-        parent = Folder.objects.get(id = int(request.GET.get('parent_id')))
-        folder.parent = parent
-        parent.children.add(folder)
-    folder.save()
-    data = {
-        'name':name,
-        'url':folder.get_absolute_url(),
-    }
-    return JsonResponse(data)
+        is_in_school(profile, school)
+        if len(school.school_folders.all()) > 0:
+            name = 'Папка' + str(school.school_folders.all()[len(school.school_folders.all())-1].id + 1)
+        else:
+            name = 'Папка'
+        folder = Folder.objects.create(title = name)
+        folder.author_profile = profile
+        if request.GET.get('school_id'):
+            folder.school = school
+        if request.GET.get('parent_id') != 'denone':
+            parent = Folder.objects.get(id = int(request.GET.get('parent_id')))
+            folder.parent = parent
+            parent.children.add(folder)
+        folder.save()
+        data = {
+            'name':name,
+            'url':folder.get_absolute_url(),
+        }
+        return JsonResponse(data)
 
 def change_name(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -187,6 +178,7 @@ def change_name(request):
             folder = Folder.objects.all()[len(Folder.objects.all())-1]
         else:
             folder = Folder.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, folder.school)
         if request.GET.get('name'):
             folder.title = request.GET.get('name')
             folder.save()
@@ -199,6 +191,7 @@ def delete_folder(request):
     only_teachers(profile)
     if request.GET.get('id'):
         folder = Folder.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, folder.school)
         folder.delete()
     data = {}
     return JsonResponse(data)

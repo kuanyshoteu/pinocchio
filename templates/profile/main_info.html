@@ -39,7 +39,7 @@
                         <span id="hiscoins">{{ hisprofile.coins }}</span>
                     </div></p>
                         <p>{{ hisprofile.birthdate }}</p>
-                        <p>{{ hisprofile.schools.all.0.title }}</p>
+                        <a href="{{ hisprofile.schools.first.landing }}">{{ hisprofile.schools.first.title }}</a>
                         <p>{{ hisprofile.phone }}</p>
                         <p>{{ hisprofile.mail }}</p>
                     </div>
@@ -72,8 +72,8 @@
                     <p style="color: #828282;">Почта: </p>                   
                 </div>
                 <div class="five wide column de" id="main-info-desktop" style="padding-left: 0">
-                    <p>{{ hisprofile.birthdate }}</p>
-                    <p>{{ hisprofile.schools.all.0.title }}</p>
+                    <p style="min-height: 18px;">{{ hisprofile.birthdate }}</p>
+                    <p><a href="{{ hisprofile.schools.first.landing }}">{{ hisprofile.schools.first.title }}</a></p>
                     <p>{{ hisprofile.phone }}</p>
                     <p>{{ hisprofile.mail }}</p>
                 </div>

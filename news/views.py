@@ -41,7 +41,8 @@ def news(request):
 
 def post_list(request, school_id):
     profile = get_profile(request)
-    school = School.objects.get(id=school_id)    
+    school = School.objects.get(id=school_id)
+    is_in_school(profile, school)       
     if request.POST: 
         text = request.POST.get('post_text')
         newpost = Post.objects.create(author_profile=profile,content=text, school=school)
@@ -67,6 +68,7 @@ def post_delete(request):
     profile = Profile.objects.get(user = request.user.id)
     if is_profi(profile, 'Manager'):
         post = Post.objects.get(id=int(request.GET.get('post_id')))
+        is_in_school(profile, post.school)       
         post.delete()
     data = {
     }

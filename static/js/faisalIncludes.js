@@ -36,6 +36,7 @@ $(document).ready(function () {
     $(this).toggleClass('active');
   });
   // Landing slider
+  var item_count = parseInt($('.schoolLanding__content-teacher').length);
   $('.schoolLanding__content-teachers').owlCarousel({
     loop: true,
     autoplay: true,
@@ -44,6 +45,22 @@ $(document).ready(function () {
     dots: false,
     nav: false,
     items: 5,
+    onInitialize: function(event) {
+      // Check if only one slide in carousel
+      if (item_count < 4) {
+        $('.schoolLanding__content-teachers').css({
+          'display': 'flex',
+          'justifyContent': 'center'
+        })
+        this.options.loop = false;
+        console.log('less one')
+      }
+      // I have more than one slide?! Great what are my options?!
+      else {
+        this.options.loop = true;
+        console.log('more one')
+      }
+    },
   })
   // Landing end
   // map_phone-close script start

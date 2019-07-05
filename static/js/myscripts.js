@@ -138,22 +138,6 @@ $(document).ready(function () {
         else{
             $('.reg_fill_all').show()
         }
-    });    
-    $('.make_payment').click(function(e) {
-        url = $(this).attr('url')
-        id = $(this).attr('id')
-        amount = $('.payment_amount'+id).val()
-        $.ajax({
-            url: url,
-            data: {
-                'amount':amount,
-                'id':id
-            },
-            dataType: 'json',
-            success: function (data) {
-                location.reload()
-            }
-        })        
     });
     $('.show_free_cards').click(function(e) {
         url = $(this).attr('url')
@@ -322,7 +306,7 @@ $(document).ready(function () {
             }
         });
     }) 
-    $('.change_subject_office').on('change', function(e) {
+    $('.change_squad_office').on('change', function(e) {
         id = $(this).attr('id')
         this_ = document.getElementById(id);
         object_id = this_.options[this_.selectedIndex].value;

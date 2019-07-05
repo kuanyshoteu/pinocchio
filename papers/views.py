@@ -1,5 +1,4 @@
 from urllib.parse import quote_plus
-
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -31,6 +30,7 @@ def lesson_details(request, lesson_id = None):
 def estimate_lesson_page(request, lesson_id = None):
     profile = get_profile(request)
     lesson = Lesson.objects.get(id=lesson_id)
+    is_in_school(profile, lesson.school)           
     if not profile.id in lesson.estimater_ids:
         lesson.estimater_ids.append(profile.id)
         lesson.grades.append(0)
@@ -50,7 +50,7 @@ def paper_details(request, paper_id = None):
     profile = get_profile(request)
     paper = Paper.objects.get(id=paper_id)
     lesson = paper.lessons.first()
-
+    is_in_school(profile, lesson.school)           
     subtheme_text_form = SubthemeTextForm(request.POST or None)
     if subtheme_text_form.is_valid():
         subtheme = subtheme_text_form.save(commit=False)
@@ -106,6 +106,7 @@ def add_lesson(request):
     only_teachers(profile)
     if request.GET.get('paper_id') and request.GET.get('group_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('paper_id')))
+        is_in_school(profile, lesson.school)           
         course = Course.objects.get(id = int(request.GET.get('group_id')))
         course.lessons.add(lesson)
     data = {
@@ -114,13 +115,12 @@ def add_lesson(request):
 
 def AddPaper(request):
     profile = Profile.objects.get(user = request.user.id)
-    print('fo')
     only_teachers(profile)
-    print('fo2')
     if request.GET.get('id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, lesson.school)           
         if request.GET.get('title'):
-            paper = Paper.objects.create(title=request.GET.get('title'))
+            paper = Paper.objects.create(title=request.GET.get('title'),school=lesson.school)
             subtheme = Subtheme.objects.create()
             subtheme.save()
             paper.subthemes.add(subtheme)
@@ -136,6 +136,7 @@ def AddSubtheme(request):
     only_teachers(profile)
     if request.GET.get('id'):
         paper = Paper.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, paper.school)           
         if request.GET.get('title'):
             subtheme = Subtheme.objects.create(title=request.GET.get('title'))
             paper.subthemes.add(subtheme)
@@ -175,6 +176,7 @@ def NewTask(request):
                 task.tags.add(tag)
         
         subtheme = Subtheme.objects.get(id=int(request.GET.get('subtheme_id')))
+        is_in_school(profile, subtheme.papers.first().school)           
         task.subthemes.add(subtheme)                    
         task.cost = request.GET.get('cost')
         task.save()
@@ -192,6 +194,7 @@ def AddTask(request):
     only_teachers(profile)
     if request.GET.get('subtheme_id') and request.GET.get('task_id'):
         subtheme = Subtheme.objects.get(id = int(request.GET.get('subtheme_id')))
+        is_in_school(profile, subtheme.papers.first().school)           
         task = Task.objects.get(id = int(request.GET.get('task_id')))
         if task in subtheme.task_list.all():
             subtheme.task_list.remove(task)
@@ -210,6 +213,7 @@ def create_lesson(request):
     name = 'Урок'
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
+        is_in_school(profile, school)           
         if len(school.lessons.all()) > 0:
             name += str(school.lessons.all()[len(school.lessons.all())-1].id + 1)
     lesson = Lesson.objects.create(title = name, author_profile = profile)
@@ -227,6 +231,7 @@ def rename_lesson(request):
     only_teachers(profile)
     if request.GET.get('id') and request.GET.get('name'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, lesson.school)           
         lesson.title = request.GET.get('name')
         lesson.save()
 
@@ -239,6 +244,7 @@ def rename_paper(request):
     if request.GET.get('new_title') and request.GET.get('id'):
         if len(request.GET.get('new_title')) > 0:
             paper = Paper.objects.get(id = int(request.GET.get('id')))
+            is_in_school(profile, paper.school)           
             if paper.title != request.GET.get('new_title'):
                 paper.title = request.GET.get('new_title')
                 paper.save()
@@ -251,6 +257,7 @@ def rewrite_subtheme(request):
     if request.GET.get('new_content') and request.GET.get('id'):
         if len(request.GET.get('new_content')) > 0:
             subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
+            is_in_school(profile, subtheme.papers.first().school)
             if subtheme.content != request.GET.get('new_content'):
                 subtheme.content = request.GET.get('new_content')
                 subtheme.save()
@@ -262,6 +269,7 @@ def delete_paper(request):
     only_teachers(profile)
     if request.GET.get('id'):
         paper = Paper.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, paper.school)
         paper.delete()
     data = {}
     return JsonResponse(data)
@@ -272,6 +280,7 @@ def rename_subtheme(request):
     if request.GET.get('new_title') and request.GET.get('id'):
         if len(request.GET.get('new_title')) > 0:
             subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
+            is_in_school(profile, subtheme.papers.first().school)
             if subtheme.title != request.GET.get('new_title'):
                 subtheme.title = request.GET.get('new_title')
                 subtheme.save()
@@ -283,6 +292,7 @@ def delete_subtheme(request):
     only_teachers(profile)
     if request.GET.get('id'):
         subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, subtheme.papers.first().school)
         subtheme.delete()
     data = {}
     return JsonResponse(data)
@@ -292,6 +302,7 @@ def delete_lesson(request):
     only_teachers(profile)
     if request.GET.get('id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, lesson.school)
         lesson.delete()
     data = {}
     return JsonResponse(data)
@@ -301,6 +312,7 @@ def delete_course(request):
     only_teachers(profile)
     if request.GET.get('id'):
         course = Course.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, course.school)
         course.delete()
     data = {}
     return JsonResponse(data)
@@ -377,6 +389,7 @@ def estimate_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('new_rating') and request.GET.get('lesson_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
+        is_in_school(profile, lesson.school)
         if not profile.id in lesson.estimater_ids:
             lesson.estimater_ids.append(profile.id)
             lesson.grades.append(1)
@@ -486,6 +499,7 @@ def course_seller(request, course_id=None):
 def course_update(request, course_id=None):
     profile = get_profile(request)
     course = get_object_or_404(Course, id=course_id)
+    is_in_school(profile, course.school)
     form = CourseForm(request.POST or None, request.FILES or None, instance=course)
     if form.is_valid():
         course = form.save(commit=False)
@@ -513,6 +527,7 @@ def course_create(request):
     if form.is_valid():
         course = form.save(commit=False)
         course.author_profile = profile
+        course.school = profile.schools.first()
         course.save()
         return HttpResponseRedirect(course.get_absolute_url())
 

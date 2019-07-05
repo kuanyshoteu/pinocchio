@@ -98,7 +98,9 @@
                                 <div class="crm_title">{{ column.title }}</div>
                                 <div class="crm_divider"></div>
                                 <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
+                                {% if forloop.counter > 1 %}
                                 {% include 'school/new_card_form.html' %}
+                                {% endif %}
                             </div>
                             <div style="height: 70%;overflow-x: scroll;background-color: #4A4A4A;">
                                 <div class="" style="padding: 0 4px;color: #fff;">

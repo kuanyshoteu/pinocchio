@@ -276,28 +276,30 @@
         })
         firstCollection = new ymaps.GeoObjectCollection(null)
         {% for school in schools_all %}
-            x = parseFloat('{{school.latitude}}')
-            y = parseFloat('{{school.longtude}}')
-            firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
-                {
-                    iconLayout: 'default#imageWithContent',
-                    iconImageHref: '{%static "images/circle.png" %}',
-                    iconImageSize: [10, 10],
-                    iconImageOffset: [-5, -5],
-                    iconContentOffset: [15, 15],
-                }
-            ));
-            firstCollection.events
-            .add('click', function (e) {
-                show_school(e.get('target').properties._data.id)
-            })
-            .add('mouseenter', function (e) {
-                e.get('target').options.set('preset', 'islands#greenIcon');
-            })
-            .add('mouseleave', function (e) {
-                e.get('target').options.unset('preset');
-            });
-            myMap.geoObjects.add(firstCollection);
+            {% for office in school.school_offices.all %}
+                x = parseFloat('{{office.latitude}}')
+                y = parseFloat('{{office.longtude}}')
+                firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
+                    {
+                        iconLayout: 'default#imageWithContent',
+                        iconImageHref: '{%static "images/circle.png" %}',
+                        iconImageSize: [10, 10],
+                        iconImageOffset: [-5, -5],
+                        iconContentOffset: [15, 15],
+                    }
+                ));
+                firstCollection.events
+                .add('click', function (e) {
+                    show_school(e.get('target').properties._data.id)
+                })
+                .add('mouseenter', function (e) {
+                    e.get('target').options.set('preset', 'islands#greenIcon');
+                })
+                .add('mouseleave', function (e) {
+                    e.get('target').options.unset('preset');
+                });
+                myMap.geoObjects.add(firstCollection);
+            {% endfor %}
         {% endfor %}
         $( function() {
             $( "#slider-range" ).slider({

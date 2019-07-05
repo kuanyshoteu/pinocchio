@@ -31,6 +31,7 @@ def subject_detail(request, slug=None):
     days = Day.objects.all()
     cells = Cell.objects.all()
     school = instance.school
+    is_in_school(profile, school)
     time_periods = school.time_periods.all()
     if len(cells) < len(days) * len(time_periods):
         for day in days:
@@ -101,6 +102,7 @@ def subject_update(request, slug=None):
     profile = get_profile(request)
     only_staff(profile)
     school = instance.school
+    is_in_school(profile, school)
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
     if is_profi(profile, 'Manager'):
         if form.is_valid():
@@ -126,9 +128,6 @@ def subject_update(request, slug=None):
             if 'subject_icon' in request.FILES:
                 file = request.FILES['subject_icon']
                 instance.image_icon = file
-            if 'subject_backg' in request.FILES:
-                file = request.FILES['subject_backg']
-                instance.image_back = file
         get_number_of_materials = int(request.POST.get('number_of_materials'))
         if instance.number_of_materials < get_number_of_materials:
             if get_number_of_materials < 100:
@@ -166,7 +165,6 @@ def subject_update(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
-        "offices":school.school_offices.all(),
         "school_money":school.money,
     }
     return render(request, "subjects/subject_create.html", context)
@@ -193,6 +191,8 @@ def subject_delete(request, slug=None):
     instance = Subject.objects.get(slug=slug)
     profile = get_profile(request)
     only_managers(profile)
+    school = instance.school
+    is_in_school(profile, school)
     if request.method == "POST":
         instance.delete()
         messages.success(request, "Successfully deleted")
@@ -216,6 +216,8 @@ def add_paper(request):
     only_teachers(profile)
     if request.GET.get('day_id') and request.GET.get('paper_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('paper_id')))
+        school = lesson.school
+        is_in_school(profile, school)
         subject_materials = SubjectMaterials.objects.get(id=int(request.GET.get('day_id')))
         subject_materials.lessons.add(lesson)
     data = {
@@ -229,6 +231,8 @@ def remove_lesson(request):
     if request.GET.get('material_id') and request.GET.get('lesson_id'):
         material = SubjectMaterials.objects.get(id=int(request.GET.get('material_id')))
         lesson = Lesson.objects.get(id=int(request.GET.get('lesson_id')))
+        school = lesson.school
+        is_in_school(profile, school)
         material.lessons.remove(lesson)
         print('ok')
     data = {
@@ -238,8 +242,9 @@ def remove_lesson(request):
 def subject_schedule(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
     subject = Subject.objects.get(id = id)
+    school = subject.school
+    is_in_school(profile, school)
     res = []
     for timep in school.time_periods.all():
         line = []
@@ -252,7 +257,12 @@ def subject_schedule(request, id=None):
                     if lecture.cabinet:
                         cabinet = lecture.cabinet.title
                         cabinet_id = lecture.cabinet.id
-                    lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet, cabinet_id])
+                    office_cabs = [[cabinet_id, cabinet]]
+                    if lecture.office:
+                        for cab in lecture.office.cabinets.all():
+                            if cab.id != cabinet_id:
+                                office_cabs.append([cab.id, cab.title])
+                    lectures.append([lecture.id, lecture.squad.title, lecture.squad.id, cabinet, cabinet_id, office_cabs])
             line.append([cell.id, lectures])
         res.append([timep.start + '-' + timep.end, line])
 
@@ -264,8 +274,9 @@ def subject_schedule(request, id=None):
 def squad_list(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
     subject = Subject.objects.get(id = id)
+    school = subject.school
+    is_in_school(profile, school)
     res = []
     res2 = []
     for squad in school.groups.all():
@@ -284,6 +295,7 @@ def change_schedule(request, id=None):
     only_managers(profile)
     subject = Subject.objects.get(id = id)
     school = subject.school
+    is_in_school(profile, school)
     school.new_schedule = True
     school.save()
 
@@ -299,7 +311,7 @@ def change_schedule(request, id=None):
                     cell=cell, 
                     school=school,
                     day=cell.day,
-                    office=subject.office,
+                    office=squad.office,
                     category=subject.category,
                     age=subject.age)
                 lecture.people.add(*squad_students)
@@ -325,6 +337,8 @@ def add_squad(request):
     only_managers(profile)
     if request.GET.get('squad_id') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
+        school = subject.school
+        is_in_school(profile, school)
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         subject.squads.add(squad)
         squad_students = squad.students.all()
@@ -340,6 +354,8 @@ def delete_squad(request):
     only_managers(profile)
     if request.GET.get('squad_id') and request.GET.get('subject_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
+        school = subject.school
+        is_in_school(profile, school)
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         subject.squads.remove(squad)
         squad_students = squad.students.all()
@@ -354,6 +370,8 @@ def change_category(request, id=None):
     only_managers(profile)
     if request.GET.get('object_id'):
         subject = Subject.objects.select_related('category').get(id = id)
+        school = subject.school
+        is_in_school(profile, school)
         students = subject.students.all()
         if subject.category:
             subject.category.students.remove(*students)
@@ -375,6 +393,8 @@ def change_age(request, id=None):
     only_managers(profile)
     if request.GET.get('object_id'):
         subject = Subject.objects.select_related('age').get(id = id)
+        school = subject.school
+        is_in_school(profile, school)
         students = subject.students.all()
         if subject.age:
             subject.age.students.remove(*students)
@@ -391,23 +411,6 @@ def change_age(request, id=None):
     }
     return JsonResponse(data)
 
-def change_office(request, id=None):
-    profile = get_profile(request)
-    only_managers(profile)
-    if request.GET.get('object_id'):
-        subject = Subject.objects.select_related('office').get(id = id)
-        if int(request.GET.get('object_id')) == -1:
-            subject.office = None
-            change_lecture_options(subject, 'office', None)
-        else:
-            office = Office.objects.get(id = int(request.GET.get('object_id')))
-            subject.office = office
-            change_lecture_options(subject, 'office', office)
-        subject.save()
-    data = {
-    }
-    return JsonResponse(data)
-
 def change_lecture_options(subject, option, objectt):
     if option == 'subject':
         for lecture in subject.subject_lectures.all():
@@ -418,7 +421,7 @@ def change_lecture_options(subject, option, objectt):
             lecture.age = objectt
             lecture.save()
     if option == 'office':
-        for lecture in subject.subject_lectures.all():
+        for lecture in subject.squad_lectures.all():
             lecture.office = objectt
             lecture.save()
         
@@ -427,6 +430,8 @@ def delete_lesson(request, id=None):
     only_managers(profile)
     if request.GET.get('lecture_id'):
         subject = Subject.objects.get(id = id)
+        school = subject.school
+        is_in_school(profile, school)
         lecture = subject.subject_lectures.get(id=int(request.GET.get('lecture_id')))
         lecture.delete()
     data = {
@@ -438,6 +443,8 @@ def change_lecture_cabinet(request):
     only_managers(profile)
     if request.GET.get('cabinet_id') and request.GET.get('lecture_id'):
         lecture = Lecture.objects.get(id=int(request.GET.get('lecture_id')))
+        school = lecture.school
+        is_in_school(profile, school)        
         cabinet = Cabinet.objects.get(id=int(request.GET.get('cabinet_id')))
         lecture.cabinet = cabinet
         lecture.save()

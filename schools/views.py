@@ -30,10 +30,6 @@ import os
 from constants import *
 
 def school_rating(request):
-    # for sch in School.objects.all():
-    #     ppp = sch.people.all()
-    #     for tp in sch.time_periods.all():
-    #         tp.people.add(*ppp)
     profile = get_profile(request)
     if len(profile.schools.all()) == 0:
         context = {
@@ -70,12 +66,12 @@ def school_payments(request):
     school = profile.schools.first()
     context = {
         "profile":profile,
-        "instance": profile.schools.first(),
+        "instance": school,
         "squads":school.groups.all(),
         "payments":True,
         "subject_categories":school.school_subject_categories.all(),
         "subject_ages":school.school_subject_ages.all(),
-        "all_students":school.people.filter(),
+        "all_students":school.people.filter(is_student=True),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -823,6 +819,8 @@ def save_salary(request):
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('salary'):
         worker = Profile.objects.get(id=int(request.GET.get('id')))
+        school = profile.schools.first()
+        is_in_school(worker, school)
         worker.salary = int(request.GET.get('salary'))
         worker.save()
     data = {
@@ -878,8 +876,10 @@ def show_free_cards(request):
 
 def get_card_squads(request):
     profile = Profile.objects.get(user = request.user.id)
-    only_managers(profile)    
+    only_managers(profile)
     card = CRMCard.objects.get(id=int(request.GET.get('id')))
+    school = card.school
+    is_in_school(profile, school)
     profile = card.card_user
     res = []
     if profile:
@@ -894,6 +894,8 @@ def take_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)    
     card = CRMCard.objects.get(id=int(request.GET.get('id')))
+    school = card.school
+    is_in_school(profile, school)
     ok = False
     if not card.author_profile:
         card.author_profile = profile
@@ -914,6 +916,7 @@ def change_day_of_week(request):
     status = 'no'
     card = CRMCard.objects.get(id=int(request.GET.get('card')))
     school = card.school
+    is_in_school(profile, school)
     if len(card.days_of_weeks) < 7:
         card.days_of_weeks = [False,False,False,False,False,False,False]
     tag = Hashtag.objects.get_or_create(title='day'+str(int(request.GET.get('id'))+1))[0]
@@ -990,6 +993,7 @@ def change_title(request):
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('text') and request.GET.get('status') and request.GET.get('text') != "":
         school = School.objects.get(id = int(request.GET.get('id')))
+        is_in_school(profile, school)
         if request.GET.get('status') == 'title':
             school.title = request.GET.get('text') 
         if request.GET.get('status') == 'slogan':
