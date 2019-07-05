@@ -71,3 +71,11 @@ class OfficeAdmin(admin.ModelAdmin):
     class Meta:
         model = Office
 admin.site.register(Office, OfficeAdmin)
+
+class SchoolBannerAdmin(admin.ModelAdmin):
+    list_display = ["id", "school"]
+    list_display_links = ["id"]
+    list_filter = ["id"]
+    class Meta:
+        model = SchoolBanner
+admin.site.register(SchoolBanner, SchoolBannerAdmin)

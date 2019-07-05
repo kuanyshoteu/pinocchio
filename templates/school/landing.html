@@ -3,12 +3,14 @@
 {% load staticfiles %}
 {% load ttags %}
 {% block content %}
-  <header class="schoolLanding__header-wrapper">
-    <div style="background: url(https://zapis.kz/data/pics/salon/pic-4019.jpg?v=0);" class="schoolLanding__header-img"></div>
-    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4020.jpg?v=0');" class="schoolLanding__header-img"></div>
-    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4010.jpg?v=0');" class="schoolLanding__header-img"></div>
+  <header class="schoolLanding__header-wrapper" style="display: block;">
+    {% for banner in school.banners.all %}
+        {% if banner.image_banner and forloop.counter < 3 %}
+          <div style="width: 33%;display: inline-block;background: url({{banner.image_banner.url}});" class="schoolLanding__header-img"></div>
+        {% endif %}
+    {% endfor %}
   </header>
-
+  
   <main class="schoolLanding__container">
 
     <div class="schoolLanding__content-header">

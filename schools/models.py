@@ -38,7 +38,6 @@ class School(models.Model):
     phones = ArrayField(models.TextField(), default = list)
     social_networks = ArrayField(models.TextField(), default = list)
     offices = models.IntegerField(default=0)
-
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
 

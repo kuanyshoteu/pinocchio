@@ -132,6 +132,14 @@ def school_info(request):
     school = profile.schools.first()
     if is_profi(profile, 'Director'):
         money = school.money
+    if request.POST: 
+        if len(request.FILES) > 0:
+            if 'school_banner' in request.FILES:
+                file = request.FILES['school_banner']
+                banner = school.banners.create()
+                banner.image_banner = file
+                banner.save()
+                return redirect("schools:info")
     context = {
         "profile":profile,
         "instance": school,
