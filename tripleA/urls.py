@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from accounts.views import (logout_view, confirm_email)
 from papers.views import courses
-from main.views import(main_view, loaderio, adilmed)
+from main.views import(main_view, loaderio)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,7 +40,6 @@ urlpatterns = [
     url(r'^loaderio-3614d85f1228305eef28963b2654a5ae', loaderio, name='loaderio'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^confirm/', confirm_email, name="confirm_email"),
-    url(r'^adilmed/', adilmed, name="adilmed"),
     url(r'^', include("main.urls", namespace='main')),
 ]
 if settings.DEBUG:

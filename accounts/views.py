@@ -469,7 +469,9 @@ def make_payment(request):
         school.money += amount
         school.save()
         if profile.money > profile.salary:
-            if not profile.card:
+            if profile.card:
+                card = profile.card            
+            else:
                 card = CRMCard.objects.create(
                     author_profile=manager,
                     card_user = profile,
@@ -481,8 +483,6 @@ def make_payment(request):
                     saved = True,
                     was_called = True
                 )[0]
-            else:
-                card = profile.card            
             card.was_called = True
         profile.save()
     data = {
