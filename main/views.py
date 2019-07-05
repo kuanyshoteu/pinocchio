@@ -433,6 +433,7 @@ def get_landing(request):
             'worktime':school.worktime,
             'subjects':subjects,
             'site':school.site,
+            'average_cost':school.average_cost,
             'landing_url':school.landing(),
         }
         return JsonResponse(data)
