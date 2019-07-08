@@ -7,21 +7,12 @@
                 <a class="item lftitem" href='{{ profile.get_absolute_url }}'>
                     <i class="home icon"></i> Моя страница
                 </a>
-                <a class="item lftitem help7 help77hb help26 help2626hb hepl45 help4545hb help65 help6565hb" href='{% url "news:list" %}'>
-                    <i class="newspaper icon"></i>Новости
-                </a>
                 {% if is_director %}
                 <a class="item lftitem" href='{% url "schools:info" %}'>
                     <i class="cog icon"></i>Управление
                 </a>
                 {% endif %}
                 {% if is_manager or is_director %}
-                <a class="item lftitem" href='{% url "schools:schedule" %}'>
-                    <i class="table icon"></i>Расписание
-                </a>
-                <a class="item lftitem" href='{% url "schools:payments" %}'>
-                    <i class="dollar sign icon"></i>Оплата
-                </a>
                 <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}'>
                     <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>
                     CRM
@@ -29,14 +20,27 @@
                     <span class="left_menu_number">{{profile.skill.need_actions}}</span>
                     {% endif %}                    
                 </a>
+                <a class="item lftitem" href='{% url "schools:schedule" %}'>
+                    <i class="table icon"></i>Расписание
+                </a>
                 {% endif %}
                 {% if is_manager or is_trener or is_director %}
                 <a class="item lftitem help27 help2727hb help66 help6666hb" href='{% url "documents:main" %}'>
                     <i class="folder icon"></i>Документы
                 </a>
                 {% endif %}
-                <a class="item lftitem help8 help88hb help28 help2828hb help46 help4646hb help67 help6767hb" href='{% url "schools:rating" %}'>
-                    <i class="trophy icon"></i>Рейтинги
+                {% if is_trener or is_director %}
+                <a class="item lftitem help48 help4848hb help69 help6969hb" href='{% url "library:main" %}'>
+                    <i class="file alternate icon"></i>База уроков
+                </a>
+                {% endif %}
+                {% if is_manager or is_director %}
+                <a class="item lftitem" href='{% url "schools:payments" %}'>
+                    <i class="dollar sign icon"></i>Оплата
+                </a>
+                {% endif %}
+                <a class="item lftitem help7 help77hb help26 help2626hb hepl45 help4545hb help65 help6565hb" href='{% url "news:list" %}'>
+                    <i class="newspaper icon"></i>Новости
                 </a>
                 {% if is_manager or is_trener or is_director %}
                 <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "squads:list" %}'>
@@ -46,20 +50,18 @@
                     <i class="book icon"></i>Курсы
                 </a>
                 {% endif %}
-                {% if is_trener or is_director %}
-                <a class="item lftitem help48 help4848hb help69 help6969hb" href='{% url "library:main" %}'>
-                    <i class="file alternate icon"></i>База уроков
-                </a>
-                {% endif %}
-                <a class="item lftitem help6 help66hb help49 help4949hb help70 help7070hb" href='{% url "courses" %}'>
-                    <i class="rocket icon"></i>Курс store
+                <a class="item lftitem help8 help88hb help28 help2828hb help46 help4646hb help67 help6767hb" href='{% url "schools:rating" %}'>
+                    <i class="trophy icon"></i>Рейтинги
                 </a>
                 {% if is_manager or is_trener or is_director %}
                 <a class="item lftitem help30 help3030hb help50 help5050hb help71 help7171hb" href='/todolist/'>
                     <i class="check calendar icon"></i>Задания
                 </a>
                 {% endif %}
-                {% if is_trener or profile.is_student and profile.schools.all > 0 %}                
+<!--                 <a class="item lftitem help6 help66hb help49 help4949hb help70 help7070hb" href='{% url "courses" %}'>
+                    <i class="rocket icon"></i>Курс store
+                </a>
+ -->                {% if is_trener or profile.is_student and profile.schools.all > 0 %}                
                 <div class="ui divider" style="margin: 7px 0 7px 35px;width: 100px;"></div>
                 <a class="item lftitem" href='{{ profile.hislessons }}'>
                     <i class="arrow right icon"></i>Урок

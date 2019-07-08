@@ -122,7 +122,7 @@
                                                         {% if not card.saved %}
                                                             <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
                                                         {%endif%}
-                                                        <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}')"><i class="icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>     
+                                                        <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', 'null')"><i class="icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>     
                                                     </div>
                                                     <div style="width: 80%;">
                                                         {% if card.author_profile %}
@@ -170,11 +170,15 @@
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 <script>
-    function openNav(id, name) {
+    function openNav(id, name, predoplata) {
         $('#register_students_calendar').modal('show')
         $('#current_user_name').text(name)
         $('.card_for_save').attr('id', id)
         $('.insquadicon').hide()
+        console.log(predoplata)
+        if (predoplata == 'predoplata') {
+            $('.predoplata_form').show()
+        }
         $.ajax({
             url: $('.card_for_save').attr('get_card_squads'),
             data: {
@@ -207,7 +211,6 @@
         },
         methods: {
             move_card(column_id) {
-                console.log('fff')
                 id = $('.current_card').attr('id')
                 axios.get('/schools/api/move_card/', {
                     params: {
@@ -217,8 +220,11 @@
                 });
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 if(oldcolumn_id != '4' || column_id != '5'){
-                    if (column_id == '4' || column_id == '2') {
-                        openNav(id, $('.current_card').attr('name'));
+                    if (column_id == '2') {
+                        openNav(id, $('.current_card').attr('name'), 'null');
+                    }
+                    if (column_id == '4') {
+                        openNav(id, $('.current_card').attr('name'), 'predoplata');
                     }
                 }
             },

@@ -83,6 +83,10 @@ def account_view(request, user = None):
             "profile": profile,
         }
         return render(request, "confirm.html", context)
+    school_money = 0
+    is_director = is_profi(profile, 'Director')
+    if is_director:
+        school_money = profile.schools.first().money
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
@@ -101,9 +105,9 @@ def account_view(request, user = None):
         "is_this_director":is_profi(hisprofile, 'Director'),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
+        "is_director":is_director,
         'hint':skill.hint_numbers[0],
-        "school_money":profile.schools.first().money,
+        "school_money":school_money,
     }
     return render(request, "profile.html", context)
 
@@ -354,11 +358,15 @@ def att_present(request):
                 if student.money < student.salary:
                     was_minus = True
                 student.money -= attendance.subject.cost
+                print('sdfsdfsdfsdf****')
                 student.save()
-                if student.money < student.salary and was_minus == False:
+                student_card = student.card 
+                if student.money < student.salary and was_minus == False and student_card.was_called == True:
                     skill = student.card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()
+                    student_card.was_called = False
+                    student_card.save()
         attendance.save()
         profile.save()
     data = {
@@ -461,7 +469,11 @@ def make_payment(request):
         profile = Profile.objects.get(id = int(request.GET.get('id')))
         school = manager.schools.first()
         is_in_school(profile, school)        
+        was_minus = False
+        if profile.money < profile.salary:
+            was_minus = True
         profile.money += amount
+        profile.save()
         profile.payment_history.create(
             manager = manager,
             amount = amount,
@@ -481,10 +493,20 @@ def make_payment(request):
                     mail = profile.mail,
                     saved = True,
                     was_called = True
+<<<<<<< HEAD
                 )
             card.was_called = True
             card.save()
         profile.save()
+=======
+                )[0]
+            if was_minus and card.was_called == False and profile.money > profile.salary:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()            
+            card.was_called = True
+            card.save()
+>>>>>>> 89dd518018321946cc2ee64aff2b48a07c991a6e
     data = {
     }
     return JsonResponse(data)

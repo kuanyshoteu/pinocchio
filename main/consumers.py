@@ -7,6 +7,7 @@ from django.utils import timezone
 
 class ChatConsumer(AsyncConsumer):
     async def websocket_connect(self, event):
+        print('connect yes')
         user = self.scope['user']
         profile = self.get_profile(user)
         for school in profile.schools.all():
@@ -28,13 +29,16 @@ class ChatConsumer(AsyncConsumer):
         if post_text is not None:
             loaded_data = json.loads(post_text)
             text = loaded_data.get('text')
+            image_url = ''
+            if profile.image:
+                image_url = profile.image.url
             my_response = {
                 'message':text,
                 'author':profile.first_name,
-                'image_url':profile.image.url,
+                'image_url':image_url,
                 'time':timezone.now().strftime('%d %B %Yг. %H:%M'),
             }
-            print(self.chat_room, 'fm')
+            print('********')
             self.create_notification(profile, text, '')
             await self.channel_layer.group_send(
                 self.chat_room,
@@ -58,13 +62,18 @@ class ChatConsumer(AsyncConsumer):
 
     def create_notification(self, profile, text, url):
         for pr in profile.schools.first().people.all():
-            pr.notifications_number += 1
-            pr.save()
+            if pr.skill:
+                skill = pr.skill
+                skill.notifications_number += 1
+                skill.save()
+        image_url = 'None'
+        if profile.image:
+            image_url = profile.image.url
         Notification.objects.create(
             text = text,
             author_profile = profile,
             school = profile.schools.first(),
             itstype = 'news',
             url = url,
-            image_url = profile.image.url
+            image_url = image_url
         )

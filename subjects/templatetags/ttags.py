@@ -136,7 +136,7 @@ def check_date(material, squad):
     date = get_date(material, squad)
     if date > timezone.now().date():
         return 'future'
-    elif date + timedelta(17) >= timezone.now().date():
+    elif date + timedelta(150) >= timezone.now().date():
         return 'now'
     else:
         return 'past'
@@ -147,7 +147,15 @@ def get_current_attendance(subject, squad):
         return '_'
     lectures = squad.squad_lectures.filter(subject = subject)
     num_of_lectures = len(lectures)
+<<<<<<< HEAD
     if num_of_lectures > 0 and  timezone.now().date() >= squad.start_date:
+=======
+    if timezone.now().date() >= squad.start_date:
+        delta = (timezone.now().date() - squad.start_date).days
+    else:
+        delta = (squad.end_date - squad.start_date).days
+    if num_of_lectures > 0:
+>>>>>>> 89dd518018321946cc2ee64aff2b48a07c991a6e
         delta = (timezone.now().date() - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7
@@ -178,7 +186,9 @@ def get_current_attendance(subject, squad):
             if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
                 create_atts(squad, sm, subject)
             attendances = sm.sm_atts.filter(squad = squad)
-            get_date_results = get_date(attendances[0].subject_materials, squad)
+            get_date_results = '_'
+            if len(attendances)>0:
+                get_date_results = get_date(attendances[0].subject_materials, squad)
             if get_date_results == '_':
                 res = [[attendances, '_','_']] + res
             else:
@@ -192,7 +202,9 @@ def get_current_attendance(subject, squad):
                 if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
                     create_atts(squad, sm, subject)
                 attendances = sm.sm_atts.filter(squad = squad)
-                get_date_results = get_date(attendances[0].subject_materials, squad)
+                get_date_results = '_'
+                if len(attendances)>0:
+                    get_date_results = get_date(attendances[0].subject_materials, squad)
                 if get_date_results == '_':
                     res = [[attendances, '_','_']] + res
                     res.append([attendances, '_','_'])
@@ -326,3 +338,15 @@ def rating_empty_stars(review):
 @register.filter
 def get_ratings(school, number):
     return len(school.reviews.filter(rating=number))
+
+@register.filter
+def get_subject_courses_len(subject, school):
+    return len(school.school_subjects.filter(category=subject))
+
+@register.filter
+def get_age_courses_len(age, school):
+    return len(school.school_subjects.filter(age=age))
+
+@register.filter
+def get_column_cards_len(column, school):
+    return len(school.crm_cards.filter(column=column))

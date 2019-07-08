@@ -1,4 +1,18 @@
 $(document).ready(function () {
+    $('.delete_school_banner').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#banner'+id).hide('fast')
+            }
+        })
+    })
     $('.save_review').click(function(e) {
         number = $('.result_rating').attr('number')
         url = $(this).attr('url')
@@ -11,20 +25,26 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
-                number = parseInt(number)
-                stars = ''
-                notstars = ''
-                for (var i = 1; i <= number; i++) {
-                    stars += '<i class="icon star"></i>'
+                if (data.nouser) {
+                    $('.review_error').show()
                 }
-                for (var i = number+1; i <= 5; i++) {
-                    notstars += '<i class="icon star"></i>'
+                else{
+                    $('.review_error').hide()
+                    number = parseInt(number)
+                    stars = ''
+                    notstars = ''
+                    for (var i = 1; i <= number; i++) {
+                        stars += '<i class="icon star"></i>'
+                    }
+                    for (var i = number+1; i <= 5; i++) {
+                        notstars += '<i class="icon star"></i>'
+                    }
+                    rev='<div class="schoolLanding__content-review-comment__rating"> <span class="organization__info-rating-icon active">'+
+                    stars+'</span> <span class="organization__info-rating-icon"> '+notstars+
+                    ' </span> </div> <div class="schoolLanding__content-review-comment__text"> '+text+
+                    ' </div> <div class="schoolLanding__content-review-comment__about"> <span class="schoolLanding__content-review-comment__about-left"> <span class="schoolLanding__content-review-comment__about-name">'+data.name+'</span> <span class="schoolLanding__content-review-comment__about-date">'+data.timestamp+'</span> </span> </div>'
+                    $(rev).appendTo('.schoolLanding__content-review-comment')
                 }
-                rev='<div class="schoolLanding__content-review-comment__rating"> <span class="organization__info-rating-icon active">'+
-                stars+'</span> <span class="organization__info-rating-icon"> '+notstars+
-                ' </span> </div> <div class="schoolLanding__content-review-comment__text"> '+text+
-                ' </div> <div class="schoolLanding__content-review-comment__about"> <span class="schoolLanding__content-review-comment__about-left"> <span class="schoolLanding__content-review-comment__about-name">'+data.name+'</span> <span class="schoolLanding__content-review-comment__about-date">'+data.timestamp+'</span> </span> </div>'
-                $(rev).appendTo('.schoolLanding__content-review-comment')
             }
         })
     })

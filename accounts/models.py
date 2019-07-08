@@ -218,7 +218,7 @@ class Hashtag(models.Model):
 
 class CRMCard(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
-    card_user = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='card')
+    card_user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_cards')
     column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
     name = models.CharField(max_length=250)
@@ -256,7 +256,7 @@ class Notification(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='notifications')
     itstype = models.CharField(max_length=25)
     profession = models.ManyToManyField(Profession, related_name='notifications')
-    url = models.TextField(default='')
+    url = models.TextField(default='', null=True)
     image_url = models.TextField(default='')
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:

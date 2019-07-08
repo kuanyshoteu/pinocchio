@@ -3,14 +3,18 @@
 {% load staticfiles %}
 {% load ttags %}
 {% block content %}
-  <header class="schoolLanding__header-wrapper">
-    <div style="background: url(https://zapis.kz/data/pics/salon/pic-4019.jpg?v=0);" class="schoolLanding__header-img"></div>
-    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4020.jpg?v=0');" class="schoolLanding__header-img"></div>
-    <div style="background: url('https://zapis.kz/data/pics/salon/pic-4010.jpg?v=0');" class="schoolLanding__header-img"></div>
+  <header class="schoolLanding__header-wrapper" style="display: block;margin-top: -5px;">
+    {% if school.banners.all|length %}
+          {% for banner in school.banners.all %}
+              {% if banner.image_banner and forloop.counter < 4 %}
+                <div style="width: calc(33.333% - 6px);display: inline-block;background: url({{banner.image_banner.url}});" class="schoolLanding__header-img"></div>
+              {% endif %}
+          {% endfor %}
+    {% else %}
+          <div style="width: calc(100% - 3px);display: inline-block;background: url({% static 'images/fon1.png' %});" class="schoolLanding__header-img"></div>
+    {% endif %}
   </header>
-
   <main class="schoolLanding__container">
-
     <div class="schoolLanding__content-header">
       <div class="schoolLanding__content-headerLeft">
         <div class="organization__info-top-part">
@@ -23,7 +27,7 @@
                 <span class="organization__info-buttons-call">
                   <i class="icon phone"></i>
                 </span>
-                {% for phone in school.phones %}{{phone}} {% if forloop.counter < school.phones|length %},{%endif%}{% endfor %}
+                {% for phone in school.phones %}{{phone}} {% if forloop.counter < school.phones|length %},{% endif %}{% endfor %}
               </p>
             </div>
           </div>
@@ -48,7 +52,7 @@
                 </span>
               </span>
               <p class="organization__info-rating-desc">
-                38 отзывов
+                {{ school.reviews.all|length }} отзывов
               </p>
             </div>
           </div>
@@ -64,8 +68,12 @@
                 {{school.worktime}}
               </span>
               <span class="organization__info-item">
-                <i class="icon instagram"></i>
-                {{school.social_networks}}
+                {% for social in school.social_networks %}
+                    <a href="{{ social.0 }}">{{ social.1 }}</a>
+                    {% if forloop.counter < school.social_networks|length %}
+                      ,
+                    {% endif %}
+                {% endfor %}
               </span>
             </div>
             <a class="organization__info-button">Записаться</a>
@@ -77,12 +85,12 @@
 
     <div class="schoolLanding__content-category">
       <ul class="schoolLanding__content-category__list">
-        <li class="schoolLanding__content-category__item">
+        <li class="schoolLanding__content-category__item active" id="all">
           <i class="icon list ul"></i>
           <p class="schoolLanding__content-category__item__title">Все</p>
         </li>
         {% for subject in school.school_subject_categories.all %}
-        <li class="schoolLanding__content-category__item">
+        <li class="schoolLanding__content-category__item" id="{{ subject.id }}">
           <i class="icon book"></i>
           <p class="schoolLanding__content-category__item__title">{{ subject.title }}</p>
         </li>
@@ -93,7 +101,7 @@
     <div class="schoolLanding__content-services">
       <h3 class="schoolLanding__content-services__title">Курсы</h3>
       {% for course in school.school_subjects.all %}
-      <section class="schoolLanding__content-services__item">
+      <section class="schoolLanding__content-services__item category{{ course.category.id }} categoryall">
         <div class="schoolLanding__content-services__item-left">
           <h2 class="schoolLanding__content-services__item-title">{{ course.title }}</h2>
           <span class="schoolLanding__content-services__item-time">{{ course.content }}</span>
@@ -111,9 +119,11 @@
     <div class="schoolLanding__content-teachers owl-carousel owl-theme">
       {% for teacher in all_teachers %}
       <div class="schoolLanding__content-teacher">
-        <div style="background: url({% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %});" class="schoolLanding__content-teacher__photo"></div>
-        <div class="schoolLanding__content-teacher__name">{{teacher.first_name}}</div>
-        <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+        <a href="{{ teacher.get_absolute_url }}">
+          <div style="background: url({% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %}) no-repeat;" class="schoolLanding__content-teacher__photo"></div>
+          <div class="schoolLanding__content-teacher__name">{{teacher.first_name}}</div>
+          <div class="schoolLanding__content-teacher__desc">Какое то описание учителя</div>
+        </a>
       </div>
       {% endfor %}
     </div>
@@ -233,16 +243,16 @@
               <i class="icon star make_review" id="star4" number="4"></i>
               <i class="icon star make_review" id="star5" number="5"></i>
             </span>
-
             <form class="ui form wright_review" style="width: 80%;margin: auto;margin-top: 15px;display: none;">
               <textarea class="review_text" placeholder="Напишите отзыв" style="height: 80px;"></textarea>
               <div style="text-align: center;">
                 <input class="ui button green save_review" url="{{school.save_review_url}}" value="Отправить" type="submit" onclick="return false">                
               </div>
-            </form>          
+            </form>  
+            <br><br>
+            <div class="review_error highlight_red" style="display: none;">Сначала нужно войти в аккаунт или зарегестрироваться</div>        
         </div>
       </div>
     </div>
-
   </main>
 {% endblock content %}

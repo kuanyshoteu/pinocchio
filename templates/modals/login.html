@@ -3,8 +3,8 @@
     <div class="content">
         <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
             <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
-            <input class="username" name="username" placeholder="Номер телефона или Email">
-            <input class="password" type="password" name="password" placeholder="Пароль">
+            <input class="username" name="username" placeholder="Номер телефона или Email" style="margin-bottom: 10px;">
+            <input class="password" type="password" name="password" placeholder="Пароль" style="margin-bottom: 10px;">
             <div style="text-align: center;">
                 <input class="ui button green login-btn" value="Войти" type="submit" onclick="return false">
 <!--                 <button class="ui button green login-btn" type="button">Войти</button> -->

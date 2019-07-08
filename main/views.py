@@ -361,8 +361,9 @@ def get_notifications(request):
     timezone.now()
     res = []
     i = 0
-    profile.skill.notifications_number = 0
-    profile.save()
+    skill = profile.skill
+    skill.notifications_number = 0
+    skill.save()
     for school in profile.schools.all():
         for notif in school.notifications.filter():
             i += 1
@@ -433,6 +434,7 @@ def get_landing(request):
             'worktime':school.worktime,
             'subjects':subjects,
             'site':school.site,
+            'average_cost':school.average_cost,
             'landing_url':school.landing(),
         }
         return JsonResponse(data)
@@ -452,6 +454,6 @@ def get_phone(request):
 def adilmed(request):
     print(request.GET)
     if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
-        send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['adilmedmk@mail.ru'])
+        send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['akuir01@inbox.ru'])
     data={}
     return JsonResponse(data)

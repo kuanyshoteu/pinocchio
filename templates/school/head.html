@@ -8,7 +8,7 @@
             <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
             {% endif %}
         {% endif %}
-        <span class="ui header ava-title school_title">{{ instance.title }}</span>
+        <span class="ui header ava-title school_title"><a href="{{instance.landing}}">{{ instance.title }}</a></span>
         {% if is_director %}
         <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
         <form class="ui form no_margin school_title_form" style="width: 400px;display: none;">
