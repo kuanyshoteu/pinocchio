@@ -18,6 +18,7 @@ admin.site.register(Squad, SquadModelAdmin)
 class AttendanceModelAdmin(admin.ModelAdmin):
     list_display = ["id", 'student']
     list_display_links = ["id", 'student']
+    list_filter = ["student"]
     class Meta:
         model = Attendance
 

@@ -36,9 +36,8 @@ class School(models.Model):
     site = models.CharField(max_length=250, default='')
     worktime = models.CharField(max_length=250, default='')
     phones = ArrayField(models.TextField(), default = list)
-    social_networks = ArrayField(models.TextField(), default = list)
+    social_networks = ArrayField(ArrayField(models.TextField()), default = list)
     offices = models.IntegerField(default=0)
-
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
 
@@ -120,9 +119,15 @@ class School(models.Model):
         return reverse("schools:show_free_cards")
     # School map
     def get_landing(self):
-        return reverse("schools:get_landing")    
+        return reverse("schools:get_landing")
     def save_review_url(self):
         return reverse("schools:save_review_url", kwargs={"school_id": self.id})
+    def make_zaiavka(self):
+        return reverse("schools:make_zaiavka", kwargs={"school_id": self.id})
+    def create_social_url(self):
+        return reverse("schools:create_social_url")
+    def delete_social_url(self):
+        return reverse("schools:delete_social_url")
 
 class SchoolBanner(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
@@ -133,6 +138,10 @@ class SchoolBanner(models.Model):
             height_field="height_field2")
     height_field2 = models.IntegerField(default=0, null=True)
     width_field2 = models.IntegerField(default=0, null=True)
+    class Meta:
+        ordering = ['id']
+    def delete_school_banner(self):
+        return reverse("schools:delete_school_banner")
 
 class EliteSchools(models.Model):
     schools = models.ManyToManyField(School, related_name='elite')

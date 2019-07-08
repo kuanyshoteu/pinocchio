@@ -20,6 +20,61 @@
             <div class="twelve wide column">
                 {% include 'school/head.html' %}
                 <div class="ui grid">
+                    <div class="wide column in_mobile full-w no_padding">
+                        <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+                            <form class="ui form">  
+                                <div style="padding-bottom: 15px;">
+                                    Выберите <b>предмет</b>:
+                                    <div class="controls" style="margin-top: 10px"> 
+                                        <select class="crm_option" id="crm_subject" url="{{ instance.crm_option_url }}" option="subject"> 
+                                            {% if profile.skill.crm_subject %}
+                                                <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                                            {% endif %}
+                                            <option value="-1">Все предметы</option>
+                                            {% for subject_category in subject_categories %}
+                                                {% if subject_category != profile.skill.crm_subject %}
+                                                <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div style="padding-bottom: 15px;">
+                                    Выберите <b>возраст</b>:
+                                    <div class="controls" style="margin-top: 10px"> 
+                                        <select class="crm_option" id="crm_age" url="{{ instance.crm_option_url }}" option="age"> 
+                                            {% if profile.skill.crm_age %}
+                                                <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
+                                            {% endif %}
+                                            <option value="-1">Все возрасты</option>
+                                            {% for subject_age in subject_ages %}
+                                                {% if subject_age != profile.skill.crm_age %}
+                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>                            
+                                </div>
+                                <div>
+                                    Выберите <b>класс</b>:
+                                    <div class="controls" style="margin-top: 10px"> 
+                                        <select class="crm_option" id="crm_squad" url="{{ instance.crm_option_url }}" option="group"> 
+                                            {% if profile.rating_squad_choice.first %}
+                                                <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                            {% endif %}
+                                            <option value="-1">Все классы</option>
+                                            {% for squad in squads %}
+                                                {% if squad != profile.rating_squad_choice.first %}
+                                                <option value="{{ squad.id }}">{{ squad.title }}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>                            
+                                </div>
+                            </form>
+                        </div>
+                    </div>            
+
                     <div class="twelve wide column" style="padding: 14px 0 0;">
                         <div class="ui segment" style="margin-bottom: 0;">
                             <div class="ui grid">
@@ -71,7 +126,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="four wide column" style="padding-right: 0;">
+                    <div class="four wide column not_in_mobile" style="padding-right: 0;">
                         <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
                             <form class="ui form">  
                                 <div style="padding-bottom: 15px;">

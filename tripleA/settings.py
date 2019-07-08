@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'schools',
     'documents',
     'social_django',
+    'channels'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -106,7 +107,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('127.0.0.1', 6379), REDIS_URL],
 #            "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },
@@ -148,20 +149,13 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
-
 LANGUAGE_CODE = 'ru-RU'
-
 TIME_ZONE = 'Asia/Almaty'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
@@ -204,11 +198,8 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
-
 # MEDIA_URL = '/media_cdn/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
-
-
 # EMAIL
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
@@ -216,7 +207,6 @@ EMAIL_HOST_PASSWORD = 'Siski1zhopa$'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-
 
 SOCIAL_AUTH_FACEBOOK_KEY = '2392044301038148'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '494684c0aa2bcf8ac943467a1d8ef3f0'  # App Secret

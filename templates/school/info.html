@@ -89,14 +89,54 @@
                     <br>
                     <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Фотографии (для рекламной страницы):</span> 
                     <div style="display: inline-block;">
-                        {% for banner in school.banners.all %}
-                            <img src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;">
+                        <form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+                            <input type="file" name="school_banner" id="school_banner" class="postfile">
+                            <label class="file_post" for="school_banner">
+                                <a class="ui button mini"><i class="icon image blue"></i>Выбрать картинку</a>
+                            </label>
+                            <input type="submit" class="ui button mini blue save_banner" name="" value="Сохранить">
+                        </form>
+                    </div>
+                    <br>
+                    <div style="display: flex;">
+                        {% for banner in instance.banners.all %}
+                            {% if banner.image_banner %}
+                            <div style="margin-right: 15px;display: flex;" id="banner{{banner.id}}">
+                                <img src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;">
+                                <a class="delete_school_banner" id="{{ banner.id }}" url="{{ banner.delete_school_banner }}"><b style="color: red;">×</b></a>
+                            </div>
+                            {% endif %}
                         {% endfor %}
-                        <input type="file" name="new_banner" id="new_banner" class="postfile">
-                        <label class="file_post" for="new_banner">
-                            <a class="ui button mini"><i class="icon image blue"></i>Выбрать картинку</a>
-                        </label>
-                        <a class="ui button mini blue save_banner">Сохранить</a>
+                    </div>
+                    <br>
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Социальные сети:</span> 
+                    <div style="display: inline-block;" class="school_social_list">
+                        {% for social in instance.social_networks %}
+                            <a class="ui button mini social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">{{ social.1 }}</a>
+                            <div class="ui modal mini social_form{{ forloop.counter }}">
+                                <i class="close icon"></i>
+                                <div class="content">
+                                    <form class="ui form">
+                                        <textarea id="social_link{{forloop.counter}}" placeholder="Введите ссылку">{{social.0}}</textarea>
+                                        <a class="ui button mini blue" onclick="create_social('{{instance.create_social_url}}', '{{forloop.counter}}')">Сохранить</a>
+                                        <a class="ui button mini red" onclick="delete_social('{{instance.delete_social_url}}', '{{forloop.counter}}')" style="float: right;">Удалить</a>
+                                    </form>
+                                    <div class="errorsocial{{forloop.counter}} highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
+                                </div>
+                            </div>                        
+                        {% endfor %}
+                    </div>
+                    <a class="ui button mini blue" onclick="$('.social_form_new').modal('show')" style="padding: 7px 10px;">Добавить социальную сеть</a>
+                    <div class="ui modal mini social_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <textarea id="social_link_new" placeholder="Введите ссылку">{{social.0}}</textarea>
+                                <a class="ui button mini blue" onclick="create_social('{{instance.create_social_url}}', '_new')">Сохранить</a>
+                                <a class="ui button mini red" onclick="delete_social('{{instance.delete_social_url}}', '_new')" style="float: right;">Удалить</a>
+                            </form>
+                            <div class="errorsocial_new highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
+                        </div>
                     </div>
                 </div>
                 {% if is_director %}
@@ -136,7 +176,7 @@
                     Предметы школы:
                     <div class="school_subject_list" style="display: inline-block;">
                     {% for subject in instance.school_subject_categories.all %}
-                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject.category_subjects.all|length}} курсов)</a>
+                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
                         <div class="ui modal mini" id="subject_form{{ subject.id }}">
                             <i class="close icon"></i>
                             <div class="content">
@@ -172,7 +212,7 @@
                     Возрасты учеников:
                     <div class="school_age_list" style="display: inline-block;">
                     {% for age in instance.school_subject_ages.all %}
-                        <a class="ui button mini green age_object{{age.id}}" onclick="$('#age_form{{age.id}}').modal('show')" id="{{age.id}}" style="padding: 7px 10px;">{{ age.title }} ({{ age.category_age.all|length}} курсов)</a>
+                        <a class="ui button mini green age_object{{age.id}}" onclick="$('#age_form{{age.id}}').modal('show')" id="{{age.id}}" style="padding: 7px 10px;">{{ age.title }} ({{ age|get_age_courses_len:instance}} курсов)</a>
                         <div class="ui modal mini" id="age_form{{ age.id }}">
                             <i class="close icon"></i>
                             <div class="content">
@@ -523,6 +563,47 @@
             success: function (data) {
                 $('.timep_object'+id).hide('fast');
                 $('#timep_form'+id).modal('hide')
+            }
+        })        
+    };
+   function create_social(url, id) {
+        link = $('#social_link'+id).val()
+        if (link != '') {
+            $.ajax({
+                url: url,
+                data: {
+                    'id':id,
+                    'link':link,                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.errorsocial'+id).hide()
+                    if (data.taken_name) {
+                        $('.errorsocial'+id).show()
+                    }
+                    else{
+                        if (id == '_new') {
+                            $('<a class="ui button mini social_object'+id+'" onclick="$('+"'"+'#social_form'+id+"'"+').modal('+"'show'"+')" id="'+id+'" style="padding: 7px 10px;">'+data.social_name+'</a> <div class="ui modal mini" id="social_form'+id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="social_link'+id+'">'+link+'</textarea> <a class="ui button mini blue" onclick="create_social('+"'"+data.create_url+"'"+','+"'"+id+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_social('+"'"+data.delete_url+"'"+','+"'"+id+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsocial'+id+' highlight_red" style="display: none;">Эта социальная сеть уже записана</div></div> </div>').appendTo($('.school_social_list'))
+                        }
+                        else{
+                            $('.social_object'+id).text(data.social_name);
+                        }
+                        $('.social_form'+id).modal('hide')
+                    }
+                }
+            })
+        }
+    };
+    function delete_social(url, id) {
+        $.ajax({
+            url: url,
+            data: {
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.social_object'+id).hide('fast');
+                $('.social_form'+id).modal('hide')
             }
         })        
     };

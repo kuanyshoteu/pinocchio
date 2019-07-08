@@ -86,7 +86,7 @@
         </div>
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left: -100px;margin-top: 5px;">
-            - Платформа учебных центров
+            Платформа учебных центров
         </div>
         {% endif %}
         <div class="full-w left-main-menu">
@@ -101,9 +101,9 @@
                     {% endif %}
                 </a>
             </div>
-            {% else %}            
+            {% else %}
             <div class="item float_right" style="margin-right: 15%;">
-                <span style="margin-right: 30px;"><a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a></span>
+                <span style="margin-right: 30px;height: 30px;"><!-- <a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a> --></span>
                 <a class="open_login" style="color: #fff;margin-right: 25px;" onclick="$('#signup-modal').modal('show')">
                     Регистрация
                 </a>
@@ -146,7 +146,7 @@
                     </a>
                     {% endif %}
                     {% if is_manager or is_director %}
-                    <a class="item mobmenu" href='{% url "schools:crm" %}'>
+                    <a class="item mobmenu not_in_mobile" href='{% url "schools:crm" %}'>
                         <i class="list alternate icon blue"></i>
                         CRM
                         {% if profile.skill.need_actions > 0 %}
@@ -220,7 +220,7 @@
 <script src='{% static "js/notice.js" %}'></script>
 {% if profile.schools.all|length > 0 %}
 <script src="https://cndjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
-<!-- <script type="text/javascript">
+<script type="text/javascript">
     var wsStart = 'ws://'
     var loc = window.location
     if (loc.protocol == 'https:'){
@@ -252,6 +252,6 @@
     }
 
 </script>
- -->{% endif %}
+{% endif %}
 </body>
 </html>

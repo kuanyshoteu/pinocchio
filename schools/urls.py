@@ -45,7 +45,11 @@ urlpatterns = [
     url(r'^api/change_title_url/$', change_title, name='change_title_url'),
     url(r'^api/create_cabinet_url/$', create_cabinet, name='create_cabinet_url'),
     url(r'^api/save_review_url/(?P<school_id>\d+)/$', save_review, name='save_review_url'),
+    url(r'^api/create_social_url/$', create_social, name='create_social_url'),
+    url(r'^api/delete_social_url/$', delete_social, name='delete_social_url'),
+    url(r'^api/delete_school_banner/', delete_school_banner, name='delete_school_banner'),
     url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
     url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
+    url(r'^api/make_zaiavka/(?P<school_id>\d+)/$', make_zaiavka, name='make_zaiavka'),
     url(r'^adilmed/', adilmed, name="adilmed"),
 ]
