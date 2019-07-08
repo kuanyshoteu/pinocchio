@@ -147,15 +147,11 @@ def get_current_attendance(subject, squad):
         return '_'
     lectures = squad.squad_lectures.filter(subject = subject)
     num_of_lectures = len(lectures)
-<<<<<<< HEAD
-    if num_of_lectures > 0 and  timezone.now().date() >= squad.start_date:
-=======
     if timezone.now().date() >= squad.start_date:
         delta = (timezone.now().date() - squad.start_date).days
     else:
         delta = (squad.end_date - squad.start_date).days
     if num_of_lectures > 0:
->>>>>>> 89dd518018321946cc2ee64aff2b48a07c991a6e
         delta = (timezone.now().date() - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7

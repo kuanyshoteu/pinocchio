@@ -493,12 +493,6 @@ def make_payment(request):
                     mail = profile.mail,
                     saved = True,
                     was_called = True
-<<<<<<< HEAD
-                )
-            card.was_called = True
-            card.save()
-        profile.save()
-=======
                 )[0]
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
@@ -506,7 +500,6 @@ def make_payment(request):
                 skill.save()            
             card.was_called = True
             card.save()
->>>>>>> 89dd518018321946cc2ee64aff2b48a07c991a6e
     data = {
     }
     return JsonResponse(data)
