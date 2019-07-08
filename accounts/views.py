@@ -469,11 +469,10 @@ def make_payment(request):
         school.money += amount
         school.save()
         if profile.money > profile.salary:
-            if profile.card:
+            try:
                 card = profile.card            
-            else:
+            except Exception as e:
                 card = CRMCard.objects.create(
-                    author_profile=manager,
                     card_user = profile,
                     school = school,
                     column = CRMColumn.objects.get(id = 5),
@@ -482,8 +481,9 @@ def make_payment(request):
                     mail = profile.mail,
                     saved = True,
                     was_called = True
-                )[0]
+                )
             card.was_called = True
+            card.save()
         profile.save()
     data = {
     }
