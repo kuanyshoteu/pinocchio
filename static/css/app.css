@@ -20718,6 +20718,9 @@ ol.ui.horizontal.list li:before,
   .not_in_mobile{
     display: none !important;
   }
+  .in_mobile{
+    display: block;
+  }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -20730,6 +20733,9 @@ ol.ui.horizontal.list li:before,
   }
   #main-info {
     min-height: 250px;
+  }
+  .in_mobile{
+    display: none !important;
   }
 }
 
@@ -20745,6 +20751,9 @@ ol.ui.horizontal.list li:before,
     min-height: 250px;
   }
 
+  .in_mobile{
+    display: none !important;
+  }
 }
 
 @media only screen and (min-width: 1200px) and (max-width: 1919px) {
@@ -20758,6 +20767,9 @@ ol.ui.horizontal.list li:before,
   #main-info {
     min-height: 250px;
   }
+  .in_mobile{
+    display: none !important;
+  }
 }
 
 @media only screen and (min-width: 1920px) {
@@ -20770,6 +20782,9 @@ ol.ui.horizontal.list li:before,
   }
   #main-info {
     min-height: 250px;
+  }
+  .in_mobile{
+    display: none !important;
   }
 }
 
@@ -39812,7 +39827,7 @@ body.pushable > .pusher {
 }
 
 .full-w {
-  width: 100%;
+  width: 100% !important;
 }
 
 a {
@@ -41031,7 +41046,7 @@ i.map_worktime-icon {
 }
 
 .schoolLanding__header-img {
-  height: 80vh;
+  height: 50%;
   width: 100%;
 }
 .schoolLanding__header-img:first-child {
@@ -41327,7 +41342,7 @@ i.map_worktime-icon {
 }
 
 .schoolLanding__content-teacher__photo {
-  min-height: 300px;
+  min-height: 200px;
 }
 .schoolLanding__content-teacher__name {
   margin: 1rem 0;

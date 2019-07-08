@@ -32,8 +32,11 @@ $(document).ready(function () {
   // Filter-list end
   // Landing category selector start
   $('.schoolLanding__content-category__item').on('click', function () {
+    $('.schoolLanding__content-services__item').hide()
     $('.schoolLanding__content-category__item').removeClass('active');
     $(this).toggleClass('active');
+    id = $(this).attr('id')
+    $('.category'+id).show()
   });
   // Landing slider
   var item_count = parseInt($('.schoolLanding__content-teacher').length);

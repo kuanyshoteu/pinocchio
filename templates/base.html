@@ -146,7 +146,7 @@
                     </a>
                     {% endif %}
                     {% if is_manager or is_director %}
-                    <a class="item mobmenu" href='{% url "schools:crm" %}'>
+                    <a class="item mobmenu not_in_mobile" href='{% url "schools:crm" %}'>
                         <i class="list alternate icon blue"></i>
                         CRM
                         {% if profile.skill.need_actions > 0 %}

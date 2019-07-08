@@ -1,8 +1,21 @@
+.predoplata_form{
+  width: 250px !important;
+  margin-top: -5px !important;
+  margin-left: 25px !important;
+}
+.predoplata_number{
+  margin-bottom: 0 !important;
+  padding: 4 12 6 12 !important;
+  height: 30px !important;
+}
+.delete_school_banner{
+  position: absolute;
+  margin-left: 50px;
+}
 .make_review{
   font-size: 25px !important;
   cursor: pointer;
 }
-
 .change_lecture_cabinet{
   width: 50% !important;
   background-color: #313a57 !important;

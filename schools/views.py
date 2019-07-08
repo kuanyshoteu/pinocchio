@@ -425,17 +425,12 @@ def office_create(request):
     if request.GET.get('id') and request.GET.get('title'):
         title = request.GET.get('title')
         school = manager_profile.schools.first()
-        if school.school_offices.filter(title = title):
+        if len(school.school_offices.filter(title = title)) > 0:
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            qs = school.school_offices.filter(title=title)
-            if len(qs) > 0:
-                school.school_offices.add(qs[0])
-                office = qs[0]
-            else:
-                office = school.school_offices.create(title=title)
-                school.offices += 1
-                school.save()
+            office = school.school_offices.create(title=title)
+            school.offices += 1
+            school.save()
             school.hashtags.create(title = title.replace(' ', '_'))
         else:
             office = school.school_offices.get(id=int(request.GET.get('id')))
@@ -484,6 +479,52 @@ def create_cabinet(request):
             title=request.GET.get('title'),
             capacity=int(request.GET.get('capacity')),
             )
+    data = {
+    }
+    return JsonResponse(data)
+
+def create_social(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    if request.GET.get('id') and request.GET.get('link'):
+        link = request.GET.get('link')
+        school = manager_profile.schools.first()
+        social_name = ''
+        if 'instagram' in link:
+            social_name = 'instagram'
+        elif 'facebook' in link:
+            social_name = 'facebook'
+        elif 'vk.com' in link:
+            social_name = 'vk'
+        else:
+            social_name = 'Страница' + str(len(school.social_networks)+1)
+        if [link, social_name] in school.social_networks:
+            return JsonResponse({'taken_name':True})
+        if request.GET.get('id') == '_new':
+            school.social_networks.append([link, social_name])
+        else:
+            school.social_networks[int(request.GET.get('id'))-1] = [link, social_name]
+        school.save()
+        create_url = school.create_social_url()
+        delete_url = school.delete_social_url()
+    data = {
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'social_name':social_name,
+    }
+    return JsonResponse(data)
+
+def delete_social(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_managers(profile)
+    index = int(request.GET.get('id'))
+    a = school.social_networks
+    school.social_networks = a[:index-1] + a[index :]
+    print(school.social_networks)
+    school.save()
     data = {
     }
     return JsonResponse(data)
@@ -593,6 +634,18 @@ def save_card_as_user(request):
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
+        if request.GET.get('predoplata'):
+            was_minus = False
+            if profile.money < profile.salary:
+                was_minus = True
+            profile.money += int(request.GET.get('predoplata'))
+            profile.save()
+            if was_minus and card.was_called == False and profile.money > profile.salary:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()            
+                card.was_called = True
+                card.save()
     data = {
         'password':password,
         'add':add,
@@ -802,6 +855,42 @@ def add_card(request):
         "author_url":profile.get_absolute_url(),
         "call_helper":card.call_helper(),
         "is_director":is_profi(profile, 'Director'),
+    }
+    return JsonResponse(data)
+
+def make_zaiavka(request, school_id):
+    profile = Profile.objects.get(user = request.user.id)
+    school = School.objects.get(id=school_id)
+    column = school.crm_columns.first()
+    course = 'Заявка с рекламной страницы: ' + timezone.now().strftime('%d %m %Y %H:%M')
+    if request.GET.get('course') != '':
+        course = '. Хочет на курс ' + request.GET.get('course')
+    card = school.crm_cards.create(
+        name = profile.first_name,
+        phone = profile.phone,
+        mail = profile.mail,
+        comments = course,
+        column = column,
+        school = school,
+    )
+    card.save()
+    hist = CRMCardHistory.objects.create(
+        card = card,
+        edit = '***Создание карточки***',
+        )
+    hist.save()
+    text = "Новая заявка в СРМ"
+    manager_prof = Profession.objects.get(title='Manager')
+    for manager in school.workers.filter(profession=manager_prof):
+        Notification.objects.create(
+            text = text,
+            author_profile = manager,
+            school = school,
+            itstype = 'crm',
+            url = '',
+            image_url = 'crm'
+        )
+    data = {
     }
     return JsonResponse(data)
 
@@ -1030,6 +1119,8 @@ def change_title(request):
     return JsonResponse(data)
 
 def save_review(request, school_id=None):
+    if not request.user.is_authenticated:
+        return JsonResponse({'nouser':True})
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('number'):
         school = School.objects.get(id = school_id)
@@ -1048,5 +1139,16 @@ def save_review(request, school_id=None):
     data = {
         "name":profile.first_name,
         "timestamp":review.timestamp.strftime('%d %m %Y %H:%M'),
+    }
+    return JsonResponse(data)
+
+def delete_school_banner(request):
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('id'):
+        school = profile.schools.first()
+        banner = school.banners.filter(id=int(request.GET.get('id')))
+        if len(banner) > 0:
+            banner[0].delete()
+    data = {
     }
     return JsonResponse(data)

@@ -358,11 +358,15 @@ def att_present(request):
                 if student.money < student.salary:
                     was_minus = True
                 student.money -= attendance.subject.cost
+                print('sdfsdfsdfsdf****')
                 student.save()
-                if student.money < student.salary and was_minus == False and student.card.was_called == True:
+                student_card = student.card 
+                if student.money < student.salary and was_minus == False and student_card.was_called == True:
                     skill = student.card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()
+                    student_card.was_called = False
+                    student_card.save()
         attendance.save()
         profile.save()
     data = {
@@ -465,7 +469,11 @@ def make_payment(request):
         profile = Profile.objects.get(id = int(request.GET.get('id')))
         school = manager.schools.first()
         is_in_school(profile, school)        
+        was_minus = False
+        if profile.money < profile.salary:
+            was_minus = True
         profile.money += amount
+        profile.save()
         profile.payment_history.create(
             manager = manager,
             amount = amount,
@@ -487,8 +495,12 @@ def make_payment(request):
                     saved = True,
                     was_called = True
                 )[0]
+            if was_minus and card.was_called == False and profile.money > profile.salary:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()            
             card.was_called = True
-        profile.save()
+            card.save()
     data = {
     }
     return JsonResponse(data)

@@ -277,13 +277,18 @@ def remove_student_from_squad(student, squad):
     squad.students.remove(student)
     for subject in squad.subjects.all():
         subject.students.remove(student)
+        student.salary -= subject.cost
+    student.save()
     for lecture in squad.squad_lectures.all():
         remove_person_from_lecture(lecture, student)
-        lecture.save()            
+        lecture.save()
+    squad.squad_attendances.filter(student=student).delete()
 def add_student_to_squad(student, squad, password, send_mail):
     squad.students.add(student)
     for subject in squad.subjects.all():
         subject.students.add(student)
+        student.salary += subject.cost
+    student.save()
     school = squad.school
     for timep in school.time_periods.all():
         timep.people.add(student)
