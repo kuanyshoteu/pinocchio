@@ -218,7 +218,7 @@ class Hashtag(models.Model):
 
 class CRMCard(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
-    card_user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card')
+    card_user = models.OneToOneField(Profile, on_delete = models.CASCADE,null=True,related_name='card')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_cards')
     column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
     name = models.CharField(max_length=250)
