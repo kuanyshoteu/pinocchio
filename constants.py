@@ -11,7 +11,7 @@ from django.core.mail import EmailMultiAlternatives
 def send_sms(phones, message, time):
     login = 'Pinocchio'
     password = 'Siski11zhopa'
-    url = 'https://smsc.kz/sys/send.php?login='+login+'&psw='+password+'&phones='+phones+'&mes='+message+'&time='+time+'&sender=Pinocchiokz'
+    url = 'https://smsc.kz/sys/send.php?login='+login+'&psw='+password+'&phones='+phones+'&mes='+message+'&time='+time#+'&sender=Pinocchiokz'
     requests.post(url)
 
 def send_hello_email(profile, password, timeaddress):

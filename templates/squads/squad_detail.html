@@ -13,13 +13,13 @@
 
 {% block content %}
 <div id="group-details" style="padding-bottom: 200px;">
-    <a id="go-back-btn"  href='{% url "squads:list" %}'>
-        <i class="check icon" style="color: #5181b8"></i>
+    <a id="go-back-btn-before"  href='{% url "squads:list" %}'>
+        <i class="arrow left icon"></i>
     </a>
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="width: 80%;">
+            <div class="wide column" style="width: 80%;margin-left: 30px;">
                 <div class="ui grid">
                     <div class="sixteen wide column">
                         <div class="ui segment" style="margin-bottom: 0;padding: 0;padding-bottom: 15px;">

@@ -293,16 +293,25 @@ def add_student_to_squad(student, squad, password, send_mail):
     for timep in school.time_periods.all():
         timep.people.add(student)
     today = int(timezone.now().strftime('%w'))
+    nowhour = int(timezone.now().strftime('%H')) 
+    nowminute = int(timezone.now().strftime('%M')) 
+    nowtime = int(nowhour*60 + nowminute)
     needed_day = 14
     lecture_time = ''
+    is_send = True
     for lecture in squad.squad_lectures.all():
         lecture_day_number = lecture.day.number
         if lecture_day_number - today < 0:
             lecture_day_number += 7 
         if lecture_day_number - today < needed_day-today:
+            lecture_start_h = int(lecture.cell.time_period.start.split(':')[0])
+            lecture_start_m = int(lecture.cell.time_period.start.split(':')[1])
+            lecture_start_t = lecture_start_h*60 + lecture_start_m
+            if nowtime < lecture_start_t -120:
+                is_send = True
             needed_day = lecture_day_number
             lecture_time = lecture.cell.time_period.start
-            if '8:' in lecture.cell.time_period.start or '9:' in lecture.cell.time_period.start:
+            if '08:' in lecture.cell.time_period.start or '09:' in lecture.cell.time_period.start:
                 needed_day -= 1
                 time = '20:00'
             elif '10:' in lecture.cell.time_period.start:
@@ -320,11 +329,12 @@ def add_student_to_squad(student, squad, password, send_mail):
             address = lecture.office.address
         else:
             address = squad.school.school_offices.first().address
-        print(send_date, lecture_time, address)
+        print(send_date, lecture_time, address, is_send)
         if send_mail:
             send_hello_email(student,password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
-    #    send_sms(student.phone, 'Здравствуйте '+student.first_name+'! в '+lecture_time+' у Вас состоится пробный урок по адресу '+address, send_date)
-
+        if is_send:
+            send_sms(student.phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
+            #pass
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.append(person.id)

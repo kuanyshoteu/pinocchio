@@ -9,7 +9,8 @@ $(document).ready(function () {
     text.on('keyup', function (e) {
         var id = $(this).attr('id')
         var text = $(this).text()
-        if (e.key === ' ' || (e.key === 'Backspace' && text[text.length-1] == '!')) {
+        console.log(e.key)
+        if (e.key == 'Enter' || e.key === ' ' || (e.key === 'Backspace' && text[text.length-1] == '!')) {
             closeHelper(id)
         }
         else{

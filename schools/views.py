@@ -586,6 +586,7 @@ def save_card_as_user(request):
     add = True
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
+        print('card', card.timestamp)
         if card.saved == False:
             new_id = User.objects.order_by("id").last().id + 1
             password = random_password()
@@ -600,9 +601,11 @@ def save_card_as_user(request):
             profile.save()
             card.card_user = profile
             card.author_profile = manager_profile
+            card.timestamp = timezone.now()
+            squad_id = int(request.GET.get('squad_id'))
+            card.last_groups = squad_id
             card.save()
             profile.schools.add(school)
-            squad_id = int(request.GET.get('squad_id'))
             skill = Skill.objects.create()
             profile.skill = skill
             profile.save()
@@ -622,6 +625,12 @@ def save_card_as_user(request):
             card.author_profile = manager_profile
             card.save()
             squad_id = int(request.GET.get('squad_id'))
+            if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
+                print('stop', card.timestamp)
+                return JsonResponse({'stop':True})
+            card.last_groups = squad_id
+            card.timestamp = timezone.now()
+            card.save()
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
                 if profile in squad.students.all():
@@ -640,6 +649,8 @@ def save_card_as_user(request):
                 was_minus = True
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
+            school.money += int(request.GET.get('predoplata'))
+            school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
                 skill.need_actions -= 1

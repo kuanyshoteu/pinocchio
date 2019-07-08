@@ -9,6 +9,7 @@
             <form class="ui form predoplata_form" style="display: none;">
                 <input class="predoplata_number" placeholder="Сумма предоплаты" type="number">                
             </form>
+            <span class="time_stop highlight_red" style="height: 25px;margin-left: 25px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></span>
         </div>
         <div class="ui segment margin0">
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
@@ -137,6 +138,7 @@
     function save_card_as_user(squad_id){
         id = $('.card_for_save').attr('id')
         predoplata = $('.predoplata_number').val()
+        $('.time_stop').hide()
         $.ajax({
             url: $('.card_for_save').attr('url'),
             data: {
@@ -146,10 +148,18 @@
             },
             dataType: 'json',
             success: function (data) {
-                document.getElementById("school_schedule").style.width = "0";
-                $('#saved_modal').modal('show')
                 $('.predoplata_form').hide()
                 $('.predoplata_number').val('')
+                if (data.stop) {
+                    $('.time_stop').show()
+                }
+                else if(data.add){
+                    document.getElementById("school_schedule").style.width = "0";
+                    $('#saved_modal').modal('show')
+                }
+                else{
+                    $('.squad'+squad_id).hide()
+                }
             }
         })
     };

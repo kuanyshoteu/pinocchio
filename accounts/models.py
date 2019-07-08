@@ -228,6 +228,7 @@ class CRMCard(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     saved = models.BooleanField(default=False)
     was_called = models.BooleanField(default=False)
+    last_groups = models.IntegerField(default=-1)
     days_of_weeks = ArrayField(models.BooleanField(), default = list)
     action = models.CharField(max_length=250, default='')
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
