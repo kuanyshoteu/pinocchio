@@ -48,6 +48,7 @@ def folder_details(request, folder_id=None):
     profile = get_profile(request)
     only_teachers(profile)
     folder = Folder.objects.get(id=folder_id)
+    school = folder.school
     is_in_school(profile, folder.school)        
     context = {
         "profile": profile,
@@ -59,6 +60,7 @@ def folder_details(request, folder_id=None):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'), 
         "school_money":profile.schools.first().money,
+        "current_school_id":school.id,
     }
     return render(request, 'library/library.html', context=context)
 
