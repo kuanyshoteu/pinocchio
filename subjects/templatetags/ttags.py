@@ -310,6 +310,14 @@ def filtercards(column, profile):
     return column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
 
 @register.filter
+def filtercardsall(column, profile):
+    school = profile.schools.first()
+    if profile.skill:
+        if profile.skill.crm_show_free_cards:
+            return column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
+    return column.cards.filter(school=school).prefetch_related('hashtags').exclude(author_profile__isnull=True)
+
+@register.filter
 def get_professions(school):
     return Profession.objects.all()
 

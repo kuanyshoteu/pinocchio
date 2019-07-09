@@ -7,6 +7,7 @@ from main.views import get_landing,adilmed
 app_name = 'schools'
 urlpatterns = [
     url(r'^crm/$', school_crm, name='crm'),
+    url(r'^crm_all/$', school_crm_all, name='crm_all'),
     url(r'^schedule/$', school_schedule, name='schedule'),
     url(r'^students/$', school_students, name='students'),
     url(r'^info/$', school_info, name='info'),

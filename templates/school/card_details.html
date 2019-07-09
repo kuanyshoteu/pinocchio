@@ -1,0 +1,30 @@
+{% load tttags %}
+{% load staticfiles %}
+{% load ttags %}
+<div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
+    <div id="card{{card.id}}" class="ui segment crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%} {% if column.id > 3 and card.saved and card.card_user.money < card.card_user.salary %}warning_card{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
+        <div onclick="open_crmcard('{{ card.id }}')" style="width: 80%;display: inline-block;">
+            <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
+            <div style="color: #707070;font-size: 12px;">
+                {{ card.phone }}                                                    
+            </div>
+        </div>
+        <div style="width: 20%;display: inline-block;float: right;margin-top: 20px;">
+            {% if not card.saved %}
+                <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
+            {%endif%}
+            <a class="show_card_schedule" onclick="openNav('{{ card.id }}', '{{ card.name }}', 'null')"><i class="icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>     
+        </div>
+        <div style="width: 80%;">
+            {% if card.author_profile %}
+            <a class="nouser{{card.id}}" href="{{card.author_profile.get_absolute_url}}" style="color: darkblue;font-size: 11px">
+                {{card.author_profile.first_name}}
+            </a>
+            {% else %}
+            <a class="nouser{{card.id}}" style="color: darkblue;font-size: 11px">Свободная</a>
+            {% endif %}
+        </div>
+        <div style="width: 20%;">
+        </div>
+    </div>
+</div>

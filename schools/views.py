@@ -192,6 +192,35 @@ def school_crm(request):
         "is_director":is_director,
         'managers':managers,
         "school_money":school.money,
+        "all":False,
+    }
+    return render(request, "school/crm.html", context)
+
+def school_crm_all(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = profile.schools.first()
+    time_periods = school.time_periods.all()
+    managers = None
+    is_director = is_profi(profile, 'Director')
+    if is_director:
+        manager_prof = Profession.objects.get(title='Manager')
+        managers = school.people.filter(profession=manager_prof)
+    context = {
+        "profile":profile,
+        "instance": school,
+        "columns":school.crm_columns.all(),
+        "subject_categories":school.school_subject_categories.all(),
+        "ages":school.school_subject_ages.all(),
+        "offices":school.school_offices.all(),
+        'days':Day.objects.all(),
+        'time_periods':time_periods,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_director,
+        'managers':managers,
+        "school_money":school.money,
+        "all":True,
     }
     return render(request, "school/crm.html", context)
 

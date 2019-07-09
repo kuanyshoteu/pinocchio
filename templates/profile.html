@@ -109,7 +109,9 @@
                             {% endif %}
                             {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
-                                    {% include 'profile/hisschedule.html' %}
+                                    {% if college %}
+                                        {% include 'profile/hisschedule.html' %}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                             {% if hisprofile == profile %}
