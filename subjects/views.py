@@ -373,15 +373,17 @@ def change_category(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         students = subject.students.all()
+        old_subject = None
         if subject.category:
             subject.category.students.remove(*students)
+            old_subject = subject.category
         if int(request.GET.get('object_id')) == -1:
             subject.category = None
-            change_lecture_options(subject, 'subject', None)
+            change_lecture_options(subject, 'subject', None, old_subject)
         else:
             category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
             subject.category = category
-            change_lecture_options(subject, 'subject', category)
+            change_lecture_options(subject, 'subject', category, old_subject)
             category.students.add(*students)
         subject.save()
     data = {
@@ -396,22 +398,40 @@ def change_age(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         students = subject.students.all()
+        old_age = None
         if subject.age:
             subject.age.students.remove(*students)
+            old_age = subject.age
         if int(request.GET.get('object_id')) == -1:
             subject.age = None
-            change_lecture_options(subject, 'age', None)
+            change_lecture_options(subject, 'age', None, old_age)
         else:
             age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
             subject.age = age
-            change_lecture_options(subject, 'age', age)
+            change_lecture_options(subject, 'age', age, old_age)
             age.students.add(*students)
         subject.save()
     data = {
     }
     return JsonResponse(data)
 
-def change_lecture_options(subject, option, objectt):
+def change_lecture_options(subject, option, objectt, old_object):
+    hashtag = ''
+    old_hashtag = ''
+    if old_object:
+        old_hashtag = subject.school.hashtags.get_or_create(title=old_object.title.replace(' ', ''))
+    if objectt:
+        hashtag = subject.school.hashtags.get_or_create(title=objectt.title.replace(' ', ''))
+    qs = subject.students.prefetch_related('card__hashtags')
+    print(hashtag, old_hashtag, qs)
+    if len(hashtag) > 0:
+        hashtag = hashtag[0]
+        for student in qs:
+            student.card.hashtags.add(hashtag)
+    if len(old_hashtag) > 0:
+        old_hashtag = old_hashtag[0]
+        for student in qs:
+            student.card.hashtags.remove(old_hashtag)
     if option == 'subject':
         for lecture in subject.subject_lectures.all():
             lecture.category = objectt

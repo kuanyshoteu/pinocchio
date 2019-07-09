@@ -145,8 +145,8 @@ $(document).ready(function () {
     set = document.getElementsByClassName('filter-item')
     for (var i = set.length - 1; i >= 0; i--) {
       if (set[i].getAttribute('status') != '0') {
-        title = set[i].getAttribute('id')
-        filterstring = filterstring + '.' + title.replace(' ', '.')
+        title = set[i].getAttribute('id').replace(' ', '').replace(' ', '').replace(' ', '').replace(' ', '')
+        filterstring = filterstring + '.' + title
       }
     }
     $(filterstring).show()
@@ -158,10 +158,14 @@ $(document).ready(function () {
     url = '/schools/api/card_called/'
     id = $(this).attr('id')
     this_ = $(this)
+    selector = document.getElementsByClassName('card_form-select-contact'+id)[0];
+    action = selector.options[selector.selectedIndex].value;
+    console.log(action)
     $.ajax({
       url: url,
       data: {
         'id': id,
+        'action':action,
       },
       dataType: 'json',
       success: function (data) {

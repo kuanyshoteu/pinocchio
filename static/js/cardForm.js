@@ -93,11 +93,14 @@ $(document).ready(function () {
             },
             dataType: 'json',
             success: function (data) {
+                num = id+1
                 if (data.status == 'yes') {
                     this_.addClass('green')
+                    $('#card'+card).addClass('day'+num)
                 }
                 else{
-                    this_.removeClass('green')                    
+                    this_.removeClass('green')
+                    $('#card'+card).removeClass('day'+num)                    
                 }
             }
         })        
@@ -129,14 +132,19 @@ $(document).ready(function () {
         url = '/schools/api/card_called/'
         id = $(this).attr('id')
         this_ = $(this)
+        selector = document.getElementsByClassName('card_form-select-contact'+id)[0];
+        action = selector.options[selector.selectedIndex].value;
+        console.log(action)        
         $.ajax({
             url: url,
             data: {
                 'id':id,
+                'action':action,
             },
             dataType: 'json',
             success: function (data) {
                 this_.hide();
+                $('.card_form-select-contact-btn'+this_.attr('id')).text('Связался по ' + action)
                 $('.card_form-select-contact-btn'+this_.attr('id')).show();                    
             }
         })          

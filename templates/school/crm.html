@@ -111,7 +111,7 @@
                                                 @add="move_card({{ column.id }})">
                                             {% for card in column|filtercards:profile %}
                                             <div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
-                                                <div id="card{{card.id}}" class="ui segment crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%} {% if card.saved and card.card_user.money < card.card_user.salary %}warning_card{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
+                                                <div id="card{{card.id}}" class="ui segment crm_card {% for tag in card.hashtags.all %}{{tag.title}} {% endfor %} {% if not card.author_profile %}free{%else%}mine{%endif%} {% if column.id > 3 and card.saved and card.card_user.money < card.card_user.salary %}warning_card{%endif%}" ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
                                                     <div onclick="open_crmcard('{{ card.id }}')" style="width: 80%;display: inline-block;">
                                                         <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
                                                         <div style="color: #707070;font-size: 12px;">

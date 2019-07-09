@@ -333,8 +333,8 @@ def add_student_to_squad(student, squad, password, send_mail):
         if send_mail:
             send_hello_email(student,password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
         if is_send:
-            send_sms(student.phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
-            #pass
+            #send_sms(student.phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
+            pass
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.append(person.id)
@@ -364,13 +364,16 @@ def change_office(request, id=None):
         squad = Squad.objects.select_related('office').get(id = id)
         school = squad.school
         is_in_school(profile, school)
+        old_office = None
+        if squad.office:
+            old_office = squad.office
         if int(request.GET.get('object_id')) == -1:
             squad.office = None
-            change_lecture_options(squad, 'office', None)
+            change_lecture_options(squad, 'office', None, old_office)
         else:
             office = Office.objects.get(id = int(request.GET.get('object_id')))
             squad.office = office
-            change_lecture_options(squad, 'office', office)
+            change_lecture_options(squad, 'office', office, old_office)
         squad.save()
     data = {
     }
