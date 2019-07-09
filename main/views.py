@@ -194,8 +194,8 @@ def map_filter(request):
         subject = SubjectCategory.objects.get(title = request.GET.get('subject'))
     if len(request.GET.get('age')) > 0:
         age = SubjectAge.objects.get(title = request.GET.get('age'))
-    mincost = int(request.GET.get('mincost')) - 1
-    maxcost = int(request.GET.get('maxcost')) + 1
+    mincost = int(request.GET.get('mincost'))*1000 - 1
+    maxcost = int(request.GET.get('maxcost'))*1000 + 1
     if subject and age:
         schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost,school_subject_categories=subject,school_subject_ages=age)
     elif subject:
@@ -204,24 +204,24 @@ def map_filter(request):
         schools = schools.filter(school_subject_ages=age,average_cost__gt=mincost,average_cost__lt=maxcost)
     else:
         schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost)
-
     options = []
     coordinates = []
     res = []
     i = 0
     for school in schools:
-        coordinates.append([float(school.latitude), float(school.longtude)])
-        point = {
-            "properties": {"id":school.id,},
-        }
-        options.append(point)
-        image_url = ''
-        if school.image_icon:
-            image_url = school.image_icon.url
-        res.append([school.id, school.title, image_url, school.school_offices.first().address])
-        i+=1
-        if i == 15:
-            break
+        if len(school.school_offices.all())>0:
+            coordinates.append([float(school.school_offices.first().latitude), float(school.school_offices.first().longtude)])
+            point = {
+                "properties": {"id":school.id,},
+            }
+            options.append(point)
+            image_url = ''
+            if school.image_icon:
+                image_url = school.image_icon.url
+            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
+            i+=1
+            if i == 15:
+                break
     data = {
         'options':options,
         'coordinates':coordinates,

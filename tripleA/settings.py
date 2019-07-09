@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'schools',
     'documents',
     'social_django',
-    'channels'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -123,15 +122,9 @@ CHANNEL_LAYERS = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-<<<<<<< HEAD
         'NAME': 'tripleA',
         'USER': 'postgres',
         'PASSWORD': 'Zxcvbn123',
-=======
-        'NAME': 'pinocchio',
-        'USER': 'postgres',
-        'PASSWORD': '123',
->>>>>>> 89dd518018321946cc2ee64aff2b48a07c991a6e
         'HOST': 'localhost',
         'PORT': '',
     }

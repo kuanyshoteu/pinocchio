@@ -482,8 +482,10 @@ def make_payment(request):
         school.save()
         if profile.money > profile.salary:
             try:
-                card = profile.card            
+                card = profile.card  
+                print('try')
             except Exception as e:
+                print('except')
                 card = CRMCard.objects.create(
                     card_user = profile,
                     school = school,
@@ -493,20 +495,14 @@ def make_payment(request):
                     mail = profile.mail,
                     saved = True,
                     was_called = True
-<<<<<<< HEAD
-                )
-            card.was_called = True
-            card.save()
-        profile.save()
-=======
                 )[0]
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
                 skill.need_actions -= 1
                 skill.save()            
             card.was_called = True
+            print(card)
             card.save()
->>>>>>> 89dd518018321946cc2ee64aff2b48a07c991a6e
     data = {
     }
     return JsonResponse(data)
