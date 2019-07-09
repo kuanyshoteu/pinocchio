@@ -87,6 +87,7 @@
                             <div class="wide column" style="padding:14px 0 0 0 !important;width: 28.13px;">
                                 <a class="ui button small blue search_by_tags"><i class="icon search" style="color: white;"></i></a>
                             </div>
+                            {% if is_director %}
                             <div class="wide column">
                                 {% if all %}
                                 <a class="ui button mini blue" style="padding: 8px;" href='{% url "schools:crm" %}'>Мои</a>
@@ -94,6 +95,7 @@
                                 <a class="ui button mini blue" style="padding: 8px;" href='{% url "schools:crm_all" %}'>Все</a>
                                 {% endif %}
                             </div>
+                            {% endif %}
                         </div>
                     </form>
                 </div>
