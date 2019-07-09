@@ -132,7 +132,7 @@ def paste(request):
         folder = DocumentFolder.objects.get(id = cache.object_id)
         title = folder.title
         link = folder.get_absolute_url()
-        copy_folder = DocumentFolder.objects.create(author_profile = profile, title=folder.title)
+        copy_folder = DocumentFolder.objects.create(author_profile = profile, title=folder.title, school=folder.school)
         for doc in folder.files.all():
             copy_folder.files.add(doc)
         if request.GET.get('new_parent') != 'root':
@@ -145,7 +145,7 @@ def paste(request):
             folder.delete()
     else:
         doc = Document.objects.get(id = cache.object_id)
-        new_doc = Document.objects.create(file = doc.file, object_type = doc.object_type)
+        new_doc = Document.objects.create(file = doc.file, object_type = doc.object_type, school=doc.school)
         link = new_doc.file.url
         if request.GET.get('new_parent') != 'root':
             new_parent.files.add(new_doc)

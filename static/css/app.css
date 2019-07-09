@@ -41040,7 +41040,85 @@ i.map_worktime-icon {
 
 
 /*********** schoolLanding start**************/
+.schoolLanding__header-gallery {
+  position: fixed;
+  top: 0;
+  padding-top: 50px;
+  width: 100%;
+  height: 100vh;
+  background-color: #000;
+  z-index: 100;
+}
 
+.schoolLanding__header-gallery__nav {
+  text-align: right;
+  margin: 7px 1rem 7px 0;
+}
+
+.schoolLanding__header-gallery__nav > .icon {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.schoolLanding__header-gallery__nav > .icon:first-child {
+  margin-right: 1rem;
+}
+
+#schoolLanding__header-gallery__sliderone .schoolLanding__header-gallery__item {
+  background: #0c83e7;
+  padding: 30vh 0px;
+  /* height: 40vh; */
+  margin: 5px;
+  color: #FFF;
+  border-radius: 3px;
+  text-align: center;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#schoolLanding__header-gallery__slidertwo .schoolLanding__header-gallery__item {
+  background: #C9C9C9;
+  padding: 50px;
+  border: 4px solid transparent;
+  margin: 5px;
+  color: #FFF;
+  border-radius: 3px;
+  text-align: center;
+  cursor: pointer;
+  transition: border .5s;
+}
+#schoolLanding__header-gallery__slidertwo .current .schoolLanding__header-gallery__item {
+  /* background: #0c83e7; */
+  border: 5px solid red;
+}
+.owl-theme .owl-nav {
+  /*default owl-theme theme reset .disabled:hover links */
+}
+.owl-theme .owl-nav [class*='owl-'] {
+  transition: all 0.3s ease;
+}
+.owl-theme .owl-nav [class*='owl-'].disabled:hover {
+  background-color: #D6D6D6;
+}
+#schoolLanding__header-gallery__sliderone.owl-theme {
+  position: relative;
+}
+#schoolLanding__header-gallery__sliderone.owl-theme .owl-next,
+#schoolLanding__header-gallery__sliderone.owl-theme .owl-prev {
+  width: 22px;
+  height: 40px;
+  margin-top: -20px;
+  position: absolute;
+  top: 50%;
+}
+#schoolLanding__header-gallery__sliderone.owl-theme .owl-prev {
+  left: 10px;
+}
+#schoolLanding__header-gallery__sliderone.owl-theme .owl-next {
+  right: 10px;
+}
 .schoolLanding__header-wrapper {
   display: flex;
 }

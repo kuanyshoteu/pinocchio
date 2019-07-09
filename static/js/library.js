@@ -366,16 +366,22 @@ $(document).ready(function(){
         }
     });
     $(".open_folder_features").click(function (event) {
-        event.preventDefault();
         var this_ = $(this)
-        $('.folder_features' + this_.attr("id")).fadeToggle();
+        $('.folder_features').hide();
+        $('.lesson_features').hide();     
+        $('.doc_features').hide();           
+        $('.folder_features' + this_.attr("id")).show();
+        $('.rename_folder_form').hide();
+        $('.rename_lesson_form').hide();        
+        event.stopPropagation();
     })
     $(".rename_folder").click(function (event) {
-        event.preventDefault();
         var this_ = $(this)
         $('.folder_features' + this_.attr('id')).hide() 
         $('.rename_form' + this_.attr("id")).show();
-        $('#folder_title' + this_.attr('id')).hide()            
+        $('.folder_features').hide();
+        $('.lesson_features').hide();
+        event.stopPropagation();
     })
     $(".delete_folder").click(function (event) {
         event.preventDefault();
@@ -560,21 +566,31 @@ $(document).ready(function(){
         });  
     });
     $(".open_lesson_features").click(function (event) {
-        event.preventDefault();
         var this_ = $(this)
-        $('.lesson_features' + this_.attr("id")).fadeToggle();
+        $('.folder_features').hide();
+        $('.lesson_features').hide();        
+        $('.lesson_features' + this_.attr("id")).show();
+        $('.rename_folder_form').hide();
+        $('.rename_lesson_form').hide();
+        event.stopPropagation();
     })
     $(".open_doc_features").click(function (event) {
-        event.preventDefault();
         var this_ = $(this)
-        $('.doc_features' + this_.attr("id")).fadeToggle();
+        $('.doc_features').hide();
+        $('.folder_features').hide();
+        $('.doc_features' + this_.attr("id")).show();
+        $('.rename_folder_form').hide();
+        $('.rename_lesson_form').hide();
+        event.stopPropagation();
     })
     $(".rename_lesson").click(function (event) {
-        event.preventDefault();
         var this_ = $(this)
         $('.paper_features' + this_.attr('id')).hide() 
         $('.rename_lesson' + this_.attr("id")).show();
-        $('#paper_title' + this_.attr('id')).hide()            
+        $('#paper_title' + this_.attr('id')).hide()      
+        $('.folder_features').hide();
+        $('.lesson_features').hide();              
+        event.stopPropagation();
     })
     $(".delete_lesson").click(function (event) {
         event.preventDefault();

@@ -1,3 +1,9 @@
+.folder_features{
+  position: absolute !important; 
+  z-index: 3000;
+  margin: 30px 0 0 30px !important; 
+  width: 155px;
+}
 .predoplata_form{
   width: 250px !important;
   margin-top: -5px !important;

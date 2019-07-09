@@ -38,12 +38,24 @@ $('.notice').click(function(event) {
 $('.school_landing').click(function(e){
     e.stopPropagation();
 });
+$('.rename_folder_form').click(function(e){
+    e.stopPropagation();
+});
+$('.rename_lesson_form').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
-    $('.notice-bar').css('display', 'none');
+    console.log('body555')
+    $('.notice-bar').hide();
     var div = $('.notice');
     div.css('color', '#2D437C');
     $(this).attr('status', 'hide')
     $('.school_landing').hide()
     $('.map_phone-main').show();
     $('.map_phone-other').hide();
+    $('.folder_features').hide();
+    $('.lesson_features').hide();
+    $('.doc_features').hide();
+    $('.rename_folder_form').hide();
+    $('.rename_lesson_form').hide();
 });

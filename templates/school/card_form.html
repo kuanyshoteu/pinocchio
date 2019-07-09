@@ -37,7 +37,7 @@
                                 <option value="sms">СМС</option>
                                 <option value="mail">Почта</option>
                             </select>
-                            <a {%if card.was_called%}style="display: none"{%endif%} class="ui button green small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался по {{card.action}}</a>
+                            <a {%if card.was_called%}style="display: none"{%endif%} class="ui button green small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался(ась) по {{card.action}}</a>
                         </div>
                         <div class="eight wide column" id="card_form-select">
                             {% if is_director %}

@@ -2,7 +2,7 @@
 <div class="two wide column" id="all_folder{{ folder.id }}">
     <a id="{{ folder.id }}" class="open_folder_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal"></i></a>
 
-    <div class="ui segment folder_features{{ folder.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+    <div class="ui segment folder_features folder_features{{ folder.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
         <a  class="rename_folder" id="{{ folder.id }}"><i class="icon pencil alternate"></i> Переименовать</a>
         <div class="ui divider"></div>
         <a  class="file_action" object_type='folder' action='copy' data-href='{{ profile.docfile_action_url }}' id="{{ folder.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon copy outline"></i> Копировать</a>
@@ -18,7 +18,7 @@
         <br>
         <span id="folder_title{{ folder.id }}">{{ folder.title }}</span>
     </a>
-    <form class="ui form rename_form{{ folder.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+    <form class="ui form rename_folder_form rename_form{{ folder.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
         <textarea style="padding: 0; height: 60px;" id='change_folder_name{{ folder.id }}' type="text">{{ folder.title }}</textarea>
         <a class="ui button mini blue change_folder_name" id="{{ folder.id }}" data-href='{{ folder.change_docname_url }}' style="width: 100%; margin-top: 5px;">✓</a>
     </form>

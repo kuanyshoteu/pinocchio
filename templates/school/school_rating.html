@@ -15,7 +15,7 @@
                         <div style="padding-bottom: 15px;">
                             Выберите <b>предмет</b>:
                             <div class="controls" style="margin-top: 10px"> 
-                                <select class="crm_option" id="crm_subject" url="{{ instance.crm_option_url }}" option="subject"> 
+                                <select class="crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
                                     {% if profile.skill.crm_subject %}
                                         <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
                                     {% endif %}
@@ -31,7 +31,7 @@
                         <div style="padding-bottom: 15px;">
                             Выберите <b>возраст</b>:
                             <div class="controls" style="margin-top: 10px"> 
-                                <select class="crm_option" id="crm_age" url="{{ instance.crm_option_url }}" option="age"> 
+                                <select class="crm_option" id="crm_age_mobile" url="{{ instance.crm_option_url }}" option="age"> 
                                     {% if profile.skill.crm_age %}
                                         <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
                                     {% endif %}
@@ -47,7 +47,7 @@
                         <div>
                             Выберите <b>класс</b>:
                             <div class="controls" style="margin-top: 10px"> 
-                                <select class="crm_option" id="crm_squad" url="{{ instance.crm_option_url }}" option="group"> 
+                                <select class="crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
                                     {% if profile.rating_squad_choice.first %}
                                         <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
                                     {% endif %}

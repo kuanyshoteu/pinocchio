@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <div class="two wide column" id="all_lesson{{ lesson.id }}">
   <a id="{{ lesson.id }}" class="open_lesson_features {%if forloop.counter == 1%}{% if hint == 42 or hint == 62 %}help42 help62 help_big_button{% endif %}{% endif %}" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal {%if forloop.counter == 1%}{% if hint == 42 or hint == 62 %}help42 help62 help_big_button{% endif %}{% endif %}"></i></a>
-  <div class="ui segment lesson_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
+  <div class="ui segment lesson_features lesson_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
       <a  class="rename_lesson" id="{{ lesson.id }}"><i class="icon pencil alternate"></i>Переименовать</a>
       <div class="ui divider"></div>
       <a  class="file_action" object_type='lesson' action='copy' data-href='{{ profile.file_action_url }}' id="{{ lesson.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
@@ -15,7 +15,7 @@
       <br>
       <span id="lesson_title{{ lesson.id }}">{{ lesson.title }}</span>
   </a>
-  <form class="ui form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+  <form class="ui form rename_lesson_form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
       <textarea style="padding: 0; height: 60px;" id='change_lesson_name{{ lesson.id }}' type="text">{{ lesson.title }}</textarea>
       <a class="ui button mini blue change_lesson_name" id="{{ lesson.id }}" data-href='{{ lesson.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
   </form>

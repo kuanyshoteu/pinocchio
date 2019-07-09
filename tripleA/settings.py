@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'schools',
     'documents',
     'social_django',
+    'channels',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -101,12 +102,12 @@ AUTHENTICATION_BACKENDS = (
 
 ASGI_APPLICATION = "tripleA.routing.application"
 #WSGI_APPLICATION = 'tripleA.wsgi.application'
-REDIS_URL='redis://h:p04805ed78b5ba825c92c34d209a538835bbbb5eddce36ec7a904974cc76fcbd4@ec2-108-129-69-107.eu-west-1.compute.amazonaws.com:14599'
+#REDIS_URL='redis://h:p04805ed78b5ba825c92c34d209a538835bbbb5eddce36ec7a904974cc76fcbd4@ec2-108-129-69-107.eu-west-1.compute.amazonaws.com:14599'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379), REDIS_URL],
+            "hosts": [('127.0.0.1', 6379)],
 #            "hosts":[os.environ.get('REDIS_URL', 'redis://localhost:6379')]
         },
     },

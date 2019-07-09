@@ -841,7 +841,7 @@ def open_card(request):
 def card_called(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
-    if request.GET.get('id') and request.GET.get('action'):
+    if request.GET.get('id'):
         school = profile.schools.first()
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         skill = profile.skill

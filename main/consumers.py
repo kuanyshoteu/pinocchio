@@ -7,7 +7,7 @@ from django.utils import timezone
 
 class ChatConsumer(AsyncConsumer):
     async def websocket_connect(self, event):
-        print('connect yes')
+        print('connect yes ')
         user = self.scope['user']
         profile = self.get_profile(user)
         for school in profile.schools.all():

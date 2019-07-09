@@ -96,7 +96,7 @@ def paste(request):
         folder = Folder.objects.get(id = cache.object_id)
         title = folder.title
         link = folder.get_absolute_url()
-        copy_folder = Folder.objects.create(author_profile = profile, title=folder.title)
+        copy_folder = Folder.objects.create(author_profile = profile, title=folder.title, school=folder.school)
         for ppr in folder.lesson_list.all():
             copy_folder.lesson_list.add(ppr)
 
@@ -112,7 +112,7 @@ def paste(request):
 
     if cache.object_type == 'lesson':
         lesson = Lesson.objects.get(id = cache.object_id)
-        new_lesson = Lesson.objects.create(author_profile = profile, title = lesson.title)
+        new_lesson = Lesson.objects.create(author_profile = profile, title = lesson.title, school=lesson.school)
         new_lesson.save()
         title = new_lesson.title
         link = new_lesson.get_absolute_url()
