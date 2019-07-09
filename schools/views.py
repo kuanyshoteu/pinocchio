@@ -198,7 +198,7 @@ def school_crm(request):
 
 def school_crm_all(request):
     profile = get_profile(request)
-    only_managers(profile)
+    only_directors(profile)
     school = profile.schools.first()
     time_periods = school.time_periods.all()
     managers = None
