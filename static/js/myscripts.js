@@ -288,6 +288,7 @@ $(document).ready(function () {
         }
         else{
             $('.wrong_mail_error'+id).show()
+            console.log('sdfsdf', id)
         }
     });
     $('.crm_option').on('change', function(e) {

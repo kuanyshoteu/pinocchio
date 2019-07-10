@@ -2,7 +2,7 @@
     <i class="close icon"></i>
     <div class="content">
         <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <span class="wrong_mail_error{{ column.id }} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
+            <span class="wrong_mail_error wrong_mail_error{{ column.id }} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
             <table class="ui celled table" style="margin: 0">
                 <thead>
                     <tr>

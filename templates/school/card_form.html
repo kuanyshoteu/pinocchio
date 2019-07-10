@@ -1,10 +1,11 @@
-<div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_form{{ card.id }}">
+    <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_form{{ card.id }}">
     <i class="close icon"></i>
     <div class="content">
         <div class="card_head">
             Карточка {{ card.name }}
         </div>
         <form class="ui form card_form_update_here" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+            <span class="wrong_mail_error wrong_mail_error{{card.id}} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
             <div class="ui grid stackable card_form_update">
                 <div class="six wide column" style="padding-top: 5px;">
                     <div style="height: 15px;"></div>
