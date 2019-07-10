@@ -32,7 +32,7 @@
                         {% endif %}
                     </span>
                     {% if is_trener or is_manager or is_director %}
-                    <div style="float: right;">
+                    <div style="display: inline-block;margin-left: 15px;">
                         {% if cache.full %}
                             <a class="ui button mini blue pastee" data-href='{{ profile.paste_docobject_url }}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}root{% endif %}' school="{{current_school_id}}">Вставить</a>
                         {% else %}

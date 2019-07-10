@@ -14,7 +14,7 @@ from .forms import SchoolForm
 from .models import *
 from subjects.models import *
 from squads.models import Squad
-from squads.views import remove_student_from_squad, add_student_to_squad
+from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile, Corruption, Zaiavka
@@ -613,66 +613,72 @@ def save_card_as_user(request):
     school = manager_profile.schools.first()
     password = ''
     add = True
+    ok_mail = False
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         print('card', card.timestamp)
+        squad_id = int(request.GET.get('squad_id'))
         if card.saved == False:
-            new_id = User.objects.order_by("id").last().id + 1
-            password = random_password()
-            user = User.objects.create(username='user' + str(new_id))
-            user.set_password(password)
-            user.save()
-            card.saved = True
-            profile = Profile.objects.get(user = user)
-            profile.first_name = card.name
-            profile.phone = card.phone
-            profile.mail = card.mail
-            profile.save()
-            card.card_user = profile
-            card.author_profile = manager_profile
-            card.timestamp = timezone.now()
-            squad_id = int(request.GET.get('squad_id'))
-            card.last_groups = squad_id
-            card.save()
-            profile.schools.add(school)
-            skill = Skill.objects.create()
-            profile.skill = skill
-            profile.save()
-            skill.confirmation_time = timezone.now()
-            skill.confirmed = True
-            skill.save()
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
-                add_student_to_squad(profile, squad,password, True)
+                password = random_password()
+                ok_mail = prepare_mail(card.name, card.phone, card.mail, squad, password, True)
+            if ok_mail:
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
+                new_id = User.objects.order_by("id").last().id + 1
+                user = User.objects.create(username='user' + str(new_id))
+                user.set_password(password)
+                user.save()
+                card.saved = True
+                profile = Profile.objects.get(user = user)
+                profile.first_name = card.name
+                profile.phone = card.phone
+                profile.mail = card.mail
+                profile.save()
+                card.card_user = profile
+                card.author_profile = manager_profile
+                card.timestamp = timezone.now()
+                card.last_groups = squad_id
+                card.save()
+                profile.schools.add(school)
+                skill = Skill.objects.create()
+                profile.skill = skill
+                profile.save()
+                skill.confirmation_time = timezone.now()
+                skill.confirmed = True
+                skill.save()
+                add_student_to_squad(profile, squad)
         else:
             profile = card.card_user
             card.author_profile = manager_profile
             card.save()
             squad_id = int(request.GET.get('squad_id'))
             if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
-                print('stop', card.timestamp)
                 return JsonResponse({'stop':True})
-            card.last_groups = squad_id
-            card.timestamp = timezone.now()
-            card.save()
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
                 if profile in squad.students.all():
                     add = False
                     remove_student_from_squad(profile, squad)
+                    ok_mail = True
                 else:
-                    add_student_to_squad(profile, squad,None,False)
+                    ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
+            if ok_mail:
+                card.last_groups = squad_id
+                card.timestamp = timezone.now()
+                card.save()
+                add_student_to_squad(profile, squad)
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
-        if request.GET.get('predoplata'):
+        print(request.GET.get('predoplata'), ok_mail)
+        if request.GET.get('predoplata') and ok_mail:
             was_minus = False
             if profile.money < profile.salary:
                 was_minus = True
@@ -686,9 +692,11 @@ def save_card_as_user(request):
                 skill.save()            
                 card.was_called = True
                 card.save()
+    print('****',ok_mail)
     data = {
         'password':password,
         'add':add,
+        'ok_mail':ok_mail,
     }
     return JsonResponse(data)
 

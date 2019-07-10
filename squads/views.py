@@ -267,7 +267,7 @@ def add_student(request):
             add = False
             remove_student_from_squad(student, squad)
         else:
-            add_student_to_squad(student, squad,None,False)
+            add_student_to_squad(student, squad)
     data = {
         'add':add,
     }
@@ -283,15 +283,8 @@ def remove_student_from_squad(student, squad):
         remove_person_from_lecture(lecture, student)
         lecture.save()
     squad.squad_attendances.filter(student=student).delete()
-def add_student_to_squad(student, squad, password, send_mail):
-    squad.students.add(student)
-    for subject in squad.subjects.all():
-        subject.students.add(student)
-        student.salary += subject.cost
-    student.save()
-    school = squad.school
-    for timep in school.time_periods.all():
-        timep.people.add(student)
+
+def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     today = int(timezone.now().strftime('%w'))
     nowhour = int(timezone.now().strftime('%H')) 
     nowminute = int(timezone.now().strftime('%M')) 
@@ -321,9 +314,8 @@ def add_student_to_squad(student, squad, password, send_mail):
                 if int(lecture.cell.time_period.start.split(':')[0])-2 < 10:
                     timestr = '0' + str(int(lecture.cell.time_period.start.split(':')[0])-2)
                 time = timestr+str(lecture.cell.time_period.start.split(':')[1])
-        add_person_to_lecture(lecture, student)
-        lecture.save()
-    if len(squad.squad_lectures.all())>0:
+    ok_mail = False
+    if len(squad.squad_lectures.all()) > 0:
         send_date = (timezone.now().date() + timedelta(needed_day - today)).strftime('%d%m%y')+time
         if lecture.office:
             address = lecture.office.address
@@ -331,10 +323,30 @@ def add_student_to_squad(student, squad, password, send_mail):
             address = squad.school.school_offices.first().address
         print(send_date, lecture_time, address, is_send)
         if send_mail:
-            send_hello_email(student,password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
+            ok_mail = True
+            try:
+                send_hello_email(first_name, phone, mail, password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
+            except Exception as e:
+                ok_mail = False
+                print('ok_mail False')
         if is_send:
             #send_sms(student.phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
             pass
+    return ok_mail
+
+def add_student_to_squad(student, squad):
+    squad.students.add(student)
+    for subject in squad.subjects.all():
+        subject.students.add(student)
+        student.salary += subject.cost
+    student.save()
+    school = squad.school
+    for timep in school.time_periods.all():
+        timep.people.add(student)
+    for lecture in squad.squad_lectures.all():
+        add_person_to_lecture(lecture, student)
+        lecture.save()
+
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.append(person.id)
