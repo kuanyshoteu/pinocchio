@@ -14,7 +14,7 @@
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
 <script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
 <script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
-<div id="app" style="overflow-y: hidden;height: 90%;">
+<div id="app" style="overflow-y: hidden;height: 90% !important;">
     <div class='ui container' id="untouch" style="height: 100%;">
         <div class="ui grid main_crm" style="margin-top: 0;height: 100%;">
             {% include 'left_menu.html' %}
@@ -170,6 +170,7 @@
         $('.wrong_mail_error').hide()
         $('.no_predoplata_number').hide()
         $('.predoplata_form').hide()
+        $('.loading').hide();        
         if (predoplata == 'predoplata') {
             $('.predoplata_form').show()
             $('.predoplata_number').attr('status', 'show')
@@ -239,6 +240,9 @@
     })
     function open_crmcard(id){
         $('#card_form'+id).modal('show')
+    }
+    function open_crmhist(id){
+        $('#card_hist'+id).modal('show')
         url = $('.current_card').attr('url')
         $.ajax({
             url: url,

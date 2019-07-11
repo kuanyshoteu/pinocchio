@@ -666,17 +666,17 @@ def save_card_as_user(request):
                     remove_student_from_squad(profile, squad)
                     ok_mail = True
                 else:
-                    ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
-            if ok_mail:
-                card.last_groups = squad_id
-                card.timestamp = timezone.now()
-                card.save()
-                add_student_to_squad(profile, squad)
-                hist = CRMCardHistory.objects.create(
-                    action_author = manager_profile,
-                    card = card,
-                    edit = '*** Регистрация в ' + squad.title + ' ***',
-                    )
+                    ok_mail = True#prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
+                    if ok_mail:
+                        card.last_groups = squad_id
+                        card.timestamp = timezone.now()
+                        card.save()
+                        add_student_to_squad(profile, squad)
+                        hist = CRMCardHistory.objects.create(
+                            action_author = manager_profile,
+                            card = card,
+                            edit = '*** Регистрация в ' + squad.title + ' ***',
+                            )
         print(request.GET.get('predoplata'), ok_mail)
         if request.GET.get('predoplata') and ok_mail:
             was_minus = False

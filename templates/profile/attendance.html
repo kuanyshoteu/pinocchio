@@ -30,6 +30,17 @@
         {% endfor %}
         </div>
         <div id="squad_attendance">
+            <div class="loading" style="display: none;">
+                <span class="l l1"></span>
+                <span class="l l2"></span>
+                <span class="l l3"></span>
+                <span class="l l4"></span>
+                <span class="l l5"></span>
+                <span class="l l6"></span>
+                <span class="l l7"></span>
+                <span class="l l8"></span>
+                <span class="l l9"></span>
+            </div>
             {% include "profile/attendance_squad.html" %}
         </div>
     {% else %}
@@ -44,8 +55,16 @@
 <span class="attendance_present_url" url="{{ hisprofile.attendance_present_url }}" style="display: none;"></span>
 <span class="attendance_change_url" url="{{ hisprofile.attendance_change_url }}" style="display: none;"></span>
 <script type="text/javascript">
+    function loading(){
+        $('.loading').show();
+    }
+    function loading_stop(){
+        $('.loading').hide();
+        console.log('stopped')
+    }
     function load_attendance_subject(subject_id){
         var url = $('#load_attendance_subject').attr('url');
+        loading()
         $.ajax({
             url: url,
             method: "GET",
@@ -53,10 +72,9 @@
                 'subject_id':subject_id,
             },
             success: function (data) {
-                for (var i = 0; i < document.getElementsByClassName("load_attendance_subject").length; i++){
-                    document.getElementsByClassName("load_attendance_subject")[i].setAttribute('class', 'other_option')
-                }
-                $('#subject' + subject_id).attr('class', 'load_attendance_subject current_option')
+                $('.load_attendance_subject').removeClass('current_option')
+                $('.load_attendance_subject').addClass('other_option')
+                $('#subject' + subject_id).addClass('current_option')
                 $( "#subject_attendance" ).load(document.URL +  ' #subject_attendance');
             }, 
             error: function (error) {
@@ -66,6 +84,7 @@
     };
     function load_attendance_squad(squad_id){
         var url = $('#load_attendance_squad').attr('url');
+        loading()
         $.ajax({
             url: url,
             method: "GET",
@@ -73,11 +92,11 @@
                 'squad_id':squad_id,
             },
             success: function (data) {
-                for (var i = 0; i < document.getElementsByClassName("switch_btn").length; i++){
-                    document.getElementsByClassName("switch_btn")[i].setAttribute('class', 'other_option2 switch_btn')
-                }
-                $('#squad' + squad_id).attr('class', 'load_attendance_squad current_option2 switch_btn_active switch_btn')
-                $( "#squad_attendance" ).load(document.URL +  ' #squad_attendance');
+                $('.switch_btn').removeClass('switch_btn_active')
+                $('.switch_btn').removeClass('current_option2')
+                $('.switch_btn').addClass('other_option2')
+                $('#squad' + squad_id).addClass('switch_btn_active')
+                $( "#squad_attendance" ).load(document.URL +  ' #squad_attendance'); 
             }, 
             error: function (error) {
                 console.log('error')
@@ -89,6 +108,7 @@
     //$('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
     function createColumnRight(nextNumber, index){
         $('.wait').attr('status', 'yes')
+        loading()
         var url = $('.more_attendance_url').attr('url')
         var subject_id = $('.more_attendance_url').attr('subject_id')
         var squad_id = $('.more_attendance_url').attr('squad_id')
@@ -104,6 +124,7 @@
                 'sm_id':last_sm,
             },
             success: function (data) {
+                var r = $.Deferred();
                 if (data.stopright == false){
                     index = index - 130;
                     $('#slider').animate({
@@ -116,7 +137,7 @@
                 }
                 if(data.last_set){
                     $('#slider').attr('last_set', 'yes')
-                }
+                };
                 for (var i = 0; i < data.columns.length; i++){
                     var section = createEl('section', 'slider__section');
                     console.log(nextNumber+i)
@@ -132,7 +153,8 @@
                     section.appendChild(div)
                     document.getElementById('next_atts').appendChild(section)                   
                     $('.wait').attr('status', 'no')
-                }
+                };
+                loading_stop();
             }, error: function (error) {
                 console.log('error')
             }

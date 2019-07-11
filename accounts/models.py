@@ -233,7 +233,7 @@ class CRMCard(models.Model):
     action = models.CharField(max_length=250, default='')
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
     class Meta:
-        ordering = ['saved', 'timestamp']
+        ordering = ['saved', '-timestamp']
     def call_helper(self):
         return reverse("schools:call_helper")
     def change_day_of_week(self):

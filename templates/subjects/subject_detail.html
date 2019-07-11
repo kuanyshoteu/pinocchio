@@ -53,11 +53,29 @@
                         </div>
                         <div class="ui segment" style="{% if not course.image %}margin-top: 0{% endif %}">
                             <div class="ui grid">
-                                <div class="one wide column">
+                                <div class="one wide column" style="padding-bottom: 0">
                                     <i class="icon list" style="font-size: 17px; padding-bottom: 0"></i>
                                 </div>
                                 <div class="fifteen wide column" style="padding-right: 25px; padding-bottom: 0">
-                                    {{ instance.get_markdown }}
+                                    <span>{{ instance.get_markdown }}</span>
+                                </div>
+                                <div class="one wide column" style="padding-bottom: 0">
+                                    <i class="icon certificate" style="font-size: 17px; padding-bottom: 0"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px; padding-bottom: 0">
+                                    <span>Стоимость: <b>{{ instance.cost }} тг</b></span>
+                                </div>
+                                <div class="one wide column" style="padding-bottom: 0">
+                                    <i class="icon book" style="font-size: 17px; padding-bottom: 0"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px; padding-bottom: 0">
+                                    <span>Предмет: <b>{{ instance.category.title }}</b></span>
+                                </div>
+                                <div class="one wide column">
+                                    <i class="icon address book" style="font-size: 17px; padding-bottom: 0"></i>
+                                </div>
+                                <div class="fifteen wide column" style="padding-right: 25px;">
+                                    <span>Возраст: <b>{{ instance.age.title }}</b></span>
                                 </div>
                             </div>                            
                         </div>

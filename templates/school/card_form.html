@@ -1,4 +1,4 @@
-    <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_form{{ card.id }}">
+<div class="ui modal" style="margin-top: 10%;" id="card_form{{ card.id }}">
     <i class="close icon"></i>
     <div class="content">
         <div class="card_head">
@@ -95,14 +95,23 @@
                 <div class="sixteen wide column center aligned">
                     <a class="ui button blue tiny" onclick="edit_card('{{ card.id }}')" id="{{ card.id }}">Сохранить</a>
                 </div>
-                <div class="sixteen wide column">
-                    <div class="ui divider full-w"></div>
-                    <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений
-                    </div>
-                </div>
-                <div class="sixteen wide column cardhistory{{ card.id }}" style="color: #6b6d72;font-size: 12px;">
-                </div>
             </div>
         </form>
+    </div>
+</div>
+<div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist{{ card.id }}">
+    <i class="close icon"></i>
+    <div class="content">
+        <div class="card_head">
+            Карточка {{ card.name }}
+        </div>
+        <div class="ui grid stackable card_form_update">
+            <div class="sixteen wide column">
+                <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений
+                </div>
+            </div>
+            <div class="sixteen wide column cardhistory{{ card.id }}" style="color: #6b6d72;font-size: 12px;">
+            </div>
+        </div>
     </div>
 </div>

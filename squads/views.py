@@ -274,6 +274,7 @@ def add_student(request):
     return JsonResponse(data)
 
 def remove_student_from_squad(student, squad):
+    print('##########')
     squad.students.remove(student)
     for subject in squad.subjects.all():
         subject.students.remove(student)
@@ -283,6 +284,7 @@ def remove_student_from_squad(student, squad):
         remove_person_from_lecture(lecture, student)
         lecture.save()
     squad.squad_attendances.filter(student=student).delete()
+    print('##########')
 
 def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     today = int(timezone.now().strftime('%w'))

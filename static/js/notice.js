@@ -45,7 +45,6 @@ $('.rename_lesson_form').click(function(e){
     e.stopPropagation();
 });
 $("body").click(function(e){
-    console.log('body555')
     $('.notice-bar').hide();
     var div = $('.notice');
     div.css('color', '#2D437C');

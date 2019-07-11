@@ -14,6 +14,17 @@
             <span class="no_predoplata_number highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Введите сумму предоплаты</b></span>
         </div>
         <div class="ui segment margin0">
+            <div class="loading" style="display: none;">
+                <span class="l l1"></span>
+                <span class="l l2"></span>
+                <span class="l l3"></span>
+                <span class="l l4"></span>
+                <span class="l l5"></span>
+                <span class="l l6"></span>
+                <span class="l l7"></span>
+                <span class="l l8"></span>
+                <span class="l l9"></span>
+            </div>            
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
                 <div class="ui grid">
                     <div class="four wide column">
@@ -138,13 +149,16 @@
 
 <script type="text/javascript">
     function save_card_as_user(squad_id){
+        $('.loading').show();
         id = $('.card_for_save').attr('id')
         predoplata = $('.predoplata_number').val()
         $('.time_stop').hide()
         $('.wrong_mail').hide()
         $('.no_predoplata_number').hide()
-        if ($('.predoplata_number').attr('status') == 'show' && predoplata.length > 0) {
+        console.log('**', predoplata, predoplata.length, $('.predoplata_number').attr('status'))
+        if ($('.predoplata_number').attr('status') == 'show' && predoplata == '') {
             $('.no_predoplata_number').show()
+            $('.loading').hide();
         }
         else{
             $.ajax({
@@ -156,6 +170,7 @@
                 },
                 dataType: 'json',
                 success: function (data) {
+                    $('.loading').hide();
                     $('.predoplata_form').hide()
                     $('.predoplata_number').attr('status', 'hide')
                     $('.predoplata_number').val('')
