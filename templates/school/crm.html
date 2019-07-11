@@ -22,10 +22,10 @@
                 <div style="padding-bottom: 8px;">
                     <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
                         <div class="ui grid">
-                            <div class="filter wide column">
-                                <div class="ui toggle checkbox segment" style="padding: 4px 12px;margin-top: 1px;">
+                            <div class="wide column" style="width: 155px;padding-left: 5px;padding-bottom: 0">
+                                <div class="ui toggle checkbox segment" style="padding: 4px 5px;margin-top: 1px;">
                                   <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
-                                  <label>Свободные</label>
+                                  <label style="padding-left: 55px;">Свободные</label>
                                 </div>
                             </div>
                             <div class="filter wide column">
@@ -67,9 +67,9 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="filter wide column">
+                            <div class="wide column" style="width: 60px;padding: 14px 0 0 0;">
                                 <div class="filter-element">
-                                    <div class="filter-title">По дням недели<i class="icon caret down" style="float: right;"></i></div>
+                                    <div class="filter-title" style="padding-right: 1px;">Дни<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                     {% for day in days %}
                                         <li class="filter-item" status="0" id="day{{ day.id }}">
@@ -88,7 +88,7 @@
                                 <a class="ui button small blue search_by_tags"><i class="icon search" style="color: white;"></i></a>
                             </div>
                             {% if is_director %}
-                            <div class="wide column">
+                            <div class="wide column" style="padding-bottom: 0">
                                 {% if all %}
                                 <a class="ui button mini blue" style="padding: 8px;" href='{% url "schools:crm" %}'>Мои</a>
                                 {% else %}
@@ -168,9 +168,11 @@
         $('.time_stop').hide()
         $('.wrong_mail').hide()        
         $('.wrong_mail_error').hide()
-        console.log(predoplata)
+        $('.no_predoplata_number').hide()
+        $('.predoplata_form').hide()
         if (predoplata == 'predoplata') {
             $('.predoplata_form').show()
+            $('.predoplata_number').attr('status', 'show')
         }
         $.ajax({
             url: $('.card_for_save').attr('get_card_squads'),
@@ -212,12 +214,24 @@
                     }
                 });
                 oldcolumn_id = $('#card'+id).attr('column_id')
-                if(oldcolumn_id != '4' || column_id != '5'){
+                if(oldcolumn_id == '1'){
+                    if (column_id == '5') {
+                        openNav(id, $('.current_card').attr('name'), 'predoplata');
+                        $('#card'+id).attr('column_id', column_id)
+                    }
+                    else{
+                        openNav(id, $('.current_card').attr('name'), 'null');
+                        $('#card'+id).attr('column_id', column_id)
+                    }
+                }
+                else if(oldcolumn_id != '4' || column_id != '5'){
                     if (column_id == '2') {
                         openNav(id, $('.current_card').attr('name'), 'null');
+                        $('#card'+id).attr('column_id', column_id)
                     }
-                    if (column_id == '4') {
+                    if (column_id == '4' || column_id == '5') {
                         openNav(id, $('.current_card').attr('name'), 'predoplata');
+                        $('#card'+id).attr('column_id', column_id)
                     }
                 }
             },
@@ -356,10 +370,14 @@
   overflow-x: hidden;
   transition: 0.5s;
 }
-
 @media screen and (max-height: 450px) {
   .school_schedule {padding-top: 15px;}
   .school_schedule a {font-size: 18px;}
+}
+@media screen and (min-width: 900px)  and (max-width: 1020px){
+    .filter-title{
+        padding: 5px 0 5px 2px !important;
+    }
 }
 </style>
 

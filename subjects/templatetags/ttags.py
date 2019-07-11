@@ -354,3 +354,17 @@ def get_age_courses_len(age, school):
 @register.filter
 def get_column_cards_len(column, school):
     return len(school.crm_cards.filter(column=column))
+
+@register.filter
+def get_his_squads(subject, profile):
+    if profile.is_student:
+        return subject.squads.filter(students=profile)
+    else:
+        return subject.squads.filter(teacher=profile)
+
+@register.filter
+def get_his_squads_len(subject, profile):
+    if profile.is_student:
+        return len(subject.squads.filter(students=profile))
+    else:
+        return len(subject.squads.filter(teacher=profile))

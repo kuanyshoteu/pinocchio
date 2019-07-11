@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load ttags %}
 <span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
 <span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
 <div class="ui segment shapka help3 help42">
@@ -24,8 +25,8 @@
     {% if hissubjects|length > 0 %}
     {% if is_this_trener %}
         <div class="ui stackable grid" style="margin:-1rem 0 0 !important">
-        {% for squad in att_subject.squads.all %}
-            <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject.squads.all|length }}));">{{ squad.title }}</a>
+        {% for squad in att_subject|get_his_squads:hisprofile %}
+            <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject|get_his_squads_len:hisprofile }}));">{{ squad.title }}</a>
         {% endfor %}
         </div>
         <div id="squad_attendance">

@@ -7,10 +7,11 @@
         <div class="ui segment margin0" style="display: flex;padding-bottom: 0;">
             <span style="font-size: 15px;margin-left: 15px;margin-bottom: 15px;">Регистрация <b id="current_user_name"></b></span>
             <form class="ui form predoplata_form" style="display: none;">
-                <input class="predoplata_number" placeholder="Сумма предоплаты" type="number">                
+                <input status="hide" class="predoplata_number" placeholder="Сумма предоплаты" type="number">                
             </form>
             <span class="time_stop highlight_red" style="height: 25px;margin-left: 25px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></span>
             <span class="wrong_mail highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
+            <span class="no_predoplata_number highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Введите сумму предоплаты</b></span>
         </div>
         <div class="ui segment margin0">
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
@@ -141,36 +142,43 @@
         predoplata = $('.predoplata_number').val()
         $('.time_stop').hide()
         $('.wrong_mail').hide()
-        $.ajax({
-            url: $('.card_for_save').attr('url'),
-            data: {
-                'id':id,
-                'squad_id':squad_id,
-                'predoplata':predoplata,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.predoplata_form').hide()
-                $('.predoplata_number').val('')
-                if (data.ok_mail == false) {
-                    $('.time_stop').hide()
-                    $('.wrong_mail').show()
+        $('.no_predoplata_number').hide()
+        if ($('.predoplata_number').attr('status') == 'show' && predoplata.length > 0) {
+            $('.no_predoplata_number').show()
+        }
+        else{
+            $.ajax({
+                url: $('.card_for_save').attr('url'),
+                data: {
+                    'id':id,
+                    'squad_id':squad_id,
+                    'predoplata':predoplata,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.predoplata_form').hide()
+                    $('.predoplata_number').attr('status', 'hide')
+                    $('.predoplata_number').val('')
+                    if (data.ok_mail == false) {
+                        $('.time_stop').hide()
+                        $('.wrong_mail').show()
+                    }
+                    else if (data.stop) {
+                        $('.time_stop').show()
+                        $('.wrong_mail').hide()
+                    }
+                    else if(data.add){
+                        document.getElementById("school_schedule").style.width = "0";
+                        $('#saved_modal').modal('show')
+                        $('.icontable'+id).removeClass('green')
+                        $('.icontable'+id).addClass('blue')
+                    }
+                    else{
+                        $('.squad'+squad_id).hide()
+                    }
                 }
-                else if (data.stop) {
-                    $('.time_stop').show()
-                    $('.wrong_mail').hide()
-                }
-                else if(data.add){
-                    document.getElementById("school_schedule").style.width = "0";
-                    $('#saved_modal').modal('show')
-                    $('.icontable'+id).removeClass('green')
-                    $('.icontable'+id).addClass('blue')
-                }
-                else{
-                    $('.squad'+squad_id).hide()
-                }
-            }
-        })
+            })
+        }
     };
     function show_subject_cost(cost){
         $('.subject_cost').html(cost)
