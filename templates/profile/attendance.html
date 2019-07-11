@@ -40,7 +40,7 @@
     {% endif %}   
     </div>   
 </div>
-
+<span class="wait" status="no" style="display: none;"></span>
 <span class="attendance_present_url" url="{{ hisprofile.attendance_present_url }}" style="display: none;"></span>
 <span class="attendance_change_url" url="{{ hisprofile.attendance_change_url }}" style="display: none;"></span>
 <script type="text/javascript">
@@ -88,6 +88,7 @@
 <script type="text/javascript">
     //$('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
     function createColumnRight(nextNumber, index){
+        $('.wait').attr('status', 'yes')
         var url = $('.more_attendance_url').attr('url')
         var subject_id = $('.more_attendance_url').attr('subject_id')
         var squad_id = $('.more_attendance_url').attr('squad_id')
@@ -107,7 +108,7 @@
                     index = index - 130;
                     $('#slider').animate({
                         marginLeft:(index) + 'px'
-                    } ,200, function(){
+                    } ,100, function(){
                         $('#slider').attr('index', index)
                     });
                     $('.last_att').removeClass('last_att')
@@ -130,6 +131,7 @@
                     div.innerHTML = data.columns[i][0]
                     section.appendChild(div)
                     document.getElementById('next_atts').appendChild(section)                   
+                    $('.wait').attr('status', 'no')
                 }
             }, error: function (error) {
                 console.log('error')
@@ -137,6 +139,7 @@
         })
     }
     function createColumnLeft(prevNumber, index){
+        $('.wait').attr('status', 'yes')
         var url = $('.more_attendance_url').attr('url')
         var subject_id = $('.more_attendance_url').attr('subject_id')
         var squad_id = $('.more_attendance_url').attr('squad_id')
@@ -230,6 +233,7 @@
                     }
                     prev_atts = document.getElementById('prev_atts')
                     prev_atts.insertBefore(section, prev_atts.firstChild)                   
+                    $('.wait').attr('status', 'no')
                 }
             }, error: function (error) {
                 console.log('error')
@@ -247,20 +251,22 @@
         var length = document.getElementsByClassName('slider__section').length
         var last_set = $('#slider').attr('last_set')
         nextNumber = parseInt($('.last_att').attr('number')) + 1
-        if($('.att' + nextNumber).length == 0 && last_set == "no"){
-            createColumnRight(nextNumber, index);
-            console.log('created', nextNumber)
-        }
-        else if($('.att' + nextNumber).length > 0 || last_set == "no"){
-            console.log('moved', nextNumber, 'index', index-130)
-            index = index - 130;
-            slider.animate({
-                marginLeft:(index) + 'px'
-            } ,200, function(){
-                slider.attr('index', index)
-            });
-            $('.last_att').removeClass('last_att')
-            $('.att' + nextNumber).addClass('last_att')
+        if ($('.wait').attr('status') == 'no') {
+            if($('.att' + nextNumber).length == 0 && last_set == "no"){
+                createColumnRight(nextNumber, index);
+                console.log('created', nextNumber)
+            }
+            else if($('.att' + nextNumber).length > 0 || last_set == "no"){
+                console.log('moved', nextNumber, 'index', index-130)
+                index = index - 130;
+                slider.animate({
+                    marginLeft:(index) + 'px'
+                } ,100, function(){
+                    slider.attr('index', index)
+                });
+                $('.last_att').removeClass('last_att')
+                $('.att' + nextNumber).addClass('last_att')
+            }
         }
     }
     function moverLeft() {
@@ -272,28 +278,30 @@
 
         action = false;
         console.log('length',$('.att' + prevNumber).length)
-        if($('.att' + prevNumber).length == 0 && first_set == "no"){
-            slider.animate({
-                marginLeft:(index) + 'px'
-            } ,200, function(){
-                console.log('created')
-                createColumnLeft(prevNumber,index);
-            });
-            action = true;
-        }
-        else if($('.att' + (prevNumber)).length > 0 || first_set == "no"){
-            if (index != 0) {
-                index = index + 130;
+        if ($('.wait').attr('status') == 'no') {
+            if($('.att' + prevNumber).length == 0 && first_set == "no"){
                 slider.animate({
                     marginLeft:(index) + 'px'
-                } ,200, function(){
-                });                
+                } ,100, function(){
+                    console.log('created')
+                    createColumnLeft(prevNumber,index);
+                });
+                action = true;
             }
-            console.log('moved left', -prevNumber, 'index', index)
-            slider.attr('index', index)
-            $("#section" + (-prevNumber)).attr('style', '')
-            $('.last_att').removeClass('last_att')
-            $('.att' + (prevNumber+3)).addClass('last_att')        
+            else if($('.att' + (prevNumber)).length > 0 || first_set == "no"){
+                if (index != 0) {
+                    index = index + 130;
+                    slider.animate({
+                        marginLeft:(index) + 'px'
+                    } ,100, function(){
+                    });                
+                }
+                console.log('moved left', -prevNumber, 'index', index)
+                slider.attr('index', index)
+                $("#section" + (-prevNumber)).attr('style', '')
+                $('.last_att').removeClass('last_att')
+                $('.att' + (prevNumber+3)).addClass('last_att')        
+            }
         }
     }
 </script>
