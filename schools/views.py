@@ -666,7 +666,7 @@ def save_card_as_user(request):
                     remove_student_from_squad(profile, squad)
                     ok_mail = True
                 else:
-                    ok_mail = True#prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
+                    ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
                     if ok_mail:
                         card.last_groups = squad_id
                         card.timestamp = timezone.now()
@@ -692,7 +692,6 @@ def save_card_as_user(request):
                 skill.save()            
                 card.was_called = True
                 card.save()
-    print('****',ok_mail)
     data = {
         'password':password,
         'add':add,

@@ -170,10 +170,13 @@
         $('.wrong_mail_error').hide()
         $('.no_predoplata_number').hide()
         $('.predoplata_form').hide()
-        $('.loading').hide();        
+        $('.loading').hide();
         if (predoplata == 'predoplata') {
             $('.predoplata_form').show()
             $('.predoplata_number').attr('status', 'show')
+        }
+        else{
+            $('.predoplata_number').attr('status', 'hide')          
         }
         $.ajax({
             url: $('.card_for_save').attr('get_card_squads'),
