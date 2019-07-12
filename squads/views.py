@@ -323,11 +323,16 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
             address = lecture.office.address
         else:
             address = squad.school.school_offices.first().address
-        print(send_date, lecture_time, address, is_send)
         if send_mail:
             ok_mail = True
             try:
-                send_hello_email(first_name, phone, mail, password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
+                if password:
+                    send_hello_email(first_name, phone, mail, password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
+                else:
+                    print('send reg')
+                    timeaddress = 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address
+                    text = "Здравствуйте "+first_name+ "! Вас зарегестрировали в группу<br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
+                    send_email('Pinocchio регистрация в группу', text, [mail])
             except Exception as e:
                 ok_mail = False
                 print('ok_mail False')
@@ -339,6 +344,10 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
 def add_student_to_squad(student, squad):
     squad.students.add(student)
     for subject in squad.subjects.all():
+        if subject.age:
+            subject.age.students.add(student)
+        if subject.category:
+            subject.category.students.add(student)
         subject.students.add(student)
         student.salary += subject.cost
     student.save()

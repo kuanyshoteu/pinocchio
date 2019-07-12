@@ -15,21 +15,22 @@ def send_sms(phones, message, time):
     requests.post(url)
 
 def send_hello_email(first_name, phone, mail, password, timeaddress):
+    print('send_hello_email',first_name, mail)
     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали на сайте <a href='pinocchio.kz'>Pinocchio.kz</a><br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
     login_text="<br>Ваш логин: "+phone+" или "+mail
     password_text = "<br>Ваш пароль (не говорите никому): "+password
-    html_content = text+login_text+password_text+" <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
-
+    ender = " <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
+    html_content = text+login_text+password_text+ender
     msg = EmailMultiAlternatives("Добро пожаловать на Pinocchio.kz", 'q', 'aaa.academy.kz@gmail.com', [mail])
     msg.attach_alternative(html_content, "text/html")
     print(msg)
     msg.send()
 
 def send_email(subject, html_content, send_to):
-    print(subject, html_content, send_to)
     msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
-    msg.attach_alternative(html_content, "text/html")
-    print(msg)
+    ender = " <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
+    msg.attach_alternative(html_content+ender, "text/html")
+    print('msg',msg)
     msg.send()
 
 def random_password():

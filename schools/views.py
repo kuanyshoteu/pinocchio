@@ -616,7 +616,6 @@ def save_card_as_user(request):
     ok_mail = False
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
-        print('card', card.timestamp)
         squad_id = int(request.GET.get('squad_id'))
         if card.saved == False:
             if squad_id > 0:
@@ -677,7 +676,6 @@ def save_card_as_user(request):
                             card = card,
                             edit = '*** Регистрация в ' + squad.title + ' ***',
                             )
-        print(request.GET.get('predoplata'), ok_mail)
         if request.GET.get('predoplata') and ok_mail:
             was_minus = False
             if profile.money < profile.salary:
