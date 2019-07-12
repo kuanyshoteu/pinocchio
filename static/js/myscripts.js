@@ -297,6 +297,7 @@ $(document).ready(function () {
         object_id = this_.options[this_.selectedIndex].value;
         url = $(this).attr('url')
         option = $(this).attr('option')
+                console.log('f0')
         $.ajax({
             url: url,
             data: {
@@ -306,6 +307,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 $( "#calendar" ).load(document.URL +  ' #calendar');
+                console.log('f')
             }
         });
     }) 

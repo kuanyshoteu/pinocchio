@@ -14,17 +14,14 @@
             <span class="no_predoplata_number highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Введите сумму предоплаты</b></span>
         </div>
         <div class="ui segment margin0">
-            <div class="loading" style="display: none;">
-                <span class="l l1"></span>
-                <span class="l l2"></span>
-                <span class="l l3"></span>
-                <span class="l l4"></span>
-                <span class="l l5"></span>
-                <span class="l l6"></span>
-                <span class="l l7"></span>
-                <span class="l l8"></span>
-                <span class="l l9"></span>
-            </div>            
+            <div class="loading" style="">
+              <div class="animation"><div class="circle one"></div></div>
+              <div class="animation"><div class="circle two"></div></div>
+              <div class="animation"><div class="circle three"></div></div>
+              <div class="animation"><div class="circle four"></div></div>
+              <div class="animation"><div class="circle five"></div></div>
+              <div class="animation"><div class="circle six"></div></div>
+            </div>
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
                 <div class="ui grid">
                     <div class="four wide column">

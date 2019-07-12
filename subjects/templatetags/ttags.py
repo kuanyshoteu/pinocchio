@@ -28,9 +28,10 @@ def rating_filter(profile):
     else:
         students_query = school.people.filter(is_student=True)
     if profile.skill.crm_subject:
-        students_query.filter(crm_subject_connect=profile.skill.crm_subject)
+        students_query = students_query.filter(crm_subject_connect=profile.skill.crm_subject)
     if profile.skill.crm_age:
-        students_query.filter(crm_age_connect=profile.skill.crm_age)
+        students_query = students_query.filter(crm_age_connect=profile.skill.crm_age)
+    print(students_query)
     return students_query
 
 @register.filter

@@ -42,6 +42,13 @@ urlpatterns = [
     url(r'^confirm/', confirm_email, name="confirm_email"),
     url(r'^', include("main.urls", namespace='main')),
 ]
+from django.conf.urls import (handler400, handler403, handler404, handler500)
+
+handler400 = 'main.views.bad_request'
+handler403 = 'main.views.permission_denied'
+handler404 = 'main.views.page_not_found'
+handler500 = 'main.views.server_error'
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

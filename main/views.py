@@ -79,6 +79,16 @@ def hislessons(request):
     }
     return render(request, "profile/classwork.html", context)
 
+def moderator(request):
+    profile = get_profile(request)
+    profession = Profession.objects.get(title = 'Moderator')
+    if not profession in profile.profession.all():
+        raise Http404
+    context = {
+        "profile":profile,
+    }
+    return render(request, "moderator.html", context)
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -144,6 +154,21 @@ def register_view(request):
         'res':res,
     }
     return JsonResponse(data)
+from django.shortcuts import (render_to_response)
+from django.template import RequestContext
+
+def page_not_found(request, ex):
+    print('eeeeeeerrrrrroooorr1')
+    return render(request, "errr.html")
+def bad_request(request, ex):
+    print('eeeeeeerrrrrroooorr2')
+    return render(request, "errr.html")
+def permission_denied(request, ex):
+    print('eeeeeeerrrrrroooorr3')
+    return render(request, "errr.html")
+def server_error(request):
+    print('eeeeeeerrrrrroooorr4')
+    return render(request, "errr.html")
 
 def login_social(request):
     if request.GET.get('status'):
@@ -457,3 +482,4 @@ def adilmed(request):
         send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['akuir01@inbox.ru'])
     data={}
     return JsonResponse(data)
+

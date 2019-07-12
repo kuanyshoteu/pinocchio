@@ -170,7 +170,6 @@
         $('.wrong_mail_error').hide()
         $('.no_predoplata_number').hide()
         $('.predoplata_form').hide()
-        $('.loading').hide();
         if (predoplata == 'predoplata') {
             $('.predoplata_form').show()
             $('.predoplata_number').attr('status', 'show')
@@ -219,25 +218,22 @@
                 });
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 if(oldcolumn_id == '1'){
-                    if (column_id == '5') {
+                    if (column_id == '5' || column_id == '4') {
                         openNav(id, $('.current_card').attr('name'), 'predoplata');
-                        $('#card'+id).attr('column_id', column_id)
                     }
                     else{
                         openNav(id, $('.current_card').attr('name'), 'null');
-                        $('#card'+id).attr('column_id', column_id)
                     }
                 }
                 else if(oldcolumn_id != '4' || column_id != '5'){
                     if (column_id == '2') {
                         openNav(id, $('.current_card').attr('name'), 'null');
-                        $('#card'+id).attr('column_id', column_id)
                     }
                     if (column_id == '4' || column_id == '5') {
                         openNav(id, $('.current_card').attr('name'), 'predoplata');
-                        $('#card'+id).attr('column_id', column_id)
                     }
                 }
+                $('#card'+id).attr('column_id', column_id)
             },
         },
     })
