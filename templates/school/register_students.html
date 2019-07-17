@@ -6,9 +6,12 @@
     <div class="content no_padding" style="background-color: #4A4A4A">
         <div class="ui segment margin0" style="display: flex;padding-bottom: 0;">
             <span style="font-size: 15px;margin-left: 15px;margin-bottom: 15px;">Регистрация <b id="current_user_name"></b></span>
+            <span class="card_money_sch ui pointing below label" style="margin-left: 25px;margin-top: -5px;"></span>
             <form class="ui form predoplata_form" style="display: none;">
-                <input status="hide" class="predoplata_number" placeholder="Сумма предоплаты" type="number">                
+                <input status="hide" class="predoplata_number" placeholder="Сумма предоплаты" type="number">
+                <a class="ui button mini blue save_predoplata" onclick="save_predoplata()" style="width: 150px;margin-left: 10px;">Сохранить</a>
             </form>
+            <span class="ok_predoplata highlight" style="height: 25px;margin-left: 25px;"><b>Оплата принята</b></span>
             <span class="time_stop highlight_red" style="height: 25px;margin-left: 25px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></span>
             <span class="wrong_mail highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
             <span class="no_predoplata_number highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Введите сумму предоплаты</b></span>
@@ -169,6 +172,7 @@
                 success: function (data) {
                     $('.loading').hide();
                     $('.predoplata_form').hide()
+                    $('.ok_predoplata').hide()
                     $('.predoplata_number').attr('status', 'hide')
                     $('.predoplata_number').val('')
                     if (data.ok_mail == false) {
@@ -191,6 +195,25 @@
                 }
             })
         }
+    };
+    function save_predoplata(){
+        $('.ok_predoplata').hide()
+        $('.loading').show();
+        id = $('.card_for_save').attr('id')
+        predoplata = $('.predoplata_number').val()
+        $.ajax({
+            url: $('.card_for_save').attr('predoplata_url'),
+            data: {
+                'id':id,
+                'predoplata':predoplata,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.loading').hide();
+                $('.predoplata_number').val('')
+                $('.ok_predoplata').show()
+            }
+        })
     };
     function show_subject_cost(cost){
         $('.subject_cost').html(cost)

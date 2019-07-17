@@ -156,11 +156,11 @@
 <span style="display: none;" id="0" class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
-<span style="display: none;" class="card_for_save" id="-1" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}"></span>
+<span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 <script>
-    function openNav(id, name, predoplata) {
+    function openNav(id, name, predoplata, column_id) {
         $('#register_students_calendar').modal('show')
         $('#current_user_name').text(name)
         $('.card_for_save').attr('id', id)
@@ -170,8 +170,15 @@
         $('.wrong_mail_error').hide()
         $('.no_predoplata_number').hide()
         $('.predoplata_form').hide()
+        $('.ok_predoplata').hide()
+        if (column_id == '4') {
+            $('.predoplata_number').attr('placeholder', 'Сумма предоплаты')
+        }
+        if (column_id == '5') {
+            $('.predoplata_number').attr('placeholder', 'Сумма оплаты')
+        }
         if (predoplata == 'predoplata') {
-            $('.predoplata_form').show()
+            $('.predoplata_form').attr('style', 'display:flex;')
             $('.predoplata_number').attr('status', 'show')
         }
         else{
@@ -184,6 +191,7 @@
             },
             dataType: 'json',
             success: function (data) {
+                $('.card_money_sch').text('На счету: ' + data.money + "тг")
                 for (var i = 0; i < data.res.length; i++){
                     squad_id = data.res[i]
                     $('.squad'+squad_id).show()
@@ -219,18 +227,18 @@
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 if(oldcolumn_id == '1'){
                     if (column_id == '5' || column_id == '4') {
-                        openNav(id, $('.current_card').attr('name'), 'predoplata');
+                        openNav(id, $('.current_card').attr('name'), 'predoplata', column_id);
                     }
                     else{
-                        openNav(id, $('.current_card').attr('name'), 'null');
+                        openNav(id, $('.current_card').attr('name'), 'null', 0);
                     }
                 }
                 else{
                     if (column_id == '2') {
-                        openNav(id, $('.current_card').attr('name'), 'null');
+                        openNav(id, $('.current_card').attr('name'), 'null', 0);
                     }
                     if (column_id == '4' || column_id == '5') {
-                        openNav(id, $('.current_card').attr('name'), 'predoplata');
+                        openNav(id, $('.current_card').attr('name'), 'predoplata', column_id);
                     }
                 }
                 $('#card'+id).attr('column_id', column_id)

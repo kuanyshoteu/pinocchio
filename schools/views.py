@@ -140,6 +140,18 @@ def school_info(request):
                 banner.image_banner = file
                 banner.save()
                 return redirect("schools:info")
+    manager_prof = Profession.objects.get(title='Manager')
+    managers = school.people.filter(profession=manager_prof)
+    weekago = timezone.now().date() - timedelta(7)    
+    voronka = []
+    number = 0
+    for column in school.crm_columns.all().order_by('-id'):
+        if column.id != 6:
+            x = len(school.crm_cards.filter(column=column, timestamp__gt=weekago))
+            number += x
+            print(column.id, x, number)
+            voronka.append([column.title, number])
+    voronka = reversed(voronka)
     context = {
         "profile":profile,
         "instance": school,
@@ -150,6 +162,10 @@ def school_info(request):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         "school_money":school.money,
+        "today":timezone.now().date().strftime('%Y-%m-%d'),
+        "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),
+        "managers":managers,
+        "voronka_array":voronka,
     }
     return render(request, "school/info.html", context)
 
@@ -697,6 +713,31 @@ def save_card_as_user(request):
     }
     return JsonResponse(data)
 
+def predoplata(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    school = manager_profile.schools.first()
+    if request.GET.get('id') and request.GET.get('predoplata'):
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
+        profile = card.card_user
+        if request.GET.get('predoplata'):
+            was_minus = False
+            if profile.money < profile.salary:
+                was_minus = True
+            profile.money += int(request.GET.get('predoplata'))
+            profile.save()
+            school.money += int(request.GET.get('predoplata'))
+            school.save()
+            if was_minus and card.was_called == False and profile.money > profile.salary:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()            
+                card.was_called = True
+                card.save()
+    data = {
+    }
+    return JsonResponse(data)
+
 def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('object_id') and request.GET.get('option'):
@@ -1033,11 +1074,14 @@ def get_card_squads(request):
     is_in_school(profile, school)
     profile = card.card_user
     res = []
+    money = 0
     if profile:
+        money = profile.money
         for squad in profile.squads.all():
             res.append(squad.id)
     data = {
         'res':res,
+        'money':money,
     }
     return JsonResponse(data)
 
@@ -1196,5 +1240,62 @@ def delete_school_banner(request):
         if len(banner) > 0:
             banner[0].delete()
     data = {
+    }
+    return JsonResponse(data)
+
+from dateutil.relativedelta import relativedelta
+def update_voronka(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    res = []
+    is_ago = False
+    if request.GET.get('status') and request.GET.get('first_vrnk') and request.GET.get('second_vrnk'):
+        school = profile.schools.first()
+        timefuture = timezone.now().date()
+        today = timefuture
+        weekago = timezone.now().date() - timedelta(7)
+        monthago = timezone.now().date() - relativedelta(months=1)
+        yearago = timezone.now().date() - relativedelta(years=1)
+        if request.GET.get('status') == 'get_here':
+            if request.GET.get('value') == 'week':
+                timeago = weekago
+            if request.GET.get('value') == 'month':
+                timeago = monthago
+            if request.GET.get('value') == 'year':
+                timeago = yearago
+        if request.GET.get('status') == 'get_input':
+            timeago = datetime.datetime.strptime(request.GET.get('first_vrnk'), "%Y-%m-%d").date()
+            timefuture = datetime.datetime.strptime(request.GET.get('second_vrnk'), "%Y-%m-%d").date()
+            if timefuture == today:
+                if timeago == weekago:
+                    is_ago = 'week_vrnk'
+                elif timeago == monthago:
+                    is_ago = 'month_vrnk'
+                elif timeago == yearago:
+                    is_ago = 'year_vrnk'
+        number = 0
+        manager = False
+        if request.GET.get('manager_id') != '-1':
+            manager = school.people.get(id=int(request.GET.get('manager_id')))
+        if manager:
+            for column in school.crm_columns.all().order_by('-id'):
+                if column.id != 6:
+                    x = len(school.crm_cards.filter(column=column, timestamp__gt=timeago, timestamp__lt=timefuture, author_profile=manager))
+                    number += x
+                    print(column.id, x, number)
+                    res.append([column.title, number])
+        else:
+            for column in school.crm_columns.all().order_by('-id'):
+                if column.id != 6:
+                    x = len(school.crm_cards.filter(column=column, timestamp__gt=timeago, timestamp__lt=timefuture))
+                    number += x
+                    print(column.id, x, number)
+                    res.append([column.title, number])            
+        print(is_ago)
+    data = {
+        "res":res,
+        "timeago":timeago.strftime('%Y-%m-%d'),
+        "is_ago":is_ago,
+        "number":number,
     }
     return JsonResponse(data)

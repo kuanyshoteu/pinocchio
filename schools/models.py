@@ -128,6 +128,10 @@ class School(models.Model):
         return reverse("schools:create_social_url")
     def delete_social_url(self):
         return reverse("schools:delete_social_url")
+    def predoplata(self):
+        return reverse("schools:predoplata")
+    def update_voronka(self):
+        return reverse("schools:update_voronka")
 
 class SchoolBanner(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
