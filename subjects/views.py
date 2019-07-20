@@ -444,7 +444,10 @@ def change_lecture_options(subject, option, objectt, old_object):
         if is_old_tag:
             if old_hashtag.id in card.hashtag_ids:
                 index = card.hashtag_ids.index(old_hashtag.id)
-                card.hashtag_numbers[index] -= 1
+                if card.hashtag_numbers[index] > 0:
+                    card.hashtag_numbers[index] -= 1
+                if card.hashtag_numbers[index] < 0:
+                    card.hashtag_numbers[index] = 0
                 if card.hashtag_numbers[index] == 0:
                     card.hashtags.remove(old_hashtag)
         if is_old_tag or is_new_tag:
