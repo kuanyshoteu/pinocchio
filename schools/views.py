@@ -927,16 +927,21 @@ def add_card(request):
         school = profile.schools.first()
         found = False
         student = False
+        print(0)
         if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
             found = True
             student = Profile.objects.filter(mail=request.GET.get('mail'))[0]
+            print(1)
         elif len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
             found = True
             student = Profile.objects.filter(phone=request.GET.get('phone'))[0]            
+            print(2)
         elif len(school.crm_cards.filter(phone=request.GET.get('phone'))) > 0:
             found = True
+            print(3)
         elif len(school.crm_cards.filter(mail=request.GET.get('mail'))) > 0:
             found = True
+            print(4)
         if found:
             if student:
                 if school in student.schools.all():
