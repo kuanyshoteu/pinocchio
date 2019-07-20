@@ -926,16 +926,22 @@ def add_card(request):
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
         school = profile.schools.first()
         found = False
+        student = False
         if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
             found = True
+            student = Profile.objects.filter(phone=request.GET.get('phone'))[0]
         elif len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
             found = True
+            student = Profile.objects.filter(phone=request.GET.get('phone'))[0]            
         elif len(school.crm_cards.filter(phone=request.GET.get('phone'))) > 0:
             found = True
         elif len(school.crm_cards.filter(mail=request.GET.get('mail'))) > 0:
             found = True
         if found:
-            if school in student.schools.all():
+            if student:
+                if school in student.schools.all():
+                    return JsonResponse({"already_registered":True})
+            else:
                 return JsonResponse({"already_registered":True})
         column = school.crm_columns.get(id = int(request.GET.get('id')))
         card = school.crm_cards.create(
