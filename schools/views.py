@@ -144,14 +144,18 @@ def school_info(request):
     managers = school.people.filter(profession=manager_prof)
     weekago = timezone.now().date() - timedelta(7)    
     voronka = []
+    voronka2 = []
     number = 0
+    all_cards = school.crm_cards.filter(timestamp__gt=weekago)
+    number_of_all = len(all_cards)
     for column in school.crm_columns.all().order_by('-id'):
         if column.id != 6:
-            x = len(school.crm_cards.filter(column=column, timestamp__gt=weekago))
+            x = len(all_cards.filter(column=column))
             number += x
-            print(column.id, x, number)
-            voronka.append([column.title, number])
+            voronka.append([column.title, number, round((number/number_of_all)*100,2)])
+            voronka2.append([column.title, number, round((number/number_of_all)*100,2)])
     voronka = reversed(voronka)
+    voronka2 = reversed(voronka2)
     context = {
         "profile":profile,
         "instance": school,
@@ -166,6 +170,7 @@ def school_info(request):
         "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),
         "managers":managers,
         "voronka_array":voronka,
+        "voronka2":voronka2,
     }
     return render(request, "school/info.html", context)
 
@@ -644,16 +649,24 @@ def save_card_as_user(request):
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
-                new_id = User.objects.order_by("id").last().id + 1
-                user = User.objects.create(username='user' + str(new_id))
-                user.set_password(password)
-                user.save()
-                card.saved = True
-                profile = Profile.objects.get(user = user)
-                profile.first_name = card.name
-                profile.phone = card.phone
-                profile.mail = card.mail
-                profile.save()
+                found = False
+                if len(Profile.objects.filter(mail=card.mail)) > 0:
+                    profile = Profile.objects.filter(mail=card.mail)[0]
+                    found = True
+                elif len(Profile.objects.filter(phone=card.phone)) > 0:
+                    profile = Profile.objects.filter(phone=card.phone)[0]
+                    found = True
+                if found == False:
+                    new_id = User.objects.order_by("id").last().id + 1
+                    user = User.objects.create(username='user' + str(new_id))
+                    user.set_password(password)
+                    user.save()
+                    card.saved = True
+                    profile = Profile.objects.get(user = user)
+                    profile.first_name = card.name
+                    profile.phone = card.phone
+                    profile.mail = card.mail
+                    profile.save()
                 card.card_user = profile
                 card.author_profile = manager_profile
                 card.timestamp = timezone.now()
@@ -699,6 +712,7 @@ def save_card_as_user(request):
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
             school.money += int(request.GET.get('predoplata'))
+            school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=int(request.GET.get('predoplata')))
             school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
@@ -727,6 +741,7 @@ def predoplata(request):
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
             school.money += int(request.GET.get('predoplata'))
+            school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=int(request.GET.get('predoplata')))
             school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
@@ -808,6 +823,7 @@ def move_card(request):
         school = profile.schools.first()
         column = school.crm_columns.get(id = int(request.GET.get('column_id')))
         card = school.crm_cards.get(id = int(request.GET.get('card_id')))
+        card.timestamp = timezone.now()
         CRMCardHistory.objects.create(
             action_author = profile,
             card = card,
@@ -816,7 +832,6 @@ def move_card(request):
             )
         card.column = column
         card.save()
-
     data = {
     }
     return JsonResponse(data)
@@ -910,6 +925,16 @@ def add_card(request):
     only_managers(profile)
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
         school = profile.schools.first()
+        found = False
+        if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
+            profile = Profile.objects.filter(mail=request.GET.get('mail'))[0]
+            found = True
+        elif len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
+            profile = Profile.objects.filter(phone=request.GET.get('phone'))[0]
+            found = True
+        if found:
+            if school in profile.schools.all():
+                return JsonResponse({"already_registered":True})
         column = school.crm_columns.get(id = int(request.GET.get('id')))
         card = school.crm_cards.create(
             author_profile=profile,
@@ -1223,7 +1248,7 @@ def save_review(request, school_id=None):
             rating = 0
             for review in school.reviews.all():
                 rating += review.rating
-            rating = rating/len(school.reviews.all())
+            rating = round(rating/len(school.reviews.all()),2)
             school.rating = rating 
             school.save()
     data = {
@@ -1275,27 +1300,49 @@ def update_voronka(request):
                     is_ago = 'year_vrnk'
         number = 0
         manager = False
+        timeago = timeago - timedelta(1)
+        timefuture = timefuture + timedelta(1)
         if request.GET.get('manager_id') != '-1':
             manager = school.people.get(id=int(request.GET.get('manager_id')))
+        all_cards = school.crm_cards.filter(timestamp__gt=timeago, timestamp__lt=timefuture)
+        number_of_all = len(all_cards)
         if manager:
-            for column in school.crm_columns.all().order_by('-id'):
-                if column.id != 6:
-                    x = len(school.crm_cards.filter(column=column, timestamp__gt=timeago, timestamp__lt=timefuture, author_profile=manager))
-                    number += x
-                    print(column.id, x, number)
-                    res.append([column.title, number])
-        else:
-            for column in school.crm_columns.all().order_by('-id'):
-                if column.id != 6:
-                    x = len(school.crm_cards.filter(column=column, timestamp__gt=timeago, timestamp__lt=timefuture))
-                    number += x
-                    print(column.id, x, number)
-                    res.append([column.title, number])            
+            all_cards = all_cards.filter(author_profile=manager)
+        for column in school.crm_columns.all().order_by('-id'):
+            if column.id != 6:
+                x = len(all_cards.filter(column=column))
+                number += x
+                print(column.id, x, number)
+                res.append([column.title, number, round((number/number_of_all)*100, 2)])            
         print(is_ago)
     data = {
         "res":res,
         "timeago":timeago.strftime('%Y-%m-%d'),
         "is_ago":is_ago,
         "number":number,
+    }
+    return JsonResponse(data)
+
+def new_money_object(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    if request.GET.get('title') and request.GET.get('amount'):
+        school = profile.schools.first()
+        school.money -= int(request.GET.get('amount'))
+        school.money_obejct.create(title=request.GET.get('title'), amount=-1*int(request.GET.get('amount')))
+        school.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def show_money_history(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    school = profile.schools.first()
+    res = []
+    for money in school.money_obejct.all():
+        res.append([money.title, money.amount, money.timestamp.strftime('%d.%m.%Y %H:%M')])
+    data = {
+        "res":res,
     }
     return JsonResponse(data)

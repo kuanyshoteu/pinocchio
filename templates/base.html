@@ -162,7 +162,7 @@
                     <a class="item mobmenu" href='{% url "schools:rating" %}'>
                         <i class="trophy icon blue"></i>Рейтинги
                     </a>
-                    {% if is_manager or is_trener or is_director %}
+<!--                     {% if is_manager or is_trener or is_director %}
                     <a class="item mobmenu" href='{% url "squads:list" %}'>
                         <i class="users icon blue"></i>Классы
                     </a>
@@ -170,18 +170,19 @@
                         <i class="table icon blue"></i>Курсы
                     </a>
                     {% endif %}
-                    {% if is_trener or is_director %}
+ -->                    {% if is_trener or is_director %}
                     <a class="item mobmenu" href='{% url "library:main" %}'>
                         <i class="file alternate icon blue"></i>База уроков
                     </a>
                     {% endif %}
-                    <a class="item mobmenu" href='{% url "courses" %}'>
-                        <i class="rocket icon blue"></i>Курс store
-                    </a>
                     {% if is_manager or is_trener or is_director %}
-                    <a class="item mobmenu" href='/todolist/'>
+  <!--                   <a class="item mobmenu" href='/todolist/'>
                         <i class="check calendar icon blue"></i>Задания
-                    </a>  
+                    </a> -->
+                    <a class="item mobmenu" href='{% url "schools:payments" %}'>
+                        <i class="dollar sign icon"></i>Оплата
+                    </a>
+  
                     {% endif %}
                     {% if is_trener or profile.is_student and profile.schools.all > 0 %}   
                     <a class="item mobmenu" href='{{ profile.hislessons }}'>

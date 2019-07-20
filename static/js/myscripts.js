@@ -1,4 +1,38 @@
 $(document).ready(function () {
+    $('.show_money_history').click(function(e) {
+        url = $(this).attr('url')
+        $('.money_history').modal('show')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.res.length; i++) {
+                    $('<tr style="color: #222;"><td>'+data.res[i][0]+'</td><td>'+data.res[i][1]+'</td><td>'+data.res[i][2]+'</td>').appendTo('.history_cont')
+                }
+            }
+        })
+    })
+    $('.new_money_object').click(function(e) {
+        url = $(this).attr('url')
+        title = $('.new_money_title').val()
+        amount = $('.new_money_amount').val()
+        $('.success_new_money').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'title':title,
+                'amount':amount,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.new_money_title').val('')
+                $('.new_money_amount').val('')
+                $('.success_new_money').show()
+            }
+        })
+    })
     $('.delete_school_banner').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
@@ -265,7 +299,12 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    location.reload()
+                    if (data.already_registered) {
+                        $('.alreadyregistered'+id).show()
+                    }
+                    else{
+                        location.reload()                        
+                    }
                     // card_id = data.card_id; 
                     // var element = $('<div style="padding: 5px 0" id="card_container'+card_id+'" is_saved="'+data.is_saved+
                     //     '"><div id="card'+card_id+'" class="ui segment full-w crm_card mine" ondragstart="save_card_id('

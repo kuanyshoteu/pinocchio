@@ -32,8 +32,7 @@ def main_view(request):
     if request.user.is_authenticated:
         print(request.user.id)
         profile = Profile.objects.get(user = request.user.id)
-        return redirect(profile.get_absolute_url())    
-
+        return redirect(profile.get_absolute_url())
     is_trener = False
     is_manager = False
     is_director = False

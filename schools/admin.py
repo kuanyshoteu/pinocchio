@@ -79,3 +79,11 @@ class SchoolBannerAdmin(admin.ModelAdmin):
     class Meta:
         model = SchoolBanner
 admin.site.register(SchoolBanner, SchoolBannerAdmin)
+
+class MoneyObjectAdmin(admin.ModelAdmin):
+    list_display = ["id", "school", "amount", "timestamp"]
+    list_display_links = ["id"]
+    list_filter = ["school", "timestamp"]
+    class Meta:
+        model = MoneyObject
+admin.site.register(MoneyObject, MoneyObjectAdmin)

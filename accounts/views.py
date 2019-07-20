@@ -356,6 +356,7 @@ def att_present(request):
             profile.money += profile.salary
             school = attendance.subject.school
             school.money -= profile.salary
+            school.money_obejct.create(title='Зарплата ' + profile.first_name, amount=-1*profile.salary)
             school.save()
             for student in attendance.squad.students.all():
                 was_minus = False
@@ -483,6 +484,7 @@ def make_payment(request):
             amount = amount,
         )
         school.money += amount
+        school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=amount)        
         school.save()
         if profile.money > profile.salary:
             try:

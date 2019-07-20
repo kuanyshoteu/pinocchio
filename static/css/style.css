@@ -1,6 +1,15 @@
 body{
   min-height: 100% !important;
 }
+.new_money_title{
+  height: 33px !important;
+}
+.new_money_amount{
+  margin: 0 10px;width: 50% !important;height: 33px !important;
+}
+.new_money_object{
+  height: 33px !important;font-size:15px !important;padding: 8px 14px 8px 10px !important;
+}
 .folder_features{
   position: absolute !important; 
   z-index: 3000;

@@ -329,13 +329,11 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
                 if password:
                     send_hello_email(first_name, phone, mail, password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
                 else:
-                    print('send reg')
                     timeaddress = 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address
                     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали в группу<br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
                     send_email('Pinocchio регистрация в группу', text, [mail])
             except Exception as e:
                 ok_mail = False
-                print('ok_mail False')
         if is_send:
             #send_sms(student.phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
             pass

@@ -37,17 +37,41 @@
                     {% endfor %}
                 </select>
             </form>
-            <a class="ui button mini blue update_voronka" status="get_input" style="height: 29px;margin-left: 15px;">Показать</a>      
+            <a class="ui button mini blue update_voronka" status="get_input" style="height: 29px;margin-left: 15px;">Показать</a>
         </div>
     </div>
 </div>
 <div class="ui segment voronkachart" style="margin-top: 0">
-    <div class="ui pointing below label no_margin red nocards" style="display: none;">
-        Нет работы с карточками в этот период
-    </div>
-    <div id="chartdiv"></div>
-    <div class="container-fluid">
-        <div class="row text-center" style="overflow:hidden;">
+    <div class="ui grid stackable">
+        <div class="nine wide column no_padding">
+            <div class="ui pointing below label no_margin red nocards" style="display: none;">
+                Нет работы с карточками в этот период
+            </div>
+            <div id="chartdiv"></div>
+            <div class="container-fluid">
+                <div class="row text-center" style="overflow:hidden;">
+                </div>
+            </div>          
+        </div>
+        <div class="seven wide column no_padding_side">
+            <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
+                <thead >
+                    <tr style="color: #222;">
+                        <th>Название</th>
+                        <th>Количество</th>
+                        <th>Проценты</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    {% for item2 in voronka2 %}
+                    <tr style="color: #222;">
+                        <td>{{item2.0}}</td>
+                        <td id="tablecolumn{{ forloop.counter }}number">{{item2.1}}</td>
+                        <td id="tablecolumn{{ forloop.counter }}percent">{{item2.2}}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -81,7 +105,10 @@
                 }
                 arr = []
                 for (var i = data.res.length-1; i >=0 ; i--) {
+                    console.log(i)
                     arr.push({"title": data.res[i][0], "value":data.res[i][1]})
+                    $("#tablecolumn"+(5-i)+"number").text(data.res[i][1])
+                    $("#tablecolumn"+(5-i)+"percent").text(data.res[i][2]+'%')
                 }
                 var chart = AmCharts.makeChart( "chartdiv", {
                   "type": "funnel",
@@ -178,6 +205,12 @@ jQuery( '.chart-input' ).off().on( 'input change', function() {
 } );
 </script>
 <style type="text/css">
+    td{
+      border: 1px solid lightgrey;
+    }
+    th{
+      border: 1px solid lightgrey;
+    }
     #chartdiv {
         width: 100%;
         max-width: 580px;

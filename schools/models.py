@@ -94,6 +94,12 @@ class School(models.Model):
         return reverse("schools:delete_card_url")
     def get_card_squads(self):
         return reverse("schools:get_card_squads")
+    def update_voronka(self):
+        return reverse("schools:update_voronka")
+    def new_money_object(self):
+        return reverse("schools:new_money_object")
+    def show_money_history(self):
+        return reverse("schools:show_money_history")
     # School objects
     def get_school_documents(self):
         return reverse("documents:get_school_documents", kwargs={"school_id": self.id})
@@ -130,8 +136,6 @@ class School(models.Model):
         return reverse("schools:delete_social_url")
     def predoplata(self):
         return reverse("schools:predoplata")
-    def update_voronka(self):
-        return reverse("schools:update_voronka")
 
 class SchoolBanner(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
@@ -200,3 +204,11 @@ class Cabinet(models.Model):
     office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='cabinets')    
     class Meta:
         ordering = ['id']
+
+class MoneyObject(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='money_obejct')
+    title = models.CharField(max_length=250)
+    amount = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-id']

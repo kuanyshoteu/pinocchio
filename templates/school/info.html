@@ -176,7 +176,7 @@
                     Предметы школы:
                     <div class="school_subject_list" style="display: inline-block;">
                     {% for subject in instance.school_subject_categories.all %}
-                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
+                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;margin-bottom: 7px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
                         <div class="ui modal mini" id="subject_form{{ subject.id }}">
                             <i class="close icon"></i>
                             <div class="content">
@@ -301,14 +301,39 @@
                 {% include 'school/voronka_chart.html' %}
                 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
                     На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>
+                    <span class="ui pointing below label no_margin green success_new_money" style="display: none;">
+                        Расходы записаны, можете посмотреть в истории
+                    </span>
                 </div>
                 <div class="ui grid stackable" style="margin-bottom: 30px;">
                     <div class="six wide column" style="padding: 15px 0 0 0">
                         <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
                             Расходы
+                            <a style="float: right;margin-top: -5px;" url="{{instance.show_money_history}}" class="ui button mini blue show_money_history">История</a>
+                            <div class="ui modal money_history">
+                                <i class="close icon"></i>
+                                <div class="content">
+                                    <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
+                                        <thead>
+                                            <tr style="color: #222;">
+                                                <th>Название</th>
+                                                <th>Сумма</th>
+                                                <th>Время</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="history_cont">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                         <div class="ui segment" style="margin-top: 0">
                             {% include 'school/money_circle_chart.html' %}
+                            <form class="ui form" style="display: flex;margin-top: 15px;margin-bottom: 0">
+                                <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
+                                <input type="number" class="new_money_amount" name="" placeholder="Сумма">
+                                <a class="ui button mini blue no_margin new_money_object" url="{{instance.new_money_object}}">+</a>
+                            </form>
                         </div>
                     </div>
                     <div class="ten wide column"  style="padding: 15px 0 0 0">
@@ -322,12 +347,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="ui segment" style="margin-top: 0;height: 273px;">
+                        <div class="ui segment" style="margin-top: 0;height:324px;">
                             {% include 'school/money_chart.html' %}
                         </div>
                     </div>
                 </div>
-                <div class="ui segment">
+<!--                 <div class="ui segment">
                     <div class="ui grid">
                         <div class="sixteen wide column">
                             <div class="school-schedule">
@@ -355,7 +380,7 @@
                         </div>
                     </div>
                 </div>
-                    
+ -->                    
                 {% endif %}
                 {% include 'school/good_results_chart.html' %}
                 {% include 'school/bad_results_chart.html' %}                

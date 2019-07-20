@@ -418,20 +418,37 @@ def change_age(request, id=None):
 def change_lecture_options(subject, option, objectt, old_object):
     hashtag = ''
     old_hashtag = ''
+    school = subject.school
     if old_object:
         old_hashtag = subject.school.hashtags.get_or_create(title=old_object.title.replace(' ', ''))
     if objectt:
         hashtag = subject.school.hashtags.get_or_create(title=objectt.title.replace(' ', ''))
-    qs = subject.students.prefetch_related('card__hashtags')
-    print(hashtag, old_hashtag, qs)
+    qs = subject.students.all()
+    cards_qs = school.crm_cards.filter(card_user__in=qs)
+    is_new_tag = False
+    is_old_tag = False    
     if len(hashtag) > 0:
         hashtag = hashtag[0]
-        for student in qs:
-            student.card.hashtags.add(hashtag)
+        is_new_tag = True
     if len(old_hashtag) > 0:
         old_hashtag = old_hashtag[0]
-        for student in qs:
-            student.card.hashtags.remove(old_hashtag)
+        is_old_tag = True
+    for card in cards_qs:
+        if is_new_tag:
+            if not hashtag.id in card.hashtag_ids:
+                card.hashtag_ids.append(hashtag.id)
+                card.hashtag_numbers.append(0)
+                card.hashtags.add(hashtag)
+            index = card.hashtag_ids.index(hashtag.id)
+            card.hashtag_numbers[index] += 1
+        if is_old_tag:
+            if old_hashtag.id in card.hashtag_ids:
+                index = card.hashtag_ids.index(old_hashtag.id)
+                card.hashtag_numbers[index] -= 1
+                if card.hashtag_numbers[index] == 0:
+                    card.hashtags.remove(old_hashtag)
+        if is_old_tag or is_new_tag:
+            card.save()                
     if option == 'subject':
         for lecture in subject.subject_lectures.all():
             lecture.category = objectt

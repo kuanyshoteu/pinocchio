@@ -218,7 +218,7 @@ class Hashtag(models.Model):
 
 class CRMCard(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_author')
-    card_user = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='card')
+    card_user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='crm_cards')
     column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
     name = models.CharField(max_length=250)
@@ -232,6 +232,8 @@ class CRMCard(models.Model):
     days_of_weeks = ArrayField(models.BooleanField(), default = list)
     action = models.CharField(max_length=250, default='')
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
+    hashtag_ids = ArrayField(models.IntegerField(null=True), default=list)
+    hashtag_numbers = ArrayField(models.IntegerField(null=True), default=list)
     class Meta:
         ordering = ['saved', '-timestamp']
     def call_helper(self):
