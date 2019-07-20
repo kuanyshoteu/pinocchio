@@ -280,6 +280,7 @@ $(document).ready(function () {
         var phone = $('.new_card_phone' + id).val()
         var mail = $('.new_card_mail' + id).val()
         var comment = $('.new_card_comment' + id).val()
+        $('.alreadyregistered').hide()
         ok = false
         for (var i = mail.length - 1; i >= 0; i--) {
             if (mail[i] == '@') {
