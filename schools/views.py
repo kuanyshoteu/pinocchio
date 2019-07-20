@@ -929,7 +929,7 @@ def add_card(request):
         student = False
         if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
             found = True
-            student = Profile.objects.filter(phone=request.GET.get('phone'))[0]
+            student = Profile.objects.filter(phone=request.GET.get('mail'))[0]
         elif len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
             found = True
             student = Profile.objects.filter(phone=request.GET.get('phone'))[0]            
