@@ -438,7 +438,7 @@ def change_lecture_options(subject, option, objectt, old_object):
             if not hashtag.id in card.hashtag_ids:
                 card.hashtag_ids.append(hashtag.id)
                 card.hashtag_numbers.append(0)
-                card.hashtags.add(hashtag)
+            card.hashtags.add(hashtag)
             index = card.hashtag_ids.index(hashtag.id)
             card.hashtag_numbers[index] += 1
         if is_old_tag:
