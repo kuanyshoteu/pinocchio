@@ -927,7 +927,7 @@ def add_card(request):
         school = profile.schools.first()
         found = False
         student = False
-        print(0)
+        print("**********", 0)
         if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
             found = True
             student = Profile.objects.filter(mail=request.GET.get('mail'))[0]
@@ -943,10 +943,14 @@ def add_card(request):
             found = True
             print(4)
         if found:
+            print(5)
             if student:
+                print(6)
                 if school in student.schools.all():
+                    print(7)
                     return JsonResponse({"already_registered":True})
             else:
+                print(8)
                 return JsonResponse({"already_registered":True})
         column = school.crm_columns.get(id = int(request.GET.get('id')))
         card = school.crm_cards.create(
