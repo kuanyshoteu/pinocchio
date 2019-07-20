@@ -946,6 +946,9 @@ def add_card(request):
             else:
                 return JsonResponse({"already_registered":True})
         column = school.crm_columns.get(id = int(request.GET.get('id')))
+        saved = False
+        if found:
+            saved = True
         card = school.crm_cards.create(
             author_profile=profile,
             name = request.GET.get('name'),
@@ -954,6 +957,7 @@ def add_card(request):
             comments = request.GET.get('comment'),
             column = column,
             school = school,
+            saved = saved,
         )
         card.save()
         hist = CRMCardHistory.objects.create(
