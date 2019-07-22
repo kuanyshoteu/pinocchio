@@ -173,7 +173,6 @@ def confirm_email(request):
         skill = profile.skill
         if skill.confirmation_code == request.GET.get('confirm'):
             skill.confirmed = True
-            print('yoyoyo')
             skill.save()
     return redirect(profile.get_absolute_url())
 
@@ -314,7 +313,6 @@ def miss_lecture(request):
         if len(miss_lesson) > 0:
             miss_lesson = miss_lesson[0]
         else:
-            print('new miss')
             miss_lesson = MissLesson.objects.create(profile=profile)
         date = datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()
         if date in miss_lesson.dates:
@@ -338,9 +336,10 @@ def att_present(request):
         is_in_school(profile, school)        
         attendance.present = 'present'
         if len(CRMCard.objects.filter(card_user=attendance.student)) > 0:
-            if attendance.student.card.column.id == 2:
-                attendance.student.card.column = CRMColumn.objects.get(id=3)
-                attendance.student.card.save()
+            card = attendance.student.card.get(school=school)
+            if card.column.id == 2:
+                card.column = CRMColumn.objects.get(id=3)
+                card.save()
         else:
             CRMCard.objects.create(
                 card_user=attendance.student,
@@ -348,6 +347,7 @@ def att_present(request):
                 name=attendance.student.first_name,
                 phone=attendance.student.phone,
                 mail=attendance.student.mail,
+                school=school,
                 saved=True
             )   
         material = attendance.subject_materials
@@ -355,19 +355,17 @@ def att_present(request):
             material.done_by.add(profile)
             profile.money += profile.salary
             school = attendance.subject.school
-            school.money -= profile.salary
-            school.money_obejct.create(title='Зарплата ' + profile.first_name, amount=-1*profile.salary)
+            change_school_money(school, -1*profile.salary, 'teacher_salary', profile)
             school.save()
             for student in attendance.squad.students.all():
                 was_minus = False
                 if student.money < student.salary:
                     was_minus = True
                 student.money -= attendance.subject.cost
-                print('sdfsdfsdfsdf****')
                 student.save()
-                student_card = student.card 
+                student_card = student.card.first()
                 if student.money < student.salary and was_minus == False and student_card.was_called == True:
-                    skill = student.card.author_profile.skill
+                    skill = student_card.author_profile.skill
                     skill.need_actions += 1
                     skill.save()
                     student_card.was_called = False
@@ -482,33 +480,18 @@ def make_payment(request):
         profile.payment_history.create(
             manager = manager,
             amount = amount,
+            school = school,
         )
-        school.money += amount
-        school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=amount)        
+        change_school_money(school, amount, 'student_payment', profile)
         school.save()
         if profile.money > profile.salary:
-            try:
-                card = profile.card  
-                print('try')
-            except Exception as e:
-                print('except')
-                card = CRMCard.objects.create(
-                    card_user = profile,
-                    school = school,
-                    column = CRMColumn.objects.get(id = 5),
-                    name = profile.first_name,
-                    phone = profile.phone,
-                    mail = profile.mail,
-                    saved = True,
-                    was_called = True
-                )[0]
-            if was_minus and card.was_called == False and profile.money > profile.salary:
-                skill = card.author_profile.skill
-                skill.need_actions -= 1
-                skill.save()            
-            card.was_called = True
-            print(card)
-            card.save()
+            for card in profile.card.all():
+                if was_minus and card.was_called == False and profile.money > profile.salary:
+                    skill = card.author_profile.skill
+                    skill.need_actions -= 1
+                    skill.save()            
+                card.was_called = True
+                card.save()
     data = {
     }
     return JsonResponse(data)

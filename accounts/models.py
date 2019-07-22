@@ -164,6 +164,7 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 class PaymentHistory(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='payment_history') 
     user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='payment_history') 
     manager = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_payments') 
     amount = models.IntegerField(default=0)

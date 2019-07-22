@@ -8,6 +8,10 @@ from django.core.mail import send_mail
 import requests
 from django.core.mail import EmailMultiAlternatives
 
+from django.utils import timezone
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+
 def send_sms(phones, message, time):
     login = 'Pinocchio'
     password = 'Siski11zhopa'
@@ -15,7 +19,6 @@ def send_sms(phones, message, time):
     requests.post(url)
 
 def send_hello_email(first_name, phone, mail, password, timeaddress):
-    print('send_hello_email',first_name, mail)
     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали на сайте <a href='pinocchio.kz'>Pinocchio.kz</a><br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
     login_text="<br>Ваш логин: "+phone+" или "+mail
     password_text = "<br>Ваш пароль (не говорите никому): "+password
@@ -23,15 +26,48 @@ def send_hello_email(first_name, phone, mail, password, timeaddress):
     html_content = text+login_text+password_text+ender
     msg = EmailMultiAlternatives("Добро пожаловать на Pinocchio.kz", 'q', 'aaa.academy.kz@gmail.com', [mail])
     msg.attach_alternative(html_content, "text/html")
-    print(msg)
     msg.send()
 
 def send_email(subject, html_content, send_to):
     msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
     ender = " <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
     msg.attach_alternative(html_content+ender, "text/html")
-    print('msg',msg)
     msg.send()
+
+def change_school_money(school, amount, reason, profile):
+    school.money += amount
+    if reason == 'student_payment':
+        school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=amount)
+    elif reason == 'teacher_salary':
+        school.money_obejct.create(title='Зарплата ' + profile.first_name, amount=amount)
+    else:
+        school.money_obejct.create(title=reason, amount=amount)
+    now = timezone.now()
+    last = len(school.money_month)-1
+    if len(school.money_month) == 0:
+        first_day = get_frist_day_of_month(now)
+        school.money_month.append(first_day)
+        school.money_earnn.append([0,0])
+        school.money_spendd.append([0,0])
+        school.save()
+    if now - relativedelta(months=1) >= school.money_month[last]:
+        first_day = get_frist_day_of_month(now)
+        school.money_month.append(first_day)
+        school.money_earnn.append([0, 0])
+        school.money_spendd.append([0, 0])
+    if amount > 0:
+        school.money_earnn[last][0] += amount
+    else:
+        if reason == 'teacher_salary':
+            school.money_spendd[last][0] += amount
+        else:
+            school.money_spendd[last][1] += amount            
+
+def get_frist_day_of_month(now):
+    month = now.strftime('%m')
+    year = now.strftime('%Y')
+    first_day = datetime.datetime.strptime(year+'-'+month+'-01', "%Y-%m-%d").date()
+    return first_day
 
 def random_password():
     symbols = string.ascii_letters + string.digits
@@ -62,7 +98,6 @@ def is_in_school(profile, school):
 def only_teachers(profile):
     profession = Profession.objects.get(title = 'Teacher')
     profession2 = Profession.objects.get(title = 'Director')
-    print(profession ,profile.profession.all(), profession in profile.profession.all())
     if not profession in profile.profession.all() and not profession2 in profile.profession.all():
         raise Http404
 

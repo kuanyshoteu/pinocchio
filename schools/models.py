@@ -30,7 +30,6 @@ class School(models.Model):
             height_field="height_field")
     height_field = models.IntegerField(default=0, null=True)
     width_field = models.IntegerField(default=0, null=True)
-    money = models.IntegerField(default=0)
     content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')
     site = models.CharField(max_length=250, default='')
@@ -40,6 +39,10 @@ class School(models.Model):
     offices = models.IntegerField(default=0)
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
+    money = models.IntegerField(default=0)
+    money_spendd = ArrayField(ArrayField(models.IntegerField()), default = list)
+    money_earnn = ArrayField(ArrayField(models.IntegerField()), default = list)
+    money_month = ArrayField(models.DateTimeField(auto_now_add=False), default = list)
 
     class Meta:
         ordering = ['rating']

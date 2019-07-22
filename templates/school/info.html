@@ -301,88 +301,54 @@
                 {% include 'school/voronka_chart.html' %}
                 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
                     На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>
-                    <span class="ui pointing below label no_margin green success_new_money" style="display: none;">
+                </div>
+                <div class="ui segment" style="margin: 0;padding-left: 17px;display: flex;">
+                    <div style="font-size: 13px;">Расходы</div>
+                    <div class="ui pointing below label no_margin green success_new_money" style="display: none;margin-left: 100px !important;">
                         Расходы записаны, можете посмотреть в истории
-                    </span>
-                </div>
-                <div class="ui grid stackable" style="margin-bottom: 30px;">
-                    <div class="six wide column" style="padding: 15px 0 0 0">
-                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
-                            Расходы
-                            <a style="float: right;margin-top: -5px;" url="{{instance.show_money_history}}" class="ui button mini blue show_money_history">История</a>
-                            <div class="ui modal money_history">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
-                                        <thead>
-                                            <tr style="color: #222;">
-                                                <th>Название</th>
-                                                <th>Сумма</th>
-                                                <th>Время</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="history_cont">
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui segment" style="margin-top: 0">
-                            {% include 'school/money_circle_chart.html' %}
-                            <form class="ui form" style="display: flex;margin-top: 15px;margin-bottom: 0">
-                                <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
-                                <input type="number" class="new_money_amount" name="" placeholder="Сумма">
-                                <a class="ui button mini blue no_margin new_money_object" url="{{instance.new_money_object}}">+</a>
-                            </form>
-                        </div>
                     </div>
-                    <div class="ten wide column"  style="padding: 15px 0 0 0">
-                        <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
-                            <div class="ui grid">
-                                <div class="nine wide column" style="padding: 14px">
-                                    Доходы
-                                </div>
-                                <div class="seven wide column" style="padding: 9px">
-                                    <a class="ui button mini blue">Показать графики за год</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui segment" style="margin-top: 0;height:324px;">
-                            {% include 'school/money_chart.html' %}
+                </div>
+                <div class="ui segment" style="margin: 0;padding-left: 17px;display: flex;">
+                    <form class="ui form" style="display: flex;margin: -5px 15px 0 15px;">
+                        <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
+                        <input type="number" class="new_money_amount" name="" placeholder="Сумма">
+                        <a class="ui button mini no_margin new_money_object" url="{{instance.new_money_object}}">+</a>
+                    </form>
+                    <a style="margin-top: -5px;height: 33px;" url="{{instance.show_money_history}}" class="ui button mini blue show_money_history">История</a>
+                    <div class="ui modal money_history" style="margin-top: 10%;min-height: 100%;">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
+                                <thead>
+                                    <tr style="color: #222;">
+                                        <th>Название</th>
+                                        <th>Сумма</th>
+                                        <th>Время</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="history_cont">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-<!--                 <div class="ui segment">
+                <div class="ui segment" style="margin-top: 0">
+                    {% include 'school/money_circle_chart.html' %}
+                </div>
+                <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
                     <div class="ui grid">
-                        <div class="sixteen wide column">
-                            <div class="school-schedule">
-                                <div class="schedule-scale">
-                                    <div class="schedule-scale-num"></div>
-                                    <div class="schedule-scale-num"></div>
-                                    <div class="schedule-scale-num"></div>
-                                    <div class="schedule-scale-num"></div>
-                                    <div class="schedule-scale-num"></div>
-                                    <div class="schedule-scale-num"></div>
-                                </div>
-                                <div class="schedule-column">
-                                    <div style="height: 30%" class="schedule-item-light">30</div>
-                                    <div style="height: 20%" class="schedule-item-dark">20</div>
-                                </div>
-                                <div class="schedule-column">
-                                    <div style="height: 50%" class="schedule-item-light">50</div>
-                                    <div style="height: 30%" class="schedule-item-dark">30</div>
-                                </div>
-                                <div class="schedule-column">
-                                    <div style="height: 30%" class="schedule-item-light">30</div>
-                                    <div style="height: 70%" class="schedule-item-dark">70</div>
-                                </div>
-                            </div>
+                        <div class="nine wide column" style="padding: 14px">
+                            Доходы
                         </div>
                     </div>
                 </div>
- -->                    
+                <div class="ui segment" style="margin-top: 0;height:324px;">
+                    {% include 'school/money_chart.html' %}
+                </div>
                 {% endif %}
-                {% include 'school/good_results_chart.html' %}
+                {% if instance.title == 'Тамос' %}
+                    {% include 'school/good_results_chart.html' %}
+                {% endif %}
                 {% include 'school/bad_results_chart.html' %}                
             </div>
         </div>

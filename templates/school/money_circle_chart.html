@@ -1,4 +1,26 @@
-<div class="donut-chart-block">
+{% load ttags %}
+<div class="ui grid">
+    <div class="sixteen wide column">
+        <div class="school-schedule">
+            <div class="schedule-scale">
+                <div class="schedule-scale-num"></div>
+                <div class="schedule-scale-num"></div>
+                <div class="schedule-scale-num"></div>
+                <div class="schedule-scale-num"></div>
+                <div class="schedule-scale-num"></div>
+                <div class="schedule-scale-num"></div>
+            </div>
+            {% for money in instance.money_spendd %}
+            <div class="schedule-column">
+                <div style="height: {{ instance|money_spendd_percent:forloop.counter }}%" class="schedule-item-light">{{ money.0 }}</div>
+                <div style="height: {{ instance|money_spendd_percent_scnd:forloop.counter }}%" class="schedule-item-dark">{{ money.1 }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- <div class="donut-chart-block">
     <div id="chart" class="chart-container"></div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
@@ -117,3 +139,4 @@ var restOfTheData=function(){
  
 setTimeout(restOfTheData,1000);
 </script>
+ -->

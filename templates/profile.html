@@ -9,6 +9,7 @@
 {{ paper_form.media }}
 {% endblock head_extra %}
 {% load staticfiles %}
+{% load ttags %}
 {% block content %}
 <span class="first_squad" style="display: none;" id='{{ first_squad }}'></span>
 <span class="first_subject" style="display: none;" id='{{ first_subject }}'></span>
@@ -97,7 +98,7 @@
                                             <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатил(а)</a>
                                         </div>
                                         <div class="twelve wide column">
-                                            {% for payment in hisprofile.payment_history.all %}
+                                            {% for payment in hisprofile|get_school_payment_history:profile %}
                                                 {{payment.manager.first_name}}
                                                 {{payment.timestamp}}
                                                 {{payment.amount}}тг.

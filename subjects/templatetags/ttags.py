@@ -31,7 +31,6 @@ def rating_filter(profile):
         students_query = students_query.filter(crm_subject_connect=profile.skill.crm_subject)
     if profile.skill.crm_age:
         students_query = students_query.filter(crm_age_connect=profile.skill.crm_age)
-    print(students_query)
     return students_query
 
 @register.filter
@@ -370,3 +369,18 @@ def get_his_squads_len(subject, profile):
         return len(subject.squads.filter(students=profile))
     else:
         return len(subject.squads.filter(teacher=profile))
+
+@register.filter
+def get_school_payment_history(hisprofile, profile):
+    return hisprofile.payment_history.filter(school=profile.schools.first())
+
+@register.filter
+def money_spendd_percent(school, index):
+    first = school.money_spendd[index-1][0]
+    second = school.money_spendd[index-1][1]
+    return int(100 * first/(first+second))
+@register.filter
+def money_spendd_percent_scnd(school, index):
+    first = school.money_spendd[index-1][0]
+    second = school.money_spendd[index-1][1]
+    return int(100 * second/(first+second))

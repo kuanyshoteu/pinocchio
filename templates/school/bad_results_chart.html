@@ -1,3 +1,4 @@
+{% if instance.title == 'Тамос' %}
 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
     <div class="ui grid">
         <div class="one wide column">
@@ -29,63 +30,11 @@
         </div>
     {% endfor %}
 </div>
+{% endif %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript">
-  var lineChartData = {
-    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
-    datasets: [{
-        label: "SES 3.4",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(16,133,135,1)",
-        pointColor: "rgba(16,133,135,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(16,133,135,1)",
-        data: ["128.940", "131.397", "132.235", "128.235", "125.636", "127.271", "125.667", "129.554"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(236,83,62,1)",
-        pointColor: "rgba(236,83,62,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["127.283", "125.147", "124.489", "116.783", "111.696", "110.563", "105.469", "104.332"]
-    }]
-}
-  var lineChartData2 = {
-    labels: ["2017", "2018", "2019"],
-    datasets: [{
-        label: "SES 3.4",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "#21BA45",
-        pointColor: "#21BA45",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "#21BA45",
-        data: ["28.940", "31.397", "32.235"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(236,83,62,1)",
-        pointColor: "rgba(236,83,62,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["17.283", "15.283", "12.283"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(16,133,135,1)",
-        pointColor: "rgba(16,133,135,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(16,133,135,1)",
-        data: ["5", "7", "2"]
-    }]
-}
   var lineChartDataMoney = {
-    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
+    labels: [{% for month in instance.money_month %}'{{month|date:"M"}}',{% endfor %}],
     datasets: [{
         label: "SES 3.4",
         fillColor: "rgba(255,255,255,0)",
@@ -94,82 +43,12 @@
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "#21BA45",
-        data: ["128.940", "131.397", "132.235", "128.235", "145.636"]
+        data: [{% for money in instance.money_earnn %}'{{money.0}}',{% endfor %}]
     }]
 }
-  var lineChartData_cg = {
-    labels: ["Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
-    datasets: [{
-        label: "SES 3.4",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(16,133,135,1)",
-        pointColor: "rgba(16,133,135,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(16,133,135,1)",
-        data: ["50", "40", "45", "47", "60", "70", "30", "40"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(236,83,62,1)",
-        pointColor: "rgba(236,83,62,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["60", "70", "55", "60", "90", "75", "50", "50"]
-    }]
-}
-  var lineChartData_cb = {
-    labels: ["Август","Сентябрь", "Октябрь", "Ноябрь", "Декабрь", "Январь"],
-    datasets: [{
-        label: "SES 3.4",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "#21BA45",
-        pointColor: "#21BA45",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "#21BA45",
-        data: ["70", "100", "90","80", "90", "90"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(236,83,62,1)",
-        pointColor: "rgba(236,83,62,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["105", "117", "112","105", "117", "112"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(16,133,135,1)",
-        pointColor: "rgba(16,133,135,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(16,133,135,1)",
-        data: ["60", "50", "70","60", "50", "40"]
-    }]
-}
-
 window.onload = function() {
-    var ctx = document.getElementById("canvas").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData, {
-        responsive: true
-    });
-    var ctx = document.getElementById("canvas2").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData2, {
-        responsive: true
-    });
     var ctx = document.getElementById("canvas_money").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
-        responsive: true
-    });
-    var ctx = document.getElementById("canvas_cg").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData_cg, {
-        responsive: true
-    });
-    var ctx = document.getElementById("canvas_cb").getContext("2d");
-    window.myLine = new Chart(ctx).Line(lineChartData_cb, {
         responsive: true
     });
 }

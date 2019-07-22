@@ -84,7 +84,6 @@ def school_schedule(request):
     only_managers(profile)
     school = profile.schools.first()
     time_periods = school.time_periods.all()
-    print(is_profi(profile, 'Manager'))
     context = {
         "profile":profile,
         "instance": school,
@@ -374,7 +373,6 @@ def subject_create(request):
         school = manager_profile.schools.first()
         if school.school_subject_categories.filter(title = title):
             return JsonResponse({'taken_name':True})
-        print(request.GET.get('id'))
         if request.GET.get('id') == '_new':
             qs = SubjectCategory.objects.filter(title=title)
             if len(qs) > 0:
@@ -573,7 +571,6 @@ def delete_social(request):
     index = int(request.GET.get('id'))
     a = school.social_networks
     school.social_networks = a[:index-1] + a[index :]
-    print(school.social_networks)
     school.save()
     data = {
     }
@@ -711,8 +708,7 @@ def save_card_as_user(request):
                 was_minus = True
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
-            school.money += int(request.GET.get('predoplata'))
-            school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=int(request.GET.get('predoplata')))
+            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile)
             school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
@@ -740,8 +736,7 @@ def predoplata(request):
                 was_minus = True
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
-            school.money += int(request.GET.get('predoplata'))
-            school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=int(request.GET.get('predoplata')))
+            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile)
             school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
@@ -888,7 +883,6 @@ def open_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     res = []
-    print(request.GET.get('id'), profile.schools.first().title)
     if request.GET.get('id'):
         school = profile.schools.first()
         card = school.crm_cards.get(id = int(request.GET.get('id')))
@@ -1080,6 +1074,10 @@ def delete_card(request):
     if request.GET.get('id'):
         card = school.crm_cards.get(id=int(request.GET.get('id')))
         if not card.saved:
+            if not card.was_called:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()
             card.delete()
     data = {
     }
@@ -1184,7 +1182,6 @@ def call_helper(request):
         similarity=TrigramSimilarity('title', text)
         hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
-        print(hashtags)
         for hashtag in hashtags:
             res.append(hashtag.title)
             i+=1
@@ -1326,9 +1323,7 @@ def update_voronka(request):
             if column.id != 6:
                 x = len(all_cards.filter(column=column))
                 number += x
-                print(column.id, x, number)
                 res.append([column.title, number, round((number/number_of_all)*100, 2)])            
-        print(is_ago)
     data = {
         "res":res,
         "timeago":timeago.strftime('%Y-%m-%d'),
@@ -1342,8 +1337,7 @@ def new_money_object(request):
     only_directors(profile)
     if request.GET.get('title') and request.GET.get('amount'):
         school = profile.schools.first()
-        school.money -= int(request.GET.get('amount'))
-        school.money_obejct.create(title=request.GET.get('title'), amount=-1*int(request.GET.get('amount')))
+        change_school_money(school, -1*int(request.GET.get('amount')), request.GET.get('title'), profile)        
         school.save()
     data = {
     }
