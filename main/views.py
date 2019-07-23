@@ -93,6 +93,40 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
+def create_school(request):
+    profile = get_profile(request)
+    profession = Profession.objects.get(title = 'Moderator')
+    if request.GET.get('title') and request.GET.get('slogan') and request.GET.get('password') and request.GET.get('name') and request.GET.get('phone'):
+        school = School.objects.create(
+            title=request.GET.get('title'),
+            slogan=request.GET.get('slogan')
+            )
+        school.save()
+        new_id = str(User.objects.order_by("id").last().id + 1)
+        new_name = request.GET.get('name').replace(' ', '')+new_id
+        user = User.objects.create(username=new_name, password=request.GET.get('password'))
+        user.set_password(request.GET.get('password'))
+        user.save()
+        user2 = authenticate(username = str(user.username), password=str(request.GET.get('password')))
+        profile = Profile.objects.get(user = user)
+        profile.first_name = request.GET.get('name')
+        profile.phone = request.GET.get('phone')
+        director = Profession.objects.get(title = 'Director')
+        profile.profession.add(director)
+        profile.is_student = False
+        skill = Skill.objects.create(
+            confirmed=True,
+            confirmation_time=timezone.now(),
+            )
+        skill.save()
+        profile.skill = skill
+        profile.save()
+        profile.schools.add(school)
+        return redirect(school.get_absolute_url())
+    data = {
+    }
+    return JsonResponse(data)
+
 def login_view(request):
     res = 'error'
     if request.GET.get('username') and request.GET.get('password'):
@@ -106,12 +140,10 @@ def login_view(request):
         if found:
             res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
-            print('yo',user)
         try:
             login(request, user)
         except Exception as e:
             res = 'error'
-
     data = {
         'res':res,
     }
@@ -125,16 +157,13 @@ def register_view(request):
                 new_id = str(User.objects.order_by("id").last().id + 1)
                 new_name = request.GET.get('name').replace(' ', '')+new_id
                 user = User.objects.create(username=new_name, password=request.GET.get('password1'))
+                user.set_password(request.GET.get('password1'))
                 user.save()
-                print(user.username,request.GET.get('password1'))
                 user2 = authenticate(username = str(user.username), password=str(request.GET.get('password1')))
-                print(user, user2)
-                #print(new_user, user)
                 try:
                     login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 except Exception as e:
                     res = 'er'
-                    print('reg_er', e)
                     data = {
                         'res':res,
                     }

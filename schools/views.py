@@ -147,12 +147,13 @@ def school_info(request):
     number = 0
     all_cards = school.crm_cards.filter(timestamp__gt=weekago)
     number_of_all = len(all_cards)
-    for column in school.crm_columns.all().order_by('-id'):
-        if column.id != 6:
-            x = len(all_cards.filter(column=column))
-            number += x
-            voronka.append([column.title, number, round((number/number_of_all)*100,2)])
-            voronka2.append([column.title, number, round((number/number_of_all)*100,2)])
+    if number_of_all > 0:
+        for column in school.crm_columns.all().order_by('-id'):
+            if column.id != 6:
+                x = len(all_cards.filter(column=column))
+                number += x
+                voronka.append([column.title, number, round((number/number_of_all)*100,2)])
+                voronka2.append([column.title, number, round((number/number_of_all)*100,2)])
     voronka = reversed(voronka)
     voronka2 = reversed(voronka2)
     context = {
@@ -316,52 +317,6 @@ def school_list(request):
         "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "schools/school_list.html", context)
-
-def school_update(request, slug=None):
-    instance = get_object_or_404(School, slug=slug)
-    form = SchoolForm(request.POST or None, request.FILES or None, instance=instance)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        if not instance.height_field:
-            instance.height_field = 0
-        if not instance.width_field:
-            instance.width_field = 0
-
-        instance.save()
-        return HttpResponseRedirect(instance.get_update_url())
-        
-    profile = get_profile(request)
-
-    context = {
-        "instance": instance,
-        "form":form,
-        "profile":profile,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-    }
-    return render(request, "schools/school_create.html", context)
-
-def school_delete(request):
-    if not request.user.is_authenticated:
-        raise Http404
-    try:
-        instance = School.objects.get(slug=slug)
-    except:
-        raise Http404
-
-    if not request.user.is_staff and not request.user.is_superuser:
-        reponse.status_code = 403
-        return HttpResponse("You do not have permission to do this.")
-        
-    if request.method == "POST":
-        instance.delete()
-        messages.success(request, "Successfully deleted")
-        return redirect("schools:list")
-    context = {
-        "object": instance
-    }
-    return render(request, "confirm_delete.html", context)
 
 def subject_create(request):
     manager_profile = Profile.objects.get(user = request.user.id)

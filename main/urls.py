@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^api/map_filter/$', map_filter, name='map_filter'),
     url(r'^notifications/$', get_notifications, name='get_notifications'),
     url(r'^moderator/$', moderator, name='moderator'),
+    url(r'^api/create_school/$', create_school, name='create_school'),
 ]

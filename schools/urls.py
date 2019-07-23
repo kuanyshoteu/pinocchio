@@ -53,8 +53,6 @@ urlpatterns = [
     url(r'^api/update_voronka/', update_voronka, name='update_voronka'),
     url(r'^api/new_money_object/', new_money_object, name='new_money_object'),
     url(r'^api/show_money_history/', show_money_history, name='show_money_history'),
-    url(r'^(?P<id>\d+)/edit/$', school_update, name='update'),
-    url(r'^(?P<id>\d+)/delete/$', school_delete, name='delete'),
     url(r'^api/make_zaiavka/(?P<school_id>\d+)/$', make_zaiavka, name='make_zaiavka'),
     url(r'^adilmed/', adilmed, name="adilmed"),
 ]

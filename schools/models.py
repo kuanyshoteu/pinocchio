@@ -51,6 +51,8 @@ class School(models.Model):
     def landing(self):
         return reverse("schools:landing", kwargs={"school_id": self.id})
     # Edit API's
+    def create_school(self):
+        return reverse("main:create_school")
     def change_title_url(self):
         return reverse("schools:change_title_url")
     def change_slogan_url(self):

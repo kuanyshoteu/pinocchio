@@ -1,4 +1,26 @@
 $(document).ready(function () {
+    $('.create_school').click(function(e) {
+        url = $(this).attr('url');
+        title = $('.new_school_title').val();
+        slogan = $('.new_school_slogan').val();
+        name = $('.new_school_name').val();
+        phone = $('.new_school_phone').val();
+        password = $('.new_school_pswd').val();
+        $.ajax({
+            url: url,
+            data: {
+                'title':title,
+                'slogan':slogan,
+                'name':name,
+                'phone':phone,
+                'password':password,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })
+    })
     $('.show_money_history').click(function(e) {
         url = $(this).attr('url')
         $('.money_history').modal('show')
