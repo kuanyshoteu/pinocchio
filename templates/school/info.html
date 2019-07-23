@@ -54,7 +54,23 @@
                         </div>
                     </form>
                     {% endif %} 
-                    <br>                   
+                    <br>
+                    <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Номер телефона:</span>
+                    <span style="display: inline-block;" class="school_phones">{{ instance.phones.0 }}</span>
+                    {% if is_director %}
+                    <a onclick="$('.school_phones_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
+                    <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
+                        <div class="ui grid">
+                            <div class="twelve wide column no_padding_side">
+                                <textarea class="school_phones_edit no_margin" style="margin-bottom: 0;">{{ instance.phones.0 }}</textarea>
+                            </div>
+                            <div class="four wide column">
+                                <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}                     
+                    <br>
                     <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Сайт (если есть):</span>
                     <span style="display: inline-block;" class="school_site">{{ instance.site }}</span>
                     {% if is_director %}

@@ -472,11 +472,12 @@ def get_landing(request):
             subjects.append(subject.title)
         phone = ''
         i = 0
-        for p in school.phones[0]:
-            phone += p
-            if i == 10:
-                break
-            i += 1
+        if len(school.phones)>0:
+            for p in school.phones[0]:
+                phone += p
+                if i == 10:
+                    break
+                i += 1
         data = {
             'title':school.title,
             'address':school.school_offices.first().address,

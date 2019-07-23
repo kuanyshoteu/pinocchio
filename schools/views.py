@@ -1191,7 +1191,9 @@ def change_title(request):
         if request.GET.get('status') == 'worktime':
             school.worktime = request.GET.get('text') 
         if request.GET.get('status') == 'phones':
-            school.phones = request.GET.get('text') 
+            if len(school.phones) == 0:
+                school.phones.append('')
+            school.phones[0] = request.GET.get('text') 
         if request.GET.get('status') == 'social_networks':
             school.social_networks = request.GET.get('text') 
         school.save()
