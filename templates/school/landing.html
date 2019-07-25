@@ -50,22 +50,19 @@
           <div class="organization__info-middle-part">
             <div class="organization__info-middle-part__wrap">
               <span class="organization__info-rating">
-                <span class="organization__info-rating-avg">4</span>
-                <span class="organization__info-rating-icon active">
-                  <i class="icon star"></i>
-                </span>
-                <span class="organization__info-rating-icon active">
-                  <i class="icon star"></i>
-                </span>
-                <span class="organization__info-rating-icon active">
-                  <i class="icon star"></i>
-                </span>
-                <span class="organization__info-rating-icon active">
-                  <i class="icon star"></i>
-                </span>
-                <span class="organization__info-rating-icon">
-                  <i class="icon star"></i>
-                </span>
+                <span class="organization__info-rating-avg">{{school.rating}}</span>
+                    <span class="organization__info-rating-icon active">
+                      {% for star in five %}
+                          {% if forloop.counter <= school.rating %}
+                              <i class="icon star"></i>
+                          {% endif %}
+                      {% endfor %}
+                    </span>
+                    <span class="organization__info-rating-icon">
+                      {% for star in school|rating_empty_stars %}
+                          <i class="icon star"></i>
+                      {% endfor %}
+                    </span>
               </span>
               <p class="organization__info-rating-desc">
                 {{ school.reviews.all|length }} отзывов
@@ -284,7 +281,7 @@
         console.log(x, y)
         var myMap = new ymaps.Map("map", {
             center: [x, y],
-            zoom: 15
+            zoom: 10
         },{
             restrictMapArea: [
                 [42.8, 76.02848],
@@ -304,7 +301,7 @@
         myMap.geoObjects.add(firstCollection); 
         var myMap1 = new ymaps.Map("map1", {
             center: [x, y],
-            zoom: 14
+            zoom: 10
         },{
             restrictMapArea: [
                 [42.8, 76.02848],

@@ -42,10 +42,23 @@
         </div>
         <div class="four wide column" style="padding: 0 0 0 29px;">
             <div class="school_landing" id="school_landing">
+                <div class="loading" style="display: none;">
+                  <div class="animation"><div class="circle one"></div></div>
+                  <div class="animation"><div class="circle two"></div></div>
+                  <div class="animation"><div class="circle three"></div></div>
+                  <div class="animation"><div class="circle four"></div></div>
+                  <div class="animation"><div class="circle five"></div></div>
+                  <div class="animation"><div class="circle six"></div></div>
+                </div>
                 <div class="ui grid no_margin no_padding" style="overflow-x: hidden">
                     <div class="two wide column" style="padding-top: 20px;">
                         <a class="back_to_schools" onclick="$('#school_landing').hide()">
                             <i class="icon arrow left blue" style="font-size: 17px;"></i>
+                        </a>
+                    </div>
+                    <div class="sixteen wide column" style="position: absolute;float: right;">
+                        <a class="back_to_schools" style="position: fixed;z-index: 3000;left: calc(25% + 50px);" onclick="$('#school_landing').hide()">
+                            <i class="icon x"></i>
                         </a>
                     </div>
                     <div class="fourteen wide column" style="padding-top: 0;">
@@ -75,18 +88,20 @@
                         </div>
                         <ul class="map_icon-list">
                             <li class="map_icon-item">
-                                <div class="map_icon-item-i"><i class="icon phone"></i></div>
+                                <div class="map_icon-item-i map_phone-main2"><i class="icon phone"></i></div>
                                 Телефон
                             </li>
                             <li class="map_icon-item">
                                 <div class="map_icon-item-i"><i class="icon map marker alternate"></i></div>
                                 На карте
                             </li>
-                            <li class="map_icon-item">
-                                <div class="map_icon-item-i"><i class="icon heart"></i></div>
-                                Избранное
-                            </li>
                         </ul>
+                        <div class="map_phone map_phone-other2" style="display: none;">
+                            <div class="map_phone-number">
+                                <i class="icon phone"></i>
+                                <span class="all_phones"></span>
+                            </div>
+                        </div>
                         <a href="" class="map_photo-wrapper" style="background-color: #ccc;">
                             <div class="map_photo-label">
                                 Подробнее
@@ -96,7 +111,6 @@
                             <i class="icon clock map_wt_mn-close"></i>
                             <span class="map_worktime_main-text school_worktime_landing"></span>
                             <span class="map_worktime_main-status map_wt_mn-close">Закрыто</span>
-                            <!-- mp_wt_mn-open Если организация открыта-->
                         </div>
                         <div class="map_phone map_phone-main">
                             <div class="map_phone-number ui grid">
@@ -122,24 +136,10 @@
                             <i class="icon globe"></i>
                             <a class="map_site-link"></a>
                         </div>
+                        <br>
                         <div class="map_social">
                             <span class="map_social-title">Организация в социальных сетях</span>
                             <ul class="map_social-list">
-                                <li class="map_social-item">
-                                    <a class="map_social-item-link">
-                                        <i class="icon vk"></i>Вконтакте
-                                    </a>
-                                </li>
-                                <li class="map_social-item">
-                                    <a class="map_social-item-link">
-                                        <i class="icon facebook"></i>Facebook
-                                    </a>
-                                </li>
-                                <li class="map_social-item">
-                                    <a class="map_social-item-link">
-                                        <i class="icon instagram"></i>Instagram
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                         <div class="map_other">
@@ -152,17 +152,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <div style="background: #ccc;" class="map_other-img"></div>
                         </div>
                         <div class="map_rating">
-                            <ul class="map_rating-list">
-                                <li class="map_rating-item"><i class="icon star"></i></li>
-                                <li class="map_rating-item"><i class="icon star"></i></li>
-                                <li class="map_rating-item"><i class="icon star"></i></li>
-                                <li class="map_rating-item"><i class="icon star"></i></li>
-                                <li class="map_rating-item"><i class="icon star"></i></li>
-                            </ul>
+                            <br>
                             <div style="text-align: center;">Оставьте отзыв</div>
+                            <ul class="map_rating-list result_rating" number="">
+                                <li class="map_rating-item"><i class="icon star make_review" id="star5" number="5"></i></li>
+                                <li class="map_rating-item"><i class="icon star make_review" id="star4" number="4"></i></li>
+                                <li class="map_rating-item"><i class="icon star make_review" id="star3" number="3"></i></li>
+                                <li class="map_rating-item"><i class="icon star make_review" id="star2" number="2"></i></li>
+                                <li class="map_rating-item"><i class="icon star make_review" id="star1" number="1"></i></li>
+                            </ul>
+                            <form class="ui form wright_review" style="width: 80%;margin: auto;margin-top: 15px;display: none;">
+                              <textarea class="review_text" placeholder="Напишите отзыв" style="height: 80px;"></textarea>
+                              <div style="text-align: center;">
+                                <input class="ui button green save_review" url="" value="Отправить" type="submit" onclick="return false">                
+                              </div>
+                            </form>  
+                            <div class="review_error highlight_red" style="display: none;">Сначала нужно войти в аккаунт или зарегестрироваться</div>
+                            <div class="thanks_review highlight" style="display: none;">Спасибо за отзыв!</div>                  
                             <br>
                         </div>
 
@@ -222,6 +230,7 @@
 <script type="text/javascript">
     function show_school(id) {
         url = $('.show_url').attr('url')
+        $('.loading').show()
         $.ajax({
             url: url,
             data: {
@@ -229,14 +238,27 @@
             },
             dataType: 'json',
             success: function (data) {
+                for (var i = 1; i <= 5; i++) {
+                    $('#star'+i).attr('style', '')
+                }
+                $('.map_social-list').empty()
+                for (var i = 0; i < data.social_networks.length; i++) {
+                    console.log(data.social_networks[i])
+                    $('<li class="map_social-item"> <a class="map_social-item-link" href="'+data.social_networks[i][0]+'"> <i class="icon '+data.social_networks[i][1]+'"></i>'+data.social_networks[i][1]+'</a> </li>').appendTo('.map_social-list');
+                }
                 $('.map_sameorg-item').show()
+                $('.wright_review').hide()
+                $('.thanks_review').hide()
                 $('#addvert'+id).hide()
                 $('.school_name_big').text(data.title)
                 $('.school_worktime_landing').text(data.worktime)
                 $('.school_address_landing').text(data.address)
                 $('.school_phone_landing').text(data.phone+'...')
                 $('.map_photo-wrapper').attr('href', data.landing_url)
-                console.log(data.site)
+                $('.save_review').attr('url', data.review_url)
+                if (data.banner){
+                    $('.map_photo-wrapper').attr('style', 'background-image:url('+data.banner+');')                    
+                }
                 if (data.site == '') {
                     $('.map_site').hide()
                 }
@@ -261,6 +283,7 @@
                 $('.map_address-subtitle').text(data.offices + ' филиал'+end)
                 $('.map_other-info-subtext2').text(data.region)
                 $('#school_landing').show()
+                $('.loading').hide()
             }
         })
     }

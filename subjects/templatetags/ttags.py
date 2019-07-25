@@ -328,14 +328,10 @@ def get_school_workers(job,school):
 @register.filter
 def rating_empty_stars(review):
     res = []
-    for i in range(0, 5-review.rating):
-        res.append(i)
-    return res
-
-@register.filter
-def rating_empty_stars(review):
-    res = []
-    for i in range(0, 5-review.rating):
+    number = 5-review.rating
+    if int(number) != number:
+        number += 1
+    for i in range(0, int(number)):
         res.append(i)
     return res
 

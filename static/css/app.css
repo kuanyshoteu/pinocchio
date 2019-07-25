@@ -41226,7 +41226,7 @@ i.map_worktime-icon {
 .organization__info-rating-icon {
   margin: 0;
   vertical-align: middle;
-  font-size: 1.2rem;
+  font-size: 13px;
 }
 .organization__info-rating-icon.active i {
   color: #D4C14A;

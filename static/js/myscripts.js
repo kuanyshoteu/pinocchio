@@ -100,6 +100,9 @@ $(document).ready(function () {
                     ' </span> </div> <div class="schoolLanding__content-review-comment__text"> '+text+
                     ' </div> <div class="schoolLanding__content-review-comment__about"> <span class="schoolLanding__content-review-comment__about-left"> <span class="schoolLanding__content-review-comment__about-name">'+data.name+'</span> <span class="schoolLanding__content-review-comment__about-date">'+data.timestamp+'</span> </span> </div>'
                     $(rev).appendTo('.schoolLanding__content-review-comment')
+                    $('.review_text').val('')
+                    $('.wright_review').hide()
+                    $('.thanks_review').show()
                 }
             }
         })

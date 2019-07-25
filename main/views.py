@@ -304,17 +304,19 @@ def map_search_show(request):
             image_url = ''
             if school.image_icon:
                 image_url = school.image_icon.url
-            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
-            i+=1
+            if len(school.school_offices.all()) > 0:
+                res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
+                i+=1
             if i == 10:
                 break
     else:
         schools = EliteSchools.objects.first().schools.all()
         for school in schools:
-            image_url = ''
-            if school.image_icon:
-                image_url = school.image_icon.url
-            res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
+            if len(school.school_offices.all())>0:
+                image_url = ''
+                if school.image_icon:
+                    image_url = school.image_icon.url
+                res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
     data = {
         "res":res,
     }
@@ -478,6 +480,10 @@ def get_landing(request):
                 if i == 10:
                     break
                 i += 1
+        banner = False
+        if len(school.banners.all()) > 0:
+            banner = school.banners.first().image_banner.url
+        print(school.social_networks)
         data = {
             'title':school.title,
             'address':school.school_offices.first().address,
@@ -490,6 +496,9 @@ def get_landing(request):
             'site':school.site,
             'average_cost':school.average_cost,
             'landing_url':school.landing(),
+            'banner':banner,
+            'review_url':school.save_review_url(),
+            'social_networks':school.social_networks,
         }
         return JsonResponse(data)
     else:
