@@ -20,7 +20,7 @@ from django.conf.urls import include, url
 from django.conf.urls.static import static
 from accounts.views import (logout_view, confirm_email)
 from papers.views import courses
-from main.views import(main_view, loaderio)
+from main.views import(main_view, loaderio, handler404)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,10 +44,6 @@ urlpatterns = [
 ]
 from django.conf.urls import (handler400, handler403, handler404, handler500)
 
-handler400 = 'main.views.bad_request'
-handler403 = 'main.views.permission_denied'
-handler404 = 'main.views.page_not_found'
-handler500 = 'main.views.server_error'
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -6,36 +6,6 @@
     <div class="content">
           <div class="ui grid">
             <div class="eight wide column">
-              <!-- <div class="ui floating dropdown labeled icon" >
-                <h4><input style="width: 300px;" type='submit' class='ui button submit' id = 'gorod' value='Город:'></h4> 
-                  <div class="menu" style="margin-top: 0 !important; width: 300px;">
-                    <div class="scrolling menu">
-                      {% for city in cities %}
-                      <div class="item">
-                        <a class="city-btn" style="cursor: pointer;" name="{{ city }}" data-href='{{ user1.city_api_url }}'>
-                          {{ city }}
-                        </a>
-                      </div>
-                      {% endfor %}
-                    </div>
-                  </div>
-              </div>
-              <br>
-              <div class="ui floating dropdown labeled icon" >
-                <h4><input style="width: 300px;" type='submit' class='ui button submit' id='filial' value='Филиал:'></h4> 
-                  <div class="menu" style="margin-top: 0 !important; width: 300px;">
-                    <div class="scrolling menu">
-                      {% for filial in filials %}
-                      <div class="item" id='{{ forloop.counter }}filial'>
-                         <a class="filial-btn {{ filial }}" style="cursor: pointer;" name="{{ filial }}" data-href='{{ user1.filial_api_url }}'>
-                          {{ filial }}
-                         </a>
-                      </div>
-                      {% endfor %}
-                    </div>
-                  </div>
-              </div>    
-              <br> -->
               <div class="ui floating dropdown labeled icon" >
                 <h4><input style="width: 300px;" type='submit' class='ui button submit' id='predmet' value='Предмет:'></h4> 
                   <div class="menu" style="margin-top: 0 !important; width: 300px;">
@@ -50,12 +20,6 @@
               </div>    
               <br>
             </div>
-            <!-- <div class="eight wide column" style="margin-top: 30px;">
-                <h4>При полной регистрации через сайт скидка 5%</h4>
-                <p>Для регистрации через оператора: <tel>+7xxxxxxxxx</tel></p>
-                <br>
-                <a class="ui button tiny" onclick="$('#request_group-modal').modal('show')">Оставить заявку на новую группу</a>
-            </div> -->
           </div>  
           <br><br>
           <div style="background-color: #fff;">
@@ -112,113 +76,4 @@
               </table>
           </div>
     </div>
-        
-
-
 </div>
-
-<script>
-     $(document).ready(function(){
-      // $(".city-btn").click(function(e){
-      //   e.preventDefault()
-      //   var this_ = $(this)
-      //   var changeUrl = this_.attr("data-href")
-      //   var cityName = this_.attr("name")
-      //   if (changeUrl){
-      //      $.ajax({
-      //       url: changeUrl,
-      //       method: "GET",
-      //       data: {},
-      //       success: function(data){
-      //           $('#gorod').attr('value', cityName)
-      //           if (cityName == 'Алматы'){
-      //             $('#1filial').show();
-      //             $('#2filial').show();
-      //             $('#3filial').hide();
-
-      //             $('#cityАлматы').show();
-      //             $('#cityАстана').hide();
-      //           }
-      //           if (cityName == 'Астана'){
-      //             $('#1filial').hide();
-      //             $('#2filial').hide();
-      //             $('#3filial').show();
-
-      //             $('#cityАлматы').hide();
-      //             $('#cityАстана').show();
-      //           }
-      //           if (cityName == 'Все города'){
-      //             $('#1filial').show();
-      //             $('#2filial').show();
-      //             $('#3filial').show();
-      //             $('#cityАлматы').show();
-      //             $('#cityАстана').show();
-      //           }
-      //       }, error: function(error){
-      //         console.log('error')
-      //       }
-
-      //     })
-      //   }       
-      // })
-      // $(".filial-btn").click(function(e){
-      //   e.preventDefault()
-      //   var this_ = $(this)
-      //   var changeUrl = this_.attr("data-href")
-      //   var filialName = this_.attr("name")
-      //   if (changeUrl){
-      //      $.ajax({
-      //       url: changeUrl,
-      //       method: "GET",
-      //       data: {},
-      //       success: function(data){
-      //           $('#filial').attr('value', filialName)
-      //       }, error: function(error){
-      //         console.log('error')
-      //       }
-
-      //     })
-      //   }       
-      // })
-      $(".subject-btn").click(function(e){
-        e.preventDefault()
-        var this_ = $(this)
-        var changeUrl = this_.attr("data-href")
-        var subjectName = this_.attr("name")
-        if (changeUrl){
-           $.ajax({
-            url: changeUrl,
-            method: "GET",
-            data: {},
-            success: function(data){
-                $('#predmet').attr('value', subjectName)
-                if (subjectName == 'Геометрия'){
-                  $('#subjectГеометрия').show();
-                  $('#subjectФизика').hide();
-                  $('#subjectАлгебра').hide();
-                }
-                if (subjectName == 'Алгебра'){
-                  $('#subjectГеометрия').hide();
-                  $('#subjectФизика').hide();
-                  $('#subjectАлгебра').show();
-                }
-                if (subjectName == 'Все предметы'){
-                  $('#subjectГеометрия').show();
-                  $('#subjectФизика').show();
-                  $('#subjectАлгебра').show();
-                }
-                if (subjectName == 'Физика'){
-                  $('#subjectГеометрия').hide();
-                  $('#subjectФизика').show();
-                  $('#subjectАлгебра').hide();
-                }
-
-            }, error: function(error){
-              console.log('error')
-            }
-
-          })
-        }       
-      })
-  })
-</script>

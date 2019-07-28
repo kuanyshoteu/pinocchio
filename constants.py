@@ -18,6 +18,12 @@ def send_sms(phones, message, time):
     url = 'https://smsc.kz/sys/send.php?login='+login+'&psw='+password+'&phones='+phones+'&mes='+message+'&time='+time#+'&sender=Pinocchiokz'
     requests.post(url)
 
+def send_email(subject, html_content, send_to):
+    msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
+    ender = " <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
+    msg.attach_alternative(html_content+ender, "text/html")
+    msg.send()
+
 def send_hello_email(first_name, phone, mail, password, timeaddress):
     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали на сайте <a href='pinocchio.kz'>Pinocchio.kz</a><br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
     login_text="<br>Ваш логин: "+phone+" или "+mail
@@ -26,12 +32,6 @@ def send_hello_email(first_name, phone, mail, password, timeaddress):
     html_content = text+login_text+password_text+ender
     msg = EmailMultiAlternatives("Добро пожаловать на Pinocchio.kz", 'q', 'aaa.academy.kz@gmail.com', [mail])
     msg.attach_alternative(html_content, "text/html")
-    msg.send()
-
-def send_email(subject, html_content, send_to):
-    msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
-    ender = " <br><br>С уважением, команда <a href='pinocchio.kz'>Pinocchio.kz</a>"
-    msg.attach_alternative(html_content+ender, "text/html")
     msg.send()
 
 def change_school_money(school, amount, reason, profile):

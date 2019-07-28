@@ -156,6 +156,9 @@
 								<input type='submit' class='ui button blue tiny' value='Сохранить' />
 	        				</div>
         				</div>
+                        <div class="sixteen wide column" style="padding: 0 14px;">
+                            {% include 'squads/squad_change_calendar.html' %}
+                        </div>                        
         				<div class="sixteen wide column">
 		    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;f">
 				        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>

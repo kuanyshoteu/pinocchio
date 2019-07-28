@@ -1,12 +1,14 @@
-<div class="ui mini modal" id="login-modal">
+<div class="ui modal" id="login-modal" style="min-height: 400px;">
     <i class="close icon"></i>
     <div class="content">
-        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+        <form method='POST' style="width: 40%;margin: 5% auto;" action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
             <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
-            <input class="username" name="username" placeholder="Номер телефона или Email" style="margin-bottom: 10px;">
-            <input class="password" type="password" name="password" placeholder="Пароль" style="margin-bottom: 10px;">
+            <b>Номер телефона или Email</b>
+            <input class="username" name="username" style="margin-bottom: 15px;margin-top: 10px;">
+            <b>Пароль</b> <a onclick="$('#forget_password-modal').modal('show');$('.wrong_mail_update_pswd').hide();$('.ok_update_pswd').hide();" style="font-size: 12px;float: right;font-weight: 600;">Забыли пароль?</a>
+            <input class="password" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
             <div style="text-align: center;">
-                <input class="ui button green login-btn" value="Войти" type="submit" onclick="return false">
+                <input class="ui button green login-btn full-w" value="Войти" type="submit" onclick="return false">
 <!--                 <button class="ui button green login-btn" type="button">Войти</button> -->
             </div>
 <!--             <div style="text-align: center;margin-top: 10px;">или</div>
@@ -21,7 +23,7 @@
                 </a>
             </div>
  -->            <div style="margin-top: 20px;text-align: center;">
-                <a onclick="$('#signup-modal').modal('show')">Еще нет аккаунта? Создать аккаунт</a>
+                Еще нет аккаунта? <a onclick="$('#signup-modal').modal('show')">Создать аккаунт</a>                
             </div>
         </form>
     </div>

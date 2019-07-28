@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="profile" class="">
+    <div class="ui container" >
+        <div class="ui stackable grid">
+            <div class="two wide column">
+            </div>            
+            <div class="twelve wide column">
+                <form class="ui form" style="margin: 0 auto;width: 40%;">
+                    <b>Введите пароль</b>
+                    <input class="reset_password1" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
+                    <b>Повторите пароль</b>
+                    <input class="reset_password2" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
+                    <input class="ui button green reset_pswd full-w" id="{{ pid }}" value="Изменить пароль" type="submit" onclick="return false">
+                </form>
+            </div>
+            <div class="two wide column">
+            </div>            
+        </div>
+    </div>
+</div>
+{% endblock content %}

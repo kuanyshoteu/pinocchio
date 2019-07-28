@@ -314,11 +314,11 @@ body{
 .delete_card:hover{
   color: red;
 }
-.delete_subject_lesson{
+.delete_squad_lesson{
   right: 0;margin: -3px 4px;color: red;font-size: 13px;
   position: absolute;
 }
-.delete_subject_lesson:hover{
+.delete_squad_lesson:hover{
   color: red;
 }
 a{
@@ -837,7 +837,7 @@ a{
   background-color: #313a57;
   width: 100%;
 }
-.in_subject_schedule{
+.in_squad_schedule{
   color: #fff; 
   padding: 1px !important; 
   margin: 3px 0 !important;

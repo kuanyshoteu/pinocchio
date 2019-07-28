@@ -93,7 +93,22 @@ class Squad(models.Model):
     def add_student_url(self):
         return reverse("squads:add_student_url")   
     def change_office(self):
-        return reverse("squads:change_office",kwargs={"id": self.id})       
+        return reverse("squads:change_office",kwargs={"id": self.id})     
+    #*******************************************
+    def change_schedule_url(self):
+        return reverse("squads:change_schedule_url", kwargs={"id": self.id})
+    def delete_subject_url(self):
+        return reverse("squads:delete_subject_url")
+    def squad_schedule_url(self):
+        return reverse("squads:squad_schedule_url",kwargs={"id": self.id})
+    def subject_list_url(self):
+        return reverse("squads:subject_list",kwargs={"id": self.id})    
+    def add_subject_url(self):
+        return reverse("squads:add_subject_url")   
+    def delete_lesson_url(self):
+        return reverse("squads:delete_lesson_url",kwargs={"id": self.id})       
+    def change_lecture_cabinet(self):
+        return reverse("squads:change_lecture_cabinet")             
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)

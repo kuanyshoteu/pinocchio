@@ -15,11 +15,11 @@
         <div class="form"  style="margin-top: 0">
             <form @submit.prevent="addSquad">
                 <select v-model="squad">
-                    <option value="Выберите Класс" selected>Выберите Класс</option>
+                    <option value="Выберите Класс" selected>Выберите курс</option>
                     <option :value="[outSubjectSquads[0][index],element]" :id="'select_squad'+outSubjectSquads[0][index]" v-for="(element, index) in outSubjectSquads[1]">[[ element ]]</option>
                     <option :value="[inSubjectSquads[0][index],element]" :id="'select_squad'+inSubjectSquads[0][index]" style="display: none;" v-for="(element, index) in inSubjectSquads[1]">[[ element ]]</option>
                 </select>
-                <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить класс</a>
+                <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить курс</a>
             </form>
         </div>
 
@@ -30,7 +30,7 @@
                     :options="{group:{ name:'people',  pull:'clone', put:false}}">
                 <div v-for="(element, index) in inSubjectSquads[1]"
                     :ondragstart="'save_card_id('+inSubjectSquads[0][index]+')'"
-                    class="item ui segment in_subject_schedule" style="cursor: grab;" >
+                    class="item ui segment in_squad_schedule" style="cursor: grab;" >
                     <p class="dragg">[[ element ]]</p>
                     <p class="user">[[ trener ]]</p>
                     <span @click="deleteSquad(index,element)">✖</span>
@@ -61,13 +61,13 @@
                         :options="{group:{ name:'people'}}"
                         @change="updateSchedule($event, box)"
                         @add="added($event, box[1])">
-                    <div class="ui segment in_subject_schedule"
+                    <div class="ui segment in_squad_schedule"
                             :ondragstart="'save_card_id('+box[1][index][2]+')'"
                             style="cursor: grab;" 
                             v-for="(element, index) in box[1]" 
                             :key="index"
-                            :id="'subject_lesson' + box[1][index][0]">
-                        <a class="delete_subject_lesson" :id="box[1][index][0]"><b>×</b></a>
+                            :id="'squad_lesson' + box[1][index][0]">
+                        <a class="delete_squad_lesson" :id="box[1][index][0]"><b>×</b></a>
                         <p>[[ box[1][index][1] ]]</p>
                         <select class="no_padding change_lecture_cabinet" @change="change_cabinet('change_lecture_cabinet'+[[ box[1][index][0] ]], '{{ instance.change_lecture_cabinet }}')" :id="'change_lecture_cabinet'+[[ box[1][index][0] ]]" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
                             <option v-for="(element, index) in box[1][index][5]" :value="element[0]">[[ element[1] ]]</option>
@@ -123,16 +123,16 @@
                 }; 
                 if (!this.inSubjectSquads[1].includes(this.squad[1][0])) {
                     id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
-                    axios.get('/subjects/api/add_squad_url', {
+                    axios.get('/groups/api/add_subject_url', {
                         params: {
-                            'subject_id': id,
-                            'squad_id': this.squad[0]
+                            'squad_id': id,
+                            'subject_id': this.squad[0]
                         }
                     })
                     .then((res) => {
                         // console.log(res)
                     })
-                    axios.get('/subjects/api/schedule/' + id)
+                    axios.get('/groups/api/schedule/' + id)
                         .then( (res) => {
                             this.schedule = res.data.calendar
                     })
@@ -147,24 +147,24 @@
                 this.squad = 'Выберите Класс';
             },
             deleteSquad(i, id) {
-                let squad_id = this.inSubjectSquads[0][this.inSubjectSquads[1].indexOf(id)]
-                let squad_title = this.inSubjectSquads[1][this.inSubjectSquads[1].indexOf(id)]
+                let subject_id = this.inSubjectSquads[0][this.inSubjectSquads[1].indexOf(id)]
+                let subject_title = this.inSubjectSquads[1][this.inSubjectSquads[1].indexOf(id)]
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
-                axios.get('/subjects/api/delete_squad_url/', {
+                axios.get('/groups/api/delete_subject_url/', {
                     params: {
-                        'subject_id': id,
-                        'squad_id': squad_id
+                        'squad_id': id,
+                        'subject_id': subject_id
                     }
                 })
-                console.log('#select_squad', squad_id, squad_title)
+                console.log('#select_squad', subject_id, subject_title)
                 this.inSubjectSquads[0].splice(i, 1)
                 this.inSubjectSquads[1].splice(i, 1)
                 console.log(this.outSubjectSquads)
-                this.outSubjectSquads[0].push(squad_id);
-                this.outSubjectSquads[1].push(squad_title);
-                https://www.pinocchio.kz/subjects/api/delete_squad_url/ 
+                this.outSubjectSquads[0].push(subject_id);
+                this.outSubjectSquads[1].push(subject_title);
+                https://www.pinocchio.kz/squads/api/delete_squad_url/ 
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
-                axios.get('/subjects/api/schedule/' + id)
+                axios.get('/groups/api/schedule/' + id)
                     .then( (res) => {
                         this.schedule = res.data.calendar
                     })
@@ -176,21 +176,21 @@
                 }
                 let cell_id = e.to.dataset.cellid
                 let old_cell = "none";
-                let squad_id = $('.delete_lesson_data').attr('id')
+                let subject_id = $('.delete_lesson_data').attr('id')
                 if (e.from.dataset.cellid) {
                     old_cell = e.from.dataset.cellid
                 }
                 id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
-                axios.get('/subjects/api/change_schedule_url/' + id, { 
+                axios.get('/groups/api/change_schedule_url/' + id, { 
                     params: {
-                        'squad_id': squad_id,
+                        'subject_id': subject_id,
                         'cell_id': cell_id,
                         'old_cell': old_cell
                     }
                 })
                 .then(res => {
                     id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
-                    axios.get('/subjects/api/schedule/' + id)
+                    axios.get('/groups/api/schedule/' + id)
                     .then( (res) => {
                         this.schedule = res.data.calendar
                         this.schedule.map((row) => {
@@ -212,7 +212,7 @@
         },
         beforeCreate() {
             id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
-            axios.get('/subjects/api/schedule/' + id)
+            axios.get('/groups/api/schedule/' + id)
                 .then( (res) => {
                     this.schedule = res.data.calendar
                     this.schedule.map((row) => {
@@ -225,10 +225,10 @@
                         })
                     })
                 })
-            axios.get('/subjects/api/squad_list/' + id)
+            axios.get('/groups/api/subject_list/' + id)
                 .then( (res) => {
-                    this.inSubjectSquads = res.data.groups_in_subject
-                    this.outSubjectSquads = res.data.groups_not_in_subject
+                    this.inSubjectSquads = res.data.courses_in_group
+                    this.outSubjectSquads = res.data.courses_not_in_group
                     this.trener = res.data.trener
                     var ids = [];
                     var classes = [];

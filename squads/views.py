@@ -124,6 +124,14 @@ def squad_update(request, slug=None):
             subject.save()
         return HttpResponseRedirect(instance.get_update_url())
 
+    time_periods = school.time_periods.all()
+    days = Day.objects.all()
+    cells = school.school_cells.all()
+    if len(cells) < len(days) * len(time_periods):
+        for day in days:
+            for timep in time_periods:
+                new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
+
     context = {
         "instance": instance,
         "form":form,
@@ -136,6 +144,8 @@ def squad_update(request, slug=None):
         "is_director":is_profi(profile, 'Director'),
         "school_money":school.money,
         "offices":school.school_offices.all(),        
+        'time_periods':time_periods,
+        'days':days,
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -274,7 +284,6 @@ def add_student(request):
     return JsonResponse(data)
 
 def remove_student_from_squad(student, squad):
-    print('##########')
     squad.students.remove(student)
     for subject in squad.subjects.all():
         subject.students.remove(student)
@@ -284,7 +293,6 @@ def remove_student_from_squad(student, squad):
         remove_person_from_lecture(lecture, student)
         lecture.save()
     squad.squad_attendances.filter(student=student).delete()
-    print('##########')
 
 def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     today = int(timezone.now().strftime('%w'))
@@ -396,6 +404,162 @@ def change_office(request, id=None):
             squad.office = office
             change_lecture_options(squad, 'office', office, old_office)
         squad.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+# **************************************************************************************
+
+
+def squad_schedule(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    squad = Squad.objects.get(id = id)
+    school = squad.school
+    is_in_school(profile, school)
+    res = []
+    for timep in school.time_periods.all():
+        line = []
+        for cell in timep.time_cell.all():
+            lectures = []
+            for lecture in cell.lectures.filter(squad = squad):
+                if lecture.subject in squad.subjects.all():
+                    cabinet='каб.'
+                    cabinet_id = '-1'
+                    if lecture.cabinet:
+                        cabinet = lecture.cabinet.title
+                        cabinet_id = lecture.cabinet.id
+                    office_cabs = [[cabinet_id, cabinet]]
+                    if lecture.office:
+                        for cab in lecture.office.cabinets.all():
+                            if cab.id != cabinet_id:
+                                office_cabs.append([cab.id, cab.title])
+                    lectures.append([lecture.id, lecture.subject.title, lecture.subject.id, cabinet, cabinet_id, office_cabs])
+            line.append([cell.id, lectures])
+        res.append([timep.start + '-' + timep.end, line])
+
+    data = {
+        'calendar':res
+    }
+    return JsonResponse(data)
+
+def subject_list(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    squad = Squad.objects.get(id = id)
+    school = squad.school
+    is_in_school(profile, school)
+    res = []
+    res2 = []
+    for subject in school.school_subjects.all():
+        if not subject in squad.subjects.all():
+            res.append([subject.id, [subject.title]])
+        else:
+            res2.append([subject.id, [subject.title]])
+    data = {
+        'courses_in_group':res2,
+        'courses_not_in_group':res,
+    }
+    return JsonResponse(data)
+
+def change_schedule(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    squad = Squad.objects.get(id = id)
+    school = squad.school
+    is_in_school(profile, school)
+    school.new_schedule = True
+    school.save()
+
+    if request.GET.get('subject_id') and request.GET.get('cell_id') and request.GET.get('old_cell'):
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
+        subject_students = subject.students.all()
+        cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
+        if request.GET.get('old_cell') == 'none':
+            if len(Lecture.objects.filter(squad=squad,subject=subject,cell=cell)) == 0:
+                lecture = Lecture.objects.create(
+                    squad=squad,
+                    subject=subject,
+                    cell=cell, 
+                    school=school,
+                    day=cell.day,
+                    office=squad.office,
+                    category=subject.category,
+                    age=subject.age)
+                lecture.people.add(*subject_students)
+                if squad.teacher:
+                    lecture.people.add(squad.teacher)
+        else:
+            old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
+            lecture = Lecture.objects.get(squad=squad,subject=subject,cell=old_cell)
+            if len(Lecture.objects.filter(squad=squad,subject=subject,cell=cell)) == 0:
+                lecture.cell = cell
+                lecture.day = cell.day
+                lecture.save()
+            else:
+                lecture.delete()
+        squad.save()
+
+    data = {
+    }
+    return JsonResponse(data)
+
+def add_subject(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('subject_id') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
+        school = squad.school
+        is_in_school(profile, school)
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
+        squad.subjects.add(subject)
+        squad_students = squad.students.all()
+        subject.students.add(*squad_students)
+        if squad.teacher:
+            subject.teachers.add(squad.teacher)
+    data = {
+    }
+    return JsonResponse(data)
+
+def delete_subject(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('subject_id') and request.GET.get('squad_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
+        school = squad.school
+        is_in_school(profile, school)
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
+        squad.subjects.remove(subject)
+        squad_students = subject.students.all()
+        subject.students.remove(*squad_students)
+        subject.teachers.remove(squad.teacher)
+    data = {
+    }
+    return JsonResponse(data)
+        
+def delete_lesson(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('lecture_id'):
+        squad = Squad.objects.get(id = id)
+        school = squad.school
+        is_in_school(profile, school)
+        lecture = squad.squad_lectures.get(id=int(request.GET.get('lecture_id')))
+        lecture.delete()
+    data = {
+    }
+    return JsonResponse(data)
+        
+def change_lecture_cabinet(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('cabinet_id') and request.GET.get('lecture_id'):
+        lecture = Lecture.objects.get(id=int(request.GET.get('lecture_id')))
+        school = lecture.school
+        is_in_school(profile, school)        
+        cabinet = Cabinet.objects.get(id=int(request.GET.get('cabinet_id')))
+        lecture.cabinet = cabinet
+        lecture.save()
     data = {
     }
     return JsonResponse(data)

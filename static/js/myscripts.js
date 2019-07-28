@@ -218,6 +218,45 @@ $(document).ready(function () {
             $('.reg_fill_all').show()
         }
     });
+    $('.update_pswd-btn').click(function(e) {
+        url = '/api/update_pswd/'
+        mail = $('.update_pswd_mail').val()
+        $.ajax({
+            url: url,
+            data: {
+                'mail':mail,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.wrong_mail_update_pswd').hide()
+                    $('.ok_update_pswd').show()
+                }
+                else{
+                    $('.wrong_mail_update_pswd').show()
+                    $('.ok_update_pswd').hide()
+                }
+            }
+        })        
+    });
+    $('.reset_pswd').click(function(e) {
+        url = '/api/reset_pswrd/'
+        password1 = $('.reset_password1').val()
+        password2 = $('.reset_password2').val()
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'password1':password1,
+                'password2':password2,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    });
     $('.show_free_cards').click(function(e) {
         url = $(this).attr('url')
         checked = $(this).prop('checked')
@@ -1231,21 +1270,6 @@ $(document).ready(function () {
             });
         }
     });
-    $(document).on("click", '.delete_subject_lesson', function () {
-        console.log('bb')
-        url = $('.delete_lesson_data').attr('url')
-        id = $(this).attr('id')
-        $.ajax({
-            url: url,
-            data: {
-                'lecture_id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('#subject_lesson' + id).hide('fast');
-            }
-        })        
-    });    
     $(document).on("click", '.change_task_text', function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")

@@ -78,6 +78,19 @@ def hislessons(request):
     }
     return render(request, "profile/classwork.html", context)
 
+def reset_pswrd_view(request):
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        return redirect(profile.get_absolute_url())
+    pid = False
+    if request.GET.get('id'):
+        profile = Profile.objects.get(id=int(request.GET.get('id')))
+        pid = profile.id
+    context = {
+        "pid":pid,
+    }
+    return render(request, "profile/reset_pswd.html", context)
+
 def moderator(request):
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
@@ -182,21 +195,49 @@ def register_view(request):
         'res':res,
     }
     return JsonResponse(data)
-from django.shortcuts import (render_to_response)
-from django.template import RequestContext
 
-def page_not_found(request, ex):
-    print('eeeeeeerrrrrroooorr1')
-    return render(request, "errr.html")
-def bad_request(request, ex):
-    print('eeeeeeerrrrrroooorr2')
-    return render(request, "errr.html")
-def permission_denied(request, ex):
-    print('eeeeeeerrrrrroooorr3')
-    return render(request, "errr.html")
-def server_error(request):
-    print('eeeeeeerrrrrroooorr4')
-    return render(request, "errr.html")
+def update_pswd(request):
+    ok = False
+    if request.GET.get('mail'):
+        found = False
+        if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
+            profile = Profile.objects.filter(mail=request.GET.get('mail'))[0]
+            found = True
+        if found:
+            url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/reset_pswrd_view/?id='+str(profile.id)
+            text = "Здравствуйте "+profile.first_name+ "!<br><br>Чтобы поменять пароль пройдите по ссылке: <a href='"+url+"'>восстановить пароль</a>"
+            html_content = text+ender
+            try:
+                print('send_email')
+                send_email("Pinocchio.kz восстановление пароля", html_content, [request.GET.get('mail')])
+                print('send_email')
+                ok = True
+            except Exception as e:
+                ok = False
+    data = {
+        'ok':ok,
+    }
+    return JsonResponse(data)
+
+def reset_pswrd(request):
+    ok = False
+    if request.GET.get('id') and request.GET.get('password1') and request.GET.get('password2'):
+        if request.GET.get('password1') == request.GET.get('password2'):
+            profile = Profile.objects.get(id=int(request.GET.get('id')))
+            user = profile.user
+            user.set_password(request.GET.get('password1'))
+            user.save()
+            ok = True
+            print(profile.first_name)
+            user = authenticate(username=str(user.username), password=str(request.GET.get('password1')))
+            try:
+                login(request, user)
+            except Exception as e:
+                res = 'error' 
+    data = {
+        'ok':ok,
+    }
+    return JsonResponse(data)
 
 def login_social(request):
     if request.GET.get('status'):
@@ -513,6 +554,16 @@ def get_phone(request):
         return JsonResponse(data)
     else:
         return 0
+
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+def handler404(request, exception):
+    data = {}
+    return render(request,'errr.html', data)
+
+def error_500(request):
+    data = {}
+    return render(request,'errr.html', data)
 
 def adilmed(request):
     print(request.GET)

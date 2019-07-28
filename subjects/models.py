@@ -118,15 +118,6 @@ class Subject(models.Model):
         return reverse("subjects:set_time_url")
     def get_markdown(self):
         return mark_safe(markdown(self.content))
-    def change_schedule_url(self):
-        return reverse("subjects:change_schedule_url", kwargs={"id": self.id})
-    def delete_squad_url(self):
-        return reverse("subjects:delete_squad_url")
-
-    def subject_schedule_url(self):
-        return reverse("subjects:subject_schedule_url",kwargs={"id": self.id})
-    def squad_list_url(self):
-        return reverse("subjects:squad_list",kwargs={"id": self.id})    
         
     @property
     def get_content_type(self):
@@ -135,16 +126,10 @@ class Subject(models.Model):
         return content_type
     def add_paper_url(self):
         return reverse("subjects:add_paper_url")        
-    def add_squad_url(self):
-        return reverse("subjects:add_squad_url")   
     def change_category(self):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
     def change_age(self):
         return reverse("subjects:change_age",kwargs={"id": self.id})       
-    def delete_lesson_url(self):
-        return reverse("subjects:delete_lesson_url",kwargs={"id": self.id})       
-    def change_lecture_cabinet(self):
-        return reverse("subjects:change_lecture_cabinet")       
 
 def create_slug(instance, new_slug=None):
     if len(Subject.objects.all()) > 0:
