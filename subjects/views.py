@@ -336,6 +336,6 @@ def change_lecture_options(subject, option, objectt, old_object):
             lecture.age = objectt
             lecture.save()
     if option == 'office':
-        for lecture in subject.subj**ect_lectures.all():
+        for lecture in subject.subject_lectures.all():
             lecture.office = objectt
             lecture.save()
