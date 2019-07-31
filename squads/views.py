@@ -109,7 +109,7 @@ def squad_update(request, slug=None):
         instance.start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
         instance.end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
         instance.save()
-    if request.POST: 
+    if request.POST:
         if len(request.FILES) > 0:
             if 'squad_banner' in request.FILES:
                 file = request.FILES['squad_banner']
@@ -132,13 +132,26 @@ def squad_update(request, slug=None):
             for timep in time_periods:
                 new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
 
+    free_students = []
+    i = 0
+    qs = school.people.filter(is_student=True).exclude(squads=instance)
+    number_in_page = 27
+    for student in qs:
+        free_students.append(student)
+        i += 1
+        if i == number_in_page:
+            break
+    if len(qs) % number_in_page == 0:
+        number_of_pages = int(len(qs)/number_in_page)
+    else:
+        number_of_pages = int(len(qs)/number_in_page) + 1
     context = {
         "instance": instance,
         "form":form,
         "profile":profile,
         "all_teachers":all_teachers(school),
         "squad_students":instance.students.all(),
-        "all_students":school.people.filter(is_student=True).exclude(squads=instance),
+        "all_students":free_students,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -146,6 +159,7 @@ def squad_update(request, slug=None):
         "offices":school.school_offices.all(),        
         'time_periods':time_periods,
         'days':days,
+        'number_of_pages':number_of_pages,
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -561,5 +575,67 @@ def change_lecture_cabinet(request):
         lecture.cabinet = cabinet
         lecture.save()
     data = {
+    }
+    return JsonResponse(data)
+
+def get_page_students(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    squad = Squad.objects.get(id = id)
+    school = squad.school
+    is_in_school(profile, school)
+    if request.GET.get('need_page'):
+        need_page = int(request.GET.get('need_page'))
+        free_students = []
+        i = 0
+        qs = school.people.filter(is_student=True).exclude(squads=squad)
+        lenqs = len(qs)
+        number_in_page = 27
+        for x in range((need_page-1)*number_in_page,(need_page)*number_in_page):
+            if x >= lenqs:
+                break
+            student = qs[x]
+            if student.image:
+                image = student.image.url
+            else:
+                image = '/static/images/nophoto.png'
+            free_students.append([student.id, student.first_name, image])
+    data = {
+        "all_students":free_students
+    }
+    return JsonResponse(data)
+
+from django.contrib.postgres.search import TrigramSimilarity
+def hint_students_group(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    squad = Squad.objects.get(id = id)
+    school = squad.school
+    is_in_school(profile, school)
+    res = []
+    if request.GET.get('text'):
+        text = request.GET.get('text')
+        if len(text) > 0:
+            i = 0
+            kef = 1
+            if len(text) > 4:
+                kef = 4            
+            similarity=TrigramSimilarity('first_name', text)
+            students = school.people.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            for student in students:
+                if i >= 4:
+                    break
+                if student.image:
+                    image = student.image.url
+                else:
+                    image = '/static/images/nophoto.png'
+                if student in squad.students.all():
+                    is_in = True
+                else:
+                    is_in = False
+                res.append([student.id, student.first_name, image, is_in])
+                i += 1
+    data = {
+        "res":res
     }
     return JsonResponse(data)

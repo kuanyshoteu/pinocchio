@@ -1,6 +1,37 @@
 body{
   min-height: 100% !important;
 }
+.search-group-img{
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+}
+.search_group_add{
+  height: 23px;padding: 6px 10px !important;
+}
+.search-group-name{
+  margin-left: 10px;line-height: 30px;
+  width: 220px;
+}
+.hint_students_group{
+  position: absolute !important;
+  z-index: 1000;
+  background-color: #f5f5f5 !important;
+  margin-top: 3px !important;
+  width: 300px;
+  padding: 7px !important;
+}
+.search_group_link{
+  display: flex;
+}
+.search_students_group{
+  display: inline-block !important;
+  width: 300px !important;margin-top: 14px !important;
+  height: 30px !important;
+}
+.add_student{
+  float: right;padding: 6px 10px !important;height: 23px;
+}
 .new_money_title{
   height: 33px !important;
 }

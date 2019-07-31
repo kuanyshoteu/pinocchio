@@ -5,7 +5,7 @@ $(document).ready(function () {
         slogan = $('.new_school_slogan').val();
         name = $('.new_school_name').val();
         phone = $('.new_school_phone').val();
-        password = $('.new_school_pswd').val();
+        $('.success_created').hide()
         $.ajax({
             url: url,
             data: {
@@ -13,11 +13,17 @@ $(document).ready(function () {
                 'slogan':slogan,
                 'name':name,
                 'phone':phone,
-                'password':password,
             },
             dataType: 'json',
             success: function (data) {
-                location.reload()
+                if (data.ok) {
+                    $('.success_created').show()
+                    title = $('.new_school_title').val('');
+                    slogan = $('.new_school_slogan').val('');
+                    name = $('.new_school_name').val('');
+                    phone = $('.new_school_phone').val('');
+                    $('.director_password').text(data.password)
+                }
             }
         })
     })

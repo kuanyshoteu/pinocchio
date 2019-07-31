@@ -17,10 +17,12 @@
                     <textarea class="new_school_slogan" placeholder="Описание школы"></textarea>
                     <textarea class="new_school_name" placeholder="Имя директора"></textarea>
                     <textarea class="new_school_phone" placeholder="Номер директора"></textarea>
-                    <input class="new_school_pswd" type="password" placeholder="Пароль директора">
                     <br><br>
                     <a class="ui button green create_school" url="{% url 'main:create_school' %}">Создать школу</a>
                 </form>
+            </div>
+            <div class="highlight success_created" style="width: 50%;margin: 15px auto;display: none;">
+                Школа создана, пароль директора: <b class="director_password" style="color: #fff;"></b>
             </div>
         </div>
         <div class="one wide column">

@@ -107,9 +107,11 @@ from rest_framework import authentication, permissions
 from django.http import JsonResponse
 
 def create_school(request):
+    ok = False
+    password = False
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
-    if request.GET.get('title') and request.GET.get('slogan') and request.GET.get('password') and request.GET.get('name') and request.GET.get('phone'):
+    if request.GET.get('title') and request.GET.get('slogan') and request.GET.get('name') and request.GET.get('phone'):
         school = School.objects.create(
             title=request.GET.get('title'),
             slogan=request.GET.get('slogan')
@@ -117,10 +119,11 @@ def create_school(request):
         school.save()
         new_id = str(User.objects.order_by("id").last().id + 1)
         new_name = request.GET.get('name').replace(' ', '')+new_id
-        user = User.objects.create(username=new_name, password=request.GET.get('password'))
-        user.set_password(request.GET.get('password'))
+        password = random_password()
+        user = User.objects.create(username=new_name, password=password)
+        user.set_password(password)
         user.save()
-        user2 = authenticate(username = str(user.username), password=str(request.GET.get('password')))
+        user2 = authenticate(username = str(user.username), password=password)
         profile = Profile.objects.get(user = user)
         profile.first_name = request.GET.get('name')
         profile.phone = request.GET.get('phone')
@@ -135,8 +138,10 @@ def create_school(request):
         profile.skill = skill
         profile.save()
         profile.schools.add(school)
-        return redirect(school.get_absolute_url())
+        ok = True
     data = {
+        "ok":ok,
+        "password":password,
     }
     return JsonResponse(data)
 
