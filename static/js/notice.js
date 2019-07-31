@@ -44,6 +44,15 @@ $('.rename_folder_form').click(function(e){
 $('.rename_lesson_form').click(function(e){
     e.stopPropagation();
 });
+$('.hint_students_group').click(function(e){
+    e.stopPropagation();
+});
+$('.search_group_show').click(function(e){
+    e.stopPropagation();
+});
+$('.search_students_group').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
     $('.notice-bar').hide();
     var div = $('.notice');
@@ -56,5 +65,5 @@ $("body").click(function(e){
     $('.lesson_features').hide();
     $('.doc_features').hide();
     $('.rename_folder_form').hide();
-    $('.rename_lesson_form').hide();
+    $('.hint_students_group').hide();
 });

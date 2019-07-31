@@ -187,13 +187,13 @@
                                 <span style="line-height: 54px;">Остальные студенты школы:</span>
                                 <form class="ui form no_margin" style="display: inline-block;float: right;right: 6%;">
                                     <input type="text" class="search_students_group" url="{{ instance.hint_students_group }}" placeholder="Введите имя или телефон">
-                                    <a class="ui button mini blue" style="margin-top: 14px;"><i class="icon search" style="color: #fff;"></i> Найти</a>
+                                    <a class="ui button mini blue search_group_show" style="margin-top: 14px;"><i class="icon search" style="color: #fff;"></i> Найти</a>
                                     <div class="ui segment hint_students_group" style="display: none;">
                                     </div>
                                 </form>
                             </div>
                             <div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
-                                <div class="ui grid stackable not_group_students" style="margin-top: 0;min-height: 486px;">
+                                <div class="ui grid stackable not_group_students" style="margin-top: 0;">
 									{% for student in all_students %}
 									<div class="five wide column" style="padding:5px;">
 										<div class="test_variant2">
@@ -212,6 +212,7 @@
 		                            {% endfor %}
 			        			</div>
                                 <div style="text-align: center;font-size: 15px;margin: 25px;">
+                                    {% if number_of_pages > 1 %}
                                     <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('prev')" id="prev"><i class="icon chevron left" style="color: #fff;"></i>Налево</a>
                                     <div class="page_numbers" style="min-width: 275px;display: inline-block;">
                                         <a class="ui button mini green get_page_students page1" onclick="get_page_students('1')" id="1">1</a>
@@ -221,6 +222,7 @@
                                     </div>
                                     <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('next')" id="next">Направо<i class="icon chevron right" style="color: #fff;"></i></a>
                                     <span style="display: none;" length="{{ number_of_pages }}" url="{{ instance.get_page_students }}" class="current_page" number="1"></span>
+                                    {% endif %}
                                 </div>
                                 <div style="text-align: center;">
                                     <input type='submit' class='ui button blue tiny' value='Сохранить' />
