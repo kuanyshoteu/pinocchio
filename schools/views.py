@@ -17,7 +17,7 @@ from squads.models import Squad
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
 from papers.models import *
 from library.models import Folder
-from accounts.models import Profile, Corruption, Zaiavka
+from accounts.models import Profile
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,

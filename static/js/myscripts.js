@@ -1,4 +1,26 @@
 $(document).ready(function () {
+    $('.make_zaiavka').click(function(e) {
+        if ($(this).attr('status') == 'auth') {
+            url = '/api/make_zaiavka/'
+            id = $(this).attr('id')
+            $.ajax({
+                url: url,
+                data: {
+                    "id":id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.ok) {
+                        $(this).removeClass('green')
+                        $(this).text('Заявка оставлена')
+                    }
+                }
+            })
+        }
+        else{
+            $('#zaiavka_modal').modal('show')            
+        }
+    })
     $('.create_school').click(function(e) {
         url = $(this).attr('url');
         title = $('.new_school_title').val();

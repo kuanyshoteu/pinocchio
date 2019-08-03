@@ -172,26 +172,9 @@ class PaymentHistory(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-class Zaiavka(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='zaiavkas') 
-    first_name = models.TextField()
-    mail = models.TextField(default = '')
-    phone = models.TextField(blank = True,null = True, default = '')
-    timestamp = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        ordering = ['-timestamp']
-    
-    def get_api_deletezaiavka_url(self):
-        return reverse("accounts:deletezaiavka-api-toggle", kwargs={"id": self.id})        
-
 def pre_save_course_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = create_slug(instance)
-
-class Corruption(models.Model):
-    text = models.TextField(default='')
-    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='his_messages')
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='corruptions')
 
 class MissLesson(models.Model):
     profile = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE) 

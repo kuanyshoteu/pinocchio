@@ -27,26 +27,6 @@ class JobCategoryAdmin(admin.ModelAdmin):
         model = JobCategory
 admin.site.register(JobCategory, JobCategoryAdmin)
 
-class ZaiavkaModelAdmin(admin.ModelAdmin):
-    list_display = ["first_name", "id", "phone"]
-    list_display_links = ["first_name"]
-    list_filter = ["first_name"]
-    search_fields = ["first_name", "phone"]
-    class Meta:
-        model = Zaiavka
-
-admin.site.register(Zaiavka, ZaiavkaModelAdmin)
-
-class CorruptionAdmin(admin.ModelAdmin):
-    list_display = ["text", "id",]
-    list_display_links = ["id"]
-    list_filter = ["text"]
-    search_fields = ["text"]
-    class Meta:
-        model = Corruption
-
-admin.site.register(Corruption, CorruptionAdmin)
-
 class MissLessonAdmin(admin.ModelAdmin):
     list_display = ["profile", "text",]
     list_display_links = ["profile"]

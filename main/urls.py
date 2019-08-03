@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^reset_pswrd_view/$', reset_pswrd_view, name='reset_pswrd_view'),
     url(r'^map/$', map_view, name='map'),
     url(r'^api/change_subject_url/$', ChangeSubject, name='change_subject_url'),    
-    url(r'^save_zaiavka_url/$', SaveZaiavka, name='save_zaiavka_url'),    
     url(r'^lesson/$', hislessons, name='hislessons'),
     url(r'^search/$', search, name='search'),
     url(r'^api/map_search/$', map_search, name='map_search'),
@@ -24,4 +23,5 @@ urlpatterns = [
     url(r'^notifications/$', get_notifications, name='get_notifications'),
     url(r'^moderator/$', moderator, name='moderator'),
     url(r'^api/create_school/$', create_school, name='create_school'),
+    url(r'^api/make_zaiavka/$', make_zaiavka, name='make_zaiavka'),
 ]

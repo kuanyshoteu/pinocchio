@@ -117,6 +117,8 @@ def create_school(request):
             slogan=request.GET.get('slogan')
             )
         school.save()
+        for column in CRMColumn.objects.all():
+            school.crm_columns.add(column)
         new_id = str(User.objects.order_by("id").last().id + 1)
         new_name = request.GET.get('name').replace(' ', '')+new_id
         password = random_password()
@@ -447,16 +449,6 @@ def ChangeSubject(request):
     }
     return JsonResponse(data)
 
-def SaveZaiavka(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_teachers(profile)
-    if request.GET.get('name'):
-        if request.GET.get('phone'):
-            zaiavka = Zaiavka.objects.create(name=request.GET.get('name'), phone=request.GET.get('phone'))
-    data = {
-    }
-    return JsonResponse(data)
-
 def get_notifications(request):
     profile = Profile.objects.get(user = request.user.id)
     timezone.now()
@@ -560,6 +552,47 @@ def get_phone(request):
     else:
         return 0
 
+def make_zaiavka(request):
+    ok = False
+    print('rr')
+    if request.GET.get('id'):
+        school = School.objects.get(id=int(request.GET.get('id')))
+        if request.user.is_authenticated:
+            profile = get_profile(request)
+            saved = True
+            name = profile.first_name
+            phone = profile.phone
+            mail = profile.mail
+        else:
+            if request.GET.get('name'):
+                if request.GET.get('phone'):
+                    profile = None
+                    saved = False
+                    name = request.GET.get('name')
+                    phone = request.GET.get('phone')
+                    mail = ''
+
+        card = school.crm_cards.create(
+            name = name,
+            phone = phone,
+            mail = mail,
+            column = CRMColumn.objects.get(id=1),
+            school = school,
+            card_user = profile,
+            saved = saved,
+        )
+        card.save()
+        hist = CRMCardHistory.objects.create(
+            card = card,
+            edit = '***Создание карточки***',
+            )
+        hist.save()
+        ok = True
+    data = {
+        "ok":ok,
+    }
+    return JsonResponse(data)
+
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 def handler404(request, exception):
@@ -576,4 +609,3 @@ def adilmed(request):
         send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['akuir01@inbox.ru'])
     data={}
     return JsonResponse(data)
-

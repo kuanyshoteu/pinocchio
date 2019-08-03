@@ -35,7 +35,9 @@
       <div class="schoolLanding__content-headerLeft">
         <div class="organization__info-top-part">
           <div class="organization__info-left-part">
-            <div style="background: url({% if school.image_icon %}'{{ school.image_icon.url }}'{% else %}{% static 'images/nophoto.png' %}{% endif %}); background-position: center; background-size: contain;background-color: #fff;" class="organization__info-photo"></div>
+            {% if school.image_icon %}
+            <div style="background: url('{{ school.image_icon.url }}'); background-position: center; background-size: contain;background-color: #fff;" class="organization__info-photo"></div>
+            {% endif %}
             <div class="organization__info-main">
               <h2 class="organization__info-title">{{ school.title }}</h2>
               <p class="organization__info-subtitle">{{ school.slogan }}</p>
@@ -43,7 +45,7 @@
                 <span class="organization__info-buttons-call">
                   <i class="icon phone"></i>
                 </span>
-                {% for phone in school.phones %}{{phone}} {% if forloop.counter < school.phones|length %},{% endif %}{% endfor %}
+                {% for phone in school.phones %}{{ phone }} {% if forloop.counter < school.phones|length %},{% endif %}{% endfor %}
               </p>
             </div>
           </div>
@@ -89,7 +91,21 @@
                 {% endfor %}
               </span>
             </div>
-            <a class="organization__info-button">Записаться</a>
+            <a class="ui button green make_zaiavka" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}">Оставить заявку</a>
+            <div class="ui modal" id="zaiavka_modal">
+                <i class="close icon"></i>
+                <div class="content">
+                    <form method='POST' style="width: 40%;margin: 0 auto;text-align: center;" action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+                        <b>Имя</b>
+                        <input class="username" name="username" placeholder="Введите имя" style="margin-bottom: 15px;margin-top: 10px;">
+                        <b>Телефон</b>
+                        <input class="username" name="username" placeholder="Введите телефон" style="margin-bottom: 15px;margin-top: 10px;">
+                        <div style="text-align: center;">
+                            <input class="ui button green login-btn full-w" value="Оставить заявку" type="submit" onclick="return false">
+                        </div>
+                    </form>
+                </div>
+            </div>            
           </div>
         </div>
       </div>

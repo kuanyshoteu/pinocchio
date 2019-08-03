@@ -128,7 +128,10 @@ def subject_update(request, slug=None):
             if 'subject_icon' in request.FILES:
                 file = request.FILES['subject_icon']
                 instance.image_icon = file
-        get_number_of_materials = int(request.POST.get('number_of_materials'))
+        if request.POST.get('number_of_materials') == "":
+            get_number_of_materials = 0
+        else:
+            get_number_of_materials = int(request.POST.get('number_of_materials'))
         if instance.number_of_materials < get_number_of_materials:
             if get_number_of_materials < 100:
                 for i in range(0, get_number_of_materials - instance.number_of_materials):
