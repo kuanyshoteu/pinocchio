@@ -72,6 +72,7 @@ class Profile(models.Model):
     coins = models.IntegerField(default=0)
     mail = models.TextField(default = '')
     phone = models.TextField(blank = True,null = True, default = '')
+    extra_phone = models.TextField(blank = True,null = True, default = '')
     image = models.ImageField(upload_to=upload_location, 
             null=True, 
             blank=True, 
@@ -207,6 +208,7 @@ class CRMCard(models.Model):
     column = models.ForeignKey(CRMColumn, null=True, on_delete = models.CASCADE, related_name='cards')
     name = models.CharField(max_length=250)
     phone = models.CharField(max_length=250)
+    extra_phone = models.CharField(max_length=250, default="")
     mail = models.CharField(max_length=250)
     comments = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)

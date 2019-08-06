@@ -207,7 +207,7 @@ body{
 .card_comment-textarea{
   min-width: 100px !important;
   word-break: break-all;
-  min-height: 85px !important;
+  min-height: 65px !important;
   margin-bottom: 0 !important;
   padding: 10px;
   border: 1px solid lightgrey;

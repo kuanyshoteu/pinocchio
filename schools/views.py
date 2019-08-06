@@ -797,12 +797,15 @@ def edit_card(request):
             edit = edit + "Имя: " + card.name + " -> " + request.GET.get('name') + "; "
         if card.phone != request.GET.get('phone'):
             edit = edit + "Номер: " + card.phone + " -> " + request.GET.get('phone') + "; "
+        if card.extra_phone != request.GET.get('extra_phone'):
+            edit = edit + "Дополнительный номер: " + card.extra_phone + " -> " + request.GET.get('extra_phone') + "; "
         if card.mail != request.GET.get('mail'):
             edit = edit + "Почта: " + card.mail + " -> " + request.GET.get('mail') + "; "
         if card.comments != request.GET.get('comment'):
             edit = edit + "Коммент: " + card.comments + " -> " + request.GET.get('comment') + "; "
         card.name = request.GET.get('name')
         card.phone = request.GET.get('phone')
+        card.extra_phone = request.GET.get('extra_phone')
         card.mail = request.GET.get('mail')
         card.comments = request.GET.get('comment')
         crnt_tag = ''
@@ -1028,12 +1031,12 @@ def delete_card(request):
     school = profile.schools.first()
     if request.GET.get('id'):
         card = school.crm_cards.get(id=int(request.GET.get('id')))
-        if not card.saved:
-            if not card.was_called:
+        if not card.was_called:
+            if card.author_profile:
                 skill = card.author_profile.skill
                 skill.need_actions -= 1
                 skill.save()
-            card.delete()
+        card.delete()
     data = {
     }
     return JsonResponse(data)

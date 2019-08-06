@@ -29,8 +29,8 @@ $(document).ready(function () {
             }
             if (is_search && text[text.length - 1] != '!') {
                 var d = document.getElementById('card_comment-helper'+id);
-                d.style.left = getSelectionCoords().x - 600 +'px';
-                d.style.top = getSelectionCoords().y -170 +'px';        
+                d.style.left = getSelectionCoords().x - 250 +'px';
+                d.style.top = getSelectionCoords().y -300 +'px';        
                 $('#card_comment-helper'+id).show();
                 var url = $(this).attr('url')                    
                 $.ajax({

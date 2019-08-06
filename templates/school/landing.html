@@ -91,17 +91,23 @@
                 {% endfor %}
               </span>
             </div>
-            <a class="ui button green make_zaiavka" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}">Оставить заявку</a>
+            <a class="ui button green make_zaiavka make_zaiavka-1" course="-1" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}">Оставить заявку</a>
+            <div class="ui label ok_zaiavka-1" style="display: none;">
+                <i class="check icon green"></i> Заявка оставлена
+            </div>
             <div class="ui modal" id="zaiavka_modal">
                 <i class="close icon"></i>
                 <div class="content">
-                    <form method='POST' style="width: 40%;margin: 0 auto;text-align: center;" action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+                    <form method='POST' style="width: 40%;margin: 0 auto;text-align: center;" action='' enctype='multipart/form-data' class="ui form">{% csrf_token %}
                         <b>Имя</b>
-                        <input class="username" name="username" placeholder="Введите имя" style="margin-bottom: 15px;margin-top: 10px;">
+                        <input class="zaiavka_name" placeholder="Введите имя" style="margin-bottom: 15px;margin-top: 10px;">
                         <b>Телефон</b>
-                        <input class="username" name="username" placeholder="Введите телефон" style="margin-bottom: 15px;margin-top: 10px;">
+                        <input class="zaiavka_phone" placeholder="Введите телефон" style="margin-bottom: 15px;margin-top: 10px;">
                         <div style="text-align: center;">
-                            <input class="ui button green login-btn full-w" value="Оставить заявку" type="submit" onclick="return false">
+                            <input class="ui button green make_zaiavka_new" course="" id="{{ school.id }}" value="Оставить заявку" type="submit" onclick="return false">
+                        </div>
+                        <div class="ui label ok_zaiavka_new" style="display: none;">
+                            <i class="check icon green"></i> Заявка оставлена
                         </div>
                     </form>
                 </div>
@@ -135,13 +141,15 @@
       <section class="schoolLanding__content-services__item category{{ course.category.id }} categoryall">
         <div class="schoolLanding__content-services__item-left">
           <h2 class="schoolLanding__content-services__item-title">{{ course.title }}</h2>
-          <span class="schoolLanding__content-services__item-time">{{ course.content }}</span>
+          <div class="schoolLanding__content-services__item-time">{{ course.content }}</div>
+          <div class="schoolLanding__content-services__item-price">{{ course.cost }} тенге</div>
         </div>
         <div class="schoolLanding__content-services__item-right">
-          <span class="schoolLanding__content-services__item-price">{{ course.cost }} тенге</span>
-          <span class="schoolLanding__content-services__item-icon">
-            <i class="icon angle right"></i>
-          </span>
+          <a class="ui right labeled icon button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">Оставить заявку на курс <i class="right arrow icon" style="color: #fff;"></i></a>
+            <div class="ui label ok_zaiavka{{course.id}}" style="display: none;">
+                <i class="check icon green"></i> Заявка оставлена
+            </div>
+
         </div>
       </section>
       {% endfor %}

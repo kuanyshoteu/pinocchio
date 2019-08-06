@@ -1,5 +1,31 @@
 $(document).ready(function () {
+    $('.make_zaiavka_new').click(function(e) {
+        url = '/api/make_zaiavka/'
+        id = $(this).attr('id')
+        name = $('.zaiavka_name').val()
+        phone = $('.zaiavka_phone').val()
+        course = $(this).attr('course')
+        $.ajax({
+            url: url,
+            data: {
+                "id":id,
+                "name":name,
+                "phone":phone,
+                "course":course,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    console.log('ok')
+                    $('.make_zaiavka').hide()
+                    $('.ok_zaiavka').show()
+                    $('.ok_zaiavka_new').show()
+                }
+            }
+        })
+    })
     $('.make_zaiavka').click(function(e) {
+        course = $(this).attr('course')
         if ($(this).attr('status') == 'auth') {
             url = '/api/make_zaiavka/'
             id = $(this).attr('id')
@@ -7,18 +33,22 @@ $(document).ready(function () {
                 url: url,
                 data: {
                     "id":id,
+                    "course":course,
                 },
                 dataType: 'json',
                 success: function (data) {
                     if (data.ok) {
-                        $(this).removeClass('green')
-                        $(this).text('Заявка оставлена')
+                        $('.ok_zaiavka-1').show()
+                        $('.make_zaiavka-1').hide()
+                        $('.ok_zaiavka' + course).show()
+                        $('.make_zaiavka'+course).hide()
                     }
                 }
             })
         }
         else{
-            $('#zaiavka_modal').modal('show')            
+            $('#zaiavka_modal').modal('show')    
+            $('.make_zaiavka_new').attr('course', course)        
         }
     })
     $('.create_school').click(function(e) {

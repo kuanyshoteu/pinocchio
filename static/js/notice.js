@@ -53,6 +53,15 @@ $('.search_group_show').click(function(e){
 $('.search_students_group').click(function(e){
     e.stopPropagation();
 });
+$('.profile_links').click(function(e){
+    e.stopPropagation();
+});
+$('.profile_name').click(function(e){
+    e.stopPropagation();
+});
+$('.card_comment-textarea').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
     $('.notice-bar').hide();
     var div = $('.notice');
@@ -66,4 +75,6 @@ $("body").click(function(e){
     $('.doc_features').hide();
     $('.rename_folder_form').hide();
     $('.hint_students_group').hide();
+    $('.profile_links').hide()
+    $('.card_comment-helper').hide()
 });

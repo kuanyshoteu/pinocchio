@@ -484,12 +484,14 @@ def map_view(request):
     is_manager = False
     is_director = False
     profile = None
+    money = 0
     if request.user.is_authenticated:
         profile = get_profile(request)
         is_trener = is_profi(profile, 'Teacher')
         is_manager = is_profi(profile, 'Manager')
         is_director = is_profi(profile, 'Director')
-
+        if len(profile.schools.all()):
+            money = profile.schools.first().money
     context = {
         "profile":profile,
         "schools":EliteSchools.objects.first().schools.all(),
@@ -500,7 +502,7 @@ def map_view(request):
         "is_director":is_director, 
         "subjects":SubjectCategory.objects.all(),
         "ages":SubjectAge.objects.all(),
-        "school_money":profile.schools.first().money,
+        "school_money":money,
     }
     return render(request, "map.html", context)
 
@@ -554,9 +556,13 @@ def get_phone(request):
 
 def make_zaiavka(request):
     ok = False
-    print('rr')
-    if request.GET.get('id'):
+    if request.GET.get('id') and request.GET.get('course'):
         school = School.objects.get(id=int(request.GET.get('id')))
+        comment = ''
+        if request.GET.get('course') != '-1':
+            course = school.school_subjects.filter(id=int(request.GET.get('course')))
+            if len(course):
+                comment = 'Хочет на курс: "' + course[0].title + '"'
         if request.user.is_authenticated:
             profile = get_profile(request)
             saved = True
@@ -564,29 +570,34 @@ def make_zaiavka(request):
             phone = profile.phone
             mail = profile.mail
         else:
-            if request.GET.get('name'):
-                if request.GET.get('phone'):
-                    profile = None
-                    saved = False
-                    name = request.GET.get('name')
-                    phone = request.GET.get('phone')
-                    mail = ''
-
-        card = school.crm_cards.create(
-            name = name,
-            phone = phone,
-            mail = mail,
-            column = CRMColumn.objects.get(id=1),
-            school = school,
-            card_user = profile,
-            saved = saved,
-        )
-        card.save()
-        hist = CRMCardHistory.objects.create(
-            card = card,
-            edit = '***Создание карточки***',
+            if request.GET.get('name') and request.GET.get('phone'):
+                profile = None
+                saved = False
+                name = request.GET.get('name')
+                phone = request.GET.get('phone')
+                mail = ''
+        if len(school.crm_cards.filter(name=name, phone=phone)) > 0:
+            card = school.crm_cards.filter(name=name, phone=phone)[0]
+            if not comment in card.comments:
+                card.comments += ' ' + comment
+                card.save()
+        else:
+            card = school.crm_cards.create(
+                name = name,
+                phone = phone,
+                mail = mail,
+                column = CRMColumn.objects.get(id=1),
+                school = school,
+                card_user = profile,
+                saved = saved,
+                comments=comment,
             )
-        hist.save()
+            card.save()
+            hist = CRMCardHistory.objects.create(
+                card = card,
+                edit = '***Создание карточки***',
+                )
+            hist.save()
         ok = True
     data = {
         "ok":ok,

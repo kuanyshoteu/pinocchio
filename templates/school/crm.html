@@ -282,6 +282,7 @@
     function edit_card(id) {
         var name = $('.card_name' + id).val()
         var phone = $('.card_phone' + id).val()
+        var extra_phone = $('.card_phone_extra' + id).val()
         var mail = $('.card_mail' + id).val()
         var comment = $('.card_comment' + id).text()
         ok = false
@@ -297,6 +298,7 @@
                 data: {
                     'name':name,
                     'phone':phone,
+                    'extra_phone':extra_phone,
                     'mail':mail,
                     'comment':comment,
                     'id':id,

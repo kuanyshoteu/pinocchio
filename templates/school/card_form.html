@@ -1,4 +1,4 @@
-<div class="ui modal" style="margin-top: 10%;" id="card_form{{ card.id }}">
+<div class="ui modal" id="card_form{{ card.id }}">
     <i class="close icon"></i>
     <div class="content">
         <div class="card_head">
@@ -7,16 +7,23 @@
         <form class="ui form card_form_update_here" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             <span class="wrong_mail_error wrong_mail_error{{card.id}} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
             <div class="ui grid stackable card_form_update">
-                <div class="six wide column" style="padding-top: 5px;">
-                    <div style="height: 15px;"></div>
-                    <textarea class="card_name{{ card.id }}" placeholder="Имя">{{ card.name }}</textarea>
-                    <textarea class="card_phone{{ card.id }}" placeholder="Телефон">{{ card.phone }}</textarea>
-                    <textarea class="card_mail{{ card.id }}" placeholder="Почта">{{ card.mail }}</textarea>
+                <div class="eight wide column" style="padding-top: 5px;text-align: center;">
+                    <div style="height: 10px;"></div>
+                    <b>Имя:</b>
+                    <textarea class="card_name{{ card.id }}" style="margin-bottom: 8px;" placeholder="Имя">{{ card.name }}</textarea>
+                    <b>Телефон:</b>
+                    <textarea class="card_phone{{ card.id }}" style="margin-bottom: 8px;" placeholder="Телефон">{{ card.phone }}</textarea>
                 </div>
-                <div class="ten wide column" style="padding-top: 5px;">
-                    <div style="height: 14px;">
-                    </div>
-                    <div style="height: 85px;margin-bottom: 0;">
+                <div class="eight wide column" style="padding-top: 5px;text-align: center;">
+                    <div style="height: 10px;"></div>
+                    <b>Почта:</b>
+                    <textarea class="card_mail{{ card.id }}" style="margin-bottom: 8px;" placeholder="Почта">{{ card.mail }}</textarea>
+                    <i>Дополнительный телефон:</i>
+                    <textarea class="card_phone_extra{{ card.id }}" style="margin-bottom: 8px;" placeholder="Дополнительный телефон">{{ card.extra_phone }}</textarea>
+                </div>
+                <div class="sixteen wide column" style="padding-top: 5px;">
+                    <div style="height: 65px;margin-bottom: 0;">
+                        <b style="margin: 0 44%;">Комментарий:</b>
                         <div contenteditable="true" id="{{ card.id }}" class="card_comment-textarea card_comment{{ card.id }}"
                         placeholder="Комментарий" url="{{ card.call_helper }}" status="stop" position="0">{{ card.comments }}
                         </div>
@@ -28,7 +35,7 @@
                             <a class="card_comment-item ui button mini card{{ card.id }}helper5" id="{{ card.id }}"> </a><br>
                         </div>
                     </div>
-                    <div class="ui grid stackable" style="margin-top: 1rem;">
+                    <div class="ui grid stackable" style="margin-top: 30px;">
                         <div class="eight wide column" id="card_form-select">
                             <select {%if not card.was_called%}style="display: none"{%endif%} class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}">
                                 <option value="{{ card.action }}">{{ card.action }}</option>                                
@@ -67,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="sixteen wide column" style="text-align: center;">
+                <div class="sixteen wide column" style="text-align: center;margin-top: 15px;">
                     <div class="ui grid">
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
                             <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.0%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="0">Понедельник</a>

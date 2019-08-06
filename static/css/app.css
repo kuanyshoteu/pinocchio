@@ -41392,8 +41392,7 @@ i.map_worktime-icon {
   align-items: center;
 }
 .schoolLanding__content-services__item-price {
-  font-size: 1.3rem;
-  margin-right: 1rem;
+  margin-left: 20px;
 }
 .schoolLanding__content-services__item-icon {
   cursor: pointer;
