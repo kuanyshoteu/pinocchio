@@ -382,5 +382,8 @@ def money_spendd_percent_scnd(school, index):
     first = school.money_spendd[index-1][0]
     second = school.money_spendd[index-1][1]
     if first+second == 0:
-        return 0
-    return int(100 * second/(first+second))
+        res = 0
+    else:
+        res = int(100 * second/(first+second))
+    res += 5 
+    return res
