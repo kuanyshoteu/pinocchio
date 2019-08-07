@@ -58,7 +58,7 @@ INSTALLED_APPS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-# SECURE_SSL_REDIRECT = True # [1]
+SECURE_SSL_REDIRECT = True # [1]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -114,21 +114,21 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# import dj_database_url
-# DATABASES = {
-#     'default': dj_database_url.config('DATABASE_URL')
-# }
-
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tripleA',
-        'USER': 'admin',
-        'PASSWORD': '031196Kk',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
+    'default': dj_database_url.config('DATABASE_URL')
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'tripleA',
+#         'USER': 'admin',
+#         'PASSWORD': '031196Kk',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
