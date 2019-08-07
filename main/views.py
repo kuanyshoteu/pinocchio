@@ -213,10 +213,11 @@ def update_pswd(request):
         if found:
             url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/reset_pswrd_view/?id='+str(profile.id)
             text = "Здравствуйте "+profile.first_name+ "!<br><br>Чтобы поменять пароль пройдите по ссылке: <a href='"+url+"'>восстановить пароль</a>"
+            ender = " <br><br>С уважением, команда <a href='bilimtap.kz'>bilimtap.kz</a>"
             html_content = text+ender
             try:
                 print('send_email')
-                send_email("Pinocchio.kz восстановление пароля", html_content, [request.GET.get('mail')])
+                send_email("bilimtap.kz восстановление пароля", html_content, [request.GET.get('mail')])
                 print('send_email')
                 ok = True
             except Exception as e:

@@ -76,7 +76,7 @@ def account_view(request, user = None):
             skill.confirmation_time = timezone.now()
             skill.save()
             url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/confirm/?confirm='+profile.skill.confirmation_code
-            text = "Здравствуйте "+profile.first_name+ "!<br><br> Вы зарегестрировались на сайте Pinocchio.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
+            text = "Здравствуйте "+profile.first_name+ "!<br><br> Вы зарегестрировались на сайте bilimtap.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
             html_content = text + "<br><a href='"+url+"'>подтвердить</a>"
             try:
                 send_email("Подтверждение", html_content, [profile.mail])
