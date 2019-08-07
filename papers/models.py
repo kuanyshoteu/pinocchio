@@ -74,7 +74,7 @@ class Paper(models.Model):
         ordering = ['id']
     
 class Lesson(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='lessons') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='lessons') 
     title = models.CharField(max_length=250)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='lesson_author')
     is_homework = models.BooleanField(default=False)

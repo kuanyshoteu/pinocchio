@@ -220,6 +220,7 @@ class CRMCard(models.Model):
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
     hashtag_ids = ArrayField(models.IntegerField(null=True), default=list)
     hashtag_numbers = ArrayField(models.IntegerField(null=True), default=list)
+    premoney = models.IntegerField(default=0)
     class Meta:
         ordering = ['saved', '-timestamp']
     def call_helper(self):
