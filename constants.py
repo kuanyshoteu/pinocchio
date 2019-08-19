@@ -34,12 +34,12 @@ def send_hello_email(first_name, phone, mail, password, timeaddress):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-def change_school_money(school, amount, reason, profile):
+def change_school_money(school, amount, reason, name):
     school.money += amount
     if reason == 'student_payment':
-        school.money_obejct.create(title='Оплата за учебу ' + profile.first_name, amount=amount)
+        school.money_obejct.create(title='Оплата за учебу ' + name, amount=amount)
     elif reason == 'teacher_salary':
-        school.money_obejct.create(title='Зарплата ' + profile.first_name, amount=amount)
+        school.money_obejct.create(title='Зарплата ' + name, amount=amount)
     else:
         school.money_obejct.create(title=reason, amount=amount)
     now = timezone.now()

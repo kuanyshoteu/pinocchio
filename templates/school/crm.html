@@ -165,6 +165,7 @@
         $('#current_user_name').text(name)
         $('.card_for_save').attr('id', id)
         $('.insquadicon').hide()
+        $('.insquadicon').attr('status', 'hide')
         $('.time_stop').hide()
         $('.wrong_mail').hide()
         $('.alreadyregistered').hide()
@@ -192,10 +193,12 @@
             },
             dataType: 'json',
             success: function (data) {
+                $('.card_money_sch').attr('money', data.money);
                 $('.card_money_sch').text('На счету: ' + data.money + "тг")
                 for (var i = 0; i < data.res.length; i++){
                     squad_id = data.res[i]
                     $('.squad'+squad_id).show()
+                    $('.squad'+squad_id).attr('status', 'show')
                 }
             }
         })

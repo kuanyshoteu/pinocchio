@@ -195,6 +195,9 @@ $(document).ready(function () {
     $('.map_phone-other').show();
     $(this).hide()
   });
+  $('.map_phone-main2').on('click', function () {
+    $('.map_phone-other2').show();
+  });
   // map_phone-close script end
   // map_someorg start
   var summWeight = 0;

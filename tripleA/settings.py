@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+DEBUG = False
+ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
 
 
 # Application definition
@@ -56,9 +56,40 @@ INSTALLED_APPS = [
     'social_django',
     'channels',
 ]
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'mysite.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'MYAPP': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    }
+}
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-SECURE_SSL_REDIRECT = True # [1]
+# SECURE_SSL_REDIRECT = True # [1]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -172,7 +203,7 @@ AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' #'whitenoise.django.GzipManifestStaticFilesStorage'
 AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'

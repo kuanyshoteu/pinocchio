@@ -1,5 +1,9 @@
 body{
-  min-height: 100% !important;
+  min-height: 100%;
+}
+.content-container{
+  min-height: 92% !important;
+  background-color: #f4f4f4;
 }
 .search-group-img{
   height: 30px;
@@ -867,6 +871,7 @@ a{
   margin: 3px 0 !important;
   background-color: #313a57;
   width: 100%;
+  cursor: pointer;
 }
 .in_squad_schedule{
   color: #fff; 

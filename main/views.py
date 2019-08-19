@@ -44,7 +44,7 @@ def main_view(request):
         is_director = is_profi(profile, 'Director')
     context = {
         "profile":profile,
-        "schools":EliteSchools.objects.first().schools.all(),
+        "schools":School.objects.filter(version='full'),
         "schools_all":School.objects.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
@@ -55,6 +55,15 @@ def main_view(request):
         "ages":SubjectAge.objects.all(),
     }
     return render(request, "map.html", context)
+
+def about(request):
+    profile = None
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+    context = {
+        "profile":profile,
+    }
+    return render(request, "about.html", context)
 
 def hislessons(request):
     profile = get_profile(request)
@@ -83,9 +92,14 @@ def reset_pswrd_view(request):
         profile = get_profile(request)
         return redirect(profile.get_absolute_url())
     pid = False
-    if request.GET.get('id'):
+    if request.GET.get('id') and request.GET.get('conf'):
         profile = Profile.objects.get(id=int(request.GET.get('id')))
-        pid = profile.id
+        skill = profile.skill
+        print(skill.confirmation_code, request.GET.get('conf'), skill.confirmation_time)
+        if request.GET.get('conf') == skill.confirmation_code and timezone.now()-skill.confirmation_time < timedelta(1):
+            pid = profile.id
+        else:
+            return render(request, "er404.html", {})
     context = {
         "pid":pid,
     }
@@ -211,7 +225,12 @@ def update_pswd(request):
             profile = Profile.objects.filter(mail=request.GET.get('mail'))[0]
             found = True
         if found:
-            url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/reset_pswrd_view/?id='+str(profile.id)
+            confirmation_code = random_secrete_confirm()
+            skill = profile.skill
+            skill.confirmation_code = confirmation_code
+            skill.confirmation_time = timezone.now()
+            skill.save()
+            url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/reset_pswrd_view/?id='+str(profile.id)+'&conf='+confirmation_code
             text = "Здравствуйте "+profile.first_name+ "!<br><br>Чтобы поменять пароль пройдите по ссылке: <a href='"+url+"'>восстановить пароль</a>"
             html_content = text
             try:
@@ -356,7 +375,7 @@ def map_search_show(request):
             if i == 10:
                 break
     else:
-        schools = EliteSchools.objects.first().schools.all()
+        schools = School.objects.filter(version='full')
         for school in schools:
             if len(school.school_offices.all())>0:
                 image_url = ''
@@ -492,7 +511,7 @@ def map_view(request):
             money = profile.schools.first().money
     context = {
         "profile":profile,
-        "schools":EliteSchools.objects.first().schools.all(),
+        "schools":School.objects.filter(version='full'),
         "schools_all":School.objects.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
@@ -521,7 +540,18 @@ def get_landing(request):
         banner = False
         if len(school.banners.all()) > 0:
             banner = school.banners.first().image_banner.url
-        print(school.social_networks)
+        is_open = "Закрыто"
+        try:
+            worktime_start = school.worktime.split('-')[0].replace(' ', '')
+            worktime_start_num = int(worktime_start.split(':')[0]) * 60 + int(worktime_start.split(':')[1])
+            worktime_end = school.worktime.split('-')[1].replace(' ', '')
+            worktime_end_num = int(worktime_end.split(':')[0]) * 60 + int(worktime_end.split(':')[1])
+            crnttime = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
+            print(worktime_start, worktime_end)
+            if crnttime >= worktime_start_num and crnttime <= worktime_end_num:
+                is_open = "Открыто"
+        except Exception as e:
+            raise
         data = {
             'title':school.title,
             'address':school.school_offices.first().address,
@@ -537,6 +567,7 @@ def get_landing(request):
             'banner':banner,
             'review_url':school.save_review_url(),
             'social_networks':school.social_networks,
+            'is_open':is_open,
         }
         return JsonResponse(data)
     else:
@@ -605,16 +636,21 @@ def make_zaiavka(request):
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 def handler404(request, exception):
-    data = {}
-    return render(request,'errr.html', data)
-
-def error_500(request):
-    data = {}
-    return render(request,'errr.html', data)
+    return render(request,'er404.html', {})
+def handler500(request):
+    return render(request,'er500.html', {})
 
 def adilmed(request):
     print(request.GET)
     if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
         send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['akuir01@inbox.ru'])
+    data={}
+    return JsonResponse(data)
+
+def get_request_land(request):
+    print('fff')
+    if request.GET.get('code') == 'nfrejkNWcsdkls588w5sdkewdhs':
+        print('fff')
+        send_email('Bilimtap Заявка', "Имя: " + request.GET.get('name')+" Номер: "+request.GET.get('phone'), ['kuanyshoteu@gmail.com'])
     data={}
     return JsonResponse(data)

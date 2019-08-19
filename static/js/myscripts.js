@@ -279,6 +279,8 @@ $(document).ready(function () {
     $('.update_pswd-btn').click(function(e) {
         url = '/api/update_pswd/'
         mail = $('.update_pswd_mail').val()
+        $('.loading').show()
+        $(this).addClass('disabled')
         $.ajax({
             url: url,
             data: {
@@ -294,6 +296,7 @@ $(document).ready(function () {
                     $('.wrong_mail_update_pswd').show()
                     $('.ok_update_pswd').hide()
                 }
+                $('.loading').hide()
             }
         })        
     });

@@ -6,7 +6,7 @@ from .views import *
 app_name = 'Enigmath'
 urlpatterns = [
     url(r'^$', main_view, name='home'),
-    url(r'^about/$', main_view, name='about'),
+    url(r'^about/$', about, name='about'),
     url(r'^api/login/$', login_view, name='login'),
     url(r'^api/update_pswd/$', update_pswd, name='update_pswd'),
     url(r'^api/reset_pswrd/$', reset_pswrd, name='reset_pswrd'),
@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^moderator/$', moderator, name='moderator'),
     url(r'^api/create_school/$', create_school, name='create_school'),
     url(r'^api/make_zaiavka/$', make_zaiavka, name='make_zaiavka'),
+    url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
 ]

@@ -119,9 +119,10 @@ def school_landing(request, school_id=None):
         "all_teachers":all_teachers(school),
         'is_trener':is_trener,
         "is_manager":is_manager,
-        "is_director":is_director   ,
+        "is_director":is_director,
         "school_money":school_money,
         "five":[1,2,3,4,5],
+        "landing":True,
     }
     return render(request, "school/landing.html", context)
 
@@ -594,13 +595,6 @@ def save_card_as_user(request):
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
                 password = random_password()
-                ok_mail = prepare_mail(card.name, card.phone, card.mail, squad, password, True)
-            if ok_mail:
-                hist = CRMCardHistory.objects.create(
-                    action_author = manager_profile,
-                    card = card,
-                    edit = '*** Регистрация в ' + squad.title + ' ***',
-                    )
                 found = False
                 if len(Profile.objects.filter(mail=card.mail)) > 0:
                     profile = Profile.objects.filter(mail=card.mail)[0]
@@ -608,30 +602,41 @@ def save_card_as_user(request):
                 elif len(Profile.objects.filter(phone=card.phone)) > 0:
                     profile = Profile.objects.filter(phone=card.phone)[0]
                     found = True
-                if found == False:
-                    new_id = User.objects.order_by("id").last().id + 1
-                    user = User.objects.create(username='user' + str(new_id))
-                    user.set_password(password)
-                    user.save()
+                if found:
+                    ok_mail = prepare_mail(card.name, card.phone, card.mail, squad, None, True)
+                else:
+                    ok_mail = prepare_mail(card.name, card.phone, card.mail, squad, password, True)
+                if ok_mail:
+                    hist = CRMCardHistory.objects.create(
+                        action_author = manager_profile,
+                        card = card,
+                        edit = '*** Регистрация в ' + squad.title + ' ***',
+                        )
+                    if found == False:
+                        new_id = User.objects.order_by("id").last().id + 1
+                        user = User.objects.create(username='user' + str(new_id))
+                        user.set_password(password)
+                        user.save()
+                        profile = Profile.objects.get(user = user)
+                        profile.first_name = card.name
+                        profile.phone = card.phone
+                        profile.mail = card.mail
+                        profile.money += card.premoney
+                        profile.save()
+                    card.card_user = profile
+                    card.author_profile = manager_profile
+                    card.timestamp = timezone.now()
+                    card.last_groups = squad_id
                     card.saved = True
-                    profile = Profile.objects.get(user = user)
-                    profile.first_name = card.name
-                    profile.phone = card.phone
-                    profile.mail = card.mail
+                    card.save()
+                    profile.schools.add(school)
+                    skill = Skill.objects.create()
+                    profile.skill = skill
                     profile.save()
-                card.card_user = profile
-                card.author_profile = manager_profile
-                card.timestamp = timezone.now()
-                card.last_groups = squad_id
-                card.save()
-                profile.schools.add(school)
-                skill = Skill.objects.create()
-                profile.skill = skill
-                profile.save()
-                skill.confirmation_time = timezone.now()
-                skill.confirmed = True
-                skill.save()
-                add_student_to_squad(profile, squad)
+                    skill.confirmation_time = timezone.now()
+                    skill.confirmed = True
+                    skill.save()
+                    add_student_to_squad(profile, squad)
         else:
             profile = card.card_user
             card.author_profile = manager_profile
@@ -648,6 +653,7 @@ def save_card_as_user(request):
                 else:
                     ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
                     if ok_mail:
+                        profile.schools.add(school)
                         card.last_groups = squad_id
                         card.timestamp = timezone.now()
                         card.save()
@@ -663,7 +669,7 @@ def save_card_as_user(request):
                 was_minus = True
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
-            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile)
+            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile.first_name)
             school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
@@ -687,18 +693,24 @@ def predoplata(request):
         profile = card.card_user
         if request.GET.get('predoplata'):
             was_minus = False
-            if profile.money < profile.salary:
-                was_minus = True
-            profile.money += int(request.GET.get('predoplata'))
-            profile.save()
-            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile)
-            school.save()
-            if was_minus and card.was_called == False and profile.money > profile.salary:
-                skill = card.author_profile.skill
-                skill.need_actions -= 1
-                skill.save()            
-                card.was_called = True
+            if profile == None:
+                card.premoney += int(request.GET.get('predoplata'))
                 card.save()
+                name = card.name
+            else:
+                if profile.money < profile.salary:
+                    was_minus = True
+                profile.money += int(request.GET.get('predoplata'))
+                profile.save()
+                name = profile.first_name
+                if was_minus and card.was_called == False and profile.money > profile.salary:
+                    skill = card.author_profile.skill
+                    skill.need_actions -= 1
+                    skill.save()            
+                    card.was_called = True
+                    card.save()
+            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', name)
+            school.save()
     data = {
     }
     return JsonResponse(data)
@@ -910,6 +922,7 @@ def add_card(request):
             column = column,
             school = school,
             saved = saved,
+            card_user = student,
         )
         card.save()
         hist = CRMCardHistory.objects.create(
@@ -1074,6 +1087,8 @@ def get_card_squads(request):
         money = profile.money
         for squad in profile.squads.all():
             res.append(squad.id)
+    else:
+        money = card.premoney
     data = {
         'res':res,
         'money':money,
@@ -1297,7 +1312,7 @@ def new_money_object(request):
     only_directors(profile)
     if request.GET.get('title') and request.GET.get('amount'):
         school = profile.schools.first()
-        change_school_money(school, -1*int(request.GET.get('amount')), request.GET.get('title'), profile)        
+        change_school_money(school, -1*int(request.GET.get('amount')), request.GET.get('title'), profile.first_name)        
         school.save()
     data = {
     }

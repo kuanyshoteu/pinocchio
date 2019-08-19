@@ -41,10 +41,14 @@ urlpatterns = [
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^confirm/', confirm_email, name="confirm_email"),
     url(r'^', include("main.urls", namespace='main')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 from django.conf.urls import (handler400, handler403, handler404, handler500)
 
-
+handler404 = 'main.views.handler404'
+handler500 = 'main.views.handler500'
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    urlpatterns += static(r'^static/(?P<path>.*)$', document_root=settings.STATIC_ROOT)

@@ -35,14 +35,13 @@ class School(models.Model):
     site = models.CharField(max_length=250, default='')
     worktime = models.CharField(max_length=250, default='')
     phones = ArrayField(models.TextField(), default = list)
-    social_networks = ArrayField(ArrayField(models.TextField()), default = list)
+    social_networks = ArrayField(models.TextField(), default = list)
+    social_network_links = ArrayField(models.TextField(), default = list)
     offices = models.IntegerField(default=0)
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
     money = models.IntegerField(default=0)
-    money_spendd = ArrayField(ArrayField(models.IntegerField()), default = list)
-    money_earnn = ArrayField(ArrayField(models.IntegerField()), default = list)
-    money_month = ArrayField(models.DateTimeField(auto_now_add=False), default = list)
+    version = models.CharField(max_length=10, default='')
 
     class Meta:
         ordering = ['rating']
@@ -156,9 +155,6 @@ class SchoolBanner(models.Model):
     def delete_school_banner(self):
         return reverse("schools:delete_school_banner")
 
-class EliteSchools(models.Model):
-    schools = models.ManyToManyField(School, related_name='elite')
-
 class SubjectCategory(models.Model):
     schools = models.ManyToManyField(School, related_name='school_subject_categories')
     title = models.CharField(max_length=250)
@@ -217,3 +213,12 @@ class MoneyObject(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['-id']
+
+class MoneyMonth(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='money_months')
+    month = models.CharField(max_length=250)
+    money_spend = ArrayField(models.IntegerField(), default = list)
+    money_earn = ArrayField(models.IntegerField(), default = list)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['timestamp']

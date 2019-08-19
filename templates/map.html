@@ -51,10 +51,7 @@
                   <div class="animation"><div class="circle six"></div></div>
                 </div>
                 <div class="ui grid no_margin no_padding" style="overflow-x: hidden">
-                    <div class="two wide column" style="padding-top: 20px;">
-                        <a class="back_to_schools" onclick="$('#school_landing').hide()">
-                            <i class="icon arrow left blue" style="font-size: 17px;"></i>
-                        </a>
+                    <div class="one wide column" style="padding-top: 20px;">
                     </div>
                     <div class="sixteen wide column" style="position: absolute;float: right;">
                         <a class="back_to_schools" style="position: fixed;z-index: 3000;left: calc(25% + 50px);" onclick="$('#school_landing').hide()">
@@ -110,7 +107,7 @@
                         <div class="map_worktime_main">
                             <i class="icon clock map_wt_mn-close"></i>
                             <span class="map_worktime_main-text school_worktime_landing"></span>
-                            <span class="map_worktime_main-status map_wt_mn-close">Закрыто</span>
+                            <span class="map_worktime_main-status"></span>
                         </div>
                         <div class="map_phone map_phone-main">
                             <div class="map_phone-number ui grid">
@@ -256,6 +253,13 @@
                 $('.school_phone_landing').text(data.phone+'...')
                 $('.map_photo-wrapper').attr('href', data.landing_url)
                 $('.save_review').attr('url', data.review_url)
+                $('.map_worktime_main-status').text(data.is_open)
+                if (data.is_open == 'Открыто') {
+                    $('.map_worktime_main-status').attr('style', 'color:green')
+                }
+                else{
+                    $('.map_worktime_main-status').attr('style', 'color:#c86478;')                    
+                }
                 if (data.banner){
                     $('.map_photo-wrapper').attr('style', 'background-image:url('+data.banner+');')                    
                 }

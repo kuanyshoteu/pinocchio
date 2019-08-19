@@ -288,7 +288,7 @@ def more_attendance_student(request):
                 if len(columns) == 4:
                     break
                 if len(sm.sm_atts.filter(student = profile)) < 1:
-                    create_atts_student(sm, profile)
+                    create_atts_student(squad, sm, profile)
                 section = [get_date(sm, squad)[0], sm.id, 'past']
                 att = sm.sm_atts.get(student = profile)
                 section.append([att.id, att.present, att.grade])
@@ -358,7 +358,7 @@ def att_present(request):
             material.done_by.add(profile)
             profile.money += profile.salary
             school = attendance.subject.school
-            change_school_money(school, -1*profile.salary, 'teacher_salary', profile)
+            change_school_money(school, -1*profile.salary, 'teacher_salary', profile.first_name)
             school.save()
             for student in attendance.squad.students.all():
                 was_minus = False
@@ -485,7 +485,7 @@ def make_payment(request):
             amount = amount,
             school = school,
         )
-        change_school_money(school, amount, 'student_payment', profile)
+        change_school_money(school, amount, 'student_payment', profile.first_name)
         school.save()
         if profile.money > profile.salary:
             for card in profile.card.all():

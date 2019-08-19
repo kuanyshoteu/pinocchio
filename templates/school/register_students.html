@@ -113,7 +113,7 @@
                         {% for lecture in cell|cell_school_lectures:profile %}
                             <div class="ui segment in_schedule show_subject_cost save_card_as_user" onclick="save_card_as_user('{{lecture.squad.id}}')" onmouseover="show_subject_cost('{{lecture.subject.cost}}тг в месяц')" squad_id={{lecture.squad.id}} cost="{{lecture.subject.cost}}тг в месяц" style="background-color:{%if lecture.squad.color_back == ''%}#5181b8{%else%}{{ lecture.squad.color_back }}{%endif%};">
                                 {{ lecture.subject.title }}
-                                <i class="icon check circle white insquadicon squad{{lecture.squad.id}}" style="font-size: 12px;position: absolute;right: 0;display: none;color: #fff;"></i>
+                                <i class="icon check circle white insquadicon squad{{lecture.squad.id}}" status="hide" style="font-size: 12px;position: absolute;right: 0;display: none;color: #fff;"></i>
                                 <br>
                                 <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.squad.title }}, {{ lecture.squad.teacher.first_name }}</span>
                                 {% if lecture.cabinet %}
@@ -138,7 +138,7 @@
             <div class="twelve wide column" style="font-size: 15px;">
                 Студент записан на курс
                 <br> 
-                Пароль отправлен на почту                
+                Данные отправлены студенту на почту                
             </div>
             <div class="four wide column">
                 <i class="icon check circle" style="color: #21BA45;font-size: 30px;"></i>
@@ -150,17 +150,15 @@
 <script type="text/javascript">
     function save_card_as_user(squad_id){
         $('.loading').show();
-        id = $('.card_for_save').attr('id')
-        predoplata = $('.predoplata_number').val()
+        id = $('.card_for_save').attr('id');
+        predoplata = $('.predoplata_number').val();
+        sch = parseInt($('.card_money_sch').attr('money'));
         $('.time_stop').hide()
         $('.wrong_mail').hide()
         $('.no_predoplata_number').hide()
-        console.log('**', predoplata, predoplata.length, $('.predoplata_number').attr('status'))
-        if ($('.predoplata_number').attr('status') == 'show' && predoplata == '') {
-            $('.no_predoplata_number').show()
-            $('.loading').hide();
-        }
-        else{
+        in_squad = $('.squad'+squad_id).attr('status')
+        console.log(in_squad)
+        if (in_squad == 'show' || $('.predoplata_number').attr('status') != 'show' || sch != 0 || predoplata != '') {
             $.ajax({
                 url: $('.card_for_save').attr('url'),
                 data: {
@@ -193,27 +191,37 @@
                         $('.squad'+squad_id).hide()
                     }
                 }
-            })
+            })            
+        }
+        else{
+            $('.no_predoplata_number').show()
+            $('.loading').hide();            
         }
     };
     function save_predoplata(){
         $('.ok_predoplata').hide()
-        $('.loading').show();
+        $('.no_predoplata_number').hide()
         id = $('.card_for_save').attr('id')
         predoplata = $('.predoplata_number').val()
-        $.ajax({
-            url: $('.card_for_save').attr('predoplata_url'),
-            data: {
-                'id':id,
-                'predoplata':predoplata,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.loading').hide();
-                $('.predoplata_number').val('')
-                $('.ok_predoplata').show()
-            }
-        })
+        if (predoplata != '') {
+            $('.loading').show();
+            $.ajax({
+                url: $('.card_for_save').attr('predoplata_url'),
+                data: {
+                    'id':id,
+                    'predoplata':predoplata,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.loading').hide();
+                    $('.predoplata_number').val('')
+                    $('.ok_predoplata').show()
+                    sch = parseInt($('.card_money_sch').attr('money'))+parseInt(predoplata);
+                    $('.card_money_sch').attr('money', sch)
+                    $('.card_money_sch').text('На счету: '+sch+'тг')
+                }
+            })            
+        }
     };
     function show_subject_cost(cost){
         $('.subject_cost').html(cost)

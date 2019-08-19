@@ -1,0 +1,308 @@
+{% load staticfiles %}
+<html> 
+<head> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">     
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href='{% static "css/style.css" %}'/>    
+    <script src="{% static 'js/landing/func2.js' %}"></script>   
+    <title>Bilimtap</title> 
+</head> 
+<body data-track-group="Landing-Marquee">  
+    <header class="fixed-top "> 
+        <nav class="navbar py-3" data-track-group="Global Header"> 
+            <a class="float-left" href="/home">
+                <img src="{% static 'images/landing/bilimtap.png' %}" style="width: 180px;height: 70px">
+            </a> 
+            <div class="d-none d-md-block recommend"></div> 
+            <div class="float-right buttons">   
+                <a href="/login" class="btn btn-sm btn-link text-white">Войти</a> 
+                <a href="/signup" class="btn btn-sm bg-white font-weight-bold">Зарегистрироваться</a>  
+            </div> 
+        </nav> 
+    </header>   
+    <section id="hero"> 
+        <div class="container pt-7 pb-0 text-white"> 
+            <div class="row align-items-center text-center text-md-left"> 
+                <div class="col-lg-5 top50"> 
+                    <h2>Онлайн-платформа для управления учебным центром</h2> 
+                    <p class="lead">CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое…</p>  
+                </div>
+                <div class="col-lg-6 offset-lg-1"> 
+                    <img src="{% static 'images/landing/f1.png' %}" width="582" style="height: 350px;width: 90%;" class="img-fluid" alt="">
+                </div>  
+                <div class="col-lg-8 offset-lg-2 not_in_mobile" style="text-align: center;margin-top: 15px;">
+                    Закажите бесплатную презентацию всех возможностей прямо сейчас 
+                </div>  
+                <div class="col-lg-12 not_in_mobile" style="padding-bottom: 50px;"> 
+                    <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;">
+                        <textarea name="email" class="quick-signup-email request_name1" type="" placeholder="Имя"></textarea>
+                        <textarea name="email" class="quick-signup-email request_phone1" type="phone" placeholder="Телефон"></textarea>
+                        <br>
+                        <div class="loading" style="display: none;">
+                            <div class="animation"><div class="circle one"></div></div>
+                            <div class="animation"><div class="circle two"></div></div>
+                            <div class="animation"><div class="circle three"></div></div>
+                            <div class="animation"><div class="circle four"></div></div>
+                            <div class="animation"><div class="circle five"></div></div>
+                            <div class="animation"><div class="circle six"></div></div>
+                        </div>
+                        <input class="btn btn-wrap btn-success btn-md px-4 get_request_land" style="margin-top: 10px;" value="Заказать" type="submit" onclick="return false">
+                        <div class="success_query" style="display: none;">
+                            Спасибо! Мы скоро с Вами свяжемся
+                        </div>
+                    </form>  
+                </div>  
+            </div> 
+        </div> 
+    </section> 
+    <section id="collaborate"> 
+        <div class="container py-5 pb-md-0"> 
+            <div class="row align-items-center"> 
+                <div class="col-md-7 order-md-12"> 
+                    <div class="board"> 
+                        <img src="{% static 'images/landing/market.png' %}" style="width: 600px;height: 300px;">
+                    </div> 
+                </div> 
+                <div class="col-md-5 order-md-1 text-center text-md-left"> 
+                    <h3>Marketplace всех учебных центров города</h3> 
+                    <p>Клиенты сами находят Вас и напрямую записываются на понравившийся курс.</p>
+                    <p><a href="/signup" class="btn btn-secondary px-3">Начать работу →</a></p>
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+    <section id="teams"> 
+        <div class="container py-5 pb-md-0"> 
+            <div class="row align-items-center"> 
+                <div class="col-md-7"> 
+                    <div class="board"> 
+                        <img src="{% static 'images/landing/crm.png' %}" style="width: 100%;height: 280px;">
+                    </div> 
+                </div> 
+                <div class="col-md-5 text-center text-md-left"> 
+                    <h3 class="mt-3 mt-md-0">CRM система с 6 этапами продаж</h3> 
+                    <p class="m-0">Поможет Вам не терять клиентов и лучше обрабатывать входящие заявки.</p> 
+                    <p><a href="/signup" class="btn btn-secondary px-3" style="margin-top: 15px;">Начать работу →</a></p>
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+    <section id="collaborate"> 
+        <div class="container py-5 pt-md-0"> 
+            <div class="row align-items-center"> 
+                <div class="col-md-7 order-md-12"> 
+                    <div class="board"> 
+                        <img src="{% static 'images/landing/sch.png' %}" style="width: 600px;height: 300px;">
+                    </div> 
+                </div> 
+                <div class="col-md-5 order-md-1 text-center text-md-left"> 
+                    <h3>Интерактивное расписание занятий</h3> 
+                    <p>Группы, классы, индивидуальные занятия, учителя и аудитории - всё в одном месте, просто и наглядно.</p>
+                    <p><a href="/signup" class="btn btn-secondary px-3">Начать работу →</a></p>
+                </div> 
+            </div> 
+        </div> 
+    </section>     
+    <section> 
+        <div class="container text-center"> 
+            <div class="row"> 
+                <div class="col-md-6 offset-md-3"> 
+                    <h3>Как это работает?</h3> 
+                    <p>Студент находит Ваш учебный центр на маркетплейсе Bilimtap.kz и ему открывается лэндинг страница Вашего центра (которая создается Вам бесплатно).</p> 
+                </div> 
+            </div> 
+            <div id="carousel" data-step="1"> 
+                <a class="arrow arrow-left"> 
+                    <svg height="40" viewBox="0 0 22 40" width="22"> 
+                        <path d="m4.31783602 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" transform="translate(.265262)"/> 
+                    </svg> 
+                </a> 
+                <a class="arrow arrow-right"> 
+                    <svg height="40" viewBox="0 0 22 40" width="22"> 
+                        <path d="m4.31783662 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" fill-rule="evenodd" transform="matrix(-1 0 0 -1 21.734738 40)"/> 
+                    </svg> 
+                </a>
+                <div class="board" style="padding: 0 20px 123px 20px;">
+                    <div class="slide_images">
+                        <img src="{% static 'images/landing/1.png' %}" class="full_size">
+                    </div>
+                    <div class="captions" style="height: 123px;"> 
+                        <div class="caption caption-1"> На этой странице клиент знакомится с предлагаемыми курсами, ценами, преподавателями Вашего центра, выбирает подходящий себе курс и оставляет заявку на него. </div> 
+                        <div class="caption caption-2"> Заявка в виде карточки появляется во вкладке CRM в Вашем личном кабинете. </div> 
+                        <div class="caption caption-3"> Нажав на карточку, Вы сможете увидеть подробную информацию о клиенте и его пожеланиях, чтобы обратная связь с ним стала эффективнее. </div> 
+                        <div class="caption caption-4"> Связавшись с клиентом и договорившись о пробном уроке, либо покупке абонемента, Вы передвигаете его на следующую колонку (на следующий этап продаж). </div> 
+                        <div class="caption caption-5"> Переместив карточку клиента в колонку «Записался на пробный урок» или «Купил абонемент», Вам открывается расписание заранее созданных Вами классов/курсов. Нажав на которые, Вы запишите клиента в данный класс. </div> 
+                        <nav> 
+                            <a class="step-1"></a> 
+                            <a class="step-2"></a> 
+                            <a class="step-3"></a> 
+                            <a class="step-4"></a> 
+                            <a class="step-5"></a> 
+                        </nav> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+    <section id="features"> 
+        <div class="container text-center py-6"> 
+            <div class="row"> 
+                <div class="col-md-10 offset-md-1"> 
+                    <h3>Bilimtap.kz- поможет Вам найти новых клиентов, лучше давать им обратную связь, эффективнее управлять учебным центром и экономить Ваше драгоценное время</h3> 
+                    <p></p>
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col-lg-4"> 
+                    <div class="img img-collaborate">
+                        <img src="{% static 'images/landing/vrn.png' %}" style="width: 320px;height: 200px;"/>
+                    </div> 
+                    <h5>Воронка продаж</h5> 
+                    <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж.</p> 
+                    <p><a class="btn btn-secondary btn-wrap px-3" href="/teams">Попробовать</a></p> 
+                </div> 
+                <div class="col-lg-4"> 
+                    <div class="img img-apps">
+                        <img src="{% static 'images/landing/sms.png' %}" style="width: 270px;height: 200px;">
+                    </div>
+                    <h5>СМС уведомления</h5> 
+                    <p class="small">Напоминайте клиентам о предстоящем пробном занятии, информируйте об отмене урока вовремя и расскажите всем своим клиентам о новой акции.</p> 
+                    <p><a class="btn btn-secondary btn-wrap px-3" href="/power-ups">Заказать презентацию</a></p> 
+                </div> 
+                <div class="col-lg-4"> 
+                    <div class="img img-sync">
+                        <img src="{% static 'images/landing/money.png' %}" style="width: 270px;height: 200px;">
+                    </div> 
+                    <h5>Оплата, расчет зарплат</h5> 
+                    <p class="small">Оплата по скидке или в рассрочку, скидки по акциям, перерасчет оплаты в случае пропуска занятия, расчёт зарплат преподавателей по проведённым урокам – проводите все расчёты одной кнопкой.</p> 
+                    <p><a class="btn btn-secondary btn-wrap px-3" href="/power-ups">Заказать презентацию</a></p>
+                </div> 
+            </div> 
+        </div> 
+    </section> 
+    <div id="bottom-gradient"> 
+        <!-- <section id="work-smarter"> 
+            <div class="container"> 
+                <div class="inner px-4 py-5 text-center text-white"> 
+                    <h3>Работайте эффективнее вместе с Bilimtap</h3> 
+                    <p>Компании самых разных типов и размеров выбирают Bilimtap.</p> 
+                    <div class="logo-container mb-4"> 
+                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/83b3c2b3542d1ce997306dd2c76a898d/logo' %}-kickstarter.svg" width="207" height="24" alt="Kickstarter"> 
+                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/99b35981e7c571708532ba39f0764aeb/logo' %}-national-geographic.svg" width="166" height="46" alt="National Geographic"> 
+                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/4838c7256b43105d3abe0631ac1bb72c/logo' %}-google.svg" width="143" height="46" alt="Google"> 
+                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/759e9aaacc706fd1f2d5f81b1a76b768/logo' %}-fender.svg" width="153" height="55" alt="Fender"> 
+                    </div> 
+                    <p><a href="/business-class" class="btn btn-light px-3">Подробнее →</a></p> 
+                </div> 
+            </div> 
+        </section>  -->
+        <section id="get-started" class="d-flex align-items-center my-4"> 
+            <div class="container text-center py-0"> 
+                <div class="row"> 
+                    <div class="col-lg-7"> 
+                        <div class="board"> 
+                            <div id="map" style="width: 100%; height: 350px;"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5"> 
+                        <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;margin-top: 70px;">
+                            Закажите бесплатную презентацию всех возможностей прямо сейчас 
+                            <textarea name="email" class="quick-signup-email request_name2" type="email" placeholder="Имя"></textarea>
+                            <br>
+                            <textarea name="email" class="quick-signup-email request_phone2" type="email" placeholder="Телефон"></textarea>
+                            <br>
+                            <div class="loading" style="display: none;">
+                                <div class="animation"><div class="circle one"></div></div>
+                                <div class="animation"><div class="circle two"></div></div>
+                                <div class="animation"><div class="circle three"></div></div>
+                                <div class="animation"><div class="circle four"></div></div>
+                                <div class="animation"><div class="circle five"></div></div>
+                                <div class="animation"><div class="circle six"></div></div>
+                            </div>                            
+                            <input class="btn btn-wrap btn-success btn-md px-4 get_request_land" style="margin-top: 10px;" value="Заказать" type="submit" onclick="return false">
+                            <div class="success_query" style="display: none;">
+                                Спасибо! Мы скоро с Вами свяжемся
+                            </div>
+                        </form>  
+                    </div>
+                </div> 
+            </div> 
+        </section>  
+        <footer class="quiet" data-track-group="Footer">  
+            <script>
+              window.isHreflangPath = false;
+              window.prefLocale = '';
+              window.locale = 'ru';
+            </script> 
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+            <ul> 
+                <li><a href="/about">О нас</a></li> 
+                <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
+                <li><a href="https://www.atlassian.com/company/careers/trello">Вакансии</a></li> 
+            </ul> 
+            <p> 
+                <img src="{% static 'images/landing/logo.png' %}" style="width: 270px;height: 100px;">
+                <br>
+                &nbsp;© 2019. Все права защищены. 
+            </p> 
+        </footer>   
+    </div>
+    <span class="request_url" url='{% url "main:get_request_land" %}'></span>
+    <script src="{% static 'js/landing/func3.js' %}"></script> 
+    <script src="{% static 'js/landing/func.js' %}"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
+    type="text/javascript"></script>
+
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){ 
+            var myMap = new ymaps.Map("map", {
+                center: [43.25114500794218, 76.93245686909563],
+                zoom: 15
+            },{
+                restrictMapArea: [
+                    [42.8, 76.02848],
+                    [44.25654, 77.92848]
+                ]
+            })
+            firstCollection = new ymaps.GeoObjectCollection(null)
+            firstCollection.add(new ymaps.Placemark([43.25114500794218, 76.93245686909563], 
+                {
+                    iconLayout: 'default#imageWithContent',
+                    iconImageHref: "{% static 'images/landing/pointer.png' %}",
+                    iconImageSize: [20, 30],
+                    iconImageOffset: [-10, -15],
+                    iconContentOffset: [15, 15],
+                }
+            ));
+            myMap.geoObjects.add(firstCollection);
+        }
+    </script>
+<style type="text/css">
+    .ymaps-2-1-74-controls__control_toolbar {}
+
+    .ymaps-2-1-74-controls__control {
+        right: 10px !important;
+        left: auto !important;
+    }
+
+    .ymaps-2-1-74-search {
+        display: none;
+    }
+
+    .ymaps-2-1-74-traffic {
+        display: none;
+    }
+
+    .ymaps-2-1-74-listbox__button {
+        display: none;
+    }
+    @media only screen and (max-width: 767px) {
+      .not_in_mobile{
+        display: none !important;
+      }
+    }
+</style>
+
+</body> 
+</html>

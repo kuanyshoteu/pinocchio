@@ -1,3 +1,50 @@
+body{
+  min-height: 100%;
+}
+.content-container{
+  min-height: 92% !important;
+  background-color: #f4f4f4;
+}
+.search-group-img{
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+}
+.search_group_add{
+  height: 23px;padding: 6px 10px !important;
+}
+.search-group-name{
+  margin-left: 10px;line-height: 30px;
+  width: 220px;
+}
+.hint_students_group{
+  position: absolute !important;
+  z-index: 1000;
+  background-color: #f5f5f5 !important;
+  margin-top: 3px !important;
+  width: 300px;
+  padding: 7px !important;
+}
+.search_group_link{
+  display: flex;
+}
+.search_students_group{
+  display: inline-block !important;
+  width: 300px !important;margin-top: 14px !important;
+  height: 30px !important;
+}
+.add_student{
+  float: right;padding: 6px 10px !important;height: 23px;
+}
+.new_money_title{
+  height: 33px !important;
+}
+.new_money_amount{
+  margin: 0 10px;width: 50% !important;height: 33px !important;
+}
+.new_money_object{
+  height: 33px !important;font-size:15px !important;padding: 8px 14px 8px 10px !important;
+}
 .folder_features{
   position: absolute !important; 
   z-index: 3000;
@@ -5,7 +52,7 @@
   width: 155px;
 }
 .predoplata_form{
-  width: 250px !important;
+  width: 300px !important;
   margin-top: -5px !important;
   margin-left: 25px !important;
 }
@@ -164,7 +211,7 @@
 .card_comment-textarea{
   min-width: 100px !important;
   word-break: break-all;
-  min-height: 85px !important;
+  min-height: 65px !important;
   margin-bottom: 0 !important;
   padding: 10px;
   border: 1px solid lightgrey;
@@ -302,11 +349,11 @@
 .delete_card:hover{
   color: red;
 }
-.delete_subject_lesson{
+.delete_squad_lesson{
   right: 0;margin: -3px 4px;color: red;font-size: 13px;
   position: absolute;
 }
-.delete_subject_lesson:hover{
+.delete_squad_lesson:hover{
   color: red;
 }
 a{
@@ -824,8 +871,9 @@ a{
   margin: 3px 0 !important;
   background-color: #313a57;
   width: 100%;
+  cursor: pointer;
 }
-.in_subject_schedule{
+.in_squad_schedule{
   color: #fff; 
   padding: 1px !important; 
   margin: 3px 0 !important;
@@ -1567,85 +1615,149 @@ a{
   width: 600px;
   overflow-x: scroll;
 }
-.transp{
-  background-color: transparent;
+
+  @-webkit-keyframes spin {
+    0% {
+        -webkit-transform:rotate(0deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    25% {
+        -webkit-transform:rotate(270deg);
+        opacity: 1;
+    }
+    50% {
+        -webkit-transform:rotate(540deg);
+        opacity: 1;
+    }
+    80% {
+        -webkit-transform:rotate(810deg);
+        
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform:rotate(1080deg);
+        opacity: 0;
+    }
 }
-.loading {
-  position: absolute;
-  left: 50%;
-  top: 100px;
-  transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
-  z-index: 4000;
+@-moz-keyframes spin {
+    0% {
+        -moz-transform:rotate(0deg);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+    }
+    25% {
+        -moz-transform:rotate(270deg);
+        opacity: 1;
+    }
+    50% {
+        -moz-transform:rotate(540deg);
+        opacity: 1;
+    }
+    80% {
+        -moz-transform:rotate(810deg);
+        
+        opacity: 1;
+    }
+    100% {
+        -moz-transform:rotate(1080deg);
+        opacity: 0;
+    }
 }
-.loading .l {
-  position: absolute;
-  width: 33.3%;
-  height: 33.3%;
-  background-color: yellow;
-  animation: loading-l 1.5s infinite ease-in-out;
-}
-.loading .l.l1 {
-  animation-delay: .1s;
-}
-.loading .l.l2 {
-  animation-delay: .2s;
-}
-.loading .l.l4 {
-  animation-delay: .2s;
-}
-.loading .l.l3 {
-  animation-delay: .3s;
-}
-.loading .l.l5 {
-  animation-delay: .3s;
-}
-.loading .l.l7 {
-  animation-delay: .3s;
-}
-.loading .l.l6 {
-  animation-delay: .4s;
-}
-.loading .l.l8 {
-  animation-delay: .4s;
-}
-.loading .l.l9 {
-  animation-delay: .5s;
-}
-.loading .l1,
-.loading .l2,
-.loading .l3 {
-  top: 0;
-}
-.loading .l4,
-.loading .l5,
-.loading .l6 {
-  top: 33.3%;
-}
-.loading .l7,
-.loading .l8,
-.loading .l9 {
-  top: 66.6%;
-}
-.loading .l1,
-.loading .l4,
-.loading .l7 {
-  left: 0;
-}
-.loading .l2,
-.loading .l5,
-.loading .l8 {
-  left: 33.3%;
-}
-.loading .l3,
-.loading .l6,
-.loading .l9 {
-  left: 66.6%;
+@keyframes spin {
+    0% {
+        transform:rotate(0deg);
+        opacity: 1;
+    }
+    15% {
+        opacity: 1;
+    }
+    25% {
+        transform:rotate(270deg);
+        opacity: 1;
+    }
+    50% {
+        transform:rotate(540deg);
+        opacity: 1;
+    }
+    80% {
+        transform:rotate(810deg);
+        
+        opacity: 1;
+    }
+    100% {
+        transform:rotate(1080deg);
+        opacity: 0;
+    }
 }
 
-@keyframes loading-l {
-  0% { transform: scale(.95, .95) }
-  50% { transform: scale(.05, .05) }
-  100% { transform: scale(.95, .95) }
+.loading {
+    height: 64px;
+    left: 50%;
+    margin-left: -22px;
+    margin-top: -20px;
+    position: absolute;
+    top: 100px;
+    width: 64px;
+    z-index: 4000;
+}
+.loading .animation {
+  -webkit-animation: spin 5s linear 0s infinite;
+  -moz-animation: spin 5s linear 0s infinite;
+  animation: spin 5s linear 0s infinite;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  perspective: 1000;
+  opacity: 0;
+}
+.loading .animation:nth-child(2) {
+  -webkit-animation-delay: 250ms;
+  -moz-animation-delay: 250ms;
+  animation-delay: 250ms;
+}
+.loading .animation:nth-child(3) {
+  -webkit-animation-delay: 500ms;
+  -moz-animation-delay: 500ms;
+  animation-delay: 500ms;
+}
+.loading .animation:nth-child(4) {
+  -webkit-animation-delay: 750ms;
+  -moz-animation-delay: 750ms;
+  animation-delay: 750ms;
+}
+.loading .animation:nth-child(5) {
+  -webkit-animation-delay: 1000ms;
+  -moz-animation-delay: 1000ms;
+  animation-delay: 1000ms;
+}
+.loading .circle {
+    background: none repeat scroll 0 0 #0092ED;
+    border-radius: 100%;
+    height: 8px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 8px;
+}
+.loading .circle.two {
+  background: #d3d3d3;
+}
+.loading .circle.three {
+  background: #d3d3d3;
+}
+.loading .circle.four {
+  background: #d3d3d3;
+}
+.loading .circle.five {
+  background: #d3d3d3;
+}
+.loading .circle {
+  background: #d3d3d3;
 }

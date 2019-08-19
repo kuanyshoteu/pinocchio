@@ -353,7 +353,7 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
                 else:
                     timeaddress = 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address
                     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали в группу<br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
-                    send_email('Pinocchio регистрация в группу', text, [mail])
+                    send_email('Bilimtap регистрация в группу', text, [mail])
             except Exception as e:
                 ok_mail = False
         if is_send:

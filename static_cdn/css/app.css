@@ -39902,10 +39902,13 @@ a:hover {
 }
 
 #logo{
-  width: 140px !important; 
-  height: 25px!important;position: absolute;
-  padding-left: 25px;
-  margin-top: -2px
+  width: 150px !important; 
+  height: 50px!important;
+  position: absolute;
+  padding-left: 5px;
+  margin-top: -14px;
+  font-size: 23px;
+  letter-spacing: 1px;
 }
 #left-main-menu {
   padding: 1rem 1rem 0 0;
@@ -40912,6 +40915,7 @@ i.map_worktime-icon {
   font-size: 17px;
   line-height: 25px;
   color: #007bab;
+  cursor: pointer;
 }
 .map_other-info-title:hover {
   color: #004b7d;
@@ -41226,7 +41230,7 @@ i.map_worktime-icon {
 .organization__info-rating-icon {
   margin: 0;
   vertical-align: middle;
-  font-size: 1.2rem;
+  font-size: 13px;
 }
 .organization__info-rating-icon.active i {
   color: #D4C14A;
@@ -41392,8 +41396,7 @@ i.map_worktime-icon {
   align-items: center;
 }
 .schoolLanding__content-services__item-price {
-  font-size: 1.3rem;
-  margin-right: 1rem;
+  margin-left: 20px;
 }
 .schoolLanding__content-services__item-icon {
   cursor: pointer;

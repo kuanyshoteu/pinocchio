@@ -335,4 +335,120 @@ $(document).ready(function () {
   })
 
   // Number counter end
+
+   // Kanban script start
+
+  $(document).on('click', '.kanban-column-add__open', function(){
+    $(this).parent().removeClass('kanban-column-add__hidden')
+    .addClass('kanban-column-add__showed');
+    $('.kanban-column-add input').focus();
+  });
+
+  $(document).on('click', '.kanban-column-add i', function(){
+    $(this).parent().removeClass('kanban-column-add__showed')
+    .addClass('kanban-column-add__hidden');
+  });
+
+  $(document).on('click', '.kanban-column-add button', function(){
+    let inputVal = $('.kanban-column-add input').val();
+    let elem = $(`<div class="kanban-column"><div class="kanban-column-item"><h5>${inputVal}</h5></div><div class="kanban-column-item__add kanban-column-add-item__hidden"><a class="kanban-column-item-add__open">+ Добавьте еще одну карточку</a><input placeholder="Ввести заголовок для этой карточки" type="text"><button>Добавить карточку</button><i class="icon close icon"></i></div></div>`);
+    if(inputVal !== '') {
+      $(this).parent().parent().before(elem);
+      $(this).siblings('input').val('').focus();
+    }
+  });
+
+  $(document).on('click', '.kanban-column-item-add__open', function(){
+    $(this).parent().removeClass('kanban-column-add-item__hidden')
+    .addClass('kanban-column-add-item__showed');
+    $('.kanban-column-item__add input').focus();
+  });
+
+  $(this).on('click', '.kanban-column-item__add i', function(){
+    $(this).parent().removeClass('kanban-column-add-item__showed')
+    .addClass('kanban-column-add-item__hidden');
+  });
+
+  $(document).on('click', '.kanban-column-item__add button', function(){
+    let input = $(this).siblings('input');
+    let inputVal = input.val();
+    let elem = $(`<div class="kanban-column-task" draggable="true">${inputVal}</div>`)
+    if(inputVal !== '') $(this).parent().siblings().append(elem);
+    input.val('');
+    input.focus();
+  });
+
+  $(document).on('click', '.kanban-column-task', function(){
+    $('#kanban-modal').modal('show');
+  });
+
+  $(document).on('click', '.kanban-modal-icon-close', function(){
+    $('#kanban-modal').modal('hide');
+  });
+
+  $(document).on('click', '.kanban-modal-desc', function(){
+    $('.kanban-modal-desc').addClass('kanban-modal-desc-hidden');
+    $('.kanban-modal-desc__text-block').removeClass('kanban-modal-desc-hidden');
+    $('.kanban-modal-desc__text').focus();
+  });
+
+
+  $('.kanban-modal-desc__text-block-btn').on('click', function(){
+    let kanbanTextBlock = $('.kanban-modal-desc');
+
+    kanbanTextBlock.text($('.kanban-modal-desc__text').val())
+    kanbanTextBlock.removeClass('kanban-modal-desc-hidden');
+    $('.kanban-modal-desc__text-block').addClass('kanban-modal-desc-hidden');
+
+    if (kanbanTextBlock.text() !== 'Добавить более подробное описание...') {
+      kanbanTextBlock.addClass('kanban-modal-desc-edited');
+    }
+    if (kanbanTextBlock.text() === '') {
+      kanbanTextBlock.text('Добавить более подробное описание...');
+      kanbanTextBlock.removeClass('kanban-modal-desc-edited')
+    }
+  });
+
+  $('.kanban-modal-desc__text-block-btn__close').on('click', function(){
+    let kanbanTextBlock = $('.kanban-modal-desc');
+
+    kanbanTextBlock.removeClass('kanban-modal-desc-hidden');
+    $('.kanban-modal-desc__text-block').addClass('kanban-modal-desc-hidden');
+    $('.kanban-modal-desc__text').val(kanbanTextBlock.text());
+  });
+
+  $('.kanban-modal-features__modal-input').datepicker({ timepicker: true });
+  $('.kanban-modal-features__modal-input').data(['datepicker'])
+
+  $('#kanban-modal-features__item-clock').on('click', function(){
+    console.log('Clicked')
+    $('.kanban-modal-features__modal').css('display', 'block');
+    $('.kanban-modal-features__modal-input').focus();
+  });
+
+  $('.kanban-modal-features__modal-btn').on('click', function(){
+    $('.kanban-modal-features__modal').css('display', 'none');
+  });
+
+  //Kanban Drag n Drop
+
+  var firstDragEl = document.querySelectorAll('.kanban-column-item');
+
+  for (item of firstDragEl) {
+    new Sortable(item, {
+      group: "colums",
+      handle: ".kanban-column-task",
+      draggable: ".kanban-column-task",
+      ghostClass: "sortable-ghost",
+      onAdd: function (evt) {
+        var itemEl = evt.item;
+      },
+      onUpdate: function (evt) {
+        var itemEl = evt.item; // the current dragged HTMLElement
+      },
+      onRemove: function (evt) {
+        var itemEl = evt.item;
+      }
+    });
+  }
 });

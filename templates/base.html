@@ -13,11 +13,14 @@
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
     <link rel="stylesheet" href='{% static "OwlCarousel/owl.carousel.min.css" %}'>
     <link rel="stylesheet" href='{% static "OwlCarousel/owl.theme.default.min.css" %}'>
+    <link rel="stylesheet" href='{% static "css/datepicker.min.css" %}'>    
     <script src='{% static "js/myscripts.js" %}'></script>
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
     <script src='{% static "js/cardForm.js" %}'></script>
     <script src='{% static "js/OwlCarousel/owl.carousel.min.js" %}'></script>
+    <script src='{% static "js/datepicker.min.js" %}'></script>
+    <script src='{% static "js/dragAndDrop/Sortable.min.js" %}'></script>
     <script src='{% static "js/faisalIncludes.js" %}'></script>
     {% block head_extra %} {% endblock head_extra %}
 </head>
@@ -38,6 +41,11 @@
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
+            {% if landing == True %}
+            <div class="item not_in_mobile" >
+                <a class="ui button mini green" href="/map/" style="padding:6px 15px;margin-right: 25px;">Карта</a>
+            </div>
+            {% endif %}
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
                 <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
                 <div class="search-bar">
@@ -129,7 +137,7 @@
 </div>
 <br><br>
 
-<div class='content-container' style="background-color: #f4f4f4;">
+<div class='content-container'>
     <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' stage='passive' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
         <div class="eleven wide column no_padding">
             <div class="ui segment no_padding full-h" style="background-color: #f4f4f4; z-index: 3000;">

@@ -1,4 +1,118 @@
 $(document).ready(function () {
+    $('.make_zaiavka_new').click(function(e) {
+        url = '/api/make_zaiavka/'
+        id = $(this).attr('id')
+        name = $('.zaiavka_name').val()
+        phone = $('.zaiavka_phone').val()
+        course = $(this).attr('course')
+        $.ajax({
+            url: url,
+            data: {
+                "id":id,
+                "name":name,
+                "phone":phone,
+                "course":course,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    console.log('ok')
+                    $('.make_zaiavka').hide()
+                    $('.ok_zaiavka').show()
+                    $('.ok_zaiavka_new').show()
+                }
+            }
+        })
+    })
+    $('.make_zaiavka').click(function(e) {
+        course = $(this).attr('course')
+        if ($(this).attr('status') == 'auth') {
+            url = '/api/make_zaiavka/'
+            id = $(this).attr('id')
+            $.ajax({
+                url: url,
+                data: {
+                    "id":id,
+                    "course":course,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.ok) {
+                        $('.ok_zaiavka-1').show()
+                        $('.make_zaiavka-1').hide()
+                        $('.ok_zaiavka' + course).show()
+                        $('.make_zaiavka'+course).hide()
+                    }
+                }
+            })
+        }
+        else{
+            $('#zaiavka_modal').modal('show')    
+            $('.make_zaiavka_new').attr('course', course)        
+        }
+    })
+    $('.create_school').click(function(e) {
+        url = $(this).attr('url');
+        title = $('.new_school_title').val();
+        slogan = $('.new_school_slogan').val();
+        name = $('.new_school_name').val();
+        phone = $('.new_school_phone').val();
+        $('.success_created').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'title':title,
+                'slogan':slogan,
+                'name':name,
+                'phone':phone,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.success_created').show()
+                    title = $('.new_school_title').val('');
+                    slogan = $('.new_school_slogan').val('');
+                    name = $('.new_school_name').val('');
+                    phone = $('.new_school_phone').val('');
+                    $('.director_password').text(data.password)
+                }
+            }
+        })
+    })
+    $('.show_money_history').click(function(e) {
+        url = $(this).attr('url')
+        $('.money_history').modal('show')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.res.length; i++) {
+                    $('<tr style="color: #222;"><td>'+data.res[i][0]+'</td><td>'+data.res[i][1]+'</td><td>'+data.res[i][2]+'</td>').appendTo('.history_cont')
+                }
+            }
+        })
+    })
+    $('.new_money_object').click(function(e) {
+        url = $(this).attr('url')
+        title = $('.new_money_title').val()
+        amount = $('.new_money_amount').val()
+        $('.success_new_money').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'title':title,
+                'amount':amount,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.new_money_title').val('')
+                $('.new_money_amount').val('')
+                $('.success_new_money').show()
+            }
+        })
+    })
     $('.delete_school_banner').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
@@ -44,6 +158,9 @@ $(document).ready(function () {
                     ' </span> </div> <div class="schoolLanding__content-review-comment__text"> '+text+
                     ' </div> <div class="schoolLanding__content-review-comment__about"> <span class="schoolLanding__content-review-comment__about-left"> <span class="schoolLanding__content-review-comment__about-name">'+data.name+'</span> <span class="schoolLanding__content-review-comment__about-date">'+data.timestamp+'</span> </span> </div>'
                     $(rev).appendTo('.schoolLanding__content-review-comment')
+                    $('.review_text').val('')
+                    $('.wright_review').hide()
+                    $('.thanks_review').show()
                 }
             }
         })
@@ -159,6 +276,48 @@ $(document).ready(function () {
             $('.reg_fill_all').show()
         }
     });
+    $('.update_pswd-btn').click(function(e) {
+        url = '/api/update_pswd/'
+        mail = $('.update_pswd_mail').val()
+        $('.loading').show()
+        $(this).addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+                'mail':mail,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.wrong_mail_update_pswd').hide()
+                    $('.ok_update_pswd').show()
+                }
+                else{
+                    $('.wrong_mail_update_pswd').show()
+                    $('.ok_update_pswd').hide()
+                }
+                $('.loading').hide()
+            }
+        })        
+    });
+    $('.reset_pswd').click(function(e) {
+        url = '/api/reset_pswrd/'
+        password1 = $('.reset_password1').val()
+        password2 = $('.reset_password2').val()
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'password1':password1,
+                'password2':password2,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    });
     $('.show_free_cards').click(function(e) {
         url = $(this).attr('url')
         checked = $(this).prop('checked')
@@ -246,6 +405,7 @@ $(document).ready(function () {
         var phone = $('.new_card_phone' + id).val()
         var mail = $('.new_card_mail' + id).val()
         var comment = $('.new_card_comment' + id).val()
+        $('.alreadyregistered').hide()
         ok = false
         for (var i = mail.length - 1; i >= 0; i--) {
             if (mail[i] == '@') {
@@ -265,7 +425,12 @@ $(document).ready(function () {
                 },
                 dataType: 'json',
                 success: function (data) {
-                    location.reload()
+                    if (data.already_registered) {
+                        $('.alreadyregistered'+id).show()
+                    }
+                    else{
+                        location.reload()                        
+                    }
                     // card_id = data.card_id; 
                     // var element = $('<div style="padding: 5px 0" id="card_container'+card_id+'" is_saved="'+data.is_saved+
                     //     '"><div id="card'+card_id+'" class="ui segment full-w crm_card mine" ondragstart="save_card_id('
@@ -297,6 +462,7 @@ $(document).ready(function () {
         object_id = this_.options[this_.selectedIndex].value;
         url = $(this).attr('url')
         option = $(this).attr('option')
+        $('.loading').show()
         $.ajax({
             url: url,
             data: {
@@ -1165,21 +1331,6 @@ $(document).ready(function () {
             });
         }
     });
-    $(document).on("click", '.delete_subject_lesson', function () {
-        console.log('bb')
-        url = $('.delete_lesson_data').attr('url')
-        id = $(this).attr('id')
-        $.ajax({
-            url: url,
-            data: {
-                'lecture_id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('#subject_lesson' + id).hide('fast');
-            }
-        })        
-    });    
     $(document).on("click", '.change_task_text', function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")

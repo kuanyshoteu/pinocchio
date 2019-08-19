@@ -72,9 +72,11 @@
             </div>
           </div>
           <div class="organization__info-right-part">
-            <p class="organization__info-address">
-              {{ school.school_offices.first.address }}
-            </p>
+              {% for office in school.school_offices.all %}
+              <p class="organization__info-address">
+                  {{ office.address }}
+              </p>    
+              {% endfor %}
           </div>
           <div class="organization__info-bottom-part">
             <div class="organization__info-list">
@@ -294,7 +296,7 @@
       </div>
     </div>
     <div class="ui segment">
-        <div id="map" style="width: 80%; height: 300px;margin: 30px auto;"></div>      
+        <div id="map" style="width: 80%; height: 300px;margin: 0 auto;"></div>      
     </div>
   </main>
   <script type="text/javascript">
@@ -302,10 +304,9 @@
     function init(){ 
         x = parseFloat('{{school.school_offices.first.latitude}}')
         y = parseFloat('{{school.school_offices.first.longtude}}')
-        console.log(x, y)
         var myMap = new ymaps.Map("map", {
             center: [x, y],
-            zoom: 13
+            zoom: {%if school.school_offices.all|length > 1 %}13{%else%}16{%endif%}
         },{
             restrictMapArea: [
                 [42.8, 76.02848],
@@ -313,19 +314,10 @@
             ]
         })
         firstCollection = new ymaps.GeoObjectCollection(null)
-        firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
-            {
-                iconLayout: 'default#imageWithContent',
-                iconImageHref: '{% static "images/pointer.png" %}',
-                iconImageSize: [20, 30],
-                iconImageOffset: [-10, -15],
-                iconContentOffset: [15, 15],
-            }
-        ));
-        myMap.geoObjects.add(firstCollection); 
+        //******************************
         var myMap1 = new ymaps.Map("map1", {
             center: [x, y],
-            zoom: 13
+            zoom: 16
         },{
             restrictMapArea: [
                 [42.8, 76.02848],
@@ -333,16 +325,32 @@
             ]
         })
         firstCollection1 = new ymaps.GeoObjectCollection(null)
-        firstCollection1.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
-            {
-                iconLayout: 'default#imageWithContent',
-                iconImageHref: '{% static "images/pointer.png" %}',
-                iconImageSize: [20, 30],
-                iconImageOffset: [-10, -15],
-                iconContentOffset: [15, 15],
-            }
-        ));
-        myMap1.geoObjects.add(firstCollection1); 
+        //********************************
+        {% for office in school.school_offices.all %}
+              x = parseFloat('{{office.latitude}}')
+              y = parseFloat('{{office.longtude}}')
+              console.log(x, y)
+              firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
+                  {
+                      iconLayout: 'default#imageWithContent',
+                      iconImageHref: '{% static "images/pointer.png" %}',
+                      iconImageSize: [20, 30],
+                      iconImageOffset: [-10, -15],
+                      iconContentOffset: [15, 15],
+                  }
+              ));
+              myMap.geoObjects.add(firstCollection); 
+              firstCollection1.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
+                  {
+                      iconLayout: 'default#imageWithContent',
+                      iconImageHref: '{% static "images/pointer.png" %}',
+                      iconImageSize: [20, 30],
+                      iconImageOffset: [-10, -15],
+                      iconContentOffset: [15, 15],
+                  }
+              ));
+              myMap1.geoObjects.add(firstCollection1); 
+        {% endfor %}
     }
   </script>
   <style type="text/css">

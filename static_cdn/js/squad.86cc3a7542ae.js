@@ -1,30 +1,39 @@
 $(document).ready(function () {
-    $('.add_student').on('click', function(e) {
-        this_ = $(this)
-        url = $('.add_student_url').attr('url')
-        student_id = this_.attr('id')
-        squad_id = $('.add_student_url').attr('id')
-        $.ajax({
-            url: url,
-            method: "GET",
-            data: {
-                'squad_id':squad_id,
-                'student_id':student_id,
-            },
-            success: function (data) {
-                if (data.add) {
-                    this_.text('-')
-                    $('#studenticon'+student_id).show()
+    $('.search_group_show').on('click', function(e) {
+        $('.hint_students_group').show()
+    })
+    $('.search_students_group').on('input', function(e) {
+        text = $(this).val()
+        url = $(this).attr('url')
+        if (text.length == 0) {
+            $('.hint_students_group').hide() 
+        }
+        else{
+            $.ajax({
+                url: url,
+                data: {
+                    'text':text,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.hint_students_group').show()
+                    $('.hint_students_group').empty()                
+                    console.log(data.res)
+                    for (var i = 0; i < data.res.length; i++) {
+                        id = data.res[i][0]
+                        name = data.res[i][1]
+                        image = data.res[i][2]
+                        check = '<i class="icon check circle green studenticon'+id+'" style="display:none;"></i>'
+                        sign = '+'
+                        if (data.res[i][3]) {
+                            check = '<i class="icon check circle green studenticon'+id+'"></i>'
+                            sign = '-'
+                        }
+                        $('<div class="search_group_link"> <img class="search-group-img" src="'+image+'" alt="photo"> <span class="search-group-name">'+name+'</span> '+check+' <a class="ui button mini blue add_student add_student'+id+' search_group_add" onclick="add_student('+"'"+id+"'"+')" id="'+id+'">'+sign+'</a> </div>').appendTo('.hint_students_group')
+                    }
                 }
-                else{
-                    this_.text('+')                    
-                    $('#studenticon'+student_id).hide()
-                }
-            }, 
-            error: function (error) {
-                console.log('error')
-            }
-        })
+            })
+        }
     });
     $('.det').on('click', function(e) {
         this_ = $(this)
@@ -127,6 +136,21 @@ $(document).ready(function () {
             }
         })
     });
+    $(document).on("click", '.delete_squad_lesson', function () {
+        console.log('bb')
+        url = $('.delete_lesson_data').attr('url')
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'lecture_id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#squad_lesson' + id).hide('fast');
+            }
+        })        
+    });        
     $('.remove_lesson_from_subject').on('click', function(e) {
         var material_id = $(this).attr('material_id');
         var lesson_id = $(this).attr('lesson_id');
