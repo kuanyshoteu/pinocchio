@@ -651,6 +651,6 @@ def get_request_land(request):
     print('fff')
     if request.GET.get('code') == 'nfrejkNWcsdkls588w5sdkewdhs':
         print('fff')
-        send_email('Bilimtap Заявка', "Имя: " + request.GET.get('name')+" Номер: "+request.GET.get('phone'), ['kuanyshoteu@gmail.com'])
+        send_email('Bilimtap Заявка', "Имя: " + request.GET.get('name')+" Номер: "+request.GET.get('phone'), ['aaa.academy.kz@gmail.com'])
     data={}
     return JsonResponse(data)
