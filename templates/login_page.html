@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block content %}
+
+<div class="ui container" style="overflow-y: hidden;">
+    <div class="ui segment">
+        <form method='POST' style="width: 40%;margin: 5% auto;" action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+            <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
+            <b>Номер телефона или Email</b>
+            <input class="username2" name="username" style="margin-bottom: 15px;margin-top: 10px;">
+            <b>Пароль</b> <a onclick="$('#forget_password-modal').modal('show');$('.wrong_mail_update_pswd').hide();$('.ok_update_pswd').hide();" style="font-size: 12px;float: right;font-weight: 600;">Забыли пароль?</a>
+            <input class="password2" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
+            <div style="text-align: center;">
+                <input class="ui button green login-btn2 full-w" value="Войти" type="submit" onclick="return false">
+            </div>
+            <div style="margin-top: 20px;text-align: center;">
+                Еще нет аккаунта? <a onclick="$('#signup-modal').modal('show')">Создать аккаунт</a>                
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -276,6 +276,68 @@ $(document).ready(function () {
             $('.reg_fill_all').show()
         }
     });
+    $('.login-btn2').click(function(e) {
+        url = '/api/login/'
+        username = $('.username2').val()
+        password = $('.password2').val()
+        $.ajax({
+            url: url,
+            data: {
+                'username':username,
+                'password':password
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.res == 'login') {
+                    $('.wrong_login').hide()
+                    location.reload()
+                }
+                else if (data.res == 'error'){
+                    $('.wrong_login').show()
+                }
+            }
+        })        
+    });
+    $('.register-btn2').click(function(e) {
+        url = '/api/register/'
+        name = $('.new_name2').val()
+        phone = $('.new_username2').val()
+        mail = $('.new_mail2').val()
+        new_password = $('.new_password22').val()
+        new_password2 = $('.new_password222').val()
+        console.log(name, phone, mail, new_password, new_password2)
+        if (name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2) {        
+            $.ajax({
+                url: url,
+                data: {
+                    'name':name,
+                    'phone':phone,
+                    'mail':mail,
+                    'password1':new_password,
+                    'password2':new_password2,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data.res)
+                    if (data.res == 'ok') {
+                        $('.reg_wrong_phone').hide()
+                        $('.reg_fill_all').hide()
+                        $('.reg_wrong_pass').hide()
+                        location.reload()
+                    }
+                    else if (data.res == 'second_user'){
+                        $('.reg_wrong_phone').show()
+                    }
+                    else if (data.res == 'not_equal_password'){
+                        $('.reg_wrong_pass').show()
+                    }
+                }
+            })
+        }
+        else{
+            $('.reg_fill_all').show()
+        }
+    });
     $('.update_pswd-btn').click(function(e) {
         url = '/api/update_pswd/'
         mail = $('.update_pswd_mail').val()

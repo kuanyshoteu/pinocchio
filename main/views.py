@@ -56,6 +56,21 @@ def main_view(request):
     }
     return render(request, "map.html", context)
 
+def login_page(request):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+        return redirect(profile.get_absolute_url())
+    context = {
+    }
+    return render(request, "login_page.html", context)
+def sign_up(request):
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user.id)
+        return redirect(profile.get_absolute_url())
+    context = {
+    }
+    return render(request, "sign_up.html", context)
+
 def about(request):
     profile = None
     if request.user.is_authenticated:

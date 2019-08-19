@@ -14,9 +14,9 @@
                 <img src="{% static 'images/landing/bilimtap.png' %}" style="width: 180px;height: 70px">
             </a> 
             <div class="d-none d-md-block recommend"></div> 
-            <div class="float-right buttons">   
+            <div class="float-right buttons">
                 <a href="/login" class="btn btn-sm btn-link text-white">Войти</a> 
-                <a href="/signup" class="btn btn-sm bg-white font-weight-bold">Зарегистрироваться</a>  
+                <a href="/sign_up" class="btn btn-sm bg-white font-weight-bold">Зарегистрироваться</a>  
             </div> 
         </nav> 
     </header>   
@@ -205,7 +205,7 @@
                         </div>
                     </div>
                     <div class="col-lg-5"> 
-                        <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;margin-top: 70px;">
+                        <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;margin-top: -27px;">
                             Закажите бесплатную презентацию всех возможностей прямо сейчас 
                             <textarea name="email" class="quick-signup-email request_name2" type="email" placeholder="Имя"></textarea>
                             <br>
@@ -222,6 +222,13 @@
                             <input class="btn btn-wrap btn-success btn-md px-4 get_request_land" style="margin-top: 10px;" value="Заказать" type="submit" onclick="return false">
                             <div class="success_query" style="display: none;">
                                 Спасибо! Мы скоро с Вами свяжемся
+                            </div>
+                            <div>
+                                <br>
+                                <b>Наши контакты:</b><br>
+                                г. Алматы, ул. Богенбай батыра 156а,<br> этаж 1, офис 9<br>
+                                Телефон: <b>+7 (708) 070-63-70</b><br>
+                                Email: <b>aaa.academy.kz@gmail.com</b>
                             </div>
                         </form>  
                     </div>
@@ -269,7 +276,7 @@
             firstCollection.add(new ymaps.Placemark([43.25114500794218, 76.93245686909563], 
                 {
                     iconLayout: 'default#imageWithContent',
-                    iconImageHref: "{% static 'images/landing/pointer.png' %}",
+                    iconImageHref: "{% static 'images/pointer.png' %}",
                     iconImageSize: [20, 30],
                     iconImageOffset: [-10, -15],
                     iconContentOffset: [15, 15],

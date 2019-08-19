@@ -10,7 +10,7 @@ $(function(){
 		var a=parseInt($carousel.attr("data-step")),a=$(this).hasClass("arrow-left")?1==a?5:a-1:5==a?1:a+1;
 		$carousel.attr("data-step",a);
 		$('.slide_images').empty();
-		$('<img src="images/'+a+'.png" class="full_size">').appendTo('.slide_images');		
+		$('<img src="https://triplea-bucket.s3.amazonaws.com/images/landing/'+a+'.png" class="full_size">').appendTo('.slide_images');		
 		b.stopPropagation()
 	});
 	$carousel.on("click","nav a",function(b){
