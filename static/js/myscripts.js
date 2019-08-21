@@ -207,7 +207,12 @@ $(document).ready(function () {
         url = $(this).attr('url')
         id = $(this).attr('id')
         status = $(this).attr('status')
-        text = $('.school_'+status+'_edit').val()
+        if (status == 'worktime') {
+            text = $('.school_'+status+'_edit1').val()+'-'+$('.school_'+status+'_edit2').val()
+        }
+        else{
+            text = $('.school_'+status+'_edit').val()
+        }
         $.ajax({
             url: url,
             data: {

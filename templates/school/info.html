@@ -88,13 +88,19 @@
                     {% endif %} 
                     <br>                   
                     <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Время работы (для карты):</span>
-                    <span style="display: inline-block;" class="school_worktime">{{ instance.worktime }}</span>
+                    <span style="display: inline-block;" class="school_worktime">{{ worktime1 }}-{{ worktime2 }}</span>
                     {% if is_director %}
                     <a onclick="$('.school_worktime_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
                     <form class="ui form no_margin school_worktime_form" style="width: 400px;display: none;">
                         <div class="ui grid">
-                            <div class="twelve wide column no_padding_side">
-                                <textarea class="school_worktime_edit no_margin" style="margin-bottom: 0;">{{ instance.worktime }}</textarea>
+                            <div class="four wide column no_padding_side">
+                                <textarea class="school_worktime_edit1 no_margin">{{ worktime1 }}</textarea>
+                            </div>
+                            <div class="one wide column no_padding_side" style="text-align: center;">
+                                -
+                            </div>
+                            <div class="four wide column no_padding_side">
+                                <textarea class="school_worktime_edit2 no_margin">{{ worktime2 }}</textarea>
                             </div>
                             <div class="four wide column">
                                 <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>

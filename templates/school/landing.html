@@ -18,17 +18,16 @@
       {% endfor %}
     </div>
   </div>
-  
-    <header class="schoolLanding__header-wrapper" style="display: block;margin-top: -5px;">
-    {% if school.banners.all|length %}
+  <header class="schoolLanding__header-wrapper" style="display: block;margin-top: -5px;">
+      {% if school.banners.all|length %}
           {% for banner in school.banners.all %}
               {% if banner.image_banner and forloop.counter < 4 %}
-                <div style="width: calc(33.333% - 6px);display: inline-block;background: url({{banner.image_banner.url}});" class="schoolLanding__header-img"></div>
+                  <div style="width: calc(33.333% - 6px);display: inline-block;background: url({{banner.image_banner.url}});" class="schoolLanding__header-img"></div>
               {% endif %}
           {% endfor %}
-    {% else %}
+      {% else %}
           <div style="width: calc(100% - 3px);display: inline-block;background: url({% static 'images/fon1.png' %});" class="schoolLanding__header-img"></div>
-    {% endif %}
+      {% endif %}
   </header>
   <main class="schoolLanding__container">
     <div class="schoolLanding__content-header">

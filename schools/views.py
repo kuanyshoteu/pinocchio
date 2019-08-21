@@ -172,6 +172,8 @@ def school_info(request):
         "managers":managers,
         "voronka_array":voronka,
         "voronka2":voronka2,
+        "worktime1":school.worktime.split('-')[0],
+        "worktime2":school.worktime.split('-')[1],
     }
     return render(request, "school/info.html", context)
 

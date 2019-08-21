@@ -41379,24 +41379,29 @@ i.map_worktime-icon {
 .schoolLanding__content-services__item-left {
   display: flex;
   align-items: center;
+  width: calc(100% - 240px);
 }
 .schoolLanding__content-services__item-title {
   font-size: 1rem;
-  margin: 0 1rem 0 0;
+  margin: 0 40px 0 0;
   line-height: 1rem;
+  width: 20%;
 }
 .schoolLanding__content-services__item-time {
   font-size: 1rem;
   line-height: 1rem;
+  width: 50%;
 }
 
 .schoolLanding__content-services__item-right {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 240px;
 }
 .schoolLanding__content-services__item-price {
   margin-left: 20px;
+  width: 70px;
 }
 .schoolLanding__content-services__item-icon {
   cursor: pointer;
