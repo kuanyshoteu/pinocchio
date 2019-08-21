@@ -157,6 +157,11 @@ def school_info(request):
                 voronka2.append([column.title, number, round((number/number_of_all)*100,2)])
     voronka = reversed(voronka)
     voronka2 = reversed(voronka2)
+    worktime1 = ''
+    worktime2 = ''
+    if '-' in school.worktime:
+        worktime1 = school.worktime.split('-')[0]
+        worktime2 = school.worktime.split('-')[1]
     context = {
         "profile":profile,
         "instance": school,
@@ -172,8 +177,8 @@ def school_info(request):
         "managers":managers,
         "voronka_array":voronka,
         "voronka2":voronka2,
-        "worktime1":school.worktime.split('-')[0],
-        "worktime2":school.worktime.split('-')[1],
+        "worktime1":worktime1,
+        "worktime2":worktime2,
     }
     return render(request, "school/info.html", context)
 
