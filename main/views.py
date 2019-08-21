@@ -44,7 +44,7 @@ def main_view(request):
         is_director = is_profi(profile, 'Director')
     context = {
         "profile":profile,
-        "schools":School.objects.filter(version='full'),
+        "schools":School.objects.all(),
         "schools_all":School.objects.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
@@ -552,7 +552,7 @@ def map_view(request):
             money = profile.schools.first().money
     context = {
         "profile":profile,
-        "schools":School.objects.filter(version='full'),
+        "schools":School.objects.all(),
         "schools_all":School.objects.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
