@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block content %}
+<style type="text/css">
+    .itemm{
+        padding: 10px 7% !important;
+    }
+</style>
+<div class="full-w">
+    <div class="ui grid stackable">
+        <div class="two wide column">
+        </div>
+        <div class="twelve wide column">
+            <div class="ui menu full-w">
+                <a class="itemm item" href="/about">Главная</a>
+                <a class="itemm item" href="/">Карта</a>
+                <a class="active itemm item" href="/">О нас</a>
+                <a class="itemm item" href="/pricing">Цены</a>
+                <a class="itemm item" href="/vacancies">Вакансии</a>
+            </div>    
+        <div class="two wide column">
+        </div>            
+    </div>
+</div>
+<div class="ui container" style="padding-top: 15px;">
+    <div class="ui grid stackable">
+        <div class="two wide column">
+        </div>
+        <div class="twelve wide column">
+            <div class="ui segment no_padding">
+                <div class="our_mission" style="background-image: url({% static 'images/team/koktobe.jpg' %});background-size: 100% 100%; color: #fff;text-align: center;padding-bottom: 15%;margin-bottom: 50px;">
+                    <h1 style="padding-top: 15%;font-size: 66px;font-weight: 600;">Наша миссия</h1>
+                    <p style="font-size: 24px;">Связать учителей и учеников</p>
+                </div>
+                <div style="text-align: center;">
+                    <h1 style="font-size: 66px;font-weight: 600;margin-bottom: 36px;">Наша команда</h1>
+                </div>
+                <div class="ui grid stackable" style="text-align: left;">
+                    <div class="four wide column">
+                        <img src="{% static 'images/team/team2.png' %}" style="width: 230px;">
+                    </div>
+                    <div class="ten wide column" style="margin-left: 80px;margin-bottom: 60px;">
+                        <h3 style="font-size: 24px;font-weight: 600;">Абилханов Адилжан</h3>
+                        <h4 style="font-size: 17px;font-weight: 600;color: #898f9c;margin-bottom: 12px;">Директор по продажам</h4>
+                        <p style='font-size: 16px;font-family: "freightsans_pro", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;'>Отвечает за стратегию и продвижение кампании. Работал в учебных центрах преподавателем по олимпиадной и школьной математике, был куратором олимпиадной сборной РФМШ. Работал репетитором 1 год. Открывал свой учебный центр и познал все трудности, связанные с этим.</p>
+                    </div>
+                    <div class="four wide column">
+                        <img src="{% static 'images/team/team1.png' %}" style="width: 230px;">
+                    </div>
+                    <div class="ten wide column" style="margin-left: 80px;margin-bottom: 60px;">
+                        <h3 style="font-size: 24px;font-weight: 600;">Отеу Куаныш</h3>
+                        <h4 style="font-size: 17px;font-weight: 600;color: #898f9c;margin-bottom: 12px;">Директор по технической части</h4>
+                        <p style='font-size: 16px;font-family: "freightsans_pro", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;'>Отвечает за функциональность и работоспособность сайта. Окончил КБТУ по специальности . Проработал преподавателем олимпиадной математики 4 года. Обучил множество призеров республиканских и международных олимпиад, в том числе 3 призера IMO.</p>
+                    </div>
+                    <div class="four wide column">
+                        <img src="{% static 'images/team/team3.png' %}" style="width: 230px;">
+                    </div>
+                    <div class="ten wide column" style="margin-left: 80px;margin-bottom: 60px;">
+                        <h3 style="font-size: 24px;font-weight: 600;">Дуйсенов Дулат</h3>
+                        <h4 style="font-size: 17px;font-weight: 600;color: #898f9c;margin-bottom: 12px;">Младший помощник</h4>
+                        <p style='font-size: 16px;font-family: "freightsans_pro", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;'>Отвечает за работоспособность сайта во время обновлений и обратную связь с клиентами. Имеет опыт работы в самых различных сферах: от риэлтора до специалиста по продвижению продукта. Незаменимый сотрудник.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="two wide column">
+        </div>            
+    </div>
+</div>
+<footer class="quiet" data-track-group="Footer">  
+    <ul> 
+        <li><a href="/about">Главная</a></li> 
+        <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
+        <li><a href="/vacancies">Вакансии</a></li> 
+    </ul> 
+    <p> 
+        <img src="{% static 'images/landing/logo.png' %}" style="width: 270px;height: 100px;">
+        <br>
+        &nbsp;© 2019. Все права защищены. 
+    </p> 
+</footer>   
+<style type="text/css">
+    footer{font-size:.8em;margin:4em 1em;text-align:center}
+    footer ul{list-style-type:none;overflow:auto;padding:0;margin:0 0 1.25rem}
+    footer ul li{display:inline-block;margin:0 .4em}
+    footer ul li a{color:#8993A4;text-decoration:underline}
+    footer ul li a:hover{color:#4d4d4d}
+    footer img.atlassian-logo-small{width:150px;height:auto;display:block;margin:0 auto 17px}
+    footer img.white{display:none}
+    footer div#language-picker-container{display:inline-block;margin:0 0 1.25rem;position:relative}
+    footer div#language-picker-container select#language-picker{
+        -webkit-appearance:none;-moz-appearance:none;
+        appearance:none;background-color:rgba(255,255,255,0.5);
+        border:2px solid #EDEFF0;color:#959DA1;padding:.5em
+    }
+    footer div#language-picker-container select#language-picker::-ms-expand{display:none}
+    footer div#language-picker-container:after{background-repeat:no-repeat;background-position:center;border:0;-moz-box-sizing:content-box;box-sizing:content-box;content:"";height:16px;margin:0;padding:0;position:absolute;right:11px;top:50%;-webkit-transform:translateY(-50%) rotate(90deg);transform:translateY(-50%) rotate(90deg);width:10px}*:focus{outline:none !important}@font-face{font-family:'Charlie Display';font-style:normal;font-weight:100;}
+    
+</style>
+{% endblock content %}

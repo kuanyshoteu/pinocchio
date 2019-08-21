@@ -1334,7 +1334,21 @@
     .text-hide{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0}
     .visible{visibility:visible !important}
     .invisible{visibility:hidden !important}header nav.navbar{-webkit-transition:background 1s ease 0s;transition:background 1s ease 0s;background-color:rgba(0,121,191,0)}header nav.navbar a.btn.bg-white{color:#0079BF}header nav.navbar a.btn.bg-white:hover{color:#0079BF}html.scroll header nav.navbar{background-color:#0079bf;box-shadow:0 0 10px rgba(0,0,0,0.3)}
-    .btn.btn-wrap{white-space:normal}footer{font-size:.8em;margin:4em 1em;text-align:center}footer ul{list-style-type:none;overflow:auto;padding:0;margin:0 0 1.25rem}footer ul li{display:inline-block;margin:0 .4em}footer ul li a{color:#8993A4;text-decoration:underline}footer ul li a:hover{color:#4d4d4d}footer img.atlassian-logo-small{width:150px;height:auto;display:block;margin:0 auto 17px}footer img.white{display:none}footer div#language-picker-container{display:inline-block;margin:0 0 1.25rem;position:relative}footer div#language-picker-container select#language-picker{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:rgba(255,255,255,0.5);border:2px solid #EDEFF0;color:#959DA1;padding:.5em}footer div#language-picker-container select#language-picker::-ms-expand{display:none}
+    .btn.btn-wrap{white-space:normal}
+    footer{font-size:.8em;margin:4em 1em;text-align:center}
+    footer ul{list-style-type:none;overflow:auto;padding:0;margin:0 0 1.25rem}
+    footer ul li{display:inline-block;margin:0 .4em}
+    footer ul li a{color:#8993A4;text-decoration:underline}
+    footer ul li a:hover{color:#4d4d4d}
+    footer img.atlassian-logo-small{width:150px;height:auto;display:block;margin:0 auto 17px}
+    footer img.white{display:none}
+    footer div#language-picker-container{display:inline-block;margin:0 0 1.25rem;position:relative}
+    footer div#language-picker-container select#language-picker{
+        -webkit-appearance:none;-moz-appearance:none;
+        appearance:none;background-color:rgba(255,255,255,0.5);
+        border:2px solid #EDEFF0;color:#959DA1;padding:.5em
+    }
+    footer div#language-picker-container select#language-picker::-ms-expand{display:none}
     footer div#language-picker-container:after{background-repeat:no-repeat;background-position:center;border:0;-moz-box-sizing:content-box;box-sizing:content-box;content:"";height:16px;margin:0;padding:0;position:absolute;right:11px;top:50%;-webkit-transform:translateY(-50%) rotate(90deg);transform:translateY(-50%) rotate(90deg);width:10px}*:focus{outline:none !important}@font-face{font-family:'Charlie Display';font-style:normal;font-weight:100;}
     .opacity-50{opacity:.5}
     .rounded-top-left{border-top-left-radius:6px}

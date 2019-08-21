@@ -24,18 +24,22 @@ $(function(){
 		$carousel.attr("data-step",5==b?1:b+1)
 		$('<img src="images/'+a+'.png" class="full_size">').appendTo('.slide_images');		
 	})
+	$('.get_request_land_top').on("click",function(){
+		document.getElementById('start_request').scrollIntoView();
+	})
 	$('.get_request_land').on("click",function(){
 		console.log('iiii')
-		var name = $('.request_name1').val()
-		var phone = $('.request_phone1').val()
-		console.log('iiii')
+		id = $(this).attr('id')
+		var name = $('.request_name' + id).val()
+		var phone = $('.request_phone' + id).val()
     	$('.success_query').hide();
+		$('.land_fill_error'+id).hide()
 		if (name == '' || phone == '') {
-			var name = $('.request_name2').val()
-			var phone = $('.request_phone2').val()
+			$('.land_fill_error'+id).show()
 		}
-		if (name != '' && phone != '') {
+		else {
         	$('.loading').show()
+			$('.land_fill_error'+id).hide()
 			url = $('.request_url').attr('url')
 	        $.ajax({
 	            url: url,
@@ -46,7 +50,6 @@ $(function(){
 	            },
 	            dataType: 'json',
 	            success: function (data) {
-	            	console.log('yo')
 	            	$('.get_request_land').hide()
 	            	$('.loading').hide()
 	            	$('.success_query').show()

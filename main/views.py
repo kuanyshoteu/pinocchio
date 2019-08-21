@@ -80,6 +80,31 @@ def about(request):
     }
     return render(request, "about.html", context)
 
+def team(request):
+    profile = None
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+    context = {
+        "profile":profile,
+    }
+    return render(request, "team.html", context)
+def pricing(request):
+    profile = None
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+    context = {
+        "profile":profile,
+    }
+    return render(request, "pricing.html", context)
+def vacancies(request):
+    profile = None
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+    context = {
+        "profile":profile,
+    }
+    return render(request, "vacancies.html", context)
+
 def hislessons(request):
     profile = get_profile(request)
     res = []
