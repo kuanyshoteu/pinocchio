@@ -53,31 +53,39 @@ $(document).ready(function () {
     })
     $('.create_school').click(function(e) {
         url = $(this).attr('url');
+        $('.not_success_created').hide()
+        $('.success_created').hide()
         title = $('.new_school_title').val();
         slogan = $('.new_school_slogan').val();
         name = $('.new_school_name').val();
         phone = $('.new_school_phone').val();
-        $('.success_created').hide()
-        $.ajax({
-            url: url,
-            data: {
-                'title':title,
-                'slogan':slogan,
-                'name':name,
-                'phone':phone,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.ok) {
-                    $('.success_created').show()
-                    title = $('.new_school_title').val('');
-                    slogan = $('.new_school_slogan').val('');
-                    name = $('.new_school_name').val('');
-                    phone = $('.new_school_phone').val('');
-                    $('.director_password').text(data.password)
+        version = $('.new_school_version').val();
+        if (title == '' || slogan == '' || name == "" || phone == "" || version == "") {
+            $('.not_success_created').show()
+        }
+        else{
+            $.ajax({
+                url: url,
+                data: {
+                    'title':title,
+                    'slogan':slogan,
+                    'name':name,
+                    'phone':phone,
+                    'version':version,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.ok) {
+                        $('.success_created').show()
+                        title = $('.new_school_title').val('');
+                        slogan = $('.new_school_slogan').val('');
+                        name = $('.new_school_name').val('');
+                        phone = $('.new_school_phone').val('');
+                        $('.director_password').text(data.password)
+                    }
                 }
-            }
-        })
+            })
+        }
     })
     $('.show_money_history').click(function(e) {
         url = $(this).attr('url')

@@ -168,7 +168,8 @@ def create_school(request):
     if request.GET.get('title') and request.GET.get('slogan') and request.GET.get('name') and request.GET.get('phone'):
         school = School.objects.create(
             title=request.GET.get('title'),
-            slogan=request.GET.get('slogan')
+            slogan=request.GET.get('slogan'),
+            version=request.GET.get('version')
             )
         school.save()
         for column in CRMColumn.objects.all():
