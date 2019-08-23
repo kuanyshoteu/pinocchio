@@ -145,21 +145,21 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config('DATABASE_URL')
-}
-
+# import dj_database_url
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tripleA',
-#         'USER': 'admin',
-#         'PASSWORD': '031196Kk',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
+#     'default': dj_database_url.config('DATABASE_URL')
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tripleA',
+        'USER': 'admin',
+        'PASSWORD': '031196Kk',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -196,8 +196,8 @@ from tripleA.aws.conf import *
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'    
 
 import datetime
-AWS_ACCESS_KEY_ID = 'AKIAI2QY4AWO32KO4MWA'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQRLWPNLEG'
+AWS_SECRET_ACCESS_KEY = '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'
 AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
