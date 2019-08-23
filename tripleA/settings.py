@@ -18,12 +18,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-
+toserver = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+if toserver:
+    DEBUG = False
+else:
+    DEBUG = True
+
 ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
 
 
@@ -145,21 +149,22 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config('DATABASE_URL')
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'tripleA',
-#         'USER': 'admin',
-#         'PASSWORD': '031196Kk',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
+if toserver:
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config('DATABASE_URL')
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'tripleA',
+            'USER': 'admin',
+            'PASSWORD': '031196Kk',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
