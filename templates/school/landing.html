@@ -3,8 +3,6 @@
 {% load staticfiles %}
 {% load ttags %}
 {% block content %}
-<script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
-    type="text/javascript"></script>
 <div style="display: none;" class="schoolLanding__header-gallery">
     <div class="schoolLanding__header-gallery__nav"><i id="landing__gallery-download" class="icon download"></i><i id="landing__gallery-close" class="icon close"></i></div>
     <div id="schoolLanding__header-gallery__sliderone" class="owl-carousel owl-theme">
@@ -297,6 +295,8 @@
         <div id="map" style="width: 80%; height: 300px;margin: 0 auto;"></div>      
     </div>
   </main>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
+    type="text/javascript"></script>
   <script type="text/javascript">
     ymaps.ready(init);
     function init(){ 

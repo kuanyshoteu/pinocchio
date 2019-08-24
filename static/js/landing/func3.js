@@ -9,20 +9,26 @@ $(function(){
 	$carousel.on("click","a.arrow",function(b){
 		var a=parseInt($carousel.attr("data-step")),a=$(this).hasClass("arrow-left")?1==a?5:a-1:5==a?1:a+1;
 		$carousel.attr("data-step",a);
-		$('.slide_images').empty();
-		$('<img src="https://triplea-bucket.s3.amazonaws.com/images/landing/'+a+'.png" class="full_size">').appendTo('.slide_images');		
+		$('.land_img').hide()
+		$('.land_img'+a).show()
 		b.stopPropagation()
 	});
 	$carousel.on("click","nav a",function(b){
 		var a=$(this).index()+1;
 		$carousel.attr("data-step",a);
-		$('<img src="images/'+a+'.png" class="full_size">').appendTo('.slide_images');		
+		$('.land_img').hide()
+		$('.land_img'+a).show()
 		b.stopPropagation()
 	})
-	$carousel.on("click",function(){
-		var b=parseInt($carousel.attr("data-step"));
-		$carousel.attr("data-step",5==b?1:b+1)
-		$('<img src="images/'+a+'.png" class="full_size">').appendTo('.slide_images');		
+	$carousel.on("click",function(b){
+		var a=parseInt($carousel.attr("data-step"))+1;
+		if (a == 6) {
+			a = 1
+		}
+		$carousel.attr("data-step",a);
+		$('.land_img').hide()
+		$('.land_img'+a).show()
+		b.stopPropagation()
 	})
 	$('.get_request_land_top').on("click",function(){
 		document.getElementById('start_request').scrollIntoView();

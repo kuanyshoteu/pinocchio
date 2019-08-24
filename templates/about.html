@@ -2,9 +2,9 @@
 <html> 
 <head> 
     <meta name="viewport" content="width=device-width, initial-scale=1">     
+    <meta name="description" content="Расширенные возможности для команд, компаний и опытных пользователей.">
     <link rel="stylesheet" href="{% static 'css/landing.css' %}">
-    <link rel="stylesheet" href='{% static "css/style.css" %}'/>    
-    <script src="{% static 'js/landing/func2.js' %}"></script>   
+    <link rel="stylesheet" href='{% static "css/style.css" %}'/>
     <title>Bilimtap</title> 
 </head> 
 <body data-track-group="Landing-Marquee">  
@@ -24,11 +24,11 @@
         <div class="container pt-7 pb-0 text-white"> 
             <div class="row align-items-center text-center text-md-left"> 
                 <div class="col-lg-5 top50"> 
-                    <h2>Онлайн-платформа для управления учебным центром</h2> 
+                    <h1>Онлайн-платформа для управления учебным центром</h1> 
                     <p class="lead">CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое…</p>  
                 </div>
                 <div class="col-lg-6 offset-lg-1"> 
-                    <img src="{% static 'images/landing/f1.png' %}" width="582" style="height: 350px;width: 90%;" class="img-fluid" alt="">
+                    <img src="{% static 'images/landing/f1.png' %}" width="582" style="width: 82%;" class="img-fluid" alt="">
                 </div>  
                 <div class="col-lg-8 offset-lg-2 not_in_mobile" style="text-align: center;margin-top: 15px;">
                     Закажите бесплатную презентацию всех возможностей прямо сейчас 
@@ -63,7 +63,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/market.png' %}" style="width: 600px;height: 300px;">
+                        <img class="full-w" src="{% static 'images/landing/market.png' %}">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -79,7 +79,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/crm.png' %}" style="width: 100%;height: 280px;">
+                        <img src="{% static 'images/landing/crm.png' %}" class="full-w">
                     </div> 
                 </div> 
                 <div class="col-md-5 text-center text-md-left"> 
@@ -95,7 +95,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/sch.png' %}" style="width: 600px;height: 300px;">
+                        <img src="{% static 'images/landing/sch.png' %}" class="full-w">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -125,16 +125,22 @@
                         <path d="m4.31783662 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" fill-rule="evenodd" transform="matrix(-1 0 0 -1 21.734738 40)"/> 
                     </svg> 
                 </a>
-                <div class="board" style="padding: 0 0 123px 0;">
+                <div class="board how-it-works">
                     <div class="slide_images">
-                        <img src="{% static 'images/landing/1.png' %}" class="full_size">
+                        <img src="{% static 'images/landing/1.png' %}" class="full-w land_img land_img1">
+                        <img src="{% static 'images/landing/2.png' %}" class="full-w land_img land_img2" style="display: none;">
+                        <img src="{% static 'images/landing/3.png' %}" class="full-w land_img land_img3" style="display: none;">
+                        <img src="{% static 'images/landing/4.png' %}" class="full-w land_img land_img4" style="display: none;">
+                        <img src="{% static 'images/landing/5.png' %}" class="full-w land_img land_img5" style="display: none;">
                     </div>
-                    <div class="captions" style="height: 123px;"> 
-                        <div class="caption caption-1"> На этой странице клиент знакомится с предлагаемыми курсами, ценами, преподавателями Вашего центра, выбирает подходящий себе курс и оставляет заявку на него. </div> 
-                        <div class="caption caption-2"> Заявка в виде карточки появляется во вкладке CRM в Вашем личном кабинете. </div> 
-                        <div class="caption caption-3"> Нажав на карточку, Вы сможете увидеть подробную информацию о клиенте и его пожеланиях, чтобы обратная связь с ним стала эффективнее. </div> 
-                        <div class="caption caption-4"> Связавшись с клиентом и договорившись о пробном уроке, либо покупке абонемента, Вы передвигаете его на следующую колонку (на следующий этап продаж). </div> 
-                        <div class="caption caption-5"> Переместив карточку клиента в колонку «Записался на пробный урок» или «Купил абонемент», Вам открывается расписание заранее созданных Вами классов/курсов. Нажав на которые, Вы запишите клиента в данный класс. </div> 
+                    <div class="captions"> 
+                        <div class="caption-texts">
+                            <div class="caption caption-1"> На этой странице клиент знакомится с предлагаемыми курсами, ценами, преподавателями Вашего центра, выбирает подходящий себе курс и оставляет заявку на него. </div> 
+                            <div class="caption caption-2"> Заявка в виде карточки появляется во вкладке CRM в Вашем личном кабинете. </div> 
+                            <div class="caption caption-3"> Нажав на карточку, Вы сможете увидеть подробную информацию о клиенте и его пожеланиях, чтобы обратная связь с ним стала эффективнее. </div> 
+                            <div class="caption caption-4"> Связавшись с клиентом и договорившись о пробном уроке, либо покупке абонемента, Вы передвигаете его на следующую колонку (на следующий этап продаж). </div> 
+                            <div class="caption caption-5"> Переместив карточку клиента в колонку «Записался на пробный урок» или «Купил абонемент», Вам открывается расписание заранее созданных Вами классов/курсов. Нажав на которые, Вы запишите клиента в данный класс. </div>
+                        </div>
                         <nav> 
                             <a class="step-1"></a> 
                             <a class="step-2"></a> 
@@ -247,7 +253,6 @@
               window.prefLocale = '';
               window.locale = 'ru';
             </script> 
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
             <ul> 
                 <li><a href="/team">О нас</a></li> 
                 <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
@@ -261,6 +266,7 @@
         </footer>   
     </div>
     <span class="request_url" url='{% url "main:get_request_land" %}'></span>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="{% static 'js/landing/func3.js' %}"></script> 
     <script src="{% static 'js/landing/func.js' %}"></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
@@ -316,6 +322,7 @@
       }
     }
 </style>
+<script src="{% static 'js/landing/func2.js' %}"></script>   
 
 </body> 
 </html>

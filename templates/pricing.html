@@ -148,10 +148,10 @@ table {
                         <td>Неограниченное кол-во филиалов/офисов/аудиторий</td> 
                     </tr> 
                     <tr> 
-                        <td>Неограниченное кол-во курсов/предметов/групп</td> 
-                        <td>Неограниченное кол-во курсов/предметов/групп</td> 
-                        <td>Неограниченное кол-во курсов/предметов/групп</td> 
-                        <td>Неограниченное кол-во курсов/предметов/групп</td> 
+                        <td>Неограниченное кол-во курсов/предметов</td> 
+                        <td>Неограниченное кол-во курсов/предметов</td> 
+                        <td>Неограниченное кол-во курсов/предметов</td> 
+                        <td>Неограниченное кол-во курсов/предметов</td> 
                     </tr> 
                     <tr> 
                         <td>1 группа</td> 
@@ -315,24 +315,335 @@ table {
             </div> 
         </div> 
     </section> 
-        <footer class="quiet" data-track-group="Footer">  
-            <script>
-              window.isHreflangPath = false;
-              window.prefLocale = '';
-              window.locale = 'ru';
-            </script> 
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-            <ul> 
-                <li><a href="/team">О нас</a></li> 
-                <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
-                <li><a href="/vacancies">Вакансии</a></li> 
-            </ul> 
-            <p> 
-                <img src="{% static 'images/landing/logo.png' %}" style="width: 270px;height: 100px;">
-                <br>
-                &nbsp;© 2019. Все права защищены. 
-            </p> 
-        </footer>   
+    <section class="features d-md-none">
+        <div class="container">
+            <div class="tiers text-center text-white" id="tiers" data-billed="annually">
+                <div class="pt-4">
+                    <h3>Бесплатно</h3>
+                </div>
+                <div class="price">
+                    <h2 class="m-0"><small>0тг</small></h2> 
+                </div>
+                <div class="price-2">
+                в месяц  </div>
+                <div class="pb-4">
+                    <a class="btn btn-secondary mt-3 px-3" onclick="$('#request_price_modal').modal('show')" data-track="Signup">Начать</a>
+                </div>
+            </div>
+            <table class="table table-bordered text-center m-0">
+                <tbody>
+                    <tr class="table-light">
+                        <th>Marketplace</th>
+                    </tr>
+                    <tr>
+                        <td>Указание центра на маркетплейсе</td>
+                    </tr>
+                    <tr>
+                        <td>Лэндинг-страница учебного центра</td>
+                    </tr>
+                    <tr>
+                        <td>Возможность редактирования информации на лэндинг-странице</td>
+                    </tr>
+                    <tr>
+                        <td>Блог учебного центра</td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Внутренняя система</th>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное кол-во филиалов/офисов/аудиторий</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное кол-во курсов/предметов</td>
+                    </tr>
+                    <tr>
+                        <td>1 группа</td>
+                    </tr>
+                    <tr>
+                        <td>10 карточек в CRM</td>
+                    </tr>
+                    <tr>
+                        <td>Воронка продаж</td>
+                    </tr>
+                    <tr>
+                        <td>Интерактивное расписание занятий</td>
+                    </tr>
+                    <tr>
+                        <td>Личный кабинет студента с расписанием</td>
+                    </tr>
+                    <tr>
+                        <td>Журнал посещаемости</td>
+                    </tr>
+                    <tr>
+                        <td>Хранилище документов 10 мб</td>
+                    </tr>
+                    <tr>
+                        <td>Задания и поручения по системе Канбан</td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Дополнительно</th>
+                    </tr>
+                    <tr>
+                        <td>Email рассылки</td>                         
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tiers tiers-bottom text-center text-white">
+                <div>
+                    <a class="btn btn-secondary my-3 px-3" href="/signup" data-track="Signup">Начать</a>
+                </div>
+            </div>
+            <div class="tiers text-center text-white mt-4" id="tiers" data-billed="annually">
+                <div class="pt-4">
+                    <h3>Business Class</h3>
+                </div>
+                <div class="price">
+                    <h2 class="m-0" data-billed="annually"><small>$</small>9<small>99</small></h2>
+                    <h2 class="m-0" data-billed="monthly"><small>$</small>12<small>50</small></h2>
+                </div>
+                <div>
+                    <small class="d-block mb-1">за пользователя в месяц</small>
+                </div>
+                <div class="price-2">
+                    <div class="business-class-pricing mb-2">
+                        <select>
+                            <option class="annually" selected>в год</option>
+                            <option class="monthly">ежемесячно</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pb-4">
+                    <a class="btn btn-success font-weight-bold mt-3 px-3" href="/business-class" data-track="Learn More about Business Class">Узнать больше</a>
+                </div>
+            </div>
+            <table class="table table-bordered text-center m-0">
+                <tbody>
+                    <tr class="table-light">
+                        <th>Marketplace</th>
+                    </tr>
+                    <tr>
+                        <td>Указание центра на маркетплейсе</td>
+                    </tr>
+                    <tr>
+                        <td>Лэндинг-страница учебного центра</td>
+                    </tr>
+                    <tr>
+                        <td>Возможность редактирования информации на лэндинг-странице</td>
+                    </tr>
+                    <tr>
+                        <td>Блог учебного центра</td>
+                    </tr>
+                    <tr>
+                        <td>Возможность клиента пройти тест на определение уровня знаний</td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Внутренняя система</th>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное кол-во филиалов/офисов/аудиторий</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное кол-во курсов/предметов</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное кол-во групп</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное кол-во карточек в CRM</td>
+                    </tr>
+                    <tr>
+                        <td>Воронка продаж</td>
+                    </tr>
+                    <tr>
+                        <td>Интерактивное расписание занятий</td>
+                    </tr>
+                    <tr>
+                        <td>Личный кабинет студента с расписанием</td>
+                    </tr>
+                    <tr>
+                        <td>Личный кабинет студента с расписанием</td>
+                    </tr>
+                    <tr>
+                        <td>Журнал посещаемости</td>
+                    </tr>
+                    <tr>
+                        <td>Хранилище документов 10 мб</td>
+                    </tr>
+                    <tr>
+                        <td>Задания и поручения по системе Канбан</td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Дополнительно</th>
+                    </tr>
+                    <tr>
+                        <td>Email рассылки</td>                         
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tiers tiers-bottom text-center text-white">
+                <div>
+                    <a class="btn btn-success font-weight-bold my-3 px-3" href="/business-class" data-track="Learn More about Business Class">Узнать больше</a>
+                </div>
+            </div>
+            <div class="tiers text-center text-white mt-4" id="tiers" data-billed="annually">
+                <div class="pt-4">
+                    <h3>Enterprise</h3>
+                </div>
+                <div class="price">
+                    <h2 class="m-0" id="enterprise-price"><small>$</small>20<small>83</small></h2>
+                </div>
+                <div>
+                    <small class="d-block mb-1">за пользователя в месяц</small>
+                </div>
+                <div class="price-2">
+                    До <input type="text" id="users-count" value="100"> пользователей 
+                    <div class="pt-3 px-6">
+                        <input type="range" min="20" max="5000" value="100" class="form-control-range" id="users-range">
+                </div>
+                <div id="user-max" class="d-none">
+                Если пользователей больше 5000, нажмите ниже </div>
+                </div>
+                <div class="pb-4">
+                    <a class="btn btn-success font-weight-bold mt-3 px-3" href="/enterprise" data-track="Enterprise">Узнать больше</a>
+                </div>
+            </div>
+            <table class="table table-bordered text-center m-0">
+                <tbody>
+                    <tr class="table-light">
+                        <th>Стандартные функции</th>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число персональных досок</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число карточек</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число колонок</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число <a href="#power-ups">улучшений</a></td>
+                    </tr>
+                    <tr>
+                        <td>Размер вложения – 250 МБ</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#priority-support">Приоритет в поддержке</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#observers">Наблюдатели</a></td>
+                    </tr>
+                    <tr>
+                        <td>Пользовательские фоны и стикеры</td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Функции для команд</th>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число <a href="#team-boards">досок команды</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#board-collections">Коллекции досок</a></td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Улучшение Butler для автоматизации процессов</th>
+                    </tr>
+                    <tr>
+                        <td>
+                        Настройте <a href="#automation">автоматизацию</a>
+                    для рутинных задач и выведите свой бизнес на новый уровень! </td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число кнопок, правил и запланированных последовательностей</td>
+                    </tr>
+                    <tr>
+                        <td>Неограниченное число <a href="#command-runs">запусков последовательностей</a></td>
+                    </tr>
+                    <tr>
+                        <td>Запланированные последовательности</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#command-administration">Администрирование последовательностей</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#custom-field-actions">Действия с пользовательскими полями</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#email-notifications">Уведомления по электронной почте</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#http-requests">Запросы HTTP</a></td>
+                    </tr>
+                    <tr class="table-light">
+                        <th>Администрирование и безопасность</th>
+                    </tr>
+                    <tr>
+                        <td><a href="#2fa">Двухфакторная аутентификация</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#advanced-admin-permissions">Расширенные права доступа администратора</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#domain-restricted-invites">Приглашения только для пользователей домена</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#deactivate-members">Деактивировать участников</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#google-apps-signon">Вход через Google Apps</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#simple-data-export">Простой экспорт данных</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#sso">Система единого входа для всех SAML IdP</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#power-up-restrictions">Администрирование улучшений</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#power-up-restrictions">Ограничения для вложений</a></td>
+                    </tr>
+                    <tr>
+                        <td><a href="#organization-wide-permissions">Права доступа для сотрудников организации</a></td>
+                    </tr>
+                    <tr>
+                        <td>Доски, доступные для сотрудников организации</td>
+                    </tr>
+                    <tr>
+                        <td>Индивидуальная адаптация сотрудников</td>
+                    </tr>
+                    <tr>
+                        <td><a href="#public-board-management">Управление публичными досками</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tiers tiers-bottom text-center text-white">
+                <div>
+                    <a class="btn btn-success font-weight-bold my-3 px-3" href="/enterprise" data-track="Enterprise">Узнать больше</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="quiet" data-track-group="Footer">  
+        <script>
+          window.isHreflangPath = false;
+          window.prefLocale = '';
+          window.locale = 'ru';
+        </script> 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <ul> 
+            <li><a href="/team">О нас</a></li> 
+            <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
+            <li><a href="/vacancies">Вакансии</a></li> 
+        </ul> 
+        <p> 
+            <img src="{% static 'images/landing/logo.png' %}" style="width: 270px;height: 100px;">
+            <br>
+            &nbsp;© 2019. Все права защищены. 
+        </p> 
+    </footer>   
     </div>    
     <script src='{% static "js/scripts.js" %}'></script>
     <span class="request_url" url='{% url "main:get_request_land" %}'></span>

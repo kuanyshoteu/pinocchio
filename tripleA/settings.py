@@ -208,7 +208,10 @@ AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' #'whitenoise.django.GzipManifestStaticFilesStorage'
+if toserver:
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'

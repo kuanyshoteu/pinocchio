@@ -1,6 +1,9 @@
 body{
   min-height: 100%;
 }
+.full-w {
+  width: 100% !important;
+}
 .content-container{
   min-height: 92% !important;
   background-color: #f4f4f4;

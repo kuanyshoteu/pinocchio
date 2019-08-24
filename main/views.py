@@ -633,6 +633,8 @@ def make_zaiavka(request):
             course = school.school_subjects.filter(id=int(request.GET.get('course')))
             if len(course):
                 comment = 'Хочет на курс: "' + course[0].title + '"'
+        else:
+            comment = 'Подал заявку через bilimtap'
         if request.user.is_authenticated:
             profile = get_profile(request)
             saved = True
