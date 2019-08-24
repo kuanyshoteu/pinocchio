@@ -23,7 +23,7 @@
 				        	</div>
 				        	<div class="ui segment" style="margin-top: 0;">
                                 <div class="hint40 highliter" style="position: absolute;margin-left: 300px;margin-top: -20px;"></div>
-				        		<form class="ui form help40" method='POST' enctype="multipart/form-data" class="ui form">{% csrf_token %}
+				        		<form class="ui form help40" class="ui form">{% csrf_token %}
 								    {{ form }}
 								    <input type='submit' class='ui button blue mini' value='Сохранить'/>
 								</form>
@@ -32,10 +32,13 @@
 				        		Пароль
 				        	</div>
 				        	<div class="ui segment" style="margin-top: 0;">
-				        		<form class="ui form" method='POST' enctype="multipart/form-data" class="ui form">{% csrf_token %}
-								    {{ password_form }}
-								    <input type='submit' class='ui button blue mini' value='Сохранить'/>
-								</form>
+                                <form class="ui form" style="margin: 0 auto;width: 40%;">
+                                    <b>Введите пароль</b>
+                                    <input class="reset_password1" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
+                                    <b>Повторите пароль</b>
+                                    <input class="reset_password2" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
+                                    <input class="ui button green reset_pswd full-w" id="{{ profile.id }}" value="Изменить пароль" type="submit" onclick="return false">
+                                </form>
 			        		</div>
 			        	</div>
 					</div>			

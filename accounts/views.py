@@ -145,6 +145,7 @@ def change_profile(request):
     if form.is_valid():
         hisprofile = form.save(commit=False)
         hisprofile.save()
+        return redirect(hisprofile.change_url())
 
     if request.method == 'POST':
         password_form = PasswordChangeForm(request.user, request.POST)
@@ -152,10 +153,7 @@ def change_profile(request):
             hisprofile.user = password_form.save()
             update_session_auth_hash(request, hisprofile.user)  # Important!
             login(request, hisprofile.user)
-            messages.success(request, 'Your password was successfully updated!')
             return redirect(hisprofile.change_url())
-        else:
-            messages.error(request, 'Please correct the error below.')
     else:
         password_form = PasswordChangeForm(request.user)
 
