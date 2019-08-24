@@ -148,8 +148,8 @@
                     div.innerHTML = data.columns[i][0]
                     section.appendChild(div)
                     document.getElementById('next_atts').appendChild(section)                   
-                    $('.wait').attr('status', 'no')
                 };
+                $('.wait').attr('status', 'no')
                 setTimeout(loading_stop, 1000);
             }, error: function (error) {
                 console.log('error')
@@ -252,9 +252,9 @@
                     }
                     prev_atts = document.getElementById('prev_atts')
                     prev_atts.insertBefore(section, prev_atts.firstChild)                   
-                    $('.wait').attr('status', 'no')
-                    setTimeout(loading_stop, 1000);
                 }
+                $('.wait').attr('status', 'no')
+                setTimeout(loading_stop, 1000);
             }, error: function (error) {
                 console.log('error')
             }

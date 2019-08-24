@@ -4,7 +4,16 @@
 .land_price2{
     margin-top: -25px !important;font-size: 17px;margin-bottom: 0;height: 45px;
 }
-
+header{
+    background-color: #506ca9;
+}
+.login{
+    color: #fff;
+    margin-right: 15px;
+}
+.logo{
+    width: 180px;height: 70px;
+}
 .badge{display:inline-block;padding:.25em .4em;font-size:75%;font-weight:500;line-height:1;text-align:center;white-space:nowrap;vertical-align:baseline;border-radius:6px}
 
 .badge:empty{display:none}
@@ -1240,8 +1249,13 @@ h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6{margin-bottom:.5rem;font-family:"Charl
 h1,.h1{font-size:3.125rem !important}
 h2,.h2{font-size:2.5rem !important}
 h3,.h3{font-size:2.1875rem !important}
-h4,.h4{font-size:1.875rem !important}
-h5,.h5{font-size:1.5625rem !important}
+h4,.h4{font-size:1.6rem !important}
+h5,.h5{
+    font-size:1.5rem;
+    color: lightgrey;
+    height: 50px;
+    width: 100%;
+}
 h6,.h6{font-size:1.25rem !important}
 
 .lead{font-size:1.5625rem;font-weight:300}

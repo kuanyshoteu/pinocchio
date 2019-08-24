@@ -12,6 +12,8 @@
     <link rel="stylesheet" href='{% static "OwlCarousel/owl.carousel.min.css" %}'>
     <link rel="stylesheet" href='{% static "OwlCarousel/owl.theme.default.min.css" %}'>
     <link rel="stylesheet" href='{% static "css/datepicker.min.css" %}'>    
+    <script src='{% static "js/scripts.js" %}'></script>
+    <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     {% block head_extra %} {% endblock head_extra %}
 </head>
 <body>
@@ -20,7 +22,7 @@
 
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
-        <div class="menu-title" style="width: calc(25% + 140px);">
+        <div class="menu-title" style="width: calc(25% + 140px);padding-left: 10px;">
             <i class="icon bars" id="toggle"></i>
             <a href='{% url "main:home" %}' class="header main">
                 <img src="{% static 'images/bilimtap.png' %}" id="logo">
@@ -213,15 +215,13 @@
 <audio id="notification_audio" style="display: none;" controls>
     <source src='{% static "notification.mp3" %}' type="audio/mpeg">
 </audio>
-    <script src='{% static "js/scripts.js" %}'></script>
-    <script src='{% static "js/myscripts.js" %}'></script>
-    <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
-    <script src='{% static "js/cardForm.js" %}'></script>
-    <script src='{% static "js/OwlCarousel/owl.carousel.min.js" %}'></script>
-    <script src='{% static "js/datepicker.min.js" %}'></script>
-    <script src='{% static "js/dragAndDrop/Sortable.min.js" %}'></script>
-    <script src='{% static "js/faisalIncludes.js" %}'></script>
+<script src='{% static "js/myscripts.js" %}'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
+<script src='{% static "js/cardForm.js" %}'></script>
+<script src='{% static "js/OwlCarousel/owl.carousel.min.js" %}'></script>
+<script src='{% static "js/datepicker.min.js" %}'></script>
+<script src='{% static "js/dragAndDrop/Sortable.min.js" %}'></script>
+<script src='{% static "js/faisalIncludes.js" %}'></script>
 <script src='{% static "js/squad.js" %}'></script>
 <script src='{% static "js/library.js" %}'></script>
 <script src='{% static "js/plugins.js" %}'></script>
