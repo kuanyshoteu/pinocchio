@@ -34,7 +34,6 @@ urlpatterns = [
     url(r'^todolist/', include("todolist.urls", namespace='todolist')),
     url(r'^library/', include("library.urls", namespace='library')),
     url(r'^news/', include("news.urls", namespace='news')),
-    url(r'^courses/$', courses, name='courses'),        
     url(r'^api/squads/', include('squads.api.urls', namespace='api-squads')),
     url(r'^documents/', include("documents.urls", namespace='documents')),
     url(r'^loaderio-3614d85f1228305eef28963b2654a5ae', loaderio, name='loaderio'),

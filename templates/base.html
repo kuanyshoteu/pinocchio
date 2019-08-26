@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale = 1">
-    <title>{% block head_title %}bilimtap{% endblock head_title %}</title>
+    <meta name="description" content="Поиск курсов и учебных центров в Алмате">
+    <title>{% block head_title %}Bilimtap Поиск курсов{% endblock head_title %}</title>
     <!-- CSS -->
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="shortcut icon" href='{% static "images/fav2.ico" %}' type="image/png">
@@ -81,7 +82,7 @@
         </div>
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left:-50px;margin-top: 0px;">
-            Платформа учебных центров
+            <h1 style="font-size: 15px;" class="no_margin">Поиск учебных центров</h1>
             <a href="/about" class="ui button mini green" style="margin-left: 15px;padding: 8px 14px;">Стать партнером</a>
             {% if landing == True %}
             <div class="item not_in_mobile" >
@@ -104,7 +105,7 @@
             </div>
             {% else %}
             <div class="item float_right" style="margin-right: 15%;">
-                <span style="margin-right: 30px;height: 30px;"><!-- <a href='{% url "courses" %}' class="ui button mini green" style="font-weight: 600;font-size: 13px;padding: 8.6px 16.5px;">Магазин курсов</a> --></span>
+                <span style="margin-right: 30px;height: 30px;"></span>
                 <a class="open_login" style="color: #fff;margin-right: 25px;" onclick="$('#signup-modal').modal('show')">
                     Регистрация
                 </a>

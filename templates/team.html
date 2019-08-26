@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+{% block head_title %}
+Команда | {{ block.super }}
+{% endblock head_title %}
 {% block content %}
 <style type="text/css">
     .itemm{
@@ -34,7 +37,7 @@
                     <p style="font-size: 24px;">Связать учителей и учеников</p>
                 </div>
                 <div style="text-align: center;">
-                    <h1 style="font-size: 66px;font-weight: 600;margin-bottom: 36px;">Наша команда</h1>
+                    <h2 style="font-size: 60px;font-weight: 600;margin-bottom: 36px;">Наша команда</h2>
                 </div>
                 <div class="ui grid stackable" style="text-align: left;padding: 15px;">
                     <div class="four wide column" style="text-align: center;">

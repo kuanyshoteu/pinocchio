@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
-{% block content %}
+{% block head_title %}
+Зарегестрироваться | {{ block.super }}
+{% endblock head_title %}{% block content %}
 <div class="ui container" style="overflow-y: hidden;">
     <div class="ui grid stackable">
         <div class="five wide column">

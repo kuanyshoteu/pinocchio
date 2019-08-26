@@ -9,7 +9,6 @@ urlpatterns = [
     url(r'^about/$', about, name='about'),
     url(r'^team/$', team, name='team'),
     url(r'^pricing/$', pricing, name='pricing'),
-    url(r'^vacancies/$', vacancies, name='vacancies'),
     url(r'^login/$', login_page, name='login_page'),
     url(r'^sign_up/$', sign_up, name='sign_up'),
     url(r'^api/login/$', login_view, name='login'),
