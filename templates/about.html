@@ -12,7 +12,7 @@
     <header class="fixed-top "> 
         <nav class="navbar py-3" data-track-group="Global Header"> 
             <a class="float-left" href="/">
-                <img src="{% static 'images/landing/bilimtap.png' %}" style="width: 180px;height: 70px">
+                <img src="{% static 'images/landing/bilimtap.png' %}" alt="logo" style="width: 180px;height: 70px">
             </a> 
             <div class="d-none d-md-block recommend"></div> 
             <div class="float-right buttons">
@@ -29,15 +29,15 @@
                     <p class="lead">CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое…</p>  
                 </div>
                 <div class="col-lg-6 offset-lg-1"> 
-                    <img src="{% static 'images/landing/f1.png' %}" width="582" style="width: 82%;" class="img-fluid" alt="">
+                    <img src="{% static 'images/landing/f1.png' %}" alt="work" width="582" style="width: 82%;" class="img-fluid" alt="">
                 </div>  
                 <div class="col-lg-8 offset-lg-2 not_in_mobile" style="text-align: center;margin-top: 15px;">
                     Закажите бесплатную презентацию всех возможностей прямо сейчас 
                 </div>  
                 <div class="col-lg-12 not_in_mobile" style="padding-bottom: 50px;"> 
                     <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;">
-                        <textarea name="email" class="quick-signup-email request_name1" type="" placeholder="Имя"></textarea>
-                        <textarea name="email" class="quick-signup-email request_phone1" type="phone" placeholder="Телефон"></textarea>
+                        <textarea name="email" class="quick-signup-email request_name1" placeholder="Имя"></textarea>
+                        <textarea name="email" class="quick-signup-email request_phone1" placeholder="Телефон"></textarea>
                         <br>
                         <div class="loading" style="display: none;">
                             <div class="animation"><div class="circle one"></div></div>
@@ -59,12 +59,12 @@
             </div> 
         </div> 
     </section> 
-    <section id="collaborate"> 
+    <section id="marketplace"> 
         <div class="container py-5 pb-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
-                        <img class="full-w" src="{% static 'images/landing/market.png' %}">
+                        <img class="full-w" src="{% static 'images/landing/market.png' %}" alt="marketplace">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -80,7 +80,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/crm.png' %}" class="full-w">
+                        <img src="{% static 'images/landing/crm.png' %}" class="full-w" alt="crm">
                     </div> 
                 </div> 
                 <div class="col-md-5 text-center text-md-left"> 
@@ -91,12 +91,12 @@
             </div> 
         </div> 
     </section> 
-    <section id="collaborate"> 
+    <section id="schedule"> 
         <div class="container py-5 pt-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/sch.png' %}" class="full-w">
+                        <img src="{% static 'images/landing/sch.png' %}" class="full-w" alt="schedule">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -128,11 +128,11 @@
                 </a>
                 <div class="board how-it-works">
                     <div class="slide_images">
-                        <img src="{% static 'images/landing/1.png' %}" class="full-w land_img land_img1">
-                        <img src="{% static 'images/landing/2.png' %}" class="full-w land_img land_img2" style="display: none;">
-                        <img src="{% static 'images/landing/3.png' %}" class="full-w land_img land_img3" style="display: none;">
-                        <img src="{% static 'images/landing/4.png' %}" class="full-w land_img land_img4" style="display: none;">
-                        <img src="{% static 'images/landing/5.png' %}" class="full-w land_img land_img5" style="display: none;">
+                        <img src="{% static 'images/landing/1.png' %}" class="full-w land_img land_img1" alt="landing">
+                        <img src="{% static 'images/landing/2.png' %}" class="full-w land_img land_img2" alt="crm" style="display: none;">
+                        <img src="{% static 'images/landing/3.png' %}" class="full-w land_img land_img3" alt="client" style="display: none;">
+                        <img src="{% static 'images/landing/4.png' %}" class="full-w land_img land_img4" alt="card" style="display: none;">
+                        <img src="{% static 'images/landing/5.png' %}" class="full-w land_img land_img5" alt="schedule" style="display: none;">
                     </div>
                     <div class="captions"> 
                         <div class="caption-texts">
@@ -165,7 +165,7 @@
             <div class="row"> 
                 <div class="col-lg-4"> 
                     <div class="img img-collaborate">
-                        <img src="{% static 'images/landing/vrn.png' %}" style="width: 320px;height: 200px;"/>
+                        <img src="{% static 'images/landing/vrn.png' %}" alt="voronka" style="width: 320px;height: 200px;"/>
                     </div> 
                     <h5>Воронка продаж</h5> 
                     <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж.</p> 
@@ -173,7 +173,7 @@
                 </div> 
                 <div class="col-lg-4"> 
                     <div class="img img-apps">
-                        <img src="{% static 'images/landing/sms.png' %}" style="width: 270px;height: 200px;">
+                        <img src="{% static 'images/landing/sms.png' %}" alt="sms" style="width: 270px;height: 200px;">
                     </div>
                     <h5>СМС уведомления</h5> 
                     <p class="small">Напоминайте клиентам о предстоящем пробном занятии, информируйте об отмене урока вовремя и расскажите всем своим клиентам о новой акции.</p> 
@@ -181,7 +181,7 @@
                 </div> 
                 <div class="col-lg-4"> 
                     <div class="img img-sync">
-                        <img src="{% static 'images/landing/money.png' %}" style="width: 270px;height: 200px;">
+                        <img src="{% static 'images/landing/money.png' %}" alt="money" style="width: 270px;height: 200px;">
                     </div> 
                     <h5>Оплата, расчет зарплат</h5> 
                     <p class="small">Оплата по скидке или в рассрочку, скидки по акциям, перерасчет оплаты в случае пропуска занятия, расчёт зарплат преподавателей по проведённым урокам – проводите все расчёты одной кнопкой.</p> 
@@ -217,9 +217,11 @@
                     </div>
                     <div class="col-lg-5"> 
                         <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;margin-top: -27px;">
-                            Закажите бесплатную презентацию всех возможностей прямо сейчас 
-                            <textarea style="margin: 15px 0;" name="email" class="quick-signup-email request_name2" type="email" placeholder="Имя"></textarea>
-                            <textarea name="email" class="quick-signup-email request_phone2" type="email" placeholder="Телефон"></textarea>
+                            <h2 style="font-size: 23px;">
+                                Закажите бесплатную презентацию всех возможностей прямо сейчас 
+                            </h2>
+                            <textarea style="margin: 15px 0;" name="email" class="quick-signup-email request_name2" placeholder="Имя"></textarea>
+                            <textarea name="email" class="quick-signup-email request_phone2" placeholder="Телефон"></textarea>
                             <br>
                             <div class="loading" style="display: none;">
                                 <div class="animation"><div class="circle one"></div></div>
@@ -259,13 +261,14 @@
                 <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
             </ul> 
             <p> 
-                <img src="{% static 'images/landing/logo.png' %}" style="width: 270px;height: 100px;">
+                <img src="{% static 'images/landing/logo.png' %}" alt="triplea" style="width: 270px;height: 100px;">
                 <br>
                 &nbsp;© 2019. Все права защищены. 
             </p> 
         </footer>   
     </div>
     <span class="request_url" url='{% url "main:get_request_land" %}'></span>
+</body> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="{% static 'js/landing/func3.js' %}"></script> 
     <script src="{% static 'js/landing/func.js' %}"></script>
@@ -324,5 +327,4 @@
 </style>
 <script src="{% static 'js/landing/func2.js' %}"></script>   
 
-</body> 
 </html>
