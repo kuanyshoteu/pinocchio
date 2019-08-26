@@ -1,7 +1,7 @@
 <div class="ui modal" id="login-modal" style="min-height: 400px;">
     <i class="close icon"></i>
     <div class="content">
-        <form method='POST' style="width: 40%;margin: 5% auto;" action='' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
+        <form method='POST' style="width: 40%;margin: 5% auto;" action='login' enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
             <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
             <b>Номер телефона или Email</b>
             <input class="username" name="username" style="margin-bottom: 15px;margin-top: 10px;">
