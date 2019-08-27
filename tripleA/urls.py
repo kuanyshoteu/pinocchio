@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^loaderio-3614d85f1228305eef28963b2654a5ae', loaderio, name='loaderio'),
     url(r'^oauth/', include('social_django.urls', namespace='social')),
     url(r'^confirm/', confirm_email, name="confirm_email"),
-    url(r'^robots.txt/', robots, name="confirm_email"),
+    url(r'^robots.txt', robots, name="confirm_email"),
     url(r'^', include("main.urls", namespace='main')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
