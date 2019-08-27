@@ -4,19 +4,21 @@
 <head> 
     <meta name="viewport" content="width=device-width, initial-scale=1">     
     <meta name="description" content="CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое">
+    <link rel="canonical" href="https://www.bilimtap.kz/about/" />    
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
+    <link rel="stylesheet" href='{% static "css/landing.css" %}'/>
     <title>Marketplace и CRM для учебных центров – Bilimtap</title>
 </head> 
 <body data-track-group="Landing-Marquee">  
     <header class="fixed-top "> 
         <nav class="navbar py-3" data-track-group="Global Header"> 
             <a class="float-left" href="/">
-                <img src="{% static 'images/landing/bilimtap.png' %}" alt="logo" style="width: 180px;height: 70px">
+                <img src="{% static 'images/landing/bilimtap.png' %}" alt="logo" class="land_logo">
             </a> 
             <div class="d-none d-md-block recommend"></div> 
             <div class="float-right buttons">
                 <a href="/login" class="btn btn-sm btn-link text-white">Войти</a> 
-                <a href="/sign_up" class="btn btn-sm bg-green font-weight-bold" style="color: #fff;">Зарегистрироваться</a>  
+                <a href="/sign_up" class="btn btn-sm font-weight-bold">Зарегистрироваться</a>  
             </div> 
         </nav> 
     </header>   
@@ -28,13 +30,13 @@
                     <p class="lead">CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое…</p>  
                 </div>
                 <div class="col-lg-6 offset-lg-1"> 
-                    <img src="{% static 'images/landing/f1.png' %}" alt="work" width="582" style="width: 82%;" class="img-fluid" alt="">
+                    <img src="{% static 'images/landing/f1.png' %}" alt="work" class="img-fluid">
                 </div>  
-                <div class="col-lg-8 offset-lg-2 not_in_mobile" style="text-align: center;margin-top: 15px;">
+                <div class="col-lg-8 offset-lg-2 not_in_mobile text-center">
                     Закажите бесплатную презентацию всех возможностей прямо сейчас 
                 </div>  
-                <div class="col-lg-12 not_in_mobile" style="padding-bottom: 50px;"> 
-                    <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;">
+                <div class="col-lg-12 not_in_mobile pb-5"> 
+                    <form class="quick-signup text-center" method="POST" action="/signup_redirect">
                         <textarea name="email" class="quick-signup-email request_name1" placeholder="Имя"></textarea>
                         <textarea name="email" class="quick-signup-email request_phone1" placeholder="Телефон"></textarea>
                         <br>
@@ -46,11 +48,11 @@
                             <div class="animation"><div class="circle five"></div></div>
                             <div class="animation"><div class="circle six"></div></div>
                         </div>
-                        <input class="btn btn-wrap btn-success btn-md px-4 get_request_land" id="1" style="margin-top: 10px;" value="Заказать" type="submit" onclick="return false">
-                        <div class="success_query highlight" style="display: none;margin-top: 15px;">
+                        <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" value="Заказать" type="submit" onclick="return false">
+                        <div class="success_query highlight mt-2" style="display: none;">
                             Спасибо! Мы скоро с Вами свяжемся
                         </div>
-                        <div class="land_fill_error1 highlight_red" style="display: none;margin-top: 15px;">
+                        <div class="land_fill_error1 highlight_red mt-2" style="display: none;">
                             Пожалуйста, заполните все поля
                         </div>                        
                     </form>  
@@ -69,7 +71,7 @@
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
                     <h3>Marketplace всех учебных центров города</h3> 
                     <p>Клиенты сами находят Вас и напрямую записываются на понравившийся курс.</p>
-                    <p><a style="color:#fff;" class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
+                    <p><a class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
                 </div> 
             </div> 
         </div> 
@@ -85,7 +87,7 @@
                 <div class="col-md-5 text-center text-md-left"> 
                     <h3 class="mt-3 mt-md-0">CRM система с 6 этапами продаж</h3> 
                     <p class="m-0">Поможет Вам не терять клиентов и лучше обрабатывать входящие заявки.</p> 
-                    <p><a style="color:#fff;" class="btn btn-secondary px-3 get_request_land_top" style="margin-top: 15px;">Заказать презентацию →</a></p>
+                    <p><a class="btn btn-secondary px-3 get_request_land_top mt-2">Заказать презентацию →</a></p>
                 </div> 
             </div> 
         </div> 
@@ -101,7 +103,7 @@
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
                     <h3>Интерактивное расписание занятий</h3> 
                     <p>Группы, классы, индивидуальные занятия, учителя и аудитории - всё в одном месте, просто и наглядно.</p>
-                    <p><a style="color:#fff;" class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
+                    <p><a class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
                 </div> 
             </div> 
         </div> 
@@ -153,7 +155,7 @@
             </div> 
         </div> 
     </section> 
-    <section id="features" style="margin-top: 80px;"> 
+    <section id="features" class="mt-6"> 
         <div class="container text-center py-0"> 
             <div class="row"> 
                 <div class="col-md-10 offset-md-1"> 
@@ -164,32 +166,32 @@
             <div class="row"> 
                 <div class="col-lg-4"> 
                     <div class="img img-collaborate">
-                        <img src="{% static 'images/landing/vrn.png' %}" alt="voronka" style="width: 320px;height: 200px;"/>
+                        <img src="{% static 'images/landing/vrn.png' %}" class="three_feat1" alt="voronka"/>
                     </div> 
                     <h5>Воронка продаж</h5> 
                     <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж.</p> 
-                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top" style="color: #fff;">Заказать презентацию</a></p> 
+                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p> 
                 </div> 
                 <div class="col-lg-4"> 
                     <div class="img img-apps">
-                        <img src="{% static 'images/landing/sms.png' %}" alt="sms" style="width: 270px;height: 200px;">
+                        <img src="{% static 'images/landing/sms.png' %}" class="three_feat2" alt="sms">
                     </div>
                     <h5>СМС уведомления</h5> 
                     <p class="small">Напоминайте клиентам о предстоящем пробном занятии, информируйте об отмене урока вовремя и расскажите всем своим клиентам о новой акции.</p> 
-                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top" style="color: #fff;">Заказать презентацию</a></p> 
+                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p> 
                 </div> 
                 <div class="col-lg-4"> 
                     <div class="img img-sync">
-                        <img src="{% static 'images/landing/money.png' %}" alt="money" style="width: 270px;height: 200px;">
+                        <img src="{% static 'images/landing/money.png' %}" class="three_feat3" alt="money">
                     </div> 
                     <h5>Оплата, расчет зарплат</h5> 
                     <p class="small">Оплата по скидке или в рассрочку, скидки по акциям, перерасчет оплаты в случае пропуска занятия, расчёт зарплат преподавателей по проведённым урокам – проводите все расчёты одной кнопкой.</p> 
-                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top" style="color: #fff;">Заказать презентацию</a></p>
+                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p>
                 </div>                 
             </div> 
         </div> 
     </section>
-    <div style="height: 80px;" id="start_request"></div>
+    <div id="start_request"></div>
     <div id="bottom-gradient"> 
         <!-- <section id="work-smarter"> 
             <div class="container"> 
@@ -211,15 +213,15 @@
                 <div class="row"> 
                     <div class="col-lg-7"> 
                         <div class="board"> 
-                            <div id="map" style="width: 100%; height: 350px;"></div>
+                            <div id="map""></div>
                         </div>
                     </div>
                     <div class="col-lg-5"> 
-                        <form class="quick-signup" method="POST" action="/signup_redirect" style="text-align: center;margin-top: -27px;">
-                            <h2 style="font-size: 23px;">
+                        <form class="quick-signup text-center mt-01" method="POST" action="/signup_redirect">
+                            <h5>
                                 Закажите бесплатную презентацию всех возможностей прямо сейчас 
-                            </h2>
-                            <textarea style="margin: 15px 0;" name="email" class="quick-signup-email request_name2" placeholder="Имя"></textarea>
+                            </h5>
+                            <textarea name="email" class="quick-signup-email request_name2 mt-2 mb-2" placeholder="Имя"></textarea>
                             <textarea name="email" class="quick-signup-email request_phone2" placeholder="Телефон"></textarea>
                             <br>
                             <div class="loading" style="display: none;">
@@ -230,11 +232,11 @@
                                 <div class="animation"><div class="circle five"></div></div>
                                 <div class="animation"><div class="circle six"></div></div>
                             </div>
-                            <input class="btn btn-wrap btn-success btn-md px-4 get_request_land" id="2" style="margin-top: 10px;" value="Заказать" type="submit" onclick="return false">
-                            <div class="success_query highlight" style="display: none;margin-top: 15px;">
+                            <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="2" value="Заказать" type="submit" onclick="return false">
+                            <div class="success_query highlight mt-2" style="display: none;">
                                 Спасибо! Мы скоро с Вами свяжемся
                             </div>
-                            <div class="land_fill_error2 highlight_red" style="display: none;margin-top: 15px;">
+                            <div class="land_fill_error2 highlight_red mt-2" style="display: none;">
                                 Пожалуйста, заполните все поля
                             </div>
                             <div>
@@ -256,11 +258,11 @@
               window.locale = 'ru';
             </script> 
             <ul> 
-                <li><a href="/team">О нас</a></li> 
-                <li><a href="/pricing"><b style="color: #172B4D;font-size: 21px;">Цены</b></a></li> 
+                <li><a href="{% url 'main:about' %}">О нас</a></li> 
+                <li><a href="{% url 'main:pricing' %}" class="land_costs_link">Цены</a></li> 
             </ul> 
             <p> 
-                <img src="{% static 'images/landing/logo.png' %}" alt="triplea" style="width: 270px;height: 100px;">
+                <img src="{% static 'images/landing/logo.png' %}" class="triplea" alt="triplea">
                 <br>
                 &nbsp;© 2019. Все права защищены. 
             </p> 

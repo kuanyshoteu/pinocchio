@@ -684,16 +684,16 @@ def handler500(request):
     return render(request,'er500.html', {})
 
 def adilmed(request):
-    print(request.GET)
     if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
         send_email('ADILMED Заявка', "имя: " + request.GET.get('name')+" номер: "+request.GET.get('phone'), ['akuir01@inbox.ru'])
     data={}
     return JsonResponse(data)
 
 def get_request_land(request):
-    print('fff')
     if request.GET.get('code') == 'nfrejkNWcsdkls588w5sdkewdhs':
-        print('fff')
         send_email('Bilimtap Заявка', "Имя: " + request.GET.get('name')+" Номер: "+request.GET.get('phone'), ['aaa.academy.kz@gmail.com'])
     data={}
     return JsonResponse(data)
+
+def robots(request):
+    return render(request,'robots.txt', {})
