@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^api/create_school/$', create_school, name='create_school'),
     url(r'^api/make_zaiavka/$', make_zaiavka, name='make_zaiavka'),
     url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
+    url(r'^robots.txt', robots, name="robots"),
+    url(r'^about/robots.txt', robots, name="robots"),    
 ]
