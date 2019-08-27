@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = True
+toserver = False
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 
@@ -218,6 +218,7 @@ MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
 MEDIA_ROOT = MEDIA_URL
 
 STATIC_URL = '/static/'
+AWS_IS_GZIPPED = True
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months

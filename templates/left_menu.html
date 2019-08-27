@@ -58,10 +58,7 @@
                     <i class="check calendar icon"></i>Задания
                 </a>
                 {% endif %}
-<!--                 <a class="item lftitem help6 help66hb help49 help4949hb help70 help7070hb" href='{% url "courses" %}'>
-                    <i class="rocket icon"></i>Курс store
-                </a>
- -->                {% if is_trener or profile.is_student and profile.schools.all > 0 %}                
+                {% if is_trener or profile.is_student and profile.schools.all > 0 %}                
                 <div class="ui divider" style="margin: 7px 0 7px 35px;width: 100px;"></div>
                 <a class="item lftitem" href='{{ profile.hislessons }}'>
                     <i class="arrow right icon"></i>Урок
