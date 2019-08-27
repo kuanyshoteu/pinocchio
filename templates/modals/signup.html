@@ -3,24 +3,30 @@
     <i class="close icon"></i>
     <div class="content" style="padding: 0">
         <div class="ui grid">
-            <div class="eight wide column" style="padding: 0">
-                <img src="{% static 'images/dude.gif' %}" style="width: 100%;">
+            <div class="four wide column">
             </div>
             <div class="eight wide column">
                 <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
                 <div style="display: none;" class="highlight_red reg_fill_all">Заполните все</div>
                 <form method='POST' style="margin-bottom: 0" enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
-                    <input class="new_name" placeholder="Имя Фамилия" style="margin-bottom: 10px;">
-                    <input class="new_username" placeholder="Номер телефона" style="margin-bottom: 10px;">
-                    <input class="new_mail" placeholder="Email" style="margin-bottom: 10px;">
+                    <b>Имя Фамилия</b>
+                    <input class="new_name"  style="margin-bottom: 10px;">
+                    <b>Номер телефона</b>
+                    <input class="new_username"  style="margin-bottom: 10px;">
+                    <b>Email</b>
+                    <input class="new_mail" style="margin-bottom: 10px;">
                     <div style="display: none;" class="highlight_red reg_wrong_pass">Пароли не совпадают</div>
-                    <input class="new_password" type="password" placeholder="Пароль" style="margin-bottom: 10px;">
-                    <input class="new_password2" type="password" placeholder="Повторите пароль" style="margin-bottom: 10px;">
+                    <b>Пароль</b>
+                    <input class="new_password" type="password" style="margin-bottom: 10px;">
+                    <b>Повторите пароль</b>
+                    <input class="new_password2" type="password"  style="margin-bottom: 10px;">
                     <div style="text-align: center;">
                         <input class="ui button green register-btn" style="margin-right: 15px;" value="Зарегистрироваться" type="submit" onclick="return false">
                     </div>
                 </form>                
             </div>
+            <div class="four wide column">
+            </div>            
         </div>
     </div>
 </div>
