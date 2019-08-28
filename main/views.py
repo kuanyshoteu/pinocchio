@@ -679,19 +679,9 @@ def make_zaiavka(request):
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 def handler404(request, exception):
-    response = render_to_response(
-        'er404.html',
-        context_instance=RequestContext(request)
-        )
-    response.status_code = 404
-    return response    
+    return render(request,'er404.html', {})
 def handler500(request):
-    response = render_to_response(
-        'er500.html',
-        context_instance=RequestContext(request)
-        )
-    response.status_code = 404
-    return response    
+    return render(request,'er500.html', {})
 
 def adilmed(request):
     if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
