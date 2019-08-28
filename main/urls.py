@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^api/make_zaiavka/$', make_zaiavka, name='make_zaiavka'),
     url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
     url(r'^robots.txt', robots, name="robots"),
-    url(r'^sitemap', sitemap, name="sitemap"),
+    url(r'^sitemap.xml', sitemap, name="sitemap"),
 ]
