@@ -680,13 +680,18 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 def handler404(request, exception):
     response = render_to_response(
-        'er400.html',
+        'er404.html',
         context_instance=RequestContext(request)
         )
-    response.status_code = 400
+    response.status_code = 404
     return response    
 def handler500(request):
-    return render(request,'er500.html', {})
+    response = render_to_response(
+        'er500.html',
+        context_instance=RequestContext(request)
+        )
+    response.status_code = 404
+    return response    
 
 def adilmed(request):
     if request.GET.get('code') == 'Nkjergmscsdkls554384sd1dfjbhmfhs':
