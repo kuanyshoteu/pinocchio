@@ -679,7 +679,12 @@ def make_zaiavka(request):
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 def handler404(request, exception):
-    return render(request,'er404.html', {})
+    response = render_to_response(
+        'er400.html',
+        context_instance=RequestContext(request)
+        )
+    response.status_code = 400
+    return response    
 def handler500(request):
     return render(request,'er500.html', {})
 
