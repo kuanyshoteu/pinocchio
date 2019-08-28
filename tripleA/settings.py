@@ -25,10 +25,11 @@ SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
     DEBUG = False
-    ALLOWED_HOSTS = ['www.bilimtap.kz', 'bilimtap.kz']
 else:
     DEBUG = True
-    ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
+
 
 # Application definition
 
@@ -198,11 +199,9 @@ from tripleA.aws.conf import *
 
 #STATIC_URL = '/static/'
 
-import datetime
-AWS_S3_CUSTOM_DOMAIN = 'E1DIVWQNJ8N4FW.cloudfront.net'
-AWS_S3_SECURE_URLS = True
-AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
+#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'    
 
+import datetime
 AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQRLWPNLEG'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_FILE_EXPIRE = 200
@@ -211,17 +210,16 @@ AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
 if toserver:
-    STATICFILES_STORAGE = 'static_compress.CompressedStaticFilesStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'
 MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
 MEDIA_ROOT = MEDIA_URL
 
 STATIC_URL = '/static/'
-AWS_IS_GZIPPED = True
-COMPRESS_URL = STATIC_URL
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
