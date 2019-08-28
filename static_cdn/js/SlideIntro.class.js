@@ -1,4 +1,4 @@
-// "use strict";
+// "use strict"; 
 /**
 * @constructor
 * @requires ScrollParallax, Slide

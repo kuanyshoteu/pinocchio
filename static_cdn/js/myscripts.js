@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () { 
     $('.make_zaiavka_new').click(function(e) {
         url = '/api/make_zaiavka/'
         id = $(this).attr('id')

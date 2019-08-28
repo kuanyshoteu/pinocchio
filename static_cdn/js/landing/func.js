@@ -1,4 +1,4 @@
-window.locale = 'ru';// "0.3.1"
+window.locale = 'ru';// "0.3.1" 
 // commit ff76c738ac8330498ceae10aa483df593d40419a
 // Author: Fred Galoso <fgaloso@atlassian.com>
 // Date:   Fri Mar 22 10:48:31 2019 -0500

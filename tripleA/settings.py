@@ -25,11 +25,10 @@ SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
     DEBUG = False
+    ALLOWED_HOSTS = ['www.bilimtap.kz', 'bilimtap.kz']
 else:
     DEBUG = True
-
-ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
-
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -59,6 +58,7 @@ INSTALLED_APPS = [
     'documents',
     'social_django',
     'channels',
+    'compressor',
 ]
 LOGGING = {
     'version': 1,
@@ -97,6 +97,7 @@ if toserver:
     SECURE_SSL_REDIRECT = True # [1]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -196,30 +197,35 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 from tripleA.aws.conf import *
-
-#STATIC_URL = '/static/'
-
-#STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'    
-
 import datetime
+
 AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQRLWPNLEG'
 AWS_SECRET_ACCESS_KEY = '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'
+
+AWS_S3_CUSTOM_DOMAIN = 'E1DIVWQNJ8N4FW.cloudfront.net'
+AWS_S3_SECURE_URLS = True
+
+AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
+COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
+if toserver:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+AWS_IS_GZIPPED = True
+STATIC_URL = '/static/'
+COMPRESS_URL = STATIC_URL
+
 AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
-if toserver:
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-else:
-    STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'
 MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
 MEDIA_ROOT = MEDIA_URL
 
-STATIC_URL = '/static/'
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
@@ -234,7 +240,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     #'/var/www/static/',
 ]
-
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder' # Django-Compressor
+]
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
 # MEDIA_URL = '/media_cdn/'

@@ -1,4 +1,4 @@
-inherits = function(childCtor, parentCtor) {
+inherits = function(childCtor, parentCtor) { 
 	// Copy static properties
 	for (var key in parentCtor) { if (Object.prototype.hasOwnProperty.call(parentCtor, key)) childCtor[key] = parentCtor[key]; }
   /** @constructor */

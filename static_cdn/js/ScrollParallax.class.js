@@ -1,4 +1,4 @@
-var ScrollParallax = function(opt)
+var ScrollParallax = function(opt) 
 {
 	this.$window = $(window);
 	this.$container = null;

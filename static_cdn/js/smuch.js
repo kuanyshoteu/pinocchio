@@ -1,4 +1,4 @@
-setTimeout(function() {
+setTimeout(function() { 
     if (!UI.USER.id) return;
     var ver = '1',
         key = 'user#' + UI.USER.id;

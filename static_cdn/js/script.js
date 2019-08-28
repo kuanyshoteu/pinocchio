@@ -1,4 +1,4 @@
-var $window = $(window),
+var $window = $(window), 
 	$document = $(document),
 	$body = null;
 $document.ready(function()

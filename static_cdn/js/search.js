@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () { 
     $('#search-input').on('input', function(e) {
         id = $(this).attr('id')
         text = $(this).val()

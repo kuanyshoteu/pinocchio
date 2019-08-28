@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () { 
   // Filter-list start
 
   let filterElement = $('.filter-element');

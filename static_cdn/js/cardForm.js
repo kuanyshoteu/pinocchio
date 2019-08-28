@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () { 
     var text = $('.card_comment-textarea');
     var texto = $('.card_commento'); 
     var helper = $('.card_comment-helper');

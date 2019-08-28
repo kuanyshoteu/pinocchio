@@ -1,4 +1,4 @@
- $(document).ready(function() {
+ $(document).ready(function() { 
     var hint = parseInt( $('.hint_data').attr('id'))
     $('.help' + hint).addClass('highliter');
     $(('.help' + hint)+hint+'hb').addClass('help_button');

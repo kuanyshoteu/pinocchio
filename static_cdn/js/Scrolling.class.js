@@ -1,4 +1,4 @@
-"use strict";
+"use strict"; 
 /**
 * Adds scrolling class to target element during scrolling
 * @requires ExtendingBlocker

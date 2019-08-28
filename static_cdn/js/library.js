@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function(){ 
     $('.estimate_lesson').click(function () {
         lesson_id = $('.lesson_id').attr('id')
         var onStar = parseInt($(this).data('value'), 10); // The star currently selected

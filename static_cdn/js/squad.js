@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () { 
     $('.search_group_show').on('click', function(e) {
         $('.hint_students_group').show()
     })

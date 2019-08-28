@@ -1,4 +1,4 @@
-$('.notice').click(function(event) {
+$('.notice').click(function(event) { 
     $('.notice-bar').fadeToggle('fast');
     $('.search-bar').hide();
     event.stopPropagation();

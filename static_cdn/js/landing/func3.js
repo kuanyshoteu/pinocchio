@@ -1,4 +1,4 @@
-$(function(){
+$(function(){ 
 	$document=$(document)
 	$html=$("html");
 	$carousel=$("#carousel");

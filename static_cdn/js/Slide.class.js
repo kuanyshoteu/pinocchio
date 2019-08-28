@@ -1,4 +1,4 @@
-"use strict";
+"use strict"; 
 var Slide = function(opt)
 {
 	this.$window = $(window);

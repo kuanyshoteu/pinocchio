@@ -1,4 +1,4 @@
-var Parallax = function(opt)
+var Parallax = function(opt) 
 {
 	this.$container = null;
 	this.$layers = $();
