@@ -697,3 +697,6 @@ def get_request_land(request):
 
 def robots(request):
     return render(request,'robots.txt', {})
+
+def sitemap(request):
+    return render(request,'Sitemap.xml', {})
