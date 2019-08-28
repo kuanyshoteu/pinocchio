@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var text = $('.card_comment-textarea');
-    var texto = $('.card_commento');
+    var texto = $('.card_commento'); 
     var helper = $('.card_comment-helper');
     function closeHelper(id) {
         $('#card_comment-helper'+id).hide();
