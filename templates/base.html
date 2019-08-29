@@ -63,6 +63,9 @@
                 Заявка
             </a>
             {% endif %}
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'main:about' %}" class="ui button mini green" id="request-responsive" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">Стать партнером</a>
+            {% endif %}
         </div>
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
