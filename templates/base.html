@@ -48,8 +48,9 @@
 </head>
 <body>
 {% include "modals/confirm_delete.html" %}
+{% if is_manager %}
 {% include "modals/new_card_crm.html" %}
-
+{%endif%}
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
         <div class="menu-title" style="width: calc(25% + 140px);padding-left: 10px;">
@@ -57,7 +58,7 @@
             <a href='{% url "main:home" %}' class="header main">
                 <img src="{% static 'images/bilimtap.png' %}" id="logo">
             </a>
-            {% is_manager %}
+            {% if is_manager %}
             <a class="ui button mini red help24 help2424hb" id="request-responsive" onclick="$('#new_card_form1').modal('show')" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
                 Заявка
             </a>
