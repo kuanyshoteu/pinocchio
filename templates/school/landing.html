@@ -82,11 +82,9 @@
                 {{school.worktime}}
               </span>
               <span class="organization__info-item">
-                {% for social in school.social_networks %}
-                    <a href="https://{{ social.0 }}">{{ social.1 }}</a>
-                    {% if forloop.counter < school.social_networks|length %}
-                      ,
-                    {% endif %}
+                {% for social in social_networks %}
+                    <a href="https://{{ social.0 }}"><i class="icon {{ social.1 }}"></i>{{ social.1 }}</a>
+                    {% if forloop.counter < school.social_networks|length %}, {% endif %}
                 {% endfor %}
               </span>
             </div>
@@ -141,10 +139,10 @@
         <div class="schoolLanding__content-services__item-left">
           <h2 class="schoolLanding__content-services__item-title">{{ course.title }}</h2>
           <div class="schoolLanding__content-services__item-time">{{ course.content }}</div>
-          <div class="schoolLanding__content-services__item-price">{{ course.cost }} тенге</div>
+          <div class="schoolLanding__content-services__item-price">{% if course.cost > 0 %}{{ course.cost }} тенге{% endif %}</div>
         </div>
         <div class="schoolLanding__content-services__item-right">
-          <a class="ui right labeled icon button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">Оставить заявку на курс <i class="right arrow icon" style="color: #fff;"></i></a>
+          <a class="ui right labeled icon button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">{%  if course.cost > 0 %}Оставить заявку на курс{% else %}Уточнить стоимость{% endif %}<i class="right arrow icon" style="color: #fff;"></i></a>
             <div class="ui label ok_zaiavka{{course.id}}" style="display: none;">
                 <i class="check icon green"></i> Заявка оставлена
             </div>

@@ -123,6 +123,7 @@ def school_landing(request, school_id=None):
         "school_money":school_money,
         "five":[1,2,3,4,5],
         "landing":True,
+        "social_networks":get_social_networks(school),
     }
     return render(request, "school/landing.html", context)
 
@@ -179,8 +180,14 @@ def school_info(request):
         "voronka2":voronka2,
         "worktime1":worktime1,
         "worktime2":worktime2,
+        "social_networks":get_social_networks(school),
     }
     return render(request, "school/info.html", context)
+def get_social_networks(school):
+    social_networks = []
+    for i in range(0, len(school.social_networks)):
+        social_networks.append([school.social_networks[i], school.social_network_links[i]])
+    return social_networks
 
 def school_salaries(request):
     profile = get_profile(request)
@@ -472,6 +479,9 @@ def office_delete(request):
     hashtag = school.hashtags.filter(title = office.title.replace(' ', '_'))
     if len(hashtag) > 0:
         hashtag.delete()
+    for cabinet in office.cabinets.all():
+        cabinet.delete()
+    print(office)
     office.delete()
     school.offices -= 1
     school.save()
@@ -508,15 +518,17 @@ def create_social(request):
         elif 'facebook' in link:
             social_name = 'facebook'
         elif 'vk.com' in link:
-            social_name = 'vk'
+            social_name = 'Вконтакте'
         else:
             social_name = 'Страница' + str(len(school.social_networks)+1)
         if [link, social_name] in school.social_networks:
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            school.social_networks.append([link, social_name])
+            school.social_networks.append(social_name)
+            school.social_network_links.append(link)
         else:
-            school.social_networks[int(request.GET.get('id'))-1] = [link, social_name]
+            school.social_networks[int(request.GET.get('id'))-1] = link
+            school.social_network_links[int(request.GET.get('id'))-1] = social_name
         school.save()
         create_url = school.create_social_url()
         delete_url = school.delete_social_url()
@@ -677,7 +689,6 @@ def save_card_as_user(request):
             profile.money += int(request.GET.get('predoplata'))
             profile.save()
             change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile.first_name)
-            school.save()
             if was_minus and card.was_called == False and profile.money > profile.salary:
                 skill = card.author_profile.skill
                 skill.need_actions -= 1
@@ -1214,7 +1225,10 @@ def change_title(request):
         if request.GET.get('status') == 'site':
             school.site = request.GET.get('text') 
         if request.GET.get('status') == 'worktime':
-            school.worktime = request.GET.get('text') 
+            if request.GET.get('text') == '-':
+                school.worktime = 'По предварительной записи'
+            else:
+                school.worktime = request.GET.get('text') 
         if request.GET.get('status') == 'phones':
             if len(school.phones) == 0:
                 school.phones.append('')
@@ -1320,7 +1334,6 @@ def new_money_object(request):
     if request.GET.get('title') and request.GET.get('amount'):
         school = profile.schools.first()
         change_school_money(school, -1*int(request.GET.get('amount')), request.GET.get('title'), profile.first_name)        
-        school.save()
     data = {
     }
     return JsonResponse(data)
@@ -1330,7 +1343,7 @@ def show_money_history(request):
     only_directors(profile)
     school = profile.schools.first()
     res = []
-    for money in school.money_obejct.all():
+    for money in school.money_object.all():
         res.append([money.title, money.amount, money.timestamp.strftime('%d.%m.%Y %H:%M')])
     data = {
         "res":res,

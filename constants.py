@@ -37,31 +37,41 @@ def send_hello_email(first_name, phone, mail, password, timeaddress):
 def change_school_money(school, amount, reason, name):
     school.money += amount
     if reason == 'student_payment':
-        school.money_obejct.create(title='Оплата за учебу ' + name, amount=amount)
+        school.money_object.create(title='Оплата за учебу ' + name, amount=amount)
     elif reason == 'teacher_salary':
-        school.money_obejct.create(title='Зарплата ' + name, amount=amount)
+        school.money_object.create(title='Зарплата ' + name, amount=amount)
     else:
-        school.money_obejct.create(title=reason, amount=amount)
-    now = timezone.now()
-    last = len(school.money_month)-1
-    if len(school.money_month) == 0:
-        first_day = get_frist_day_of_month(now)
-        school.money_month.append(first_day)
-        school.money_earnn.append([0,0])
-        school.money_spendd.append([0,0])
-        school.save()
-    if now - relativedelta(months=1) >= school.money_month[last]:
-        first_day = get_frist_day_of_month(now)
-        school.money_month.append(first_day)
-        school.money_earnn.append([0, 0])
-        school.money_spendd.append([0, 0])
+        school.money_object.create(title=reason, amount=amount)
+    now = timezone.now().date()
+    spend = 0
+    earn = 0
     if amount > 0:
-        school.money_earnn[last][0] += amount
+        earn = amount
+    else:
+        spend = amount
+    first_day = get_frist_day_of_month(now)
+    if len(school.money_months.all()) == 0:
+        create_money_month(school, first_day, spend, earn)
+    last = school.money_months.last()
+    if now - relativedelta(months=1) >= last.month:
+        create_money_month(school, first_day, spend, earn)
+        last = school.money_months.last()
+    if amount > 0:
+        last.money_earn[0] += amount
     else:
         if reason == 'teacher_salary':
-            school.money_spendd[last][0] += amount
+            last.money_spend[0] += amount
         else:
-            school.money_spendd[last][1] += amount            
+            last.money_spend[1] += amount
+    last.save()
+
+def create_money_month(school, first_day, spend, earn):
+    new_money_month = school.money_months.create(
+        month = first_day,
+        money_spend = [0, 0, 0, 0, 0],
+        money_earn = [0, 0, 0, 0, 0],
+    )
+    new_money_month.save()
 
 def get_frist_day_of_month(now):
     month = now.strftime('%m')

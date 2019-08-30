@@ -207,7 +207,7 @@ class Cabinet(models.Model):
         ordering = ['id']
 
 class MoneyObject(models.Model):
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='money_obejct')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='money_object')
     title = models.CharField(max_length=250)
     amount = models.IntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -216,7 +216,7 @@ class MoneyObject(models.Model):
 
 class MoneyMonth(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='money_months')
-    month = models.CharField(max_length=250)
+    month = models.DateField(null = True, blank = True)
     money_spend = ArrayField(models.IntegerField(), default = list)
     money_earn = ArrayField(models.IntegerField(), default = list)
     timestamp = models.DateTimeField(auto_now_add=True)

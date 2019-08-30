@@ -74,14 +74,15 @@
                         </div>
                         <div class="map_worktime">
                             <i class="icon clock map_worktime-icon"></i>
-                            <div class="map_worktime-today school_worktime_landing"></div>
-                            <div style="padding-top: 7px;">
+                            <span style="color: grey;">Время работы:</span>
+                            <div style="display: inline-block;" class="map_worktime-today school_worktime_landing"></div>
+                            <div style="padding-top: 7px;" class="map_aboutpayment_cost_cont">
                                 <i class="icon tag map_worktime-icon"></i>
-                                <div class="map_aboutpayment-cost"></div>                                
+                                <span style="color: grey;">Средняя цена:</span> <div style="display: inline-block;" class="map_aboutpayment-cost"></div>                  
                             </div>
                         </div>
                         <div class="map_aboutpayment">
-                            <div class="map_aboutpayment-text"></div>
+                            <div class="map_aboutpayment-text" style="display: inline-block;"></div>
                         </div>
                         <ul class="map_icon-list">
                             <li class="map_icon-item">
@@ -280,10 +281,16 @@
                     $('<span>'+data.subjects[i]+comma+'</span>').appendTo('.map_aboutpayment-text')
                 }
                 $('.map_aboutpayment-cost').empty()
-                $('<span>'+data.average_cost+'</span>').appendTo('.map_aboutpayment-cost')
+                if (data.average_cost > 0) {
+                    $('.map_aboutpayment_cost_cont').show()
+                    $('<span>'+data.average_cost+' тенге</span>').appendTo('.map_aboutpayment-cost');
+                }
+                else{
+                    $('.map_aboutpayment_cost_cont').hide()                    
+                }
                 end='ов'
                 if(data.offices == 1){end=''}
-                else if(data.offices % 10 < 5 && parseInt((data.offices % 100)/10) != 1){end='а'}
+                else if(data.offices % 10 < 5 && parseInt((data.offices % 100)/10) != 1 && data.offices > 0){end='а'}
                 $('.map_address-subtitle').text(data.offices + ' филиал'+end)
                 $('.map_other-info-subtext2').text(data.region)
                 $('#school_landing').show()

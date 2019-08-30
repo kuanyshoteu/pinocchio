@@ -208,7 +208,14 @@ $(document).ready(function () {
         id = $(this).attr('id')
         status = $(this).attr('status')
         if (status == 'worktime') {
-            text = $('.school_'+status+'_edit1').val()+'-'+$('.school_'+status+'_edit2').val()
+            part1 = $('.school_'+status+'_edit1').val()
+            part2 =  $('.school_'+status+'_edit2').val()
+            if (part1 == '' || part2 == '') {
+                text = 'По предварительной записи'
+            }
+            else{
+                text = part1+'-'+part2
+            }
         }
         else{
             text = $('.school_'+status+'_edit').val()
@@ -232,6 +239,7 @@ $(document).ready(function () {
         url = '/api/login/'
         username = $('.username').val()
         password = $('.password').val()
+        $('.wrong_login').hide()
         $.ajax({
             url: url,
             data: {
@@ -241,7 +249,6 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.res == 'login') {
-                    $('.wrong_login').hide()
                     location.reload()
                 }
                 else if (data.res == 'error'){

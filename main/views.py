@@ -22,6 +22,7 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from constants import *
 from schools.models import School
+from schools.views import get_social_networks
 
 def loaderio(request):
     context = {
@@ -169,7 +170,8 @@ def create_school(request):
         school = School.objects.create(
             title=request.GET.get('title'),
             slogan=request.GET.get('slogan'),
-            version=request.GET.get('version')
+            version=request.GET.get('version'),
+            worktime='По предварительной записи',
             )
         school.save()
         for column in CRMColumn.objects.all():
@@ -581,16 +583,19 @@ def get_landing(request):
         banner = False
         if len(school.banners.all()) > 0:
             banner = school.banners.first().image_banner.url
-        is_open = "Закрыто"
+        is_open = ""
         try:
-            worktime_start = school.worktime.split('-')[0].replace(' ', '')
-            worktime_start_num = int(worktime_start.split(':')[0]) * 60 + int(worktime_start.split(':')[1])
-            worktime_end = school.worktime.split('-')[1].replace(' ', '')
-            worktime_end_num = int(worktime_end.split(':')[0]) * 60 + int(worktime_end.split(':')[1])
-            crnttime = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
-            print(worktime_start, worktime_end)
-            if crnttime >= worktime_start_num and crnttime <= worktime_end_num:
-                is_open = "Открыто"
+            if '-' in school.worktime:
+                worktime_start = school.worktime.split('-')[0].replace(' ', '')
+                worktime_end = school.worktime.split('-')[1].replace(' ', '')
+                if ':' in worktime_start and ':' in worktime_end:
+                    worktime_start_num = int(worktime_start.split(':')[0]) * 60 + int(worktime_start.split(':')[1])
+                    worktime_end_num = int(worktime_end.split(':')[0]) * 60 + int(worktime_end.split(':')[1])
+                    crnttime = int(timezone.now().strftime('%H')) * 60 + int(timezone.now().strftime('%M'))
+                    if crnttime >= worktime_start_num and crnttime <= worktime_end_num:
+                        is_open = "Открыто"
+                    else:
+                        is_open = "Закрыто"
         except Exception as e:
             raise
         data = {
@@ -607,7 +612,7 @@ def get_landing(request):
             'landing_url':school.landing(),
             'banner':banner,
             'review_url':school.save_review_url(),
-            'social_networks':school.social_networks,
+            "social_networks":get_social_networks(school),
             'is_open':is_open,
         }
         return JsonResponse(data)
