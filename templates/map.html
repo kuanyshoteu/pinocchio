@@ -197,7 +197,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment no_padding school_list" style="overflow-y: scroll;height: 90%;">
+            <div class="ui segment school_list" style="overflow-y: scroll;height: 90%;padding: 0 0 51px 0;">
                 {% for school in schools %}
                 <div class="ui grid no_margin school_div" onclick="school_div('{{ school.id }}')"
                     url='{{ school.get_landing }}' id="{{ school.id }}">
@@ -304,8 +304,8 @@
     ymaps.ready(init);
     function init(){ 
         var myMap = new ymaps.Map("map", {
-            center: [43.25654, 76.92848],
-            zoom: 13
+            center: [43.230, 76.92848],
+            zoom: 12.5
         },{
             restrictMapArea: [
                 [42.8, 76.02848],
@@ -320,7 +320,7 @@
                 firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
                     {
                         iconLayout: 'default#imageWithContent',
-                        iconImageHref: '{% if school in schools %}{%static "images/pointer.png" %}{% else %}{%static "images/circle.png" %}{% endif %}',
+                        iconImageHref: '{% if school in schools %}{%static "images/pointer.png" %}{% else %}{%static "images/pointer.png" %}{% endif %}',
                         iconImageSize: [{% if school in schools %}20, 30{% else %}12, 12{% endif %}],
                         iconImageOffset: [{% if school in schools %}-10, -30{% else %}-6, -12{% endif %}],
                         iconContentOffset: [15, 15],
@@ -387,7 +387,7 @@
                     newCollection.add(new ymaps.Placemark(data.coordinates[i], data.options[i], 
                         {
                             iconLayout: 'default#imageWithContent',
-                            iconImageHref: '{%static "images/circle.png" %}',
+                            iconImageHref: '{%static "images/pointer.png" %}',
                             iconImageSize: [10, 10],
                             iconImageOffset: [-5, -5],
                             iconContentOffset: [15, 15],
