@@ -54,7 +54,7 @@
                     <div class="one wide column" style="padding-top: 20px;">
                     </div>
                     <div class="sixteen wide column" style="position: absolute;float: right;">
-                        <a class="back_to_schools" style="position: fixed;z-index: 3000;left: calc(25% + 50px);" onclick="$('#school_landing').hide()">
+                        <a class="back_to_schools" style="position: fixed;z-index: 3000;left: calc(25% + 50px);" onclick="$('#school_landing').hide();$('#school_landing').attr('status', 'hidden')">
                             <i class="icon x"></i>
                         </a>
                     </div>
@@ -236,12 +236,12 @@
             },
             dataType: 'json',
             success: function (data) {
+                console.log('yoyo', data.title)
                 for (var i = 1; i <= 5; i++) {
                     $('#star'+i).attr('style', '')
                 }
                 $('.map_social-list').empty()
                 for (var i = 0; i < data.social_networks.length; i++) {
-                    console.log(data.social_networks[i])
                     $('<li class="map_social-item"> <a class="map_social-item-link" href="'+data.social_networks[i][0]+'"> <i class="icon '+data.social_networks[i][1]+'"></i>'+data.social_networks[i][1]+'</a> </li>').appendTo('.map_social-list');
                 }
                 $('.map_sameorg-item').show()
@@ -321,8 +321,8 @@
                     {
                         iconLayout: 'default#imageWithContent',
                         iconImageHref: '{% if school in schools %}{%static "images/pointer.png" %}{% else %}{%static "images/pointer.png" %}{% endif %}',
-                        iconImageSize: [{% if school in schools %}20, 30{% else %}12, 12{% endif %}],
-                        iconImageOffset: [{% if school in schools %}-10, -30{% else %}-6, -12{% endif %}],
+                        iconImageSize: [20, 30],
+                        iconImageOffset: [-10, -30],
                         iconContentOffset: [15, 15],
                     }
                 ));
@@ -388,8 +388,8 @@
                         {
                             iconLayout: 'default#imageWithContent',
                             iconImageHref: '{%static "images/pointer.png" %}',
-                            iconImageSize: [10, 10],
-                            iconImageOffset: [-5, -5],
+                            iconImageSize: [20, 30],
+                            iconImageOffset: [-10, -30],
                             iconContentOffset: [15, 15],
                         }
                     ));
