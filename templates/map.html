@@ -329,6 +329,7 @@
                 firstCollection.events
                 .add('click', function (e) {
                     show_school(e.get('target').properties._data.id)
+                    e.stopPropagation();
                 })
                 .add('mouseenter', function (e) {
                     e.get('target').options.set('preset', 'islands#greenIcon');
