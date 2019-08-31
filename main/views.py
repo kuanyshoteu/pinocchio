@@ -563,6 +563,7 @@ def map_view(request):
         "subjects":SubjectCategory.objects.all(),
         "ages":SubjectAge.objects.all(),
         "school_money":money,
+        "map_view":True,
     }
     return render(request, "map.html", context)
 

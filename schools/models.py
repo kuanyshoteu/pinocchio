@@ -44,7 +44,7 @@ class School(models.Model):
     version = models.CharField(max_length=10, default='')
 
     class Meta:
-        ordering = ['rating']
+        ordering = ['rating', 'version', '-average_cost']
     def __unicode__(self):
         return self.title
     def landing(self):
