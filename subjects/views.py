@@ -260,10 +260,12 @@ def change_category(request, id=None):
         if subject in category.category_subjects.all():
             category.students.remove(*students)
             category.category_subjects.remove(subject)
+            school.school_subject_categories.remove(category)
             change_lecture_options(subject, 'subject', category, False)
         else:
             is_in = True
             category.category_subjects.add(subject)
+            school.school_subject_categories.add(category)
             category.students.add(*students)
             change_lecture_options(subject, 'subject', category, True)
         subject.save()
@@ -288,12 +290,13 @@ def change_age(request, id=None):
         if subject in age.age_subjects.all():
             age.students.remove(*students)
             age.age_subjects.remove(subject)
+            school.school_subject_ages.remove(age)
             change_lecture_options(subject, 'age', age, False)
         else:
             is_in = True
             age.age_subjects.add(subject)
-            print(subject.age.all())
             age.students.add(*students)
+            school.school_subject_ages.add(age)
             change_lecture_options(subject, 'age', age, True)
         ok = True
         subject.save()
@@ -317,11 +320,13 @@ def change_level(request, id=None):
         if subject in level.level_subjects.all():
             level.students.remove(*students)
             level.level_subjects.remove(subject)
+            school.school_subject_levels.remove(level)
             change_lecture_options(subject, 'level', level, False)
         else:
             is_in = True
             level.level_subjects.add(subject)
             level.students.add(*students)
+            school.school_subject_levels.remove(level)
             change_lecture_options(subject, 'level', level, True)
         ok = True
         subject.save()

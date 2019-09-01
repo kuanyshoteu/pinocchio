@@ -147,6 +147,20 @@ def reset_pswrd_view(request):
     return render(request, "profile/reset_pswd.html", context)
 
 def moderator(request):
+    cts = SubjectCategory.objects.all()
+    cta = SubjectAge.objects.all()
+    ctl = SubjectLevel.objects.all()
+    for subject in Subject.objects.all():
+        school = subject.school
+        school.school_subject_categories.remove(*cts)
+        school.school_subject_ages.remove(*cta)
+        school.school_subject_levels.remove(*ctl)
+        for category in subject.category.all():
+            school.school_subject_categories.add(category)
+        for age in subject.age.all():
+            school.school_subject_ages.add(age)
+        for level in subject.level.all():
+            school.school_subject_ages.add(age)
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
     if not profession in profile.profession.all():
