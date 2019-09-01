@@ -131,6 +131,8 @@ class Subject(models.Model):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
     def change_level(self):
         return reverse("subjects:change_level",kwargs={"id": self.id})       
+    def change_age(self):
+        return reverse("subjects:change_age",kwargs={"id": self.id})       
 
 def create_slug(instance, new_slug=None):
     if len(Subject.objects.all()) > 0:
@@ -169,7 +171,7 @@ class Lecture(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_lectures') 
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='subject_lectures')
 
-    office = models.ManyToManyField(Office, related_name='office_lectures')
+    office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='office_lectures')
     category = models.ManyToManyField(SubjectCategory, related_name='category_lectures')
     age = models.ManyToManyField(SubjectAge, related_name='age_lectures')
     level = models.ManyToManyField(SubjectLevel, related_name='level_lectures')
