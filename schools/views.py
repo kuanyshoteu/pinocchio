@@ -1246,8 +1246,8 @@ def search_title(request):
             kef = 4
         if request.GET.get('status') == 'subject':
             objects = SubjectCategory.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-        elif request.GET.get('status') == 'age':
-            objects = SubjectAge.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        elif request.GET.get('status') == 'level':
+            objects = SubjectLevel.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         else:
             objects = Office.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')            
         i = 0
