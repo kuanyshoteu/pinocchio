@@ -1,3 +1,7 @@
+.show_url{ color: red; }
+@media only screen and (max-width: 760px) {
+  .show_url{ color: blue; }
+}
 body{ 
   min-height: 100%;
 }
@@ -1828,4 +1832,16 @@ a{
 }
 .loading_small .circle {
   background: blue;
+}
+.filter.wide.column{
+    padding: 14px 4px 0 4px !important;
+    width: 15% !important;
+}
+@media screen and (min-width: 900px){
+    .filter-title{
+        padding: 2px 0 2px 2px !important;
+    }
+    .mapf{
+      margin: 0 0 0 10px;
+    }
 }

@@ -9,21 +9,21 @@
     <div class="ui grid stackable" style="margin-top: 0;padding-left: 0; height: 90%">
         <div class="sixteen wide column" style="padding: 14px 0 0 0;">
             <form class="ui form no_margin">
-                <div class="ui grid">
+                <div class="ui grid stackable">
                     <div class="four wide column" style="padding-right: 0 !important;display: flex;padding-left: 28px;">
-                        <textarea class="map_search_input" url="/api/map_search/" style=" margin: 0;border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
-                        <a class="ui button small blue map_search_by_tags" url="/api/map_search_show/" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;margin: 0"><i class="icon search" style="color: white;"></i></a>
+                        <textarea class="map_search_input no_margin" url="/api/map_search/" style="border-radius: 3px 0 0 3px;padding-top: 8px; height: 35px;overflow-y: hidden;" placeholder="Поиск учебных центров"></textarea>
+                        <a class="ui button small blue map_search_by_tags no_margin" url="/api/map_search_show/" style="padding-right: 1px;padding-left: 9px;height: 35px;border-radius: 0 3px 3px 0;"><i class="icon search" style="color: white;"></i></a>
                         <div class="map_search_hint ui segment" style="display: none;"></div>
                     </div>
-                    <div class="wide column" style="margin-right: 15px;margin-left: 10px;width: 15%;padding: 14px 0">
+                    <div class="mapf wide column" style="width: 15%;padding: 14px 0">
                         <div class="ui segment" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
                             <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;margin-bottom: 0;height: 20px; margin-left: -7px; font-size: 12px;font-weight: 600;color: #7e7e7e;background-color: transparent;">
                             <div id="slider-range"></div>                            
                         </div>
                     </div>
-                    <div class="two wide column left_p">
+                    <div class="three wide column left_p">
                         <select class="map_subject_filter map_filter" url='/api/map_filter/'>
-                            <option value="">Все предметы</option>
+                            <option value="">Выберите предметы</option>
                             {% for subject in subjects %}
                             <option value="{{subject.title}}">{{subject.title}}</option>
                             {% endfor %}
@@ -31,7 +31,7 @@
                     </div>
                     <div class="two wide column left_p">
                         <select class="map_age_filter map_filter" url='/api/map_filter/'>
-                            <option value="">Все уровни</option>
+                            <option value="">Возрасты</option>
                             {% for age in ages %}
                             <option value="{{age.title}}">{{age.title}}</option>
                             {% endfor %}
@@ -226,6 +226,9 @@
 <script src="{% static 'js/price-slider.js' %}"></script>
 
 <script type="text/javascript">
+    if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+
+    }
     function show_school(id) {
         url = $('.show_url').attr('url')
         $('.loading').show()

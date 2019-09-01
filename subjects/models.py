@@ -129,8 +129,6 @@ class Subject(models.Model):
         return reverse("subjects:add_paper_url")        
     def change_category(self):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
-    def change_age(self):
-        return reverse("subjects:change_age",kwargs={"id": self.id})       
     def change_level(self):
         return reverse("subjects:change_level",kwargs={"id": self.id})       
 
