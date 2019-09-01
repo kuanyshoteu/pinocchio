@@ -1,6 +1,6 @@
 $(document).ready(function () { 
   // Filter-list start
-
+  console.log('hahah')
   let filterElement = $('.filter-element');
   let filterList = $('.filter-list');
   let filterTitle = $('.filter-title');
