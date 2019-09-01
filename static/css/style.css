@@ -1,7 +1,4 @@
 .show_url{ color: red; }
-@media only screen and (max-width: 760px) {
-  .show_url{ color: blue; }
-}
 body{ 
   min-height: 100%;
 }
@@ -1840,8 +1837,28 @@ a{
 .map_filter{
     padding: 7px 0 7px 7px !important;
 }
+.map_distance{
+    display: flex !important;  
+}
 @media screen and (min-width: 900px){
     .mapf{
       margin: 0 10px;
     }
+    .map_distance{
+      padding: 14px 0 14px 28px !important;
+    }
+}
+@media only screen and (max-width: 760px) {
+  .show_url{ color: blue; }
+  .map_distance{
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  .map_distance_half{
+    width: 50% !important;
+    padding: 0 !important;
+  }
+  .map_distance_cont{
+    padding: 0 14px !important;
+  }
 }

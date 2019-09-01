@@ -16571,19 +16571,19 @@ ol.ui.horizontal.list li:before,
 .ui.grid > .column.row > [class*="two wide"].column,
 .ui.grid > [class*="two wide"].column,
 .ui.column.grid > [class*="two wide"].column {
-  width: 12.5% !important;
+  width: 12.5%;
 }
 .ui.grid > .row > [class*="three wide"].column,
 .ui.grid > .column.row > [class*="three wide"].column,
 .ui.grid > [class*="three wide"].column,
 .ui.column.grid > [class*="three wide"].column {
-  width: 18.75% !important;
+  width: 18.75%;
 }
 .ui.grid > .row > [class*="four wide"].column,
 .ui.grid > .column.row > [class*="four wide"].column,
 .ui.grid > [class*="four wide"].column,
 .ui.column.grid > [class*="four wide"].column {
-  width: 25% !important;
+  width: 25%;
 }
 .ui.grid > .row > [class*="five wide"].column,
 .ui.grid > .column.row > [class*="five wide"].column,
@@ -18052,7 +18052,6 @@ ol.ui.horizontal.list li:before,
     margin: 0em 0em !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-    padding: 1rem 1rem !important;
   }
   .ui.stackable.grid:not(.vertically) > .row {
     margin: 0em;

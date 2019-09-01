@@ -63,6 +63,8 @@ class School(models.Model):
     # School information pages
     def get_absolute_url(self):
         return reverse("schools:info")
+    def school_moderator_url(self):
+        return reverse("schools:info_moderator", kwargs={"school_id": self.id})
     def get_requests_url(self):
         return reverse("schools:requests")
     def get_recalls_url(self):
