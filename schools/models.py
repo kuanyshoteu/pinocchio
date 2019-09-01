@@ -179,6 +179,18 @@ class SubjectAge(models.Model):
     class Meta:
         ordering = ['id']
 
+class SubjectLevel(models.Model):
+    schools = models.ManyToManyField(School, related_name='school_subject_levels')
+    title = models.CharField(max_length=250)
+    def delete_url(self):
+        return reverse("schools:level_delete_url")
+    def create_url(self):
+        return reverse("schools:level_create_url")
+    def search_url(self):
+        return reverse("schools:search_url")
+    class Meta:
+        ordering = ['id']
+
 class Office(models.Model):
     title = models.CharField(max_length=250)
     latitude = models.CharField(max_length=250, default='0.0')

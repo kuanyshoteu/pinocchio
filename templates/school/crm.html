@@ -33,7 +33,7 @@
                                     <div class="filter-title">Предметы <i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                         {% for subject_category in subject_categories %}
-                                        <li class="filter-item" status="0" id="{{ subject_category.title }}">
+                                        <li class="filter-item filter-item-s" status="0" id="{{ subject_category.title }}">
                                             <i class="icon check green" id="check_subject_category{{ subject_category.title }}"></i>
                                             {{subject_category.title}}
                                         </li>
@@ -46,7 +46,7 @@
                                     <div class="filter-title">Возрасты <i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                     {% for age in ages %}
-                                        <li class="filter-item" status="0" id="{{ age.title }}">
+                                        <li class="filter-item filter-item-s" status="0" id="{{ age.title }}">
                                             <i class="icon check green" id="check_age{{ age.title }}"></i>
                                             {{age.title}}
                                         </li>
@@ -59,7 +59,7 @@
                                     <div class="filter-title">Офисы<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                     {% for office in offices %}
-                                        <li class="filter-item" status="0" id="{{ office.title }}">
+                                        <li class="filter-item filter-item-s" status="0" id="{{ office.title }}">
                                             <i class="icon check green" id="check_office{{ office.title }}"></i>
                                             {{office.title}}
                                         </li>
@@ -72,7 +72,7 @@
                                     <div class="filter-title" style="padding-right: 1px;">Дни<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                     {% for day in days %}
-                                        <li class="filter-item" status="0" id="day{{ day.id }}">
+                                        <li class="filter-item filter-item-s" status="0" id="day{{ day.id }}">
                                             <i class="icon check green" id="check_day{{ day.title }}"></i>
                                             {{day.title}}
                                         </li>

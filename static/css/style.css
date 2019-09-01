@@ -1766,3 +1766,66 @@ a{
 }
 
 
+.loading_small {
+  padding-top: 11px;
+  height: 16px;
+  width: 16px;
+  z-index: 4000;
+  display: inline-block;
+}
+.loading_small .animation {
+  -webkit-animation: spin 5s linear 0s infinite;
+  -moz-animation: spin 5s linear 0s infinite;
+  animation: spin 5s linear 0s infinite;
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  perspective: 1000;
+  opacity: 0;
+}
+.loading_small .animation:nth-child(2) {
+  -webkit-animation-delay: 250ms;
+  -moz-animation-delay: 250ms;
+  animation-delay: 250ms;
+}
+.loading_small .animation:nth-child(3) {
+  -webkit-animation-delay: 500ms;
+  -moz-animation-delay: 500ms;
+  animation-delay: 500ms;
+}
+.loading_small .animation:nth-child(4) {
+  -webkit-animation-delay: 750ms;
+  -moz-animation-delay: 750ms;
+  animation-delay: 750ms;
+}
+.loading_small .animation:nth-child(5) {
+  -webkit-animation-delay: 1000ms;
+  -moz-animation-delay: 1000ms;
+  animation-delay: 1000ms;
+}
+.loading_small .circle {
+    background: none repeat scroll 0 0 #0092ED;
+    border-radius: 100%;
+    height: 2px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 2px;
+}
+.loading_small .circle.two {
+  background: blue;
+}
+.loading_small .circle.three {
+  background: blue;
+}
+.loading_small .circle.four {
+  background: blue;
+}
+.loading_small .circle.five {
+  background: blue;
+}
+.loading_small .circle {
+  background: blue;
+}

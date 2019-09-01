@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = False
+toserver = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 
@@ -60,38 +60,6 @@ INSTALLED_APPS = [
     'social_django',
     'channels',
 ]
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'mysite.log',
-            'formatter': 'verbose'
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers':['file'],
-            'propagate': True,
-            'level':'DEBUG',
-        },
-        'MYAPP': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-        },
-    }
-}
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 if toserver:
     SECURE_SSL_REDIRECT = True # [1]

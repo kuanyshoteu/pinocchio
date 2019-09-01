@@ -114,10 +114,10 @@ def subject_update(request, slug=None):
             instance.save()
         cost = 0
         for subject in school.school_subjects.all():
-            if not subject.cost:
-                subject.cost = 0
-                subject.save()
-            cost += subject.cost
+            subject_cost = 0
+            if subject.cost:
+                subject_cost = subject.cost
+            cost += subject_cost
         school.average_cost = int(cost / len(school.school_subjects.all()))
         school.save()
     if request.POST: 
@@ -153,7 +153,7 @@ def subject_update(request, slug=None):
         for day in days:
             for timep in time_periods:
                 new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
-
+    print(instance.age.all())
     context = {
         "instance": instance,
         "form":form,
@@ -161,7 +161,11 @@ def subject_update(request, slug=None):
         "profile":profile,
         'squads':Squad.objects.all(),
         "subject_categories":school.school_subject_categories.all(),        
-        "subject_ages":school.school_subject_ages.all(),        
+        "subject_categories_this":instance.category.all(),        
+        "subject_ages":SubjectAge.objects.all(),
+        "subject_ages_this":instance.age.all(),        
+        "subject_levels":SubjectLevel.objects.all(),
+        "subject_levels_this":instance.level.all(),        
         'time_periods':time_periods,
         'days':days,
         "all_teachers":all_teachers(school),
@@ -238,7 +242,6 @@ def remove_lesson(request):
         school = lesson.school
         is_in_school(profile, school)
         material.lessons.remove(lesson)
-        print('ok')
     data = {
     }
     return JsonResponse(data)
@@ -246,99 +249,129 @@ def remove_lesson(request):
 def change_category(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
+    ok = False
+    is_in = False
     if request.GET.get('object_id'):
-        subject = Subject.objects.select_related('category').get(id = id)
+        subject = Subject.objects.prefetch_related('category').get(id = id)
         school = subject.school
         is_in_school(profile, school)
+        category = school.school_subject_categories.get(id=int(request.GET.get('object_id')))
         students = subject.students.all()
-        old_subject = None
-        if subject.category:
-            subject.category.students.remove(*students)
-            old_subject = subject.category
-        if int(request.GET.get('object_id')) == -1:
-            subject.category = None
-            change_lecture_options(subject, 'subject', None, old_subject)
+        if subject in category.category_subjects.all():
+            category.students.remove(*students)
+            category.category_subjects.remove(subject)
+            change_lecture_options(subject, 'subject', category, False)
         else:
-            category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-            subject.category = category
-            change_lecture_options(subject, 'subject', category, old_subject)
+            is_in = True
+            category.category_subjects.add(subject)
             category.students.add(*students)
+            change_lecture_options(subject, 'subject', category, True)
         subject.save()
+        ok = True
     data = {
-    }
-    return JsonResponse(data)
-        
-def change_age(request, id=None):
-    profile = get_profile(request)
-    only_managers(profile)
-    if request.GET.get('object_id'):
-        subject = Subject.objects.select_related('age').get(id = id)
-        school = subject.school
-        is_in_school(profile, school)
-        students = subject.students.all()
-        old_age = None
-        if subject.age:
-            subject.age.students.remove(*students)
-            old_age = subject.age
-        if int(request.GET.get('object_id')) == -1:
-            subject.age = None
-            change_lecture_options(subject, 'age', None, old_age)
-        else:
-            age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
-            subject.age = age
-            change_lecture_options(subject, 'age', age, old_age)
-            age.students.add(*students)
-        subject.save()
-    data = {
+        "ok":ok,
+        "is_in":is_in,
     }
     return JsonResponse(data)
 
-def change_lecture_options(subject, option, objectt, old_object):
+def change_age(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    ok = False
+    is_in = False
+    if request.GET.get('object_id'):
+        subject = Subject.objects.prefetch_related('age').get(id = id)
+        school = subject.school
+        is_in_school(profile, school)
+        age = SubjectAge.objects.get(id=int(request.GET.get('object_id')))
+        students = subject.students.all()
+        if subject in age.age_subjects.all():
+            age.students.remove(*students)
+            age.age_subjects.remove(subject)
+            change_lecture_options(subject, 'age', age, False)
+        else:
+            is_in = True
+            age.age_subjects.add(subject)
+            print(subject.age.all())
+            age.students.add(*students)
+            change_lecture_options(subject, 'age', age, True)
+        ok = True
+        subject.save()
+    data = {
+        "ok":ok,
+        "is_in":is_in,
+    }
+    return JsonResponse(data)
+        
+def change_level(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    ok = False
+    is_in = False
+    if request.GET.get('object_id'):
+        subject = Subject.objects.prefetch_related('level').get(id = id)
+        school = subject.school
+        is_in_school(profile, school)
+        level = school.school_subject_levels.get(id=int(request.GET.get('object_id')))
+        students = subject.students.all()
+        if subject in level.level_subjects.all():
+            level.students.remove(*students)
+            level.level_subjects.remove(subject)
+            change_lecture_options(subject, 'level', level, False)
+        else:
+            is_in = True
+            level.level_subjects.add(subject)
+            level.students.add(*students)
+            change_lecture_options(subject, 'level', level, True)
+        ok = True
+        subject.save()
+    data = {
+        "ok":ok,
+        "is_in":is_in,
+    }
+    return JsonResponse(data)
+
+def change_lecture_options(subject, option, objectt, is_add):
     hashtag = ''
-    old_hashtag = ''
     school = subject.school
-    if old_object:
-        old_hashtag = subject.school.hashtags.get_or_create(title=old_object.title.replace(' ', ''))
     if objectt:
-        hashtag = subject.school.hashtags.get_or_create(title=objectt.title.replace(' ', ''))
+        obj_title = objectt.title.replace(' ', '')
+        hst = school.hashtags.filter(title=obj_title)
+        if len(hst) == 0:
+            hashtag = school.hashtags.get_or_create(title=obj_title)
+        else:
+            hashtag = hst
     qs = subject.students.all()
     cards_qs = school.crm_cards.filter(card_user__in=qs)
-    is_new_tag = False
-    is_old_tag = False    
     if len(hashtag) > 0:
         hashtag = hashtag[0]
-        is_new_tag = True
-    if len(old_hashtag) > 0:
-        old_hashtag = old_hashtag[0]
-        is_old_tag = True
     for card in cards_qs:
-        if is_new_tag:
+        if is_add:
             if not hashtag.id in card.hashtag_ids:
                 card.hashtag_ids.append(hashtag.id)
                 card.hashtag_numbers.append(0)
             card.hashtags.add(hashtag)
             index = card.hashtag_ids.index(hashtag.id)
             card.hashtag_numbers[index] += 1
-        if is_old_tag:
-            if old_hashtag.id in card.hashtag_ids:
-                index = card.hashtag_ids.index(old_hashtag.id)
+        else:
+            if hashtag.id in card.hashtag_ids:
+                index = card.hashtag_ids.index(hashtag.id)
                 if card.hashtag_numbers[index] > 0:
                     card.hashtag_numbers[index] -= 1
                 if card.hashtag_numbers[index] < 0:
                     card.hashtag_numbers[index] = 0
                 if card.hashtag_numbers[index] == 0:
-                    card.hashtags.remove(old_hashtag)
-        if is_old_tag or is_new_tag:
-            card.save()                
+                    card.hashtags.remove(hashtag)
+        card.save()                
     if option == 'subject':
-        for lecture in subject.subject_lectures.all():
-            lecture.category = objectt
-            lecture.save()
+        lectures = subject.subject_lectures.all()
+        objectt.category_lectures.add(*lectures)
     elif option == 'age':
-        for lecture in subject.subject_lectures.all():
-            lecture.age = objectt
-            lecture.save()
-    if option == 'office':
-        for lecture in subject.squad_lectures.all():
-            lecture.office = objectt
-            lecture.save()
+        lectures = subject.subject_lectures.all()
+        objectt.age_lectures.add(*lectures)
+    elif option == 'level':
+        lectures = subject.subject_lectures.all()
+        objectt.level_lectures.add(*lectures)
+    elif option == 'office':
+        lectures = subject.squad_lectures.all()
+        objectt.office_lectures.add(*lectures)

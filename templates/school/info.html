@@ -240,38 +240,38 @@
                         </div>
                     </div>
                     <div class="ui segment" style="margin: 0;padding-left: 17px;">
-                        Возрасты учеников:
-                        <div class="school_age_list" style="display: inline-block;">
-                        {% for age in instance.school_subject_ages.all %}
-                            <a class="ui button mini green age_object{{age.id}}" onclick="$('#age_form{{age.id}}').modal('show')" id="{{age.id}}" style="padding: 7px 10px;">{{ age.title }} ({{ age|get_age_courses_len:instance}} курсов)</a>
-                            <div class="ui modal mini" id="age_form{{ age.id }}">
+                        Уровни курсов:
+                        <div class="school_level_list" style="display: inline-block;">
+                        {% for level in instance.school_subject_levels.all %}
+                            <a class="ui button mini green level_object{{level.id}}" onclick="$('#level_form{{level.id}}').modal('show')" id="{{level.id}}" style="padding: 7px 10px;">{{ level.title }} ({{ level|get_level_courses_len:instance}} курсов)</a>
+                            <div class="ui modal mini" id="level_form{{ level.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
                                     <form class="ui form">
                                         <div style="height: 20px;">
-                                            <div class="hint_age_title{{age.id}}" style="display: none;"></div>
+                                            <div class="hint_level_title{{level.id}}" style="display: none;"></div>
                                         </div>                                    
-                                        <textarea class="object_textarea" status='age' id="age_title{{age.id}}">{{age.title}}</textarea>
-                                        <a class="ui button mini blue" onclick="create_age('{{age.create_url}}', '{{age.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_age('{{age.delete_url}}', '{{age.id}}')" style="float: right;">Удалить</a>
+                                        <textarea class="object_textarea" status='level' id="level_title{{level.id}}">{{level.title}}</textarea>
+                                        <a class="ui button mini blue" onclick="create_level('{{level.create_url}}', '{{level.id}}')">Сохранить</a>
+                                        <a class="ui button mini red" onclick="delete_level('{{level.delete_url}}', '{{level.id}}')" style="float: right;">Удалить</a>
                                     </form>
-                                    <div class="errorage{{age.id}} highlight_red" style="display: none;">Такой возраст уже есть</div>
+                                    <div class="errorlevel{{level.id}} highlight_red" style="display: none;">Такой уровень уже есть</div>
                                 </div>
                             </div>
                         {% endfor %}
                         </div>
-                        <a class="ui button mini" onclick="$('#age_form_new').modal('show')">Добавить возраст</a>
-                        <div class="ui modal mini" id="age_form_new">
+                        <a class="ui button mini" onclick="$('#level_form_new').modal('show')">Добавить уровень</a>
+                        <div class="ui modal mini" id="level_form_new">
                             <i class="close icon"></i>
                             <div class="content">
                                 <form class="ui form">
                                     <div style="height: 20px;">
-                                        <div class="hint_age_title_new" style="display: none;"></div>
+                                        <div class="hint_level_title_new" style="display: none;"></div>
                                     </div>
-                                    <textarea class="object_textarea need_clear" status='age' id="age_title_new" placeholder="Название"></textarea>
-                                    <a class="ui button mini blue" onclick="create_age('/schools/api/age_create_url/', '_new');clear_textareas();">Создать</a>
+                                    <textarea class="object_textarea need_clear" status='level' id="level_title_new" placeholder="Название"></textarea>
+                                    <a class="ui button mini blue" onclick="create_level('/schools/api/level_create_url/', '_new');clear_textareas();">Создать</a>
                                 </form>
-                                <div class="errorage_new highlight_red" style="display: none;">Такой возраст уже есть</div>
+                                <div class="errorlevel_new highlight_red" style="display: none;">Такой уровень уже есть</div>
                             </div>
                         </div>
                     </div>
@@ -470,8 +470,8 @@
             }
         })        
     };
-   function create_age(url, id) {
-        title = $('#age_title'+id).val()
+   function create_level(url, id) {
+        title = $('#level_title'+id).val()
         if (title != '') {
             $.ajax({
                 url: url,
@@ -481,18 +481,18 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $('.errorage'+id).hide()
+                    $('.errorlevel'+id).hide()
                     if (data.taken_name) {
-                        $('.errorage'+id).show()
+                        $('.errorlevel'+id).show()
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini green age_object'+data.idd+'" onclick="$('+"'#age_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="age_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="age_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_age('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_age('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorage'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_age_list'))
+                            $('<a class="ui button mini green level_object'+data.idd+'" onclick="$('+"'#level_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="level_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="level_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_level('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_level('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorlevel'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_level_list'))
                         }
                         else{
-                            $('.age_object'+id).text(title);
+                            $('.level_object'+id).text(title);
                         }
-                        $('#age_form'+id).modal('hide')
+                        $('#level_form'+id).modal('hide')
                     }
                 }
             })

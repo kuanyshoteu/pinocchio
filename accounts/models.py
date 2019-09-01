@@ -83,6 +83,7 @@ class Profile(models.Model):
 
     crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
     crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
+    crm_level_connect = models.ManyToManyField(SubjectLevel, default=1, related_name='students')
     skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile') 
 
     class Meta:

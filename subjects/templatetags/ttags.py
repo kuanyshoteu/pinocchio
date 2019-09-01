@@ -348,6 +348,10 @@ def get_age_courses_len(age, school):
     return len(school.school_subjects.filter(age=age))
 
 @register.filter
+def get_level_courses_len(level, school):
+    return len(school.school_subjects.filter(level=level))
+
+@register.filter
 def get_column_cards_len(column, school):
     weekago = (timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d')
     return len(school.crm_cards.filter(column=column, timestamp__gt=weekago))

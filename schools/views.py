@@ -435,6 +435,57 @@ def age_delete(request):
     }
     return JsonResponse(data)
 
+def level_create(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    if request.GET.get('id') and request.GET.get('title'):
+        title = request.GET.get('title')
+        school = manager_profile.schools.first()
+        if school.school_subject_levels.filter(title = title):
+            return JsonResponse({'taken_name':True})
+        if request.GET.get('id') == '_new':
+            qs = SubjectLevel.objects.filter(title=title)
+            if len(qs) > 0:
+                school.school_subject_levels.add(qs[0])
+                level = qs[0]
+            else:
+                level = school.school_subject_levels.create(title=title)
+            school.hashtags.create(title = title.replace(' ', '_'))
+        else:
+            level = school.school_subject_levels.get(id=int(request.GET.get('id')))
+            hashtag = school.hashtags.filter(title = level.title.replace(' ', '_'))
+            if len(hashtag) > 0:
+                hashtag.title = title.replace(' ', '_')
+                hashtag.save()
+            else:
+                school.hashtags.create(title=title.replace(' ', '_'))
+            level.title = title
+        level.save()
+        create_url = level.create_url()
+        delete_url = level.delete_url()
+    data = {
+        'taken_name':False,
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'idd':level.id,
+    }
+    return JsonResponse(data)
+
+def level_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = profile.schools.first()
+    only_managers(profile)
+    level = school.school_subject_levels.get(id=int(request.GET.get('id')))
+    hashtag = school.hashtags.filter(title = level.title.replace(' ', '_'))
+    if len(hashtag) > 0:
+        hashtag.delete()
+    level.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
 def office_create(request):
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)

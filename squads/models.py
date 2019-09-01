@@ -14,7 +14,7 @@ from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
 from accounts.models import Profile
-from schools.models import School, Office, SubjectAge
+from schools.models import *
 
 def upload_location(instance, filename):
     CourseModel = instance.__class__
@@ -29,7 +29,8 @@ class Squad(models.Model):
     students = models.ManyToManyField(Profile, default=1, related_name='squads')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='groups')
     office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='groups')
-    age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='groups')
+    age = models.ManyToManyField(SubjectAge, related_name='groups')
+    level = models.ManyToManyField(SubjectLevel, related_name='groups')
     rating_choices = models.ManyToManyField(Profile, related_name='rating_squad_choice')
 
     title = models.CharField(max_length=250)
