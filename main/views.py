@@ -153,6 +153,14 @@ def moderator(request):
             if subject.title in cat.title or cat.title in subject.title:
                 cat.schools.add(school)
                 subject.category.add(cat)
+        if 'Англ' in subject.title or 'Engl' in subject.title:
+            cat = SubjectCategory.objects.get(id=10)
+            cat.schools.add(school)
+            subject.category.add(cat)
+        if 'Корпоративное' in subject.title or 'взрослых' in subject.title:
+            age = SubjectAge.objects.get(id=)
+            subject.age.add(age)
+            age.schools.add(school)
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
     if not profession in profile.profession.all():
