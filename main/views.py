@@ -152,6 +152,7 @@ def moderator(request):
         for cat in SubjectCategory.objects.all():
             if subject.title in cat.title:
                 cat.schools.add(school)
+                subject.category.add(cat)
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
     if not profession in profile.profession.all():
