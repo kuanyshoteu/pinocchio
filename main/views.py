@@ -150,7 +150,7 @@ def moderator(request):
     for subject in Subject.objects.all():
         school = subject.school
         for cat in SubjectCategory.objects.all():
-            if subject.title in cat.title:
+            if subject.title in cat.title or cat.title in subject.title:
                 cat.schools.add(school)
                 subject.category.add(cat)
     profile = get_profile(request)
