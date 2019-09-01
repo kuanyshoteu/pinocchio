@@ -219,7 +219,7 @@ def school_crm(request):
         "instance": school,
         "columns":school.crm_columns.all(),
         "subject_categories":school.school_subject_categories.all(),
-        "ages":school.school_subject_ages.all(),
+        "ages":SubjectAge.objects.all(),
         "offices":school.school_offices.all(),
         'days':Day.objects.all(),
         'time_periods':time_periods,

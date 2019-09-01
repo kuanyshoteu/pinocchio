@@ -30450,6 +30450,17 @@ a:hover {
   width: 100%;
   cursor: pointer;
   border: 1px solid #ccc;
+  line-height: 25px;
+}
+.filter-title-s {
+  background-color: #fff;
+  display: inline-block;
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  line-height: 25px;
 }
 .filter-list {
   position: absolute;
@@ -30466,15 +30477,12 @@ a:hover {
 .filter-list-hide {
   display: none;
 }
-.filter-item {
-  padding: 5px 5px;
+.filter-item-s {
+  padding: 0 0 0 17px;
   cursor: pointer;
 }
-.filter-item:hover {
+.filter-item-s:hover {
   background-color: #ccc;
-}
-.filter-item i {
-  opacity: 0;
 }
 .show-icon {
   opacity: 1 !important;

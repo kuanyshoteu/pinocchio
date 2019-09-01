@@ -5562,8 +5562,8 @@ a.ui.inverted.grey.header:hover {
 
 @font-face {
   font-family: 'Icons';
-  src: url("/static/fonts/semantic-ui/icons.eot");
-  src: url("/static/fonts/semantic-ui/icons.eot?#iefix") format("embedded-opentype"), url("/static/fonts/semantic-ui/icons.woff2") format("woff2"), url("/static/fonts/semantic-ui/icons.woff") format("woff"), url("/static/fonts/semantic-ui/icons.ttf") format("truetype"), url("/static/fonts/semantic-ui/icons.svg#icons") format("svg");
+  src: url("/static/fonts/semantic-ui/icons.263bfe56755c.eot");
+  src: url("/static/fonts/semantic-ui/icons.263bfe56755c.eot?#iefix") format("embedded-opentype"), url("/static/fonts/semantic-ui/icons.27c88389f00e.woff2") format("woff2"), url("/static/fonts/semantic-ui/icons.7bc63d50d415.woff") format("woff"), url("/static/fonts/semantic-ui/icons.d3490a32350d.ttf") format("truetype"), url("/static/fonts/semantic-ui/icons.b42b446772f8.svg#icons") format("svg");
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -30234,7 +30234,7 @@ a:hover {
   height: 27px;
   padding: 6px 0 0 27px;
   font-size: 13px;
-  background: url(../images/search.png) no-repeat 7px;
+  background: url("../images/search.b4e65840afd5.png") no-repeat 7px;
   background-size: 14px;
   border-radius: 14px;
   background-color: #2D437C;
@@ -30446,7 +30446,7 @@ a:hover {
   background-color: #fff;
   display: inline-block;
   border-radius: 5px;
-  padding: 2px 0 2px 7px !important;
+  padding: 5px 10px;
   width: 100%;
   cursor: pointer;
   border: 1px solid #ccc;
@@ -30483,12 +30483,6 @@ a:hover {
 }
 .filter-item-s:hover {
   background-color: #ccc;
-}
-.filter-item i {
-  opacity: 0;
-}
-.filter-item{
-  padding: 5px 0;
 }
 .show-icon {
   opacity: 1 !important;
