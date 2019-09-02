@@ -7,7 +7,7 @@
     type="text/javascript"></script>
 <div class="ui container" style="overflow-y: hidden;">
     <div class="ui grid stackable" style="margin-top: 0;padding-left: 0; height: 90%">
-        <div class="sixteen wide column no_padding">
+        <div class="sixteen wide column no_padding map_filters_block">
             <form class="ui form no_margin map_distance_cont">
                 <div class="ui grid no_margin">
                     <div class="four wide column map_distance">
@@ -17,7 +17,7 @@
                     </div>
                     <div class="three wide column map_distance">
                         <div class="ui segment full-w" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
-                            <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;margin-bottom: 0;height: 20px; margin-left: 10%; font-size: 12px;font-weight: 600;color: #7e7e7e;background-color: transparent;">
+                            <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;margin-bottom: 0;height: 20px;font-size: 12px;font-weight: 600;color: #7e7e7e;background-color: transparent;">
                             <div id="slider-range"></div>                            
                         </div>
                     </div>
@@ -40,8 +40,8 @@
                 </div>
             </form>
         </div>
-        <div class="four wide column" style="padding: 0 0 0 29px;">
-            <div class="school_landing" id="school_landing">
+        <div class="four wide column map_school_list">
+            <div class="school_landing  ui segment" id="school_landing">
                 <div class="loading" style="display: none;">
                   <div class="animation"><div class="circle one"></div></div>
                   <div class="animation"><div class="circle two"></div></div>
@@ -197,7 +197,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment school_list no_margin" style="overflow-y: scroll;height: 90%;padding: 0 0 51px 0;">
+            <div class="ui segment school_list no_margin">
                 {% for school in schools %}
                 <div class="ui grid no_margin school_div" onclick="school_div('{{ school.id }}')"
                     url='{{ school.get_landing }}' id="{{ school.id }}">
@@ -216,7 +216,7 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="twelve wide column" style="padding: 0 28px 0 0;">
+        <div class="twelve wide column map_map" style="padding: 0 28px 0 0;">
             <div id="map" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
@@ -239,7 +239,6 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log('yoyo', data.title)
                 for (var i = 1; i <= 5; i++) {
                     $('#star'+i).attr('style', '')
                 }
@@ -468,6 +467,7 @@
     function update_list(res){
         $('.school_list').empty();
         url = $('.show_url').attr('url')
+        $('.map_school_list').attr('style', 'display:inline-block !important;');
         for(var i = 0; i < res.length; i++){
             id = res[i][0]
             name = res[i][1]
@@ -479,27 +479,27 @@
             }
             var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon map marker blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div><div class="school_slogan">'+slogan+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
         }        
+        $('.map_school_list').animate({'top' : "-=200px"});
     }
+    $('.map_school_list').click(function(e){
+        $(this).animate({'top' : "150px"});
+    });
     $("body").click(function(e){
         $('.map_search_bar').hide();
     });
 </script>
 <style type="text/css">
     .ymaps-2-1-74-controls__control_toolbar {}
-
     .ymaps-2-1-74-controls__control {
         right: 10px !important;
         left: auto !important;
     }
-
     .ymaps-2-1-74-search {
         display: none;
     }
-
     .ymaps-2-1-74-traffic {
         display: none;
     }
-
     .ymaps-2-1-74-listbox__button {
         display: none;
     }
