@@ -158,7 +158,7 @@ def moderator(request):
             cat.schools.add(school)
             subject.category.add(cat)
         if 'Корпоративное' in subject.title or 'взрослых' in subject.title:
-            age = SubjectAge.objects.get(id=)
+            age = SubjectAge.objects.get(id=1)
             subject.age.add(age)
             age.schools.add(school)
     profile = get_profile(request)
