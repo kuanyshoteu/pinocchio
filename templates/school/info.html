@@ -143,7 +143,10 @@
                     <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Социальные сети:</span> 
                     <div style="display: inline-block;" class="school_social_list">
                         {% for social in social_networks %}
-                            <a class="ui button mini social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;"><i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>{{ social.1 }}</a>
+                            <a class="ui button mini social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">
+                                <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
+                                {{ social.1 }}
+                            </a>
                             <div class="ui modal mini social_form{{ forloop.counter }}">
                                 <i class="close icon"></i>
                                 <div class="content">
@@ -393,8 +396,8 @@
         </div>
     </div>
 </div>
-<span class="day_id" id="" group_id = '{{ instance.id }}'></span>
-
+<span class="day_id" group_id='{{ instance.id }}'></span>
+<span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
 <script type="text/javascript">
     function clear_textareas(){
         $('.need_clear').val('')
@@ -407,6 +410,9 @@
         text = $(this).val()
         url = '/schools/api/search_url/'
         status = $(this).attr('status')
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         $.ajax({
             url: url,
             data: {
@@ -432,6 +438,9 @@
    function create_subject(url, id) {
         title = $('#subject_title'+id).val()
         if (title != '') {
+            if ($('.check_moderator').attr('status')=='True') {
+                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+            }
             $.ajax({
                 url: url,
                 data: {
@@ -458,6 +467,9 @@
         }
     };
     function delete_subject(url, id) {
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         $.ajax({
             url: url,
             data: {
@@ -473,6 +485,9 @@
    function create_level(url, id) {
         title = $('#level_title'+id).val()
         if (title != '') {
+            if ($('.check_moderator').attr('status')=='True') {
+                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+            }
             $.ajax({
                 url: url,
                 data: {
@@ -498,7 +513,10 @@
             })
         }
     };
-    function delete_age(url, id) {
+    function delete_level(url, id) {
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         $.ajax({
             url: url,
             data: {
@@ -506,14 +524,17 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.age_object'+id).hide('fast');
-                $('#age_form'+id).modal('hide')
+                $('.level_object'+id).hide('fast');
+                $('#level_form'+id).modal('hide')
             }
         })        
     };
     function create_office(url, id) {
         title = $('#office_title'+id).val()
         if (title != '') {
+            if ($('.check_moderator').attr('status')=='True') {
+                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+            }
             $.ajax({
                 url: url,
                 data: {
@@ -540,6 +561,9 @@
         }
     };
     function delete_office(url, id) {
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         $.ajax({
             url: url,
             data: {
@@ -557,6 +581,9 @@
         start = $('#timep_start'+id).val()
         end = $('#timep_end'+id).val()
         if (start != '' && end != '') {
+            if ($('.check_moderator').attr('status')=='True') {
+                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+            }
             $.ajax({
                 url: url,
                 data: {
@@ -584,6 +611,9 @@
         }
     };
     function delete_timep(url, id) {
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         $.ajax({
             url: url,
             data: {
@@ -599,6 +629,9 @@
    function create_social(url, id) {
         link = $('#social_link'+id).val()
         if (link != '') {
+            if ($('.check_moderator').attr('status')=='True') {
+                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+            }
             $.ajax({
                 url: url,
                 data: {
@@ -625,6 +658,9 @@
         }
     };
     function delete_social(url, id) {
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         $.ajax({
             url: url,
             data: {

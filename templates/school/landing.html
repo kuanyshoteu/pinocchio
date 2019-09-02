@@ -118,7 +118,7 @@
     </div>
 
     <div class="schoolLanding__content-category">
-      <ul class="schoolLanding__content-category__list">
+      <ul class="schoolLanding__content-category__list no_margin no_padding">
         <li class="schoolLanding__content-category__item active" id="all">
           <i class="icon list ul"></i>
           <p class="schoolLanding__content-category__item__title">Все</p>
@@ -135,7 +135,7 @@
     <div class="schoolLanding__content-services">
       <h3 class="schoolLanding__content-services__title">Курсы</h3>
       {% for course in school.school_subjects.all %}
-      <section class="schoolLanding__content-services__item category{{ course.category.id }} categoryall">
+      <section class="schoolLanding__content-services__item {%for cat in course.category.all%}category{{ cat.id }} {%endfor%} categoryall">
         <div class="schoolLanding__content-services__item-left">
           <h2 class="schoolLanding__content-services__item-title">{{ course.title }}</h2>
           <div class="schoolLanding__content-services__item-time">{{ course.content }}</div>

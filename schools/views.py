@@ -42,10 +42,11 @@ def school_rating(request):
             'is_trener':is_profi(profile, 'Teacher'),
             "is_manager":is_profi(profile, 'Manager'),
             "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
         }
         return render(request, "school/school_rating.html", context)
     else:
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         context = {
             "profile":profile,
             "instance": profile.schools.first(),
@@ -56,6 +57,7 @@ def school_rating(request):
             'is_trener':is_profi(profile, 'Teacher'),
             "is_manager":is_profi(profile, 'Manager'),
             "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
             "school_money":school.money,
         }
         return render(request, "school/school_rating.html", context)
@@ -63,7 +65,7 @@ def school_rating(request):
 def school_payments(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     context = {
         "profile":profile,
         "instance": school,
@@ -75,6 +77,7 @@ def school_payments(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/school_payments.html", context)
@@ -82,7 +85,7 @@ def school_payments(request):
 def school_schedule(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     time_periods = school.time_periods.all()
     context = {
         "profile":profile,
@@ -95,6 +98,7 @@ def school_schedule(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/schedule.html", context)
@@ -130,7 +134,7 @@ def school_landing(request, school_id=None):
 def school_info(request):
     profile = get_profile(request)
     only_directors(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     if is_profi(profile, 'Director'):
         money = school.money
     if request.POST: 
@@ -172,6 +176,7 @@ def school_info(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "today":timezone.now().date().strftime('%Y-%m-%d'),
         "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),
@@ -192,7 +197,7 @@ def get_social_networks(school):
 def school_salaries(request):
     profile = get_profile(request)
     only_directors(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     context = {
         "profile":profile,
         "instance": school,
@@ -200,6 +205,7 @@ def school_salaries(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/salaries.html", context)
@@ -207,7 +213,7 @@ def school_salaries(request):
 def school_crm(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     time_periods = school.time_periods.all()
     managers = None
     is_director = is_profi(profile, 'Director')
@@ -235,7 +241,7 @@ def school_crm(request):
 def school_crm_all(request):
     profile = get_profile(request)
     only_directors(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     time_periods = school.time_periods.all()
     managers = None
     is_director = is_profi(profile, 'Director')
@@ -263,7 +269,7 @@ def school_crm_all(request):
 def school_students(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()    
+    school = is_moderator_school(request, profile)    
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
@@ -272,6 +278,7 @@ def school_students(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/all_students.html", context)
@@ -279,7 +286,7 @@ def school_students(request):
 def school_requests(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     context = {
         "profile":profile,
         "instance": profile.schools.first(),
@@ -288,6 +295,7 @@ def school_requests(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/all_students.html", context)
@@ -295,7 +303,7 @@ def school_requests(request):
 def school_recalls(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     context = {
         "profile":profile,
         "instance": school,
@@ -304,6 +312,7 @@ def school_recalls(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/all_students.html", context)
@@ -318,6 +327,7 @@ def school_courses(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
     }
     return render(request, "school/all_courses.html", context)
@@ -330,6 +340,7 @@ def school_list(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
     }
     return render(request, "schools/school_list.html", context)
 
@@ -340,7 +351,7 @@ def subject_create(request):
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
         title = request.GET.get('title')
-        school = manager_profile.schools.first()
+        school = is_moderator_school(request, manager_profile)
         if school.school_subject_categories.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
@@ -373,7 +384,7 @@ def subject_create(request):
 
 def subject_delete(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_managers(profile)
     subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
     hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
@@ -391,7 +402,7 @@ def age_create(request):
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
         title = request.GET.get('title')
-        school = manager_profile.schools.first()
+        school = is_moderator_school(request, manager_profile)
         if school.school_subject_ages.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
@@ -424,7 +435,7 @@ def age_create(request):
 
 def age_delete(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_managers(profile)
     age = school.school_subject_ages.get(id=int(request.GET.get('id')))
     hashtag = school.hashtags.filter(title = age.title.replace(' ', '_'))
@@ -442,7 +453,7 @@ def level_create(request):
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
         title = request.GET.get('title')
-        school = manager_profile.schools.first()
+        school = is_moderator_school(request, manager_profile)
         if school.school_subject_levels.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
@@ -475,7 +486,7 @@ def level_create(request):
 
 def level_delete(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_managers(profile)
     level = school.school_subject_levels.get(id=int(request.GET.get('id')))
     hashtag = school.hashtags.filter(title = level.title.replace(' ', '_'))
@@ -493,7 +504,7 @@ def office_create(request):
     delete_url = ''
     if request.GET.get('id') and request.GET.get('title'):
         title = request.GET.get('title')
-        school = manager_profile.schools.first()
+        school = is_moderator_school(request, manager_profile)
         if len(school.school_offices.filter(title = title)) > 0:
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
@@ -524,7 +535,7 @@ def office_create(request):
 
 def office_delete(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_managers(profile)
     office = school.school_offices.get(id=int(request.GET.get('id')))
     hashtag = school.hashtags.filter(title = office.title.replace(' ', '_'))
@@ -544,7 +555,7 @@ def create_cabinet(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     if request.GET.get('title') != '':
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         office = school.school_offices.get(id=int(request.GET.get('id')))
         office.cabinets.create(
             school=school,
@@ -562,7 +573,7 @@ def create_social(request):
     delete_url = ''
     if request.GET.get('id') and request.GET.get('link'):
         link = request.GET.get('link')
-        school = manager_profile.schools.first()
+        school = is_moderator_school(request, manager_profile)
         social_name = ''
         if 'instagram' in link:
             social_name = 'instagram'
@@ -575,8 +586,8 @@ def create_social(request):
         if [link, social_name] in school.social_networks:
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            school.social_networks.append(social_name)
-            school.social_network_links.append(link)
+            school.social_networks.append(link)
+            school.social_network_links.append(social_name)
         else:
             school.social_networks[int(request.GET.get('id'))-1] = link
             school.social_network_links[int(request.GET.get('id'))-1] = social_name
@@ -592,7 +603,7 @@ def create_social(request):
 
 def delete_social(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_managers(profile)
     index = int(request.GET.get('id'))
     a = school.social_networks
@@ -610,7 +621,7 @@ def timep_create(request):
     if request.GET.get('id') and request.GET.get('start') and request.GET.get('end'):
         start = request.GET.get('start')
         end = request.GET.get('end')
-        school = manager_profile.schools.first()
+        school = is_moderator_school(request, manager_profile)
         if school.time_periods.filter(start = start, end=end):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
@@ -637,7 +648,7 @@ def timep_create(request):
 
 def timep_delete(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_managers(profile)
     timep = school.time_periods.get(id=int(request.GET.get('id')))
     timep.delete()
@@ -654,7 +665,7 @@ from django.http import JsonResponse
 def save_card_as_user(request):
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)
-    school = manager_profile.schools.first()
+    school = is_moderator_school(request, manager_profile)
     password = ''
     add = True
     ok_mail = False
@@ -756,7 +767,7 @@ def save_card_as_user(request):
 def predoplata(request):
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)
-    school = manager_profile.schools.first()
+    school = is_moderator_school(request, manager_profile)
     if request.GET.get('id') and request.GET.get('predoplata'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         profile = card.card_user
@@ -851,7 +862,7 @@ def move_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     if request.GET.get('card_id') and request.GET.get('column_id'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         column = school.crm_columns.get(id = int(request.GET.get('column_id')))
         card = school.crm_cards.get(id = int(request.GET.get('card_id')))
         card.timestamp = timezone.now()
@@ -871,7 +882,7 @@ def edit_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         edit = '***Редактирование*** '
         if card.name != request.GET.get('name'):
@@ -923,7 +934,7 @@ def open_card(request):
     only_managers(profile)
     res = []
     if request.GET.get('id'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         for history in card.history.all():
             res.append([history.action_author.first_name, history.action_author.get_absolute_url(), history.timestamp.strftime('%d.%m.%Y %H:%M') ,history.oldcolumn,history.newcolumn, history.edit])
@@ -936,7 +947,7 @@ def card_called(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     if request.GET.get('id'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         skill = profile.skill
         card.action = request.GET.get('action')
@@ -957,7 +968,7 @@ def add_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         found = False
         student = False
         if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
@@ -1015,6 +1026,7 @@ def add_card(request):
         "author_url":profile.get_absolute_url(),
         "call_helper":card.call_helper(),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
     }
     return JsonResponse(data)
 
@@ -1058,7 +1070,7 @@ def change_manager(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     if request.GET.get('manager') and request.GET.get('card'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('card')))
         if request.GET.get('manager') == '-1':
             card.author_profile = None
@@ -1069,7 +1081,7 @@ def change_manager(request):
             Notification.objects.create(
                 text = text,
                 author_profile = manager,
-                school = profile.schools.first(),
+                school = is_moderator_school(request, profile),
                 itstype = 'crm',
                 url = '',
                 image_url = 'crm'
@@ -1084,7 +1096,7 @@ def save_salary(request):
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('salary'):
         worker = Profile.objects.get(id=int(request.GET.get('id')))
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         is_in_school(worker, school)
         worker.salary = int(request.GET.get('salary'))
         worker.save()
@@ -1094,7 +1106,7 @@ def save_salary(request):
 
 def save_job_salary(request):
     profile = Profile.objects.get(user = request.user.id)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('salary'):
         job = JobCategory.objects.get(id=int(request.GET.get('id')))
@@ -1110,7 +1122,7 @@ def save_job_salary(request):
 def delete_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     if request.GET.get('id'):
         card = school.crm_cards.get(id=int(request.GET.get('id')))
         if not card.was_called:
@@ -1126,7 +1138,7 @@ def delete_card(request):
 def show_free_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     if profile.skill == None:
         skill = Skill.objects.create()
         profile.skill = skill
@@ -1219,7 +1231,7 @@ def call_helper(request):
         if not request.GET.get('reverse'):
             text = text[::-1]
         res = []
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         kef = 1
         similarity=TrigramSimilarity('title', text)
         hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
@@ -1265,8 +1277,7 @@ def change_title(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('text') and request.GET.get('status') and request.GET.get('text') != "":
-        school = School.objects.get(id = int(request.GET.get('id')))
-        is_in_school(profile, school)
+        school = is_moderator_school(request, profile)
         if request.GET.get('status') == 'title':
             school.title = request.GET.get('text') 
         if request.GET.get('status') == 'slogan':
@@ -1318,7 +1329,7 @@ def save_review(request, school_id=None):
 def delete_school_banner(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('id'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         banner = school.banners.filter(id=int(request.GET.get('id')))
         if len(banner) > 0:
             banner[0].delete()
@@ -1333,7 +1344,7 @@ def update_voronka(request):
     res = []
     is_ago = False
     if request.GET.get('status') and request.GET.get('first_vrnk') and request.GET.get('second_vrnk'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         timefuture = timezone.now().date()
         today = timefuture
         weekago = timezone.now().date() - timedelta(7)
@@ -1383,7 +1394,7 @@ def new_money_object(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     if request.GET.get('title') and request.GET.get('amount'):
-        school = profile.schools.first()
+        school = is_moderator_school(request, profile)
         change_school_money(school, -1*int(request.GET.get('amount')), request.GET.get('title'), profile.first_name)        
     data = {
     }
@@ -1392,7 +1403,7 @@ def new_money_object(request):
 def show_money_history(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     res = []
     for money in school.money_object.all():
         res.append([money.title, money.amount, money.timestamp.strftime('%d.%m.%Y %H:%M')])

@@ -16571,19 +16571,19 @@ ol.ui.horizontal.list li:before,
 .ui.grid > .column.row > [class*="two wide"].column,
 .ui.grid > [class*="two wide"].column,
 .ui.column.grid > [class*="two wide"].column {
-  width: 12.5% !important;
+  width: 12.5%;
 }
 .ui.grid > .row > [class*="three wide"].column,
 .ui.grid > .column.row > [class*="three wide"].column,
 .ui.grid > [class*="three wide"].column,
 .ui.column.grid > [class*="three wide"].column {
-  width: 18.75% !important;
+  width: 18.75%;
 }
 .ui.grid > .row > [class*="four wide"].column,
 .ui.grid > .column.row > [class*="four wide"].column,
 .ui.grid > [class*="four wide"].column,
 .ui.column.grid > [class*="four wide"].column {
-  width: 25% !important;
+  width: 25%;
 }
 .ui.grid > .row > [class*="five wide"].column,
 .ui.grid > .column.row > [class*="five wide"].column,
@@ -18052,7 +18052,6 @@ ol.ui.horizontal.list li:before,
     margin: 0em 0em !important;
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
-    padding: 1rem 1rem !important;
   }
   .ui.stackable.grid:not(.vertically) > .row {
     margin: 0em;
@@ -30446,7 +30445,7 @@ a:hover {
   background-color: #fff;
   display: inline-block;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 2px 0 2px 7px !important;
   width: 100%;
   cursor: pointer;
   border: 1px solid #ccc;
@@ -30483,6 +30482,12 @@ a:hover {
 }
 .filter-item-s:hover {
   background-color: #ccc;
+}
+.filter-item i {
+  opacity: 0;
+}
+.filter-item{
+  padding: 5px 0;
 }
 .show-icon {
   opacity: 1 !important;
@@ -31134,17 +31139,15 @@ i.map_worktime-icon {
   padding: 30px 0;
 }
 .schoolLanding__content-category__list {
-  margin: 0;
-  padding: 0;
   list-style-type: none;
   display: flex;
-  justify-content: space-between;
 }
 .schoolLanding__content-category__item {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-right: 10px;
   width: 140px;
   height: 140px;
   border-radius: 4px;

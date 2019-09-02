@@ -205,6 +205,9 @@ $(document).ready(function () {
     });
     $('.save_school_title').click(function(e) {
         url = $(this).attr('url')
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
         id = $(this).attr('id')
         status = $(this).attr('status')
         if (status == 'worktime') {

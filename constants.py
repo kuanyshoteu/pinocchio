@@ -134,7 +134,7 @@ def only_staff(profile):
 def is_profi(profile, job_name):
     profession = Profession.objects.get(title = job_name)
     director = Profession.objects.get(title = 'Director')
-    if job_name != 'Teacher' and director in profile.profession.all():
+    if job_name != 'Teacher' and job_name != 'Moderator' and director in profile.profession.all():
     	if not profile.is_student:
     		return True
     return profession in profile.profession.all()
@@ -171,3 +171,11 @@ def all_teachers(school):
     profession = Profession.objects.get(title = 'Teacher')
     return profession.workers.filter(schools=school)
 
+def is_moderator_school(request, profile):
+    if request.GET.get('type'):
+        if request.GET.get('type') == 'moderator':
+            if is_profi(profile, 'Moderator'):
+                school = School.objects.get(id=int(request.GET.get('mod_school_id')))
+                return school
+    school = profile.schools.first()
+    return school
