@@ -57,6 +57,34 @@ def main_view(request):
     }
     return render(request, "map.html", context)
 
+def map_view(request):
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = None
+    money = 0
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        if len(profile.schools.all()):
+            money = profile.schools.first().money
+    context = {
+        "profile":profile,
+        "schools":School.objects.all(),
+        "schools_all":School.objects.all(),
+        "url":School.objects.first().get_landing(),
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
+        "subjects":FilterControl.objects.first().categories.all(),
+        "ages":SubjectAge.objects.all(),
+        "school_money":money,
+        "map_view":True,
+    }
+    return render(request, "map.html", context)
+
 def login_page(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
@@ -147,24 +175,24 @@ def reset_pswrd_view(request):
     return render(request, "profile/reset_pswd.html", context)
 
 def moderator(request):
-    for subject in Subject.objects.all():
-        school = subject.school
-        for cat in SubjectCategory.objects.all():
-            if subject.title in cat.title or cat.title in subject.title:
-                cat.schools.add(school)
-                subject.category.add(cat)
-        if 'Англ' in subject.title or 'Engl' in subject.title:
-            cat = SubjectCategory.objects.get(id=10)
-            cat.schools.add(school)
-            subject.category.add(cat)
-        if 'Корпоративное' in subject.title or 'взрослых' in subject.title:
-            age = SubjectAge.objects.get(id=1)
-            subject.age.add(age)
-            age.schools.add(school)
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
     if not profession in profile.profession.all():
         raise Http404
+    # for subject in Subject.objects.all():
+    #     school = subject.school
+    #     for cat in SubjectCategory.objects.all():
+    #         if subject.title in cat.title or cat.title in subject.title:
+    #             cat.schools.add(school)
+    #             subject.category.add(cat)
+    #     if 'Англ' in subject.title or 'Engl' in subject.title:
+    #         cat = SubjectCategory.objects.get(id=10)
+    #         cat.schools.add(school)
+    #         subject.category.add(cat)
+    #     if 'Корпоративное' in subject.title or 'взрослых' in subject.title:
+    #         age = SubjectAge.objects.get(id=1)
+    #         subject.age.add(age)
+    #         age.schools.add(school)
     context = {
         "profile":profile,
     }
@@ -432,7 +460,7 @@ def map_search_show(request):
             if i == 10:
                 break
     else:
-        schools = School.objects.filter(version='full')
+        schools = School.objects.all()
         for school in schools:
             if len(school.school_offices.all())>0:
                 image_url = ''
@@ -552,34 +580,6 @@ def contacts_view(request):
         "school_money":profile.schools.first().money,
     }
     return render(request, "contacts.html", context)
-
-def map_view(request):
-    is_trener = False
-    is_manager = False
-    is_director = False
-    profile = None
-    money = 0
-    if request.user.is_authenticated:
-        profile = get_profile(request)
-        is_trener = is_profi(profile, 'Teacher')
-        is_manager = is_profi(profile, 'Manager')
-        is_director = is_profi(profile, 'Director')
-        if len(profile.schools.all()):
-            money = profile.schools.first().money
-    context = {
-        "profile":profile,
-        "schools":School.objects.all(),
-        "schools_all":School.objects.all(),
-        "url":School.objects.first().get_landing(),
-        'is_trener':is_trener,
-        "is_manager":is_manager,
-        "is_director":is_director, 
-        "subjects":SubjectCategory.objects.all(),
-        "ages":SubjectAge.objects.all(),
-        "school_money":money,
-        "map_view":True,
-    }
-    return render(request, "map.html", context)
 
 def get_landing(request):
     if request.GET.get('id'):

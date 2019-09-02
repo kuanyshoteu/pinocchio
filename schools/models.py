@@ -167,7 +167,7 @@ class SubjectCategory(models.Model):
     def search_url(self):
         return reverse("schools:search_url")
     class Meta:
-        ordering = ['id']
+        ordering = ['title']
 
 class SubjectAge(models.Model):
     schools = models.ManyToManyField(School, related_name='school_subject_ages')
@@ -192,6 +192,10 @@ class SubjectLevel(models.Model):
         return reverse("schools:search_url")
     class Meta:
         ordering = ['id']
+
+class FilterControl(models.Model):
+    levels = models.ManyToManyField(SubjectLevel, related_name='filter_control')
+    categories = models.ManyToManyField(SubjectCategory, related_name='filter_control')
 
 class Office(models.Model):
     title = models.CharField(max_length=250)
