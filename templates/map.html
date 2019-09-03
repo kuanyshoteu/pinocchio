@@ -41,7 +41,7 @@
             </form>
         </div>
         <div class="four wide column map_school_list">
-            <div class="school_landing  ui segment" id="school_landing">
+            <div class="school_landing ui segment no_padding" id="school_landing">
                 <div class="loading" style="display: none;">
                   <div class="animation"><div class="circle one"></div></div>
                   <div class="animation"><div class="circle two"></div></div>
@@ -51,14 +51,12 @@
                   <div class="animation"><div class="circle six"></div></div>
                 </div>
                 <div class="ui grid no_margin no_padding" style="overflow-x: hidden">
-                    <div class="one wide column" style="padding-top: 20px;">
-                    </div>
                     <div class="sixteen wide column" style="position: absolute;float: right;">
-                        <a class="back_to_schools" style="position: fixed;z-index: 3000;left: calc(25% + 50px);" onclick="$('#school_landing').hide();$('#school_landing').attr('status', 'hidden')">
+                        <a class="back_to_schools" onclick="$('#school_landing').hide();$('#school_landing').attr('status', 'hidden')">
                             <i class="icon x"></i>
                         </a>
                     </div>
-                    <div class="fourteen wide column" style="padding-top: 0;">
+                    <div class="fourteen wide column no_padding">
                         <div class="school_start_landing"></div>
                         <div class="school_name_big"></div>
                     </div>
@@ -480,11 +478,11 @@
             var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon map marker blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div><div class="school_slogan">'+slogan+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
         }        
     }
-    if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
-        $('.map_school_list').click(function(e){
+    $('.map_school_list').click(function(e){
+        if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
             $(this).animate({'top' : "150px"});
-        });
-    }
+        }
+    });
     $("body").click(function(e){
         $('.map_search_bar').hide();
     });

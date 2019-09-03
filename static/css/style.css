@@ -146,10 +146,6 @@ body{
   font-size: 15px;
   font-weight: 600;
 }
-.school_name_big{
-  font-size: 22px;
-  padding: 20px 0px 10px 0px;
-}
 .map_address-subtitle{
   color: #a0a0a0;
 }
@@ -168,12 +164,6 @@ body{
 .school_div:hover{
   background-color: #f7f7f7;
   cursor: pointer;
-}
-.school_phone_landing{
-  font-size: 17px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 .left_menu_number{
   color: #5b6e85;
@@ -1830,6 +1820,12 @@ a{
   overflow-y: scroll;height: 90%;
 }
 @media screen and (min-width: 900px){
+    .back_to_schools{
+      position: fixed;
+      z-index: 3000;
+      left: 22%;
+      margin-top: -10px;
+    }
     .mapf{
       margin: 0 10px;
     }
@@ -1849,15 +1845,40 @@ a{
       z-index: 1000;
       display: none;
       background-color: #fff;
-      margin-left: 50px;
       border-radius: 3px;
       border: 1px solid #CCE2FF;
       box-shadow: 0 0px 7px lightgrey;
       margin-top: 14px;
       overflow-y: scroll;
     }
+    .school_name_big{
+      font-size: 22px;
+      padding: 23px 0px 23px 20px;
+    }
+    .school_phone_landing{
+      font-size: 14px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
 }
 @media only screen and (max-width: 899px) {
+    .school_phone_landing{
+      font-size: 17px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .school_name_big{
+      font-size: 22px;
+      padding: 20px 0px 23px 20px;
+    }
+    .back_to_schools{
+      position: fixed;
+      z-index: 3000;
+      left: 88%;
+    }  
     .school_landing{
       position: absolute;
       height: 95%;
