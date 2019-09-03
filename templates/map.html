@@ -226,9 +226,6 @@
 <script src="{% static 'js/price-slider.js' %}"></script>
 
 <script type="text/javascript">
-    if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
-
-    }
     function show_school(id) {
         url = $('.show_url').attr('url')
         $('.loading').show()
@@ -465,9 +462,12 @@
         });
     }
     function update_list(res){
+        if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+            $('.map_school_list').attr('style', 'display:inline-block !important;');
+            $('.map_school_list').animate({'top' : "-=200px"});
+        }
         $('.school_list').empty();
         url = $('.show_url').attr('url')
-        $('.map_school_list').attr('style', 'display:inline-block !important;');
         for(var i = 0; i < res.length; i++){
             id = res[i][0]
             name = res[i][1]
@@ -479,11 +479,12 @@
             }
             var element = $('<div class="ui grid no_margin school_div" onclick="school_div('+id+')"  url='+url+' id="'+id+'"> <div class="two wide column"> <i class="icon map marker blue no_padding"></i> </div> <div class="fourteen wide column no_padding_side"> <a class="school_name">'+name+'</a> <div class="school_address">'+address+'</div><div class="school_slogan">'+slogan+'</div> </div> </div> <div class="ui divider" style="margin: 0"></div>').appendTo('.school_list');
         }        
-        $('.map_school_list').animate({'top' : "-=200px"});
     }
-    $('.map_school_list').click(function(e){
-        $(this).animate({'top' : "150px"});
-    });
+    if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+        $('.map_school_list').click(function(e){
+            $(this).animate({'top' : "150px"});
+        });
+    }
     $("body").click(function(e){
         $('.map_search_bar').hide();
     });
