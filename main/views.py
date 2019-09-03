@@ -179,12 +179,12 @@ def moderator(request):
     profession = Profession.objects.get(title = 'Moderator')
     if not profession in profile.profession.all():
         raise Http404
-    # for subject in Subject.objects.all():
-    #     school = subject.school
-    #     for cat in SubjectCategory.objects.all():
-    #         if subject.title in cat.title or cat.title in subject.title:
-    #             cat.schools.add(school)
-    #             subject.category.add(cat)
+    for subject in Subject.objects.all():
+        school = subject.school
+        for cat in SubjectCategory.objects.all():
+            if subject.title in cat.title or cat.title in subject.title:
+                cat.schools.add(school)
+                subject.category.add(cat)
     #     if 'Англ' in subject.title or 'Engl' in subject.title:
     #         cat = SubjectCategory.objects.get(id=10)
     #         cat.schools.add(school)
@@ -392,7 +392,6 @@ def map_filter(request):
     schools = School.objects.all()
     subject = False
     age = False
-    print(request.GET.get('age'), request.GET.get('subject'))
     if len(request.GET.get('subject')) > 0:
         subject = SubjectCategory.objects.get(title = request.GET.get('subject'))
     if len(request.GET.get('age')) > 0:
