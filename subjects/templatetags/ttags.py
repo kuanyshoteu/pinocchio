@@ -375,23 +375,8 @@ def get_school_payment_history(hisprofile, profile):
     return hisprofile.payment_history.filter(school=profile.schools.first())
 
 @register.filter
-def money_spendd_percent(school, index):
-    if len(school.money_spendd[index-1]) > 1:
-        first = school.money_spendd[index-1][0]
-        second = school.money_spendd[index-1][1]
-        if first+second == 0:
-            return 0
-        return int(100 * first/(first+second))
-    return 0
-@register.filter
-def money_spendd_percent_scnd(school, index):
-    if len(school.money_spendd[index-1]) > 1:
-        first = school.money_spendd[index-1][0]
-        second = school.money_spendd[index-1][1]
-        if first+second == 0:
-            res = 0
-        else:
-            res = int(100 * second/(first+second))
-        res += 5 
-        return res
-    return 0
+def money_percent(first, second):
+    if first+second == 0:
+        return 0
+    num = first+second
+    return int(100*first / num + ((100*first) % num > (num/2)))

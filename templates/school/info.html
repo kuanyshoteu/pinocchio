@@ -339,7 +339,7 @@
                         </div>
                     </div>
                     {% include 'school/voronka_chart.html' %}
-                    {% if school.version == 'standart' or school.version == 'business' %}
+                    {% if instance.version == 'standart' or instance.version == 'business' %}
                     <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
                         На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>
                     </div>

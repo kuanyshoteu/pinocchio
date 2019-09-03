@@ -34,7 +34,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript">
   var lineChartDataMoney = {
-    labels: [{% for month in instance.money_month %}'{{month|date:"M"}}',{% endfor %}],
+    labels: [{% for month in instance.money_months.all %}'{{month.month|date:"M"}}',{% endfor %}],
     datasets: [{
         label: "SES 3.4",
         fillColor: "rgba(255,255,255,0)",
@@ -43,7 +43,7 @@
         pointStrokeColor: "#fff",
         pointHighlightFill: "#fff",
         pointHighlightStroke: "#21BA45",
-        data: [{% for money in instance.money_earnn %}'{{money.0}}',{% endfor %}]
+        data: [{% for month in instance.money_months.all %}'{{month.money_earn.0}}',{% endfor %}]
     }]
 }
 window.onload = function() {
