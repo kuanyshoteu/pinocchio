@@ -364,10 +364,10 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
 def add_student_to_squad(student, squad):
     squad.students.add(student)
     for subject in squad.subjects.all():
-        if subject.age:
-            subject.age.students.add(student)
-        if subject.category:
-            subject.category.students.add(student)
+        ages = subject.age.all()
+        student.crm_age_connect.add(*ages)
+        categories = subject.category.all()
+        student.crm_subject_connect.add(*categories)
         subject.students.add(student)
         student.salary += subject.cost
     student.save()
@@ -499,7 +499,7 @@ def change_schedule(request, id=None):
                     day=cell.day,
                     office=squad.office,
                     category=subject.category,
-                    age=subject.age)
+                    age=subject.age.first())
                 lecture.people.add(*subject_students)
                 if squad.teacher:
                     lecture.people.add(squad.teacher)
