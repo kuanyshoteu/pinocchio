@@ -967,7 +967,7 @@ def card_called(request):
 def add_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
-    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
+    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone'):
         school = is_moderator_school(request, profile)
         found = False
         student = False

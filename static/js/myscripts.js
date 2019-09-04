@@ -492,11 +492,16 @@ $(document).ready(function () {
         var comment = $('.new_card_comment' + id).val()
         $('.alreadyregistered').hide()
         ok = false
-        for (var i = mail.length - 1; i >= 0; i--) {
-            if (mail[i] == '@') {
-                ok = true;
-                break;
-            } 
+        if (mail != '') {
+            for (var i = mail.length - 1; i >= 0; i--) {
+                if (mail[i] == '@') {
+                    ok = true;
+                    break;
+                } 
+            }            
+        }
+        else{
+            ok = true;
         }
         if (ok) {
             $.ajax({
