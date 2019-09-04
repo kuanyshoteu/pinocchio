@@ -970,19 +970,21 @@ def add_card(request):
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone'):
         school = is_moderator_school(request, profile)
         found = False
-        student = False
-        if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
-            found = True
-            student = Profile.objects.filter(mail=request.GET.get('mail'))[0]
+        student = None
+        if len(request.GET.get('mail')) > 0:
+            if len(Profile.objects.filter(mail=request.GET.get('mail'))) > 0:
+                found = True
+                student = Profile.objects.filter(mail=request.GET.get('mail'))[0]
         elif len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
             found = True
             student = Profile.objects.filter(phone=request.GET.get('phone'))[0]            
         if len(school.crm_cards.filter(phone=request.GET.get('phone'))) > 0:
             found = True
             student = False
-        elif len(school.crm_cards.filter(mail=request.GET.get('mail'))) > 0:
-            found = True
-            student = False
+        elif len(request.GET.get('mail')) > 0:
+            if len(school.crm_cards.filter(mail=request.GET.get('mail'))) > 0:
+                found = True
+                student = False
         if found:
             if student:
                 if school in student.schools.all():
