@@ -323,20 +323,20 @@
                         iconContentOffset: [15, 15],
                     }
                 ));
-                firstCollection.events
-                .add('click', function (e) {
-                    show_school(e.get('target').properties._data.id)
-                    e.stopPropagation();
-                })
-                .add('mouseenter', function (e) {
-                    e.get('target').options.set('preset', 'islands#greenIcon');
-                })
-                .add('mouseleave', function (e) {
-                    e.get('target').options.unset('preset');
-                });
-                myMap.geoObjects.add(firstCollection);
             {% endfor %}
         {% endfor %}
+        firstCollection.events
+        .add('click', function (e) {
+            show_school(e.get('target').properties._data.id)
+            e.stopPropagation();
+        })
+        .add('mouseenter', function (e) {
+            e.get('target').options.set('preset', 'islands#greenIcon');
+        })
+        .add('mouseleave', function (e) {
+            e.get('target').options.unset('preset');
+        });
+        myMap.geoObjects.add(firstCollection);
         $( function() {
             $( "#slider-range" ).slider({
                 range: true,
@@ -394,6 +394,7 @@
                 }
                 newCollection.events
                 .add('click', function (e) {
+                    console.log('update map')
                     show_school(e.get('target').properties._data.properties.id)
                 })
                 myMap.geoObjects.add(newCollection)

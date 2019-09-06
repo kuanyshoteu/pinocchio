@@ -41,7 +41,7 @@
         <i class="arrow left icon"></i>
     </a>
 	{% else %}
-	<a id="go-back-btn-before" href='{% url "subjects:list" %}'>
+	<a id="go-back-btn-before" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
     </a>
     {% endif %}
@@ -175,7 +175,7 @@
 							<div class="one wide column"></div>
 							<div class="{% if instance %}sixteen{%else%}eight{% endif %} wide column" style="padding-top: 0;padding-right: 0">
 		        				<div class="ui segment" style="text-align: center;">
-									<input type='submit' class='ui button blue tiny' value='Создать курс' />
+									<input type='submit' class='ui button blue tiny' value='Создать курс'/>
 								</div>
 							</div>
 						{% endif %}

@@ -5,11 +5,11 @@
 {% load staticfiles %}
 {% block content %}
 <div class="ui container">
-    <div class="ui grid stackable" style="margin-top: 14px;">
+    <div class="ui grid stackable mt15">
         <div class="five wide column">
-            <div class="ui segment">
-                <form class="ui form" style="text-align: center;">
-                    <b>Создать новую школу</b>
+            <div class="ui segment" style="height: 380px;">
+                <form class="ui form text-center">
+                    <b>Добавить новую школу</b>
                     <br><br>
                     <textarea class="new_school_title" placeholder="Название школы"></textarea>
                     <textarea class="new_school_slogan" placeholder="Описание школы"></textarea>
@@ -17,7 +17,7 @@
                     <textarea class="new_school_phone" placeholder="Номер директора"></textarea>
                     <textarea class="new_school_version" placeholder="Версия"></textarea>
                     <br><br>
-                    <a class="ui button green create_school" url="{% url 'main:create_school' %}">Создать школу</a>
+                    <a class="ui button green create_school" url="{% url 'main:create_school' %}">Добавить школу</a>
                 </form>
             </div>
             <div class="highlight success_created" style="width: 50%;margin: 15px auto;display: none;">
@@ -28,17 +28,20 @@
             </div>
         </div>
         <div class="five wide column">
-            <div class="ui segment">
-                <form class="ui form" style="text-align: center;">
-                    <b>Создать нового учителя</b>
+            <div class="ui segment" style="height: 380px;">
+                <form class="ui form text-center">
+                    <b>Добавить нового сотрудника</b>
                     <br><br>
-                    <textarea class="new_school_title" placeholder="Название школы"></textarea>
-                    <textarea class="new_school_slogan" placeholder="Описание школы"></textarea>
-                    <textarea class="new_school_name" placeholder="Имя директора"></textarea>
-                    <textarea class="new_school_phone" placeholder="Номер директора"></textarea>
-                    <textarea class="new_school_version" placeholder="Версия"></textarea>
+                    <select class="mb15">
+                        <option>Профессия</option>                        
+                        {% for prof in professions %}<option>{{prof.title}}</option>{%endfor%}
+                    </select>
+                    <textarea class="new_school_name" placeholder="Школа"></textarea>
+                    <textarea class="new_school_name" placeholder="Имя"></textarea>
+                    <textarea class="new_school_phone" placeholder="Номер"></textarea>
+                    <textarea class="new_school_version" placeholder="Почта"></textarea>
                     <br><br>
-                    <a class="ui button green create_school" url="{% url 'main:create_school' %}">Создать школу</a>
+                    <a class="ui button green create_school" url="{% url 'main:create_school' %}">Добавить сотрудника</a>
                 </form>
             </div>
             <div class="highlight success_created" style="width: 50%;margin: 15px auto;display: none;">
@@ -46,6 +49,67 @@
             </div>
             <div class="highlight_red not_success_created" style="width: 50%;margin: 15px auto;display: none;">
                 Школа создана, пароль директора: <b class="director_password" style="color: #fff;"></b>
+            </div>
+        </div>
+        <div class="five wide column">
+            <div class="ui segment" style="height: 380px;">
+                <form class="ui form text-center">
+                    <b>Переместить сотрудника</b>
+                    <br><br>
+                    <textarea class="new_school_name" placeholder="Имя"></textarea>
+                    <textarea class="new_school_name" placeholder="Школа"></textarea>
+                    <br><br>
+                    <a class="ui button green create_school inline" url="{% url 'main:create_school' %}">Добавить сотрудника в школу</a>
+                    <br><br>
+                    <a class="ui button red create_school inline" url="{% url 'main:create_school' %}">Уволить сотрудника из школы</a>
+                </form>
+            </div>
+            <div class="highlight success_created" style="width: 50%;margin: 15px auto;display: none;">
+                Школа создана, пароль директора: <b class="director_password" style="color: #fff;"></b>
+            </div>
+            <div class="highlight_red not_success_created" style="width: 50%;margin: 15px auto;display: none;">
+                Школа создана, пароль директора: <b class="director_password" style="color: #fff;"></b>
+            </div>
+        </div>
+        <div class="sixteen wide column" style="margin-bottom: 200px;">
+            <div class="ui segment">
+                <div class="mb15 text-center">
+                    <b>Партнеры</b>
+                </div>
+                <form class="ui form grid no_margin stackable">
+                    {% for school in schools %}
+                        <div class="four wide column" style="border: 1px solid lightgrey">
+                            <div class="ui grid no_margin">
+                                <div class="eight wide column no_padding">
+                                    <a href="{{ school.get_absolute_url }}?type=moderator&mod_school_id={{school.id}}">{{ school.title }}</a>
+                                </div>
+                                <div class="eight wide column no_padding">
+                                    <select>
+                                        <option>{{school.version}}</option>
+                                        {% if school.version != 'free' %}
+                                            <option>free</option>
+                                        {%endif%}
+                                        {% if school.version != 'econom' %}
+                                            <option>econom</option>
+                                        {%endif%}
+                                        {% if school.version != 'free' %}
+                                            <option>standart</option>
+                                        {%endif%}
+                                        {% if school.version != 'business' %}
+                                            <option>business</option>
+                                        {%endif%}
+                                    </select>
+                                </div>
+                                <div class="sixteen wide column no_padding small_text">
+                                    Рейтинг: {{ school.rating }},
+                                    Предметы: {{ school.school_subjects.all|length }},
+                                    Группы: {{ school.groups.all|length }},
+                                    Офисы: {{ school.offices }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
             </div>
         </div>
     </div>

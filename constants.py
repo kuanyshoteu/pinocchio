@@ -102,8 +102,9 @@ def get_profile(request):
     return profile
 
 def is_in_school(profile, school):
-    if not school in profile.schools.all():
-        raise Http404
+    if not is_profi(profile, 'Moderator'):
+        if not school in profile.schools.all():
+            raise Http404
 
 def only_teachers(profile):
     profession = Profession.objects.get(title = 'Teacher')
@@ -134,6 +135,9 @@ def only_staff(profile):
 def is_profi(profile, job_name):
     profession = Profession.objects.get(title = job_name)
     director = Profession.objects.get(title = 'Director')
+    moderator = Profession.objects.get(title = 'Moderator')
+    if moderator in profile.profession.all():
+        return True
     if job_name != 'Teacher' and job_name != 'Moderator' and director in profile.profession.all():
     	if not profile.is_student:
     		return True
@@ -174,7 +178,7 @@ def all_teachers(school):
 def is_moderator_school(request, profile):
     if request.GET.get('type'):
         if request.GET.get('type') == 'moderator':
-            if is_profi(profile, 'Moderator'):
+            if is_profi(profile, 'Moderator') and request.GET.get('mod_school_id') != '':
                 school = School.objects.get(id=int(request.GET.get('mod_school_id')))
                 return school
     school = profile.schools.first()

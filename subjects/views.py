@@ -50,14 +50,16 @@ def subject_detail(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "subjects/subject_detail.html", context)
 
 def subject_list(request):
     profile = get_profile(request)
     only_staff(profile)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     subjects = school.school_subjects.all()
     if profile.skill.crm_subject2:
         subjects = subjects.filter(category=profile.skill.crm_subject2)
@@ -70,7 +72,9 @@ def subject_list(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "subjects/subject_list.html", context)
 
@@ -78,13 +82,12 @@ def subject_create(request):
     profile = get_profile(request)
     only_managers(profile)
     form = SubjectForm(request.POST or None, request.FILES or None)
-    school = profile.schools.first()    
+    school = is_moderator_school(request, profile)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.school = school
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
-
     context = {
         "form": form,
         "profile":profile,
@@ -93,7 +96,9 @@ def subject_create(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "subjects/subject_create.html", context)
 
@@ -172,7 +177,9 @@ def subject_update(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "subjects/subject_create.html", context)
 
@@ -203,13 +210,13 @@ def subject_delete(request, slug=None):
     is_in_school(profile, school)
     if request.method == "POST":
         instance.delete()
-        messages.success(request, "Successfully deleted")
-        return redirect("subjects:list")
+        return HttpResponseRedirect("/subjects/?type=moderator&mod_school_id="+str(school.id))
     context = {
         "object": instance,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":profile.schools.first().money,
     }
     return render(request, "confirm_delete.html", context)

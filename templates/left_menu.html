@@ -8,49 +8,49 @@
                     <i class="home icon"></i> Моя страница
                 </a>
                 {% if is_director %}
-                <a class="item lftitem" href='{% url "schools:info" %}'>
+                <a class="item lftitem" href='{% url "schools:info" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="cog icon"></i>Управление
                 </a>
                 {% endif %}
                 {% if is_manager or is_director %}
-                <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}'>
+                <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>
                     CRM
                     {% if profile.skill.need_actions > 0 %}
                     <span class="left_menu_number">{{profile.skill.need_actions}}</span>
                     {% endif %}                    
                 </a>
-                <a class="item lftitem" href='{% url "schools:schedule" %}'>
+                <a class="item lftitem" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="table icon"></i>Расписание
                 </a>
                 {% endif %}
                 {% if is_manager or is_trener or is_director %}
-                <a class="item lftitem help27 help2727hb help66 help6666hb" href='{% url "documents:main" %}'>
+                <a class="item lftitem help27 help2727hb help66 help6666hb" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="folder icon"></i>Документы
                 </a>
                 {% endif %}
                 {% if is_trener or is_director %}
-                <a class="item lftitem help48 help4848hb help69 help6969hb" href='{% url "library:main" %}'>
+                <a class="item lftitem help48 help4848hb help69 help6969hb" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="file alternate icon"></i>База уроков
                 </a>
                 {% endif %}
                 {% if is_manager or is_director %}
-                <a class="item lftitem" href='{% url "schools:payments" %}'>
+                <a class="item lftitem" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="dollar sign icon"></i>Оплата
                 </a>
                 {% endif %}
-                <a class="item lftitem help7 help77hb help26 help2626hb hepl45 help4545hb help65 help6565hb" href='{% url "news:list" %}'>
+                <a class="item lftitem help7 help77hb help26 help2626hb hepl45 help4545hb help65 help6565hb" href='{% url "news:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="newspaper icon"></i>Новости
                 </a>
                 {% if is_manager or is_trener or is_director %}
-                <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "squads:list" %}'>
+                <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="users icon"></i>Классы
                 </a>
-                <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "subjects:list" %}'>
+                <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="book icon"></i>Курсы
                 </a>
                 {% endif %}
-                <a class="item lftitem help8 help88hb help28 help2828hb help46 help4646hb help67 help6767hb" href='{% url "schools:rating" %}'>
+                <a class="item lftitem help8 help88hb help28 help2828hb help46 help4646hb help67 help6767hb" href='{% url "schools:rating" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="trophy icon"></i>Рейтинги
                 </a>
                 {% if is_manager or is_trener or is_director %}
@@ -65,16 +65,21 @@
                 </a>
                 {% endif %}
             </div>
-            <a class="lftitemsmall update_hints" style="color: #939699;font-size: 12px;margin-left: 10px;" href="{% url 'main:map' %}">
+            <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:map' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
                 Карта
             </a>
-            <a class="lftitemsmall update_hints" style="color: #939699;font-size: 12px;margin-left: 10px;" url="{{ profile.update_hints }}">
+            <a class="lftitemsmall update_hints small_text ml10" url="{{ profile.update_hints }}">
                 Помощь
             </a>
             <br>
-            <a class="lftitemsmall" style="color: #939699;font-size: 12px;margin-left: 10px;" href='/contacts/'>
-                Контакты
+            <a class="lftitemsmall small_text ml10" href='/team/'>
+                О нас
             </a>
+            {% if is_moderator %}
+            <a class="lftitemsmall small_text ml10" href='/moderator/'>
+                Модераторская
+            </a>
+            {% endif %}
     </div>
 <!--     <br>
     <a class="ui button mini blue" style="margin-left: 20px;" onclick="$('#corruption').modal('show')">

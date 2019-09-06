@@ -1,11 +1,9 @@
 {% extends "base.html" %}
-
 {% load crispy_forms_tags %}
 {% block head_extra %}
 {{ form.media }}
 {% endblock head_extra %}
 {% block content %}
-
 <div id="profile">
     <div class='ui container'>
         <div class="ui grid stackable">
@@ -35,7 +33,7 @@
                             {% endfor %}
                             {% if is_director or is_manager%}
                             <div class="eight wide column" style="padding: 0">
-                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "subjects:create" %}'>+ Создать новый курс</a>
+                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "subjects:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>+ Создать новый курс</a>
                             </div>
                             {% endif %}
                         </div>

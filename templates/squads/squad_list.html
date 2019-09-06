@@ -28,7 +28,7 @@
                             {% endfor %}
                             {% if is_director or is_manager%}
                             <div class="eight wide column" style="padding: 0">
-                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "squads:create" %}'>+ Создать новый класс</a>
+                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>+ Создать новый класс</a>
                             </div>
                             {% endif %}                            
                         </div>

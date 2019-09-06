@@ -46,6 +46,8 @@ def squad_detail(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,        
         "school_money":school.money,
     }
     return render(request, "squads/squad_detail.html", context)
@@ -57,7 +59,7 @@ def squad_list(request):
         hissquads = profile.hissquads.all()
     else:
         hissquads = profile.squads.all()
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     context = {
         "profile": profile,
         "squads":school.groups.all(),
@@ -65,6 +67,8 @@ def squad_list(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,        
         "school_money":school.money,
     }
     return render(request, "squads/squad_list.html", context)
@@ -73,7 +77,7 @@ def squad_create(request):
     profile = get_profile(request)
     only_managers(profile)
     form = SquadForm(request.POST or None, request.FILES or None)
-    school = profile.schools.first()
+    school = is_moderator_school(request, profile)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.start_date = timezone.now().date()
@@ -89,6 +93,8 @@ def squad_create(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,        
         "school_money":school.money,
     }
     return render(request, "squads/squad_create.html", context)
@@ -155,6 +161,8 @@ def squad_update(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,        
         "school_money":school.money,
         "offices":school.school_offices.all(),        
         'time_periods':time_periods,
@@ -180,6 +188,8 @@ def squad_delete(request, slug=None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,        
         "school_money":profile.schools.first().money,
     }
     return render(request, "confirm_delete.html", context)

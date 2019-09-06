@@ -40,7 +40,7 @@
         <i class="arrow left icon"></i>
     </a>
 	{% else %}
-	<a id="go-back-btn-before" href='{% url "squads:list" %}'>
+	<a id="go-back-btn-before" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
     </a>
     {% endif %}

@@ -195,6 +195,8 @@ def moderator(request):
     #         age.schools.add(school)
     context = {
         "profile":profile,
+        "schools":School.objects.all(),
+        "professions":Profession.objects.all(),
     }
     return render(request, "moderator.html", context)
 

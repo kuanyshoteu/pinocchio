@@ -247,6 +247,7 @@
         </div>
     </div>
     <div style="padding-top: 10px;min-height: calc(100% - 40px) ;">
+        {% if is_moderator %}<span class="highlight ml150 fix_mod">Находитесь внутри школы <b>{{school_crnt.title}}</b>{%endif%}</span>
         {% block content %}{% endblock content %}
     </div>
 </div>

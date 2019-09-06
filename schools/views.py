@@ -59,6 +59,7 @@ def school_rating(request):
             "is_director":is_profi(profile, 'Director'),
             "is_moderator":is_profi(profile, 'Moderator'),
             "school_money":school.money,
+            "school_crnt":school,
         }
         return render(request, "school/school_rating.html", context)
 
@@ -79,6 +80,7 @@ def school_payments(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/school_payments.html", context)
 
@@ -100,6 +102,7 @@ def school_schedule(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/schedule.html", context)
 
@@ -125,6 +128,7 @@ def school_landing(request, school_id=None):
         "is_manager":is_manager,
         "is_director":is_director,
         "school_money":school_money,
+        "school_crnt":school,
         "five":[1,2,3,4,5],
         "landing":True,
         "social_networks":get_social_networks(school),
@@ -178,6 +182,7 @@ def school_info(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
         "today":timezone.now().date().strftime('%Y-%m-%d'),
         "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),
         "managers":managers,
@@ -207,6 +212,7 @@ def school_salaries(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/salaries.html", context)
 
@@ -231,9 +237,11 @@ def school_crm(request):
         'time_periods':time_periods,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "is_director":is_director,
         'managers':managers,
         "school_money":school.money,
+        "school_crnt":school,
         "all":False,
     }
     return render(request, "school/crm.html", context)
@@ -260,8 +268,10 @@ def school_crm_all(request):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_director,
+        "is_moderator":is_profi(profile, 'Moderator'),
         'managers':managers,
         "school_money":school.money,
+        "school_crnt":school,
         "all":True,
     }
     return render(request, "school/crm.html", context)
@@ -280,6 +290,7 @@ def school_students(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/all_students.html", context)
 
@@ -297,6 +308,7 @@ def school_requests(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/all_students.html", context)
 
@@ -314,6 +326,7 @@ def school_recalls(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/all_students.html", context)
 
@@ -329,6 +342,7 @@ def school_courses(request):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
+        "school_crnt":school,
     }
     return render(request, "school/all_courses.html", context)
 
@@ -341,6 +355,7 @@ def school_list(request):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,
     }
     return render(request, "schools/school_list.html", context)
 

@@ -12,8 +12,8 @@
 {% load staticfiles %}
 {% block content %}
 <div id="group-details" style="padding-bottom: 100px;">
-    {% if profile.is_manager %}
-    <a id="go-back-btn-before"  href='{% url "subjects:list" %}'>
+    {% if is_manager %}
+    <a id="go-back-btn-before"  href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
     </a>
     {% else %}

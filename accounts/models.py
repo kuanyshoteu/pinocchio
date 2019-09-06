@@ -30,7 +30,7 @@ def upload_location(instance, filename):
 class Profession(models.Model):
     title = models.TextField(blank = True,null = True,default='')
     class Meta:
-        ordering = ['title']
+        ordering = ['-title']
 class JobCategory(models.Model):
     title = models.TextField(blank = True,null = True,default='')
     salary = models.IntegerField(default=0)
