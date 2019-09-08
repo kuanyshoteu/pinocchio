@@ -33,7 +33,7 @@ admin.site.register(CRMColumn, CRMColumnModelAdmin)
 class CRMCardModelAdmin(admin.ModelAdmin):
     list_display = ["name","id", "phone", "mail", "author_profile", "timestamp"]
     list_display_links = ["name"]
-    list_filter = ["author_profile"]
+    list_filter = ["school","author_profile"]
 
     search_fields = ["name"]
     class Meta:
