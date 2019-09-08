@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<html>
+<html {% if map_view %} style="overflow-y: hidden;"{% endif %}>
 <head>
     {% if map_view %}
     <link rel="canonical" href="https://www.bilimtap.kz" />

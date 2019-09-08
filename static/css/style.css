@@ -1947,6 +1947,9 @@ a{
   overflow-y: scroll;height: 90%;
 }
 @media screen and (min-width: 900px){
+  .mapdivider{
+    display: none;
+  }
     .back_to_schools{
       position: fixed;
       z-index: 3000;
@@ -2000,51 +2003,54 @@ a{
   overflow-y: hidden;
 }
 @media only screen and (max-width: 899px) {
-    .back-w-m{
-      background-color: #fff;
-      box-shadow: 0 0 4px rgba(0,0,0,.25);
-      border-radius: 4px;
-    }
-    .back-g{
-      background: #f5f5f5;
-    }
-    .map_search_input{
-      border: 1px solid #fff !important;
-      border-radius: 4px 0 0 0 !important; 
-    }
-    .map_filter{
-      border: 1px solid #fff !important;
-      border-radius: 0 !important;
-    }
-    .school_phone_landing{
-      font-size: 17px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-    .school_name_big{
-      font-size: 22px;
-      padding: 20px 0px 23px 20px;
-    }
-    .back_to_schools{
-      position: fixed;
-      z-index: 3000;
-      left: 88%;
-    }  
-    .school_landing{
-      position: absolute;
-      height: 95%;
-      width: 100%;
-      z-index: 1005;
-      display: none;
-      background-color: #fff;
-      border-radius: 3px;
-      border: 1px solid #CCE2FF;
-      box-shadow: 0 0px 7px lightgrey;
-      margin-top: 14px;
-      overflow-y: scroll;
-      padding: 0 !important;
-    }
+  .mapdivider{
+    width: 50px;background-color: lightgrey;margin: 0 auto 10px auto;height: 2px; 
+  }
+  .back-w-m{
+    background-color: #fff;
+    box-shadow: 0 0 4px rgba(0,0,0,.25);
+    border-radius: 4px;
+  }
+  .back-g{
+    background: #f5f5f5;
+  }
+  .map_search_input{
+    border: 1px solid #fff !important;
+    border-radius: 4px 0 0 0 !important; 
+  }
+  .map_filter{
+    border: 1px solid #fff !important;
+    border-radius: 0 !important;
+  }
+  .school_phone_landing{
+    font-size: 17px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .school_name_big{
+    font-size: 22px;
+    padding: 20px 0px 23px 20px;
+  }
+  .back_to_schools{
+    position: fixed;
+    z-index: 3000;
+    left: 88%;
+  }  
+  .school_landing{
+    position: absolute;
+    height: 95%;
+    width: 100%;
+    z-index: 1005;
+    display: none;
+    background-color: #fff;
+    border-radius: 3px;
+    border: 1px solid #CCE2FF;
+    box-shadow: 0 0px 7px lightgrey;
+    margin-top: 0px !important;
+    overflow-y: scroll;
+    padding: 0 !important;
+  }
   .show_url{ color: blue; }
   .map_distance{
     padding: 0 !important;
@@ -2064,7 +2070,7 @@ a{
     z-index: 1000;
     display: none !important;
     background-color: #f5f5f5;
-    padding-top: 30px !important;
+    padding-top: 10px !important;
   }
   .school_name{
     font-size: 22px;
