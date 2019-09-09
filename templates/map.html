@@ -4,10 +4,10 @@
 {% block content %}
 <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
     type="text/javascript"></script>
-<div class="ui container" style="overflow-y: hidden;">
+<div class="ui container" style="overflow-y: hidden;max-height: 90%;">
     <div class="drop1" style="position: absolute;top: 150px;"></div>
     <div class="drop2" style="position: absolute;top: 550px;"></div>
-    <div class="ui grid stackable" style="margin-top: 0;padding-left: 0; height: 90%">
+    <div class="ui grid stackable" style="margin-top: 0;padding-left: 0; height: 100%">
         <div class="sixteen wide column no_padding map_filters_block">
             <form class="ui form no_margin map_distance_cont">
                 <div class="ui grid no_margin back-w-m">
@@ -233,29 +233,22 @@
         $( ".map_school_list" ).draggable({ 
             axis: "y",
             distance:30,
-            scroll: true,
-            helper: 'clone',
-            start: function(){
-                $(this).hide();             
-            },
+            containment:'.list_cont',
+            scroll:true,
             stop: function( event, ui ) {
-                $(this).show()
-                if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
-                    if ($('.map_school_list').attr('status') == 'down'){
-                        $('.map_school_list').attr('style', 'display:inline-block !important;');
-                        $('.map_school_list').animate({top:"-="+ (parseInt($(".map_school_list").css("top")) - 150)});
-                        $('.map_school_list').attr('status','up')       
-                    }
-                    else{
-                        $('.map_school_list').attr('style', 'display:inline-block !important;');
-                        $('.map_school_list').animate({'top' : "550px"});     
-                        $('.map_school_list').attr('status','down')
-                    }
+                if ($('.map_school_list').attr('status') == 'down'){
+                    $('.map_school_list').attr('style', 'display:inline-block !important;');
+                    $('.map_school_list').animate({top:"-="+ (parseInt($(".map_school_list").css("top")) - 150)});
+                    $('.map_school_list').attr('status','up')       
+                }
+                else{
+                    $('.map_school_list').attr('style', 'display:inline-block !important;');
+                    $('.map_school_list').animate({'top' : "550px"});     
+                    $('.map_school_list').attr('status','down')
                 }
             },
             cancel: ".no_drag",
         });
-
     }
     function down_schools(){
         if( $('.show_url').css('color')=='rgb(0, 0, 255)') {

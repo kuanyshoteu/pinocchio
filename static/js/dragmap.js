@@ -99,9 +99,14 @@
    * @param {Object} event The document's touchmove event
    */
   mouseProto._touchMove = function (event) {
-
     // Ignore event if not handled
-    if (!touchHandled) {
+    console.log($(".map_school_list").css("top"))
+    if (parseInt($(".map_school_list").css("top")) < 150) {
+      console.log('enough')
+      simulateMouseEvent(event, 'click');
+      return 0;
+    }
+    if (!touchHandled ) {
       return;
     }
 

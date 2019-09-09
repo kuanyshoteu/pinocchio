@@ -47,7 +47,7 @@
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
     {% block head_extra %} {% endblock head_extra %}
 </head>
-<body>
+<body {% if map_view %} style="overflow-y: hidden;max-height: 100%;"{% endif %}>
 {% include "modals/confirm_delete.html" %}
 {% if is_manager %}
 {% include "modals/new_card_crm.html" %}
@@ -246,7 +246,7 @@
         <div class="five wide column menu_back no_padding">
         </div>
     </div>
-    <div style="padding-top: 10px;min-height: calc(100% - 40px) ;">
+    <div style="padding-top: 10px;min-height: calc(100% - 40px) ;{% if map_view %}overflow-y: hidden;max-height: 100%;{% endif %}">
         {% if is_moderator %}<span class="highlight ml150 fix_mod">Находитесь внутри школы <b>{{school_crnt.title}}</b>{%endif%}</span>
         {% block content %}{% endblock content %}
     </div>
