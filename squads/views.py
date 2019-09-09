@@ -367,7 +367,7 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
             except Exception as e:
                 ok_mail = False
         if is_send:
-            #send_sms(student.phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
+            send_sms(phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
             pass
     return ok_mail
 
@@ -395,6 +395,7 @@ def remove_person_from_lecture(lecture, person):
     index = lecture.person_id.index(person.id)
     number = lecture.person_number[index]
     if number == 1:
+        print('f', lecture.cell.time_period)
         lecture.people.remove(person)
     lecture.person_number[index] -= 1
     if lecture.person_number[index] < 0:
@@ -501,6 +502,8 @@ def change_schedule(request, id=None):
         cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
         if request.GET.get('old_cell') == 'none':
             if len(Lecture.objects.filter(squad=squad,subject=subject,cell=cell)) == 0:
+                ages = subject.age.all()
+                categories = subject.category.all()
                 lecture = Lecture.objects.create(
                     squad=squad,
                     subject=subject,
@@ -508,8 +511,9 @@ def change_schedule(request, id=None):
                     school=school,
                     day=cell.day,
                     office=squad.office,
-                    category=subject.category,
-                    age=subject.age.first())
+                )
+                lecture.age.add(*ages)
+                lecture.age.add(*categories)
                 lecture.people.add(*subject_students)
                 if squad.teacher:
                     lecture.people.add(squad.teacher)

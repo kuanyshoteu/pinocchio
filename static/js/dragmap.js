@@ -10,6 +10,7 @@
  */
 (function ($) {
 
+
   // Detect touch support
   $.support.touch = 'ontouchend' in document;
 
@@ -67,14 +68,15 @@
    * Handle the jQuery UI widget's touchstart events
    * @param {Object} event The widget element's touchstart event
    */
-  mouseProto._touchStart = function (event) {
 
+  mouseProto._touchStart = function (event) {
     var self = this;
 
     // Ignore the event if another widget is already being handled
     if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
       return;
     }
+    console.log('start')
 
     // Set the flag to prevent other widgets from inheriting the touch event
     touchHandled = true;
@@ -115,37 +117,20 @@
    * @param {Object} event The document's touchend event
    */
   mouseProto._touchEnd = function (event) {
-    console.log('end')
-    if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
-        if ($('.map_school_list').attr('status') == 'down'){
-            $('.map_school_list').attr('style', 'display:inline-block !important;');
-            $('.map_school_list').animate({'top' : "150px"});     
-            $('.map_school_list').attr('status','up')       
-        }
-        else{
-            $('.map_school_list').attr('style', 'display:inline-block !important;');
-            $('.map_school_list').animate({'top' : "650px"});     
-            $('.map_school_list').attr('status','down')
-        }
-    }
     // Ignore event if not handled
     if (!touchHandled) {
       return;
     }
-
+    console.log('end')
     // Simulate the mouseup event
     simulateMouseEvent(event, 'mouseup');
-
     // Simulate the mouseout event
     simulateMouseEvent(event, 'mouseout');
-
     // If the touch interaction did not move, it should trigger a click
     if (!this._touchMoved) {
-
       // Simulate the click event
       simulateMouseEvent(event, 'click');
     }
-
     // Unset the flag to allow other widgets to inherit the touch event
     touchHandled = false;
   };

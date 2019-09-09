@@ -157,7 +157,6 @@
         $('.wrong_mail').hide()
         $('.no_predoplata_number').hide()
         in_squad = $('.squad'+squad_id).attr('status')
-        console.log(in_squad)
         if (in_squad == 'show' || $('.predoplata_number').attr('status') != 'show' || sch != 0 || predoplata != '') {
             $.ajax({
                 url: $('.card_for_save').attr('url'),
@@ -173,11 +172,7 @@
                     $('.ok_predoplata').hide()
                     $('.predoplata_number').attr('status', 'hide')
                     $('.predoplata_number').val('')
-                    if (data.ok_mail == false) {
-                        $('.time_stop').hide()
-                        $('.wrong_mail').show()
-                    }
-                    else if (data.stop) {
+                    if (data.stop) {
                         $('.time_stop').show()
                         $('.wrong_mail').hide()
                     }

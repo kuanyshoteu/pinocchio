@@ -35,6 +35,7 @@ $('.notice').click(function(event) {
         $('.bell').attr('style', 'color:#2D437C;')
     }
 });
+
 $('.school_landing').click(function(e){
     e.stopPropagation();
 });
