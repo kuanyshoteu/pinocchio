@@ -236,18 +236,22 @@
             containment:'.list_cont',
             scroll:true,
             stop: function( event, ui ) {
-                if ($('.map_school_list').attr('status') == 'down'){
-                    $('.map_school_list').attr('style', 'display:inline-block !important;');
-                    $('.map_school_list').animate({top:"-="+ (parseInt($(".map_school_list").css("top")) - 150)});
-                    $('.map_school_list').attr('status','up')       
-                }
-                else{
-                    $('.map_school_list').attr('style', 'display:inline-block !important;');
-                    $('.map_school_list').animate({'top' : "550px"});     
-                    $('.map_school_list').attr('status','down')
+                myDiv = $('.map_school_list')
+                land = $('.school_landing')
+                mlist = $('.school_list') 
+                if ((land.prop('scrollTop') == 0 && land.attr('status') == 'shown') || (mlist.prop('scrollTop') == 0 && land.attr('status') == 'hidden')) {
+                    if (myDiv.attr('status') == 'down'){
+                        myDiv.attr('style', 'display:inline-block !important;');
+                        myDiv.animate({top:"-="+ (parseInt(myDiv.css("top")) - 150)});
+                        myDiv.attr('status','up')       
+                    }
+                    else{
+                        myDiv.attr('style', 'display:inline-block !important;');
+                        myDiv.animate({'top' : "550px"});     
+                        myDiv.attr('status','down')
+                    }
                 }
             },
-            cancel: ".no_drag",
         });
     }
     function down_schools(){

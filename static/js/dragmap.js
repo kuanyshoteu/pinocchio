@@ -71,7 +71,6 @@
 
   mouseProto._touchStart = function (event) {
     var self = this;
-
     // Ignore the event if another widget is already being handled
     if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
       return;
@@ -100,9 +99,11 @@
    */
   mouseProto._touchMove = function (event) {
     // Ignore event if not handled
-    console.log($(".map_school_list").css("top"))
+    if ($('.school_landing').prop('scrollTop') > 0 || $('.school_list').prop('scrollTop') > 0) {
+      simulateMouseEvent(event, 'click');
+      return 0;
+    }
     if (parseInt($(".map_school_list").css("top")) < 150) {
-      console.log('enough')
       simulateMouseEvent(event, 'click');
       return 0;
     }
