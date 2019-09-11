@@ -54,6 +54,7 @@ def main_view(request):
         'main':True,
         "subjects":SubjectCategory.objects.all(),
         "ages":SubjectAge.objects.all(),
+        'map_view':True
     }
     return render(request, "map.html", context)
 
@@ -82,6 +83,7 @@ def map_view(request):
         "ages":SubjectAge.objects.all(),
         "school_money":money,
         "map_view":True,
+        "map_map_view":True,
     }
     return render(request, "map.html", context)
 

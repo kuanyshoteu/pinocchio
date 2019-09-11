@@ -1,7 +1,8 @@
 {% load staticfiles %}
+{% load static compress %}
 <html {% if map_view %} style="overflow-y: hidden;max-height: 100%;"{% endif %}>
 <head>
-    {% if map_view %}
+    {% if map_map_view %}
     <link rel="canonical" href="https://www.bilimtap.kz" />
     {% endif %}
     <meta charset="utf-8">
@@ -36,6 +37,7 @@
 
       gtag('config', 'UA-146621937-1');
     </script>
+    {% compress css %}
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="shortcut icon" href='{% static "images/fav2.ico" %}' type="image/png">
     <link rel="stylesheet" href='{% static "css/slider.css" %}'>
@@ -43,8 +45,11 @@
     <link rel="stylesheet" href='{% static "OwlCarousel/owl.carousel.min.css" %}'>
     <link rel="stylesheet" href='{% static "OwlCarousel/owl.theme.default.min.css" %}'>
     <link rel="stylesheet" href='{% static "css/datepicker.min.css" %}'>    
+    {% endcompress %}
+    {% compress js %}
     <script src='{% static "js/scripts.js" %}'></script>
     <script src='{% static "js/libs/modernizr-2.5.3.min.js" %}'></script>
+    {% endcompress %}
     {% block head_extra %} {% endblock head_extra %}
 </head>
 <body {% if map_view %} style="overflow-y: hidden;max-height: 100%;"{% endif %}>
@@ -246,7 +251,7 @@
         <div class="five wide column menu_back no_padding">
         </div>
     </div>
-    <div style="padding-top: 10px;min-height: calc(100% - 40px) ;{% if map_view %}overflow-y: hidden;max-height: 100%;{% endif %}">
+    <div style="padding-top: 10px;min-height: calc(100% - 40px);{% if map_view %}overflow-y: hidden;max-height: 100%;{% endif %}">
         {% if is_moderator %}<span class="highlight ml150 fix_mod">Находитесь внутри школы <b>{{school_crnt.title}}</b>{%endif%}</span>
         {% block content %}{% endblock content %}
     </div>

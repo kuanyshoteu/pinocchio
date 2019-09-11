@@ -99,10 +99,6 @@
    */
   mouseProto._touchMove = function (event) {
     // Ignore event if not handled
-    if ($('.school_landing').prop('scrollTop') > 0 || $('.school_list').prop('scrollTop') > 0) {
-      simulateMouseEvent(event, 'click');
-      return 0;
-    }
     if (parseInt($(".map_school_list").css("top")) < 150) {
       simulateMouseEvent(event, 'click');
       return 0;

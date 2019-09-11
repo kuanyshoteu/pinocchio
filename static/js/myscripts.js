@@ -1,4 +1,3 @@
-$(document).ready(function () { 
     $('.make_zaiavka_new').click(function(e) {
         url = '/api/make_zaiavka/'
         id = $(this).attr('id')
@@ -1011,8 +1010,6 @@ $(document).ready(function () {
         var this_ = $(this)
         $('#' + this_.attr("id") + 'chart').fadeToggle();
     })
-})
-$(document).ready(function () {
     $(".delete_zaiavka").click(function (e) {
         e.preventDefault()
         var this_ = $(this)
@@ -1280,8 +1277,6 @@ $(document).ready(function () {
             });
         }
     });
-})
-$(document).ready(function () {
     $(".check_task_answer").click(function () {
         var this_ = $(this)
         var id = this_.attr("id")
@@ -1385,8 +1380,6 @@ $(document).ready(function () {
             })
         }
     })
-})
-$(document).ready(function () {
     $(".task_answer").change(function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")
@@ -1461,8 +1454,6 @@ $(document).ready(function () {
             });
         }
     });
-
-})
 // vmenu2
 
 // $('#toggle').on('ready', function(e) {

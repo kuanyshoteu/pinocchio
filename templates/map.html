@@ -7,8 +7,8 @@
 <div class="ui container" style="overflow-y: hidden;max-height: 90%;">
     <div class="drop1" style="position: absolute;top: 150px;"></div>
     <div class="drop2" style="position: absolute;top: 550px;"></div>
-    <div class="ui grid stackable" style="margin-top: 0;padding-left: 0; height: 100%">
-        <div class="sixteen wide column no_padding map_filters_block">
+    <div class="ui grid stackable mt0 pl0" style="height: 100%">
+        <div class="sixteen wide column map_filters_block" style="padding: 0 0 2px 0;">
             <form class="ui form no_margin map_distance_cont">
                 <div class="ui grid no_margin back-w-m">
                     <div class="four wide column map_distance">
@@ -42,7 +42,10 @@
             </form>
         </div>
         <div class="four wide column map_school_list" id="map_school_list" status="down">
-            <div class="mapdivider" id="mapdivider">
+            <div class="mapdivider to_drag" id="mapdivider">
+                <div class="linesmall to_drag"></div>
+                <div class="linesmall to_drag"></div>
+                <div class="linesmall to_drag"></div>
             </div>
             <div class="school_landing ui segment no_padding" id="school_landing">
                 <div class="loading" style="display: none;">
@@ -59,14 +62,14 @@
                             <i class="icon x"></i>
                         </a>
                     </div>
-                    <div class="fourteen wide column no_padding">
+                    <div class="fourteen wide column no_padding to_drag">
                         <div class="school_start_landing"></div>
                         <div class="school_name_big"></div>
                     </div>
-                    <div class="sixteen wide column no_padding no_drag_p no_drag">
+                    <div class="sixteen wide column no_padding">
                         <div class="ui divider no_margin"></div>
                     </div>
-                    <div class="sixteen wide column map_block no_drag_p no_drag">
+                    <div class="sixteen wide column map_block">
                         <div class="map_address">
                             <div class="map_address-text">
                                 <a class="map_address-title school_address_landing"></a>
@@ -225,11 +228,26 @@
 <span style="display: none;" class="show_url" url="{{url}}" slider_status="0"></span>
 <link rel="stylesheet" href="{% static 'css/price-slider.css' %}">
 <script src="{% static 'js/price-slider.js' %}"></script>
-<script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+<script>
+    if ($('.show_url').css('color')=='rgb(0, 0, 255)') {
+        document.write('<script src="https://code.jquery.com/jquery-1.7.2.min.js"><\/script><script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"><\/script>');
+    }
+</script>
 <script type="text/javascript" src="{% static 'js/dragmap.js' %}"></script>
 <script type="text/javascript">
     if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+        var count = 0;
+        $('.school_landing').bind('touchmove', function(e) { 
+            if (parseInt($(this).scrollTop()) == 0) {
+                count += 1
+            }
+            else{
+                count = 0;
+            }
+            if (count == 20) {
+                down_schools()
+            }
+        });
         $( ".map_school_list" ).draggable({ 
             axis: "y",
             distance:30,
@@ -239,20 +257,20 @@
                 myDiv = $('.map_school_list')
                 land = $('.school_landing')
                 mlist = $('.school_list') 
-                if ((land.prop('scrollTop') == 0 && land.attr('status') == 'shown') || (mlist.prop('scrollTop') == 0 && land.attr('status') == 'hidden')) {
                     if (myDiv.attr('status') == 'down'){
                         myDiv.attr('style', 'display:inline-block !important;');
                         myDiv.animate({top:"-="+ (parseInt(myDiv.css("top")) - 150)}, 100);
-                        myDiv.attr('status','up')       
+                        myDiv.attr('status','up')
+                        $('.map_filters_block').addClass('back-g')
                     }
                     else{
                         myDiv.attr('style', 'display:inline-block !important;');
                         myDiv.animate({'top' : "550px"}, 100);     
                         myDiv.attr('status','down')
+                        $('.map_filters_block').removeClass('back-g')
                     }
-                }
             },
-            cancel:'.no_drag',
+            handle:'.to_drag',
         });
     }
     function down_schools(){
@@ -261,7 +279,7 @@
             $('.map_school_list').animate({'top' : "-=200px"});
             $('.school_list').show()
             $('.map_school_list').attr('status','down')
-            e.stopPropagation();
+            $('.map_filters_block').removeClass('back-g')
         }
     }
     function lift_schools(){
@@ -271,6 +289,7 @@
                 $('.map_school_list').attr('style', 'display:inline-block !important;');
                 $('.map_school_list').animate({'top' : "150px"});
                 $('.map_school_list').attr('status','up')
+                $('.map_filters_block').addClass('back-g')
             }
         }
     }
@@ -524,6 +543,7 @@
         $('.school_list').empty();
         $('.school_list').show();
         url = $('.show_url').attr('url')
+        console.log(res)
         for(var i = 0; i < res.length; i++){
             id = res[i][0]
             name = res[i][1]
