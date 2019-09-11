@@ -25,7 +25,7 @@ SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
     DEBUG = False
-    ALLOWED_HOSTS = ['www.bilimtap.kz', 'bilimtap.kz']
+    ALLOWED_HOSTS = ['www.bilimtap.kz', 'bilimtap.kz', 'testbilimtap.herokuapp.com']
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
