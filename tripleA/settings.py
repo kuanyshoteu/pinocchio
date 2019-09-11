@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = True
+toserver = False
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 
@@ -59,17 +59,15 @@ INSTALLED_APPS = [
     'documents',
     'social_django',
     'channels',
-    'compressor',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 if toserver:
     SECURE_SSL_REDIRECT = True # [1]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -180,7 +178,7 @@ AWS_QUERYSTRING_AUTH = False
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
 if toserver:
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 else:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
@@ -188,6 +186,8 @@ S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'
 MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
 MEDIA_ROOT = MEDIA_URL
+
+STATIC_URL = '/static/'
 
 two_months = datetime.timedelta(days=61)
 date_two_months_later = datetime.date.today() + two_months
@@ -197,29 +197,14 @@ AWS_HEADERS = {
     'Expires': expires,
     'Cache-Control': 'max-age=%d' % (int(two_months.total_seconds()), ),
 }
-import environ
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
-STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
-STATIC_URL = STATIC_HOST + '/static/'
 
 STATICFILES_DIRS = [
-#    str(BASE_DIR.path('static')),
     os.path.join(BASE_DIR, "static"),
     #'/var/www/static/',
 ]
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder' # Django-Compressor
-]
-COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
-COMPRESS_ENABLED = env.bool('COMPRESS_ENABLED', default=True)
-# Must enable this to use with Whitenoise
-COMPRESS_OFFLINE = env.bool('COMPRESS_OFFLINE', default=True)
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
+
 # MEDIA_URL = '/media_cdn/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 # EMAIL
