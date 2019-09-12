@@ -204,7 +204,7 @@ env = environ.Env(
 )
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 STATIC_HOST = 'https://d2keambcwaj901.cloudfront.net'
-STATIC_URL = STATIC_HOST + '/static/'
+STATIC_URL = 'https://d2keambcwaj901.cloudfront.net'
 
 STATICFILES_DIRS = [
 #    str(BASE_DIR.path('static')),
