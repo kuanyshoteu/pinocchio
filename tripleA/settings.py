@@ -177,7 +177,7 @@ AWS_SECRET_ACCESS_KEY = 'A4vH8IFm+toG99z7YtI4Dnk3Vwdwau27Bueq8X0q'
 AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
-AWS_S3_CUSTOM_DOMAIN = 'dmee4ixiu8ais.cloudfront.net'
+AWS_S3_CUSTOM_DOMAIN = 'd2keambcwaj901.cloudfront.net'
 AWS_SECURE_URLS = True
 AWS_IS_GZIPPED = True
 
@@ -205,9 +205,14 @@ env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
 )
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
-STATIC_URL = 'https://dmee4ixiu8ais.cloudfront.net/static/'
+#STATIC_URL = 'https://d2keambcwaj901.cloudfront.net/'
+STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
+STATIC_URL = STATIC_HOST + '/static/'
+print('d',STATIC_URL)
 COMPRESS_URL = STATIC_URL
+
 
 STATICFILES_DIRS = [
 #    str(BASE_DIR.path('static')),
