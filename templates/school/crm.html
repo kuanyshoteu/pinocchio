@@ -289,12 +289,15 @@
         var mail = $('.card_mail' + id).val()
         var comment = $('.card_comment' + id).text()
         ok = false
-        for (var i = mail.length - 1; i >= 0; i--) {
-            if (mail[i] == '@') {
-                ok = true;
-                break;
-            } 
+        if (mail.length > 0) {
+            for (var i = mail.length - 1; i >= 0; i--) {
+                if (mail[i] == '@') {
+                    ok = true;
+                    break;
+                } 
+            }            
         }
+        else{ok = true}
         if (ok) {
             $.ajax({
                 url: $('.edit_card_url').attr('url'),

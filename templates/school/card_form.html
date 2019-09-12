@@ -5,7 +5,7 @@
             Карточка {{ card.name }}
         </div>
         <form class="ui form card_form_update_here" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <span class="wrong_mail_error wrong_mail_error{{card.id}} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
+            <span class="wrong_mail_error wrong_mail_error{{card.id}} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
             <div class="ui grid stackable card_form_update">
                 <div class="eight wide column" style="padding-top: 5px;text-align: center;">
                     <div style="height: 10px;"></div>

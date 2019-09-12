@@ -203,7 +203,7 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
-STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
+STATIC_HOST = 'https://d2keambcwaj901.cloudfront.net'
 STATIC_URL = STATIC_HOST + '/static/'
 
 STATICFILES_DIRS = [
