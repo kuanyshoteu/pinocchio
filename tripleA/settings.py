@@ -203,7 +203,7 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 if toserver:
-    STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME        
+    STATIC_URL = '/static/'      
 else:
     STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
     STATIC_URL = STATIC_HOST + '/static/'
