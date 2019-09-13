@@ -266,6 +266,7 @@
         mail = $('.new_mail').val()
         new_password = $('.new_password').val()
         new_password2 = $('.new_password2').val()
+        console.log(name, phone, mail)
         if (name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2) {        
             $.ajax({
                 url: url,
