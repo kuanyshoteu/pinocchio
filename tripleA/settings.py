@@ -209,7 +209,9 @@ env = environ.Env(
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 #STATIC_URL = 'https://d2keambcwaj901.cloudfront.net/'
 STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
-STATIC_URL = STATIC_HOST + '/static/'
+STATIC_URL = STATIC_HOST
+if not toserver:
+    STATIC_URL += '/static/'
 print('d',STATIC_URL)
 COMPRESS_URL = STATIC_URL
 
