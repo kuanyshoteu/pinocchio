@@ -177,9 +177,13 @@ AWS_SECRET_ACCESS_KEY = 'A4vH8IFm+toG99z7YtI4Dnk3Vwdwau27Bueq8X0q'
 AWS_FILE_EXPIRE = 200
 AWS_PRELOAD_METADATA = True
 AWS_QUERYSTRING_AUTH = False
+CLOUDFRONT_DOMAIN = 'd2keambcwaj901.cloudfront.net'
+CLOUDFRONT_ID = 'E1DIVWQNJ8N4FW'
+
 AWS_S3_CUSTOM_DOMAIN = 'd2keambcwaj901.cloudfront.net'
 AWS_SECURE_URLS = True
 AWS_IS_GZIPPED = True
+
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
 if toserver:
