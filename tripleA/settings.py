@@ -66,6 +66,8 @@ if toserver:
     SECURE_SSL_REDIRECT = True # [1]
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
+    'htmlmin.middleware.HtmlMinifyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -77,8 +79,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social_django.middleware.SocialAuthExceptionMiddleware',
+    'htmlmin.middleware.MarkRequestMiddleware',
 ]
-
+HTML_MINIFY = True
 ROOT_URLCONF = 'tripleA.urls'
 CORS_ORIGIN_ALLOW_ALL = True
 TEMPLATES = [
@@ -183,7 +186,7 @@ CLOUDFRONT_ID = 'E1DIVWQNJ8N4FW'
 AWS_S3_CUSTOM_DOMAIN = 'd2keambcwaj901.cloudfront.net'
 AWS_SECURE_URLS = True
 AWS_IS_GZIPPED = True
-
+AWS_PRELOAD_METADATA = True
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
 if toserver:
@@ -191,6 +194,38 @@ if toserver:
 else:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 AWS_STORAGE_BUCKET_NAME = 'triplea-bucket'
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
+#STATIC_URL = 'https://d2keambcwaj901.cloudfront.net/'
+import environ
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+if toserver:
+    STATIC_URL = 'https://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME        
+else:
+    STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
+    STATIC_URL = STATIC_HOST + '/static/'
+COMPRESS_OFFLINE = True
+COMPRESS_ENABLED = True
+COMPRESS_URL = STATIC_URL
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter'
+]
+COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.JSMinFilter',
+]
+GZIP_CONTENT_TYPES = (
+    'text/css',
+    'application/javascript',
+    'application/x-javascript',
+    'text/javascript'
+)
+print('d',STATIC_URL)
+
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'
 MEDIA_URL = '//triplea-bucket.s3.amazonaws.com/media/'
@@ -204,21 +239,6 @@ AWS_HEADERS = {
     'Expires': expires,
     'Cache-Control': 'max-age=%d' % (int(two_months.total_seconds()), ),
 }
-import environ
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
-
-STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
-#STATIC_URL = 'https://d2keambcwaj901.cloudfront.net/'
-STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
-STATIC_URL = STATIC_HOST + '/'
-if not toserver:
-    STATIC_URL += 'static/'
-print('d',STATIC_URL)
-COMPRESS_URL = STATIC_URL
-
 
 STATICFILES_DIRS = [
 #    str(BASE_DIR.path('static')),
@@ -230,10 +250,6 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder' # Django-Compressor
 ]
-COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
-COMPRESS_ENABLED = env.bool('COMPRESS_ENABLED', default=True)
-# Must enable this to use with Whitenoise
-COMPRESS_OFFLINE = env.bool('COMPRESS_OFFLINE', default=True)
 # MEDIA_URL = '/media_cdn/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media_cdn")
 # EMAIL
