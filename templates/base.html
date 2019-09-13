@@ -260,8 +260,9 @@
 <audio id="notification_audio" style="display: none;" controls>
     <source src='{% static "notification.mp3" %}' type="audio/mpeg">
 </audio>
-<script src='{% static "js/myscripts.js" %}'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js'></script>
+{% compress js %}   
+<script src='{% static "js/myscripts.js" %}'></script>
 <script src='{% static "js/cardForm.js" %}'></script>
 <script src='{% static "js/OwlCarousel/owl.carousel.min.js" %}'></script>
 <script src='{% static "js/datepicker.min.js" %}'></script>
@@ -273,7 +274,7 @@
 <script src='{% static "js/script.js" %}'></script>
 <script src='{% static "js/search.js" %}'></script>
 <script src='{% static "js/notice.js" %}'></script>
-
+{% endcompress %}
 {% if profile.schools.all|length > 0 %}
 <script type="text/javascript">
     var wsStart = 'ws://'
