@@ -1,13 +1,16 @@
-{% load staticfiles %}
 <!DOCTYPE html> 
 <html lang="ru"> 
+{% load staticfiles %}
+{% load static compress %}
 <head> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое">
     <meta name="keywords" content="CRM система, учёт клиентов, расписание, для учебного центра, для образовательного центра, bilimtap">
-    <link rel="canonical" href="https://www.bilimtap.kz/about/" />    
+    <link rel="canonical" href="https://www.bilimtap.kz/about/" />
+    {% compress css %}    
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
     <link rel="stylesheet" href='{% static "css/landing.css" %}'/>
+    {% endcompress %}
     <title>Bilimtap – Marketplace и CRM для учебных центров</title>
 </head> 
 <body data-track-group="Landing-Marquee">  
@@ -194,21 +197,6 @@
     </section>
     <div id="start_request"></div>
     <div id="bottom-gradient"> 
-        <!-- <section id="work-smarter"> 
-            <div class="container"> 
-                <div class="inner px-4 py-5 text-center text-white"> 
-                    <h3>Работайте эффективнее вместе с Bilimtap</h3> 
-                    <p>Компании самых разных типов и размеров выбирают Bilimtap.</p> 
-                    <div class="logo-container mb-4"> 
-                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/83b3c2b3542d1ce997306dd2c76a898d/logo' %}-kickstarter.svg" width="207" height="24" alt="Kickstarter"> 
-                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/99b35981e7c571708532ba39f0764aeb/logo' %}-national-geographic.svg" width="166" height="46" alt="National Geographic"> 
-                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/4838c7256b43105d3abe0631ac1bb72c/logo' %}-google.svg" width="143" height="46" alt="Google"> 
-                        <img src="https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/{% static 'images/landing/759e9aaacc706fd1f2d5f81b1a76b768/logo' %}-fender.svg" width="153" height="55" alt="Fender"> 
-                    </div> 
-                    <p><a href="/business-class" class="btn btn-light px-3">Подробнее →</a></p> 
-                </div> 
-            </div> 
-        </section>  -->
         <section id="get-started" class="d-flex align-items-center my-4 sellform"> 
             <div class="container text-center py-0"> 
                 <div class="row"> 
@@ -272,8 +260,10 @@
     <span class="request_url" url='{% url "main:get_request_land" %}'></span>
 </body> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {% compress js %}   
     <script src="{% static 'js/landing/func3.js' %}"></script> 
     <script src="{% static 'js/landing/func.js' %}"></script>
+    {% endcompress %}
     <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
     type="text/javascript"></script>
 
@@ -302,6 +292,7 @@
             myMap.geoObjects.add(firstCollection);
         }
     </script>
+{% compress js %}       
 <script src="{% static 'js/landing/func2.js' %}"></script>   
-
+{% endcompress %}
 </html>

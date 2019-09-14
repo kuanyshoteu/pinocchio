@@ -27,7 +27,7 @@ if toserver:
     DEBUG = False
     ALLOWED_HOSTS = ['www.bilimtap.kz', 'bilimtap.kz', 'testbilimtap.herokuapp.com']
 else:
-    DEBUG = True
+    DEBUG = False
     ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
 
 
