@@ -29673,6 +29673,7 @@ select.ui.dropdown {
   }
 }
 #main-menu {
+  top: 0 !important;
   position: fixed;
   z-index: 2000;
   width: 100%;
@@ -29682,9 +29683,6 @@ select.ui.dropdown {
   margin-top: 0;
   margin-bottom: 0;
   border-bottom: 1px solid #506ca9;
-  position: fixed; 
-  z-index: 2000;
-  width: 100%;
 }
 #main-menu .container {
   display: -webkit-flex;

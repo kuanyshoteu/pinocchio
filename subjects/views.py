@@ -26,8 +26,10 @@ from django.contrib.auth.models import User
 from constants import *
 
 def subject_detail(request, slug=None):
-    instance = get_object_or_404(Subject, slug=slug)   
+    instance = get_object_or_404(Subject, slug=slug)
+    print('s1')
     profile = get_profile(request)
+    print('s2')
     days = Day.objects.all()
     cells = Cell.objects.all()
     school = instance.school
@@ -54,6 +56,7 @@ def subject_detail(request, slug=None):
         "school_money":school.money,
         "school_crnt":school,
     }
+    print('s3')
     return render(request, "subjects/subject_detail.html", context)
 
 def subject_list(request):
