@@ -367,7 +367,8 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
             except Exception as e:
                 ok_mail = False
         if is_send:
-            send_sms(phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
+            if squad.school.version != 'free':
+                send_sms(phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
             pass
     return ok_mail
 

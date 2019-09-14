@@ -13,13 +13,10 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 def send_sms(phones, message, time):
-    print('send_sms')
     login = 'Pinocchio'
     password = 'Siski11zhopa'
-    print(phones)
     url = 'https://smsc.kz/sys/send.php?login='+login+'&psw='+password+'&phones='+phones+'&mes='+message+'&time='+time#+'&sender=bilimtapkz'
     requests.post(url)
-    print('send_sms_ok', url)
 
 def send_email(subject, html_content, send_to):
     msg = EmailMultiAlternatives(subject, 'qq', 'aaa.academy.kz@gmail.com', send_to)
