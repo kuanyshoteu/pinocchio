@@ -183,7 +183,6 @@ if toserver:
     AWS_QUERYSTRING_AUTH = False
     CLOUDFRONT_DOMAIN = 'd2keambcwaj901.cloudfront.net'
     CLOUDFRONT_ID = 'E1DIVWQNJ8N4FW'
-
     AWS_S3_CUSTOM_DOMAIN = 'd2keambcwaj901.cloudfront.net'
     AWS_SECURE_URLS = True
     AWS_IS_GZIPPED = True

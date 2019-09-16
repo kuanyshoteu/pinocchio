@@ -30967,7 +30967,6 @@ i.map_worktime-icon {
   margin: -100px 1rem 0 0;
   border: 2px solid #fff;
   border-radius: 4px;
-  background: url('{{ school.image_icon.url }}'); 
   background-position: center; 
   background-size: contain;
   background-color: #fff;
