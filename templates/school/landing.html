@@ -79,8 +79,8 @@
                               </span>
                               {% endfor %}
                           </div>
-                          <div class="four wide column no_padding_side">
-                              <a class="in_mobile" style="float: right;text-align: center;margin-top: -45px;">
+                          <div class="four wide column no_padding_side in_mobile">
+                              <a style="float: right;text-align: center;margin-top: -45px;">
                                   <i class="icon map marker alternate" style="font-size: 21px;"></i>
                                   <br>
                                   Показать <br>
@@ -95,7 +95,7 @@
                         <span class="organization__info-buttons-call">
                           <i class="icon phone"></i>
                         </span>
-                        {% for phone in school.phones %}{{ phone }} {% if forloop.counter < school.phones|length %},{% endif %}{% endfor %}
+                        {% for phone in school.phones %}<a href="tel:{{ phone }}">{{ phone }}</a> {% if forloop.counter < school.phones|length %},{% endif %}{% endfor %}
                       </p>
                       <div class="ui divider full-w no_margin"></div>
                   </div>

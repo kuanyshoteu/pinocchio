@@ -392,6 +392,7 @@ def subject_create(request):
             subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
             if len(hashtag) > 0:
+                hashtag = hashtag[0]
                 hashtag.title = title.replace(' ', '_')
                 hashtag.save()
             else:
