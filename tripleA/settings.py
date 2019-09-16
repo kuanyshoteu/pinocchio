@@ -173,20 +173,21 @@ from tripleA.aws.conf import *
 #STATIC_URL = '/static/'
 
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage CompressedManifestStaticFilesStorage'    
-
+    
 import datetime
 AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQRLWPNLEG'
 AWS_SECRET_ACCESS_KEY = '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'
-AWS_FILE_EXPIRE = 200
-AWS_PRELOAD_METADATA = True
-AWS_QUERYSTRING_AUTH = False
-CLOUDFRONT_DOMAIN = 'd2keambcwaj901.cloudfront.net'
-CLOUDFRONT_ID = 'E1DIVWQNJ8N4FW'
+if toserver:
+    AWS_FILE_EXPIRE = 200
+    AWS_PRELOAD_METADATA = True
+    AWS_QUERYSTRING_AUTH = False
+    CLOUDFRONT_DOMAIN = 'd2keambcwaj901.cloudfront.net'
+    CLOUDFRONT_ID = 'E1DIVWQNJ8N4FW'
 
-AWS_S3_CUSTOM_DOMAIN = 'd2keambcwaj901.cloudfront.net'
-AWS_SECURE_URLS = True
-AWS_IS_GZIPPED = True
-AWS_PRELOAD_METADATA = True
+    AWS_S3_CUSTOM_DOMAIN = 'd2keambcwaj901.cloudfront.net'
+    AWS_SECURE_URLS = True
+    AWS_IS_GZIPPED = True
+    AWS_PRELOAD_METADATA = True
 
 DEFAULT_FILE_STORAGE = 'tripleA.aws.utils.MediaRootS3BotoStorage'
 if toserver:
@@ -207,8 +208,8 @@ if toserver:
 else:
     STATIC_HOST = env('DJANGO_STATIC_HOST', default='')
     STATIC_URL = STATIC_HOST + '/static/'
-COMPRESS_OFFLINE = True
-COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = toserver
+COMPRESS_ENABLED = toserver
 COMPRESS_URL = STATIC_URL
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
@@ -224,7 +225,6 @@ GZIP_CONTENT_TYPES = (
     'application/x-javascript',
     'text/javascript'
 )
-print('d',STATIC_URL)
 
 S3DIRECT_REGION = 'us-west-2'
 S3_URL = '//triplea-bucket.s3.amazonaws.com/'

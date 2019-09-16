@@ -122,6 +122,14 @@ def school_landing(request, school_id=None):
         is_director = is_profi(profile, 'Director')
         if len(profile.schools.all()):
             school_money = profile.schools.first().money
+    count = 0
+    posts = []
+    for post in school.school_posts.all():
+        if post.image:
+            posts.append(post)
+            count += 1
+        if count == 4:
+            break
     context = {
         "profile":profile,
         "school": school,
@@ -131,6 +139,7 @@ def school_landing(request, school_id=None):
         "is_director":is_director,
         "school_money":school_money,
         "school_crnt":school,
+        "posts":posts,
         "five":[1,2,3,4,5],
         "landing":True,
         "social_networks":get_social_networks(school),
@@ -1309,9 +1318,10 @@ def change_title(request):
             else:
                 school.worktime = request.GET.get('text') 
         if request.GET.get('status') == 'phones':
-            if len(school.phones) == 0:
-                school.phones.append('')
-            school.phones[0] = request.GET.get('text') 
+            phones = request.GET.get('text').split(',')
+            print(phones)
+            if len(phones) > 0:
+                school.phones = phones
         if request.GET.get('status') == 'social_networks':
             school.social_networks = request.GET.get('text') 
         school.save()

@@ -105,6 +105,18 @@ body{
 .mr150{
   margin-right: 150px;
 }
+.mb50{
+  margin-bottom: 50px !important;
+}
+.mt50{
+  margin-top: 50px !important;
+}
+.ml50{
+  margin-left: 50px;
+}
+.mr50{
+  margin-right: 50px;
+}
 .pb0{
   padding-bottom: 0px !important;
 }
@@ -1994,10 +2006,95 @@ a{
     .linesmall{
       display: none;
     }
-
+    .organization__info-top-part {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 35px 0 0 0;
+      height: 100%;
+      width: 100%;
+    }
+    .organization__info-left-part {
+      display: flex;
+      margin-left: 35px;
+    }
+    .organization__info-right-part {
+      width: 100%;
+      text-align: right;
+    }
+    .schoolLanding__container {
+      max-width: 85%;
+      margin: 0 auto;
+      padding-bottom: 2rem;
+      position: relative;
+    }
+    .schoolLanding__content-headerLeft {
+      display: flex;
+      flex-wrap: wrap;
+      width: 80%;
+    }
+    .organization__info-middle-part__wrap {
+      width: 100%;
+      text-align: right;
+      padding-right: 15px;
+    }
+    .schoolLanding__header-img {
+      height: 50%;
+      width: calc(33.333% - 6px);
+      display: inline-block;
+    }
+    .schoolLanding__header-img:first-child {
+      margin-right: 3px;
+    }
+    .schoolLanding__header-img:nth-child(2) {
+      margin-right: 3px;
+    }
+    .in_mobile{
+      display: none;
+    }
+    .organization__info-bottom-part {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background-color: #fff;
+      border-bottom-left-radius: 5px;
+      margin: 0 0 0 35px;
+    }
+    .schoolLanding__content-services {
+      padding: 15px 20px 15px 60px;
+      background-color: #fff;
+      border-radius: 4px;
+    }
+    .schoolLanding__content-services__item-right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 240px;
+      float: right;
+    }
+    .schoolLanding__content-services__item-left {
+      display: flex;
+      align-items: center;
+      width: 70%;
+    }
+    .schoolLanding__content-services__item-price {
+      width: 70px;
+    }
+    .schoolLanding__content-services__item-title {
+      font-size: 15px;
+      line-height: 1rem;
+      color: #404040;
+      width: 50%;
+    }
+    .schoolLanding__content-teacher {
+      width: 20%;
+    }
 }
 .back-w{
   background-color: #fff;
+}
+.schoolLanding__content-services__item-right {
+  text-align: center;
 }
 .map_search_input{
   border-radius: 3px 0 0 3px;
@@ -2006,6 +2103,80 @@ a{
   overflow-y: hidden;
 }
 @media only screen and (max-width: 899px) {
+    .schoolLanding__content-teacher {
+      width: 50%;
+    }
+    .schoolLanding__content-services__item-left {
+      display: flex;
+      align-items: center;
+      width: 90%;
+    }
+    .schoolLanding__content-services__item-right{
+      width: 10%;
+    }
+    .schoolLanding__content-services__item-price {
+      width: 30%;
+    }
+    .schoolLanding__content-services__item-title {
+      font-size: 15px;
+      line-height: 1rem;
+      color: #404040;
+      width: 70%;
+    }
+    .schoolLanding__content-services {
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 4px;
+    }
+    .organization__info-bottom-part {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background-color: #fff;
+      border-bottom-left-radius: 5px;
+      padding: 10px 25px;
+    }
+    .make_zaiavka-1{
+      width: 100%;
+    }
+    .ok_zaiavka_new{
+      width: 100%;
+    }
+    .schoolLanding__header-img:nth-child(2) {
+      display: none;
+    }
+    .schoolLanding__header-img {
+      height: 30%;
+      width: 100%;
+      display: inline-block;
+    }
+    .organization__info-middle-part__wrap {
+      width: 100%;
+    }
+    .schoolLanding__content-headerLeft {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+    .schoolLanding__container {
+      padding: 0 15px;
+      position: relative;
+    }
+    .organization__info-right-part {
+      width: 100%;
+    }
+    .organization__info-top-part {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 25px 0 0 0;
+      height: 100%;
+      width: 100%;
+    }
+    .organization__info-left-part {
+      display: flex;
+      margin-left: 0;
+    }
   .linesmall{
     width: 40px;height: 2px;background-color: lightgrey;margin: 0 auto 3px auto;
   }
