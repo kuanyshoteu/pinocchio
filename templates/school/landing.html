@@ -366,11 +366,21 @@
                 width = (parseInt(mydiv.attr('number'))+2)*100
                 max_width = parseInt($('.get_width_div').css('width'))
                 console.log(left, max_width - width)
-                if (left < max_width - width) {
-                  mydiv.animate({left: max_width-width}, 100);
+                if (width > max_width) {
+                    if (left < max_width - width) {
+                      mydiv.animate({left: max_width-width}, 100);
+                    }
+                    else if (left > 0) {
+                      mydiv.animate({left:0}, 100);
+                    }                  
                 }
-                if (left > 0) {
-                  mydiv.animate({left:0}, 100);
+                else{
+                    if (left < max_width - width) {
+                      mydiv.animate({left: 0}, 100);
+                    }
+                    else if (left > 0) {
+                      mydiv.animate({left:0}, 100);
+                    }                                    
                 }
 
             },
