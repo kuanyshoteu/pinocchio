@@ -225,7 +225,7 @@
         </div>
     </div>
 </div>
-<span style="display: none;" class="show_url" url="{{url}}" slider_status="0"></span>
+<span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
 <link rel="stylesheet" href="{% static 'css/price-slider.css' %}">
 <script src="{% static 'js/price-slider.js' %}"></script>
 <script>
@@ -251,7 +251,6 @@
         $( ".map_school_list" ).draggable({ 
             axis: "y",
             distance:30,
-            containment:'.list_cont',
             scroll:false,
             stop: function( event, ui ) {
                 myDiv = $('.map_school_list')
@@ -429,7 +428,7 @@
                     $( "#amount" ).val(ui.values[ 0 ]+addzero1 + " - " + ui.values[ 1 ]+addzero2);
                     $( "#amount" ).attr( "mincost", ui.values[ 0 ])
                     $( "#amount" ).attr( "maxcost", ui.values[ 1 ])
-                    update_map(myMap)
+                    update_map(myMap);
                 }
             });
         });
@@ -536,8 +535,9 @@
             }
         });
     }
-    function update_list(res){
-        if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+    function update_list(res, list){
+        if( $('.show_url').css('color')=='rgb(0, 0, 255)' && $('.show_url').attr('uplist') == 'yes') {
+            $('.show_url').attr('uplist', 'no')
             down_schools()
         }
         $('.school_list').empty();

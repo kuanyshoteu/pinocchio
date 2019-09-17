@@ -70,13 +70,12 @@
    */
 
   mouseProto._touchStart = function (event) {
+    console.log('startst')
     var self = this;
     // Ignore the event if another widget is already being handled
     if (touchHandled || !self._mouseCapture(event.originalEvent.changedTouches[0])) {
       return;
     }
-    console.log('start')
-
     // Set the flag to prevent other widgets from inheriting the touch event
     touchHandled = true;
 
