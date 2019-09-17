@@ -31081,22 +31081,22 @@ i.map_worktime-icon {
   padding: 30px 0;
 }
 .schoolLanding__content-category__list {
-  list-style-type: none;
   display: flex;
+  width: auto;
 }
 .schoolLanding__content-category__item {
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  display: flex;
   margin-right: 10px;
-  width: 140px;
-  height: 140px;
+  min-width: 100px !important;
+  height: 100px;
   border-radius: 4px;
   background-color: #fff;
   cursor: pointer;
   box-shadow: 0 2px 2px 0 rgb(220, 220, 220);
-  transition: background .2s;
+  transition: background .1s;
 }
 .schoolLanding__content-category__item.active {
   background-color: #9C5FE3;
