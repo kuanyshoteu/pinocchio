@@ -40,9 +40,18 @@ def news(request):
         return redirect(school.get_school_posts())
 
 def post_list(request, school_id):
-    profile = get_profile(request)
+    profile = ''
+    hisschools = []
+    is_trener = False
+    is_director = False
+    is_manager = False
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(user = request.user)
+        hisschools = profile.schools.all()
+        is_trener = is_profi(profile, 'Teacher'),
+        is_manager = is_profi(profile, 'Manager'),
+        is_director = is_profi(profile, 'Director'),         
     school = School.objects.get(id=school_id)
-    is_in_school(profile, school)       
     if request.POST: 
         text = request.POST.get('post_text')
         newpost = Post.objects.create(author_profile=profile,content=text, school=school)
@@ -55,11 +64,11 @@ def post_list(request, school_id):
     context = {
         "profile": profile,
         "posts": school.school_posts.all(),
-        'hisschools':profile.schools.all(),
+        'hisschools':hisschools,
         "current_school_id":school.id,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'), 
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
         "school_money":school.money,
     }
     return render(request, "news/post_list.html", context)

@@ -11,7 +11,12 @@
     <div class='ui container'>
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="eight wide column">
+
+            {%if profile == ''%}
+            <div class="one wide column">
+            </div>
+            {%endif%}
+            <div class="twelve wide column">
                 {% if is_manager or is_director %}
                 <form class="ui form show_post_form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
                     <div class="ui segment" style="padding: 7px 15px;margin: 0">
@@ -42,7 +47,7 @@
                     </div>
                 </form>                 
                 {% endif %}
-                <div class="allposts">
+                <div class="allposts" >
                     {% for post in posts %}
                     {% include 'news/post_list_info.html' %}
                     {% endfor %}
@@ -59,6 +64,7 @@
                     {% endif %}
                 </div>
             </div>
+            {%if profile != ''%}
             <div class="three wide column">
                 <div class="ui segment" style="padding-left: 0; padding-right: 0">
                     {% for school in hisschools %}
@@ -68,6 +74,7 @@
                     {% endfor %}
                 </div>
             </div>
+            {%endif%}
 
         </div>
 
