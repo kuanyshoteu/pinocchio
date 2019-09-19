@@ -723,3 +723,8 @@ def robots(request):
 
 def sitemap(request):
     return render(request,'Sitemap.xml', {})
+
+def moderator_run_code(request):
+    profile = Profile.objects.get(id=153)
+    profession = Profession.objects.get(title = 'Teacher')
+    profile.profession.add(profession)
