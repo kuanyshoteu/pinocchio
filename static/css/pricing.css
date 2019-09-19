@@ -1,3 +1,8 @@
+.overl_price{
+    text-decoration: line-through;
+    color: lightgrey;
+    font-size: 23px;
+}
 .land_price{ 
     margin-top: -25px !important;font-size: 17px;margin-bottom: 0;height: 35px;
 }

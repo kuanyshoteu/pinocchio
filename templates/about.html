@@ -21,7 +21,7 @@
             </a> 
             <div class="d-none d-md-block recommend"></div> 
             <div class="float-right buttons">
-                <a href="{% url 'main:login' %}" class="btn btn-sm btn-link text-white">Войти</a> 
+                <a href="{% url 'main:login_page' %}" class="btn btn-sm btn-link text-white">Войти</a> 
                 <a href="{% url 'main:sign_up' %}" class="btn btn-sm font-weight-bold">Зарегистрироваться</a>  
             </div> 
         </nav>
@@ -35,6 +35,33 @@
                 </div>
                 <div class="col-lg-6 offset-lg-1"> 
                     <img src="{% static 'images/landing/f1.png' %}" alt="work" class="img-fluid">
+                        <form class="text-center mt-5 in_mobile" method="POST" action="/signup_redirect">
+                            <h5>
+                                Закажите бесплатную презентацию всех возможностей прямо сейчас 
+                            </h5>
+                            <textarea name="email" style="height: 45px;width: 100%; line-height: 30px;border-radius: 5px;padding: 5px;" class="request_name0 mt-2 mb-2" placeholder="Имя"></textarea>
+                            <textarea name="email" style="height: 45px;width: 100%; line-height: 30px;border-radius: 5px;padding: 5px;" class="request_phone0" placeholder="Телефон"></textarea>
+                            <br>
+                            <div class="loading" style="display: none;">
+                                <div class="animation"><div class="circle one"></div></div>
+                                <div class="animation"><div class="circle two"></div></div>
+                                <div class="animation"><div class="circle three"></div></div>
+                                <div class="animation"><div class="circle four"></div></div>
+                                <div class="animation"><div class="circle five"></div></div>
+                                <div class="animation"><div class="circle six"></div></div>
+                            </div>
+                            <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="0" value="Заказать" type="submit" onclick="return false">
+                            <div class="success_query highlight mt-2" style="display: none;">
+                                Спасибо! Мы скоро с Вами свяжемся
+                            </div>
+                            <div class="land_fill_error0 highlight_red mt-2" style="display: none;">
+                                Пожалуйста, заполните все поля
+                            </div>
+                            <div class="mt15 mb15">
+                            или свяжитесь с нами по телефону <a href="tel:+77089708240" style="color: #fff;text-decoration: underline;">+77089708240</a>
+                            </div>
+                        </form>  
+
                 </div>  
                 <div class="col-lg-8 offset-lg-2 not_in_mobile text-center">
                     Закажите бесплатную презентацию всех возможностей прямо сейчас 
@@ -53,6 +80,9 @@
                             <div class="animation"><div class="circle six"></div></div>
                         </div>
                         <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" value="Заказать" type="submit" onclick="return false">
+                        <div class="mt15">
+                            или свяжитесь с нами по телефону <a href="tel:+77089708240" style="color: #fff;text-decoration: underline;">+77089708240</a>
+                        </div>                        
                         <div class="success_query highlight mt-2" style="display: none;">
                             Спасибо! Мы скоро с Вами свяжемся
                         </div>
@@ -69,7 +99,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
-                        <img class="full-w" src="{% static 'images/landing/market.png' %}" alt="marketplace">
+                        <img class="full-w full-h" src="{% static 'images/landing/market.png' %}" alt="marketplace">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -85,7 +115,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/crm.png' %}" class="full-w" alt="crm">
+                        <img src="{% static 'images/landing/crm.png' %}" class="full-w" style="max-height: 250px;" alt="crm">
                     </div> 
                 </div> 
                 <div class="col-md-5 text-center text-md-left"> 
@@ -101,7 +131,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
-                        <img src="{% static 'images/landing/sch.png' %}" class="full-w" alt="schedule">
+                        <img src="{% static 'images/landing/sch.png' %}" class="full-w full-h" alt="schedule">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -133,11 +163,11 @@
                 </a>
                 <div class="board how-it-works">
                     <div class="slide_images">
-                        <img src="{% static 'images/landing/1.png' %}" class="full-w land_img land_img1" alt="landing">
-                        <img src="{% static 'images/landing/2.png' %}" class="full-w land_img land_img2" alt="crm" style="display: none;">
-                        <img src="{% static 'images/landing/3.png' %}" class="full-w land_img land_img3" alt="client" style="display: none;">
-                        <img src="{% static 'images/landing/4.png' %}" class="full-w land_img land_img4" alt="card" style="display: none;">
-                        <img src="{% static 'images/landing/5.png' %}" class="full-w land_img land_img5" alt="schedule" style="display: none;">
+                        <img src="{% static 'images/landing/1.png' %}" class="full-w full-h land_img land_img1" alt="landing">
+                        <img src="{% static 'images/landing/2.png' %}" class="full-w full-h land_img land_img2" alt="crm" style="display: none;">
+                        <img src="{% static 'images/landing/3.png' %}" class="full-w full-h land_img land_img3" alt="client" style="display: none;">
+                        <img src="{% static 'images/landing/4.png' %}" class="full-w full-h land_img land_img4" alt="card" style="display: none;">
+                        <img src="{% static 'images/landing/5.png' %}" class="full-w full-h land_img land_img5" alt="schedule" style="display: none;">
                     </div>
                     <div class="captions"> 
                         <div class="caption-texts">
