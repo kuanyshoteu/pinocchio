@@ -234,11 +234,14 @@ def school_crm(request):
     time_periods = school.time_periods.all()
     managers = None
     is_director = is_profi(profile, 'Director')
+    theprofile = profile
+    if is_profi(profile, 'Moderator'):
+        theprofile = school.people.first()
     if is_director:
         manager_prof = Profession.objects.get(title='Manager')
         managers = school.people.filter(profession=manager_prof)
     context = {
-        "profile":profile,
+        "profile":theprofile,
         "instance": school,
         "columns":school.crm_columns.all(),
         "subject_categories":school.school_subject_categories.all(),

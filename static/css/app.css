@@ -29841,11 +29841,10 @@ a:hover {
   width: 100%;
 }
 #logo{
-  width: 150px !important; 
-  height: 50px!important;
+  height: 46px!important;
   position: absolute;
   padding-left: 5px;
-  margin-top: -14px;
+  margin-top: -11px;
   font-size: 23px;
   letter-spacing: 1px;
 }
