@@ -62,15 +62,15 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
     first_name = models.TextField(blank = True,null = True,default='name')
 
-    schools = models.ManyToManyField(School, related_name='people')
-    profession = models.ManyToManyField(Profession, related_name='workers')
-    job_categories = models.ManyToManyField(JobCategory, related_name='job_workers')
+    schools = models.ManyToManyField(School, related_name='people',null = True)
+    profession = models.ManyToManyField(Profession, related_name='workers',null = True)
+    job_categories = models.ManyToManyField(JobCategory, related_name='job_workers',null = True)
     money = models.IntegerField(default=0)
     salary = models.IntegerField(default=0)
     is_student = models.BooleanField(default=True)
 
     coins = models.IntegerField(default=0)
-    mail = models.TextField(default = '')
+    mail = models.TextField(default = '',null = True)
     phone = models.TextField(blank = True,null = True, default = '')
     extra_phone = models.TextField(blank = True,null = True, default = '')
     image = models.ImageField(upload_to=upload_location, 
@@ -81,9 +81,9 @@ class Profile(models.Model):
     height_field = models.IntegerField(default=0, null = True)
     width_field = models.IntegerField(default=0, null = True)
 
-    crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
-    crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
-    crm_level_connect = models.ManyToManyField(SubjectLevel, default=1, related_name='students')
+    crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students',null = True)
+    crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students',null = True)
+    crm_level_connect = models.ManyToManyField(SubjectLevel, default=1, related_name='students',null = True)
     skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile') 
 
     class Meta:
