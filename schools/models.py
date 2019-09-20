@@ -129,7 +129,7 @@ class School(models.Model):
     def open_card_url(self):
         return reverse("schools:open_card_url")
     def show_free_cards(self):
-        return reverse("schools:show_free_cards")
+        return reverse("schools:show_free_cards", kwargs={"school_id": self.id})
     # School map
     def get_landing(self):
         return reverse("schools:get_landing")

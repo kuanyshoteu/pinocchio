@@ -237,11 +237,13 @@ def school_crm(request):
     theprofile = profile
     if is_profi(profile, 'Moderator'):
         theprofile = school.people.first()
+        print(theprofile.first_name)
     if is_director:
         manager_prof = Profession.objects.get(title='Manager')
         managers = school.people.filter(profession=manager_prof)
     context = {
-        "profile":theprofile,
+        "theprofile":theprofile,
+        "profile":profile,
         "instance": school,
         "columns":school.crm_columns.all(),
         "subject_categories":school.school_subject_categories.all(),
@@ -1170,10 +1172,10 @@ def delete_card(request):
     }
     return JsonResponse(data)
 
-def show_free_cards(request):
-    profile = Profile.objects.get(user = request.user.id)
+def show_free_cards(request, school_id):
+    school = School.objects.get(id=school_id)
+    profile = school.people.first()
     only_managers(profile)
-    school = is_moderator_school(request, profile)
     if profile.skill == None:
         skill = Skill.objects.create()
         profile.skill = skill
@@ -1185,6 +1187,7 @@ def show_free_cards(request):
         else:
             skill.crm_show_free_cards = False  
         skill.save()          
+    print(profile.first_name, skill.crm_show_free_cards)
     data = {
         'check':request.GET.get('check')
     }

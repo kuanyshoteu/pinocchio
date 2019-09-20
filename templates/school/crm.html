@@ -24,7 +24,7 @@
                         <div class="ui grid">
                             <div class="wide column" style="width: 155px;padding-left: 5px;padding-bottom: 0">
                                 <div class="ui toggle checkbox segment" style="padding: 4px 5px;margin-top: 1px;">
-                                  <input type="checkbox" {% if profile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
+                                  <input type="checkbox" {% if theprofile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
                                   <label style="padding-left: 55px;">Свободные</label>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                                                     {% include 'school/card_form.html' %}
                                                 {% endfor %}
                                             {% else %}
-                                                {% for card in column|filtercards:profile %}
+                                                {% for card in column|filtercards:theprofile %}
                                                     {% include 'school/card_details.html' %}                                            
                                                     {% include 'school/card_form.html' %}
                                                 {% endfor %}
