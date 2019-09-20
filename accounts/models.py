@@ -67,7 +67,7 @@ class Profile(models.Model):
     job_categories = models.ManyToManyField(JobCategory, related_name='job_workers',null = True)
     money = models.IntegerField(default=0)
     salary = models.IntegerField(default=0)
-    is_student = models.BooleanField(default=True)
+    is_student = models.BooleanField(default=True) 
 
     coins = models.IntegerField(default=0)
     mail = models.TextField(default = '',null = True)
