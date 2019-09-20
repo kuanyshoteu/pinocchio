@@ -87,7 +87,7 @@ class Profile(models.Model):
     skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile') 
 
     class Meta:
-        ordering = ['-is_student', 'id', '-coins', 'first_name']
+        ordering = ['id', '-coins', 'first_name']
 
     def get_absolute_url(self):
         self.user.username = self.user.username.replace(' ', '_')

@@ -725,33 +725,7 @@ def sitemap(request):
     return render(request,'Sitemap.xml', {})
 
 def moderator_run_code(request):
-    school = School.objects.get(id=5)
-    squad = Squad.objects.get(id=36)
-
-    card = CRMCard.objects.get(id=96)
-    salta = Profile.objects.get(id=203)
+    card = CRMCard.objects.get(id=95)
+    salta = Profile.objects.get(id=204)
     card.card_user = salta
     card.save()
-    
-    password = random_password()
-    new_id = User.objects.order_by("id").last().id + 1
-    user = User.objects.create(username='Салтанат' + str(new_id))
-    user.set_password(password)
-    user.save()
-
-    profile = Profile.objects.get(user = user)
-    profile.first_name = 'Салтанат'
-    profile.phone = '87773696601'
-    profile.schools.add(school)
-    skill = Skill.objects.create()
-    profile.skill = skill
-    profile.save()
-    skill.confirmation_time = timezone.now()
-    skill.confirmed = True
-    skill.save()
-    add_student_to_squad(profile, squad)
-
-    card2 = CRMCard.objects.get(id=95)
-    card2.card_user = profile
-    card2.save()
-    print('************hereherehrherh*********')
