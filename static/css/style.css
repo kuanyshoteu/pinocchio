@@ -1,3 +1,6 @@
+.show_hint_schedule:hover + .hint_schedule {
+    display: inline-block !important;
+}
 .show_url{ color: red; }
 body{ 
   min-height: 100%;

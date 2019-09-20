@@ -137,7 +137,6 @@ def squad_update(request, slug=None):
         for day in days:
             for timep in time_periods:
                 new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
-
     free_students = []
     i = 0
     qs = school.people.filter(is_student=True).exclude(squads=instance)
@@ -147,6 +146,7 @@ def squad_update(request, slug=None):
         i += 1
         if i == number_in_page:
             break
+    print(qs, free_students)
     if len(qs) % number_in_page == 0:
         number_of_pages = int(len(qs)/number_in_page)
     else:
@@ -170,7 +170,6 @@ def squad_update(request, slug=None):
         'number_of_pages':number_of_pages,
     }
     return render(request, "squads/squad_create.html", context)
-
 
 def squad_delete(request, slug=None):
     profile = get_profile(request)
@@ -354,21 +353,32 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
         if lecture.office:
             address = lecture.office.address
         else:
-            address = squad.school.school_offices.first().address
-        if send_mail:
+            if len(squad.school.school_offices.all())> 0:
+                address = squad.school.school_offices.first().address
+            else:
+                address = ''
+        if send_mail and '@' in mail:
             ok_mail = True
             try:
                 if password:
-                    send_hello_email(first_name, phone, mail, password, 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address)
+                    send_str = 'В '+lecture_time+' у Вас состоится пробный урок'
+                    if address != '':
+                        send_str += ' по адресу '+address
+                    send_hello_email(first_name, phone, mail, password, send_str)
                 else:
-                    timeaddress = 'В '+lecture_time+' у Вас состоится пробный урок по адресу '+address
+                    timeaddress = 'В '+lecture_time+' у Вас состоится пробный урок'
+                    if address != '':
+                        timeaddress += ' по адресу '+address
                     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали в группу<br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
                     send_email('Bilimtap регистрация в группу', text, [mail])
             except Exception as e:
                 ok_mail = False
         if is_send:
-            if squad.school.version != 'free':
+            school = squad.school
+            if school.version != 'free' and school.sms_amount > 0:
                 send_sms(phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
+                school.sms_amount -= 1
+                school.save()
             pass
     return ok_mail
 
@@ -433,9 +443,6 @@ def change_office(request, id=None):
     data = {
     }
     return JsonResponse(data)
-
-# **************************************************************************************
-
 
 def squad_schedule(request, id=None):
     profile = get_profile(request)
@@ -514,7 +521,7 @@ def change_schedule(request, id=None):
                     office=squad.office,
                 )
                 lecture.age.add(*ages)
-                lecture.age.add(*categories)
+                lecture.category.add(*categories)
                 lecture.people.add(*subject_students)
                 if squad.teacher:
                     lecture.people.add(squad.teacher)

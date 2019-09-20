@@ -18,7 +18,7 @@
                     <div class="twelve wide column" style="padding-right: 0">
                         <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
                             <span style="font-size: 16px;">
-                                Классы 
+                                Группы 
                                 <span style="color: #939393;">{{ squads|length }}</span>
                             </span>
                         </div>
@@ -28,7 +28,7 @@
                             {% endfor %}
                             {% if is_director or is_manager%}
                             <div class="eight wide column" style="padding: 0">
-                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>+ Создать новый класс</a>
+                                <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>+ Создать новую группу</a>
                             </div>
                             {% endif %}                            
                         </div>
@@ -52,7 +52,7 @@
                                 {% endfor %}
                             {% else %}
                             <div style="border-left: 2px solid #5181b8;padding: 10px 18px;background-color: #f0f2f5;">
-                                <a class="full-w" style="color: black;font-size: 13px;"><b>Все классы</b></a>
+                                <a class="full-w" style="color: black;font-size: 13px;"><b>Все группы</b></a>
                             </div>
                             {% endif %}
                         </div>

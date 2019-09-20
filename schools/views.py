@@ -704,7 +704,7 @@ def save_card_as_user(request):
                 squad = Squad.objects.get(id=squad_id)
                 password = random_password()
                 found = False
-                if len(Profile.objects.filter(mail=card.mail)) > 0:
+                if card.mail != '' and len(Profile.objects.filter(mail=card.mail)) > 0:
                     profile = Profile.objects.filter(mail=card.mail)[0]
                     found = True
                 elif len(Profile.objects.filter(phone=card.phone)) > 0:
@@ -729,6 +729,11 @@ def save_card_as_user(request):
                     profile.phone = card.phone
                     profile.mail = card.mail
                     profile.money += card.premoney
+                    profile.payment_history.create(
+                        school=school,
+                        manager=manager_profile,
+                        amount=card.premoney,
+                        )
                     profile.save()
                 card.card_user = profile
                 card.author_profile = manager_profile

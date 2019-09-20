@@ -7,8 +7,6 @@
   color: #fff;
   width: 100%;
 }
-
-
 #keywords thead {
   cursor: pointer;
 }
@@ -44,8 +42,13 @@
       </div>
   </div>
 </div>
-<div class="ui segment" style="margin-top: 0;padding: 0">
-    <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;">
+<div class="ui segment" style="margin-top: 0;padding: 0;background: #4A4A4A;">
+  {% if instance.students.all|length == 0 %}
+    <div class="mb15 pt15 pl15 pb15 pr15" style="color: #fff;">
+        Еще нет студентов в этой группе, можете добавить их в <a href="{{ instance.get_update_url}}" class="ui button mini green"><b>Настройках группы</b></a> или в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a>
+    </div>  
+  {% else %}
+    <table id="keywords" cellspacing="0" cellpadding="0">
         <thead>
             <tr>
                 <th><span>Имя</span></th>
@@ -72,6 +75,7 @@
         {% endfor %}
         </tbody>
     </table>
+  {% endif %}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

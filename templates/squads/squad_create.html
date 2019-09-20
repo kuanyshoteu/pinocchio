@@ -32,7 +32,6 @@
 		width: 30%;
 	}
 </style>
-
 <div id="group-create">
 	{% if instance %}
 	<span class="add_student_url" id="{{instance.id}}" style="display: none;" url="{{ instance.add_student_url }}"></span>
@@ -73,25 +72,25 @@
 			        				</div>
 									<div class="eight wide column" style="padding-top: 0">
 										<p style="font-size: 13px;padding-top: 2px;">
-				        					Выберите дату <b>начала</b> курса:
+				        					Выберите дату <b>начала</b> учебы:
 				        				</p>
 										<input type="date" url="{{ instance.change_start_url }}" squad_id="{{ instance.id }}" name='start' class="start" style="width: 200px;" value="{{ instance.start_date|date:'Y-m-d'}}"> 
 				    					<div class="ui mini modal ws">
     										<i class="close icon"></i>
 										    <div class="content">
-				    							Начало курса не может быть позднее конца, выберите другую дату
+				    							Начало учебы не может быть позднее конца, выберите другую дату
 				    						</div>
 				    					</div>
 									</div>
 									<div class="eight wide column" style="padding-top: 0">
 										<p style="font-size: 13px;padding-top: 2px;">
-				        					Выберите дату <b>окончания</b> курса:
+				        					Выберите дату <b>окончания</b> учебы:
 				        				</p>
 										<input type="date" url="{{ instance.change_end_url }}" squad_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
 				    					<div class="ui mini modal we">
     										<i class="close icon"></i>
 										    <div class="content">
-				    							Конец курса не может быть раньше начала, выберите другую дату
+				    							Конец учебы не может быть раньше начала, выберите другую дату
 				    						</div>
 				    					</div>				        				
 									</div>
@@ -101,7 +100,7 @@
 						{% if not instance %}
 						<div class="nine wide column" style="padding-right: 0;text-align: center;">
 							<div class="ui segment">
-					    		<input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание класса' />								
+					    		<input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание группы' />								
 							</div>
 			    		</div>
 			        	{% else %}
@@ -162,9 +161,18 @@
         				<div class="sixteen wide column">
 		    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
 				        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>:
+                                <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+                                <div class="ui pointing below label green hint_schedule" style="display: none;">
+                                    Нажимая на кнопки "+" или "-" можете управлять списком
+                                </div>                                
 				        	</div>
 				        	<div class="ui segment no_margin" style="background-color: #4a4a4a;color: #fff;padding-top: 15px;">
 				        		<div class="ui grid stackable" style="margin-top: 0">
+                                    {% if squad_students|length == 0 %}
+                                    <div class="mb15">
+                                        Еще нет студентов в этой группе, можете добавить их {% if all_students|length > 0 %}ниже из студентов вашей школы или{% endif %} в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a>
+                                    </div>
+                                    {% endif %}
 									{% for student in squad_students %}
 									<div class="five wide column" style="padding:5px;">
 										<div class="test_variant_chosed" style="">
@@ -194,6 +202,15 @@
                             </div>
                             <div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
                                 <div class="ui grid stackable not_group_students" style="margin-top: 0;">
+                                    {% if all_students|length == 0 and squad_students == 0 %}
+                                    <div class="mb15">
+                                        В вашей школе еще нет студентов, можете добавить их в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a> вашей школы
+                                    </div>
+                                    {% elif all_students|length == 0 %}
+                                    <div class="mb15">
+                                        Пока все студенты в этой группе, можете добавить новых в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a> вашей школы
+                                    </div>                                    
+                                    {% else %}
 									{% for student in all_students %}
 									<div class="five wide column" style="padding:5px;">
 										<div class="test_variant2">
@@ -210,6 +227,7 @@
 				                        </div>
 				                    </div>
 		                            {% endfor %}
+                                    {% endif %}
 			        			</div>
                                 <div style="text-align: center;font-size: 15px;margin: 25px;">
                                     {% if number_of_pages > 1 %}
@@ -224,10 +242,11 @@
                                     <span style="display: none;" length="{{ number_of_pages }}" url="{{ instance.get_page_students }}" class="current_page" number="1"></span>
                                     {% endif %}
                                 </div>
+                                {% if all_students|length > 0 %}
                                 <div style="text-align: center;">
                                     <input type='submit' class='ui button blue tiny' value='Сохранить' />
                                 </div>
-
+                                {% endif %}
 			        		</div>
 			        	</div>
 		        		{% endif %}

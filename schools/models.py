@@ -42,6 +42,7 @@ class School(models.Model):
     rating = models.FloatField(default=0)
     money = models.IntegerField(default=0)
     version = models.CharField(max_length=10, default='')
+    sms_amount = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['rating', 'version', '-average_cost']

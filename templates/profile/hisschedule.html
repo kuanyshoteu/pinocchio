@@ -60,7 +60,7 @@
                                 {% if is_trener or is_manager %}
                                 {{ lecture.squad.title }}
                                 {% else %}
-                                {{ lecture.subject.teacher.all.0.first_name }}
+                                {{ lecture.subject.teacher.first.first_name }}
                                 {% endif %}
                             </span>
                         </div>

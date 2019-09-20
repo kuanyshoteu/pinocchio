@@ -12,14 +12,14 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="group-details pt150">
+<div id="group-details" class="pt15">
     <a id="go-back-btn-before"  href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
     </a>
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="width: 80%;margin-left: 30px;">
+            <div class="wide column pt0" style="width: 80%;margin-left: 30px;">
                 <div class="ui grid no_margin">
                     <div class="sixteen wide column">
                         <div class="ui segment pt0 pl0 pr0 pb15 mb0">
@@ -35,7 +35,7 @@
                                     {% else %}
                                     <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
                                     {% endif %}
-                                    <span class="ui header ava-title">{{ instance.title }}</span>
+                                    <span class="ui header ava-title pl10">{{ instance.title }}</span>
                                 </div>
                                 {% if is_trener or is_manager %}
                                 <div style="padding-top: 23px;">
@@ -50,23 +50,21 @@
                     </div>
                     <div class="sixteen wide column pr0">
                     {% endif %}
-                        <div class="ui segment mb0 pl15 {% if not instance.image %}mt0{% endif %}">
-                            Информация
-                        </div>
                         <div class="ui segment {% if not instance.image %}mt0{% endif %}">
                             <div class="ui grid">
                                 {% if instance.get_markdown != '' %}
-                                <div class="one wide column">
+                                <div class="one wide column pb0">
                                     <i class="icon list" style="font-size: 17px;"></i>
                                 </div>
-                                <div class="fifteen wide column">
+                                <div class="fifteen wide column pb0">
                                     {{ instance.get_markdown }}
                                 </div>
                                 {% endif %}
-                                <div class="one wide column">
+                                {% if instance.teacher %}
+                                <div class="one wide column pb0">
                                     <i class="icon id badge no_padding" style="font-size: 22px;margin-left: -5px;"></i>
                                 </div>
-                                <div class="fifteen wide column">
+                                <div class="fifteen wide column pb0">
                                     Учитель: 
                                         <a href='{{ instance.teacher.get_absolute_url }}'>
                                             {% if instance.teacher.image %}
@@ -77,10 +75,11 @@
                                             {{ instance.teacher.first_name }}
                                         </a>
                                 </div>
-                                <div class="one wide column pt0">
+                                {% endif %}
+                                <div class="one wide column">
                                     <i class="icon calendar alternate no_padding" style="font-size: 20px;margin-left: -5px;"></i>
                                 </div>
-                                <div class="fifteen wide column pt0">
+                                <div class="fifteen wide column">
                                     Начало курса: {{ instance.start_date }} | 
                                     Окончание: {{ instance.end_date }}
                                 </div>

@@ -101,21 +101,31 @@
         </tbody>
     </table>        
 </form>
-
-<div class="ui segment" style="margin: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+<div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
     Расписание <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+    <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+    <div class="ui pointing below label green hint_schedule" style="display: none;">
+        Выберите курс и добавьте в список курсов, затем перетаскиванием добавляйте в расписание
+    </div>
 </div>
 <div id="app">
     <div class="options">
-        <div class="form"  style="margin-top: 0">
+        <div class="form addSquadform" style="margin-top: 0">
             <form @submit.prevent="addSquad">
                 <select v-model="squad">
                     <option value="Выберите Класс" selected>Выберите курс</option>
                     <option :value="[outSubjectSquads[0][index],element]" :id="'select_squad'+outSubjectSquads[0][index]" v-for="(element, index) in outSubjectSquads[1]">[[ element ]]</option>
                     <option :value="[inSubjectSquads[0][index],element]" :id="'select_squad'+inSubjectSquads[0][index]" style="display: none;" v-for="(element, index) in inSubjectSquads[1]">[[ element ]]</option>
                 </select>
-                <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить курс</a>
+                <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить курс группе <b>{{ instance.title }}</b></a>
             </form>
+        </div>
+        <div style="font-size: 15px;" class="mb10">
+            Список курсов группы <b>{{ instance.title }}</b>:
+            <a class="show_hint_schedule ml15"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+            <div class="ui pointing below label green hint_schedule" style="display: none;position: absolute;">
+                Захватите нужный курс мышкой и перетаскивайте в расписание
+            </div>
         </div>
 
         <div class="selected-squad-list">
@@ -308,21 +318,31 @@
             id = document.getElementsByClassName('instance_id')[0].getAttribute('id')
             axios.get('/groups/api/schedule/' + id)
                 .then( (res) => {
-                    this.schedule = res.data.calendar
-                    this.schedule.map((row) => {
-                        row[1].map((item) => {
-                            if (item[1].length == 1) {
-                                item.push(false)
-                                return
-                            }
-                            item.push(true)
+                    if (res.data.calendar.length == 0) {
+                        $('<div style="background-color:#4a4a4a;color:#fff;padding:15px;">Не настроены времена уроков, можете настроить в <a href="/schools/info/" class="ui button mini green">Управлении</a></div>').appendTo('#app')
+                    }
+                    else{
+                        this.schedule = res.data.calendar
+                        this.schedule.map((row) => {
+                            row[1].map((item) => {
+                                if (item[1].length == 1) {
+                                    item.push(false)
+                                    return
+                                }
+                                item.push(true)
+                            })
                         })
-                    })
+                    }
                 })
             axios.get('/groups/api/subject_list/' + id)
                 .then( (res) => {
                     this.inSubjectSquads = res.data.courses_in_group
                     this.outSubjectSquads = res.data.courses_not_in_group
+                    if (res.data.courses_in_group.length == 0 && res.data.courses_not_in_group.length == 0) {
+                        $('<div style="background-color:#4a4a4a;color:#fff;padding:15px;margin:0 -10px;">В вашей школе еще не созданы курсы, можете создать их на <a href="/subjects/" class="ui button mini green">Странице курсов</a></div>').appendTo('.options');
+                        $('.addSquadform').hide()
+                    }
+                    else{}
                     this.trener = res.data.trener
                     var ids = [];
                     var classes = [];

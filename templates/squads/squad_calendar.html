@@ -12,15 +12,23 @@
                 <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
-            Расписание
+            Расписание 
+            {% if is_trener or is_manager %}
+            <a class="show_hint_schedule ml15" href="{{ instance.get_update_url }}"><span style="font-size: 13px;">Изменить</span></a>
+            {% endif %}
         </div>
     </div>
 </div>
-
 {% load ttags %}
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
-<div id="calendar" length='7'>           
+<div id="calendar" length='7'>
+    {% if is_manager %}
+    {% if time_periods|length == 0 %}
+    <div style="background-color:#4a4a4a;color:#fff;padding:15px;">Не настроены времена уроков, можете настроить в <a href="/schools/info/" class="ui button mini green">Управлении</a></div>
+    {% endif %}
+    {% endif %}
+    {% if time_periods|length > 0 %}
     <div id="week">   
         <div class="week" id="0">
             <div class="daysmall daysmall_time" style="padding-top: 17px;">
@@ -49,7 +57,7 @@
                             <br>
                             <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ instance.cabinet }}</span>
                             <br>
-                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ instance.teacher.all.0.first_name }}</span>
+                            <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ instance.teacher.first.first_name }}</span>
                             {% endif %}
                         </div>
                     {% endfor %}
@@ -60,4 +68,5 @@
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% endfor %}
     </div>
+    {% endif %}
 </div>   
