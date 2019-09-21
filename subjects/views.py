@@ -278,7 +278,6 @@ def change_category(request, id=None):
         else:
             is_in = True
             category.category_subjects.add(subject)
-            school.school_subject_categories.add(category)
             category.students.add(*students)
             change_lecture_options(subject, 'subject', category, True)
         subject.save()
