@@ -89,6 +89,8 @@ def subject_create(request):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.school = school
+        instance.cost_period = request.POST.get('get_subject_period')
+        print('period: ', request.POST.get('get_subject_period'))
         instance.save()
         return HttpResponseRedirect(instance.get_update_url())
     context = {
@@ -115,6 +117,8 @@ def subject_update(request, slug=None):
     if is_profi(profile, 'Manager'):
         if form.is_valid():
             instance = form.save(commit=False)
+            instance.cost_period = request.POST.get('get_subject_period')
+            print('period: ', request.POST.get('get_subject_period'))
             if not instance.height_field:
                 instance.height_field = 0
             if not instance.width_field:
@@ -172,7 +176,7 @@ def subject_update(request, slug=None):
         "subject_categories_this":instance.category.all(),        
         "subject_ages":SubjectAge.objects.all(),
         "subject_ages_this":instance.age.all(),        
-        "subject_levels":SubjectLevel.objects.all(),
+        "subject_levels":school.school_subject_levels.all(),
         "subject_levels_this":instance.level.all(),        
         'time_periods':time_periods,
         'days':days,
@@ -270,7 +274,6 @@ def change_category(request, id=None):
         if subject in category.category_subjects.all():
             category.students.remove(*students)
             category.category_subjects.remove(subject)
-            school.school_subject_categories.remove(category)
             change_lecture_options(subject, 'subject', category, False)
         else:
             is_in = True

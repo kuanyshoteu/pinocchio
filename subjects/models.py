@@ -60,6 +60,7 @@ class Subject(models.Model):
     teachers = models.ManyToManyField(Profile, related_name='teacher_subjects')
     squads = models.ManyToManyField(Squad, related_name='subjects')
     cost = models.IntegerField(default=0, null = True)
+    cost_period = models.CharField(max_length=250, default="month")
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)

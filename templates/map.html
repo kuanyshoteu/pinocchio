@@ -47,7 +47,7 @@
                 <div class="linesmall to_drag"></div>
                 <div class="linesmall to_drag"></div>
             </div>
-            <div class="school_landing ui segment no_padding" id="school_landing">
+            <div class="school_landing ui segment" id="school_landing">
                 <div class="loading" style="display: none;">
                   <div class="animation"><div class="circle one"></div></div>
                   <div class="animation"><div class="circle two"></div></div>
@@ -82,7 +82,7 @@
                             <div style="display: inline-block;" class="map_worktime-today school_worktime_landing"></div>
                             <div style="padding-top: 7px;" class="map_aboutpayment_cost_cont">
                                 <i class="icon tag map_worktime-icon"></i>
-                                <span style="color: grey;">Средняя цена:</span> <div style="display: inline-block;" class="map_aboutpayment-cost"></div>                  
+                                <span style="color: grey;">Средняя цена: </span> <div style="display: inline-block;" class="map_aboutpayment-cost"></div>
                             </div>
                         </div>
                         <div class="map_aboutpayment">
@@ -184,18 +184,18 @@
                                     <i class="icon angle right select__next"></i>
                                 </div>
                             </div>
-                            <ul class="map_sameorg-list">
+                            <div class="map_sameorg-list">
                                 {% for school in schools %}
-                                <li class="map_sameorg-item" id="addvert{{ school.id }}">
+                                <div class="map_sameorg-item" id="addvert{{ school.id }}">
                                     <h5 class="map_sameorg-item__title">
                                         {{ school.title }}, {{ school.slogan }}
                                     </h5>
                                     <div class="map_sameorg-item__subtitle">
                                         {{ school.content }}
                                     </div>
-                                </li>
+                                </div>
                                 {% endfor %}
-                            </ul>
+                            </div>
                         </div>
                         <br><br><br>
                     </div>

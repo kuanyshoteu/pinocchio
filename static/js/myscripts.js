@@ -1,3 +1,9 @@
+    $('.subject_period').click(function(e) {
+        $('.subject_period').removeClass('green')
+        $(this).addClass('green')
+        newstatus = $(this).attr('status')
+        $('.get_subject_period').attr('value', newstatus)
+    })
     $('.make_zaiavka_new').click(function(e) {
         url = '/api/make_zaiavka/'
         id = $(this).attr('id')

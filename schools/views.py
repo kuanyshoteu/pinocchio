@@ -524,7 +524,7 @@ def level_delete(request):
     hashtag = school.hashtags.filter(title = level.title.replace(' ', '_'))
     if len(hashtag) > 0:
         hashtag.delete()
-    level.delete()
+    school.school_subject_levels.remove(level)
     data = {
     }
     return JsonResponse(data)
@@ -575,7 +575,6 @@ def office_delete(request):
         hashtag.delete()
     for cabinet in office.cabinets.all():
         cabinet.delete()
-    print(office)
     office.delete()
     school.offices -= 1
     school.save()

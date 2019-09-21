@@ -1985,7 +1985,7 @@ a{
     }
     .school_landing{
       position: absolute;
-      height: 95%;
+      height: 100%;
       width: 100%;
       z-index: 1000;
       display: none;
@@ -1995,6 +1995,7 @@ a{
       box-shadow: 0 0px 7px lightgrey;
       margin-top: 0 !important;
       overflow-y: scroll;
+      padding: 0 0 80px 0 !important;
     }
     .school_name_big{
       font-size: 22px;
@@ -2092,6 +2093,10 @@ a{
     .schoolLanding__content-teacher {
       width: 20%;
     }
+    .ymaps-2-1-74-map.ymaps-2-1-74-i-ua_js_yes.ymaps-2-1-74-map-bg.ymaps-2-1-74-islets_map-lang-ru{
+        height: 80% !important;
+    }
+
 }
 .back-w{
   background-color: #fff;
@@ -2106,6 +2111,15 @@ a{
   overflow-y: hidden;
 }
 @media only screen and (max-width: 899px) {
+    #main-menu{
+      height: 45px;
+    }
+    .ymaps-2-1-74-map.ymaps-2-1-74-i-ua_js_yes.ymaps-2-1-74-map-bg.ymaps-2-1-74-islets_map-lang-ru{
+        height: 90% !important;
+    }
+    .ymaps-2-1-74-controls__control_toolbar{
+      margin-top: 100px;
+    }
     .schoolLanding__content-teacher {
       width: 50%;
     }
@@ -2220,7 +2234,7 @@ a{
   }  
   .school_landing{
     position: absolute;
-    height: 95%;
+    height: 100%;
     width: 100%;
     z-index: 1005;
     display: none;
@@ -2230,7 +2244,7 @@ a{
     box-shadow: 0 0px 7px lightgrey;
     margin-top: 0px !important;
     overflow-y: scroll;
-    padding: 0 !important;
+    padding: 0 0 100px 0 !important;
   }
   .show_url{ color: blue; }
   .map_distance{
@@ -2264,8 +2278,5 @@ a{
     position: absolute !important;
     z-index: 1000;
     padding-bottom: 2px;
-  }
-  .ymaps-2-1-74-controls__control_toolbar{
-    display: none !important;
   }
 }

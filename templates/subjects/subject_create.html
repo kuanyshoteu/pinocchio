@@ -16,26 +16,22 @@
 	}
 	.form-group{
 		width: 46%;
-		display: inline-block;
-		position: flex;
-		margin-right: 2%;
 	}
 	.textinput, .numberinput, .clearablefileinput, .change_subject_category,.change_subject_age{
 		margin: -10px 0 0 !important;
 	}
 	#div_id_title{
-		width: 64%;
+		width: 100%;
 	}
 	#div_id_content{
 		width: 100% !important;
 	}
 	#div_id_cost{
-		margin-left: 2%;
-		margin-right: 0;
 		width: 30%;
+        display: inline-block;
 	}
 </style>
-<div id="profile" style="padding-bottom: 200px;">
+<div id="profile">
 	{% if instance %}
 	<a id="go-back-btn-before"  href='{{ instance.get_absolute_url }}'>
         <i class="arrow left icon"></i>
@@ -51,14 +47,36 @@
             <div class="wide column" style="width: 80%;margin-left: 30px;">
             	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
 	            	<div class="ui grid stackable">
-			            <div class="eight wide column" style="padding-right: 0">
-			            	<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+			            <div class="eight wide column pr0">
+			            	<div class="ui segment mb0" style="height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
 				        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
-				        	<div class="ui segment" style="line-height: 40px; margin-top: 0;padding-bottom: 31px;">
+				        	<div class="ui segment mt0" style="line-height: 40px;">
 			        			<div class="ui grid">
 			        				<div class="sixteen wide column" style="font-weight: 600;">
 			        					{{ form|crispy }}
+                                        <input class="get_subject_period" name="get_subject_period" style="display: none;" value="month">
+                                        <div class="pl10" style="width: 70%;display: inline-block;">
+                                            {% if instance %}
+                                            <a class="show_hint_schedule" style="float: right;"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+                                            <div class="hint_schedule" style="display: none;">
+                                                <div class="ui segment full-w" style="position: absolute;z-index: 3000;margin-top: -100px;background-color: #4a4a4a;color: #fff;line-height: 15px;margin-left: 70%;">
+                                                    <b>Внимание!</b> 
+                                                    <br><br>
+                                                    Укажите стоимость за 1 урок, за 1 месяц или за весь курс. 
+                                                    <br><br>
+                                                    Указанная цена будет учитываться в расчетах оплаты клиентов* и показана на странице Вашего образовательного центра .  
+                                                    <br><br>
+                                                    *При недостаточном количестве денег на счету у клиента за следующий урок/месяц ему будет прислано уведомление о необходимости оплаты и его карточка в СRM системе будет отмечена красным цветом
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
+                                            За
+                                            <a class="ui button mini {%if instance.cost_period == 'lesson'%}green{%endif%} subject_period" status="lesson">Урок</a>
+                                            <a class="ui button mini {%if instance.cost_period == 'month' or not instance%}green{%endif%} subject_period" status="month">Месяц</a>
+                                            <a class="ui button mini {%if instance.cost_period == 'course'%}green{%endif%} subject_period" status="course">Курс</a>
+                                        </div>
 			        					{% if instance %}
 			                                <div class="filter-element filter-element-category" url="{{ instance.change_category }}" style="margin-top: 10px;">
 			                                    <div class="filter-title-s" id="category{{ subject_category.id }}" status="closed">
@@ -88,6 +106,7 @@
                                                     <i class="icon caret down" style="float: right;color: #222;"></i>
                                                 </div>
                                                 <ul class="filter-list filter-list-hide filter-list-hide-level{{ subject_level.id }}">
+                                                    {% if subject_levels|length > 0 %}
                                                     {% for subject_level in subject_levels %}
                                                     <li class="filter-item-s" name="filter-item-s" object="level" status="0" id="{{ subject_level.id }}">
                                                         {{subject_level.title}}
@@ -102,6 +121,13 @@
                                                         </div>
                                                     </li>
                                                     {% endfor %}
+                                                    {%else%}
+                                                    <div>
+                                                        Еще не созданы уровни
+                                                        <br>Создайте их в 
+                                                        <a href="/crm/" class="ui button mini green">CRM</a>
+                                                    </div>
+                                                    {%endif%}
                                                 </ul>
                                             </div>			                                
                                             <div class="filter-element filter-element-age" url="{{ instance.change_age }}" style="margin-top: 10px;">
@@ -133,7 +159,7 @@
 						</div>
 						{% if instance %}
 						<div class="eight wide column">
-							<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+							<div class="ui segment mb0" style="height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;">
 				        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
 							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
@@ -164,17 +190,28 @@
 								</div>
 			    			</div>
 						</div>
+                        {% else %}
+                        <div class="six wide column">
+                            <div class="ui segment help_left full-w" style="position: absolute;margin-top: 120px;">
+                                <b>Внимание!</b> 
+                                <br><br>
+                                Укажите стоимость за 1 урок, за 1 месяц или за весь курс. 
+                                <br><br>
+                                Указанная цена будет учитываться в расчетах оплаты клиентов* и показана на странице Вашего образовательного центра .  
+                                <br><br>
+                                *При недостаточном количестве денег на счету у клиента за следующий урок/месяц ему будет прислано уведомление о необходимости оплаты и его карточка в СRM системе будет отмечена красным цветом
+                            </div>
+                        </div>
 						{% endif %}	
 						{% if instance %}
-						<div class="sixteen wide column" style="padding-top: 0;padding-right: 0">
-	        				<div class="ui segment" style="text-align: center;">
+						<div class="sixteen wide column pr0 pt0">
+	        				<div class="ui segment text-center">
 								<input type='submit' class='ui button blue tiny' value='Сохранить' />
 							</div>
 						</div>
 						{% else %}
-							<div class="one wide column"></div>
-							<div class="{% if instance %}sixteen{%else%}eight{% endif %} wide column" style="padding-top: 0;padding-right: 0">
-		        				<div class="ui segment" style="text-align: center;">
+							<div class="{% if instance %}sixteen{%else%}eight{% endif %} wide column pr0 pt0">
+		        				<div class="ui segment text-center">
 									<input type='submit' class='ui button blue tiny' value='Создать курс'/>
 								</div>
 							</div>

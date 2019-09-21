@@ -1,13 +1,20 @@
 {% load ttags %}
-<div class="ui segment" style="margin-bottom: 0">
+<div class="ui segment mb0">
     <span style="font-size: 15px;"><i class="icon book blue" style="font-size: 17px;"></i> Уроки</span>
+    {% if is_trener or is_manager %}
+    <a class="ml15" href="{{ instance.get_update_url }}"><span style="font-size: 13px;">Изменить количество</span></a>
+    {% endif %}    
 </div>
-
-<div class="ui segment" style="background: #4A4A4A;margin: 0">
-    <div class="ui grid" style="margin: 0">
+<div class="ui segment no_margin" style="background: #4A4A4A;">
+    {% if materials|length == 0 %}
+    <div style="color: #fff;">
+    Пока нет у курса нет уроков, изменить количество уроков можете в <a class="ui button mini green" href="{{instance.get_update_url}}">Настроках курса</a>        
+    </div>
+    {% else %}
+    <div class="ui grid no_margin">
         {% for material in materials %}
         {% if forloop.counter <= instance.number_of_materials %}
-        <div class="four wide column" style="padding-bottom:0;">
+        <div class="four wide column pb0">
             <a class="ui button green open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
                 <span class="is_homework">{{ forloop.counter }} урок</span>
             </a>
@@ -50,4 +57,5 @@
         {% endif %}
         {% endfor %}
     </div>
+    {% endif %}
 </div>

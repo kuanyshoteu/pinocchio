@@ -30816,7 +30816,7 @@ i.map_worktime-icon {
   border-top: 1px solid rgba(0,0,0,.1);
   border-bottom: 1px solid rgba(0,0,0,.1);
   background-color: #f4f4f4;
-  padding-bottom: 12px;
+  padding-bottom: 20px;
   overflow: hidden;
 }
 .map_sameorg-title {
@@ -30842,11 +30842,11 @@ i.map_worktime-icon {
   color: #285c8a;
 }
 .map_sameorg-list {
-  display: inline-block;
+  display: flex;
   position: relative;
   list-style-type: none;
   margin: 0;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 20px;
   overflow-x: hidden;
   white-space: nowrap;
   word-break: normal;
@@ -30857,8 +30857,9 @@ i.map_worktime-icon {
   position: relative;
   flex-shrink: 1;
   background-color: #fff;
-  width: 80%;
-  max-width: 303px;
+  min-width: 90%;
+  max-width: 91%;
+  min-height:80px; 
   max-height: 128px;
   padding: 12px 0 12px 20px;
   margin: 0 4px 0 0;
@@ -30866,6 +30867,7 @@ i.map_worktime-icon {
   cursor: pointer;
   white-space: normal;
   left: 0;
+  top: 0;
   transition: left .5s;
 }
 .map_sameorg-item:hover {

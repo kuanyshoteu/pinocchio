@@ -8,14 +8,14 @@ from constants import *
 
 class SubjectForm(forms.ModelForm):
     title = forms.CharField(label='Название',required=False)
-    content = forms.CharField(label='Описание', required=False)
     cost = forms.IntegerField(label='Цена', required=False)
+    content = forms.CharField(label='Описание', required=False)
     class Meta:
         model = Subject
         fields = [      
             "title",
-            "cost",
             "content",
+            "cost",
         ]
 
 class SubjectForm2(forms.ModelForm):

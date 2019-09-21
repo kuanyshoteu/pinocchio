@@ -725,7 +725,4 @@ def sitemap(request):
     return render(request,'Sitemap.xml', {})
 
 def moderator_run_code(request):
-    card = CRMCard.objects.get(id=95)
-    salta = Profile.objects.get(id=204)
-    card.card_user = salta
-    card.save()
+    pass

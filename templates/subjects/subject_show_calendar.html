@@ -3,9 +3,21 @@
 <span style="display: none;" class="change_schedule_url" url="{{ instance.change_schedule_url }}"></span>
 <div class="ui segment" style="margin-bottom: 0;font-size: 15px;">
     <i class="icon table blue" style="font-size: 17px;"></i> Расписание
+    {% if is_trener or is_manager %}
+        <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+        <div class="ui pointing below label green hint_schedule" style="display: none;position: absolute;">
+            Разные группы могут проходить один курс, в настройках групп можно менять расписание
+        </div>                                
+    {% endif %}
 </div>
 
-<div id="calendar" length='7'>           
+<div id="calendar" length='7'>  
+    {% if is_manager %}
+    {% if time_periods|length == 0 %}
+    <div style="background-color:#4a4a4a;color:#fff;padding:15px;">Не настроены времена уроков, можете настроить в <a href="/schools/info/" class="ui button mini green">Управлении</a></div>
+    {% endif %}
+    {% endif %}
+    {% if time_periods|length > 0 %}         
     <div id="week">   
         <div class="week" id="0">
             <div class="daysmall daysmall_time" style="padding-top: 17px;">
@@ -45,4 +57,5 @@
         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
         {% endfor %}
     </div>
+    {% endif %}    
 </div>   
