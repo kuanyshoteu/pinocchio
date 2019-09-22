@@ -413,7 +413,6 @@ def map_filter(request):
     options = []
     coordinates = []
     res = []
-    i = 0
     for school in schools:
         if len(school.school_offices.all())>0:
             coordinates.append([float(school.school_offices.first().latitude), float(school.school_offices.first().longtude)])
@@ -425,9 +424,6 @@ def map_filter(request):
             if school.image_icon:
                 image_url = school.image_icon.url
             res.append([school.id, school.title, image_url, school.school_offices.first().address, school.slogan])
-            i+=1
-            if i == 15:
-                break
     data = {
         'options':options,
         'coordinates':coordinates,

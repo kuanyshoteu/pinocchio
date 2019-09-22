@@ -84,7 +84,7 @@ class Profile(models.Model):
     crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
     crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
     crm_level_connect = models.ManyToManyField(SubjectLevel, default=1, related_name='students')
-    skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile') 
+    skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile')
 
     class Meta:
         ordering = ['id', '-coins', 'first_name']
@@ -222,6 +222,7 @@ class CRMCard(models.Model):
     hashtag_ids = ArrayField(models.IntegerField(null=True), default=list)
     hashtag_numbers = ArrayField(models.IntegerField(null=True), default=list)
     premoney = models.IntegerField(default=0)
+
     class Meta:
         ordering = ['saved', '-timestamp']
     def call_helper(self):

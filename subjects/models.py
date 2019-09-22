@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
-from accounts.models import Profile
+from accounts.models import Profile,CRMCard
 from squads.models import Squad
 from papers.models import Lesson
 from schools.models import *
