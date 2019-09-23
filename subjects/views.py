@@ -14,7 +14,7 @@ from .models import *
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
-from schools.models import Cabinet
+from schools.models import School, Cabinet
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -395,8 +395,5 @@ def change_lecture_options(subject, option, objectt, is_add):
 
 def update_cards_money(request):
     if request.GET.get('secret') == 'NJf5wefewfm58keijnw':
-        title = Subject.objects.first().id
-        print('########################')
-        print(title)
-        print(request.user)
+        school
         return JsonResponse({"id":title})
