@@ -392,3 +392,7 @@ def change_lecture_options(subject, option, objectt, is_add):
     elif option == 'office':
         lectures = subject.squad_lectures.all()
         objectt.office_lectures.add(*lectures)
+
+def update_cards_money():
+    print('########################')
+    print(Subject.object.first())
