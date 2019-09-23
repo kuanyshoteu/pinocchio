@@ -10,7 +10,7 @@ def timed_job():
     url = 'https://www.bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
     requests.get(url,verify=False)
 
-@sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
+@sched.scheduled_job('cron', day_of_week='mon-sat', hour=02:40, timezone='Asia/Almaty')
 def scheduled_job():
     print('This job is run every weekday at 5pm.')
 
