@@ -7,8 +7,8 @@ sched = BlockingScheduler()
 def timed_job():
     print('************************************')
     print('This job is run every three minutes.')
-    url = 'https://bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
-    requests.post(url)
+    url = 'https://www.bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
+    requests.get(url,verify=False)
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
 def scheduled_job():
