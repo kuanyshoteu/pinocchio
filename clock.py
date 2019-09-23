@@ -1,5 +1,5 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from subjects.models import Subject
+from subjects.models import *
 sched = BlockingScheduler()
 
 @sched.scheduled_job('interval', minutes=1)
