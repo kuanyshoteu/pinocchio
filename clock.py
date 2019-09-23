@@ -9,7 +9,7 @@ def scheduled_job():
 
 sched = BlockingScheduler()
 sched.add_job(scheduled_job,'cron',
-   day_of_week='mon-sat', hour='03-24',
+   day_of_week='mon-sat', hour='03', minute='33',
    timezone='Asia/Almaty')
 
 
