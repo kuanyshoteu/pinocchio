@@ -6,7 +6,7 @@ sched = BlockingScheduler()
 def timed_job():
     print('************************************')
     print('This job is run every three minutes.')
-    print(Subject.objects.first().title)
+    print(Subject.objects.first())
 
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
