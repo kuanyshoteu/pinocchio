@@ -3,15 +3,10 @@ import requests
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', minutes=1)
-def timed_job():
-    print('************************************')
-    print('This job is run every three minutes.')
-    url = 'https://www.bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
-    requests.get(url,verify=False)
-
 @sched.scheduled_job('cron', day_of_week='mon-sat', hour=02:40, timezone='Asia/Almaty')
 def scheduled_job():
-    print('This job is run every weekday at 5pm.')
+    print('******************')
+    url = 'https://www.bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
+    requests.get(url,verify=False)
 
 sched.start()
