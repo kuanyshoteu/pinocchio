@@ -1,12 +1,14 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-from subjects.views import update_cards_money
+import requests
+
 sched = BlockingScheduler()
 
 @sched.scheduled_job('interval', minutes=1)
 def timed_job():
     print('************************************')
     print('This job is run every three minutes.')
-    update_cards_money()
+    url = 'https://bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
+    requests.post(url)
 
 @sched.scheduled_job('cron', day_of_week='mon-fri', hour=17)
 def scheduled_job():

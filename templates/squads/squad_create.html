@@ -170,7 +170,7 @@
 				        		<div class="ui grid stackable" style="margin-top: 0">
                                     {% if squad_students|length == 0 %}
                                     <div class="mb15">
-                                        Еще нет студентов в этой группе, можете добавить их {% if all_students|length > 0 %}ниже из студентов вашей школы или{% endif %} в <a href="{% url 'schools:crm' %}" class="ui button mini dark"><b>СRМ</b></a>
+                                        Еще нет студентов в этой группе, можете добавить их {% if all_students|length > 0 %}ниже из студентов вашей школы или{% endif %} в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a>
                                     </div>
                                     {% endif %}
 									{% for student in squad_students %}

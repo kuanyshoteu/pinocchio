@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^api/change_age/(?P<id>\d+)/$', change_age, name='change_age'),
     url(r'^(?P<slug>[\w-]+)/edit/$', subject_update, name='update'),
     url(r'^(?P<slug>[\w-]+)/delete/$', subject_delete, name='delete'),
+    url(r'^api/update_cards_money/$', update_cards_money, name='update_cards_money'),
 ]

@@ -393,6 +393,10 @@ def change_lecture_options(subject, option, objectt, is_add):
         lectures = subject.squad_lectures.all()
         objectt.office_lectures.add(*lectures)
 
-def update_cards_money():
-    print('########################')
-    print(Subject.object.first())
+def update_cards_money(request):
+    if request.GET.get('secret') == 'NJf5wefewfm58keijnw':
+        title = Subject.objects.first().id
+        print('########################')
+        print(title)
+        print(request.user)
+        return JsonResponse({"id":title})
