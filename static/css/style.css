@@ -231,6 +231,9 @@ body{
 .highlight_red{
   background-color: #DB2828;padding: 5 10px;color: #fff;border-radius: 3px;
 }
+.highlight_black{
+  background-color: #4a4a4a;padding: 5 10px;color: #fff;border-radius: 3px;
+}
 #search_text{
   margin: 0;border-radius: 3px 0 0 3px;height: 31px;overflow-y: hidden;
 }
