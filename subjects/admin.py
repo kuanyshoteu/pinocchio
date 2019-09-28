@@ -4,12 +4,13 @@ from django.contrib import admin
 from .models import *
 
 class SubjectModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "school", "id"]
+    list_display = ["title","content", "get_school", "id"]
     list_display_links = ["title"]
     list_filter = ["title"]
-
     class Meta:
         model = Subject
+    def get_school(self, obj):
+        return obj.school.title        
 
 admin.site.register(Subject, SubjectModelAdmin)
 
