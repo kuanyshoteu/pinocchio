@@ -2,23 +2,18 @@
 {% if is_this_trener %}
 <div class="ui segment shapka">
     <div class="highliter" style="position: absolute;margin-left: -225px;margin-top: -40px;"></div>
-    <div class="ui grid">
-        <div class="one wide column">
-            <img src="{% static 'images/settings.png' %}" style="width: 28px;border-radius: 3px;">  
-        </div>
-        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
-            Результаты
-        </div>
+    <div style="line-height: 28px;font-size: 15px;">
+        Результаты
     </div>
 </div>
-<div class="ui segment " style="margin-top: 0">
+<div class="ui segment mt0">
     <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Успеваемость </span>
     <br>
     <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Посещаемость </span>
     <br>
-    <canvas style="padding-right: 25px;" id="canvas1" height="150" width="500"></canvas>
+    <canvas style="padding-right: 25px;" id="canvas1" height="400" width="500"></canvas>
 </div>
 {% endif %}
 {% if is_this_manager or is_this_director %}
@@ -46,7 +41,7 @@
     <div class="ui segment" style="padding: 2px;background-color: #192f54;width: 30px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Класс 4 </span>
     <br>
-    <canvas style="padding-right: 25px;" id="canvas2" height="150" width="500"></canvas>
+    <canvas style="padding-right: 25px;" id="canvas2" height="400" width="500"></canvas>
 </div>
 <div class="ui segment shapka help22 help62">
     <div class="hint22 highliter" style="position: absolute;margin-left: -225px;margin-top: -70px;"></div>
@@ -66,7 +61,7 @@
     <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Посещаемость </span>
     <br>
-    <canvas style="padding-right: 25px;" id="canvas3" height="150" width="500"></canvas>
+    <canvas style="padding-right: 25px;" id="canvas3" height="400" width="500"></canvas>
 </div>
 {% endif %}
 {% if is_this_director %}
@@ -88,7 +83,7 @@
     <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px"></div>
     <span style="color: #222">Работа с клиентами </span>
     <br>
-    <canvas style="padding-right: 25px;" id="canvas4" height="150" width="500"></canvas>
+    <canvas style="padding-right: 25px;" id="canvas4" height="400" width="500"></canvas>
 </div>
 {% endif %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>

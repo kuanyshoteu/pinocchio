@@ -572,8 +572,12 @@ a{
   cursor: pointer;
   margin: 0 !important;
 }
-.warning_card{
+.red_card{
   border: 5px solid #ff5828;
+  padding: 7px 5px 0px 5px !important;
+}
+.orange_card{
+  border: 5px solid orange;
   padding: 7px 5px 0px 5px !important;
 }
 .subject_cost{

@@ -125,7 +125,7 @@
                                                     <div>
                                                         Еще не созданы уровни
                                                         <br>Создайте их в 
-                                                        <a href="/crm/" class="ui button mini green">CRM</a>
+                                                        <a href="/schools/info/" class="ui button mini green">Управлении</a>
                                                     </div>
                                                     {%endif%}
                                                 </ul>
@@ -162,7 +162,7 @@
 							<div class="ui segment mb0" style="height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;">
 				        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
-							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
+							<div class="ui segment mt0" style="line-height: 40px;height: 297px;">
 								<div class="ui grid">
 									<div class="sixteen wide column">
 										<input type="file" name="subject_banner" id="subject_banner" class="postfile">
@@ -189,6 +189,14 @@
 		                            </div>											
 								</div>
 			    			</div>
+                            <div class="ui segment mb0" style="height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;">
+                                Группы проходящие курс <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+                            </div>
+                            <div class="ui segment mt0">
+                                {% for squad in instance.squads.all %}
+                                    <a href="{{squad.get_absolute_url}}" class="ui button mini dark">{{squad.title}}</a>
+                                {% endfor %}
+                            </div>                            
 						</div>
                         {% else %}
                         <div class="six wide column">

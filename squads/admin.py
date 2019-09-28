@@ -24,3 +24,24 @@ class AttendanceModelAdmin(admin.ModelAdmin):
 
 admin.site.register(Attendance, AttendanceModelAdmin)
 
+class NeedMoneyModelAdmin(admin.ModelAdmin):
+    list_display = ["id", 'get_squad', 'get_card', 'money', 'bill', 'lesson_bill']
+    list_display_links = ["id"]
+    list_filter = ["squad", 'card']
+    class Meta:
+        model = NeedMoney
+    def get_squad(self, obj):
+        return obj.squad.title
+    def get_card(self, obj):
+        return obj.card.name
+
+admin.site.register(NeedMoney, NeedMoneyModelAdmin)
+
+class BugModelAdmin(admin.ModelAdmin):
+    list_display = ["text", 'timestamp']
+    list_display_links = ["text"]
+    class Meta:
+        model = Bug
+admin.site.register(Bug, BugModelAdmin)
+
+

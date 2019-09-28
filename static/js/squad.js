@@ -1,4 +1,95 @@
 $(document).ready(function () { 
+        $(".lecture_const").each(function() {
+            interval = parseInt($('.dataconst').attr('interval'))
+            height = (60/interval)*(parseFloat($(this).attr('height')));
+            time = $(this).attr('time');
+            id = $(this).attr('id');
+            hour = parseInt($(this).attr('hour')) * 28;
+            minute = parseInt($(this).attr('minute'));
+            day = $(this).attr('day');
+            topp = (60/interval)*(hour + 2) + 28 * minute / interval + 41;
+            add_left = 0;
+            count = 1
+            $('.wait'+ day).each(function() {
+                if ($(this).attr('id') != id) {
+                    hour2 = parseInt($(this).attr('hour')) * 28;
+                    minute2 = parseInt($(this).attr('minute'));
+                    topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 41;
+                    height2 = (60/interval)*(parseFloat($(this).attr('height')));
+                    if (topp2 < topp + height*28 + (60/interval)*1 ) {
+                        add_left = 1
+                        count += 1
+                    }
+                }
+            })
+            maxcount = count
+            dayp1 = parseInt(day) + 1
+            if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
+                $('.dataconst').attr('max'+dayp1, count)
+            }
+            else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
+            $('#constday'+day).css('width', 100*maxcount);
+
+            sum = 0
+            for (var i = 1; i < dayp1; i++) {
+                sum += parseInt($('.dataconst').attr('max' + i))
+            }
+
+            left = 55 + (sum-1)*100 + 100*count;
+
+            $(this).css('margin-top', topp);
+            $(this).css('margin-left', left);
+            $(this).css('height', height*28 + (60/interval)*1);
+            $(this).removeClass('wait' + day);
+        });
+    
+    $('.constday_choose').click(function(e) {
+        if ($(this).attr('class').indexOf("green") >= 0){
+            $(this).removeClass('green')
+        }
+        else{
+            $(this).addClass('green')            
+        }
+    })
+    $('.const_create_lectures').click(function(e) {
+        url = $(this).attr('url')
+
+        this_ = document.getElementById('constselect');
+        subject_id = this_.options[this_.selectedIndex].value;
+
+        start = $('.conststart').val()
+        end = $('.constend').val()
+
+        day1='false';day2='false';day3='false';day4='false';day5='false';day6='false';day7='false';
+        $(".constday_choose.green").each(function() {
+            if ($(this).attr('id') == 1){day1='true'}
+            else if ($(this).attr('id') == 2){day2='true'}
+            else if ($(this).attr('id') == 3){day3='true'}
+            else if ($(this).attr('id') == 4){day4='true'}
+            else if ($(this).attr('id') == 5){day5='true'}
+            else if ($(this).attr('id') == 6){day6='true'}
+            else if ($(this).attr('id') == 7){day7='true'}
+        })
+        $.ajax({
+            url: url,
+            data: {
+                "start":start,
+                "end":end,
+                "subject_id":subject_id,
+                "day1":day1,
+                "day2":day2,
+                "day3":day3,
+                "day4":day4,
+                "day5":day5,
+                "day6":day6,
+                "day7":day7,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })
+    })
     $('.search_group_show').on('click', function(e) {
         $('.hint_students_group').show()
     })

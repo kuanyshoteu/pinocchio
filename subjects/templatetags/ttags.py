@@ -80,7 +80,7 @@ def get_date(material, squad):
         
         if date > timezone.now().date():
             check_date = 'future'
-        elif date + timedelta(17) >= timezone.now().date():
+        elif date + timedelta(20) >= timezone.now().date():
             check_date = 'now'
         else:
             check_date = 'past'
@@ -209,6 +209,8 @@ def get_current_attendance(subject, squad):
                 counter += 1
                 i += 1
         return res
+    else:
+        return 'No_schedule'
     return '_'
 
 @register.filter
@@ -357,20 +359,6 @@ def get_column_cards_len(column, school):
     return len(school.crm_cards.filter(column=column, timestamp__gt=weekago))
 
 @register.filter
-def get_his_squads(subject, profile):
-    if profile.is_student:
-        return subject.squads.filter(students=profile)
-    else:
-        return subject.squads.filter(teacher=profile)
-
-@register.filter
-def get_his_squads_len(subject, profile):
-    if profile.is_student:
-        return len(subject.squads.filter(students=profile))
-    else:
-        return len(subject.squads.filter(teacher=profile))
-
-@register.filter
 def get_school_payment_history(hisprofile, profile):
     return hisprofile.payment_history.filter(school=profile.schools.first())
 
@@ -380,3 +368,18 @@ def money_percent(first, second):
         return 0
     num = first+second
     return int(100*first / num + ((100*first) % num > (num/2)))
+
+@register.filter
+def constant_schedule_lectures(squad):
+    interval = squad.school.schedule_interval
+    res = []
+    for lecture in squad.squad_lectures.all():
+        hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
+        minute = int(lecture.cell.time_period.start.split(':')[1])
+        end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8
+        end_minute = int(lecture.cell.time_period.end.split(':')[1])
+        height = end_hour - hour + (end_minute - minute)/60
+        day = lecture.cell.day.number
+        print(height, lecture.subject.title)
+        res.append([height, lecture.subject.title, hour,minute, day-1,hour*interval+minute, lecture.id])
+    return res

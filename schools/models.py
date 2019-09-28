@@ -43,11 +43,16 @@ class School(models.Model):
     money = models.IntegerField(default=0)
     version = models.CharField(max_length=10, default='')
     sms_amount = models.IntegerField(default=0)
+    pay_day_diff = models.IntegerField(default=5)
+    schedule_type = models.CharField(max_length=10, default='') #May be "classic" or "new"
+    schedule_interval = models.IntegerField(default=60)
 
     class Meta:
         ordering = ['rating', 'version', '-average_cost']
     def __unicode__(self):
         return self.title
+    def ___str__(self):
+        return self.title    
     def landing(self):
         return reverse("schools:landing", kwargs={"school_id": self.id})
     # Edit API's

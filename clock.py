@@ -4,7 +4,7 @@ from pytz import utc
 
 def scheduled_job():
     print('******************')
-    url = 'https://www.bilimtap.kz/subjects/api/update_cards_money?secret=NJf5wefewfm58keijnw'
+    url = 'https://www.bilimtap.kz/groups/api/update_cards_money?secret=NJf5wefewfm58keijnw'
     requests.get(url,verify=False)
 
 sched = BlockingScheduler()

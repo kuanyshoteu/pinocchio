@@ -23,6 +23,7 @@ from django.contrib.auth.models import User
 from constants import *
 from schools.models import School
 from schools.views import get_social_networks
+from squads.models import NeedMoney
 
 def loaderio(request):
     context = {
@@ -721,4 +722,37 @@ def sitemap(request):
     return render(request,'Sitemap.xml', {})
 
 def moderator_run_code(request):
-    pass
+    profile = get_profile(request)
+    if is_profi(profile, 'Moderator') == False:
+        return JsonResponse({'fuck_off':'sucker'})
+    if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
+        return JsonResponse({'fuck_off':'sucker'})
+    print('moderator_run_code')
+
+    # for nm in NeedMoney.objects.all():
+    #     nm.bill = 0
+    #     nm.save()
+
+    for squad in Squad.objects.all():
+        school = squad.school
+        cards = school.crm_cards.all()
+        lesson_bill = 0
+        bill = 0
+        for subject in squad.subjects.all():
+            if subject.cost_period == 'lesson':
+                lesson_bill += subject.cost
+            elif subject.cost_period == 'month':
+                bill += subject.cost
+        for student in squad.students.all():
+            card = cards.filter(card_user=student)
+            if len(card) == 1:
+                card = card[0]
+                nm = squad.need_money.get_or_create(card=card)[0]
+#                nm.bill += bill
+                nm.lesson_bill += lesson_bill
+                nm.save()  
+            else:
+                print(card)              
+
+    print('moderator_end_code')
+    return JsonResponse({'work_done':'great job'})

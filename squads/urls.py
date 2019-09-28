@@ -26,4 +26,7 @@ urlpatterns = [
     url(r'^api/change_lecture_cabinet/$', change_lecture_cabinet, name='change_lecture_cabinet'),    
     url(r'^api/get_page_students/(?P<id>\d+)/$', get_page_students, name='get_page_students'),    
     url(r'^api/hint_students_group/(?P<id>\d+)/$', hint_students_group, name='hint_students_group'),    
+    url(r'^api/const_create_lectures/(?P<id>\d+)/$', const_create_lectures, name='const_create_lectures'),
+
+    url(r'^api/update_cards_money/$', update_cards_money, name='update_cards_money'),
 ]

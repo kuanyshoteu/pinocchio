@@ -24,7 +24,7 @@ class DayModelAdmin(admin.ModelAdmin):
 admin.site.register(Day, DayModelAdmin)
 
 class TimePeriodModelAdmin(admin.ModelAdmin):
-    list_display = ["start", "end"]
+    list_display = ["start", "end", 'num']
     list_display_links = ["start", "end"]
     list_filter = ["start", "end"]
 

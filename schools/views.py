@@ -915,7 +915,7 @@ def move_card(request):
 def edit_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
-    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone') and request.GET.get('mail'):
+    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone'):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         edit = '***Редактирование*** '
@@ -954,6 +954,7 @@ def edit_card(request):
                 wright = False
                 crnt_tag = ''
         card.save()
+        print(card)
         CRMCardHistory.objects.create(
             action_author = profile,
             card = card,

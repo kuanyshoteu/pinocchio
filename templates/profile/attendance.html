@@ -14,19 +14,19 @@
     </div>
 </div>
 <div class="ui segment help3 help42" style="margin-top: 0; padding: 18px;{% if not is_this_trener %}margin-bottom: 0;{% endif %}">
-    {% for subject in hissubjects %}
-    <a onclick="load_attendance_subject('{{ subject.id }}')" class="load_attendance_subject {% if subject.id == att_subject.id %}current_option{% else %}other_option{% endif %}" id="subject{{ subject.id }}">
-        {{ subject.title }}
+    {% for squad in hissquads %}
+    <a onclick="load_attendance_squad('{{ squad.id }}')" class="load_attendance_subject {% if squad.id == att_squad.id %}current_option{% else %}other_option{% endif %}" id="squad{{ squad.id }}">
+        {{ squad.title }}
     </a>
     {% endfor %} 
 </div>
 <div class="ui segment help3 help42" style="margin-top: 0;padding: 0;">
     <div id="subject_attendance">
-    {% if hissubjects|length > 0 %}
+    {% if hissquads|length > 0 %}
     {% if is_this_trener %}
         <div class="ui stackable grid" style="margin:-1rem 0 0 !important">
-        {% for squad in att_subject|get_his_squads:hisprofile %}
-            <a onclick="load_attendance_squad('{{ squad.id }}')" class="{% if squad.id == att_squad.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="squad{{ squad.id }}" style="width: calc(100%/({{ att_subject|get_his_squads_len:hisprofile }}));">{{ squad.title }}</a>
+        {% for subject in att_squad.subjects.all %}
+            <a onclick="load_attendance_subject('{{ subject.id }}')" class="{% if subject.id == att_subject.id %}switch_btn_active current_option2{% else %}other_option2{% endif %} switch_btn " id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}));">{{ subject.title }}</a>
         {% endfor %}
         </div>
         <div id="squad_attendance">

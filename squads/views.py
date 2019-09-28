@@ -15,7 +15,7 @@ from .table_change_form import TableChangeForm
 from .models import *
 from schools.models import School
 from subjects.models import *
-from subjects.views import update_squad_dates,change_lecture_options
+from subjects.views import update_squad_dates,change_lecture_options,get_subject_students
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
@@ -146,7 +146,6 @@ def squad_update(request, slug=None):
         i += 1
         if i == number_in_page:
             break
-    print(qs, free_students)
     if len(qs) % number_in_page == 0:
         number_of_pages = int(len(qs)/number_in_page)
     else:
@@ -168,6 +167,9 @@ def squad_update(request, slug=None):
         'time_periods':time_periods,
         'days':days,
         'number_of_pages':number_of_pages,
+        'constant_times':get_times(school.schedule_interval),
+        'interval':school.schedule_interval,
+        'days':get_days(),
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -271,17 +273,11 @@ def change_curator(request):
         teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
         squad.teacher = teacher
         squad.save()
-        for subject in squad.subjects.all():
-            subject.teachers.add(teacher)
-            if oldteacher:
-                subject.teachers.remove(oldteacher)
         for lecture in squad.squad_lectures.all():
             if oldteacher:
                 remove_person_from_lecture(lecture, oldteacher)
             add_person_to_lecture(lecture, teacher)
             lecture.save()
-
-    print(lecture.people.all())
 
     data = {
     }
@@ -308,14 +304,48 @@ def add_student(request):
 
 def remove_student_from_squad(student, squad):
     squad.students.remove(student)
+    school = squad.school
     for subject in squad.subjects.all():
-        subject.students.remove(student)
-        student.salary -= subject.cost
+        card = student.card.get_or_create(school=school)[0]
+        nm = squad.need_money.get_or_create(card=card)[0]
+        cost = subject.cost
+        if subject.cost_period == 'lesson':
+            nm.lesson_bill -= cost
+            nm.save()
+        elif subject.cost_period == 'month':
+            nm.bill -= cost
+            nm.save()
+
     student.save()
     for lecture in squad.squad_lectures.all():
         remove_person_from_lecture(lecture, student)
         lecture.save()
     squad.squad_attendances.filter(student=student).delete()
+
+def add_student_to_squad(student, squad):
+    squad.students.add(student)
+    school = squad.school
+    for subject in squad.subjects.all():
+        ages = subject.age.all()
+        student.crm_age_connect.add(*ages)
+        categories = subject.category.all()
+        student.crm_subject_connect.add(*categories)
+        card = student.card.get_or_create(school=school)[0]
+        nm = squad.need_money.get_or_create(card=card)[0]
+        cost = subject.cost
+        if subject.cost_period == 'lesson':
+            nm.lesson_bill += cost
+            nm.save()
+        elif subject.cost_period == 'month':
+            nm.bill += cost
+            nm.save()
+
+    school = squad.school
+    for timep in school.time_periods.all():
+        timep.people.add(student)
+    for lecture in squad.squad_lectures.all():
+        add_person_to_lecture(lecture, student)
+        lecture.save()
 
 def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     today = int(timezone.now().strftime('%w'))
@@ -382,23 +412,6 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
             pass
     return ok_mail
 
-def add_student_to_squad(student, squad):
-    squad.students.add(student)
-    for subject in squad.subjects.all():
-        ages = subject.age.all()
-        student.crm_age_connect.add(*ages)
-        categories = subject.category.all()
-        student.crm_subject_connect.add(*categories)
-        subject.students.add(student)
-        student.salary += subject.cost
-    student.save()
-    school = squad.school
-    for timep in school.time_periods.all():
-        timep.people.add(student)
-    for lecture in squad.squad_lectures.all():
-        add_person_to_lecture(lecture, student)
-        lecture.save()
-
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.append(person.id)
@@ -406,7 +419,6 @@ def remove_person_from_lecture(lecture, person):
     index = lecture.person_id.index(person.id)
     number = lecture.person_number[index]
     if number == 1:
-        print('f', lecture.cell.time_period)
         lecture.people.remove(person)
     lecture.person_number[index] -= 1
     if lecture.person_number[index] < 0:
@@ -434,11 +446,11 @@ def change_office(request, id=None):
             old_office = squad.office
         if int(request.GET.get('object_id')) == -1:
             squad.office = None
-            change_lecture_options(squad, 'office', None, old_office)
+            change_lecture_options(squad.students.all(), squad, 'office', None, old_office)
         else:
             office = Office.objects.get(id = int(request.GET.get('object_id')))
             squad.office = office
-            change_lecture_options(squad, 'office', office, old_office)
+            change_lecture_options(squad.students.all(), squad, 'office', office, old_office)
         squad.save()
     data = {
     }
@@ -506,7 +518,7 @@ def change_schedule(request, id=None):
 
     if request.GET.get('subject_id') and request.GET.get('cell_id') and request.GET.get('old_cell'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
-        subject_students = subject.students.all()
+        subject_students = get_subject_students(subject)
         cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
         if request.GET.get('old_cell') == 'none':
             if len(Lecture.objects.filter(squad=squad,subject=subject,cell=cell)) == 0:
@@ -549,10 +561,26 @@ def add_subject(request):
         is_in_school(profile, school)
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         squad.subjects.add(subject)
-        squad_students = squad.students.all()
-        subject.students.add(*squad_students)
-        if squad.teacher:
-            subject.teachers.add(squad.teacher)
+
+        cost = subject.cost
+        cards = school.crm_cards.all()
+        if subject.cost_period == 'month':
+            for student in squad.students.all():
+                card = cards.filter(card_user=student)
+                if len(card) > 0:
+                    card = card[0]
+                    nm = squad.need_money.get_or_create(card=card)[0]
+                    nm.bill += cost
+                    nm.save()
+        elif subject.cost_period == 'lesson':
+            for student in squad.students.all():
+                card = cards.filter(card_user=student)
+                if len(card) > 0:
+                    card = card[0]
+                    nm = squad.need_money.get_or_create(card=card)[0]
+                    nm.lesson_bill += cost
+                    nm.save()
+
     data = {
     }
     return JsonResponse(data)
@@ -566,9 +594,26 @@ def delete_subject(request):
         is_in_school(profile, school)
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         squad.subjects.remove(subject)
-        squad_students = subject.students.all()
-        subject.students.remove(*squad_students)
-        subject.teachers.remove(squad.teacher)
+        subject.subject_lectures.filter(squad=squad).delete()
+        cost = subject.cost
+        cards = school.crm_cards.all()
+        if subject.cost_period == 'month':
+            for student in squad.students.all():
+                card = cards.filter(card_user=student)
+                if len(card) > 0:
+                    card = card[0]
+                    nm = squad.need_money.get_or_create(card=card)[0]
+                    nm.bill -= cost
+                    nm.save()
+        elif subject.cost_period == 'lesson':
+            for student in squad.students.all():
+                card = cards.filter(card_user=student)
+                if len(card) > 0:
+                    card = card[0]
+                    nm = squad.need_money.get_or_create(card=card)[0]
+                    nm.lesson_bill -= cost
+                    nm.save()
+
     data = {
     }
     return JsonResponse(data)
@@ -627,6 +672,45 @@ def get_page_students(request, id=None):
     }
     return JsonResponse(data)
 
+def const_create_lectures(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    squad = Squad.objects.get(id = id)
+    school = squad.school
+    is_in_school(profile, school)
+    if request.GET.get('start') and request.GET.get('end') and request.GET.get('subject_id'):
+        subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
+        category = subject.category.all()
+        age = subject.age.all()
+        level = subject.level.all()        
+        tp = school.time_periods.get_or_create(
+            start = request.GET.get('start'),
+            end = request.GET.get('end')
+            )[0]
+        for i in range(1, 8):
+            if request.GET.get('day'+str(i)) == 'true':
+                day = Day.objects.get(id=int(i))
+                cell = day.day_cell.filter(time_period=tp)
+                if len(cell) > 0:
+                    cell = cell[0]
+                else:
+                    cell = day.day_cell.create(time_period=tp,school=school)
+                lecture = school.school_lectures.create(
+                    cell=cell,
+                    day=day,
+                    squad=squad,
+                    subject=subject,
+                    office = squad.office,
+                    )
+                lecture.save()
+                add_person_to_lecture(lecture, profile)
+                lecture.category.add(*category)
+                lecture.age.add(*age)
+                lecture.level.add(*level)
+    data = {
+    }
+    return JsonResponse(data)
+
 from django.contrib.postgres.search import TrigramSimilarity
 def hint_students_group(request, id=None):
     profile = get_profile(request)
@@ -661,3 +745,20 @@ def hint_students_group(request, id=None):
         "res":res
     }
     return JsonResponse(data)
+
+def update_cards_money(request):
+    if request.GET.get('secret') == 'NJf5wefewfm58keijnw':
+        schools = School.objects.filter(version='standart').prefetch_related('groups__need_money')
+        today = int(timezone.now().date().strftime('%d'))
+        for school in schools:
+            forward = today + school.pay_day_diff
+            for squad in school.groups.filter(start_day=forward):
+                stard_day = squad.start_date.strftime('%d')
+                for nm in squad.need_money.all():
+                    card = nm.card
+                    if nm.money < nm.bill:
+                        card.colour = 'red'
+                    elif nm.money < 2*nm.bill:
+                        card.colour = 'orange'
+                    card.save()
+        return JsonResponse({"id":today})

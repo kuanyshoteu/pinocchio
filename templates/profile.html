@@ -16,6 +16,7 @@
 <a id="go-back-btn" class="start_info_btn" style="display: none;">
     <i class="arrow left icon"></i>Назад
 </a>
+{% if profile.skill.hint_numbers.0 == 0 %}
 <div class="ui modal" id="privet-modal" style="z-index: 4000;">
     <i class="close icon"></i>
     <div class="content" style="padding: 0 !important;">
@@ -25,7 +26,7 @@
             </div>            
             <div class="eight wide column" style="font-size: 17px;text-align: center;padding: 70px 15px;">
                 <div style="">
-                    <span style="font-size: 25px;font-weight: 600;color: #506ca9">Добро пожаловать на Pinocchio.kz</span>
+                    <span style="font-size: 25px;font-weight: 600;color: #506ca9">Добро пожаловать на Bilimtap.kz</span>
                     <br>
                     <br>
                     <span style="font-size: 18px;">
@@ -44,7 +45,7 @@
         </div>
     </div>
 </div>
-
+{%endif%}
 
 <div id="profile" class="">
     <div class="ui container" >
@@ -83,21 +84,27 @@
                         <div class="twenty mitem" style="padding: 0;float: left;">
                             <div class="not_in_mobile">
                                 {% include 'profile/skills_spider.html' %}
-                                {% include 'profile/courses.html' %}
+                                {% include 'profile/circle_chart.html' %}
+                                {% include 'profile/chart.html' %}
                             </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
                             {% if is_manager and hisprofile.is_student %}
                                 <div class="ui segment">
                                     <div class="ui grid stackable">
-                                        <div class="four wide column">
+                                        <div class="five wide column">
                                             <div style="margin-bottom: 15px;"> На счету: <b style="{%if hisprofile.money < 0%}color: red;{%endif%}">{{ hisprofile.money}}тг.</b></div>
-                                            <form class="ui form" style="margin-bottom: 5px;">
-                                                <input style="margin-bottom: 0;" class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
+                                            <form class="ui form mb10" style="display: flex;">
+                                                <input class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
+                                                <select id="pay_for_group">
+                                                    {%for squad in hisprofile.squads.all%}
+                                                    <option value="{{squad.id}}">{{squad.title}}</option>
+                                                    {%endfor%}
+                                                </select>
                                             </form>
                                             <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатил(а)</a>
                                         </div>
-                                        <div class="twelve wide column">
+                                        <div class="eleven wide column">
                                             {% for payment in hisprofile|get_school_payment_history:profile %}
                                                 {{payment.manager.first_name}}
                                                 {{payment.timestamp}}
@@ -132,11 +139,14 @@
 <script type="text/javascript">
     function make_payment(url, id) {
         amount = $('.payment_amount'+id).val()
+        this_ = document.getElementById('pay_for_group');
+        group_id = this_.options[this_.selectedIndex].value;        
         $.ajax({
             url: url,
             data: {
                 'amount':amount,
-                'id':id
+                'id':id,
+                'group_id':group_id
             },
             dataType: 'json',
             success: function (data) {

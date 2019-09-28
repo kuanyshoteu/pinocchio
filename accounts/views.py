@@ -50,20 +50,12 @@ def account_view(request, user = None):
         return redirect(profile.get_absolute_url())
 
     if is_profi(hisprofile, 'Teacher'):
-        hissubjects = hisprofile.teacher_subjects.all()
         hissquads = hisprofile.hissquads.all()
         hiscourses = hisprofile.hiscourses.all()
     else:
-        hissubjects = hisprofile.hissubjects.all()
         hissquads = hisprofile.squads.all()
         hiscourses = hisprofile.courses.all()
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = profile)[0]
-    if hiscacheatt.subject == None and len(hissubjects) > 0:
-        hiscacheatt.subject = hissubjects[0]
-        hiscacheatt.save()
-    if hiscacheatt.squad == None and len(hissquads) > 0:
-        hiscacheatt.squad = hissquads[0]
-        hiscacheatt.save()
     if not profile.skill:
         skill = Skill.objects.create()
         profile.skill = skill
@@ -99,7 +91,6 @@ def account_view(request, user = None):
         'hisboards':hisboards(hisprofile),
         'days':Day.objects.all(),
         'time_periods':hisprofile.histime_periods.all(),
-        'hissubjects':hissubjects,
         'hissquads':hissquads,
         'hiscourses':hiscourses,
         'att_subject':hiscacheatt.subject,
@@ -334,17 +325,20 @@ def att_present(request):
     if request.GET.get('id') and is_profi(profile, 'Teacher'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
         school = attendance.school
+        subject = attendance.subject
+        squad = attendance.squad
         is_in_school(profile, school)        
         attendance.present = 'present'
-        if len(CRMCard.objects.filter(card_user=attendance.student)) > 0:
-            card = attendance.student.card.get(school=school)
+        this_student_card = attendance.student.card.filter(school=school)
+        if len(this_student_card) > 0:
+            card = this_student_card[0]
             if card.column.id == 2:
                 card.column = CRMColumn.objects.get(id=3)
                 card.save()
         else:
             CRMCard.objects.create(
                 card_user=attendance.student,
-                column=CRMColumn.objects.get(id=1),
+                column=CRMColumn.objects.get(id=3),
                 name=attendance.student.first_name,
                 phone=attendance.student.phone,
                 mail=attendance.student.mail,
@@ -355,27 +349,54 @@ def att_present(request):
         if not profile in material.done_by.all():
             material.done_by.add(profile)
             profile.money += profile.salary
-            school = attendance.subject.school
+            school = subject.school
             change_school_money(school, -1*profile.salary, 'teacher_salary', profile.first_name)
             school.save()
-            for student in attendance.squad.students.all():
-                was_minus = False
-                if student.money < student.salary:
-                    was_minus = True
-                student.money -= attendance.subject.cost
-                student.save()
-                student_card = student.card.first()
-                if student.money < student.salary and was_minus == False and student_card.was_called == True:
-                    skill = student_card.author_profile.skill
-                    skill.need_actions += 1
-                    skill.save()
-                    student_card.was_called = False
-                    student_card.save()
+
+            cards = school.crm_cards.all()
+            cost = subject.cost
+            if subject.cost_period == 'lesson':
+                for student in squad.students.all():
+                    card = cards.filter(card_user=student)
+                    if len(card) > 0:
+                        pay_for_lesson(card[0], cost, squad)
+            elif subject.cost_period == '4weeks':
+                for student in squad.students.all():
+                    card = cards.filter(card_user=student)
+                    if len(card) > 0:
+                        pay_for_lesson(card[0], int(cost/4), squad)
         attendance.save()
         profile.save()
     data = {
     }
     return JsonResponse(data)
+
+def pay_for_lesson(card, cost, squad):
+    nm = squad.need_money.filter(card=card)
+    if len(nm) > 0:
+        nm = nm[0]
+        nm.money -= int(cost) # Might be bug with int, must be float
+        if nm.money < nm.lesson_bill:
+            card.colour = 'red'
+            card.comments += ' | Закончились деньги на счету для группы '+squad.title+', необходимо мин.'+str(nm.lesson_bill)+', сейчас на счету ' + str(nm.money)+'|'
+            if card.was_called:
+                skill = card.author_profile.skill
+                skill.need_actions += 1
+                skill.save()                            
+                card.was_called = False
+            card.save()
+        elif nm.money < 2 * nm.lesson_bill:
+            card.colour = 'orange'
+            card.comments += ' | Мало денег на счету для группы '+squad.title+', необходимо мин.'+str(nm.lesson_bill)+', сейчас на счету ' + str(nm.money)+' |'
+            if card.was_called:
+                skill = student_card.author_profile.skill
+                skill.need_actions += 1
+                skill.save()
+                card.was_called = False
+            card.save()
+        nm.save()
+    else:
+        Bug.objects.create(text='No NeedMoney object of card ' + card.id)
 
 def ChangeAttendance(request):
     profile = Profile.objects.get(user = request.user)
@@ -469,15 +490,25 @@ def make_payment(request):
     manager = Profile.objects.get(user = request.user)
     only_managers(manager)
     amount = int(request.GET.get('amount'))
-    if amount > 0 and request.GET.get('id'):
+    if amount > 0 and request.GET.get('id') and request.GET.get('group_id'):
         profile = Profile.objects.get(id = int(request.GET.get('id')))
         school = manager.schools.first()
-        is_in_school(profile, school)        
-        was_minus = False
-        if profile.money < profile.salary:
-            was_minus = True
-        profile.money += amount
-        profile.save()
+        squad = school.groups.get(id=int(request.GET.get('group_id')))
+        card = profile.card.get(school=school)
+        nm = card.need_money.get(squad=squad)
+        nm.money += amount
+        nm.save()
+        if nm.money >= nm.bill + nm.lesson_bill:
+            if card.colour == 'red' or card.colour == 'orange':
+                if not card.was_called:
+                    skill = card.manager.skill
+                    skill.need_actions -= 1
+                    skill.save()
+            card.colour = 'white'
+            card.save()
+
+        is_in_school(profile, school)
+
         profile.payment_history.create(
             manager = manager,
             amount = amount,
@@ -485,14 +516,7 @@ def make_payment(request):
         )
         change_school_money(school, amount, 'student_payment', profile.first_name)
         school.save()
-        if profile.money > profile.salary:
-            for card in profile.card.all():
-                if was_minus and card.was_called == False and profile.money > profile.salary:
-                    skill = card.author_profile.skill
-                    skill.need_actions -= 1
-                    skill.save()            
-                card.was_called = True
-                card.save()
+
     data = {
     }
     return JsonResponse(data)

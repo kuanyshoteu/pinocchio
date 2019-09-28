@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
-from accounts.models import Profile
+from accounts.models import Profile,CRMCard
 from schools.models import *
 
 def upload_location(instance, filename):
@@ -55,12 +55,15 @@ class Squad(models.Model):
     slogan = models.CharField(max_length=250, default='')
 
     start_date = models.DateField(auto_now_add=False)
+    start_day = models.IntegerField(default=0)
     end_date = models.DateField(auto_now_add=False)
     color_back = models.TextField(default='')
 
     class Meta:
         ordering = ['title']
     def __unicode__(self):
+        return self.title
+    def ___str__(self):
         return self.title
     def get_absolute_url(self):
         if not self.slug:
@@ -114,6 +117,8 @@ class Squad(models.Model):
         return reverse("squads:get_page_students",kwargs={"id": self.id})
     def hint_students_group(self):
         return reverse("squads:hint_students_group",kwargs={"id": self.id})
+    def const_create_lectures(self):
+        return reverse("squads:const_create_lectures",kwargs={"id": self.id})        
 
 def create_slug(instance, new_slug=None):
     slug = slugify(instance.title)
@@ -133,3 +138,14 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
         instance.slug = create_slug(instance)
 
 pre_save.connect(pre_save_course_receiver, sender=Squad)
+
+class NeedMoney(models.Model):
+    squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='need_money')
+    card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
+    money = models.IntegerField(default=0)
+    lesson_bill = models.IntegerField(default=0)
+    bill = models.IntegerField(default=0)
+
+class Bug(models.Model):
+    text = models.TextField(default='')
+    timestamp = models.DateTimeField(auto_now_add=True)

@@ -8,13 +8,14 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.views.generic import RedirectView
+from itertools import chain
 
 from .forms import SubjectForm,SubjectForm2
 from .models import *
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
-from schools.models import Cabinet
+from schools.models import School, Cabinet
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -116,14 +117,33 @@ def subject_update(request, slug=None):
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
     if is_profi(profile, 'Manager'):
         if form.is_valid():
+            old_cost = instance.cost
             instance = form.save(commit=False)
             instance.cost_period = request.POST.get('get_subject_period')
-            print('period: ', request.POST.get('get_subject_period'))
-            if not instance.height_field:
-                instance.height_field = 0
-            if not instance.width_field:
-                instance.width_field = 0
             instance.save()
+            if instance.cost != old_cost:
+                students = get_subject_students(instance)
+                cost = instance.cost
+                cards = school.crm_cards.all()
+                if instance.cost_period == 'lesson':
+                    for student in students:
+                        card = cards.filter(card_user=student)
+                        if len(card) > 0:
+                            card = card[0]
+                            nm = squad.need_money.get_or_create(card=card)[0]
+                            nm.lesson_bill -= old_cost
+                            nm.lesson_bill += cost
+                            nm.save()
+                elif instance.cost_period == 'month':
+                    for student in students:
+                        card = cards.filter(card_user=student)
+                        if len(card) > 0:
+                            card = card[0]
+                            nm = squad.need_money.get_or_create(card=card)[0]
+                            nm.bill -= old_cost
+                            nm.bill += cost
+                            nm.save()
+
         cost = 0
         for subject in school.school_subjects.all():
             subject_cost = 0
@@ -165,7 +185,6 @@ def subject_update(request, slug=None):
         for day in days:
             for timep in time_periods:
                 new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
-    print(instance.age.all())
     context = {
         "instance": instance,
         "form":form,
@@ -260,6 +279,13 @@ def remove_lesson(request):
     }
     return JsonResponse(data)
 
+def get_subject_students(subject):
+    students = set()
+    for sq in subject.squads.all():
+        sq_students = sq.students.all()
+        students = chain(students, sq_students)
+    return students
+
 def change_category(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
@@ -270,16 +296,16 @@ def change_category(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         category = school.school_subject_categories.get(id=int(request.GET.get('object_id')))
-        students = subject.students.all()
+        students = get_subject_students(subject)
         if subject in category.category_subjects.all():
             category.students.remove(*students)
             category.category_subjects.remove(subject)
-            change_lecture_options(subject, 'subject', category, False)
+            change_lecture_options(students, subject, 'subject', category, False)
         else:
             is_in = True
             category.category_subjects.add(subject)
             category.students.add(*students)
-            change_lecture_options(subject, 'subject', category, True)
+            change_lecture_options(students, subject, 'subject', category, True)
         subject.save()
         ok = True
     data = {
@@ -298,18 +324,16 @@ def change_age(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         age = SubjectAge.objects.get(id=int(request.GET.get('object_id')))
-        students = subject.students.all()
+        students = get_subject_students(subject)
         if subject in age.age_subjects.all():
             age.students.remove(*students)
             age.age_subjects.remove(subject)
-            school.school_subject_ages.remove(age)
-            change_lecture_options(subject, 'age', age, False)
+            change_lecture_options(students, subject, 'age', age, False)
         else:
             is_in = True
             age.age_subjects.add(subject)
             age.students.add(*students)
-            school.school_subject_ages.add(age)
-            change_lecture_options(subject, 'age', age, True)
+            change_lecture_options(students, subject, 'age', age, True)
         ok = True
         subject.save()
     data = {
@@ -328,18 +352,16 @@ def change_level(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         level = school.school_subject_levels.get(id=int(request.GET.get('object_id')))
-        students = subject.students.all()
+        students = get_subject_students(subject)
         if subject in level.level_subjects.all():
             level.students.remove(*students)
             level.level_subjects.remove(subject)
-            school.school_subject_levels.remove(level)
-            change_lecture_options(subject, 'level', level, False)
+            change_lecture_options(students, subject, 'level', level, False)
         else:
             is_in = True
             level.level_subjects.add(subject)
             level.students.add(*students)
-            school.school_subject_levels.remove(level)
-            change_lecture_options(subject, 'level', level, True)
+            change_lecture_options(students, subject, 'level', level, True)
         ok = True
         subject.save()
     data = {
@@ -348,55 +370,76 @@ def change_level(request, id=None):
     }
     return JsonResponse(data)
 
-def change_lecture_options(subject, option, objectt, is_add):
+def change_lecture_options(students, subject, option, objectt, is_add):
     hashtag = ''
     school = subject.school
-    if objectt:
-        obj_title = objectt.title.replace(' ', '')
-        hst = school.hashtags.filter(title=obj_title)
-        if len(hst) == 0:
-            hashtag = school.hashtags.get_or_create(title=obj_title)
-        else:
-            hashtag = hst
-    qs = subject.students.all()
-    cards_qs = school.crm_cards.filter(card_user__in=qs)
-    if len(hashtag) > 0:
-        hashtag = hashtag[0]
-    for card in cards_qs:
-        if is_add:
-            if not hashtag.id in card.hashtag_ids:
-                card.hashtag_ids.append(hashtag.id)
-                card.hashtag_numbers.append(0)
-            card.hashtags.add(hashtag)
-            index = card.hashtag_ids.index(hashtag.id)
-            card.hashtag_numbers[index] += 1
-        else:
-            if hashtag.id in card.hashtag_ids:
-                index = card.hashtag_ids.index(hashtag.id)
-                if card.hashtag_numbers[index] > 0:
-                    card.hashtag_numbers[index] -= 1
-                if card.hashtag_numbers[index] < 0:
-                    card.hashtag_numbers[index] = 0
-                if card.hashtag_numbers[index] == 0:
-                    card.hashtags.remove(hashtag)
-        card.save()                
-    if option == 'subject':
-        lectures = subject.subject_lectures.all()
-        objectt.category_lectures.add(*lectures)
-    elif option == 'age':
-        lectures = subject.subject_lectures.all()
-        objectt.age_lectures.add(*lectures)
-    elif option == 'level':
-        lectures = subject.subject_lectures.all()
-        objectt.level_lectures.add(*lectures)
-    elif option == 'office':
-        lectures = subject.squad_lectures.all()
-        objectt.office_lectures.add(*lectures)
+    cards_qs = school.crm_cards.filter(card_user__in=students)
+    if option == 'office':
+        remove = False
+        add = False
+        lectures = subject.squad_lectures.all() # subject = squad only in this case 
+        if is_add != None:
+            hashtag = get_hashtag(school, is_add.title)
+            if len(hashtag) > 0:
+                hashtag = hashtag[0]
+                remove = True
+            is_add.office_lectures.remove(*lectures)
+        if objectt != None:
+            hashtag2 = get_hashtag(school, objectt.title)
+            if len(hashtag2) > 0:
+                hashtag2 = hashtag2[0]
+                add = True
+            objectt.office_lectures.add(*lectures)
+        for card in cards_qs:
+            if remove:
+                card_remove_hashtag(card, hashtag)
+            if add: 
+                card_add_hashtag(card, hashtag2)
+            card.save()
+    else:
+        if objectt:
+            hashtag = get_hashtag(school, objectt.title)
+        if len(hashtag) > 0:
+            hashtag = hashtag[0]
+            for card in cards_qs:
+                if is_add:
+                    card_add_hashtag(card, hashtag)
+                else:
+                    card_remove_hashtag(card, hashtag)
+                card.save()                
+        if option == 'subject':
+            lectures = subject.subject_lectures.all()
+            objectt.category_lectures.add(*lectures)
+        elif option == 'age':
+            lectures = subject.subject_lectures.all()
+            objectt.age_lectures.add(*lectures)
+        elif option == 'level':
+            lectures = subject.subject_lectures.all()
+            objectt.level_lectures.add(*lectures)
 
-def update_cards_money(request):
-    if request.GET.get('secret') == 'NJf5wefewfm58keijnw':
-        title = Subject.objects.first().id
-        print('########################')
-        print(title)
-        print(request.user)
-        return JsonResponse({"id":title})
+def get_hashtag(school, title):
+    obj_title = title.replace(' ', '')
+    hst = school.hashtags.filter(title=obj_title)
+    if len(hst) == 0:
+        hashtag = school.hashtags.get_or_create(title=obj_title)
+    else:
+        hashtag = hst
+    return hashtag
+
+def card_add_hashtag(card, hashtag):
+    if not hashtag.id in card.hashtag_ids:
+        card.hashtag_ids.append(hashtag.id)
+        card.hashtag_numbers.append(0)
+    card.hashtags.add(hashtag)
+    index = card.hashtag_ids.index(hashtag.id)
+    card.hashtag_numbers[index] += 1
+
+def card_remove_hashtag(card, hashtag):
+    if hashtag.id in card.hashtag_ids:
+        index = card.hashtag_ids.index(hashtag.id)
+        if card.hashtag_numbers[index] > 0:
+            card.hashtag_numbers[index] -= 1
+        if card.hashtag_numbers[index] < 0:
+            card.hashtag_numbers[index] = 0
+        if card.hashtag_numbers[index] == 0:
+            card.hashtags.remove(hashtag)

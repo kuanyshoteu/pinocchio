@@ -48,9 +48,9 @@ def post_list(request, school_id):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user)
         hisschools = profile.schools.all()
-        is_trener = is_profi(profile, 'Teacher'),
-        is_manager = is_profi(profile, 'Manager'),
-        is_director = is_profi(profile, 'Director'),         
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')        
     school = School.objects.get(id=school_id)
     if request.POST: 
         text = request.POST.get('post_text')

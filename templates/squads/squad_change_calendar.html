@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load ttags %}
 <script src='{% static "js/vue-drag/vue.min.js" %}'></script>
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
 <script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
@@ -11,96 +12,88 @@
         padding: 5px !important;
         height: 25px !important;
     }
+    .dark_grey{
+        background-color: #545454;
+    }
+    th{
+        padding: 5px !important;
+        display: inline-block;
+    }
+    td{
+        display: inline-block;
+    }
 </style>
-<form class="ui grid" style="display: none;">
-    <table class="full-w" id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;display: none;">
-        <thead>
-            <tr>
-                <th>Пн</th>
-                <th>Вт</th>
-                <th>Ср</th>
-                <th>Чт</th>
-                <th>Пт</th>
-                <th>Сб</th>
-                <th>Вс</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
+<div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+    Расписание <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+    <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+    <div class="ui pointing below label dark hint_schedule" style="display: none;">
+        Выберите курс, напишите время урока, затем выберите дни недели для урока и нажмите добавить
+    </div>
+</div>
+<div class="ui segment no_margin">
+    <form class="ui grid">
+        <select style="width: 300px;display: inline-block;height: 28px;" class="mr15" id="constselect">
+            <option value="-1">Выберите курс</option>            
+            {% for subject in instance.subjects.all %}
+            <option value="{{subject.id}}">{{subject.title}}</option>
+            {% endfor %}
+        </select>
+        <input type="text" class="conststart" style="width: 100px;padding:5px;display: inline-block;"> - <input class="constend" style="width: 100px;padding:5px;display: inline-block;" type="text" name="">
+    </form>
+    <div class="mt10">
+        Выберите дни недели
+        {% for day in days %}
+        <a class="ui button mini no_margin constday_choose" id="{{forloop.counter}}">{{day}}</a>
+        {% endfor %}
+        <a class="ui button mini blue no_margin const_create_lectures" url="{{instance.const_create_lectures}}">Добавить</a>
+    </div>
+</div>
+{% if instance.school.schedule_type == 'classic' %}
+<form class="ui grid full-w mt0">
+    <div style="overflow-x: auto;width: 100%;background: #4A4A4A;">
+        <table class="no_margin" id="keywords" class="mb0" cellspacing="0" cellpadding="0" style="background: #4A4A4A;white-space: nowrap;">
+            <div style="position: relative;">
+            {% for lecture in instance|constant_schedule_lectures %}
+                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: #313a57;color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
+                    {{lecture.1}} 
+                </div>
+                <div class="ui modal constlect_modal{{lecture.6}}">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        {{lecture.1}}
                     </div>
-                </td>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
-                    </div>
-                </td>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
-                    </div>
-                </td>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
-                    </div>
-                </td>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
-                    </div>
-                </td>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
-                    </div>
-                </td>
-                <td class="no_padding_side">
-                    <div class="ui grid">
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>
-                        <div class="eight wide column no_padding">
-                            <input class="small_input" type="text" name="">                        
-                        </div>                        
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>        
+                </div>
+
+            {% endfor %}
+            </div>
+            <thead>
+                <tr>
+                    <th style="width: 53px;"></th>
+                    <th style="width: 100px;" id="constday0" class="dark_grey">Пн</th>
+                    <th style="width: 100px;" id="constday1">Вт</th>
+                    <th style="width: 100px;" id="constday2" class="dark_grey">Ср</th>
+                    <th style="width: 100px;" id="constday3">Чт</th>
+                    <th style="width: 100px;" id="constday4" class="dark_grey">Пт</th>
+                    <th style="width: 100px;" id="constday5">Сб</th>
+                    <th style="width: 100px;" id="constday6" class="dark_grey">Вс</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for time in constant_times %}
+                <tr>
+                    <td class="pt10 pb10 full-w" style="width: 53px;text-align: left;">
+                        {{ time }}
+                        <div style="border-top:1px solid #565656;margin-top: -8px;" class="full-w"></div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>   
 </form>
+<span class="dataconst" id={{instance.id}} number="0" changed="no" interval="{{interval}}" chosendays=""
+max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1"></span>
+{% else %}
 <div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
     Расписание <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
     <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
@@ -183,6 +176,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 <span style="display: none;" id="-1" class="delete_lesson_data" url="{{ instance.delete_lesson_url }}"></span>
 <script>
     function change_cabinet(id, url){

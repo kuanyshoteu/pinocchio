@@ -183,3 +183,22 @@ def is_moderator_school(request, profile):
                 return school
     school = profile.schools.first()
     return school
+
+def get_times(interval):
+    res = []
+    time = 480
+    end = 22
+    while time <= end * 60:
+        hour = str(int(time/60))
+        if len(hour) == 1:
+            hour = '0' + hour
+        minute = str(int(time%60))
+        if len(minute) == 1:
+            minute = '0' + minute
+        res.append(hour + ":" + minute )
+        time += interval
+    return res
+
+def get_days():
+    res = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+    return res

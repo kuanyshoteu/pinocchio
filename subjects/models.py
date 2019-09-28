@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
-from accounts.models import Profile,CRMCard
+from accounts.models import Profile
 from squads.models import Squad
 from papers.models import Lesson
 from schools.models import *
@@ -39,7 +39,7 @@ class TimePeriod(models.Model):
     end = models.TextField(default = '')
     num =  models.IntegerField(default = 0)
     class Meta:
-        ordering = ['id']
+        ordering = ['start']
     def create_url(self):
         return reverse("schools:timep_create_url")
     def delete_url(self):
@@ -56,11 +56,9 @@ class Cell(models.Model):
 class Subject(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subjects') 
     author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='author_subjects') 
-    students = models.ManyToManyField(Profile, related_name='hissubjects')
-    teachers = models.ManyToManyField(Profile, related_name='teacher_subjects')
     squads = models.ManyToManyField(Squad, related_name='subjects')
     cost = models.IntegerField(default=0, null = True)
-    cost_period = models.CharField(max_length=250, default="month")
+    cost_period = models.CharField(max_length=250, default="month") #could be 'lesson', 'course', '4weeks'
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)

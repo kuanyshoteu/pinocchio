@@ -14,6 +14,21 @@
 		</div>
 		<div style="width: 75%;padding: 0;overflow: hidden">
 			<div id="btn-prev" class="btn-prev" onclick="moverLeft()">&#60;</div>
+			{% if att_squad.students.all|length == 0 %}
+				<div class="highlight_black">
+					Еще нет студентов в этой группе,<br> добавить студентов можно в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы</a> или в <a class="ui button mini green" href="/schools/crm/">CRM</a>
+				</div>			
+			{% elif att_subject.number_of_materials == 0 %}
+				<div class="highlight_black">
+					Количество уроков курса равна 0, оценки можно ставить только за урок
+					<br>
+					Изменить количество уроков можно в <a class="ui button mini green" href="{{att_subject.get_update_url}}">Настройках курса {{att_subject.title}}</a>
+				</div>			
+			{% elif att_subject|get_current_attendance:att_squad == 'No_schedule' %}
+				<div class="highlight_black">
+					Не настроено расписание, может настроить в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы {{att_squad.title}}</a>
+				</div>
+			{% else %}
 			<div id="slider" class="slider" first_set="no" last_set="no" index="0">
 				<div id="prev_atts" style="width: max-content;display: flex;"></div>
 				{% for date in att_subject|get_current_attendance:att_squad %}
@@ -52,6 +67,7 @@
 				{% endfor %}
 				<div id="next_atts" style="width: max-content;display: flex;"></div>
 			</div>
+			{% endif %}
 			<div id="btn-next" class="btn-next" onclick="moverRight()">&#62;</div>
 		</div>
 	</div>
