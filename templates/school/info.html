@@ -185,12 +185,12 @@
                             <div class="ui modal mini" id="timep_form{{ timep.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
-                                    <form class="ui form">
-                                        <textarea id="timep_start{{timep.id}}" status='timep'>{{timep.start}}</textarea>
-                                        <textarea id="timep_end{{timep.id}}" status='timep'>{{timep.end}}</textarea>
+                                    <form class="ui form" style="display: flex;">
+                                        <textarea class="mr15" id="timep_start{{timep.id}}" status='timep'>{{timep.start}}</textarea> - 
+                                        <textarea class="ml15" id="timep_end{{timep.id}}" status='timep'>{{timep.end}}</textarea>
+                                    </form>
                                         <a class="ui button mini blue" onclick="create_timep('{{timep.create_url}}', '{{timep.id}}')">Сохранить</a>
                                         <a class="ui button mini red" onclick="delete_timep('{{timep.delete_url}}', '{{timep.id}}')" style="float: right;">Удалить</a>
-                                    </form>
                                     <div class="errortimep{{timep.id}} highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
                                 </div>
                             </div>
@@ -199,12 +199,12 @@
                         <a class="ui button mini" onclick="$('#timep_form_new').modal('show')">Добавить время</a>
                         <div class="ui modal mini" id="timep_form_new">
                             <i class="close icon"></i>
-                            <div class="content">
-                                <form class="ui form">
-                                    <textarea class="need_clear" id="timep_start_new" status='timep' placeholder="Название"></textarea>
-                                    <textarea class="need_clear" id="timep_end_new" status='timep' placeholder="Название"></textarea>
-                                    <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new');clear_textareas()">Создать</a>
+                            <div class="content" style="text-align: center;">
+                                <form class="ui form" style="display: flex;">
+                                    <textarea class="need_clear mr15" id="timep_start_new" status='timep' placeholder="Начальное время"></textarea> -
+                                    <textarea class="need_clear ml15" id="timep_end_new" status='timep' placeholder="Конечное время"></textarea>
                                 </form>
+                                    <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new');clear_textareas()">Создать</a>
                                 <div class="errortimep_new highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
                             </div>
                         </div>

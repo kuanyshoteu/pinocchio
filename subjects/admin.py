@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import *
 
 class SubjectModelAdmin(admin.ModelAdmin):
-    list_display = ["title","content", "get_school", "id"]
+    list_display = ["title","content","cost_period", "get_school", "id"]
     list_display_links = ["title"]
     list_filter = ["title"]
     class Meta:
