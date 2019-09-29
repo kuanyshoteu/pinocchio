@@ -733,6 +733,11 @@ def moderator_run_code(request):
     #     nm.bill = 0
     #     nm.save()
 
+    for subject in Subject.objects.all():
+        if '1 урок' in subject.content:
+            subject.cost_period = 'lesson'
+            subject.save()
+
     for squad in Squad.objects.all():
         school = squad.school
         cards = school.crm_cards.all()
@@ -748,7 +753,7 @@ def moderator_run_code(request):
             if len(card) == 1:
                 card = card[0]
                 nm = squad.need_money.get_or_create(card=card)[0]
-#                nm.bill += bill
+                nm.bill += bill
                 nm.lesson_bill += lesson_bill
                 nm.save()  
             else:
