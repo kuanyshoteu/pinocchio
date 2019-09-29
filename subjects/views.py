@@ -118,31 +118,35 @@ def subject_update(request, slug=None):
     if is_profi(profile, 'Manager'):
         if form.is_valid():
             old_cost = instance.cost
+            old_cost_period = instance.cost_period
             instance = form.save(commit=False)
             instance.cost_period = request.POST.get('get_subject_period')
             instance.save()
-            if instance.cost != old_cost:
-                students = get_subject_students(instance)
-                cost = instance.cost
-                cards = school.crm_cards.all()
-                if instance.cost_period == 'lesson':
-                    for student in students:
-                        card = cards.filter(card_user=student)
-                        if len(card) > 0:
-                            card = card[0]
-                            nm = squad.need_money.get_or_create(card=card)[0]
-                            nm.lesson_bill -= old_cost
-                            nm.lesson_bill += cost
-                            nm.save()
-                elif instance.cost_period == 'month':
-                    for student in students:
-                        card = cards.filter(card_user=student)
-                        if len(card) > 0:
-                            card = card[0]
-                            nm = squad.need_money.get_or_create(card=card)[0]
-                            nm.bill -= old_cost
-                            nm.bill += cost
-                            nm.save()
+
+            students = get_subject_students(instance)
+            cost = instance.cost
+            cards = school.crm_cards.all()
+            if old_cost_period == 'lesson':
+                old_lesson_bill = old_cost
+                old_month_bill = 0
+            elif old_cost_period == 'month':
+                old_lesson_bill = 0
+                old_month_bill = old_cost
+            if instance.cost_period == 'lesson':
+                new_lesson_bill = cost
+                new_month_bill = 0
+            elif instance.cost_period == 'month':
+                new_lesson_bill = 0
+                new_month_bill = cost
+
+            for student in students:
+                card = cards.filter(card_user=student)
+                if len(card) > 0:
+                    card = card[0]
+                    nm = squad.need_money.get_or_create(card=card)[0]
+                    nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
+                    nm.bill = nm.bill - old_month_bill + new_month_bill
+                    nm.save()
 
         cost = 0
         for subject in school.school_subjects.all():

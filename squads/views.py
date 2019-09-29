@@ -170,6 +170,7 @@ def squad_update(request, slug=None):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
+        'other_subjects':school.school_subjects.all()
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -755,6 +756,8 @@ def update_cards_money(request):
             for squad in school.groups.filter(start_day=forward):
                 stard_day = squad.start_date.strftime('%d')
                 for nm in squad.need_money.all():
+                    nm.money -= nm.bill
+                    nm.save()
                     card = nm.card
                     if nm.money < nm.bill:
                         card.colour = 'red'

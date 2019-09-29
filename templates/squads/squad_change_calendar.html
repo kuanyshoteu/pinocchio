@@ -35,7 +35,7 @@
     <form class="ui grid">
         <select style="width: 300px;display: inline-block;height: 28px;" class="mr15" id="constselect">
             <option value="-1">Выберите курс</option>            
-            {% for subject in instance.subjects.all %}
+            {% for subject in other_subjects %}
             <option value="{{subject.id}}">{{subject.title}}</option>
             {% endfor %}
         </select>
