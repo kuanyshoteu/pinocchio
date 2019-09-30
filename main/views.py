@@ -759,13 +759,13 @@ def moderator_run_code(request):
     #         else:
     #             print(card)
 
-    adil = Profile.objects.get(id=2257)
+    adil = Profile.objects.get(id=1)
     for lecture in Lecture.objects.all():
         squad = lecture.squad
         subject = lecture.subject
         if not lecture.school:
             print(lecture.id, lecture.squad.title)
-        elif lecture.school.id != 25:
+        elif lecture.school.id != 3:
             lecture.people.remove(adil)
             if squad.teacher:
                 teacher = squad.teacher
