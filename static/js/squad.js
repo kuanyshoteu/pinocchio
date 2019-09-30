@@ -1,7 +1,7 @@
 $(document).ready(function () { 
     $(".lecture_const").each(function() {
         interval = parseInt($('.dataconst').attr('interval'))
-        height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28 + 1);
+        height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
         console.log($(this).attr('height'), (parseFloat($(this).attr('height')))*28)
         time = $(this).attr('time');
         id = $(this).attr('id');
