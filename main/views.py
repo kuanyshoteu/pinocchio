@@ -758,10 +758,38 @@ def moderator_run_code(request):
     #             nm.save()  
     #         else:
     #             print(card)
-    for i in range(259,265):
-        profile = Profile.objects.get(id = i)
-        profile.is_student = False
-        profile.save()
+
+    adil = Profile.objects.get(id=2257)
+    for lecture in Lecture.objects.all():
+        squad = lecture.squad
+        subject = lecture.subject
+        if not lecture.school:
+            print(lecture.id, lecture.squad.title)
+        elif lecture.school.id != 25:
+            lecture.people.remove(adil)
+            if squad.teacher:
+                teacher = squad.teacher
+                lecture.people.add(teacher)
+
+        category1 = subject.category.all()
+        lcategory = lecture.category.all()
+        lecture.category.remove(*lcategory)
+        lecture.category.add(*category1)
+
+        age1 = subject.age.all()
+        age2 = squad.age.all()
+        lage = lecture.age.all()
+        lecture.age.remove(*lage)
+        lecture.age.add(*age1)
+        lecture.age.add(*age2)
+
+
+        level1 = subject.level.all()
+        level2 = squad.level.all()
+        llevel = lecture.level.all()
+        lecture.level.remove(*llevel)
+        lecture.level.add(*level1)
+        lecture.level.add(*level2)
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})

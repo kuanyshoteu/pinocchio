@@ -683,6 +683,7 @@ def const_create_lectures(request, id=None):
     is_in_school(profile, school)
     if request.GET.get('start') and request.GET.get('end') and request.GET.get('subject_id'):
         subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
+        teacher = squad.teacher
         category = subject.category.all()
         age = subject.age.all()
         level = subject.level.all()        
@@ -707,9 +708,10 @@ def const_create_lectures(request, id=None):
                     office = squad.office,
                     )
                 lecture.save()
-                add_person_to_lecture(lecture, profile)
+                add_person_to_lecture(lecture, teacher)
                 for student in students:
                     add_person_to_lecture(lecture, student)
+
                 lecture.category.add(*category)
                 lecture.age.add(*age)
                 lecture.level.add(*level)

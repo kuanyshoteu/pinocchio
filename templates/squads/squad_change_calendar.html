@@ -48,10 +48,15 @@
                 <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.subject.color_back == ''%}#313a57{%else%}{{ lecture.7.subject.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
                     {{lecture.1}} 
                 </div>
-                <div class="ui modal constlect_modal{{lecture.6}}">
+                <div class="ui modal small constlect_modal{{lecture.6}}">
                     <i class="close icon"></i>
                     <div class="content">
-                        {{lecture.1}}
+                        <div class="text-center">
+                            Редактирование {{lecture.1}}                            
+                        </div>
+                        <div>
+                            
+                        </div>
                     </div>
                 </div>
 
