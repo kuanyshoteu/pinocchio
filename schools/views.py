@@ -108,6 +108,7 @@ def school_schedule(request):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
+        'height':28*15*int(60/school.schedule_interval)+25,
     }
     return render(request, "school/schedule.html", context)
 
