@@ -758,7 +758,7 @@ def moderator_run_code(request):
     #             nm.save()  
     #         else:
     #             print(card)              
-    school = School.objects.get(id=25)
+    school = School.objects.get(id=48)
     profession = Profession.objects.get(id=8)
     names = ['Санат', 'Лунара', 'Айгерим', 'Алтыншаш', 'Маржан', 'Эльмира']
     phones = ['87075798081', '87089238200', '87478953660', '87089788508', '87058945154', '87014275723']
