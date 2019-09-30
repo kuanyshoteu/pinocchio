@@ -4,7 +4,7 @@
         <table class="no_margin" id="keywords" class="mb0" cellspacing="0" cellpadding="0" style="background: #4A4A4A;white-space: nowrap;">
             <div style="position: relative;">
             {% for lecture in profile|constant_school_lectures:instance %}
-                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: #313a57;color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
+                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.squad.color_back == ''%}#313a57{%else%}{{ lecture.7.squad.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
                     {{lecture.7.squad.title}} 
                 </div>
                 <div class="ui modal small constlect_modal{{lecture.6}}" style="min-height: 400px;">
