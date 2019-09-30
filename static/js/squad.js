@@ -1,21 +1,21 @@
 $(document).ready(function () { 
     $(".lecture_const").each(function() {
         interval = parseInt($('.dataconst').attr('interval'))
-        height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
+        height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28 + 1);
         console.log($(this).attr('height'), (parseFloat($(this).attr('height')))*28)
         time = $(this).attr('time');
         id = $(this).attr('id');
         hour = parseInt($(this).attr('hour')) * 28;
         minute = parseInt($(this).attr('minute'));
         day = $(this).attr('day');
-        topp = (60/interval)*(hour + 2) + 28 * minute / interval + 41;
+        topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
         add_left = 0;
         count = 1
         $('.wait'+ day).each(function() {
             if ($(this).attr('id') != id) {
                 hour2 = parseInt($(this).attr('hour')) * 28;
                 minute2 = parseInt($(this).attr('minute'));
-                topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 41;
+                topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
                 if (topp2 < topp + height ) {
                     add_left = 1
                     count += 1
