@@ -2,6 +2,10 @@
   padding: 5px !important;
   display: inline-block;
 }
+.lecture_const{
+  line-height: 12px;
+  overflow: hidden;
+}
 .tdconst{
   display: inline-block;
 }

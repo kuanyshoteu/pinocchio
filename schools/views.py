@@ -262,6 +262,9 @@ def school_crm(request):
         "school_money":school.money,
         "school_crnt":school,
         "all":False,
+        'constant_times':get_times(school.schedule_interval),
+        'interval':school.schedule_interval,
+        'days':get_days(),
     }
     return render(request, "school/crm.html", context)
 
@@ -292,6 +295,9 @@ def school_crm_all(request):
         "school_money":school.money,
         "school_crnt":school,
         "all":True,
+        'constant_times':get_times(school.schedule_interval),
+        'interval':school.schedule_interval,
+        'days':get_days(),
     }
     return render(request, "school/crm.html", context)
 
@@ -761,21 +767,22 @@ def save_card_as_user(request):
             card.author_profile = manager_profile
             card.save()
             squad_id = int(request.GET.get('squad_id'))
-            if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
-                return JsonResponse({'stop':True})
+            # if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
+            #     return JsonResponse({'stop':True})
             if squad_id > 0:
                 squad = Squad.objects.get(id=squad_id)
                 if profile in squad.students.all():
                     add = False
                     remove_student_from_squad(profile, squad)
+                    print('remove_student_from_squad')
                     ok_mail = True
                 else:
                     ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
+                    add_student_to_squad(profile, squad)
                 profile.schools.add(school)
                 card.last_groups = squad_id
                 card.timestamp = timezone.now()
                 card.save()
-                add_student_to_squad(profile, squad)
                 hist = CRMCardHistory.objects.create(
                     action_author = manager_profile,
                     card = card,

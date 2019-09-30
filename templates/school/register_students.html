@@ -6,17 +6,20 @@
     <div class="content no_padding" style="background-color: #4A4A4A">
         <div class="ui segment margin0" style="display: flex;padding-bottom: 0;">
             <span style="font-size: 15px;margin-left: 15px;margin-bottom: 15px;">Регистрация <b id="current_user_name"></b></span>
-            <span class="card_money_sch ui pointing below label" style="margin-left: 25px;margin-top: -5px;"></span>
             <form class="ui form predoplata_form" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма предоплаты" type="number">
                 <a class="ui button mini blue save_predoplata" onclick="save_predoplata()" style="width: 150px;margin-left: 10px;">Сохранить</a>
             </form>
+                <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Информация о счетах</span></a>
+                <div class="ui pointing below label hint_schedule" style="display: none;position: absolute;margin-top: 30px;margin-left: 300px; width: 500px;height: 200px;z-index: 3000;">
+                    <span class="card_money_sch"></span>            
+                </div>                                
             <span class="ok_predoplata highlight" style="height: 25px;margin-left: 25px;"><b>Оплата принята</b></span>
             <span class="time_stop highlight_red" style="height: 25px;margin-left: 25px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></span>
             <span class="wrong_mail highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
             <span class="no_predoplata_number highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Введите сумму предоплаты</b></span>
         </div>
-        <div class="ui segment margin0">
+        <div class="ui segment margin0 choose_group">
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
                 <div class="ui grid">
                     <div class="four wide column">
@@ -90,6 +93,9 @@
               <div class="animation"><div class="circle five"></div></div>
               <div class="animation"><div class="circle six"></div></div>
             </div>
+            {% if instance.schedule_type == 'classic' %}
+                {% include 'school/crm_classicschedule.html' %}
+            {% else %}
             <div id="week">   
                 <div class="week" id="0">
                     <div class="daysmall daysmall_time">
@@ -128,6 +134,7 @@
                 <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
                 {% endfor %}
             </div>
+            {% endif %}            
         </div>   
     </div>   
 </div>   
@@ -209,11 +216,11 @@
                 dataType: 'json',
                 success: function (data) {
                     $('.loading').hide();
-                    $('.predoplata_number').val('')
-                    $('.ok_predoplata').show()
-                    sch = parseInt($('.card_money_sch').attr('money'))+parseInt(predoplata);
-                    $('.card_money_sch').attr('money', sch)
-                    $('.card_money_sch').text('На счету: '+sch+'тг')
+                    // $('.predoplata_number').val('')
+                    // $('.ok_predoplata').show()
+                    // sch = parseInt($('.card_money_sch').attr('money'))+parseInt(predoplata);
+                    // $('.card_money_sch').attr('money', sch)
+                    // $('.card_money_sch').text('На счету: '+sch+'тг')
                 }
             })            
         }

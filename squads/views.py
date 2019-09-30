@@ -306,6 +306,7 @@ def add_student(request):
 def remove_student_from_squad(student, squad):
     squad.students.remove(student)
     school = squad.school
+    print(student.first_name, squad.title)
     for subject in squad.subjects.all():
         card = student.card.get_or_create(school=school)[0]
         nm = squad.need_money.get_or_create(card=card)[0]
@@ -325,6 +326,7 @@ def remove_student_from_squad(student, squad):
 
 def add_student_to_squad(student, squad):
     squad.students.add(student)
+    print('add_student_to_squad')
     school = squad.school
     for subject in squad.subjects.all():
         ages = subject.age.all()

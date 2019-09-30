@@ -415,5 +415,5 @@ def constant_school_lectures(profile, school):
         end_minute = int(lecture.cell.time_period.end.split(':')[1])
         height = end_hour - hour + (end_minute - minute)/60
         day = lecture.cell.day.number
-        res.append([height, lecture.subject.title, hour,minute, day-1,hour*interval+minute, lecture.id])
+        res.append([height, lecture.subject.title, hour, minute, day-1, hour*interval+minute, lecture.id, lecture])
     return res

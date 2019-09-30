@@ -90,29 +90,7 @@
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
                             {% if is_manager and hisprofile.is_student %}
-                                <div class="ui segment">
-                                    <div class="ui grid stackable">
-                                        <div class="five wide column">
-                                            <form class="ui form mb10" style="display: flex;">
-                                                <input class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
-                                                <select id="pay_for_group">
-                                                    {%for squad in hisprofile.squads.all%}
-                                                    <option value="{{squad.id}}">{{squad.title}}</option>
-                                                    {%endfor%}
-                                                </select>
-                                            </form>
-                                            <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатил(а)</a>
-                                        </div>
-                                        <div class="eleven wide column">
-                                            {% for payment in hisprofile|get_school_payment_history:profile %}
-                                                {{payment.manager.first_name}}
-                                                {{payment.timestamp}}
-                                                {{payment.amount}}тг.
-                                                <br>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
+                                    {% include 'profile/payment.html' %}
                             {% endif %}
                             {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
