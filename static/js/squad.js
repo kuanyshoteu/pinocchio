@@ -19,10 +19,8 @@ $(document).ready(function () {
                 friends = $('.dataconst').attr('friends')
                 $('.dataconst').attr('friends', friends+ 'd'+down2 )
                 friends = $('.dataconst').attr('friends')
-                console.log(friends, down2, topp2)
-                if (topp2 < topp + height && topp2 >= topp) {
+                if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
                     if (friends.indexOf('d'+topp2) == -1) {
-                        console.log('up')
                         count += 1
                     }
                 }
