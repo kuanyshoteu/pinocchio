@@ -757,29 +757,10 @@ def moderator_run_code(request):
     #             nm.lesson_bill += lesson_bill
     #             nm.save()  
     #         else:
-    #             print(card)              
-    school = School.objects.get(id=48)
-    profession = Profession.objects.get(id=8)
-    names = ['Санат', 'Лунара', 'Айгерим', 'Алтыншаш', 'Маржан', 'Эльмира']
-    phones = ['87075798081', '87089238200', '87478953660', '87089788508', '87058945154', '87014275723']
-    for i in range(0,6):
-        password = random_password()
-        print(password)
-        new_id = User.objects.order_by("id").last().id + 1
-        user = User.objects.create(username='user' + str(new_id))
-        user.set_password(password)
-        user.save()
-        profile = Profile.objects.get(user = user)
-        profile.first_name = names[i]
-        profile.phone = phones[i]
-        profile.profession.add(profession)
-        profile.schools.add(school)
-        skill = Skill.objects.create()
-        profile.skill = skill
-        profile.save()
-        skill.confirmation_time = timezone.now()
-        skill.confirmed = True
-        skill.save()
+    #             print(card)
+    for i in range(259,265):
+        profile = Profile.objects.get(id = i)
+        profile.is_student = False
         profile.save()
 
     print('moderator_end_code')
