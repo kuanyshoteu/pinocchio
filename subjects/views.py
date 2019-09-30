@@ -122,10 +122,11 @@ def subject_update(request, slug=None):
             instance = form.save(commit=False)
             instance.cost_period = request.POST.get('get_subject_period')
             instance.save()
-
-            students = get_subject_students(instance)
+            squads = instance.squads.prefetch_related('students')
+            students = get_subject_students(squads)
             cost = instance.cost
             cards = school.crm_cards.all()
+
             if old_cost_period == 'lesson':
                 old_lesson_bill = old_cost
                 old_month_bill = 0
@@ -141,8 +142,10 @@ def subject_update(request, slug=None):
 
             for student in students:
                 card = cards.filter(card_user=student)
-                if len(card) > 0:
+                squad = squads.filter(students=student)
+                if len(card) > 0 and len(squad) > 0:
                     card = card[0]
+                    squad = squad[0]
                     nm = squad.need_money.get_or_create(card=card)[0]
                     nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
                     nm.bill = nm.bill - old_month_bill + new_month_bill
@@ -283,9 +286,9 @@ def remove_lesson(request):
     }
     return JsonResponse(data)
 
-def get_subject_students(subject):
+def get_subject_students(squads):
     students = set()
-    for sq in subject.squads.all():
+    for sq in squads:
         sq_students = sq.students.all()
         students = chain(students, sq_students)
     return students
@@ -300,7 +303,7 @@ def change_category(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         category = school.school_subject_categories.get(id=int(request.GET.get('object_id')))
-        students = get_subject_students(subject)
+        students = get_subject_students(subject.squads.prefetch_related('students'))
         if subject in category.category_subjects.all():
             category.students.remove(*students)
             category.category_subjects.remove(subject)
@@ -328,7 +331,7 @@ def change_age(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         age = SubjectAge.objects.get(id=int(request.GET.get('object_id')))
-        students = get_subject_students(subject)
+        students = get_subject_students(subject.squads.prefetch_related('students'))
         if subject in age.age_subjects.all():
             age.students.remove(*students)
             age.age_subjects.remove(subject)
@@ -356,7 +359,7 @@ def change_level(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         level = school.school_subject_levels.get(id=int(request.GET.get('object_id')))
-        students = get_subject_students(subject)
+        students = get_subject_students(subject.squads.prefetch_related('students'))
         if subject in level.level_subjects.all():
             level.students.remove(*students)
             level.level_subjects.remove(subject)

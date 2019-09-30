@@ -519,7 +519,7 @@ def change_schedule(request, id=None):
 
     if request.GET.get('subject_id') and request.GET.get('cell_id') and request.GET.get('old_cell'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
-        subject_students = get_subject_students(subject)
+        subject_students = get_subject_students(subject.squads.prefetch_related('students'))
         cell = Cell.objects.get(id = int(request.GET.get('cell_id')))
         if request.GET.get('old_cell') == 'none':
             if len(Lecture.objects.filter(squad=squad,subject=subject,cell=cell)) == 0:
@@ -688,6 +688,7 @@ def const_create_lectures(request, id=None):
             start = request.GET.get('start'),
             end = request.GET.get('end')
             )[0]
+        students = squad.students.all()
         for i in range(1, 8):
             if request.GET.get('day'+str(i)) == 'true':
                 day = Day.objects.get(id=int(i))
@@ -705,6 +706,8 @@ def const_create_lectures(request, id=None):
                     )
                 lecture.save()
                 add_person_to_lecture(lecture, profile)
+                for student in students:
+                    add_person_to_lecture(lecture, student)
                 lecture.category.add(*category)
                 lecture.age.add(*age)
                 lecture.level.add(*level)

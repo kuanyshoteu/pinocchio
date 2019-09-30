@@ -1,0 +1,45 @@
+{% load ttags %}
+<form class="ui grid full-w mt0">
+    <div style="overflow-x: auto;width: 100%;background: #4A4A4A;">
+        <table class="no_margin" id="keywords" class="mb0" cellspacing="0" cellpadding="0" style="background: #4A4A4A;white-space: nowrap;">
+            <div style="position: relative;">
+            {% for lecture in hisprofile|constant_profile_lectures %}
+                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: #313a57;color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
+                    {{lecture.1}} 
+                </div>
+                <div class="ui modal small constlect_modal{{lecture.6}}" style="min-height: 400px;">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        {{lecture.1}}
+                    </div>
+                </div>
+
+            {% endfor %}
+            </div>
+            <thead>
+                <tr>
+                    <th class="thconst" style="width: 53px;"></th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday0">Пн</th>
+                    <th class="thconst" style="width: 100px;" id="constday1">Вт</th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday2">Ср</th>
+                    <th class="thconst" style="width: 100px;" id="constday3">Чт</th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday4">Пт</th>
+                    <th class="thconst" style="width: 100px;" id="constday5">Сб</th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday6">Вс</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for time in constant_times %}
+                <tr>
+                    <td class="pt10 pb10 full-w tdconst" style="width: 53px;text-align: left;">
+                        {{ time }}
+                        <div style="border-top:1px solid #565656;margin-top: -8px;" class="full-w"></div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>   
+</form>
+<span class="dataconst" number="0" changed="no" interval="{{interval}}" chosendays=""
+max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1"></span>

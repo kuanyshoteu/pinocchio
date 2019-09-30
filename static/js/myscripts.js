@@ -567,7 +567,12 @@
             },
             dataType: 'json',
             success: function (data) {
-                $( "#calendar" ).load(document.URL +  ' #calendar');
+                if ($('.data_update').attr('status')=='yes') {
+                    location.reload()
+                }
+                else{
+                    $( "#calendar" ).load(document.URL +  ' #calendar');
+                }
             }
         });
     }) 

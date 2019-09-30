@@ -105,6 +105,9 @@ def school_schedule(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        'constant_times':get_times(school.schedule_interval),
+        'interval':school.schedule_interval,
+        'days':get_days(),
     }
     return render(request, "school/schedule.html", context)
 

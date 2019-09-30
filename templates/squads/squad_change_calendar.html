@@ -12,16 +12,6 @@
         padding: 5px !important;
         height: 25px !important;
     }
-    .dark_grey{
-        background-color: #545454;
-    }
-    th{
-        padding: 5px !important;
-        display: inline-block;
-    }
-    td{
-        display: inline-block;
-    }
 </style>
 {% if instance.school.schedule_type == 'classic' %}
 <div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
@@ -69,20 +59,20 @@
             </div>
             <thead>
                 <tr>
-                    <th style="width: 53px;"></th>
-                    <th style="width: 100px;" id="constday0" class="dark_grey">Пн</th>
-                    <th style="width: 100px;" id="constday1">Вт</th>
-                    <th style="width: 100px;" id="constday2" class="dark_grey">Ср</th>
-                    <th style="width: 100px;" id="constday3">Чт</th>
-                    <th style="width: 100px;" id="constday4" class="dark_grey">Пт</th>
-                    <th style="width: 100px;" id="constday5">Сб</th>
-                    <th style="width: 100px;" id="constday6" class="dark_grey">Вс</th>
+                    <th class="thconst" style="width: 53px;"></th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday0">Пн</th>
+                    <th class="thconst" style="width: 100px;" id="constday1">Вт</th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday2">Ср</th>
+                    <th class="thconst" style="width: 100px;" id="constday3">Чт</th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday4">Пт</th>
+                    <th class="thconst" style="width: 100px;" id="constday5">Сб</th>
+                    <th class="thconst dark_grey" style="width: 100px;" id="constday6">Вс</th>
                 </tr>
             </thead>
             <tbody>
                 {% for time in constant_times %}
                 <tr>
-                    <td class="pt10 pb10 full-w" style="width: 53px;text-align: left;">
+                    <td class="pt10 pb10 full-w tdconst" style="width: 53px;text-align: left;">
                         {{ time }}
                         <div style="border-top:1px solid #565656;margin-top: -8px;" class="full-w"></div>
                     </td>

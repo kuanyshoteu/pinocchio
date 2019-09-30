@@ -70,15 +70,21 @@
                                     {% endif %}
                                 </select>
                             </div>
+                            {% if instance.schedule_type != 'classic' %}
                             <div class="four wide column">
                                 Цена:
                                 <div class="ui segment subject_cost">
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </form>
                 </div>
                 <div id="calendar" length='7'>
+                {% if instance.schedule_type == 'classic' %}
+                    <span class="data_update" status="yes" style="display: none;"></span>
+                    {% include 'school/classicschedule.html' %}
+                {% else %}
                     <div id="week">   
                         <div class="week" id="0">
                             <div class="daysmall daysmall_time">
@@ -117,6 +123,8 @@
                         <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
                         {% endfor %}
                     </div>
+                    <span class="data_update" status="no" style="display: none;"></span>
+                {% endif %}
                 </div>
             </div>
         </div>

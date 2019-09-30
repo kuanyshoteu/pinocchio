@@ -93,7 +93,6 @@
                                 <div class="ui segment">
                                     <div class="ui grid stackable">
                                         <div class="five wide column">
-                                            <div style="margin-bottom: 15px;"> На счету: <b style="{%if hisprofile.money < 0%}color: red;{%endif%}">{{ hisprofile.money}}тг.</b></div>
                                             <form class="ui form mb10" style="display: flex;">
                                                 <input class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
                                                 <select id="pay_for_group">
@@ -117,9 +116,7 @@
                             {% endif %}
                             {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
-                                    {% if college %}
-                                        {% include 'profile/hisschedule.html' %}
-                                    {% endif %}
+                                    {% include 'profile/classicschedule.html' %}
                                 {% endif %}
                             {% endif %}
                             {% if hisprofile == profile %}

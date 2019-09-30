@@ -1,3 +1,13 @@
+.thconst{
+  padding: 5px !important;
+  display: inline-block;
+}
+.tdconst{
+  display: inline-block;
+}
+.dark_grey{
+    background-color: #545454;
+}
 .show_hint_schedule:hover + .hint_schedule {
     display: inline-block !important;
 }

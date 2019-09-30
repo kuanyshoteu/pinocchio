@@ -82,9 +82,6 @@ def account_view(request, user = None):
     is_director = is_profi(profile, 'Director')
     if is_director:
         school_money = profile.schools.first().money
-    college=False
-    if profile.schools.first() == hisprofile.schools.first():
-        college = True
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
@@ -105,7 +102,9 @@ def account_view(request, user = None):
         "is_director":is_director,
         'hint':skill.hint_numbers[0],
         "school_money":school_money,
-        'college':college,
+        'constant_times':get_times(60),
+        "interval":60,
+        'days':get_days(),
     }
     return render(request, "profile.html", context)
 

@@ -380,6 +380,40 @@ def constant_schedule_lectures(squad):
         end_minute = int(lecture.cell.time_period.end.split(':')[1])
         height = end_hour - hour + (end_minute - minute)/60
         day = lecture.cell.day.number
-        print(height, lecture.subject.title)
+        res.append([height, lecture.subject.title, hour,minute, day-1,hour*interval+minute, lecture.id])
+    return res
+
+@register.filter
+def constant_profile_lectures(profile):
+    interval = 60
+    res = []
+    for lecture in profile.hislectures.select_related('cell'):
+        hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
+        minute = int(lecture.cell.time_period.start.split(':')[1])
+        end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8
+        end_minute = int(lecture.cell.time_period.end.split(':')[1])
+        height = end_hour - hour + (end_minute - minute)/60
+        day = lecture.cell.day.number
+        res.append([height, lecture.subject.title, hour,minute, day-1,hour*interval+minute, lecture.id])
+    return res
+
+@register.filter
+def constant_school_lectures(profile, school):
+    lectures = school.school_lectures.all()
+    if profile.skill.crm_subject:
+        lectures = lectures.filter(category=profile.skill.crm_subject)
+    if profile.skill.crm_age:
+        lectures = lectures.filter(age=profile.skill.crm_age)
+    if profile.skill.crm_office:
+        lectures = lectures.filter(office=profile.skill.crm_office)
+    res = []
+    interval = school.schedule_interval
+    for lecture in lectures:
+        hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
+        minute = int(lecture.cell.time_period.start.split(':')[1])
+        end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8
+        end_minute = int(lecture.cell.time_period.end.split(':')[1])
+        height = end_hour - hour + (end_minute - minute)/60
+        day = lecture.cell.day.number
         res.append([height, lecture.subject.title, hour,minute, day-1,hour*interval+minute, lecture.id])
     return res

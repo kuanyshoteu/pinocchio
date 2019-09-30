@@ -1,47 +1,47 @@
 $(document).ready(function () { 
-        $(".lecture_const").each(function() {
-            interval = parseInt($('.dataconst').attr('interval'))
-            height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28 + 1);
-            console.log($(this).attr('height'), (parseFloat($(this).attr('height')))*28)
-            time = $(this).attr('time');
-            id = $(this).attr('id');
-            hour = parseInt($(this).attr('hour')) * 28;
-            minute = parseInt($(this).attr('minute'));
-            day = $(this).attr('day');
-            topp = (60/interval)*(hour + 2) + 28 * minute / interval + 41;
-            add_left = 0;
-            count = 1
-            $('.wait'+ day).each(function() {
-                if ($(this).attr('id') != id) {
-                    hour2 = parseInt($(this).attr('hour')) * 28;
-                    minute2 = parseInt($(this).attr('minute'));
-                    topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 41;
-                    if (topp2 < topp + height ) {
-                        add_left = 1
-                        count += 1
-                    }
+    $(".lecture_const").each(function() {
+        interval = parseInt($('.dataconst').attr('interval'))
+        height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28 + 1);
+        console.log($(this).attr('height'), (parseFloat($(this).attr('height')))*28)
+        time = $(this).attr('time');
+        id = $(this).attr('id');
+        hour = parseInt($(this).attr('hour')) * 28;
+        minute = parseInt($(this).attr('minute'));
+        day = $(this).attr('day');
+        topp = (60/interval)*(hour + 2) + 28 * minute / interval + 41;
+        add_left = 0;
+        count = 1
+        $('.wait'+ day).each(function() {
+            if ($(this).attr('id') != id) {
+                hour2 = parseInt($(this).attr('hour')) * 28;
+                minute2 = parseInt($(this).attr('minute'));
+                topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 41;
+                if (topp2 < topp + height ) {
+                    add_left = 1
+                    count += 1
                 }
-            })
-            maxcount = count
-            dayp1 = parseInt(day) + 1
-            if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
-                $('.dataconst').attr('max'+dayp1, count)
             }
-            else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
-            $('#constday'+day).css('width', 100*maxcount);
+        })
+        maxcount = count
+        dayp1 = parseInt(day) + 1
+        if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
+            $('.dataconst').attr('max'+dayp1, count)
+        }
+        else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
+        $('#constday'+day).css('width', 100*maxcount);
 
-            sum = 0
-            for (var i = 1; i < dayp1; i++) {
-                sum += parseInt($('.dataconst').attr('max' + i))
-            }
+        sum = 0
+        for (var i = 1; i < dayp1; i++) {
+            sum += parseInt($('.dataconst').attr('max' + i))
+        }
 
-            left = 55 + (sum-1)*100 + 100*count;
+        left = 55 + (sum-1)*100 + 100*count;
 
-            $(this).css('margin-top', topp);
-            $(this).css('margin-left', left);
-            $(this).css('height', height);
-            $(this).removeClass('wait' + day);
-        });
+        $(this).css('margin-top', topp);
+        $(this).css('margin-left', left);
+        $(this).css('height', height);
+        $(this).removeClass('wait' + day);
+    });
     
     $('.constday_choose').click(function(e) {
         if ($(this).attr('class').indexOf("green") >= 0){

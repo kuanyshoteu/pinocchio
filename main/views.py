@@ -733,31 +733,54 @@ def moderator_run_code(request):
     #     nm.bill = 0
     #     nm.save()
 
-    for subject in Subject.objects.all():
-        if '1 урок' in subject.content:
-            subject.cost_period = 'lesson'
-            subject.save()
+    # for subject in Subject.objects.all():
+    #     if '1 урок' in subject.content:
+    #         subject.cost_period = 'lesson'
+    #         subject.save()
 
-    for squad in Squad.objects.all():
-        school = squad.school
-        cards = school.crm_cards.all()
-        lesson_bill = 0
-        bill = 0
-        for subject in squad.subjects.all():
-            if subject.cost_period == 'lesson':
-                lesson_bill += subject.cost
-            elif subject.cost_period == 'month':
-                bill += subject.cost
-        for student in squad.students.all():
-            card = cards.filter(card_user=student)
-            if len(card) == 1:
-                card = card[0]
-                nm = squad.need_money.get_or_create(card=card)[0]
-                nm.bill += bill
-                nm.lesson_bill += lesson_bill
-                nm.save()  
-            else:
-                print(card)              
+    # for squad in Squad.objects.all():
+    #     school = squad.school
+    #     cards = school.crm_cards.all()
+    #     lesson_bill = 0
+    #     bill = 0
+    #     for subject in squad.subjects.all():
+    #         if subject.cost_period == 'lesson':
+    #             lesson_bill += subject.cost
+    #         elif subject.cost_period == 'month':
+    #             bill += subject.cost
+    #     for student in squad.students.all():
+    #         card = cards.filter(card_user=student)
+    #         if len(card) == 1:
+    #             card = card[0]
+    #             nm = squad.need_money.get_or_create(card=card)[0]
+    #             nm.bill += bill
+    #             nm.lesson_bill += lesson_bill
+    #             nm.save()  
+    #         else:
+    #             print(card)              
+    school = School.objects.get(id=25)
+    profession = Profession.objects.get(id=8)
+    names = ['Санат', 'Лунара', 'Айгерим', 'Алтыншаш', 'Маржан', 'Эльмира']
+    phones = ['87075798081', '87089238200', '87478953660', '87089788508', '87058945154', '87014275723']
+    for i in range(0,6):
+        password = random_password()
+        print(password)
+        new_id = User.objects.order_by("id").last().id + 1
+        user = User.objects.create(username='user' + str(new_id))
+        user.set_password(password)
+        user.save()
+        profile = Profile.objects.get(user = user)
+        profile.first_name = names[i]
+        profile.phone = phones[i]
+        profile.profession.add(profession)
+        profile.schools.add(school)
+        skill = Skill.objects.create()
+        profile.skill = skill
+        profile.save()
+        skill.confirmation_time = timezone.now()
+        skill.confirmed = True
+        skill.save()
+        profile.save()
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})
