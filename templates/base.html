@@ -70,7 +70,10 @@
             </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-            <a href="{% url 'main:about' %}" class="ui button mini green" id="request-responsive" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">Стать партнером</a>
+            <a href="{% url 'main:about' %}" class="ui button mini green" id="request-responsive" style="position: absolute;right: 75px;padding: 10px;font-size: 14px;top: 2px;">Стать партнером</a>
+            {% endif %}
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'main:login_page' %}" class="ui button mini green" id="request-responsive" style="position: absolute;right: 10px;padding: 10px;font-size: 14px;top: 2px;">Войти</a>
             {% endif %}
         </div>
         {% if request.user.is_authenticated %}
@@ -238,11 +241,14 @@
                 </div>
                 {% else %}
                 <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item mobmenu" href='/contacts/' style="background-color: #fff">
-                        <i class="address book icon"></i>Контакты
+                    <a class="item mobmenu" href='{% url "main:about" %}' style="background-color: #fff">
+                        Стать партнером
                     </a>
-                    <a class="item mobmenu" href='{% url "squads:list" %}' style="background-color: #fff">
-                        <i class="users icon"></i>Группы
+                    <a class="item mobmenu" href='{% url "main:pricing" %}' style="background-color: #fff">
+                        Цены
+                    </a>
+                    <a class="item mobmenu" href='{% url "main:team" %}' style="background-color: #fff">
+                        О нас
                     </a>
                 </div>
                 {% endif %}           

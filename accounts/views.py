@@ -36,48 +36,27 @@ def account_view(request, user = None):
     user = user.replace('_', ' ')
     user = User.objects.get(username = user)
     hisprofile = Profile.objects.get(user = user)
-    if hisprofile.first_name == 'name':
-        hisprofile.first_name = user.first_name + ' ' + user.last_name
-        hisprofile.save()
-    miss_lesson = MissLesson.objects.filter(profile = profile)
-    if len(miss_lesson) > 0:
-        miss_lesson = miss_lesson[0]
-        miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None, instance=miss_lesson)
-    else:
-        miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None)
-    if miss_lesson_form.is_valid():
-        miss_lesson = miss_lesson_form.save()
-        return redirect(profile.get_absolute_url())
+    skill = hisprofile.skill
+    miss_lesson_form=False
+    if profile == hisprofile:
+        check_confirmation(hisprofile, skill)
+        # Нужна отдельная функция при вызове
+        miss_lesson = MissLesson.objects.filter(profile = profile)
+        if len(miss_lesson) > 0:
+            miss_lesson = miss_lesson[0]
+            miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None, instance=miss_lesson)
+        else:
+            miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None)
+        if miss_lesson_form.is_valid():
+            miss_lesson = miss_lesson_form.save()
+            return redirect(profile.get_absolute_url())
 
     if is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.all()
-        hiscourses = hisprofile.hiscourses.all()
     else:
         hissquads = hisprofile.squads.all()
-        hiscourses = hisprofile.courses.all()
-    hiscacheatt = CacheAttendance.objects.get_or_create(profile = profile)[0]
-    if not profile.skill:
-        skill = Skill.objects.create()
-        profile.skill = skill
-        profile.save()
-    else:
-        skill = profile.skill
-    if profile == hisprofile and skill.confirmed == False:
-        if timezone.now() - skill.confirmation_time > timedelta(1):
-            skill.confirmation_code = random_secrete_confirm()
-            skill.confirmation_time = timezone.now()
-            skill.save()
-            url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/confirm/?confirm='+profile.skill.confirmation_code
-            text = "Здравствуйте "+profile.first_name+ "!<br><br> Вы зарегестрировались на сайте bilimtap.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
-            html_content = text + "<br><a href='"+url+"'>подтвердить</a>"
-            try:
-                send_email("Подтверждение", html_content, [profile.mail])
-            except Exception as e:
-                pass
-        context = {
-            "profile": profile,
-        }
-        return render(request, "confirm.html", context)
+    hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+
     school_money = 0
     is_director = is_profi(profile, 'Director')
     if is_director:
@@ -85,11 +64,6 @@ def account_view(request, user = None):
     context = {
         "profile":profile,
         "hisprofile": hisprofile,
-        'hisboards':hisboards(hisprofile),
-        'days':Day.objects.all(),
-        'time_periods':hisprofile.histime_periods.all(),
-        'hissquads':hissquads,
-        'hiscourses':hiscourses,
         'att_subject':hiscacheatt.subject,
         'att_squad':hiscacheatt.squad,
         'today':int(timezone.now().date().strftime('%w')),
@@ -100,13 +74,30 @@ def account_view(request, user = None):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_director,
-        'hint':skill.hint_numbers[0],
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school_money,
         'constant_times':get_times(60),
         "interval":60,
-        'days':get_days(),
     }
     return render(request, "profile.html", context)
+
+def check_confirmation(hisprofile, skill):
+    if skill.confirmed == False:
+        if timezone.now() - skill.confirmation_time > timedelta(1):
+            skill.confirmation_code = random_secrete_confirm()
+            skill.confirmation_time = timezone.now()
+            skill.save()
+            url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/confirm/?confirm='+profile.skill.confirmation_code
+            text = "Здравствуйте "+profile.first_name+ "!<br><br> Вы зарегестрировались на сайте Bilimtap.kz, для подтверждения вашего Email пожалуйста пройдите по ссылке: "
+            html_content = text + "<br><a href='"+url+"'>подтвердить</a>"
+            try:
+                send_email("Подтверждение", html_content, [profile.mail])
+            except Exception as e:
+                pass
+        context = {
+            "profile": profile,
+        }
+        return render(request, "confirm.html", context)
 
 def hisboards(hisprofile):
     hisboards = []
@@ -485,37 +476,38 @@ def test_account(request):
     }
     return render(request, "profile.html", context)
 
+def add_money(profile, school, squad, card, amount, manager):
+    nm = card.need_money.get(squad=squad)
+    nm.money += amount
+    nm.save()
+    if nm.money >= nm.bill + nm.lesson_bill:
+        if card.colour == 'red' or card.colour == 'orange':
+            if not card.was_called:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()
+        card.colour = 'white'
+        card.save()
+    profile.payment_history.create(
+        manager = manager,
+        amount = amount,
+        school = school,
+        squad = squad,
+    )
+    change_school_money(school, amount, 'student_payment', profile.first_name)
+    school.save()
+
 def make_payment(request):
     manager = Profile.objects.get(user = request.user)
     only_managers(manager)
+    is_in_school(manager, school)
     amount = int(request.GET.get('amount'))
     if amount > 0 and request.GET.get('id') and request.GET.get('group_id'):
         profile = Profile.objects.get(id = int(request.GET.get('id')))
         school = manager.schools.first()
         squad = school.groups.get(id=int(request.GET.get('group_id')))
         card = profile.card.get(school=school)
-        nm = card.need_money.get(squad=squad)
-        nm.money += amount
-        nm.save()
-        if nm.money >= nm.bill + nm.lesson_bill:
-            if card.colour == 'red' or card.colour == 'orange':
-                if not card.was_called:
-                    skill = card.manager.skill
-                    skill.need_actions -= 1
-                    skill.save()
-            card.colour = 'white'
-            card.save()
-
-        is_in_school(profile, school)
-
-        profile.payment_history.create(
-            manager = manager,
-            amount = amount,
-            school = school,
-        )
-        change_school_money(school, amount, 'student_payment', profile.first_name)
-        school.save()
-
+        add_money(profile, school, squad, card, amount, manager)
     data = {
     }
     return JsonResponse(data)

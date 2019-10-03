@@ -16,60 +16,10 @@
 <a id="go-back-btn" class="start_info_btn" style="display: none;">
     <i class="arrow left icon"></i>Назад
 </a>
-{% if profile.skill.hint_numbers.0 == 0 %}
-<div class="ui modal" id="privet-modal" style="z-index: 4000;">
-    <i class="close icon"></i>
-    <div class="content" style="padding: 0 !important;">
-        <div class="ui grid">
-            <div class="eight wide column" style="padding: 0">
-                <img src="{% static 'images/dude.gif' %}" style="width: 450px;height: 300px;">
-            </div>            
-            <div class="eight wide column" style="font-size: 17px;text-align: center;padding: 70px 15px;">
-                <div style="">
-                    <span style="font-size: 25px;font-weight: 600;color: #506ca9">Добро пожаловать на Bilimtap.kz</span>
-                    <br>
-                    <br>
-                    <span style="font-size: 18px;">
-                        {% if is_director %}
-                            Экономьте время автоматизируя рутинные задачи!
-                        {% elif is_manager %}
-                            Экономьте время автоматизируя рутинные задачи!
-                        {% elif is_trener %}
-                            Экономьте время автоматизируя рутинные задачи!
-                        {% else %}
-                            Обучаясь у наших партнеров, Вы выбираете лучших!
-                        {% endif %}
-                    </span>           
-                </div>
-            </div>            
-        </div>
-    </div>
-</div>
-{%endif%}
-
 <div id="profile" class="">
     <div class="ui container" >
         <div class="ui stackable grid">
-            {% include 'left_menu.html' %}
-            <div class="hint6 highliter" style="position: absolute;margin-left: 200px;margin-top: {%if profile.is_student%}50px{%else%}235px{%endif%};"></div>
-            <div class="hint7 highliter" style="position: absolute;margin-left: 200px;"></div>
-            <div class="hint8 highliter" style="position: absolute;margin-left: 200px;margin-top: {%if profile.is_student%}5px{%else%}95px{%endif%};"></div>
-            <div class="hint23 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
-            <div class="hint24 highliter" style="position: absolute;margin-left: 200px;margin-top: 325px;"></div>
-            <div class="hint26 hint45 hint65 highliter" style="position: absolute;margin-left: 200px;margin-top: 30px;"></div>
-            <div class="hint27 hint63 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
-            <div class="hint28 hint66 highliter" style="position: absolute;margin-left: 200px;margin-top: 80px;"></div>
-            <div class="hint29 hint47 highliter" style="position: absolute;margin-left: 200px;margin-top: 110px;"></div>
-            <div class="hint30 highliter" style="position: absolute;margin-left: 200px;margin-top: 185px;"></div>
-            <div class="hint49 hint68 highliter" style="position: absolute;margin-left: 200px;margin-top: 155px;"></div>
-            <div class="hint31 highliter" style="position: absolute;margin-left: 200px;margin-top: 225px;"></div>
-            <div class="hint46 highliter" style="position: absolute;margin-left: 200px;margin-top: 55px;"></div>
-            <div class="hint48 highliter" style="position: absolute;margin-left: 200px;margin-top: 125px;"></div>
-            <div class="hint50 hint69 highliter" style="position: absolute;margin-left: 200px;margin-top: 200px;"></div>
-            <div class="hint67 highliter" style="position: absolute;margin-left: 200px;margin-top: 100px;"></div>
-            <div class="hint70  highliter" style="position: absolute;margin-left: 200px;margin-top: 190px;"></div>
-            <div class="hint71 highliter" style="position: absolute;margin-left: 200px;margin-top: 245px;"></div>
-            
+            {% include 'left_menu.html' %}            
             <div class="wide column" style="width: 84%;">
                 <div class="ui stackable grid info">
                     <div class="sixteen wide column left-side" style="padding: 14px 0;">
@@ -90,7 +40,7 @@
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
                             {% if is_manager and hisprofile.is_student %}
-                                    {% include 'profile/payment.html' %}
+                                {% include 'profile/payment.html' %}
                             {% endif %}
                             {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
@@ -131,18 +81,4 @@
     };
 
 </script>
-<span style="display: none;" class="hint_data" hint_type="0" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
-{% if hisprofile == profile %}
-    {% if is_director %}
-        {% include 'hints/director.html' %}
-    {% elif is_manager %}
-        {% include 'hints/manager.html' %}
-    {% elif is_trener %}
-        {% include 'hints/teacher.html' %}
-    {% else %}
-        {% include 'hints/student.html' %}
-    {% endif %}
-{% endif %}
-
-<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
 {% endblock content %}

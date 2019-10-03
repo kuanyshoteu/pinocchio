@@ -2117,6 +2117,10 @@ a{
     .ymaps-2-1-74-map.ymaps-2-1-74-i-ua_js_yes.ymaps-2-1-74-map-bg.ymaps-2-1-74-islets_map-lang-ru{
         height: 80% !important;
     }
+    .login_form{
+      width: 30%;
+      margin: 5% auto !important;
+    }
 
 }
 .back-w{
@@ -2132,6 +2136,11 @@ a{
   overflow-y: hidden;
 }
 @media only screen and (max-width: 899px) {
+    .login_form{
+      padding: 14px;
+      width: 100%;
+      margin: 5% auto;
+    }
     #main-menu{
       height: 45px;
     }

@@ -173,6 +173,7 @@
         $('.no_predoplata_number').hide()
         $('.predoplata_form').hide()
         $('.ok_predoplata').hide()
+        $('.isalready').hide()
         if (column_id == '4') {
             $('.predoplata_number').attr('placeholder', 'Сумма предоплаты')
         }
@@ -193,8 +194,15 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.card_money_sch').attr('money', data.money);
-                $('.card_money_sch').text('На счету: ' + data.money + "тг")
+                $('.card_money_sch').empty()
+                for (var i = 0; i < data.bills.length; i++) {
+                    text =  '<div style="font-weight:600;display:inline-block;" class="mr10">'+ data.bills[i][0] +'</div>' + 
+                            '<div class="mr10" style="display:inline-block;">На счету: '+ data.bills[i][1] +'</div>' + 
+                            '<div class="mr10" style="display:inline-block;">Оплата за уроки: '+ data.bills[i][2] +'</div>' + 
+                            '<div style="display:inline-block;">Оплата за месяц: '+ data.bills[i][3] +'</div>'
+                    $(text).appendTo('.card_money_sch')
+                    $('<br><br>').appendTo('.card_money_sch')
+                }
                 for (var i = 0; i < data.res.length; i++){
                     squad_id = data.res[i]
                     $('.squad'+squad_id).show()

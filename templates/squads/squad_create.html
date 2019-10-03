@@ -166,6 +166,7 @@
                                     Нажимая на кнопки "+" или "-" можете управлять списком
                                 </div>                                
 				        	</div>
+                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент уже учит курс <a class="isalready_subject ui button mini" href=""></a> в другой группе, студент может учить курс только из одной группы</div>
 				        	<div class="ui segment no_margin" style="background-color: #4a4a4a;color: #fff;padding-top: 15px;">
 				        		<div class="ui grid stackable" style="margin-top: 0">
                                     {% if squad_students|length == 0 %}
@@ -200,6 +201,7 @@
                                     </div>
                                 </form>
                             </div>
+                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент уже учит курс <a class="isalready_subject ui button mini" href=""></a> в другой группе, студент может учить курс только из одной группы</div>
                             <div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
                                 <div class="ui grid stackable not_group_students" style="margin-top: 0;">
                                     {% if all_students|length == 0 and squad_students == 0 %}
@@ -261,6 +263,7 @@
     function add_student(student_id) {
         url = $('.add_student_url').attr('url')
         squad_id = $('.add_student_url').attr('id')
+        $('.isalready').hide()
         $.ajax({
             url: url,
             method: "GET",
@@ -269,6 +272,11 @@
                 'student_id':student_id,
             },
             success: function (data) {
+                if (data.problems[0] != 'ok') {
+                    $('.isalready').show()
+                    $('.isalready_subject').text(data.problems[0])
+                    $('.isalready_subject').attr('href', data.problems[1])
+                }
                 if (data.add) {
                     $('.add_student'+student_id).text('-')
                     $('.studenticon'+student_id).show()
@@ -296,7 +304,6 @@
         else{
             need_page = parseInt(id)
         }
-        console.log(need_page)
         if (need_page <= length && need_page > 0) {
             $('.not_group_students').empty()
             $.ajax({

@@ -1,7 +1,7 @@
 {% if user.is_authenticated %}
 <div style="width: 14%;">
 </div>
-<div class="fixed_menu help6 help7 help8 help23 help24 help26 help27 help28 help29 help30 help31 help45 help46 help47 help48 help49 help50 help63 help65 help66 help67 help68 help69 help70 help71">
+<div class="fixed_menu">
     <div id="left-main-menu">
             <div class="ui vertical menu" style="background-color: #f4f4f4; border:0; box-shadow: none;">
                 <a class="item lftitem" href='{{ profile.get_absolute_url }}'>
@@ -13,7 +13,7 @@
                 </a>
                 {% endif %}
                 {% if is_manager or is_director %}
-                <a class="item lftitem help23 help2323hb help63 help6363hb" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="list alternate icon" style="font-size: 15px;margin-top: -3px;"></i>
                     CRM
                     {% if profile.skill.need_actions > 0 %}
@@ -25,12 +25,12 @@
                 </a>
                 {% endif %}
                 {% if is_manager or is_trener or is_director %}
-                <a class="item lftitem help27 help2727hb help66 help6666hb" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="folder icon"></i>Документы
                 </a>
                 {% endif %}
                 {% if is_trener or is_director %}
-                <a class="item lftitem help48 help4848hb help69 help6969hb" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="file alternate icon"></i>База уроков
                 </a>
                 {% endif %}
@@ -39,39 +39,24 @@
                     <i class="dollar sign icon"></i>Оплата
                 </a>
                 {% endif %}
-                <a class="item lftitem help7 help77hb help26 help2626hb hepl45 help4545hb help65 help6565hb" href='{% url "news:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "news:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="newspaper icon"></i>Новости
                 </a>
                 {% if is_manager or is_trener or is_director %}
-                <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="users icon"></i>Группы
                 </a>
-                <a class="item lftitem help29 help2929hb help47 help4747hb help68 help6868hb" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="book icon"></i>Курсы
                 </a>
                 {% endif %}
-                <a class="item lftitem help8 help88hb help28 help2828hb help46 help4646hb help67 help6767hb" href='{% url "schools:rating" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <a class="item lftitem" href='{% url "schools:rating" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="trophy icon"></i>Рейтинги
                 </a>
-                {% if is_manager or is_trener or is_director %}
-<!--                 <a class="item lftitem help30 help3030hb help50 help5050hb help71 help7171hb" href='/todolist/'>
-                    <i class="check calendar icon"></i>Задания
-                </a>
- -->                {% endif %}
-                {% if is_trener or profile.is_student and profile.schools.all > 0 %}                
-<!--                 <div class="ui divider" style="margin: 7px 0 7px 35px;width: 100px;"></div>
-                <a class="item lftitem" href='{{ profile.hislessons }}'>
-                    <i class="arrow right icon"></i>Урок
-                </a>
- -->                {% endif %}
             </div>
             <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:map' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
                 Карта
             </a>
-<!--             <a class="lftitemsmall update_hints small_text ml10" url="{{ profile.update_hints }}">
-                Помощь
-            </a>
- -->            
             <a class="lftitemsmall small_text ml10" href='/team/'>
                 О нас
             </a>
@@ -82,31 +67,5 @@
             </a>
             {% endif %}
     </div>
-<!--     <br>
-    <a class="ui button mini blue" style="margin-left: 20px;" onclick="$('#corruption').modal('show')">
-        Заявить о коррупции
-    </a>
- -->
 </div>
 {% endif %}
-
-<div class="ui mini modal" id="corruption">
-    <i class="close icon" ></i>
-    <div class="header text-center">
-        <span style="font-weight: 400">Анонимно сообщить о коррупции</span>
-    </div>
-    <div class="content">
-        <form class="ui form">{% csrf_token %}
-            Опишите ситуацию:
-            <textarea name="corruption-title" style="height: 150px;" class="corruption_text"></textarea>
-            <a class="ui button tiny blue full-w tell_about_corruption" url="{{ profile.tell_about_corruption }}">Отправить анонимно</a>
-        </form>
-        <div class="ui segment thanks" style="display: none;">Ваша заявка принята, спасибо!</div>
-    </div>
-</div>
-<style>
-    #corruption.show {
-        display: block;
-        /*position: fixed;*/
-    }
-</style>

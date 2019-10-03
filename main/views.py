@@ -728,68 +728,11 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-
-    # for nm in NeedMoney.objects.all():
-    #     nm.bill = 0
-    #     nm.save()
-
-    # for subject in Subject.objects.all():
-    #     if '1 урок' in subject.content:
-    #         subject.cost_period = 'lesson'
-    #         subject.save()
-
-    # for squad in Squad.objects.all():
-    #     school = squad.school
-    #     cards = school.crm_cards.all()
-    #     lesson_bill = 0
-    #     bill = 0
-    #     for subject in squad.subjects.all():
-    #         if subject.cost_period == 'lesson':
-    #             lesson_bill += subject.cost
-    #         elif subject.cost_period == 'month':
-    #             bill += subject.cost
-    #     for student in squad.students.all():
-    #         card = cards.filter(card_user=student)
-    #         if len(card) == 1:
-    #             card = card[0]
-    #             nm = squad.need_money.get_or_create(card=card)[0]
-    #             nm.bill += bill
-    #             nm.lesson_bill += lesson_bill
-    #             nm.save()  
-    #         else:
-    #             print(card)
-
-    adil = Profile.objects.get(id=1)
-    for lecture in Lecture.objects.all():
-        squad = lecture.squad
-        subject = lecture.subject
-        if not lecture.school:
-            print(lecture.id, lecture.squad.title)
-        elif lecture.school.id != 3:
-            lecture.people.remove(adil)
-            if squad.teacher:
-                teacher = squad.teacher
-                lecture.people.add(teacher)
-
-        category1 = subject.category.all()
-        lcategory = lecture.category.all()
-        lecture.category.remove(*lcategory)
-        lecture.category.add(*category1)
-
-        age1 = subject.age.all()
-        age2 = squad.age.all()
-        lage = lecture.age.all()
-        lecture.age.remove(*lage)
-        lecture.age.add(*age1)
-        lecture.age.add(*age2)
-
-
-        level1 = subject.level.all()
-        level2 = squad.level.all()
-        llevel = lecture.level.all()
-        lecture.level.remove(*llevel)
-        lecture.level.add(*level1)
-        lecture.level.add(*level2)
+    for squad in Squad.objects.all():
+        subjects = squad.subjects.all()
+        squad.subjects.remove(*subjects)
+        for lecture in squad.squad_lectures.all():
+            lecture.subject.squads.add(squad)
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})

@@ -8,17 +8,17 @@
             <span style="font-size: 15px;margin-left: 15px;margin-bottom: 15px;">Регистрация <b id="current_user_name"></b></span>
             <form class="ui form predoplata_form" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма предоплаты" type="number">
-                <a class="ui button mini blue save_predoplata" onclick="save_predoplata()" style="width: 150px;margin-left: 10px;">Сохранить</a>
             </form>
-                <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Информация о счетах</span></a>
+                <a class="show_hint_schedule" style="height: 25px;"><i class="icon info circle blue"></i><span style="font-size: 13px;">Информация о счетах</span></a>
                 <div class="ui pointing below label hint_schedule" style="display: none;position: absolute;margin-top: 30px;margin-left: 300px; width: 500px;height: 200px;z-index: 3000;">
-                    <span class="card_money_sch"></span>            
-                </div>                                
-            <span class="ok_predoplata highlight" style="height: 25px;margin-left: 25px;"><b>Оплата принята</b></span>
-            <span class="time_stop highlight_red" style="height: 25px;margin-left: 25px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></span>
-            <span class="wrong_mail highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email</b></span>
-            <span class="no_predoplata_number highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Введите сумму предоплаты</b></span>
+                    <div class="card_money_sch" style="font-weight: 400;font-size: 13px;"></div>
+                </div>    
         </div>
+        <div class="ok_predoplata highlight" style="height: 35px;"><b>Оплата принята</b></div>
+        <div class="time_stop highlight_red" style="height: 35px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></div>
+        <div class="wrong_mail highlight_red" style="height: 35px;display: none;"><b>Пожалуйста введите существующий email</b></div>
+        <div class="no_predoplata_number highlight_red" style="height: 35px;display: none;"><b>Введите сумму предоплаты</b></div>
+        <div class="highlight_red isalready pt15 pb15" style="display: none;">Эта группа записана на курс <a class="isalready_subject ui button mini" href=""></a>, но студент уже учит этот курс в другой группе, студент может учить курс только из одной группы</div>
         <div class="ui segment margin0 choose_group">
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
                 <div class="ui grid">
@@ -163,6 +163,7 @@
         $('.time_stop').hide()
         $('.wrong_mail').hide()
         $('.no_predoplata_number').hide()
+        $('.isalready').hide()
         in_squad = $('.squad'+squad_id).attr('status')
         if (in_squad == 'show' || $('.predoplata_number').attr('status') != 'show' || sch != 0 || predoplata != '') {
             $.ajax({
@@ -175,22 +176,29 @@
                 dataType: 'json',
                 success: function (data) {
                     $('.loading').hide();
-                    $('.predoplata_form').hide()
                     $('.ok_predoplata').hide()
-                    $('.predoplata_number').attr('status', 'hide')
-                    $('.predoplata_number').val('')
-                    if (data.stop) {
-                        $('.time_stop').show()
-                        $('.wrong_mail').hide()
-                    }
-                    else if(data.add){
-                        document.getElementById("school_schedule").style.width = "0";
-                        $('#saved_modal').modal('show')
-                        $('.icontable'+id).removeClass('green')
-                        $('.icontable'+id).addClass('blue')
+                    if (data.problems[0] != 'ok') {
+                        $('.isalready').show()
+                        $('.isalready_subject').text(data.problems[0])
+                        $('.isalready_subject').attr('href', data.problems[1])
                     }
                     else{
-                        $('.squad'+squad_id).hide()
+                        $('.isalready').hide()
+                        $('.predoplata_number').attr('status', 'hide')
+                        $('.predoplata_number').val('')
+                        if (data.stop) {
+                            $('.time_stop').show()
+                            $('.wrong_mail').hide()
+                        }
+                        else if(data.add){
+                            document.getElementById("school_schedule").style.width = "0";
+                            $('#saved_modal').modal('show')
+                            $('.icontable'+id).removeClass('green')
+                            $('.icontable'+id).addClass('blue')
+                        }
+                        else{
+                            $('.squad'+squad_id).hide()
+                        }
                     }
                 }
             })            
@@ -216,11 +224,11 @@
                 dataType: 'json',
                 success: function (data) {
                     $('.loading').hide();
-                    // $('.predoplata_number').val('')
-                    // $('.ok_predoplata').show()
-                    // sch = parseInt($('.card_money_sch').attr('money'))+parseInt(predoplata);
-                    // $('.card_money_sch').attr('money', sch)
-                    // $('.card_money_sch').text('На счету: '+sch+'тг')
+                    $('.predoplata_number').val('')
+                    $('.ok_predoplata').show()
+                    sch = parseInt($('.card_money_sch').attr('money'))+parseInt(predoplata);
+                    $('.card_money_sch').attr('money', sch)
+                    $('.card_money_sch').text('На счету: '+sch+'тг')
                 }
             })            
         }

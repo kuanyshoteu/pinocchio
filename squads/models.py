@@ -149,3 +149,13 @@ class NeedMoney(models.Model):
 class Bug(models.Model):
     text = models.TextField(default='')
     timestamp = models.DateTimeField(auto_now_add=True)
+
+class PaymentHistory(models.Model):
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='payment_history') 
+    user = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='payment_history') 
+    squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='payment_history')
+    manager = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_payments') 
+    amount = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-timestamp']

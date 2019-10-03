@@ -1,7 +1,10 @@
 {% load ttags %}
-<div class="ui segment">
+<div class="ui segment mb0">
+    Оплата
+</div>
+<div class="ui segment mt0">
     <div class="ui grid stackable">
-        <div class="five wide column">
+        <div class="five wide column pr5">
             <form class="ui form mb10" style="display: flex;">
                 <input class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
                 <select id="pay_for_group">
@@ -10,15 +13,48 @@
                     {%endfor%}
                 </select>
             </form>
-            <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатил(а)</a>
+            <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатить</a>
+            <div class="mt10">
+                <a class="ui button mini full-w">История оплаты</a>
+            </div>
         </div>
-        <div class="eleven wide column">
-            {% for payment in hisprofile|get_school_payment_history:profile %}
-                {{payment.manager.first_name}}
-                {{payment.timestamp}}
-                {{payment.amount}}тг.
-                <br>
+        <div class="eleven wide column pl0">
+            <div class="ui grid">
+            {% for nm in profile|get_bills:hisprofile %}
+                <div class="wide column" style="min-width: 33%;border-right: 1px lightgrey solid;">
+                        <b>{{ nm.squad.title }}</b>
+                        <div>
+                            На счету: {{ nm.money }}
+                            <br>
+                            Оплата за уроки: {{ nm.lesson_bill }}
+                            <br>
+                            Оплата за месяц: {{ nm.bill }}
+                        </div>
+<!--                     <form class="ui form">
+                        <table class="no_margin" class="mb0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ph in payment.2 %}
+                                <tr>
+                                    <td>
+                                        {{ph.amount}} тг
+                                        {{ph.timestamp}} тг
+                                        {{ph.manager.first_name}}
+                                    </td>
+                                </tr>
+                                {% endfor %}                    
+                            </tbody>
+                        </table>
+                    </form>
+ -->                    <div>
+                    </div>
+                </div>
             {% endfor %}
+            </div>
         </div>
     </div>
 </div>

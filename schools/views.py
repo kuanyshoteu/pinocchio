@@ -19,6 +19,7 @@ from papers.models import *
 from library.models import Folder
 from accounts.models import Profile
 from accounts.forms import *
+from accounts.views import add_money
 from django.contrib.auth import (
     authenticate,
     get_user_model,
@@ -713,9 +714,9 @@ def save_card_as_user(request):
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         squad_id = int(request.GET.get('squad_id'))
-        if card.saved == False:
-            if squad_id > 0:
-                squad = Squad.objects.get(id=squad_id)
+        if squad_id > 0:
+            squad = Squad.objects.get(id=squad_id)
+            if card.saved == False:
                 password = random_password()
                 found = False
                 if card.mail != '' and len(Profile.objects.filter(mail=card.mail)) > 0:
@@ -742,12 +743,6 @@ def save_card_as_user(request):
                     profile.first_name = card.name
                     profile.phone = card.phone
                     profile.mail = card.mail
-                    profile.money += card.premoney
-                    profile.payment_history.create(
-                        school=school,
-                        manager=manager_profile,
-                        amount=card.premoney,
-                        )
                     profile.save()
                 card.card_user = profile
                 card.author_profile = manager_profile
@@ -763,23 +758,22 @@ def save_card_as_user(request):
                 skill.confirmed = True
                 skill.save()
                 add_student_to_squad(profile, squad)
-        else:
-            profile = card.card_user
-            card.author_profile = manager_profile
-            card.save()
-            squad_id = int(request.GET.get('squad_id'))
-            # if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
-            #     return JsonResponse({'stop':True})
-            if squad_id > 0:
-                squad = Squad.objects.get(id=squad_id)
+            else:
+                profile = card.card_user
+                card.author_profile = manager_profile
+                card.save()
+                # if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
+                #     return JsonResponse({'stop':True, 'problems':['ok']})
                 if profile in squad.students.all():
                     add = False
                     remove_student_from_squad(profile, squad)
-                    print('remove_student_from_squad')
                     ok_mail = True
                 else:
+                    problems = add_student_to_squad(profile, squad)
+                    if problems[0] != 'ok':
+                        add = False
+                        return JsonResponse({'add':add, 'problems':problems})
                     ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
-                    add_student_to_squad(profile, squad)
                 profile.schools.add(school)
                 card.last_groups = squad_id
                 card.timestamp = timezone.now()
@@ -789,23 +783,13 @@ def save_card_as_user(request):
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
-        if request.GET.get('predoplata') and ok_mail:
-            was_minus = False
-            if profile.money < profile.salary:
-                was_minus = True
-            profile.money += int(request.GET.get('predoplata'))
-            profile.save()
-            change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', profile.first_name)
-            if was_minus and card.was_called == False and profile.money > profile.salary:
-                skill = card.author_profile.skill
-                skill.need_actions -= 1
-                skill.save()            
-                card.was_called = True
-                card.save()
+            if request.GET.get('predoplata'):
+                add_money(card.card_user, school, squad, card, int(request.GET.get('predoplata')), manager_profile)
     data = {
         'password':password,
         'add':add,
         'ok_mail':ok_mail,
+        'problems':['ok']
     }
     return JsonResponse(data)
 
@@ -817,23 +801,9 @@ def predoplata(request):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         profile = card.card_user
         if request.GET.get('predoplata'):
-            was_minus = False
-            if profile == None:
-                card.premoney += int(request.GET.get('predoplata'))
-                card.save()
-                name = card.name
-            else:
-                if profile.money < profile.salary:
-                    was_minus = True
-                profile.money += int(request.GET.get('predoplata'))
-                profile.save()
-                name = profile.first_name
-                if was_minus and card.was_called == False and profile.money > profile.salary:
-                    skill = card.author_profile.skill
-                    skill.need_actions -= 1
-                    skill.save()            
-                    card.was_called = True
-                    card.save()
+            card.premoney += int(request.GET.get('predoplata'))
+            card.save()
+            name = card.name
             change_school_money(school, int(request.GET.get('predoplata')), 'student_payment', name)
             school.save()
     data = {
@@ -1212,16 +1182,19 @@ def get_card_squads(request):
     is_in_school(profile, school)
     profile = card.card_user
     res = []
-    money = 0
+
+    bills = []
     if profile:
-        money = profile.money
+        nms = card.need_money.select_related('squad')
         for squad in profile.squads.all():
             res.append(squad.id)
-    else:
-        money = card.premoney
+            crnt = nms.filter(squad=squad)
+            if len(crnt) > 0:
+                crnt = crnt[0]
+                bills.append([squad.title, crnt.money, crnt.lesson_bill, crnt.bill])
     data = {
         'res':res,
-        'money':money,
+        'bills':bills,
     }
     return JsonResponse(data)
 

@@ -359,8 +359,18 @@ def get_column_cards_len(column, school):
     return len(school.crm_cards.filter(column=column, timestamp__gt=weekago))
 
 @register.filter
-def get_school_payment_history(hisprofile, profile):
-    return hisprofile.payment_history.filter(school=profile.schools.first())
+def get_bills(profile, hisprofile):
+    school = profile.schools.first()
+    squads = hisprofile.squads.filter(school=school)
+    card = hisprofile.card.get(school=school)
+    return card.need_money.filter(squad__in=squads).select_related('squad')
+
+@register.filter
+def get_bills_len(profile, hisprofile):
+    school = profile.schools.first()
+    squads = hisprofile.squads.filter(school=school)
+    card = hisprofile.card.get(school=school)
+    return len(card.need_money.filter(squad__in=squads).select_related('squad'))
 
 @register.filter
 def money_percent(first, second):
