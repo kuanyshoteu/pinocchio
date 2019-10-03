@@ -83,8 +83,6 @@ def school_payments(request):
         "school_money":school.money,
         "school_crnt":school,
     }
-    if school.version == 'free' or school.version == 'econom':
-        return render(request, "buy_new_version.html", context)
     return render(request, "school/school_payments.html", context)
 
 def school_schedule(request):

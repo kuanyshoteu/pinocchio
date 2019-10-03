@@ -122,9 +122,14 @@
                                             </td>
                                             <td style="padding: 7px 15px;">
                                                 <form class="ui form grid" >
-                                                    <div class="twelve wide column">
-                                                        <input style="margin-bottom: 0;" class="payment_amount{{ student.id }}" placeholder="Сумма" type="number" name="">
-                                                    </div>    
+                                                    <div class="twelve wide column" style="display: flex;">
+                                                        <input class="payment_amount{{ student.id }} mb0"" placeholder="Сумма" type="number" name="">
+                                                        <select id="pay_for_group{{ student.id }}">
+                                                            {%for squad in student.squads.all%}
+                                                            <option value="{{squad.id}}">{{squad.title}}</option>
+                                                            {%endfor%}
+                                                        </select>
+                                                    </div>
                                                     <div class="four wide column">
                                                         <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ student.id }}')">Оплатил(а)</a>
                                                     </div>
@@ -199,11 +204,14 @@
 <script type="text/javascript">
     function make_payment(url, id) {
         amount = $('.payment_amount'+id).val()
+        this_ = document.getElementById('pay_for_group'+id);
+        group_id = this_.options[this_.selectedIndex].value;        
         $.ajax({
             url: url,
             data: {
                 'amount':amount,
-                'id':id
+                'id':id,
+                'group_id':group_id                
             },
             dataType: 'json',
             success: function (data) {

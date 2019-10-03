@@ -500,7 +500,6 @@ def add_money(profile, school, squad, card, amount, manager):
 def make_payment(request):
     manager = Profile.objects.get(user = request.user)
     only_managers(manager)
-    is_in_school(manager, school)
     amount = int(request.GET.get('amount'))
     if amount > 0 and request.GET.get('id') and request.GET.get('group_id'):
         profile = Profile.objects.get(id = int(request.GET.get('id')))
