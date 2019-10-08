@@ -252,7 +252,8 @@ def school_crm(request):
         "subject_categories":school.school_subject_categories.all(),
         "ages":SubjectAge.objects.all(),
         "offices":school.school_offices.all(),
-        'days':Day.objects.all(),
+        "courses":school.school_subjects.all(),
+        "teachers":all_teachers(school),
         'time_periods':time_periods,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -830,6 +831,16 @@ def crm_option(request):
             else:
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
                 skill.crm_office = office
+        if request.GET.get('option') == 'course':
+            skill.filter_course_connect.clear()
+            if int(request.GET.get('object_id')) != -1:
+                course = Subject.objects.get(id = int(request.GET.get('object_id')))
+                skill.filter_course_connect.add(course)
+        if request.GET.get('option') == 'teacher':
+            skill.filter_teacher.clear()
+            if int(request.GET.get('object_id')) != -1:
+                teacher = Profile.objects.get(id = int(request.GET.get('object_id')))
+                skill.filter_teacher.add(teacher)
         if request.GET.get('option') == 'group':
             profile.rating_squad_choice.clear()
             if int(request.GET.get('object_id')) != -1:

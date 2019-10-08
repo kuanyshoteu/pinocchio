@@ -13,7 +13,7 @@ from django.utils.safestring import mark_safe
 from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
-from accounts.models import Profile
+from accounts.models import Profile, Skill
 from squads.models import Squad
 from papers.models import Lesson
 from schools.models import *
@@ -65,10 +65,7 @@ class Subject(models.Model):
     image_icon = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field", 
-            height_field="height_field")
-    height_field = models.IntegerField(default=0, null=True)
-    width_field = models.IntegerField(default=0, null=True)
+            )
     category = models.ManyToManyField(SubjectCategory, related_name='category_subjects')
     age = models.ManyToManyField(SubjectAge, related_name='age_subjects')
     level = models.ManyToManyField(SubjectLevel, related_name='level_subjects')
@@ -78,23 +75,18 @@ class Subject(models.Model):
     image_banner = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field2", 
-            height_field="height_field2")
-    height_field2 = models.IntegerField(default=0, null=True)
-    width_field2 = models.IntegerField(default=0, null=True)
+            )
 
     image_back = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field3", 
-            height_field="height_field3")
-    height_field3 = models.IntegerField(default=0, null=True)
-    width_field3 = models.IntegerField(default=0, null=True)
+            )
     color_back = models.TextField(default='')
 
     content = models.TextField()
     slogan = models.CharField(max_length=250, default='')
     number_of_materials = models.IntegerField(default=0, null=True)
+    filter_course_connect = models.ManyToManyField(Skill, related_name='filter_course_connect') 
 
     class Meta:
         ordering = ['id']

@@ -6833,7 +6833,7 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     width:30px
 }
 #hero{
-    background:linear-gradient(135deg, #0079BF, #5067C5)
+    background:#0079BF;
 }
 #hero h1{
     font-size:3rem

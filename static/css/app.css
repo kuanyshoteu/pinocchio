@@ -4468,7 +4468,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     padding-right: 0 !important;margin-right: 1rem;
   }
   .twenty{
-    width: 20%;
+    width: 20% !important;
   }
   .eighty{
     width: 80%;
@@ -4530,10 +4530,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-left: 2%;
   }
   .twenty{
-    width: 17%;
+    width: 20% !important;
   }
   .eighty{
-    width: 83%;
+    width: 80% !important;
   }
   .ui.grid.container {
     width: calc( 1127px  +  2rem) !important;

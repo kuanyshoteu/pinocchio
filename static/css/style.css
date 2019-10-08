@@ -62,6 +62,18 @@ body{
 .mr10{
   margin-right: 10px !important;
 }
+.mb30{
+  margin-bottom: 30px !important;
+}
+.mt30{
+  margin-top: 30px !important;
+}
+.ml30{
+  margin-left: 30px !important;
+}
+.mr30{
+  margin-right: 30px !important;
+}
 .mb5{
   margin-bottom: 5px !important;
 }

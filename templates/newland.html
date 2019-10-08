@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% load ttags %}
+{% block content %}
+<div class="text-center" style="padding: 45px 50px;margin-top: -5px;color: #4a4a4a;">
+    <div class="text-center mb15" style="font-size: 30px;line-height: 35px;">Введите название интересующего курса</div>
+    <div style="width: 50%; margin: 0 auto 0 auto;" class="mb15">
+        <form class="ui form">
+            <div class="ui grid no_margin"></div>
+            <textarea style="width: calc(100% - 120px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;" placeholder="Поиск учебных центров"></textarea>
+            <a class="ui button green" style="height: 50px;line-height: 25px;border-radius: 0 5px 5px 0;"><i class="icon search" style="color: #fff;"></i> Поиск</a>
+        </form>  
+    </div>
+    <div class="text-center" style="font-size: 30px;margin-bottom: 40px;">
+        или выберите категорию
+    </div>
+    <div class="ui grid">
+        {% for cat in res %}
+        <div class="four wide column">
+            <a href="/catland" class="ui button full-w" style="height: 100px;background-color: #21BA45;border-radius: 5px;padding: 25px 15px 15px 15px;color: #fff;">
+                <span style="font-size: 19;">{{cat}}</span>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}

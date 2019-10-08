@@ -26,10 +26,7 @@ class School(models.Model):
     image_icon = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field", 
-            height_field="height_field")
-    height_field = models.IntegerField(default=0, null=True)
-    width_field = models.IntegerField(default=0, null=True)
+            )
     content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')
     site = models.CharField(max_length=250, default='')
@@ -48,7 +45,7 @@ class School(models.Model):
     schedule_interval = models.IntegerField(default=60)
 
     class Meta:
-        ordering = ['rating', 'version', '-average_cost']
+        ordering = ['version','rating', '-average_cost']
     def __unicode__(self):
         return self.title
     def ___str__(self):
@@ -154,10 +151,7 @@ class SchoolBanner(models.Model):
     image_banner = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field2", 
-            height_field="height_field2")
-    height_field2 = models.IntegerField(default=0, null=True)
-    width_field2 = models.IntegerField(default=0, null=True)
+            )
     class Meta:
         ordering = ['id']
     def delete_school_banner(self):

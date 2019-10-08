@@ -10,7 +10,7 @@
     <meta name="yandex-verification" content="f222118f15d7576b" />
     <meta name="viewport" content="width=device-width, initial-scale = 1">
     <meta name="description" content="Находите любые курсы в городе Алматы на одном сайте. Записывайтесь на пробный урок в 1 клик, сравнивайте цены, отзывы, местоположение и преподавателей">
-    <meta name="keywords" content="английский,английский язык, английский язык алматы, поступление в ниш, поступление в ну, поступление в 165, математика, математика алматы, IELTS, TOEFL, продленка, ЕНТ, КТА, Курсы, курсы алматы, IELTS алматы, TOEFL алматы, SAT, SAT алматы, продленка алматы, ент алматы, кта алматы, Bilimtap">
+    <meta name="keywords" content="английский,английский язык, английский язык алматы,курсы английского алматы,курсы английского языка в алматы,ниш поступление, поступление в ниш, поступление в ну, поступление в 165, математика, математика алматы, IELTS,айлс, TOEFL, продленка, ЕНТ, КТА, Курсы, курсы алматы, IELTS алматы, TOEFL алматы, SAT, SAT алматы, продленка алматы,продленки алматы,international english test,sat, ент алматы, кта алматы, Bilimtap">
     <title>{% block head_title %}Bilimtap.kz{%if not request.user.is_authenticated %} – английский язык, поступление, курсы, подготовка к экзаменам в г. Алматы{% endif %}{% endblock head_title %}</title>
     <!-- CSS -->
     <!-- Yandex.Metrika counter -->
@@ -62,7 +62,7 @@
         <div class="menu-title" style="width: calc(25% + 140px);padding-left: 10px;">
             <i class="icon bars" id="toggle"></i>
             <a href='{% url "main:home" %}' class="header main">
-                <img src="{% static 'images/12.png' %}" id="logo">
+                <img src="{% static 'images/12.jpg' %}" id="logo">
             </a>
             {% if is_manager %}
             <a class="ui button mini red help24 help2424hb" id="request-responsive" onclick="$('#new_card_form1').modal('show')" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
@@ -143,7 +143,7 @@
                     {% if profile.image %}
                         <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
                     {% else %}
-                        <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.png' %}">
+                        <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.jpg' %}">
                     {% endif %}
                 </a>
             </div>

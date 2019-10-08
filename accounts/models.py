@@ -55,7 +55,6 @@ class Skill(models.Model):
     crm_age2 = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     crm_office2 = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     notifications_number = models.IntegerField(default=0)
-    hint_numbers = ArrayField(models.IntegerField(), default = [0,0,0,0,0,0,0])
     birthdate = models.DateField(null = True, blank = True) 
 
 class Profile(models.Model):
@@ -76,14 +75,12 @@ class Profile(models.Model):
     image = models.ImageField(upload_to=upload_location, 
             null=True, 
             blank=True, 
-            width_field="width_field", 
-            height_field="height_field",)
-    height_field = models.IntegerField(default=0, null = True)
-    width_field = models.IntegerField(default=0, null = True)
+            )
 
     crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
     crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
     crm_level_connect = models.ManyToManyField(SubjectLevel, default=2, related_name='students')
+    filter_teacher_connect = models.ManyToManyField(Skill, related_name='filter_teacher') 
     skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile')
 
     class Meta:

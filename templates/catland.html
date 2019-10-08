@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% load ttttags %}
+{% block content %}
+<div style="padding: 30px 50px;margin-top: -5px;color: #4a4a4a;">
+    <div class="sixteen wide column text-center mt10" style="font-weight: 600; font-size: 35px;">
+        Английский язык IELTS TOEFL в Алматы
+    </div>
+    <div class="ui segment" style="margin-top: 30px;">
+        <div class="ui grid mb0 mt0">
+            <div class="wide column" style="width: 33%;font-size: 20px;padding-top: 20px;">
+                Выберите курсы для изучения                
+            </div>
+            <div class="wide column" style="width: 33%;">
+                <div class="text-center">
+                {% for mf in main_filters %}
+                    <a class="ui button choose_cat" id="main">
+                        {{mf}}
+                    </a>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="wide column" style="width: 33%;">
+                <div class="text-center">
+                    <div class="full-w back-w" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
+                        <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;margin-bottom: 0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;background-color: transparent;">
+                        <div id="slider-range"></div>                            
+                    </div>            
+                </div>
+            </div>
+        </div>
+        <div class="ui grid stackable">
+            {% for second_filter in second_filters %}
+            <div class="{% if forloop.counter|is_odd %}seven{% else %}nine{%endif%} wide column" style="padding-left: 0; padding-right: 0;">
+                {% for sf in second_filter %}
+                    {%if forloop.counter == 1%}
+                        <div style="width: 190px; display: inline-block;font-size: 14px;">
+                            {{sf}}
+                        </div>
+                    {% else %}
+                        <a class="ui button mini choose_cat" id="{{forloop.parentloop.counter}}">
+                        {{sf}}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <div class="ui grid">
+            <div class="twelve wide column pl0">
+                <div class="ui segment" style="padding-top: 30px;">
+                    <div style="font-size: 20px;padding-left: 30px;font-weight: 600">
+                        Найдено 230 учебных центров
+                    </div>
+                    <div style="font-size: 16px;padding-left: 30px;padding-top: 30px">
+                        Сначала 
+                        <a class="ui button mini">Лучшие</a>
+                        <a class="ui button mini">Дешевые</a>
+                        <a class="ui button mini">Дорогие</a>
+                    </div>
+                    <div class="mt15">
+                        {% for school in schools_all %}
+                        <div class="full-w ui grid no_margin pb15" style="height: 175px;">
+                            <div class="four wide column">
+                                <img src="{% static 'images/fon1.png' %}" style="height: 100%;" class="full-w">
+                            </div>
+                            <div class="nine wide column">
+                                <a href=""><b style="font-size: 19px;">{{school.title}}</b></a>
+                                <div class="mt15" style="font-size: 15px">
+                                    <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
+                                </div>
+                                <div class="mt15">
+                                    {{school.content}}
+                                </div>
+                            </div>
+                        </div>
+                            <div class="ui divider full-w mt15 mb15"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="four wide column pr0 pl0">
+                <div class="ui segment" style="padding-top: 30px;">
+                    <div class="ui grid stackable">
+                        <div class="four wide column no_padding">
+                            <img class="full-w" src="{% static 'images/fon1.png' %}">
+                        </div>
+                        <div class="twelve wide column pt0">
+                            <a href="" style="text-decoration: underline;font-weight: 600;">
+                                OYLA на английском — теперь в Казахстане!
+                            </a>
+                            <div>
+                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid stackable">
+                        <div class="four wide column no_padding">
+                            <img class="full-w" src="{% static 'images/fon1.png' %}">
+                        </div>
+                        <div class="twelve wide column pt0">
+                            <a href="" style="text-decoration: underline;font-weight: 600;">
+                                OYLA на английском — теперь в Казахстане!
+                            </a>
+                            <div>
+                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid stackable">
+                        <div class="four wide column no_padding">
+                            <img class="full-w" src="{% static 'images/fon1.png' %}">
+                        </div>
+                        <div class="twelve wide column pt0">
+                            <a href="" style="text-decoration: underline;font-weight: 600;">
+                                OYLA на английском — теперь в Казахстане!
+                            </a>
+                            <div>
+                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
+<link rel="stylesheet" href="{% static 'css/price-slider.css' %}">
+<script src="{% static 'js/price-slider.js' %}"></script>
+<script type="text/javascript">
+    $('.choose_cat').click(function(e) {
+        id = $(this).attr('id')
+        $('.choose_cat'+id).removeClass('green')
+        $(this).addClass('green')
+    })
+</script>
+{% endblock content %}

@@ -88,6 +88,84 @@ def map_view(request):
     }
     return render(request, "map.html", context)
 
+def newland(request):
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = None
+    money = 0
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        if len(profile.schools.all()):
+            money = profile.schools.first().money
+    cats = 12
+    res = []
+    for i in range(0, cats):
+        res.append('Математика')
+#    res = ['Математика','Математика','Математика','Математика','Математика','Математика','Математика','Математика',]
+    context = {
+        "profile":profile,
+        "schools":School.objects.all(),
+        "schools_all":School.objects.all(),
+        "url":School.objects.first().get_landing(),
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
+        "subjects":FilterControl.objects.first().categories.all(),
+        "ages":SubjectAge.objects.all(),
+        "school_money":money,
+        'res':res,
+        "newland":True
+    }
+    return render(request, "newland.html", context)
+
+def catland(request):
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = None
+    money = 0
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        if len(profile.schools.all()):
+            money = profile.schools.first().money
+    main_filters = ['Английский язык', 'IELTS', 'TOEFL']
+    second_filters = []
+    a = ['Учитель','Носитель языка','Местный']
+    b = ['Язык обучение','Казахский','Русский', 'Английский']
+    c = ['Количество уроков в неделю', '1','2','3','4', '5', '6']
+    d = ['Длительность урока', '45 минут','60 минут','90 минут','Больше']
+    f = ['Кол-во студентов в группе', 'Индивидуально','До 2','До 3', 'До 6', 'До 10', 'Больше']
+    g = ['Занятия проходят', 'Утром','Днём', 'Вечером']
+    second_filters.append(a)
+    second_filters.append(b)
+    second_filters.append(c)
+    second_filters.append(d)
+    second_filters.append(g)
+    second_filters.append(f)
+
+    context = {
+        "profile":profile,
+        "schools":School.objects.all(),
+        "schools_all":School.objects.all(),
+        "url":School.objects.first().get_landing(),
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
+        "subjects":FilterControl.objects.first().categories.all(),
+        "ages":SubjectAge.objects.all(),
+        "school_money":money,
+        "main_filters":main_filters,
+        "second_filters":second_filters,
+    }
+    return render(request, "catland.html", context)
+
 def login_page(request):
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user.id)
@@ -213,7 +291,9 @@ def create_school(request):
     password = False
     profile = get_profile(request)
     profession = Profession.objects.get(title = 'Moderator')
+    print('0')
     if request.GET.get('title') and request.GET.get('slogan') and request.GET.get('name') and request.GET.get('phone'):
+        print('1')
         school = School.objects.create(
             title=request.GET.get('title'),
             slogan=request.GET.get('slogan'),
@@ -245,10 +325,13 @@ def create_school(request):
         profile.save()
         profile.schools.add(school)
         ok = True
+        print('2')
+    print('3')
     data = {
         "ok":ok,
         "password":password,
     }
+    print('4')
     return JsonResponse(data)
 
 def login_view(request):

@@ -38,18 +38,11 @@ class Squad(models.Model):
     image_icon = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field", 
-            height_field="height_field")
-    height_field = models.IntegerField(default=0, null=True)
-    width_field = models.IntegerField(default=0, null=True)
-
+            )
     image_banner = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field", 
-            height_field="height_field")
-    height_field = models.IntegerField(default=0, null=True)
-    width_field = models.IntegerField(default=0, null=True)
+            )
     
     content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')

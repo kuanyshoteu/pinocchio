@@ -34,10 +34,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            width_field="width_field", 
-            height_field="height_field")
-    height_field = models.IntegerField(default=0, null=True)
-    width_field = models.IntegerField(default=0, null=True)
+            )
 
     class Meta:
         ordering = ['-id']

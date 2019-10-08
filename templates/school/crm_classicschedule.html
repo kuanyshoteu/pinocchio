@@ -4,17 +4,33 @@
         <table class="no_margin" id="keywords" class="mb0" cellspacing="0" cellpadding="0" style="background: #4A4A4A;white-space: nowrap;">
             <div style="position: relative;">
             {% for lecture in profile|constant_school_lectures:instance %}
-                <div id="{{lecture.6}}" class="lecture_const wait{{lecture.4}} show_subject_cost save_card_as_user" onclick="save_card_as_user('{{lecture.7.squad.id}}')" onmouseover="show_subject_cost('{{lecture.7.subject.cost}}тг в месяц')" squad_id="{{lecture.7.squad.id}}" cost="{{lecture.7.subject.cost}}тг в месяц" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: #313a57;color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
+                <div id="{{lecture.6}}" class="lecture_const wait{{lecture.4}} show_hint_schedule save_card_as_user" onclick="save_card_as_user('{{lecture.7.squad.id}}')" squad_id="{{lecture.7.squad.id}}" cost="{{lecture.7.subject.cost}}тг в месяц" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: #313a57;color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
                     {{lecture.7.squad.title}} 
                     <i class="icon check circle white insquadicon squad{{lecture.7.squad.id}}" status="hide" style="font-size: 12px;position: absolute;right: 0;display: none;color: #fff;"></i>
                 </div>
-                <div class="ui modal small constlect_modal{{lecture.6}}" style="min-height: 400px;">
-                    <i class="close icon"></i>
-                    <div class="content">
-                        {{lecture.1}}
+                <div id="{{lecture.6}}" class="hint_schedule lecture_const" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
+                    <div class="ui segment" style="color: #222;width: 300px;">
+                        <div class="text-center">
+                            <b>{{lecture.7.squad.title}}</b>
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Время</span>
+                            {{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Курс</span>
+                            {{lecture.7.subject.title}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Учитель</span>
+                            {{lecture.7.squad.teacher.first_name}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Цена</span>
+                            {{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
+                        </div>
                     </div>
                 </div>
-
             {% endfor %}
             </div>
             <thead>
