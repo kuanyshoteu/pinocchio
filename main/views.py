@@ -89,6 +89,7 @@ def map_view(request):
     return render(request, "map.html", context)
 
 def newland(request):
+    print('********* newland')      
     is_trener = False
     is_manager = False
     is_director = False
@@ -159,6 +160,7 @@ def sign_up(request):
     return render(request, "sign_up.html", context)
 
 def about(request):
+    print('********* about')
     profile = None
     if request.user.is_authenticated:
         profile = get_profile(request)
@@ -169,6 +171,7 @@ def about(request):
 
 def team(request):
     profile = None
+    print('********* team')    
     if request.user.is_authenticated:
         profile = get_profile(request)
     context = {
@@ -176,6 +179,7 @@ def team(request):
     }
     return render(request, "team.html", context)
 def pricing(request):
+    print('********* pricing')  
     profile = None
     if request.user.is_authenticated:
         profile = get_profile(request)
