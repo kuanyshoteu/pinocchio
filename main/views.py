@@ -165,11 +165,11 @@ def about(request):
     if request.user.is_authenticated:
         print('0000')
         profile = get_profile(request)
-    print('11111111')
+    print('11111111', profile)
     context = {
         "profile":profile,
     }
-    print('11111111')
+    print('222222')
     return render(request, "about.html", context)
 
 def team(request):
