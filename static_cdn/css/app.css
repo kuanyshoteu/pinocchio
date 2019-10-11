@@ -4468,7 +4468,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     padding-right: 0 !important;margin-right: 1rem;
   }
   .twenty{
-    width: 20%;
+    width: 20% !important;
   }
   .eighty{
     width: 80%;
@@ -4530,10 +4530,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-left: 2%;
   }
   .twenty{
-    width: 17%;
+    width: 20% !important;
   }
   .eighty{
-    width: 83%;
+    width: 80% !important;
   }
   .ui.grid.container {
     width: calc( 1127px  +  2rem) !important;
@@ -4626,6 +4626,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.divider:not(.vertical):not(.horizontal) {
   border-top: 1px solid rgba(34, 36, 38, 0.15);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.ui.divider.light:not(.vertical):not(.horizontal) {
+  border-top: 1px solid #f4f4f4;
 }
 /*--------------
     Coupling
@@ -18066,8 +18069,8 @@ ol.ui.horizontal.list li:before,
 
   .ui.grid .ui.stackable.grid,
   .ui.segment:not(.vertical) .ui.stackable.page.grid {
-    margin-left: -1rem !important;
-    margin-right: -1rem !important;
+    margin-left: -1rem;
+    margin-right: -1rem;
   }
   /* Divided Stackable */
 
@@ -29838,11 +29841,10 @@ a:hover {
   width: 100%;
 }
 #logo{
-  width: 150px !important; 
-  height: 50px!important;
+  height: 46px!important;
   position: absolute;
   padding-left: 5px;
-  margin-top: -14px;
+  margin-top: -11px;
   font-size: 23px;
   letter-spacing: 1px;
 }
@@ -30814,7 +30816,7 @@ i.map_worktime-icon {
   border-top: 1px solid rgba(0,0,0,.1);
   border-bottom: 1px solid rgba(0,0,0,.1);
   background-color: #f4f4f4;
-  padding-bottom: 12px;
+  padding-bottom: 20px;
   overflow: hidden;
 }
 .map_sameorg-title {
@@ -30840,11 +30842,11 @@ i.map_worktime-icon {
   color: #285c8a;
 }
 .map_sameorg-list {
-  display: inline-block;
+  display: flex;
   position: relative;
   list-style-type: none;
   margin: 0;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 20px;
   overflow-x: hidden;
   white-space: nowrap;
   word-break: normal;
@@ -30855,8 +30857,9 @@ i.map_worktime-icon {
   position: relative;
   flex-shrink: 1;
   background-color: #fff;
-  width: 80%;
-  max-width: 303px;
+  min-width: 90%;
+  max-width: 91%;
+  min-height:80px; 
   max-height: 128px;
   padding: 12px 0 12px 20px;
   margin: 0 4px 0 0;
@@ -30864,6 +30867,7 @@ i.map_worktime-icon {
   cursor: pointer;
   white-space: normal;
   left: 0;
+  top: 0;
   transition: left .5s;
 }
 .map_sameorg-item:hover {
@@ -30951,30 +30955,6 @@ i.map_worktime-icon {
 #schoolLanding__header-gallery__sliderone.owl-theme .owl-next {
   right: 10px;
 }
-.schoolLanding__header-wrapper {
-  display: flex;
-}
-.schoolLanding__header-img {
-  height: 50%;
-  width: 100%;
-}
-.schoolLanding__header-img:first-child {
-  width: 25%;
-  margin-right: 3px;
-}
-.schoolLanding__header-img:nth-child(2) {
-  width: 50%;
-  margin-right: 3px;
-}
-.schoolLanding__header-img:last-child {
-  width: 25%;
-}
-.schoolLanding__container {
-  max-width: 85%;
-  margin: 0 auto;
-  padding-bottom: 2rem;
-  position: relative;
-}
 .schoolLanding__content-header {
   display: flex;
   background-color: #fff;
@@ -30982,29 +30962,15 @@ i.map_worktime-icon {
   border-radius: 4px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .1);
 }
-.schoolLanding__content-headerLeft {
-  display: flex;
-  flex-wrap: wrap;
-  width: 80%;
-}
-.organization__info-top-part {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 35px 0 0 0;
-  height: 100%;
-  width: 100%;
-}
-.organization__info-left-part {
-  display: flex;
-  width: 50%;
-  margin-left: 35px;
-}
 .organization__info-photo {
   width: 150px;
   height: 150px;
   margin: -100px 1rem 0 0;
   border: 2px solid #fff;
   border-radius: 4px;
+  background-position: center; 
+  background-size: contain;
+  background-color: #fff;
 }
 .organization__info-title {
   font-weight: 400;
@@ -31036,7 +31002,6 @@ i.map_worktime-icon {
   cursor: pointer;
 }
 .organization__info-middle-part {
-  width: 20%;
   padding-top: 6px;
   cursor: pointer;
 }
@@ -31064,27 +31029,8 @@ i.map_worktime-icon {
   margin-top: 1rem;
   color: #808080;
 }
-.organization__info-middle-part__wrap {
-  width: 100%;
-  text-align: right;
-}
-.organization__info-right-part {
-  width: 25%;
-}
 .organization__info-address {
-  text-align: right;
   color: #808080;
-}
-.organization__info-bottom-part {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  border-top: 1px solid #f1f1f1;
-  background-color: #fff;
-  border-bottom-left-radius: 5px;
-  margin-top: 3rem;
-  padding: 10px 25px;
 }
 .oraginzation__info-bottom-part:before {
   content: '';
@@ -31094,7 +31040,6 @@ i.map_worktime-icon {
   background-color: red;
 }
 .organization__info-item {
-  border-right: 1px solid #d1d1d1;
   padding: 5px 15px;
   font-size: 1rem;
 }
@@ -31137,22 +31082,22 @@ i.map_worktime-icon {
   padding: 30px 0;
 }
 .schoolLanding__content-category__list {
-  list-style-type: none;
   display: flex;
+  width: auto;
 }
 .schoolLanding__content-category__item {
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  display: flex;
   margin-right: 10px;
-  width: 140px;
-  height: 140px;
+  min-width: 100px !important;
+  height: 100px;
   border-radius: 4px;
   background-color: #fff;
   cursor: pointer;
   box-shadow: 0 2px 2px 0 rgb(220, 220, 220);
-  transition: background .2s;
+  transition: background .1s;
 }
 .schoolLanding__content-category__item.active {
   background-color: #9C5FE3;
@@ -31170,50 +31115,22 @@ i.map_worktime-icon {
 .schoolLanding__content-category__item.active p {
   color: #fff;
 }
-.schoolLanding__content-services {
-  padding: 15px 40px 15px 60px;
-  background-color: #fff;
-  border-radius: 4px;
-}
 .schoolLanding__content-services__title {
-  padding: 25px 0;
+  padding: 0 0 25px 0;
   font-size: 1rem;
   font-weight: 400;
   color: #A9A9A9;
-  border-bottom: 1px solid #F4F4F4;
   margin: 0;
 }
 .schoolLanding__content-services__item {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #f4f4f4;
   padding: 25px 0;
-}
-.schoolLanding__content-services__item-left {
-  display: flex;
-  align-items: center;
-  width: calc(100% - 240px);
-}
-.schoolLanding__content-services__item-title {
-  font-size: 1rem;
-  margin: 0 40px 0 0;
-  line-height: 1rem;
-  width: 20%;
 }
 .schoolLanding__content-services__item-time {
   font-size: 1rem;
   line-height: 1rem;
-  width: 50%;
-}
-.schoolLanding__content-services__item-right {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 240px;
-}
-.schoolLanding__content-services__item-price {
-  margin-left: 20px;
-  width: 70px;
+  width: 40%;
 }
 .schoolLanding__content-services__item-icon {
   cursor: pointer;
@@ -31238,7 +31155,9 @@ i.map_worktime-icon {
   padding: 2rem 0;
 }
 .schoolLanding__content-teacher__photo {
-  min-height: 200px;
+  min-height: 100px;
+  min-width: 100px;
+  max-height: 300px;
 }
 .schoolLanding__content-teacher__name {
   margin: 1rem 0;
