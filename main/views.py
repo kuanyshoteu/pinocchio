@@ -89,7 +89,6 @@ def map_view(request):
     return render(request, "map.html", context)
 
 def newland(request):
-    print('********* newland')      
     is_trener = False
     is_manager = False
     is_director = False
@@ -160,21 +159,16 @@ def sign_up(request):
     return render(request, "sign_up.html", context)
 
 def about(request):
-    print('********* about')
     profile = None
     if request.user.is_authenticated:
-        print('0000')
         profile = get_profile(request)
-    print('11111111', profile)
     context = {
         "profile":profile,
     }
-    print('222222')
     return render(request, "about.html", context)
 
 def team(request):
     profile = None
-    print('********* team')    
     if request.user.is_authenticated:
         profile = get_profile(request)
     context = {
@@ -182,7 +176,6 @@ def team(request):
     }
     return render(request, "team.html", context)
 def pricing(request):
-    print('********* pricing')  
     profile = None
     if request.user.is_authenticated:
         profile = get_profile(request)
@@ -829,67 +822,67 @@ def moderator_run_code(request):
     #     for lecture in squad.squad_lectures.all():
     #         lecture.subject.squads.add(squad)
 
-    for lecture in Lecture.objects.all():
-        teacher = lecture.squad.teacher
-        if teacher:
-            lecture.people.add(teacher)
+    # for lecture in Lecture.objects.all():
+    #     teacher = lecture.squad.teacher
+    #     if teacher:
+    #         lecture.people.add(teacher)
 
-    main_filters = []
-    main_filters.append(['Английский язык IELTS TOEFL', 'Английский язык', 'IELTS', 'TOEFL'])
-    main_filters.append(['Подготовка к ЕНТ, КТА', 'ЕНТ', 'КТА'])
-    main_filters.append(['Подготовка к БИЛ(КТЛ), 90, РФМШ, НИШ, 165, 134', 'БИЛ(КТЛ)', 'РФМШ', 'НИШ', '165', '134'])
-    main_filters.append(['Подготовка к школе'])
-    main_filters.append(['Продленка'])
-    main_filters.append(['SAT, GMAT, GRE, Nufypet', 'SAT', 'GMAT', 'GRE', 'Nufypet'])
-    main_filters.append(['Математика / Логика', 'Математика', 'Логика'])
-    main_filters.append(['Программирование', 'Олимпиадная', 'Для работы'])
-    main_filters.append(['Школьные предметы'])
-    main_filters.append(['Иностранные языки'])
-    main_filters.append(['Творческие навыки и Музыка'])
-    main_filters.append(['Игры, Шахматы'])
-    main_filters.append(['Профессиональные курсы', 'смм', 'сео', 'маркетинг', 'бизнес'])
-    main_filters.append(['Студентам'])
-    second_filters = []
-    a = ['Учитель','Носитель языка','Местный']
-    b = ['Язык обучения','Казахский','Русский', 'Английский']
-    c = ['Количество уроков в неделю', '1','2','3','4', '5', '6']
-    d = ['Длительность урока', '45 минут','60 минут','90 минут','Больше']
-    f = ['Кол-во студентов в группе', 'Индивидуально','До 2','До 3', 'До 6', 'До 10', 'Больше']
-    g = ['Занятия проходят', 'Утром','Днём', 'Вечером']
+    # main_filters = []
+    # main_filters.append(['Английский язык IELTS TOEFL', 'Английский язык', 'IELTS', 'TOEFL'])
+    # main_filters.append(['Подготовка к ЕНТ, КТА', 'ЕНТ', 'КТА'])
+    # main_filters.append(['Подготовка к БИЛ(КТЛ), 90, РФМШ, НИШ, 165, 134', 'БИЛ(КТЛ)', 'РФМШ', 'НИШ', '165', '134'])
+    # main_filters.append(['Подготовка к школе'])
+    # main_filters.append(['Продленка'])
+    # main_filters.append(['SAT, GMAT, GRE, Nufypet', 'SAT', 'GMAT', 'GRE', 'Nufypet'])
+    # main_filters.append(['Математика / Логика', 'Математика', 'Логика'])
+    # main_filters.append(['Программирование', 'Олимпиадная', 'Для работы'])
+    # main_filters.append(['Школьные предметы'])
+    # main_filters.append(['Иностранные языки'])
+    # main_filters.append(['Творческие навыки и Музыка'])
+    # main_filters.append(['Игры, Шахматы'])
+    # main_filters.append(['Профессиональные курсы', 'смм', 'сео', 'маркетинг', 'бизнес'])
+    # main_filters.append(['Студентам'])
+    # second_filters = []
+    # a = ['Учитель','Носитель языка','Местный']
+    # b = ['Язык обучения','Казахский','Русский', 'Английский']
+    # c = ['Количество уроков в неделю', '1','2','3','4', '5', '6']
+    # d = ['Длительность урока', '45 минут','60 минут','90 минут','Больше']
+    # f = ['Кол-во студентов в группе', 'Индивидуально','До 2','До 3', 'До 6', 'До 10', 'Больше']
+    # g = ['Занятия проходят', 'Утром','Днём', 'Вечером']
 
-    second_filters.append(a)
-    second_filters.append(b)
-    second_filters.append(c)
-    second_filters.append(d)
-    second_filters.append(g)
-    second_filters.append(f)
+    # second_filters.append(a)
+    # second_filters.append(b)
+    # second_filters.append(c)
+    # second_filters.append(d)
+    # second_filters.append(g)
+    # second_filters.append(f)
 
-    for mf in main_filters:
-        for i in range(0, len(mf)):
-            if i == 0:
-                crntsf = SchoolFilter.objects.create(title = mf[0])
-                crntsf.save()
-                crntct = SchoolCategory.objects.create(title = mf[0], main_filters=crntsf)
-                crntct.save()
-            else:
-                SchoolFilterOption.objects.create(filter_type=crntsf,title = mf[i])        
+    # for mf in main_filters:
+    #     for i in range(0, len(mf)):
+    #         if i == 0:
+    #             crntsf = SchoolFilter.objects.create(title = mf[0])
+    #             crntsf.save()
+    #             crntct = SchoolCategory.objects.create(title = mf[0], main_filters=crntsf)
+    #             crntct.save()
+    #         else:
+    #             SchoolFilterOption.objects.create(filter_type=crntsf,title = mf[i])        
 
-    for sf in second_filters:
-        for i in range(0, len(sf)):
-            if i == 0:
-                crntsf = SchoolFilter.objects.create(title = sf[0])
-                crntsf.save()
-            else:
-                SchoolFilterOption.objects.create(filter_type=crntsf,title = sf[i])
+    # for sf in second_filters:
+    #     for i in range(0, len(sf)):
+    #         if i == 0:
+    #             crntsf = SchoolFilter.objects.create(title = sf[0])
+    #             crntsf.save()
+    #         else:
+    #             SchoolFilterOption.objects.create(filter_type=crntsf,title = sf[i])
 
-    counter = 0
-    allcats = SchoolCategory.objects.all()
-    for f in SchoolFilter.objects.filter().order_by('-id'):
-        if counter == 5:
-            break
-        f.categories.add(*allcats)
-        print(f.title)
-        counter += 1
+    # counter = 0
+    # allcats = SchoolCategory.objects.all()
+    # for f in SchoolFilter.objects.filter().order_by('-id'):
+    #     if counter == 5:
+    #         break
+    #     f.categories.add(*allcats)
+    #     print(f.title)
+    #     counter += 1
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})
