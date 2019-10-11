@@ -3,139 +3,258 @@
 {% load staticfiles %}
 {% load ttttags %}
 {% block content %}
-<div style="padding: 30px 50px;margin-top: -5px;color: #4a4a4a;">
-    <div class="sixteen wide column text-center mt10" style="font-weight: 600; font-size: 35px;">
-        Английский язык IELTS TOEFL в Алматы
+<style type="text/css">
+    @media only screen and (max-width: 767px) {
+        .catfilters{
+            display: none;
+        }
+        .backhome{margin-top: -30px;}
+    }
+    .backhome{
+        position: absolute;        
+    }
+</style>
+<div class="catland" style="color: #4a4a4a;">
+    <div class="backhome">
+        <a href="{% url 'main:home' %}" class="ui button mini">
+            <i class="arrow left icon"></i>На главную
+        </a>        
     </div>
-    <div class="ui segment" style="margin-top: 30px;">
-        <div class="ui grid mb0 mt0">
-            <div class="wide column" style="width: 33%;font-size: 20px;padding-top: 20px;">
-                Выберите курсы для изучения                
+    <div class="text-center" style="font-weight: 600; font-size: 35px;color: #696969;line-height: 35px;">
+        {{category.main_filters.title}}
+    </div>
+    <div class="ui segment catfilters" style="margin-top: 20px;">
+        <div class="ui grid stackable mb0 mt0">
+            <div class="wide column text-center" style="width: 33%;font-size: 20px;padding-top: 20px;">
+                Выберите курсы для изучения
             </div>
             <div class="wide column" style="width: 33%;">
                 <div class="text-center">
-                {% for mf in main_filters %}
-                    <a class="ui button choose_cat" id="main">
-                        {{mf}}
+                {% for mf in category.main_filters.filter_options.all %}
+                    <a class="ui button choose_cat mb10" status="" id="{{mf.id}}">
+                        {{mf.title}}
                     </a>
                 {% endfor %}
                 </div>
             </div>
-            <div class="wide column" style="width: 33%;">
-                <div class="text-center">
+            <div class="wide column pb0" style="width: 33%;">
+                <div style="max-width: 250px;margin: 0 auto;">
                     <div class="full-w back-w" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
-                        <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;margin-bottom: 0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;background-color: transparent;">
-                        <div id="slider-range"></div>                            
+                        <span style="font-size: 15px;font-weight: 600;color: #7e7e7e;" class="pr10">Цена: </span> 
+                        <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;">
+                        <div id="slider-range" class="mt10"></div>
                     </div>            
                 </div>
             </div>
+            <div class="sixteen wide column no_padding">
+                <div class="ui divider no_margin"></div>
+            </div>
         </div>
-        <div class="ui grid stackable">
-            {% for second_filter in second_filters %}
-            <div class="{% if forloop.counter|is_odd %}seven{% else %}nine{%endif%} wide column" style="padding-left: 0; padding-right: 0;">
-                {% for sf in second_filter %}
-                    {%if forloop.counter == 1%}
-                        <div style="width: 190px; display: inline-block;font-size: 14px;">
-                            {{sf}}
-                        </div>
-                    {% else %}
-                        <a class="ui button mini choose_cat" id="{{forloop.parentloop.counter}}">
-                        {{sf}}
-                        </a>
-                    {% endif %}
+        <div class="ui grid stackable pb15 pt0">
+            {% for second_filter in category.second_filters.all %}
+            <div class="eight wide column pr0 pb0">
+                <div class="filter_title" style="display: inline-block;font-size: 14px;">
+                    {{second_filter.title}}
+                </div>                
+                {% for sf in second_filter.filter_options.all %}
+                    <a class="ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
+                        {{sf.title}}
+                    </a>
                 {% endfor %}
             </div>
             {% endfor %}
         </div>
     </div>
-    <div>
-        <div class="ui grid">
-            <div class="twelve wide column pl0">
-                <div class="ui segment" style="padding-top: 30px;">
-                    <div style="font-size: 20px;padding-left: 30px;font-weight: 600">
-                        Найдено 230 учебных центров
-                    </div>
-                    <div style="font-size: 16px;padding-left: 30px;padding-top: 30px">
-                        Сначала 
-                        <a class="ui button mini">Лучшие</a>
-                        <a class="ui button mini">Дешевые</a>
-                        <a class="ui button mini">Дорогие</a>
-                    </div>
-                    <div class="mt15">
-                        {% for school in schools_all %}
-                        <div class="full-w ui grid no_margin pb15" style="height: 175px;">
-                            <div class="four wide column">
-                                <img src="{% static 'images/fon1.png' %}" style="height: 100%;" class="full-w">
+    <div class="ui grid stackable">
+        <div class="sixteen wide column pl0 pr0">
+            <div class="loading" style="display: none;">
+              <div class="animation"><div class="circle one"></div></div>
+              <div class="animation"><div class="circle two"></div></div>
+              <div class="animation"><div class="circle three"></div></div>
+              <div class="animation"><div class="circle four"></div></div>
+              <div class="animation"><div class="circle five"></div></div>
+              <div class="animation"><div class="circle six"></div></div>
+            </div>
+            <div class="ui segment mpl0 mpr0">
+                <div class="in_mobile mb15 text-center">
+                    <a class="ui button blue" onclick="$('.catfilters').show('fast');$(this).hide()"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
+                </div>
+                <div class="catland_found mt15" style="font-size: 20px;font-weight: 600">
+                    Найдено <span class="schools_len">{{category.schools.all|length}}</span> учебных центров
+                </div>
+                <div class="catland_found" style="font-size: 16px;padding-top: 30px">
+                    Сначала 
+                    <a class="ui button mini">Лучшие</a>
+                    <a class="ui button mini">Дешевые</a>
+                    <a class="ui button mini">Дорогие</a>
+                </div>
+                <div class="mt15 schools_list">
+                    {% for school in category.schools.all %}
+                    <div class="full-w ui grid stackable no_margin pb15">
+                        <div class="four wide column" style="height: 170px;">
+                            <a href="">
+                                {% if school.banners.all|length > 0%}
+                                <img src="{{school.banners.first.image_banner.url}}" style="height: 100%;" class="full-w">
+                                {%else%}
+                                <img src="{% static 'images/fon2.jpeg' %}" style="height: 100%;" class="full-w">
+                                {%endif%}
+                            </a>
+                        </div>
+                        <div class="twelve wide column pb0">
+                            <a href=""><b style="font-size: 19px;">{{school.title}}</b></a>
+                            <div class="mt15" style="font-size: 15px">
+                                <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
                             </div>
-                            <div class="nine wide column">
-                                <a href=""><b style="font-size: 19px;">{{school.title}}</b></a>
-                                <div class="mt15" style="font-size: 15px">
-                                    <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
-                                </div>
-                                <div class="mt15">
-                                    {{school.content}}
-                                </div>
+                            <div class="mt15">
+                                {{school.content}}
                             </div>
                         </div>
-                            <div class="ui divider full-w mt15 mb15"></div>
-                        {% endfor %}
                     </div>
+                    <div class="ui divider full-w no_margin"></div>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="four wide column pr0 pl0">
-                <div class="ui segment" style="padding-top: 30px;">
-                    <div class="ui grid stackable">
-                        <div class="four wide column no_padding">
-                            <img class="full-w" src="{% static 'images/fon1.png' %}">
-                        </div>
-                        <div class="twelve wide column pt0">
-                            <a href="" style="text-decoration: underline;font-weight: 600;">
-                                OYLA на английском — теперь в Казахстане!
-                            </a>
-                            <div>
-                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                            </div>
+        </div>
+<!--             <div class="four wide column pr0 pl0 not_in_mobile">
+            <div class="ui segment" style="padding-top: 30px;">
+                <div class="ui grid stackable">
+                    <div class="four wide column no_padding">
+                        <img class="full-w" src="{% static 'images/fon1.png' %}">
+                    </div>
+                    <div class="twelve wide column pt0">
+                        <a href="" style="text-decoration: underline;font-weight: 600;">
+                            OYLA на английском — теперь в Казахстане!
+                        </a>
+                        <div>
+                            Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
                         </div>
                     </div>
-                    <div class="ui grid stackable">
-                        <div class="four wide column no_padding">
-                            <img class="full-w" src="{% static 'images/fon1.png' %}">
-                        </div>
-                        <div class="twelve wide column pt0">
-                            <a href="" style="text-decoration: underline;font-weight: 600;">
-                                OYLA на английском — теперь в Казахстане!
-                            </a>
-                            <div>
-                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                            </div>
+                </div>
+                <div class="ui grid stackable">
+                    <div class="four wide column no_padding">
+                        <img class="full-w" src="{% static 'images/fon1.png' %}">
+                    </div>
+                    <div class="twelve wide column pt0">
+                        <a href="" style="text-decoration: underline;font-weight: 600;">
+                            OYLA на английском — теперь в Казахстане!
+                        </a>
+                        <div>
+                            Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
                         </div>
                     </div>
-                    <div class="ui grid stackable">
-                        <div class="four wide column no_padding">
-                            <img class="full-w" src="{% static 'images/fon1.png' %}">
-                        </div>
-                        <div class="twelve wide column pt0">
-                            <a href="" style="text-decoration: underline;font-weight: 600;">
-                                OYLA на английском — теперь в Казахстане!
-                            </a>
-                            <div>
-                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                            </div>
+                </div>
+                <div class="ui grid stackable">
+                    <div class="four wide column no_padding">
+                        <img class="full-w" src="{% static 'images/fon1.png' %}">
+                    </div>
+                    <div class="twelve wide column pt0">
+                        <a href="" style="text-decoration: underline;font-weight: 600;">
+                            OYLA на английском — теперь в Казахстане!
+                        </a>
+                        <div>
+                            Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+--> </div>
 </div>
-<span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
+<span style="display: none;" class="data" id="{{category.id}}" url="{% url 'main:cat_filter' %}"></span>
 <link rel="stylesheet" href="{% static 'css/price-slider.css' %}">
 <script src="{% static 'js/price-slider.js' %}"></script>
+<script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+<script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{% static 'js/dragmap.js' %}"></script>
 <script type="text/javascript">
     $('.choose_cat').click(function(e) {
-        id = $(this).attr('id')
-        $('.choose_cat'+id).removeClass('green')
-        $(this).addClass('green')
+        if ($(this).attr('status') == 'chosen') {
+            $(this).removeClass('green')
+            $(this).attr('status', 'none')
+        }
+        else{
+            $(this).addClass('green')
+            $(this).attr('status', 'chosen')
+        }
+        ids = ''
+        $('.choose_cat.green').each(function() {
+            ids += $(this).attr('id') + 'p'
+        })
+        url = $('.data').attr('url')
+        id = $('.data').attr('id')
+        mincost = $( "#amount" ).attr( "mincost")
+        maxcost = $( "#amount" ).attr( "maxcost")
+        $('.loading').show()
+        $.ajax({
+            url: url,
+            data: {
+                'mincost':mincost,
+                'maxcost':maxcost,
+                'id':id,
+                'ids':ids,
+            },
+            dataType: 'json',
+            success: function (data) {
+                schools = data.res
+                update_list(schools)
+                $('.loading').hide()
+            }
+        })    
     })
+    $( "#slider-range" ).slider({
+        range: true,
+        min: 0,
+        max: 100,
+        values: [ 0, 100 ],
+        slide: function( event, ui ) {
+            $('.loading').show()
+            ids = ''
+            $('.choose_cat.green').each(function() {
+                ids += $(this).attr('id') + 'p'
+            })
+            url = $('.data').attr('url')
+            id = $('.data').attr('id')
+            $('.show_url').attr('slider_status', '1')
+            addzero1 = 'тг'
+            addzero2 = 'тг'
+            if(ui.values[0] > 0){addzero1 = ' 000тг'}
+            if(ui.values[1] > 0){addzero2 = ' 000тг'}
+            $( "#amount" ).val(ui.values[ 0 ]+addzero1 + " - " + ui.values[ 1 ]+addzero2);
+            $( "#amount" ).attr( "mincost", ui.values[ 0 ])
+            $( "#amount" ).attr( "maxcost", ui.values[ 1 ])
+
+            $.ajax({
+                url: url,
+                data: {
+                    'mincost':ui.values[ 0 ],
+                    'maxcost':ui.values[ 1 ],
+                    'id':id,
+                    'ids':ids,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    schools = data.res
+                    update_list(schools)
+                    $('.loading').hide()                    
+                }
+            })    
+
+        }
+    });
+    function update_list(schools){
+        $('.schools_list').empty()
+        $('.schools_len').text(schools.length)
+        for (var i = 0; i < schools.length; i++) {
+            url = schools[i][0]
+            title = schools[i][1]
+            img = schools[i][2]
+            if (img == '') {
+                img = '/static/images/fon2.jpeg'
+            }
+            address = schools[i][3]
+            content = schools[i][4]
+            $('<div class="full-w ui grid stackable no_margin pb15"> <div class="four wide column" style="height: 170px;"> <a href="'+url+'"><img src="'+img +'" style="height: 100%;" class="full-w"></a> </div> <div class="nine wide column"> <a href="'+url+'"><b style="font-size: 19px;">'+title+'</b></a> <div class="mt15" style="font-size: 15px"> <b>'+address+'</b> </div> <div class="mt15"> '+content+' </div> </div> </div> <div class="ui divider full-w no_margin"></div>').appendTo('.schools_list')
+        }
+    }
 </script>
 {% endblock content %}

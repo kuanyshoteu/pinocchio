@@ -101,15 +101,10 @@ def newland(request):
         is_director = is_profi(profile, 'Director')
         if len(profile.schools.all()):
             money = profile.schools.first().money
-    cats = 12
-    res = []
-    for i in range(0, cats):
-        res.append('Математика')
-#    res = ['Математика','Математика','Математика','Математика','Математика','Математика','Математика','Математика',]
     context = {
         "profile":profile,
-        "schools":School.objects.all(),
-        "schools_all":School.objects.all(),
+        "categories":SchoolCategory.objects.all(),
+        "schools":ElliteSchools.objects.first().schools.all(),
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
         "is_manager":is_manager,
@@ -117,12 +112,12 @@ def newland(request):
         "subjects":FilterControl.objects.first().categories.all(),
         "ages":SubjectAge.objects.all(),
         "school_money":money,
-        'res':res,
-        "newland":True
+        "newland":True,
+        "five":[1,2,3,4,5],
     }
     return render(request, "newland.html", context)
 
-def catland(request):
+def category_landing(request, id=None):
     is_trener = False
     is_manager = False
     is_director = False
@@ -135,34 +130,16 @@ def catland(request):
         is_director = is_profi(profile, 'Director')
         if len(profile.schools.all()):
             money = profile.schools.first().money
-    main_filters = ['Английский язык', 'IELTS', 'TOEFL']
-    second_filters = []
-    a = ['Учитель','Носитель языка','Местный']
-    b = ['Язык обучение','Казахский','Русский', 'Английский']
-    c = ['Количество уроков в неделю', '1','2','3','4', '5', '6']
-    d = ['Длительность урока', '45 минут','60 минут','90 минут','Больше']
-    f = ['Кол-во студентов в группе', 'Индивидуально','До 2','До 3', 'До 6', 'До 10', 'Больше']
-    g = ['Занятия проходят', 'Утром','Днём', 'Вечером']
-    second_filters.append(a)
-    second_filters.append(b)
-    second_filters.append(c)
-    second_filters.append(d)
-    second_filters.append(g)
-    second_filters.append(f)
+
+    category = SchoolCategory.objects.get(id=id)
 
     context = {
         "profile":profile,
-        "schools":School.objects.all(),
-        "schools_all":School.objects.all(),
-        "url":School.objects.first().get_landing(),
+        "category":category,
         'is_trener':is_trener,
         "is_manager":is_manager,
         "is_director":is_director, 
-        "subjects":FilterControl.objects.first().categories.all(),
-        "ages":SubjectAge.objects.all(),
         "school_money":money,
-        "main_filters":main_filters,
-        "second_filters":second_filters,
     }
     return render(request, "catland.html", context)
 
@@ -454,21 +431,15 @@ def map_search(request):
             kef = 4
         similarity=TrigramSimilarity('title', text)
         i = 0
-        categories = SubjectCategory.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-        ages = SubjectAge.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        categories = SchoolCategory.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         schools = School.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         for category in categories:
-            res.append([category.title, 'category'])
-            i+=1
-            if i == 10:
-                break
-        for age in ages:
-            res.append([age.title, 'age'])
+            res.append([category.title, 'category', category.get_absolute_url()])
             i+=1
             if i == 10:
                 break
         for school in schools:
-            res.append([school.title, 'school'])
+            res.append([school.title, 'school', school.landing()])
             i+=1
             if i == 10:
                 break
@@ -779,6 +750,40 @@ def make_zaiavka(request):
     }
     return JsonResponse(data)
 
+def cat_filter(request):
+    res = []
+    if request.GET.get('id') and request.GET.get('mincost') and request.GET.get('maxcost'):
+        cat = SchoolCategory.objects.get(id=int(request.GET.get('id')))
+        schools = cat.schools.all()
+        mincost = int(request.GET.get('mincost'))*1000 - 1
+        maxcost = int(request.GET.get('maxcost'))*1000 + 1
+        schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost)
+        if len(request.GET.get('ids')) > 0:
+            ids = request.GET.get('ids').split('p')
+            del ids[-1]
+            for i in ids:
+                option = SchoolFilterOption.objects.get(id=int(i))
+                schools = schools.filter(filter_options=option)
+        for school in schools:
+            address = '-'
+            if len(school.school_offices.all())>0:
+                office = school.school_offices.first()
+                address = office.region+', '+office.address
+            image_url = ''
+            if len(school.banners.all()) > 0:
+                image_url = school.banners.first().image_banner.url
+                print(image_url)
+            res.append([
+                school.get_landing(),
+                school.title,
+                image_url, 
+                address, 
+                school.content])
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 def handler404(request, exception):
@@ -811,11 +816,73 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    for squad in Squad.objects.all():
-        subjects = squad.subjects.all()
-        squad.subjects.remove(*subjects)
-        for lecture in squad.squad_lectures.all():
-            lecture.subject.squads.add(squad)
+    # for squad in Squad.objects.all():
+    #     subjects = squad.subjects.all()
+    #     squad.subjects.remove(*subjects)
+    #     for lecture in squad.squad_lectures.all():
+    #         lecture.subject.squads.add(squad)
+
+    for lecture in Lecture.objects.all():
+        teacher = lecture.squad.teacher
+        if teacher:
+            lecture.people.add(teacher)
+
+    main_filters = []
+    main_filters.append(['Английский язык IELTS TOEFL', 'Английский язык', 'IELTS', 'TOEFL'])
+    main_filters.append(['Подготовка к ЕНТ, КТА', 'ЕНТ', 'КТА'])
+    main_filters.append(['Подготовка к БИЛ(КТЛ), 90, РФМШ, НИШ, 165, 134', 'БИЛ(КТЛ)', 'РФМШ', 'НИШ', '165', '134'])
+    main_filters.append(['Подготовка к школе'])
+    main_filters.append(['Продленка'])
+    main_filters.append(['SAT, GMAT, GRE, Nufypet', 'SAT', 'GMAT', 'GRE', 'Nufypet'])
+    main_filters.append(['Математика / Логика', 'Математика', 'Логика'])
+    main_filters.append(['Программирование', 'Олимпиадная', 'Для работы'])
+    main_filters.append(['Школьные предметы'])
+    main_filters.append(['Иностранные языки'])
+    main_filters.append(['Творческие навыки и Музыка'])
+    main_filters.append(['Игры, Шахматы'])
+    main_filters.append(['Профессиональные курсы', 'смм', 'сео', 'маркетинг', 'бизнес'])
+    main_filters.append(['Студентам'])
+    second_filters = []
+    a = ['Учитель','Носитель языка','Местный']
+    b = ['Язык обучения','Казахский','Русский', 'Английский']
+    c = ['Количество уроков в неделю', '1','2','3','4', '5', '6']
+    d = ['Длительность урока', '45 минут','60 минут','90 минут','Больше']
+    f = ['Кол-во студентов в группе', 'Индивидуально','До 2','До 3', 'До 6', 'До 10', 'Больше']
+    g = ['Занятия проходят', 'Утром','Днём', 'Вечером']
+
+    second_filters.append(a)
+    second_filters.append(b)
+    second_filters.append(c)
+    second_filters.append(d)
+    second_filters.append(g)
+    second_filters.append(f)
+
+    for mf in main_filters:
+        for i in range(0, len(mf)):
+            if i == 0:
+                crntsf = SchoolFilter.objects.create(title = mf[0])
+                crntsf.save()
+                crntct = SchoolCategory.objects.create(title = mf[0], main_filters=crntsf)
+                crntct.save()
+            else:
+                SchoolFilterOption.objects.create(filter_type=crntsf,title = mf[i])        
+
+    for sf in second_filters:
+        for i in range(0, len(sf)):
+            if i == 0:
+                crntsf = SchoolFilter.objects.create(title = sf[0])
+                crntsf.save()
+            else:
+                SchoolFilterOption.objects.create(filter_type=crntsf,title = sf[i])
+
+    counter = 0
+    allcats = SchoolCategory.objects.all()
+    for f in SchoolFilter.objects.filter().order_by('-id'):
+        if counter == 5:
+            break
+        f.categories.add(*allcats)
+        print(f.title)
+        counter += 1
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})

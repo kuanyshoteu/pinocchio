@@ -3,27 +3,129 @@
 {% load staticfiles %}
 {% load ttags %}
 {% block content %}
-<div class="text-center" style="padding: 45px 50px;margin-top: -5px;color: #4a4a4a;">
-    <div class="text-center mb15" style="font-size: 30px;line-height: 35px;">Введите название интересующего курса</div>
-    <div style="width: 50%; margin: 0 auto 0 auto;" class="mb15">
-        <form class="ui form">
-            <div class="ui grid no_margin"></div>
-            <textarea style="width: calc(100% - 120px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;" placeholder="Поиск учебных центров"></textarea>
-            <a class="ui button green" style="height: 50px;line-height: 25px;border-radius: 0 5px 5px 0;"><i class="icon search" style="color: #fff;"></i> Поиск</a>
-        </form>  
+<div style="margin-top: -5px;color: #fff;">
+    <div class="text-center newlandhead half-h" style="background-color: #506ca9;">
+        <div class="text-center" style="font-size: 60px;margin-bottom: 30px">
+            <img src="{% static 'images/12.jpg' %}" style="width: 300px;">
+        </div>
+        <div class="text-center mb15" style="font-size: 30px;line-height: 35px;">Введите название интересующего курса</div>
+        <div class="half-w" style="margin: 0 auto 15px auto;">
+            <form class="ui form">
+                <textarea class="map_search_input mb0" url="/api/map_search/" style="width: calc(100% - 120px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;" placeholder="Учебные центры и курсы"></textarea>
+                <a class="ui button green map_search_by_tags" url="/api/map_search_show/" style="height: 50px;line-height: 25px;border-radius: 0 5px 5px 0;"><i class="icon search" style="color: #fff;"></i> <span class="not_in_mobile">Поиск</span></a>
+                <div class="map_search_hint ml5 mt5 ui segment no_padding" style="color: #222;text-align: left;width: calc(100% - 120px);display: none;">
+                </div>
+            </form>  
+        </div>
+        <div class="text-center" style="font-size: 30px;line-height: 35px;">
+            или выберите категорию
+        </div>
     </div>
-    <div class="text-center" style="font-size: 30px;margin-bottom: 40px;">
-        или выберите категорию
-    </div>
-    <div class="ui grid">
-        {% for cat in res %}
+    <div class="ui grid stackable big_pad pt50 pb50">
+        {% for cat in categories %}
         <div class="four wide column">
-            <a href="/catland" class="ui button full-w" style="height: 100px;background-color: #21BA45;border-radius: 5px;padding: 25px 15px 15px 15px;color: #fff;">
-                <span style="font-size: 19;">{{cat}}</span>
+            <a href="{{cat.get_absolute_url}}" class="ui button full-w green" style="height: 100px;border-radius: 5px;padding: 20px 15px 15px 15px;color: #fff;line-height: 30px;">
+                <span style="font-size: 19;font-weight: 600;">{{cat.title}}</span>
             </a>
         </div>
         {% endfor %}
     </div>
+    <div class="ui grid stackable big_pad pt0 pb0 mb150" style="color: #303030;">
+        <div class="sixteen wide column" style="text-align: left;">
+            <div style="font-weight: 600;font-size: 20px;display: inline-block;">
+                Рекомендуемые
+            </div>
+            <a href="" class="ml15 pl15" style="display: inline-block;font-size: 15px;">Посмотреть все</a>
+        </div>
+        {% for school in schools %}
+        <div class="four wide column">
+            <div class="ui segment full-w btn_select" style="height: 320px;padding: 20px;">
+                <a href="{{school.landing}}">
+                    <div style="font-size: 17px;font-weight: 600;">{{school.title}}</div>
+                    <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon2.jpeg'%}{%endif%});background-size: 100%;" class="full-w mt15"></div>
+                    <div class="mt15" style="height: 50px;">
+                        <span style="color: #646464;">{{school.school_offices.first.address}}</span>
+                        <br>
+                        <span>{{school.slogan}}</span>
+                    </div>
+                    <div class="mt15" style="height: 33px;color: #646464;">
+                        <span style="color: #D4C14A;font-weight: 600;">
+                            {{school.rating}}                            
+                        </span>
+                        {% for star in five %}
+                            {% if forloop.counter <= school.rating %}
+                                <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
+                            {% endif %}
+                        {% endfor %}
+                        {% for star in school|rating_empty_stars %}
+                            <i class="icon star" style="margin-right: -3px;"></i>
+                        {% endfor %}
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<!--     <div class="mb150 big_pad pt0" style="color: #303030;margin-top: 100px;">
+        <div class="pl15 pr15" style="font-weight: 600;font-size: 20px;display: inline-block;">
+            Новости и статьи про образование
+        </div>
+        <a href="" class="ml15 pl15" style="display: inline-block;font-size: 15px;">Посмотреть все</a>
+         {% for school in schools %}
+        <div class="ui segment" style="padding: 30px 14px;">
+            <div class="ui grid">
+                <div class="three wide column no_padding">
+                    <img class="full-w" src="{% static 'images/fon1.png' %}">
+                </div>
+                <div class="twelve wide column pt0">
+                    <a href="" style="text-decoration: underline;font-weight: 600;">
+                        OYLA на английском — теперь в Казахстане!
+                    </a>
+                    <div>
+                        Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+ -->
 </div>
-
+<script type="text/javascript">
+    $('.map_search_input').on('input', function(e) {
+        text = $('.map_search_input').val()
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'text': text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if(data.res.length == 0){
+                    $('.map_search_hint').hide();
+                    map_search_by_tags(text);
+                }
+                else{
+                    $('.map_search_hint').empty();
+                    url = $('.show_url').attr('url')
+                    for(var i = 0; i < data.res.length; i++){
+                        if (data.res[i][1] == 'category') {
+                            icon = '<b style="font-size:11px;color:grey;">категория:</b> '
+                        }
+                        else 
+                            icon = '<b style="font-size:11px;color:grey;">центр: </b>'
+                        var element = $('<a href="'+data.res[i][2]+'" class="map_hint_item">'+icon+'<b>'+data.res[i][0]+'</b></a>').appendTo('.map_search_hint');
+                    }
+                    $('.map_search_hint').show();
+                }
+            }
+        });
+    })
+    $('.map_search_by_tags').on('click',function(e) {
+        text = $('.map_search_input').val()
+        map_search_by_tags(text)
+    })
+    
+</script>
 {% endblock content %}

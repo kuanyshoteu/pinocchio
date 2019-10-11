@@ -20,6 +20,43 @@ class SchoolModelAdmin(admin.ModelAdmin):
         model = School
 admin.site.register(School, SchoolModelAdmin)
 
+class SchoolFilterModelAdmin(admin.ModelAdmin):
+    list_display = ["title", "id"]
+    list_display_links = ["title"]
+    list_filter = ["title"]
+
+    search_fields = ["content"]
+    class Meta:
+        model = SchoolFilter
+admin.site.register(SchoolFilter, SchoolFilterModelAdmin)
+
+class SchoolFilterOptionModelAdmin(admin.ModelAdmin):
+    list_display = ["title", "id"]
+    list_display_links = ["title"]
+    list_filter = ["title"]
+
+    search_fields = ["content"]
+    class Meta:
+        model = SchoolFilterOption
+admin.site.register(SchoolFilterOption, SchoolFilterOptionModelAdmin)
+
+class SchoolCategoryModelAdmin(admin.ModelAdmin):
+    list_display = ["title", "id"]
+    list_display_links = ["title"]
+    list_filter = ["title"]
+
+    search_fields = ["content"]
+    class Meta:
+        model = SchoolCategory
+admin.site.register(SchoolCategory, SchoolCategoryModelAdmin)
+
+class ElliteSchoolModelAdmin(admin.ModelAdmin):
+    list_display = ["id"]
+    list_display_links = ["id"]
+    class Meta:
+        model = ElliteSchools
+admin.site.register(ElliteSchools, ElliteSchoolModelAdmin)
+
 class CRMColumnModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
     list_display_links = ["title"]

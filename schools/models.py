@@ -157,6 +157,26 @@ class SchoolBanner(models.Model):
     def delete_school_banner(self):
         return reverse("schools:delete_school_banner")
 
+
+class SchoolFilter(models.Model):
+    title = models.CharField(max_length=250)
+class SchoolFilterOption(models.Model):
+    filter_type = models.ForeignKey(SchoolFilter, null=True, on_delete = models.CASCADE, related_name='filter_options')
+    schools = models.ManyToManyField(School, related_name='filter_options')
+    title = models.CharField(max_length=250)
+    class Meta:
+        ordering = ['id']
+class SchoolCategory(models.Model):
+    schools = models.ManyToManyField(School, related_name='categories')
+    title = models.CharField(max_length=250)
+    main_filters = models.ForeignKey(SchoolFilter, null=True, on_delete = models.CASCADE, related_name='mcategories')
+    second_filters = models.ManyToManyField(SchoolFilter, related_name='categories')
+    number = models.IntegerField(default=1)
+    class Meta:
+        ordering = ['id']
+    def get_absolute_url(self):
+        return reverse("main:category", kwargs={"id": self.id})
+
 class SubjectCategory(models.Model):
     schools = models.ManyToManyField(School, related_name='school_subject_categories')
     title = models.CharField(max_length=250)
@@ -192,6 +212,9 @@ class SubjectLevel(models.Model):
         return reverse("schools:search_url")
     class Meta:
         ordering = ['id']
+
+class ElliteSchools(models.Model):
+    schools = models.ManyToManyField(School, related_name='elite_list')
 
 class FilterControl(models.Model):
     levels = models.ManyToManyField(SubjectLevel, related_name='filter_control')

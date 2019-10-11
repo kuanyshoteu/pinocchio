@@ -54,9 +54,10 @@
                     <i class="trophy icon"></i>Рейтинги
                 </a>
             </div>
-            <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:map' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
-                Карта
+            <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:home' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
+                Поиск курсов
             </a>
+            <br>
             <a class="lftitemsmall small_text ml10" href='/team/'>
                 О нас
             </a>

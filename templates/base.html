@@ -70,10 +70,10 @@
             </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-            <a href="{% url 'main:about' %}" class="ui button mini green" id="request-responsive" style="position: absolute;right: 75px;padding: 10px;font-size: 14px;top: 2px;">Стать партнером</a>
+            <a href="{% url 'main:about' %}" class="ui button mini green pl5 pt10 pr5 pb10" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 2px;">Стать партнером</a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-            <a href="{% url 'main:login_page' %}" class="ui button mini green" id="request-responsive" style="position: absolute;right: 10px;padding: 10px;font-size: 14px;top: 2px;">Войти</a>
+            <a href="{% url 'main:login_page' %}" class="ui button mini green pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
             {% endif %}
         </div>
         {% if request.user.is_authenticated %}

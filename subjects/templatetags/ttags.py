@@ -416,6 +416,10 @@ def constant_school_lectures(profile, school):
         lectures = lectures.filter(age=profile.skill.crm_age)
     if profile.skill.crm_office:
         lectures = lectures.filter(office=profile.skill.crm_office)
+    if len(profile.skill.filter_teacher.all()) > 0:
+        lectures = lectures.filter(people=profile.skill.filter_teacher.first())
+    if len(profile.skill.filter_course_connect.all()) > 0:
+        lectures = lectures.filter(subject=profile.skill.filter_course_connect.first())
     res = []
     interval = school.schedule_interval
     for lecture in lectures:

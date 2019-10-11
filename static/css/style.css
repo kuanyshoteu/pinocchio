@@ -1,3 +1,13 @@
+
+.btn_select{
+  cursor: pointer;
+  box-shadow: 0 2px 2px 0 #d7d7d7;
+  transition: box-shadow 400ms ease;
+  -webkit-transition: box-shadow 400ms ease;
+}
+.btn_select:hover{
+  box-shadow: 0 15px 15px 0 #d7d7d7;
+}
 .thconst{
   padding: 5px !important;
   display: inline-block;
@@ -146,6 +156,18 @@ body{
 .mr50{
   margin-right: 50px;
 }
+.pb50{
+  padding-bottom: 50px !important;
+}
+.pt50{
+  padding-top: 50px !important;
+}
+.pl50{
+  padding-left: 50px;
+}
+.pr50{
+  padding-right: 50px;
+}
 .pb0{
   padding-bottom: 0px !important;
 }
@@ -278,22 +300,12 @@ body{
   color: darkblue;
   border-radius: 0 !important;
 }
-.map_search_hint{
-  position: absolute !important;
-  margin-top: 34px !important;
-  margin-left: 1px !important;
-  z-index: 500;
-  width: calc(100% - 56px);
-  min-height:10px;
-  background-color: #fff;
-  padding: 0 !important; 
-  color: darkblue;
-}
 .map_hint_item{
   padding: 6px 10px !important;
   cursor: pointer;
   width: 100%;
   border-bottom: 1px solid #f3f3f3;
+  display: block;
 }
 .map_hint_item:hover{
   background-color: #f3f3f3;
@@ -2133,7 +2145,26 @@ a{
       width: 30%;
       margin: 5% auto !important;
     }
-
+    .catland{
+      padding: 30px 50px 200px 50px;
+    }
+    .catland_found{
+      padding-left: 30px;
+    }    
+    .filter_title{
+      width: 190px;
+    }
+    .newlandhead{padding: 30px 50px 10px 50px;}
+    .half-w{
+      width: 50%;
+    }
+    .half-h{
+      height: 60%;
+    }
+    .big_pad{
+      padding-left: 50px !important;
+      padding-right: 50px !important;
+    }
 }
 .back-w{
   background-color: #fff;
@@ -2141,13 +2172,33 @@ a{
 .schoolLanding__content-services__item-right {
   text-align: center;
 }
-.map_search_input{
-  border-radius: 3px 0 0 3px;
-  padding-top: 8px !important; 
-  height: 36px !important;
-  overflow-y: hidden;
-}
 @media only screen and (max-width: 899px) {
+    .big_pad{
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    .half-h{
+      height: 50%;
+    }
+    .filter_title{
+      width: 100%;
+    }
+    .mpl0{
+      padding-left: 0 !important;
+    }
+    .mpr0{
+      padding-right: 0 !important;
+    }
+    .half-w{
+      width: 100%;
+    }
+    .newlandhead{padding: 50px 10px 10px 10px;}
+    .catland{
+      padding: 30px 0px 200px 0px;
+    }
+    .catland_found{
+      padding-left: 14px;
+    }
     .login_form{
       padding: 14px;
       width: 100%;

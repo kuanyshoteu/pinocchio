@@ -96,6 +96,8 @@ def school_schedule(request):
         "subject_categories":school.school_subject_categories.all(),
         "ages":school.school_subject_ages.all(),
         "offices":school.school_offices.all(),
+        "courses":school.school_subjects.all(),
+        "teachers":all_teachers(school),        
         'days':Day.objects.all(),
         'time_periods':time_periods,
         'is_trener':is_profi(profile, 'Teacher'),
