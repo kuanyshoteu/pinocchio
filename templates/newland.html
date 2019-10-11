@@ -6,7 +6,6 @@
 <div style="margin-top: -5px;color: #fff;">
     <div class="text-center newlandhead half-h" style="background-color: #506ca9;">
         <div class="text-center" style="font-size: 60px;margin-bottom: 30px">
-            <img src="{% static 'images/12.jpg' %}" style="width: 300px;">
         </div>
         <div class="text-center mb15" style="font-size: 30px;line-height: 35px;">Введите название интересующего курса</div>
         <div class="half-w" style="margin: 0 auto 15px auto;">
@@ -42,7 +41,7 @@
             <div class="ui segment full-w btn_select" style="height: 320px;padding: 20px;">
                 <a href="{{school.landing}}">
                     <div style="font-size: 17px;font-weight: 600;">{{school.title}}</div>
-                    <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon2.jpeg'%}{%endif%});background-size: 100%;" class="full-w mt15"></div>
+                    <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%endif%});background-size: 100%;" class="full-w mt15"></div>
                     <div class="mt15" style="height: 50px;">
                         <span style="color: #646464;">{{school.school_offices.first.address}}</span>
                         <br>
@@ -75,7 +74,6 @@
         <div class="ui segment" style="padding: 30px 14px;">
             <div class="ui grid">
                 <div class="three wide column no_padding">
-                    <img class="full-w" src="{% static 'images/fon1.png' %}">
                 </div>
                 <div class="twelve wide column pt0">
                     <a href="" style="text-decoration: underline;font-weight: 600;">
