@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^$', map_view, name='home'),
     url(r'^map/$', map_view, name='map'),
     url(r'^newland/$', newland, name='newland'),
-    url(r'^about/$', about, name='about'),
     url(r'^team/$', team, name='team'),
     url(r'^pricing/$', pricing, name='pricing'),
     url(r'^login/$', login_page, name='login_page'),
