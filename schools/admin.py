@@ -41,11 +41,9 @@ class SchoolFilterOptionModelAdmin(admin.ModelAdmin):
 admin.site.register(SchoolFilterOption, SchoolFilterOptionModelAdmin)
 
 class SchoolCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "id"]
+    list_display = ["title", "number"]
     list_display_links = ["title"]
     list_filter = ["title"]
-
-    search_fields = ["content"]
     class Meta:
         model = SchoolCategory
 admin.site.register(SchoolCategory, SchoolCategoryModelAdmin)

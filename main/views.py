@@ -820,11 +820,13 @@ def moderator_run_code(request):
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
 
-    counter = 0
-    allcats = SchoolCategory.objects.all()
-    for c in allcats:
-        if c.id > 8:
-            c.number = c.id + 1
-            c.save()
+    cat = SchoolCategory.objects.create(title='Поступление на магистратуру и PhD в РК',number=16)
+    cat.save()
+
+    for i in range(17, 22):
+        f = SchoolFilter.objects.get(id=i)
+        cat.main_filters = f
+    cat.save()
+
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})
