@@ -111,6 +111,11 @@
                                                 <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
                                                     <span style="margin-right: 15px;">{{ forloop.counter }}.</span>
                                                     <a href="{{ student.get_absolute_url }}" style="color: #fff;">
+                                                        {% if student.image %}
+                                                        <img class="ui image avatar" src="{{ student.image.url }}">
+                                                        {% else %}
+                                                        <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
+                                                        {% endif %}
                                                         {{ student.first_name }}
                                                     </a>
                                                 </div>
