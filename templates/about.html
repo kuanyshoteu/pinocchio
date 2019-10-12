@@ -1,8 +1,46 @@
 <!DOCTYPE html> 
 <html lang="ru"> 
+{% load staticfiles %}
+{% load static compress %}
 <head> 
 </head> 
 <body data-track-group="Landing-Marquee">  
 mmmm *****
 </body> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {% compress js %}   
+    <script src="{% static 'js/landing/func3.js' %}"></script> 
+    <script src="{% static 'js/landing/func.js' %}"></script>
+    {% endcompress %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
+    type="text/javascript"></script>
+
+    <script type="text/javascript">
+        ymaps.ready(init);
+        function init(){ 
+            var myMap = new ymaps.Map("map", {
+                center: [43.25114500794218, 76.93245686909563],
+                zoom: 15
+            },{
+                restrictMapArea: [
+                    [42.8, 76.02848],
+                    [44.25654, 77.92848]
+                ]
+            })
+            firstCollection = new ymaps.GeoObjectCollection(null)
+            firstCollection.add(new ymaps.Placemark([43.25114500794218, 76.93245686909563], 
+                {
+                    iconLayout: 'default#imageWithContent',
+                    iconImageHref: "{% static 'images/pointer.jpg' %}",
+                    iconImageSize: [20, 30],
+                    iconImageOffset: [-10, -15],
+                    iconContentOffset: [15, 15],
+                }
+            ));
+            myMap.geoObjects.add(firstCollection);
+        }
+    </script>
+{% compress js %}       
+<script src="{% static 'js/landing/func2.js' %}"></script>   
+{% endcompress %}
 </html>
