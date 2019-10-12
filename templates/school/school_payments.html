@@ -105,6 +105,33 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for student in profile|rating_filter %}
+                                        <tr style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
+                                            <td style="text-align: left;padding: 7px 15px;">
+                                                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                                    <span style="margin-right: 15px;">{{ forloop.counter }}.</span>
+                                                    <a href="{{ student.get_absolute_url }}" style="color: #fff;">
+                                                        {{ student.first_name }}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <td style="padding: 7px 15px;">
+                                                <form class="ui form grid" >
+                                                    <div class="twelve wide column" style="display: flex;">
+                                                        <input class="payment_amount{{ student.id }} mb0"" placeholder="Сумма" type="number" name="">
+                                                        <select id="pay_for_group{{ student.id }}">
+                                                            {%for squad in student.squads.all%}
+                                                            <option value="{{squad.id}}">{{squad.title}}</option>
+                                                            {%endfor%}
+                                                        </select>
+                                                    </div>
+                                                    <div class="four wide column">
+                                                        <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ student.id }}')">Оплатил(а)</a>
+                                                    </div>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
