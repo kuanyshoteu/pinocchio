@@ -387,7 +387,7 @@ def school_list(request):
     }
     return render(request, "schools/school_list.html", context)
 
-def subject_create(request):
+def subject_create(request): ### Если нет предмета, то отправить письмо Адилю
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)
     create_url = ''

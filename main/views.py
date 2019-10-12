@@ -779,6 +779,7 @@ def cat_filter(request):
                 image_url, 
                 address, 
                 school.content])
+        ## Сортировка по ценам курсов
     data = {
         'res':res,
     }
