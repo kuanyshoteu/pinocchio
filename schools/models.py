@@ -173,7 +173,7 @@ class SchoolCategory(models.Model):
     second_filters = models.ManyToManyField(SchoolFilter, related_name='categories')
     number = models.IntegerField(default=1)
     class Meta:
-        ordering = ['id']
+        ordering = ['number']
     def get_absolute_url(self):
         return reverse("main:category", kwargs={"id": self.id})
 

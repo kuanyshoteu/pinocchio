@@ -823,7 +823,8 @@ def moderator_run_code(request):
     counter = 0
     allcats = SchoolCategory.objects.all()
     for c in allcats:
-        c.number = c.id
-        c.save()
+        if c.id > 8:
+            c.number = c.id + 1
+            c.save()
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})
