@@ -97,6 +97,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
+                        <img style="height: 100%; width: 100%; object-fit: contain" src="{% static 'images/landing/market.jpg' %}" alt="marketplace">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -112,6 +113,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
                     <div class="board"> 
+                        <img src="{% static 'images/landing/crm.jpg' %}" style="height: 100%; width: 100%; object-fit: contain" alt="crm">
                     </div> 
                 </div> 
                 <div class="col-md-5 text-center text-md-left"> 
@@ -127,6 +129,7 @@
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board"> 
+                        <img src="{% static 'images/landing/sch.jpg' %}" style="height: 100%; width: 100%; object-fit: contain" alt="schedule">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
@@ -158,6 +161,11 @@
                 </a>
                 <div class="board how-it-works">
                     <div class="slide_images">
+                        <img src="{% static 'images/landing/1.jpg' %}" class="full-w full-h land_img land_img1" alt="landing">
+                        <img src="{% static 'images/landing/2.jpg' %}" class="full-w full-h land_img land_img2" alt="crm" style="display: none;">
+                        <img src="{% static 'images/landing/3.jpg' %}" class="full-w full-h land_img land_img3" alt="client" style="display: none;">
+                        <img src="{% static 'images/landing/4.jpg' %}" class="full-w full-h land_img land_img4" alt="card" style="display: none;">
+                        <img src="{% static 'images/landing/5.jpg' %}" class="full-w full-h land_img land_img5" alt="schedule" style="display: none;">
                     </div>
                     <div class="captions"> 
                         <div class="caption-texts">
@@ -190,6 +198,7 @@
             <div class="row"> 
                 <div class="col-lg-4"> 
                     <div class="img img-collaborate">
+                        <img src="{% static 'images/landing/vrn.jpg' %}" class="three_feat1" alt="voronka"/>
                     </div> 
                     <h5>Воронка продаж</h5> 
                     <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж.</p> 
@@ -197,6 +206,7 @@
                 </div> 
                 <div class="col-lg-4"> 
                     <div class="img img-apps">
+                        <img src="{% static 'images/landing/sms.jpg' %}" class="three_feat2" alt="sms">
                     </div>
                     <h5>СМС уведомления</h5> 
                     <p class="small">Напоминайте клиентам о предстоящем пробном занятии, информируйте об отмене урока вовремя и расскажите всем своим клиентам о новой акции.</p> 
@@ -204,6 +214,7 @@
                 </div> 
                 <div class="col-lg-4"> 
                     <div class="img img-sync">
+                        <img src="{% static 'images/landing/money.jpg' %}" class="three_feat3" alt="money">
                     </div> 
                     <h5>Оплата, расчет зарплат</h5> 
                     <p class="small">Оплата по скидке или в рассрочку, скидки по акциям, перерасчет оплаты в случае пропуска занятия, расчёт зарплат преподавателей по проведённым урокам – проводите все расчёты одной кнопкой.</p> 
@@ -268,6 +279,7 @@
                 <li><a href="{% url 'main:pricing' %}" class="land_costs_link">Цены</a></li> 
             </ul> 
             <p> 
+                <img src="{% static 'images/landing/logo.jpg' %}" class="triplea" alt="triplea">
                 <br>
                 &nbsp;© 2019. Все права защищены. 
             </p> 
@@ -299,7 +311,7 @@
             firstCollection.add(new ymaps.Placemark([43.25114500794218, 76.93245686909563], 
                 {
                     iconLayout: 'default#imageWithContent',
-                    iconImageHref: "",
+                    iconImageHref: "{% static 'images/pointer.png' %}",
                     iconImageSize: [20, 30],
                     iconImageOffset: [-10, -15],
                     iconContentOffset: [15, 15],
