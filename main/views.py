@@ -160,11 +160,13 @@ def sign_up(request):
 
 def about(request):
     profile = None
+    print('********* 000')         
     if request.user.is_authenticated:
         profile = get_profile(request)
     context = {
         "profile":profile,
     }
+    print('********* 111', profile)         
     return render(request, "about.html", context)
 
 def team(request):
