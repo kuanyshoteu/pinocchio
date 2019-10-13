@@ -796,6 +796,19 @@ a{
   text-shadow: none;
   background-image: none;
 }
+.ui.lightgreen {
+  background-color: #32cb56;
+  border: 1px solid lightgreen;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.lightgreen:hover {
+  background-color: #21BA45;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
 .ui.dark {
   background-color: #4a4a4a;
   color: #fff;
@@ -2159,7 +2172,7 @@ a{
       width: 50%;
     }
     .half-h{
-      height: 60%;
+      height: 352px;
     }
     .big_pad{
       padding-left: 50px !important;
@@ -2178,7 +2191,7 @@ a{
       padding-right: 10px;
     }
     .half-h{
-      height: 50%;
+      height: 382px;
     }
     .filter_title{
       width: 100%;

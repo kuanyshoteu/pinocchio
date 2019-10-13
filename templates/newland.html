@@ -3,16 +3,26 @@
 {% load staticfiles %}
 {% load ttags %}
 {% block content %}
+<style type="text/css">
+    .newlandhead{
+        background-color: #007ced;
+        background: linear-gradient(to bottom, #007ced 1%,#46C4E5 100%);    
+    }
+    #main-menu {
+        background-color: #007ced;
+    }
+</style>
 <div style="margin-top: -5px;color: #fff;">
-    <div class="text-center newlandhead half-h" style="background-color: #506ca9;">
+    <div class="text-center newlandhead half-h" style="background-color: #2172C2;">
+        <div id="cloud-intro"></div>
         <div class="text-center" style="font-size: 60px;margin-bottom: 30px">
-            <img src="{% static 'images/12.jpg' %}" style="width: 300px;">
+            <img src="{% static 'images/logo_clean.jpeg' %}" style="width: 300px;">
         </div>
         <div class="text-center mb15" style="font-size: 30px;line-height: 35px;">Введите название интересующего курса</div>
         <div class="half-w" style="margin: 0 auto 15px auto;">
             <form class="ui form">
                 <textarea class="map_search_input mb0" url="/api/map_search/" style="width: calc(100% - 120px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;" placeholder="Учебные центры и курсы"></textarea>
-                <a class="ui button green map_search_by_tags" url="/api/map_search_show/" style="height: 50px;line-height: 25px;border-radius: 0 5px 5px 0;"><i class="icon search" style="color: #fff;"></i> <span class="not_in_mobile">Поиск</span></a>
+                <a class="ui button lightgreen map_search_by_tags" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;"><i class="icon search" style="color: #fff;"></i> <b class="not_in_mobile">Поиск</b></a>
                 <div class="map_search_hint ml5 mt5 ui segment no_padding" style="color: #222;text-align: left;width: calc(100% - 120px);display: none;">
                 </div>
             </form>  
@@ -23,8 +33,13 @@
     </div>
     <div class="ui grid stackable big_pad pt50 pb50">
         {% for cat in categories %}
-        <div class="four wide column">
-            <a href="{{cat.get_absolute_url}}" class="ui button full-w green" style="height: 100px;border-radius: 5px;padding: 20px 15px 15px 15px;color: #fff;line-height: 30px;">
+        <div class="four wide column pb0">
+            {% if forloop.counter == 1 %}
+                <div style="position: absolute;margin-top: 60px;right: 20px;">
+                    <img style="width: 30px;height: 30px;border-radius: 100%;" src="{%static 'images/cats/england.jpeg'%}">
+                </div>
+            {% endif %}
+            <a href="{{cat.get_absolute_url}}" class="ui button full-w lightgreen" style="height: 100px;padding: 20px 15px 15px 15px;color: #fff;line-height: 30px; background-image: url({% static 'images/icons/math.png' %})">
                 <span style="font-size: 19;font-weight: 600;">{{cat.title}}</span>
             </a>
         </div>
