@@ -180,6 +180,7 @@ class SchoolCategory(models.Model):
 class SubjectCategory(models.Model):
     schools = models.ManyToManyField(School, related_name='school_subject_categories')
     title = models.CharField(max_length=250)
+    school_categories = models.ManyToManyField(SchoolCategory, related_name='subject_categories')
     def delete_url(self):
         return reverse("schools:subject_delete_url")
     def create_url(self):
