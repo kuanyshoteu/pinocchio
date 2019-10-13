@@ -145,7 +145,6 @@ def change_profile(request):
         'is_trener':is_profi(hisprofile, 'Teacher'),
         "is_manager":is_profi(hisprofile, 'Manager'),
         "is_director":is_profi(hisprofile, 'Director'),
-        'hint':hisprofile.skill.hint_numbers[1],
     }
     return render(request, "profile/change_profile.html", context)
 
