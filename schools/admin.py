@@ -41,7 +41,7 @@ class SchoolFilterOptionModelAdmin(admin.ModelAdmin):
 admin.site.register(SchoolFilterOption, SchoolFilterOptionModelAdmin)
 
 class SchoolCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ["title", "number"]
+    list_display = ["title", "number", "id"]
     list_display_links = ["title"]
     list_filter = ["title"]
     class Meta:
