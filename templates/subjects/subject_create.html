@@ -160,7 +160,8 @@
                             </div>
                         </div>
                         <div class="eight wide column pt0 pl0">
-                            <div class="ui segment">
+                            <div class="ui segment subject_filters">
+                                {% for filter in instance|get_filters %}
                                 <div class="filter-element filter-element-level" url="{{ instance.change_level }}" style="margin-top: 10px;">
                                     <div class="filter-title-s" id="level{{ subject_level.id }}" status="closed">
                                         Выберите уровни курса
@@ -190,7 +191,8 @@
                                         </div>
                                         {%endif%}
                                     </ul>
-                                </div>                                          
+                                </div>
+                                {% endfor %}              
                                 <div class="filter-element filter-element-age" url="{{ instance.change_age }}" style="margin-top: 10px;">
                                     <div class="filter-title-s" id="age{{ subject_age.id }}" status="closed">
                                         Выберите возрасты для курса
