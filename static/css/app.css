@@ -30477,7 +30477,7 @@ a:hover {
   display: none;
 }
 .filter-item-s {
-  padding: 0 0 0 17px;
+  padding: 5px 0 5px 17px;
   cursor: pointer;
 }
 .filter-item-s:hover {

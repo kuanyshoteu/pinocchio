@@ -1,4 +1,6 @@
-
+.filter-list{
+  background-color: #4a4a4a;color: #fff;margin-top: -10px;
+}
 .btn_select{
   cursor: pointer;
   box-shadow: 0 2px 2px 0 #d7d7d7;
