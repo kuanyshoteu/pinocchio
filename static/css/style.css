@@ -1,6 +1,3 @@
-.filter-list{
-  background-color: #4a4a4a;color: #fff;margin-top: -10px;
-}
 .btn_select{
   cursor: pointer;
   box-shadow: 0 2px 2px 0 #d7d7d7;
@@ -277,6 +274,9 @@ body{
 }
 .highlight{
   background-color: #21BA45;padding: 5 10px !important;color: #fff;border-radius: 3px;
+}
+.highlight_blue{
+  background-color: #5181b8;padding: 5 10px !important;color: #fff;border-radius: 3px;
 }
 .highlight_red{
   background-color: #DB2828;padding: 5 10px;color: #fff;border-radius: 3px;

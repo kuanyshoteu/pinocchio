@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load ttags %}
 
 {% block head_extra %} 
 	{{ form.media }}
@@ -129,14 +130,10 @@
                             </div>
                         </div>
                         <div class="sixteen wide column pt0 pb0">
-                            <div class="ui segment text-center" style="font-size: 15px;font-weight: 600;">
-                                Фильтры
-                            </div>
-                        </div>
-                        <div class="eight wide column pr0 pt0">
-                            <div class="ui segment">
-                                <div class="filter-element filter-element-category" url="{{ instance.change_category }}">
-                                    <div class="filter-title-s" id="category{{ subject_category.id }}" status="closed">
+                            <div class="ui segment" >
+                                <span class="ml15" style="font-size: 15px;font-weight: 600;">Фильтры</span> 
+                                <div class="filter-element ml50 filter-element-category" url="{{ instance.change_category }}" style="width: 400px;">
+                                    <div class="filter-title-s" onclick="filterTitleS('category{{ subject_category.id }}')" id="category{{ subject_category.id }}" status="closed">
                                         Выберите предметы курса
                                         <i class="icon caret down" style="float: right;color: #222;"></i>
                                     </div>
@@ -156,65 +153,48 @@
                                         </li>
                                         {% endfor %}
                                     </ul>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
-                        <div class="eight wide column pt0 pl0">
-                            <div class="ui segment subject_filters">
-                                {% for filter in instance|get_filters %}
-                                <div class="filter-element filter-element-level" url="{{ instance.change_level }}" style="margin-top: 10px;">
-                                    <div class="filter-title-s" id="level{{ subject_level.id }}" status="closed">
-                                        Выберите уровни курса
-                                        <i class="icon caret down" style="float: right;color: #222;"></i>
-                                    </div>
-                                    <ul class="filter-list filter-list-hide filter-list-hide-level{{ subject_level.id }}">
-                                        {% if subject_levels|length > 0 %}
-                                        {% for subject_level in subject_levels %}
-                                        <li class="filter-item-s" name="filter-item-s" object="level" status="0" id="{{ subject_level.id }}">
-                                            {{subject_level.title}}
-                                            <i class="icon check green" id="check_subject_level{{ subject_level.id }}" style="{%if not subject_level in subject_levels_this%}display: none;{% endif %}"></i>
-                                            <div class="loading_small" style="display: none;" id="loadlevel{{ subject_level.id }}">
-                                              <div class="animation"><div class="circle one"></div></div>
-                                              <div class="animation"><div class="circle two"></div></div>
-                                              <div class="animation"><div class="circle three"></div></div>
-                                              <div class="animation"><div class="circle four"></div></div>
-                                              <div class="animation"><div class="circle five"></div></div>
-                                              <div class="animation"><div class="circle six"></div></div>
+                        <div class="sixteen wide column pt0">
+                            <div class="ui segment">
+                                <div class="subject_filters">
+                                    <div class="ui grid"> 
+                                        {% for filter in instance|get_filters %}
+                                        <div class="four wide column pt5">
+                                            <div class="mt10 filter-element filter-element-level" url="{{ instance.change_filter_option }}">
+                                                <div class="filter-title-s highlight_blue" id="filter{{filter.id}}" status="closed">
+                                                    {{ filter.title }}
+                                                </div>
                                             </div>
-                                        </li>
-                                        {% endfor %}
-                                        {%else%}
-                                        <div>
-                                            Еще не созданы уровни
-                                            <br>Создайте их в 
-                                            <a href="/schools/info/" class="ui button mini green">Управлении</a>
+                                            <ul style="position: relative;" class="filter-list filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
+                                                {% if filter.filter_options.all|length > 0 %}
+                                                {% for optn in filter.filter_options.all %}
+                                                <li class="filter-item-s" name="filter-item-s" object="level" status="0" id="{{ optn.id }}">
+                                                    {{optn.title}}
+                                                    <i class="icon check green" id="check_subject_level{{ optn.id }}" style="{%if not optn in subject_filter_options%}display: none;{% endif %}"></i>
+                                                    <div class="loading_small" style="display: none;" id="loadlevel{{ optn.id }}">
+                                                      <div class="animation"><div class="circle one"></div></div>
+                                                      <div class="animation"><div class="circle two"></div></div>
+                                                      <div class="animation"><div class="circle three"></div></div>
+                                                      <div class="animation"><div class="circle four"></div></div>
+                                                      <div class="animation"><div class="circle five"></div></div>
+                                                      <div class="animation"><div class="circle six"></div></div>
+                                                    </div>
+                                                </li>
+                                                {% endfor %}
+                                                {%else%}
+                                                <div>
+                                                    Еще не созданы уровни
+                                                    <br>Создайте их в 
+                                                    <a href="/schools/info/" class="ui button mini green">Управлении</a>
+                                                </div>
+                                                {%endif%}
+                                            </ul>
                                         </div>
-                                        {%endif%}
-                                    </ul>
-                                </div>
-                                {% endfor %}              
-                                <div class="filter-element filter-element-age" url="{{ instance.change_age }}" style="margin-top: 10px;">
-                                    <div class="filter-title-s" id="age{{ subject_age.id }}" status="closed">
-                                        Выберите возрасты для курса
-                                        <i class="icon caret down" style="float: right;color: #222;"></i>
-                                    </div>
-                                    <ul class="filter-list filter-list-hide filter-list-hide-age{{ subject_age.id }}">
-                                        {% for subject_age in subject_ages %}
-                                        <li class="filter-item-s" name="filter-item-s" object="age" status="0" id="{{ subject_age.id }}">
-                                            {{subject_age.title}}
-                                            <i class="icon check green" id="check_subject_age{{ subject_age.id }}" style="{%if not subject_age in subject_ages_this%}display: none;{% endif %}"></i>
-                                            <div class="loading_small" style="display: none;" id="loadage{{ subject_age.id }}">
-                                              <div class="animation"><div class="circle one"></div></div>
-                                              <div class="animation"><div class="circle two"></div></div>
-                                              <div class="animation"><div class="circle three"></div></div>
-                                              <div class="animation"><div class="circle four"></div></div>
-                                              <div class="animation"><div class="circle five"></div></div>
-                                              <div class="animation"><div class="circle six"></div></div>
-                                            </div>
-                                        </li>
                                         {% endfor %}
-                                    </ul>
-                                </div>                                        
+                                    </div>
+                                </div>
                             </div>
                         </div>
 						{% else %}
@@ -246,5 +226,51 @@
 	<span style="display: none;" class="change_urls">
 	</span>
 </div>
-
+<script type="text/javascript">
+    function filterTitleS(id){
+        this_ = $('#'+id)
+        status = this_.attr('status')
+        if (status == 'closed') {
+            $('.filter-list-hide-'+id).removeClass('filter-list-hide');
+            this_.attr('status','opened')
+            this_.addClass('highlight_blue')
+        }
+        else{
+            this_.removeClass('highlight_blue')
+            this_.attr('status','closed')
+            $('.filter-list-hide-'+id).addClass('filter-list-hide');
+        }
+    };
+    $('.filter-item-s').on('click', function () {
+        this_ = $(this)
+        id = this_.attr('id')
+        object = this_.attr('object')
+        url = $('.filter-element-'+object).attr('url')
+        $('#load'+object+id).show()
+        $.ajax({
+            url: url,
+            data: {
+                "object_id":id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('#load'+object+id).hide()
+                    if (data.is_in) {
+                      this_.attr('status', '1')
+                      this_.children('i').show()
+                    }
+                    else {
+                      this_.attr('status', '0')
+                      this_.children('i').hide()
+                    }
+                    if (object=='category') {
+                        $( ".subject_filters" ).load(document.URL +  ' .subject_filters')
+                        $( ".subject_filters2" ).load(document.URL +  ' .subject_filters2')
+                    }
+                }
+            }
+        })
+    });    
+</script>
 {% endblock content %}

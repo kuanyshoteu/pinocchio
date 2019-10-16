@@ -160,6 +160,15 @@ class SchoolBanner(models.Model):
 
 class SchoolFilter(models.Model):
     title = models.CharField(max_length=250)
+    def delete_url(self):
+        return reverse("schools:age_delete_url")
+    def create_url(self):
+        return reverse("schools:age_create_url")
+    def search_url(self):
+        return reverse("schools:search_url")
+    class Meta:
+        ordering = ['id']
+
 class SchoolFilterOption(models.Model):
     filter_type = models.ForeignKey(SchoolFilter, null=True, on_delete = models.CASCADE, related_name='filter_options')
     schools = models.ManyToManyField(School, related_name='filter_options')

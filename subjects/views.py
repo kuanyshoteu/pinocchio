@@ -201,6 +201,7 @@ def subject_update(request, slug=None):
         "subject_ages_this":instance.age.all(),        
         "subject_levels":school.school_subject_levels.all(),
         "subject_levels_this":instance.level.all(),        
+        "subject_filter_options":instance.filter_options.all(),        
         'time_periods':time_periods,
         'days':days,
         "all_teachers":all_teachers(school),
@@ -317,6 +318,35 @@ def change_category(request, id=None):
         "is_in":is_in,
     }
     return JsonResponse(data)
+
+def change_filter_option(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    ok = False
+    is_in = False
+    if request.GET.get('object_id'):
+        subject = Subject.objects.get(id = id)
+        school = subject.school
+        is_in_school(profile, school)
+        option = SchoolFilterOption.objects.get(id=int(request.GET.get('object_id')))
+        print(subject.filter_options.all())
+        if option in subject.filter_options.all():
+            subject.filter_options.remove(option)
+            if len(school.school_subjects.filter(filter_options=option)) == 0:
+                option.schools.remove(school)
+        else:
+            subject.filter_options.add(option)
+            is_in = True
+            option.schools.add(school)
+        ok = True
+
+
+    data = {
+        "ok":ok,
+        "is_in":is_in,
+    }
+    return JsonResponse(data)
+
 
 def change_age(request, id=None):
     profile = get_profile(request)

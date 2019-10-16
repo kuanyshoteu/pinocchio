@@ -78,4 +78,5 @@ $("body").click(function(e){
     $('.hint_students_group').hide();
     $('.profile_links').hide()
     $('.card_comment-helper').hide()
+    $('.search_hint').hide();
 });

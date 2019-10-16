@@ -5,12 +5,6 @@ $(document).ready(function () {
   let filterTitle = $('.filter-title');
   let filterItem = $('.filter-item');
 
-  $(document.body).on('click', function (e) {
-    $('.search_hint').hide();
-    if ($(e.target).closest(filterElement).length === 0) {
-      filterList.addClass('filter-list-hide');
-    }
-  });
 
   filterTitle.on('click', function () {
     filterTitle.children('i').toggleClass('up');
@@ -26,45 +20,6 @@ $(document).ready(function () {
       $(this).attr('status', '0')
     }
     filtercrm()
-  });
-  $('.filter-title-s').on('click', function () {
-    $(this).children('i').toggleClass('up');
-    id = $(this).attr('id')
-    $('.filter-list').addClass('filter-list-hide');
-    if ($(this).attr('status') == 'closed') {
-        $('.filter-list-hide-'+id).removeClass('filter-list-hide');
-        $(this).attr('status','opened')
-    }
-    else{
-        $(this).attr('status','closed')
-    }
-  });
-  $('.filter-item-s').on('click', function () {
-    this_ = $(this)
-    id = this_.attr('id')
-    object = this_.attr('object')
-    url = $('.filter-element-'+object).attr('url')
-    $('#load'+object+id).show()
-    $.ajax({
-        url: url,
-        data: {
-            "object_id":id,
-        },
-        dataType: 'json',
-        success: function (data) {
-            if (data.ok) {
-                $('#load'+object+id).hide()
-                if (data.is_in) {
-                  this_.attr('status', '1')
-                  this_.children('i').show()
-                }
-                else {
-                  this_.attr('status', '0')
-                  this_.children('i').hide()
-                }
-            }
-        }
-    })
   });
 
   // Filter-list end

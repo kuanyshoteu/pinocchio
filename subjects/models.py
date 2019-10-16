@@ -70,6 +70,7 @@ class Subject(models.Model):
     category = models.ManyToManyField(SubjectCategory, related_name='category_subjects')
     age = models.ManyToManyField(SubjectAge, related_name='age_subjects')
     level = models.ManyToManyField(SubjectLevel, related_name='level_subjects')
+    filter_options = models.ManyToManyField(SchoolFilterOption, related_name='subjects')
     start_dates = ArrayField(models.DateField(null=True), default=list)
     squad_ids = ArrayField(models.IntegerField(null=True), default=list)
 
@@ -121,6 +122,8 @@ class Subject(models.Model):
         return reverse("subjects:add_paper_url")        
     def change_category(self):
         return reverse("subjects:change_category",kwargs={"id": self.id})       
+    def change_filter_option(self):
+        return reverse("subjects:change_filter_option",kwargs={"id": self.id})       
     def change_level(self):
         return reverse("subjects:change_level",kwargs={"id": self.id})       
     def change_age(self):

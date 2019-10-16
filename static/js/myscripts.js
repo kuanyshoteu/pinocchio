@@ -633,8 +633,6 @@
                 else{
                     $( "#calendar" ).load(document.URL +  ' #calendar', function(){
                         x = update_schedule_lectures()
-                        console.log(x)
-
                     });
                 }
             }
