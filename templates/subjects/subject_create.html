@@ -170,7 +170,7 @@
                                             </div>
                                             <ul style="position: relative;" class="filter-list filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
                                                 {% for optn in filter.filter_options.all %}
-                                                <li onclick="filterItemS('{{ optn.id }}')" object="level" class="optn{{ optn.id }}" id="{{ optn.id }}">
+                                                <li onclick="filterItemS('{{ optn.id }}')" object="level" class="optn{{ optn.id }} filter-item-s2" id="{{ optn.id }}">
                                                     {{optn.title}}
                                                     <i class="icon check green" id="check_subject_level{{ optn.id }}" style="{%if not optn in subject_filter_options%}display: none;{% endif %}"></i>
                                                     <div class="loading_small" style="display: none;" id="loadlevel{{ optn.id }}">

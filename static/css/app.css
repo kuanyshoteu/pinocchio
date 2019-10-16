@@ -30482,6 +30482,13 @@ a:hover {
 .filter-item-s:hover {
   background-color: #ccc;
 }
+.filter-item-s2 {
+  padding: 5px 0 5px 17px;
+  cursor: pointer;
+}
+.filter-item-s2:hover {
+  background-color: #ccc;
+}
 .filter-item i {
   opacity: 0;
 }
