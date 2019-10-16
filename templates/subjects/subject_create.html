@@ -122,13 +122,14 @@
                                 *При недостаточном количестве денег на счету у клиента за следующий урок/месяц ему будет прислано уведомление о необходимости оплаты и его карточка в СRM системе будет отмечена красным цветом
                             </div>
                         </div>
-						{% endif %}	
+						{% endif %}
 						{% if instance %}
                         <div class="sixteen wide column pt0">
                             <div class="ui segment text-center">
                                 <input type='submit' class='ui button blue tiny' value='Сохранить' />
                             </div>
                         </div>
+                        {% if is_moderator %}
                         <div class="sixteen wide column pt0 pb0">
                             <div class="ui segment" >
                                 <span class="ml15" style="font-size: 15px;font-weight: 600;">Фильтры</span> 
@@ -168,7 +169,6 @@
                                                 </div>
                                             </div>
                                             <ul style="position: relative;" class="filter-list filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
-                                                {% if filter.filter_options.all|length > 0 %}
                                                 {% for optn in filter.filter_options.all %}
                                                 <li class="filter-item-s" name="filter-item-s" object="level" status="0" id="{{ optn.id }}">
                                                     {{optn.title}}
@@ -183,13 +183,6 @@
                                                     </div>
                                                 </li>
                                                 {% endfor %}
-                                                {%else%}
-                                                <div>
-                                                    Еще не созданы уровни
-                                                    <br>Создайте их в 
-                                                    <a href="/schools/info/" class="ui button mini green">Управлении</a>
-                                                </div>
-                                                {%endif%}
                                             </ul>
                                         </div>
                                         {% endfor %}
@@ -197,6 +190,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
 						{% else %}
 							<div class="{% if instance %}sixteen{%else%}eight{% endif %} wide column pr0 pt0">
 		        				<div class="ui segment text-center">

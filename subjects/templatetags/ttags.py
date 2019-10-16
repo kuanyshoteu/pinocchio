@@ -15,6 +15,8 @@ def get_filters(subject):
     school_categories = school.categories.filter(subject_categories__in=subject_categories)
     f1 = SchoolFilter.objects.filter(mcategories__in=school_categories).prefetch_related('filter_options')
     f2 = SchoolFilter.objects.filter(categories__in=school_categories).prefetch_related('filter_options')
+    print(f1)
+    print(f2)
     filters = chain(f1, f2)
     return filters
 
