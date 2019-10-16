@@ -170,7 +170,7 @@
                                             </div>
                                             <ul style="position: relative;" class="filter-list filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
                                                 {% for optn in filter.filter_options.all %}
-                                                <li class="filter-item-s" name="filter-item-s" object="level" status="0" id="{{ optn.id }}">
+                                                <li onclick="filterItemS('{{ optn.id }}')" object="level" class="optn{{ optn.id }}" id="{{ optn.id }}">
                                                     {{optn.title}}
                                                     <i class="icon check green" id="check_subject_level{{ optn.id }}" style="{%if not optn in subject_filter_options%}display: none;{% endif %}"></i>
                                                     <div class="loading_small" style="display: none;" id="loadlevel{{ optn.id }}">
@@ -265,6 +265,32 @@
                 }
             }
         })
-    });    
+    });   
+    function filterItemS(id){ 
+        this_ = $('.optn'+id)
+        object = this_.attr('object')
+        url = $('.filter-element-'+object).attr('url')
+        $('#load'+object+id).show()
+        $.ajax({
+            url: url,
+            data: {
+                "object_id":id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('#load'+object+id).hide()
+                    if (data.is_in) {
+                      this_.attr('status', '1')
+                      this_.children('i').show()
+                    }
+                    else {
+                      this_.attr('status', '0')
+                      this_.children('i').hide()
+                    }
+                }
+            }
+        })
+    };    
 </script>
 {% endblock content %}
