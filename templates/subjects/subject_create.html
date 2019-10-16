@@ -138,7 +138,7 @@
                                         Выберите предметы курса
                                         <i class="icon caret down" style="float: right;color: #222;"></i>
                                     </div>
-                                    <ul class="filter-list filter-list-hide filter-list-hide-category{{ subject_category.id }}">
+                                    <ul class="filter-list filter-list-hide filter-list-hide-category{{ subject_category.id }}" style="z-index: 2000;">
                                         {% for subject_category in subject_categories %}
                                         <li class="filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
                                             {{subject_category.title}}
