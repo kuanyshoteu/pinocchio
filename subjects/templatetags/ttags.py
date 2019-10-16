@@ -18,7 +18,7 @@ def get_filters(subject):
     print(f1)
     print(f2)
     filters = chain(f1, f2)
-    return filters
+    return set(filters)
 
 @register.filter
 def cell_subject_lectures(cell, subject):
