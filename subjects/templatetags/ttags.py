@@ -21,10 +21,15 @@ def get_filters(subject):
     print(f2)
     filters = set(chain(f1, f2))
     filter1 = SchoolFilter.objects.filter(id=1)
+    filter2 = SchoolFilter.objects.filter(id=10)
     if len(filter1) > 0:
         filter1 = filter1[0]
         if filter1 in filters:
             filters.remove(filter1)
+    if len(filter2) > 0:
+        filter1 = filter2[0]
+        if filter1 in filters:
+            filters.remove(filter2)
     return filters
 
 @register.filter

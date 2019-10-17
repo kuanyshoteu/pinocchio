@@ -2321,6 +2321,11 @@ a{
     border: 1px solid #fff !important;
     border-radius: 4px 0 0 0 !important; 
   }
+  .map_search_hint{
+    position: absolute;
+    z-index: 3000;
+    margin-top: 38px;
+  }
   .map_filter{
     border: 1px solid #fff !important;
     border-radius: 0 !important;
