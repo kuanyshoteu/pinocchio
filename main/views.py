@@ -820,11 +820,6 @@ def moderator_run_code(request):
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
 
-    for sc in SchoolCategory.objects.all():
-        for subc in sc.subject_categories.all():
-            schools = subc.schools.all()
-            sc.schools.add(*schools)
-
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})

@@ -6,26 +6,23 @@ from datetime import timedelta
 from itertools import chain
 from subjects.models import Day, Cell,Attendance
 from accounts.models import Profession
-from schools.models import SchoolFilter
+from schools.models import *
 
 @register.filter
 def get_filters(subject):
     school = subject.school
     subject_categories = subject.category.all()
-    school_categories = school.categories.filter(subject_categories__in=subject_categories)
+    school_categories = SchoolCategory.objects.filter(subject_categories__in=subject_categories)
     f1 = SchoolFilter.objects.filter(mcategories__in=school_categories).prefetch_related('filter_options')
     f2 = SchoolFilter.objects.filter(categories__in=school_categories).prefetch_related('filter_options')
     filters = set(chain(f1, f2))
-    filter1 = SchoolFilter.objects.filter(id=1)
-    filter2 = SchoolFilter.objects.filter(id=10)
-    if len(filter1) > 0:
-        filter1 = filter1[0]
-        if filter1 in filters:
-            filters.remove(filter1)
-    if len(filter2) > 0:
-        filter2 = filter2[0]
-        if filter2 in filters:
-            filters.remove(filter2)
+    ids = [1,7,9,10]
+    for i in ids:
+        filter1 = SchoolFilter.objects.filter(id=i)
+        if len(filter1) > 0:
+            filter1 = filter1[0]
+            if filter1 in filters:
+                filters.remove(filter1)
     return filters
 
 @register.filter
