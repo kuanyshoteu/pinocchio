@@ -16,7 +16,7 @@ def get_filters(subject):
     f1 = SchoolFilter.objects.filter(mcategories__in=school_categories).prefetch_related('filter_options')
     f2 = SchoolFilter.objects.filter(categories__in=school_categories).prefetch_related('filter_options')
     filters = set(chain(f1, f2))
-    ids = [1,9,10]
+    ids = [1,7,9,10]
     for i in ids:
         filter1 = SchoolFilter.objects.filter(id=i)
         if len(filter1) > 0:

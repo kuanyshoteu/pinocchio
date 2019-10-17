@@ -825,9 +825,11 @@ def moderator_run_code(request):
     TOEFL = SubjectCategory.objects.filter(title="TOEFL")
     res = chain(TOEFL, res)
     langs = SubjectCategory.objects.filter(title__icontains="язык")
-    math = SubjectCategory.objects.filter(title="Математика")
-    logic = SubjectCategory.objects.filter(title="Логика")
     res = chain(langs, res)
+    math = SubjectCategory.objects.filter(title="Математика")
+    res = chain(math, res)
+    logic = SubjectCategory.objects.filter(title="Логика")
+    res = chain(logic, res)
     for sc in res:
         options = SchoolFilterOption.objects.filter(title=sc.title)
         for subject in sc.category_subjects.all():
