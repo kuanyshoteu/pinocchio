@@ -108,10 +108,6 @@ def squad_update(request, slug=None):
     form = SquadForm(request.POST or None, request.FILES or None, instance=instance)
     if form.is_valid():
         instance = form.save(commit=False)
-        if not instance.height_field:
-            instance.height_field = 0
-        if not instance.width_field:
-            instance.width_field = 0
         instance.start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
         instance.end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
         instance.save()

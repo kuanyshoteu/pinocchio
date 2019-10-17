@@ -322,10 +322,8 @@ def change_category(request, id=None):
             change_lecture_options(students, subject, 'subject', category, True)
             if category in hidden_filter_ids():
                 options = SchoolFilterOption.objects.filter(title=category.title)
-                if len(options) > 0:
-                    for option in options:
-                        subject.filter_options.add(option)
-                        option.schools.add(school)
+                subject.filter_options.add(*options)
+                school.filter_options.add(*options)
 
         subject.save()
         ok = True

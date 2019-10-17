@@ -819,6 +819,21 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
+    res = set()
+    IELTS = SubjectCategory.objects.filter(title="IELTS")
+    res = chain(IELTS, res)
+    TOEFL = SubjectCategory.objects.filter(title="TOEFL")
+    res = chain(TOEFL, res)
+    langs = SubjectCategory.objects.filter(title__icontains="язык")
+    math = SubjectCategory.objects.filter(title="Математика")
+    logic = SubjectCategory.objects.filter(title="Логика")
+    res = chain(langs, res)
+    for sc in res:
+        options = SchoolFilterOption.objects.filter(title=sc.title)
+        for subject in sc.category_subjects.all():
+            school = subject.school
+            subject.filter_options.add(*options)
+            school.filter_options.add(*options)
 
 
     print('moderator_end_code')
