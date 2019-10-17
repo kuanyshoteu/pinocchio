@@ -181,8 +181,8 @@ def create_docfolder(request):
         else:
             name = 'Папка'
             print('7')
-        folder = DocumentFolder.objects.create(title = name)
-        folder.author_profile = profile
+        folder = DocumentFolder.objects.create(title = name,author_profile = profile)
+        print(6)
         if request.GET.get('school_id'):
             print('2')
             folder.school = school
