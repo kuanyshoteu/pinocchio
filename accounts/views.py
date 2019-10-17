@@ -38,6 +38,7 @@ def account_view(request, user = None):
     hisprofile = Profile.objects.get(user = user)
     skill = hisprofile.skill
     miss_lesson_form=False
+    print('**************', profile, hisprofile)
     if profile == hisprofile:
         print(profile.skill)
         # Нужна отдельная функция при вызове
@@ -50,12 +51,14 @@ def account_view(request, user = None):
         if miss_lesson_form.is_valid():
             miss_lesson = miss_lesson_form.save()
             return redirect(profile.get_absolute_url())
+        print('1')
 
     if is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.all()
     else:
         hissquads = hisprofile.squads.all()
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+    print('2')
 
     school_money = 0
     is_director = is_profi(profile, 'Director')
@@ -79,6 +82,7 @@ def account_view(request, user = None):
         'constant_times':get_times(60),
         "interval":60,
     }
+    print('5')
     return render(request, "profile.html", context)
 
 def check_confirmation(hisprofile, skill):
