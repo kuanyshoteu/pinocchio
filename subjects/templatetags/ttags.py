@@ -27,8 +27,8 @@ def get_filters(subject):
         if filter1 in filters:
             filters.remove(filter1)
     if len(filter2) > 0:
-        filter1 = filter2[0]
-        if filter1 in filters:
+        filter2 = filter2[0]
+        if filter2 in filters:
             filters.remove(filter2)
     return filters
 
