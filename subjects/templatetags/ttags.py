@@ -19,8 +19,13 @@ def get_filters(subject):
     f2 = SchoolFilter.objects.filter(categories__in=school_categories).prefetch_related('filter_options')
     print(f1)
     print(f2)
-    filters = chain(f1, f2)
-    return set(filters)
+    filters = set(chain(f1, f2))
+    filter1 = SchoolFilter.objects.filter(id=1)
+    if len(filter1) > 0:
+        filter1 = filter1[0]
+        if filter1 in filters:
+            filters.remove(filter1)
+    return filters
 
 @register.filter
 def cell_subject_lectures(cell, subject):

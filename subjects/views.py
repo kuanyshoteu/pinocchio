@@ -306,11 +306,27 @@ def change_category(request, id=None):
             category.students.remove(*students)
             category.category_subjects.remove(subject)
             change_lecture_options(students, subject, 'subject', category, False)
+
+            if int(request.GET.get('object_id')) in hidden_filter_ids():
+                options = SchoolFilterOption.objects.filter(title=category.title)
+                if len(options) > 0:
+                    for option in options:
+                        subject.filter_options.remove(option)
+                        if len(school.school_subjects.filter(filter_options=option)) == 0:
+                            option.schools.remove(school)
+
         else:
             is_in = True
             category.category_subjects.add(subject)
             category.students.add(*students)
             change_lecture_options(students, subject, 'subject', category, True)
+            if int(request.GET.get('object_id')) in hidden_filter_ids():
+                options = SchoolFilterOption.objects.filter(title=category.title)
+                if len(options) > 0:
+                    for option in options:
+                        subject.filter_options.add(option)
+                        option.schools.add(school)
+
         subject.save()
         ok = True
     data = {
@@ -329,7 +345,6 @@ def change_filter_option(request, id=None):
         school = subject.school
         is_in_school(profile, school)
         option = SchoolFilterOption.objects.get(id=int(request.GET.get('object_id')))
-        print(subject.filter_options.all())
         if option in subject.filter_options.all():
             subject.filter_options.remove(option)
             if len(school.school_subjects.filter(filter_options=option)) == 0:

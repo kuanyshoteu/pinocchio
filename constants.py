@@ -202,3 +202,29 @@ def get_times(interval):
 def get_days():
     res = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
     return res
+
+def hidden_filter_ids():
+    res = []
+    IELTS = SubjectCategory.objects.filter(title="IELTS")
+    if len(IELTS) > 0:
+        res.append(IELTS[0].id)
+    engl = SubjectCategory.objects.filter(title="Английский язык")
+    if len(engl) > 0:
+        res.append(engl[0].id)
+    TOEFL = SubjectCategory.objects.filter(title="TOEFL")
+    if len(TOEFL) > 0:
+        res.append(TOEFL[0].id)
+    return res
+
+def english_filter_ids():
+    res = []
+    IELTS = SubjectCategory.objects.filter(title="IELTS")
+    if len(IELTS) > 0:
+        res.append(IELTS[0].id)
+    engl = SubjectCategory.objects.filter(title="Английский язык")
+    if len(engl) > 0:
+        res.append(engl[0].id)
+    TOEFL = SubjectCategory.objects.filter(title="TOEFL")
+    if len(TOEFL) > 0:
+        res.append(TOEFL[0].id)
+    return res
