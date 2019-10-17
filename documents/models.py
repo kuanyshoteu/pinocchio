@@ -18,7 +18,7 @@ from todolist.models import Document
 from schools.models import School
 
 class DocumentFolder(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_docfolders') 
+    school = models.ForeignKey(School, null = True, on_delete = models.CASCADE, related_name='school_docfolders') 
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='docfolders')
     title = models.TextField()
     parent = models.ForeignKey("self",  null = True, on_delete = models.CASCADE, related_name = 'docchilds')
