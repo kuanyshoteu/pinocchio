@@ -11,6 +11,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
+from itertools import chain
 
 def send_sms(phones, message, time):
     login = 'Pinocchio'
@@ -204,27 +205,14 @@ def get_days():
     return res
 
 def hidden_filter_ids():
-    res = []
+    res = set()
+    titles = ['IELTS', 'TOEFL']
     IELTS = SubjectCategory.objects.filter(title="IELTS")
-    if len(IELTS) > 0:
-        res.append(IELTS[0].id)
-    engl = SubjectCategory.objects.filter(title="Английский язык")
-    if len(engl) > 0:
-        res.append(engl[0].id)
+    res = chain(IELTS, res)
     TOEFL = SubjectCategory.objects.filter(title="TOEFL")
-    if len(TOEFL) > 0:
-        res.append(TOEFL[0].id)
-    return res
-
-def english_filter_ids():
-    res = []
-    IELTS = SubjectCategory.objects.filter(title="IELTS")
-    if len(IELTS) > 0:
-        res.append(IELTS[0].id)
-    engl = SubjectCategory.objects.filter(title="Английский язык")
-    if len(engl) > 0:
-        res.append(engl[0].id)
-    TOEFL = SubjectCategory.objects.filter(title="TOEFL")
-    if len(TOEFL) > 0:
-        res.append(TOEFL[0].id)
-    return res
+    res = chain(TOEFL, res)
+    langs = SubjectCategory.objects.filter(title__icontains="язык")
+    math = SubjectCategory.objects.filter(title="Математика")
+    logic = SubjectCategory.objects.filter(title="Логика")
+    res = chain(langs, res)
+    return set(res)

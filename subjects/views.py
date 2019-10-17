@@ -307,7 +307,7 @@ def change_category(request, id=None):
             category.category_subjects.remove(subject)
             change_lecture_options(students, subject, 'subject', category, False)
 
-            if int(request.GET.get('object_id')) in hidden_filter_ids():
+            if category in hidden_filter_ids():
                 options = SchoolFilterOption.objects.filter(title=category.title)
                 if len(options) > 0:
                     for option in options:
@@ -320,7 +320,7 @@ def change_category(request, id=None):
             category.category_subjects.add(subject)
             category.students.add(*students)
             change_lecture_options(students, subject, 'subject', category, True)
-            if int(request.GET.get('object_id')) in hidden_filter_ids():
+            if category in hidden_filter_ids():
                 options = SchoolFilterOption.objects.filter(title=category.title)
                 if len(options) > 0:
                     for option in options:
