@@ -34,6 +34,7 @@ def school_documents(request, school_id):
     file_form = FileForm(request.POST or None, request.FILES or None)
     if file_form.is_valid():
         doc = Document.objects.create(file = file_form.cleaned_data.get("file"))
+        print(doc)
         file = str(file_form.cleaned_data.get("file"))
 
         if file.split('.')[-1] in img:
@@ -55,7 +56,7 @@ def school_documents(request, school_id):
         doc.school = school
         doc.save()
         return redirect('/documents')
-
+    print('******************** docs')
     context = {
         "profile": profile,
         'yourid':profile.id,
@@ -167,6 +168,7 @@ def paste(request):
 def create_docfolder(request):
     profile = Profile.objects.get(user = request.user.id)
     only_staff(profile)
+    print('***********')
     if request.GET.get('school_id'):
         school = School.objects.get(id=int(request.GET.get('school_id')))
         is_in_school(profile, school)

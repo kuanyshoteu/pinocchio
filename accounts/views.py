@@ -39,7 +39,7 @@ def account_view(request, user = None):
     skill = hisprofile.skill
     miss_lesson_form=False
     if profile == hisprofile:
-        check_confirmation(hisprofile, skill)
+        print(profile.skill)
         # Нужна отдельная функция при вызове
         miss_lesson = MissLesson.objects.filter(profile = profile)
         if len(miss_lesson) > 0:

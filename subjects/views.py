@@ -438,6 +438,7 @@ def change_lecture_options(students, subject, option, objectt, is_add):
                 add = True
             objectt.office_lectures.add(*lectures)
         for card in cards_qs:
+            print(card.name)
             if remove:
                 card_remove_hashtag(card, hashtag)
             if add: 
