@@ -175,12 +175,6 @@ class SchoolFilterOption(models.Model):
     title = models.CharField(max_length=250)
     class Meta:
         ordering = ['id']
-class SchoolFilterOption3(models.Model):
-    filter_type = models.ForeignKey(SchoolFilter, null=True, on_delete = models.CASCADE, related_name='filter_options3')
-    schools = models.ManyToManyField(School, related_name='filter_options3')
-    title = models.CharField(max_length=250)
-    class Meta:
-        ordering = ['id']
 class SchoolCategory(models.Model):
     schools = models.ManyToManyField(School, related_name='categories')
     title = models.CharField(max_length=250)
