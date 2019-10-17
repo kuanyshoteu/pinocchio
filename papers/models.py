@@ -122,7 +122,7 @@ class Comment(models.Model):
         return reverse("papers:dislike_url")
 
 class Course(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_courses') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_courses') 
     title = models.CharField(max_length=250)
     lessons = models.ManyToManyField(Lesson, related_name='courses')
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hiscourses')
@@ -136,7 +136,7 @@ class Course(models.Model):
 
     cost = models.IntegerField(default = 0)
     content = models.TextField(default='')
-    students = models.ManyToManyField(Profile, default=1, related_name='courses')
+    students = models.ManyToManyField(Profile, related_name='courses')
     done_by = models.ManyToManyField(Profile, related_name='done_courses')
 
     timestamp = models.DateTimeField(auto_now_add=True)
