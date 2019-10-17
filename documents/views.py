@@ -174,10 +174,13 @@ def create_docfolder(request):
         print('1')
         school = School.objects.get(id=int(request.GET.get('school_id')))
         is_in_school(profile, school)
+        print('9')
         if len(school.school_docfolders.all()) > 0:
             name = 'Папка' + str(school.school_docfolders.all()[len(school.school_docfolders.all())-1].id + 1)
+            print('8')
         else:
             name = 'Папка'
+            print('7')
         folder = DocumentFolder.objects.create(title = name)
         folder.author_profile = profile
         if request.GET.get('school_id'):
