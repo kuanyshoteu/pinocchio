@@ -12,7 +12,9 @@ from schools.models import SchoolFilter
 def get_filters(subject):
     school = subject.school
     subject_categories = subject.category.all()
+    print('subject_categories', subject_categories)
     school_categories = school.categories.filter(subject_categories__in=subject_categories)
+    print('school_categories', school_categories)
     f1 = SchoolFilter.objects.filter(mcategories__in=school_categories).prefetch_related('filter_options')
     f2 = SchoolFilter.objects.filter(categories__in=school_categories).prefetch_related('filter_options')
     print(f1)
