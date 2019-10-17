@@ -43,7 +43,7 @@
                         <span style="font-size: 15px;font-weight: 600;color: #7e7e7e;" class="pr10">Цена: </span> 
                         <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;">
                         <div id="slider-range" class="mt10"></div>
-                    </div>            
+                    </div>
                 </div>
             </div>
             <div class="sixteen wide column no_padding">
@@ -92,7 +92,7 @@
                     {% for school in category.schools.all %}
                     <div class="full-w ui grid stackable no_margin pb15">
                         <div class="four wide column" style="height: 170px;">
-                            <a href="">
+                            <a href="{{school.landing}}">
                                 {% if school.banners.all|length > 0%}
                                 <img src="{{school.banners.first.image_banner.url}}" style="height: 100%;" class="full-w">
                                 {%else%}
@@ -101,7 +101,7 @@
                             </a>
                         </div>
                         <div class="twelve wide column pb0">
-                            <a href=""><b style="font-size: 19px;">{{school.title}}</b></a>
+                            <a href="{{school.landing}}"><b style="font-size: 19px;">{{school.title}}</b></a>
                             <div class="mt15" style="font-size: 15px">
                                 <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
                             </div>
