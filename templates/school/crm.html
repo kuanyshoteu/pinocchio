@@ -160,7 +160,7 @@
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 <script>
-    function openNav(id, name, predoplata, column_id) {
+    function openNav(id, name, predoplata, column_id2) {
         $('#register_students_calendar').modal('show')
         $('#current_user_name').text(name)
         $('.card_for_save').attr('id', id)
@@ -174,18 +174,39 @@
         $('.predoplata_form').hide()
         $('.ok_predoplata').hide()
         $('.isalready').hide()
-        if (column_id == '4') {
-            $('.predoplata_number').attr('placeholder', 'Сумма предоплаты')
-        }
-        if (column_id == '5') {
-            $('.predoplata_number').attr('placeholder', 'Сумма оплаты')
-        }
-        if (predoplata == 'predoplata') {
-            $('.predoplata_form').attr('style', 'display:flex;')
-            $('.predoplata_number').attr('status', 'show')
+        if (column_id2 != -1) {
+            column_id = $('#cardsch'+id).attr('column')
+            console.log('777','#card'+id, column_id, $('#card'+id))
+            if (column_id == '4') {
+                $('.predoplata_number').attr('placeholder', 'Сумма предоплаты')
+            }
+            if (column_id == '5') {
+                $('.predoplata_number').attr('placeholder', 'Сумма оплаты')
+            }
+            if (column_id == '4' || column_id == '5') {
+                $('.predoplata_form').attr('style', 'display:flex;')
+                $('.predoplata_number').attr('status', 'show')
+            }
+            else{
+                $('.predoplata_number').attr('status', 'hide')          
+            }
         }
         else{
-            $('.predoplata_number').attr('status', 'hide')          
+            if (predoplata == 'predoplata') {
+                if (column_id2 == '4') {
+                    $('.predoplata_number').attr('placeholder', 'Сумма предоплаты')
+                }
+                if (column_id2 == '5') {
+                    $('.predoplata_number').attr('placeholder', 'Сумма оплаты')
+                }
+                if (column_id2 == '4' || column_id2 == '5') {
+                    $('.predoplata_form').attr('style', 'display:flex;')
+                    $('.predoplata_number').attr('status', 'show')
+                }
+                else{
+                    $('.predoplata_number').attr('status', 'hide')          
+                }                
+            }
         }
         $.ajax({
             url: $('.card_for_save').attr('get_card_squads'),
