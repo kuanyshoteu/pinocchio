@@ -206,15 +206,11 @@ def get_days():
 
 def hidden_filter_ids():
     res = set()
-    titles = ['IELTS', 'TOEFL']
-    IELTS = SubjectCategory.objects.filter(title="IELTS")
-    res = chain(IELTS, res)
-    TOEFL = SubjectCategory.objects.filter(title="TOEFL")
-    res = chain(TOEFL, res)
+    titles = ['IELTS', 'TOEFL', 'Математика', 'Логика', 'SAT', 'GRE', 'GMAT']
+    for title in titles:
+        sc = SubjectCategory.objects.filter(title=title)
+        res = chain(sc, res)
+
     langs = SubjectCategory.objects.filter(title__icontains="язык")
-    res = chain(langs, res)
-    math = SubjectCategory.objects.filter(title="Математика")
-    res = chain(math, res)
-    logic = SubjectCategory.objects.filter(title="Логика")
     res = chain(langs, res)
     return set(res)

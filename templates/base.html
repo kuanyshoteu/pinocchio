@@ -61,7 +61,7 @@
     <div class="ui container">
         <div class="menu-title" style="width: calc(25% + 140px);padding-left: 10px;">
             <i class="icon bars" id="toggle"></i>
-            <a href='{% url "main:home" %}' class="header main">
+            <a href='{% if request.user.is_authenticated %}{{profile.get_absolute_url}}{%else%}{% url "main:home" %}{%endif%}' class="header main">
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
             </a>
             {% if is_manager %}
@@ -71,8 +71,6 @@
             {% endif %}
             {% if not request.user.is_authenticated %}
             <a href="{% url 'main:about' %}" class="ui button mini green pl5 pt10 pr5 pb10" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 2px;">Стать партнером</a>
-            {% endif %}
-            {% if not request.user.is_authenticated %}
             <a href="{% url 'main:login_page' %}" class="ui button mini green pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
             {% endif %}
         </div>
@@ -115,6 +113,9 @@
                     </div>
                 </div>
             </div>
+            <a class="ui button mini help24 help2424hb" id="" onclick="$('#new_card_form1').modal('show')" style="padding:6px 10px;background-color: #2D437C;font-size: 14px;color: lightgrey;">
+                Заявка
+            </a>
             {% if is_manager %}
             <a class="ui button mini help24 help2424hb" id="" onclick="$('#new_card_form1').modal('show')" style="padding:6px 10px;background-color: #2D437C;font-size: 14px;color: lightgrey;">
                 Заявка

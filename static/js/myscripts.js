@@ -123,6 +123,9 @@
                         $('.worker_password').text(data.password);
                         $('.create_worker').addClass('disabled')
                     }
+                    else{
+                        $('.not_success_created_worker').show()
+                    }
                 }
             })
         }

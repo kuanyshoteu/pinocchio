@@ -15,8 +15,32 @@
             </form>
             <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатить</a>
             <div class="mt10">
-                <a class="ui button mini full-w">История оплаты</a>
+                <a class="ui button mini full-w" onclick="$('.payment_history').modal('show')">История оплаты</a>
             </div>
+            <div class="ui modal small payment_history">
+                <i class="close icon"></i>
+                <div class="content">
+                    <table class="no_margin">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    {% for payment in hisprofile.payment_history.all %}
+                        {{ payment.timestamp }}
+                        {{ payment.squad.title }}
+                        <a href="{{payment.manager.get_absolute_url}}">{{ payment.manager.first_name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+
+
         </div>
         <div class="eleven wide column pl0">
             <div class="ui grid">
