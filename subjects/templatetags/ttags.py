@@ -383,7 +383,9 @@ def get_bills(profile, hisprofile):
     card = hisprofile.card.filter(school=school)
     if len(card) > 0:
         card = card[0]
-    return card.need_money.filter(squad__in=squads).select_related('squad')
+        return card.need_money.filter(squad__in=squads).select_related('squad')
+    else:
+        return []
 
 @register.filter
 def get_bills_len(profile, hisprofile):
