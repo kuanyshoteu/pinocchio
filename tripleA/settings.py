@@ -29,9 +29,6 @@ if toserver:
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
-
-DEBUG = True
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

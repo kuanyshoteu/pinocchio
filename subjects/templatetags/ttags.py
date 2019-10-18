@@ -380,7 +380,9 @@ def get_column_cards_len(column, school):
 def get_bills(profile, hisprofile):
     school = profile.schools.first()
     squads = hisprofile.squads.filter(school=school)
-    card = hisprofile.card.get(school=school)
+    card = hisprofile.card.filter(school=school)
+    if len(card) > 0:
+        card = card[0]
     return card.need_money.filter(squad__in=squads).select_related('squad')
 
 @register.filter
