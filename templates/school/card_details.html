@@ -20,7 +20,7 @@
         </div>
         <div style="width: 20%;display: inline-block;float: right;margin-top: 20px;">
             <a class="delete_card" onclick="delete_card('{{ card.id }}')" id="{{ card.id }}"><b>×</b></a>
-            <a class="show_card_schedule" id="cardsch{{card.id}}" column="{{column.id}}" style="margin-top: -5px;margin-bottom: 5px;" onclick="openNav('{{ card.id }}', '{{ card.name }}', 'null', -1)"><i class="icontable{{card.id}} icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>
+            <a class="show_card_schedule" style="margin-top: -5px;margin-bottom: 5px;" onclick="openNav('{{ card.id }}', '{{ card.name }}', {%if column.id == 4 or column.id == 5%}'predoplata', '{{column.id}}'{%else%}'null',0{%endif%})"><i class="icontable{{card.id}} icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i></a>
             <a class="show_card_schedule" onclick="open_crmhist('{{ card.id }}')" style="margin-right: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a>     
         </div>
         <div style="width: 80%;">
