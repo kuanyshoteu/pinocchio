@@ -20,7 +20,7 @@
             <div class="ui modal small payment_history">
                 <i class="close icon"></i>
                 <div class="content">
-                    <table class="no_margin">
+                    <table class="no_margin" style="font-size: 13px;">
                         <thead>
                             <tr>
                                 <th>Время</th>
@@ -35,7 +35,7 @@
                                 <td>{{ payment.timestamp }}</td>
                                 <td>{{ payment.amount }}</td>
                                 <td>{{ payment.squad.title }}</td>
-                                <a href="{{payment.manager.get_absolute_url}}">{{ payment.manager.first_name }}</a>
+                                <td><a href="{{payment.manager.get_absolute_url}}">{{ payment.manager.first_name }}</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
