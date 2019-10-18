@@ -92,6 +92,48 @@
             })
         }
     })
+    $('.create_worker').click(function(e) {
+        url = $(this).attr('url');
+        $('.not_success_created_worker').hide()
+        $('.success_created_worker').hide()
+        this_ = document.getElementById('new_worker_prof');
+        prof_id = this_.options[this_.selectedIndex].value;
+        school = $('.new_worker_school').val();
+        name = $('.new_worker_name').val();
+        phone = $('.new_worker_phone').val();
+        mail = $('.new_worker_mail').val();
+        if (school == '' || name == '' || phone == '') {
+            $('.not_success_created_worker').show()
+        }
+        else{
+            $.ajax({
+                url: url,
+                data: {
+                    'school':school,
+                    'name':name,
+                    'phone':phone,
+                    'mail':mail,
+                    'prof_id':prof_id,
+                    'mail':mail,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.ok) {
+                        $('.success_created_worker').show()
+                        $('.worker_password').text(data.password);
+                        $('.create_worker').addClass('disabled')
+                    }
+                }
+            })
+        }
+    })
+    $('.worker_saved_password').click(function(e) {
+        $('.create_worker').removeClass('disabled');
+        $('.new_worker_school').val();
+        $('.new_worker_name').val('');
+        $('.new_worker_phone').val('');
+        $('.new_worker_mail').val('');
+    })
     $('.show_money_history').click(function(e) {
         url = $(this).attr('url')
         $('.money_history').modal('show')

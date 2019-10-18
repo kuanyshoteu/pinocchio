@@ -269,10 +269,7 @@ def create_school(request):
     ok = False
     password = False
     profile = get_profile(request)
-    profession = Profession.objects.get(title = 'Moderator')
-    print('0')
-    if request.GET.get('title') and request.GET.get('slogan') and request.GET.get('name') and request.GET.get('phone'):
-        print('1')
+    if is_profi(profile, 'Moderator') and request.GET.get('title') and request.GET.get('slogan') and request.GET.get('name') and request.GET.get('phone'):
         school = School.objects.create(
             title=request.GET.get('title'),
             slogan=request.GET.get('slogan'),
@@ -304,14 +301,56 @@ def create_school(request):
         profile.save()
         profile.schools.add(school)
         ok = True
-        print('2')
-    print('3')
     data = {
         "ok":ok,
         "password":password,
     }
-    print('4')
     return JsonResponse(data)
+
+def create_worker(request):
+    ok = False
+    password = False
+    print(0)
+    profile = get_profile(request)
+    if is_profi(profile, 'Moderator') and request.GET.get('prof_id') and request.GET.get('school') and request.GET.get('name') and request.GET.get('phone'):
+        print(1)
+        school = School.objects.filter(title = request.GET.get('school'))
+        if len(school) == 0:
+            return JsonResponse({'ok':False})
+        print(2)
+        school = school[0]
+        new_id = str(User.objects.order_by("id").last().id + 1)
+        new_name = request.GET.get('name').replace(' ', '')+new_id
+        password = random_password()
+        user = User.objects.create(username=new_name, password=password)
+        user.set_password(password)
+        user.save()
+        user2 = authenticate(username = str(user.username), password=password)
+        profile = Profile.objects.get(user = user)
+        profile.first_name = request.GET.get('name')
+        profile.phone = request.GET.get('phone')
+        print('mail',request.GET.get('mail'))
+        profile.mail = request.GET.get('mail')
+        profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
+        profile.profession.add(profession)
+        profile.is_student = False
+        skill = Skill.objects.create(
+            confirmed=True,
+            confirmation_time=timezone.now(),
+            )
+        skill.save()
+        profile.skill = skill
+        profile.save()
+        profile.schools.add(school)
+        print(4)
+        ok = True
+    print(5)
+    data = {
+        "ok":ok,
+        "password":password,
+    }
+    return JsonResponse(data)
+
 
 def login_view(request):
     res = 'error'

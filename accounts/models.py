@@ -69,7 +69,7 @@ class Profile(models.Model):
     is_student = models.BooleanField(default=True)
 
     coins = models.IntegerField(default=0)
-    mail = models.TextField(default = '',null = True)
+    mail = models.TextField(blank = True,default = '',null = True)
     phone = models.TextField(blank = True,null = True, default = '')
     extra_phone = models.TextField(blank = True,null = True, default = '')
     image = models.ImageField(upload_to=upload_location, 

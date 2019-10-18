@@ -24,7 +24,7 @@
                 Школа создана, пароль директора: <b class="director_password" style="color: #fff;"></b>
             </div>
             <div class="highlight_red not_success_created" style="width: 50%;margin: 15px auto;display: none;">
-                Школа создана, пароль директора: <b class="director_password" style="color: #fff;"></b>
+                Oops, что-то пошло не так
             </div>
         </div>
         <div class="five wide column">
@@ -32,18 +32,25 @@
                 <form class="ui form text-center">
                     <b>Добавить нового сотрудника</b>
                     <br><br>
-                    <select class="mb15">
+                    <select class="mb15" id="new_worker_prof">
                         <option>Профессия</option>                        
-                        {% for prof in professions %}<option>{{prof.title}}</option>{%endfor%}
+                        {% for prof in professions %}<option value="{{prof.id}}">{{prof.title}}</option>{%endfor%}
                     </select>
-                    <textarea class="new_school_name" placeholder="Школа"></textarea>
-                    <textarea class="new_school_name" placeholder="Имя"></textarea>
-                    <textarea class="new_school_phone" placeholder="Номер"></textarea>
-                    <textarea class="new_school_version" placeholder="Почта"></textarea>
-                    <br><br>
-                    <a class="ui button green create_school" url="{% url 'main:create_school' %}">Добавить сотрудника</a>
+                    <div class="schools_for_worker" style="height: 30px;"></div>
+                    <textarea class="new_worker_school" placeholder="Школа"></textarea>
+                    <textarea class="new_worker_name" placeholder="Имя"></textarea>
+                    <textarea class="new_worker_phone" placeholder="Номер"></textarea>
+                    <textarea class="new_worker_mail" placeholder="Почта"></textarea>
+                    <a class="ui button green create_worker" url="{% url 'main:create_worker' %}">Добавить сотрудника</a>
                 </form>
             </div>
+            <div class="highlight success_created_worker" style="width: 50%;margin: 15px auto;display: none;">
+                Сотрудник добавлен, пароль: <b class="worker_password" style="color: #fff;"></b>
+                <a class="worker_saved_password ui button mini green">Сохранил</a>
+            </div>
+            <div class="highlight_red not_success_created_worker" style="width: 50%;margin: 15px auto;display: none;">
+                Oops, что-то пошло не так
+            </div>            
         </div>
         <div class="five wide column">
             <div class="ui segment" style="height: 380px;">
