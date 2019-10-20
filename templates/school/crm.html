@@ -41,19 +41,6 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="filter wide column">
-                                <div class="filter-element">
-                                    <div class="filter-title">Возрасты <i class="icon caret down" style="float: right;"></i></div>
-                                    <ul class="filter-list filter-list-hide">
-                                    {% for age in ages %}
-                                        <li class="filter-item filter-item-s" status="0" id="{{ age.title }}">
-                                            <i class="icon check green" id="check_age{{ age.title }}"></i>
-                                            {{age.title}}
-                                        </li>
-                                    {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
                             {% if offices|length > 1 %}
                             <div class="filter wide column">
                                 <div class="filter-element">
