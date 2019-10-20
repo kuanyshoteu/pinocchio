@@ -296,8 +296,6 @@ def add_student(request):
             remove_student_from_squad(student, squad)
         else:
             problems = add_student_to_squad(student, squad)
-            if problems[0] != 'ok':
-                add = False
     data = {
         'add':add,
         'problems':problems
@@ -307,9 +305,23 @@ def add_student(request):
 def remove_student_from_squad(student, squad):
     squad.students.remove(student)
     school = squad.school
-    print(student.first_name, squad.title)
+    other_squads = student.squads.all().exclude(id=squad.id)
+    print('hissquads',other_squads)
+    other_subjects = Subject.objects.filter(squads__in=other_squads)
+    card = student.card.get_or_create(school=school)[0]
     for subject in squad.subjects.all():
-        card = student.card.get_or_create(school=school)[0]
+        cats = subject.category.all()
+        cats = cats.exclude(category_subjects__in=other_subjects)
+        print('cats',cats)
+
+        # Subject filter and subject hashtag in crm removing
+        student.crm_subject_connect.remove(*cats)
+        for cat in cats:
+            hs = school.hashtags.filter(title = cat.title.replace(' ', '_'))
+            print(hs[0].title)
+            if len(hs) > 0:
+                card.hashtags.remove(hs[0])
+        # Money flows
         nm = squad.need_money.get_or_create(card=card)[0]
         cost = subject.cost
         if subject.cost_period == 'lesson':
@@ -326,19 +338,21 @@ def remove_student_from_squad(student, squad):
     squad.squad_attendances.filter(student=student).delete()
 
 def add_student_to_squad(student, squad):
-    for subject in squad.subjects.all():
-        print(student, ' in ', get_subject_students(subject.squads.all()))
-        if student in get_subject_students(subject.squads.all()):
-            print('heeeeeeeeeeeeeeeeeeeeeeee')
-            return [subject.title, subject.get_absolute_url()]
+    subjects = squad.subjects.all()
+    other_sqs = Squad.objects.filter(subjects__in=subjects).exclude(id=squad.id)
+    other_sts = Profile.objects.filter(squads__in=other_sqs)
     school = squad.school
+    card = student.card.get_or_create(school=school)[0]
     squad.students.add(student)
     for subject in squad.subjects.all():
-        ages = subject.age.all()
-        student.crm_age_connect.add(*ages)
         categories = subject.category.all()
         student.crm_subject_connect.add(*categories)
-        card = student.card.get_or_create(school=school)[0]
+
+        for cat in categories:
+            hs = school.hashtags.get_or_create(title = cat.title.replace(' ', '_'))
+            card.hashtags.add(hs[0])
+            print(hs[0].title)
+
         nm = squad.need_money.get_or_create(card=card)[0]
         cost = subject.cost
         if subject.cost_period == 'lesson':
@@ -349,12 +363,12 @@ def add_student_to_squad(student, squad):
             nm.save()
 
     school = squad.school
-    for timep in school.time_periods.all():
-        timep.people.add(student)
     for lecture in squad.squad_lectures.all():
         add_person_to_lecture(lecture, student)
         lecture.save()
-    return ['ok']
+    if student in other_sts:
+        return student.first_name  
+    return 'ok'
 
 def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     today = int(timezone.now().strftime('%w'))
@@ -438,7 +452,6 @@ def add_person_to_lecture(lecture, person):
         if not person.id in lecture.person_id:
             lecture.person_id.append(person.id)
             lecture.person_number.append(0)
-        lecture.cell.time_period.people.add(person)
         index = lecture.person_id.index(person.id)
         number = lecture.person_number[index]
         lecture.people.add(person)

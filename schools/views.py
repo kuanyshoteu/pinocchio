@@ -213,7 +213,7 @@ def school_info(request):
     return render(request, "school/info.html", context)
 def get_social_networks(school):
     social_networks = []
-    for i in range(0, len(school.social_networks)):
+    for i in range(0, len(school.social_network_links)):
         social_networks.append([school.social_networks[i], school.social_network_links[i]])
     return social_networks
 
@@ -713,6 +713,7 @@ def save_card_as_user(request):
     school = is_moderator_school(request, manager_profile)
     password = ''
     add = True
+    problems = 'ok'
     ok_mail = False
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
@@ -766,16 +767,13 @@ def save_card_as_user(request):
                 card.author_profile = manager_profile
                 card.save()
                 # if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
-                #     return JsonResponse({'stop':True, 'problems':['ok']})
+                #     return JsonResponse({'stop':True, 'problems':'ok'})
                 if profile in squad.students.all():
                     add = False
                     remove_student_from_squad(profile, squad)
                     ok_mail = True
                 else:
                     problems = add_student_to_squad(profile, squad)
-                    if problems[0] != 'ok':
-                        add = False
-                        return JsonResponse({'add':add, 'problems':problems})
                     ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
                 profile.schools.add(school)
                 card.last_groups = squad_id
@@ -792,7 +790,7 @@ def save_card_as_user(request):
         'password':password,
         'add':add,
         'ok_mail':ok_mail,
-        'problems':['ok']
+        'problems':problems,
     }
     return JsonResponse(data)
 

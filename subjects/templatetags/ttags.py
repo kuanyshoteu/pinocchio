@@ -9,6 +9,10 @@ from accounts.models import Profession
 from schools.models import *
 
 @register.filter
+def remove_space(title):
+    return title.replace(' ', '_')
+
+@register.filter
 def get_filters(subject):
     school = subject.school
     subject_categories = subject.category.all()

@@ -33,7 +33,7 @@
                                     <div class="filter-title">Предметы <i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
                                         {% for subject_category in subject_categories %}
-                                        <li class="filter-item filter-item-s" status="0" id="{{ subject_category.title }}">
+                                        <li class="filter-item filter-item-s" status="0" id="{{ subject_category.title|remove_space }}">
                                             <i class="icon check green" id="check_subject_category{{ subject_category.title }}"></i>
                                             {{subject_category.title}}
                                         </li>
@@ -54,10 +54,11 @@
                                     </ul>
                                 </div>
                             </div>
+                            {% if offices|length > 1 %}
                             <div class="filter wide column">
                                 <div class="filter-element">
                                     <div class="filter-title">Офисы<i class="icon caret down" style="float: right;"></i></div>
-                                    <ul class="filter-list filter-list-hide">
+                                    <ul class="filter-list filter-list-hide">                                    
                                     {% for office in offices %}
                                         <li class="filter-item filter-item-s" status="0" id="{{ office.title }}">
                                             <i class="icon check green" id="check_office{{ office.title }}"></i>
@@ -67,6 +68,7 @@
                                     </ul>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="wide column" style="width: 60px;padding: 14px 0 0 0;">
                                 <div class="filter-element">
                                     <div class="filter-title" style="padding-right: 1px;">Дни<i class="icon caret down" style="float: right;"></i></div>
@@ -160,7 +162,7 @@
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 <script>
-    function openNav(id, name, predoplata, column_id) {
+    function openNav(id, name) {
         $('#register_students_calendar').modal('show')
         $('#current_user_name').text(name)
         $('.card_for_save').attr('id', id)
@@ -174,13 +176,14 @@
         $('.predoplata_form').hide()
         $('.ok_predoplata').hide()
         $('.isalready').hide()
+        column_id = $('#cardsc' + id).attr('column')
         if (column_id == '4') {
             $('.predoplata_number').attr('placeholder', 'Сумма предоплаты')
         }
         if (column_id == '5') {
             $('.predoplata_number').attr('placeholder', 'Сумма оплаты')
         }
-        if (predoplata == 'predoplata') {
+        if (column_id == '4' || column_id == '5') {
             $('.predoplata_form').attr('style', 'display:flex;')
             $('.predoplata_number').attr('status', 'show')
         }
@@ -237,23 +240,24 @@
                     }
                 });
                 oldcolumn_id = $('#card'+id).attr('column_id')
+                $('#card'+id).attr('column_id', column_id)
+                $('#cardsc'+id).attr('column', column_id)
                 if(oldcolumn_id == '1'){
                     if (column_id == '5' || column_id == '4') {
-                        openNav(id, $('.current_card').attr('name'), 'predoplata', column_id);
+                        openNav(id, $('.current_card').attr('name'));
                     }
                     else{
-                        openNav(id, $('.current_card').attr('name'), 'null', 0);
+                        openNav(id, $('.current_card').attr('name'));
                     }
                 }
                 else{
                     if (column_id == '2') {
-                        openNav(id, $('.current_card').attr('name'), 'null', 0);
+                        openNav(id, $('.current_card').attr('name'));
                     }
                     if (column_id == '4' || column_id == '5') {
-                        openNav(id, $('.current_card').attr('name'), 'predoplata', column_id);
+                        openNav(id, $('.current_card').attr('name'));
                     }
                 }
-                $('#card'+id).attr('column_id', column_id)
             },
         },
     })

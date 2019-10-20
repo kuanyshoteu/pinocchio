@@ -23,19 +23,19 @@
                     <table class="no_margin" style="font-size: 13px;">
                         <thead>
                             <tr>
-                                <th>Время</th>
-                                <th>Сумма</th>
-                                <th>Группа</th>
-                                <th>Менеджер</th>
+                                <th class="border">Время</th>
+                                <th class="border">Сумма</th>
+                                <th class="border">Группа</th>
+                                <th class="border">Менеджер</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for payment in hisprofile.payment_history.all %}
                             <tr>
-                                <td>{{ payment.timestamp }}</td>
-                                <td>{{ payment.amount }}</td>
-                                <td>{{ payment.squad.title }}</td>
-                                <td><a href="{{payment.manager.get_absolute_url}}">{{ payment.manager.first_name }}</a></td>
+                                <td class="border">{{ payment.timestamp }}</td>
+                                <td class="border">{{ payment.amount }} тг</td>
+                                <td class="border">{{ payment.squad.title }}</td>
+                                <td class="border"><a href="{{payment.manager.get_absolute_url}}">{{ payment.manager.first_name }}</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -85,3 +85,9 @@
         </div>
     </div>
 </div>
+<style type="text/css">
+    .border{
+        border: 1px solid lightgrey;
+        padding: 14px;
+    }
+</style>

@@ -7,6 +7,10 @@
 .btn_select:hover{
   box-shadow: 0 15px 15px 0 #d7d7d7;
 }
+.show_free_cards{
+  margin-top: 5px;
+  margin-left: 5px;
+}
 .thconst{
   padding: 5px !important;
   display: inline-block;

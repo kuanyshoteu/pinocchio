@@ -166,7 +166,7 @@
                                     Нажимая на кнопки "+" или "-" можете управлять списком
                                 </div>                                
 				        	</div>
-                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент уже учит курс <a class="isalready_subject ui button mini" href=""></a> в другой группе, студент может учить курс только из одной группы</div>
+                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
 				        	<div class="ui segment no_margin" style="background-color: #4a4a4a;color: #fff;padding-top: 15px;">
 				        		<div class="ui grid stackable" style="margin-top: 0">
                                     {% if squad_students|length == 0 %}
@@ -201,7 +201,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент уже учит курс <a class="isalready_subject ui button mini" href=""></a> в другой группе, студент может учить курс только из одной группы</div>
+                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент <b class="isalready_subject"></b> уже учит курс в другой группе, студента лучше записывать на курс только из одной группы</div>
                             <div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
                                 <div class="ui grid stackable not_group_students" style="margin-top: 0;">
                                     {% if all_students|length == 0 and squad_students == 0 %}
@@ -272,10 +272,9 @@
                 'student_id':student_id,
             },
             success: function (data) {
-                if (data.problems[0] != 'ok') {
+                if (data.problems != 'ok') {
                     $('.isalready').show()
-                    $('.isalready_subject').text(data.problems[0])
-                    $('.isalready_subject').attr('href', data.problems[1])
+                    $('.isalready_subject').text(data.problems)
                 }
                 if (data.add) {
                     $('.add_student'+student_id).text('-')

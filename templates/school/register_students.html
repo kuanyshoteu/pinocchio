@@ -18,7 +18,7 @@
         <div class="time_stop highlight_red" style="height: 35px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></div>
         <div class="wrong_mail highlight_red" style="height: 35px;display: none;"><b>Пожалуйста введите существующий email</b></div>
         <div class="no_predoplata_number highlight_red" style="height: 35px;display: none;"><b>Введите сумму предоплаты</b></div>
-        <div class="highlight_red isalready pt15 pb15" style="display: none;">Эта группа записана на курс <a class="isalready_subject ui button mini" href=""></a>, но студент уже учит этот курс в другой группе, студент может учить курс только из одной группы</div>
+        <div class="highlight_red isalready pt15 pb15" style="display: none;"> <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
         <div class="ui segment margin0 choose_group">
             <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
                 <div class="ui grid">
@@ -169,21 +169,6 @@
         </div>   
     </div>   
 </div>   
-<div class="ui mini modal" id="saved_modal">
-    <i class="close icon"></i>
-    <div class="content">
-        <div class="ui grid">
-            <div class="twelve wide column" style="font-size: 15px;">
-                Студент записан на курс
-                <br> 
-                Данные отправлены студенту на почту                
-            </div>
-            <div class="four wide column">
-                <i class="icon check circle" style="color: #21BA45;font-size: 30px;"></i>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
     function save_card_as_user(squad_id){
@@ -208,30 +193,31 @@
                 success: function (data) {
                     $('.loading').hide();
                     $('.ok_predoplata').hide()
-                    if (data.problems[0] != 'ok') {
+                    console.log(data.problems)
+                    if (data.problems != 'ok') {
                         $('.isalready').show()
-                        $('.isalready_subject').text(data.problems[0])
-                        $('.isalready_subject').attr('href', data.problems[1])
+                        $('.isalready_subject').text(data.problems)
                     }
                     else{
                         $('.isalready').hide()
-                        $('.predoplata_number').attr('status', 'hide')
-                        $('.predoplata_number').val('')
-                        if (data.stop) {
-                            $('.time_stop').show()
-                            $('.wrong_mail').hide()
-                        }
-                        else if(data.add){
-                            document.getElementById("school_schedule").style.width = "0";
-                            $('#saved_modal').modal('show')
-                            $('.icontable'+id).removeClass('green')
-                            $('.icontable'+id).addClass('blue')
-                        }
-                        else{
-                            $('.squad'+squad_id).hide()
-                        }
+                    }
+                    $('.predoplata_number').attr('status', 'hide')
+                    $('.predoplata_number').val('')
+                    if (data.stop) {
+                        $('.time_stop').show()
+                        $('.wrong_mail').hide()
+                    }
+                    else if(data.add){
+                        document.getElementById("school_schedule").style.width = "0";
+                        $('.icontable'+id).removeClass('green')
+                        $('.icontable'+id).addClass('blue')
+                        $('.squad'+squad_id).show()
+                    }
+                    else{
+                        $('.squad'+squad_id).hide()
                     }
                 }
+            
             })            
         }
         else{

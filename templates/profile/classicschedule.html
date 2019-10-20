@@ -1,5 +1,19 @@
 {% load ttags %}
-<div class="mb0 ui segment">Расписание</div>
+{% load staticfiles %}
+
+<div class="mb0 ui segment">
+    <div class="ui grid">
+        <div class="responsive-fix">
+            <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;position: relative;top: 50%;transform: translateY(-50%);">  
+        </div>
+        <div class="seven wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            Расписание
+        </div>
+        <div class="seven wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+            {% include 'profile/miss_lecture.html' %}
+        </div>
+    </div>
+</div>
 <form class="ui grid full-w mt0">
     <div style="overflow-x: auto;width: 100%;background: #4A4A4A;">
         <table class="no_margin" id="keywords" class="mb0" cellspacing="0" cellpadding="0" style="background: #4A4A4A;white-space: nowrap;">

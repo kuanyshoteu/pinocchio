@@ -56,6 +56,7 @@ class Skill(models.Model):
     crm_office2 = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     notifications_number = models.IntegerField(default=0)
     birthdate = models.DateField(null = True, blank = True) 
+    interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
@@ -207,8 +208,6 @@ class CRMCard(models.Model):
     days_of_weeks = ArrayField(models.BooleanField(), default = list)
     action = models.CharField(max_length=250, default='')
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
-    hashtag_ids = ArrayField(models.IntegerField(null=True), default=list)
-    hashtag_numbers = ArrayField(models.IntegerField(null=True), default=list)
     premoney = models.IntegerField(default=0)
     colour = models.CharField(max_length=250, default='white')
 

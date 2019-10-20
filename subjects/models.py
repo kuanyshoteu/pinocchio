@@ -34,7 +34,6 @@ class Day(models.Model):
 
 class TimePeriod(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='time_periods') 
-    people = models.ManyToManyField(Profile, related_name='histime_periods')
     start = models.TextField(default = '')
     end = models.TextField(default = '')
     num =  models.IntegerField(default = 0)
