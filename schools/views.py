@@ -1168,7 +1168,7 @@ def delete_card(request):
 
 def show_free_cards(request, school_id):
     school = School.objects.get(id=school_id)
-    profile = school.people.first()
+    profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     if profile.skill == None:
         skill = Skill.objects.create()
