@@ -851,6 +851,13 @@ def robots(request):
 def sitemap(request):
     return render(request,'Sitemap.xml', {})
 
+
+def file_changer(request):
+    context = {
+    
+    }
+    return render(request, "file_changer.html", context)
+
 def moderator_run_code(request):
     profile = get_profile(request)
     if is_profi(profile, 'Moderator') == False:

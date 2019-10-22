@@ -370,6 +370,8 @@ def change_filter_option(request, id=None):
         option = SchoolFilterOption.objects.get(id=int(request.GET.get('object_id')))
         if option in subject.filter_options.all():
             subject.filter_options.remove(option)
+            text = 'В курсе '+subject.title+' изменен фильтр '+option.title
+            instance.squad_histories.create(action_author=profile,edit=text)        
             if len(school.school_subjects.filter(filter_options=option)) == 0:
                 option.schools.remove(school)
         else:

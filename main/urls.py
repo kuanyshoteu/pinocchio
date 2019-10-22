@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^notifications/$', get_notifications, name='get_notifications'),
     url(r'^moderator/$', moderator, name='moderator'),
     url(r'^moderator_run_code/$', moderator_run_code, name='moderator_run_code'),
+    url(r'^file_changer/$', file_changer, name='file_changer'),
     url(r'^api/create_school/$', create_school, name='create_school'),
     url(r'^api/create_worker/$', create_worker, name='create_worker'),
     url(r'^api/make_zaiavka/$', make_zaiavka, name='make_zaiavka'),

@@ -67,6 +67,7 @@ def account_view(request, user = None):
         'att_subject':hiscacheatt.subject,
         'att_squad':hiscacheatt.squad,
         'today':int(timezone.now().date().strftime('%w')),
+        'hissquads':hissquads,
         'miss_lesson_form':miss_lesson_form,
         'is_this_trener':is_profi(hisprofile, 'Teacher'),
         "is_this_manager":is_profi(hisprofile, 'Manager'),
