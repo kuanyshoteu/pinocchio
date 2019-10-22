@@ -60,7 +60,7 @@
                                 <div class="filter-element">
                                     <div class="filter-title" style="padding-right: 1px;">Дни<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-hide">
-                                    {% for day in days %}
+                                    {% for day in crmdays %}
                                         <li class="filter-item filter-item-s" status="0" id="day{{ day.id }}">
                                             <i class="icon check green" id="check_day{{ day.title }}"></i>
                                             {{day.title}}

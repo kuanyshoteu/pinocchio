@@ -4,7 +4,7 @@
 <div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
     <div id="card{{card.id}}" class="ui segment crm_card 
     {% for tag in card.hashtags.all %}
-        {{tag.title}} 
+        {{tag.title|remove_space}} 
     {% endfor %} 
     {% if not card.author_profile %}free{%else%}mine{%endif%} 
     {% if column.id > 3%}

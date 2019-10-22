@@ -18,7 +18,7 @@ from subjects.models import *
 from subjects.views import update_squad_dates,change_lecture_options,get_subject_students
 from papers.models import *
 from library.models import Folder
-from accounts.models import Profile
+from accounts.models import Profile, CRMCardHistory
 from accounts.forms import *
 from django.contrib.auth import (
     authenticate,
@@ -84,6 +84,7 @@ def squad_create(request):
         instance.end_date = timezone.now().date()
         instance.school = school
         instance.save()
+        instance.squad_histories.create(action_author=profile,edit='Создал группу '+instance.title)
         return HttpResponseRedirect(instance.get_update_url())
     
     context = {
@@ -106,13 +107,27 @@ def squad_update(request, slug=None):
     school = instance.school
     is_in_school(profile, school)
     form = SquadForm(request.POST or None, request.FILES or None, instance=instance)
+    change_time = False
+    change_img = False
+    change_title = False
+    change_content = False
     if form.is_valid():
+        old_start_date = instance.start_date
+        old_title = instance.title
+        old_content = instance.content
         instance = form.save(commit=False)
-        instance.start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
-        instance.end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
+        start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
+        if old_title != instance.title:
+            change_title = True
+        if old_content != instance.content:
+            change_content = True
+        if instance.start_date != start_date:
+            change_time = True
+            instance.start_date = start_date
         instance.save()
     if request.POST:
         if len(request.FILES) > 0:
+            change_img = True
             if 'squad_banner' in request.FILES:
                 file = request.FILES['squad_banner']
                 instance.image_banner = file
@@ -121,6 +136,16 @@ def squad_update(request, slug=None):
                 instance.image_icon = file
         instance.color_back = request.POST.get('color_back')
         instance.save()
+        text = 'Внес изменения в группу '+instance.title
+        if change_title:
+            text += '<br> Название '+old_title+' -> ' + instance.title 
+        if change_content:
+            text += '<br> Описание '+old_content+' -> ' + instance.content
+        if change_time:
+            text += '<br> Дата начала '+str(old_start_date)+' -> '+str(start_date)
+        if change_img:
+            text += '<br> Картинка'
+        instance.squad_histories.create(action_author=profile,edit=text)        
         for subject in instance.subjects.all():
             update_squad_dates(subject, instance)
             subject.save()
@@ -178,6 +203,8 @@ def squad_delete(request, slug=None):
     is_in_school(profile, school)
         
     if request.method == "POST":
+        text = 'Удалил группу '+instance.title
+        instance.squad_histories.create(action_author=profile,edit=text)
         instance.delete()
         messages.success(request, "Successfully deleted")
         return redirect("squads:list")
@@ -270,6 +297,11 @@ def change_curator(request):
         teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
         squad.teacher = teacher
         squad.save()
+        if oldteacher:
+            text = 'Изменен учитель группы '+instance.title+' '+oldteacher.first_name+' -> '+teacher.first_name
+        else:
+            text = 'Установлен учитель '+teacher.first_name+' в группу '+instance.title
+        instance.squad_histories.create(action_author=profile,edit=text)
         for lecture in squad.squad_lectures.all():
             if oldteacher:
                 remove_person_from_lecture(lecture, oldteacher)
@@ -284,7 +316,7 @@ def add_student(request):
     profile = get_profile(request)
     only_managers(profile)
     add = False
-    problems = ['ok']
+    problems = 'ok'
     if request.GET.get('student_id') and request.GET.get('squad_id'):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         school = squad.school
@@ -293,8 +325,12 @@ def add_student(request):
         add = True
         if student in squad.students.all():
             add = False
+            text = 'Убран ученик '+student.first_name+' в группу '+squad.title
+            squad.squad_histories.create(action_author=profile,edit=text)
             remove_student_from_squad(student, squad)
         else:
+            text = 'Добавлен ученик '+student.first_name+' в группу '+squad.title
+            squad.squad_histories.create(action_author=profile,edit=text)
             problems = add_student_to_squad(student, squad)
     data = {
         'add':add,
@@ -474,6 +510,15 @@ def change_office(request, id=None):
             office = Office.objects.get(id = int(request.GET.get('object_id')))
             squad.office = office
             change_lecture_options(squad.students.all(), squad, 'office', office, old_office)
+        
+        old_office_title = ', убран '
+        new_office_title = ', добавлен '
+        if old_office:
+            old_office_title += old_office.title
+        if squad.office:
+            new_office_title += squad.office.title
+        text = 'В группе '+squad.title+' изменен офис'+old_office_title+new_office_title
+        squad.squad_histories.create(action_author=profile,edit=text)
         squad.save()
     data = {
     }

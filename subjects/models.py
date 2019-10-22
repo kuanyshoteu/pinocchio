@@ -197,3 +197,13 @@ class CacheAttendance(models.Model):
     profile = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='hiscache') 
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='cache_attendance') 
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='cache_attendance') 
+
+class SubjectHistory(models.Model):
+    subject = models.ForeignKey(Subject,null=True,on_delete = models.CASCADE,related_name='subject_histories')
+    action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='subject_histories')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    edit = models.TextField(default='')
+    old = models.CharField(max_length=250)
+    new = models.CharField(max_length=250)
+    class Meta:
+        ordering = ['-timestamp']

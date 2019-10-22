@@ -342,6 +342,29 @@
                         </div>
                     </div>
                     {% include 'school/voronka_chart.html' %}
+                    <div class="ui segment mb0 pl15">
+                        <div class="ui grid">
+                            <div class="nine wide column">
+                                Отчеты оп менеджерам
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment mt0">
+                        {% for manager in managers %}
+                        <a class="ui button small blue get_manager_actions" 
+                        url="{% url 'schools:get_manager_actions' %}" id="{{manager.id}}">
+                            {{manager.first_name}}
+                        </a>
+                        <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="manager_actions{{manager.id}}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <div class="set_manager_actions{{manager.id}}">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                     {% if instance.version == 'standart' or instance.version == 'business' %}
                     <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
                         На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>
@@ -376,17 +399,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui segment" style="margin-top: 0">
+                    <div class="ui segment mt0">
                         {% include 'school/money_circle_chart.html' %}
                     </div>
-                    <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                    <div class="ui segment mb0 pl15">
                         <div class="ui grid">
-                            <div class="nine wide column" style="padding: 14px">
+                            <div class="nine wide column">
                                 Доходы
                             </div>
                         </div>
                     </div>
-                    <div class="ui segment" style="margin-top: 0;height:324px;">
+                    <div class="ui segment mt0" style="height:324px;">
                         {% include 'school/money_chart.html' %}
                     </div>
                     {% endif %}

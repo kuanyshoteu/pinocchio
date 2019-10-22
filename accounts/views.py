@@ -488,7 +488,7 @@ def add_money(profile, school, squad, card, amount, manager):
         card.colour = 'white'
         card.save()
     profile.payment_history.create(
-        manager = manager,
+        action_author = manager,
         amount = amount,
         school = school,
         squad = squad,

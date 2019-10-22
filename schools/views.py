@@ -13,11 +13,11 @@ from datetime import timedelta
 from .forms import SchoolForm
 from .models import *
 from subjects.models import *
-from squads.models import Squad
+from squads.models import Squad,PaymentHistory,SquadHistory
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
 from papers.models import *
 from library.models import Folder
-from accounts.models import Profile
+from accounts.models import Profile,CRMCardHistory
 from accounts.forms import *
 from accounts.views import add_money
 from django.contrib.auth import (
@@ -68,7 +68,6 @@ def school_payments(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)   
-    print('********* 000')     
     context = {
         "profile":profile,
         "instance": school,
@@ -84,7 +83,6 @@ def school_payments(request):
         "school_money":school.money,
         "school_crnt":school,
     }
-    print('********* 111')     
     return render(request, "school/school_payments.html", context)
 
 def school_schedule(request):
@@ -270,6 +268,7 @@ def school_crm(request):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
+        'crmdays':Day.objects.all(),
     }
     return render(request, "school/crm.html", context)
 
@@ -1441,6 +1440,42 @@ def show_money_history(request):
     res = []
     for money in school.money_object.all():
         res.append([money.title, money.amount, money.timestamp.strftime('%d.%m.%Y %H:%M')])
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)
+
+def get_manager_actions(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    res = []
+    if request.GET.get('id'):
+        manager = Profile.objects.get(id=int(request.GET.get('id')))
+        school = is_moderator_school(request, profile)
+        history = sorted(
+            chain(
+                PaymentHistory.objects.filter(action_author=manager), 
+                CRMCardHistory.objects.filter(action_author=manager), 
+                SquadHistory.objects.filter(action_author=manager), 
+                SubjectHistory.objects.filter(action_author=manager)),
+            key=lambda item: item.timestamp, reverse=False)
+        for h in history:
+            edit = ''
+            classname = h.__class__.__name__
+            if classname == 'PaymentHistory':
+                edit+='Принята оплата у '+h.user.first_name+', сумма '+str(h.amount)+'тг '
+                if h.squad:
+                    edit+='за группу '+h.squad.title
+            elif classname == 'CRMCardHistory':
+                edit += 'Карточка '+ h.card.name
+                if h.oldcolumn != '' or h.newcolumn != '':
+                    edit += ' <br>"' + h.oldcolumn+ '" -> "' + h.newcolumn+'"'
+                else:
+                    edit += ' изменения данных'
+            else:
+                edit += h.edit
+
+            res.append([manager.first_name, h.timestamp.strftime('%d.%m.%Y %H:%M'), edit])
     data = {
         "res":res,
     }

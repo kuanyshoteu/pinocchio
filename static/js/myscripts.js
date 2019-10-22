@@ -4,6 +4,33 @@
         newstatus = $(this).attr('status')
         $('.get_subject_period').attr('value', newstatus)
     })
+    $('.get_manager_actions').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        $('#manager_actions'+id).modal('show')
+        $.ajax({
+            url: url,
+            data: {
+                "id":id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.set_manager_actions'+id).empty()
+                res = data.res
+                table = ''
+                for (var i = res.length-1; i >=0 ; i--) {
+                    crnt = '<td class="border">'+res[i][0]+'</td>'
+                    crnt += '<td class="border">'+res[i][1]+'</td>'
+                    crnt += '<td class="border">'+res[i][2]+'</td>'
+                    table += '<tr style="color: #222;"> '+crnt+' </tr>'
+                }
+                $('<table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">'+
+                    ' <thead> <tr style="color: #222;"> <th>Менеджер</th> <th>Время</th> <th>Действие</th> </tr>'+
+                    ' </thead> <tbody> '+table+
+                    ' </tbody> </table>').appendTo('.set_manager_actions'+id)
+            }
+        })
+    })
     $('.make_zaiavka_new').click(function(e) {
         url = '/api/make_zaiavka/'
         id = $(this).attr('id')

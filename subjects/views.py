@@ -90,6 +90,7 @@ def subject_create(request):
         instance.cost_period = request.POST.get('get_subject_period')
         print('period: ', request.POST.get('get_subject_period'))
         instance.save()
+        instance.subject_histories.create(action_author=profile,edit='Создал курс '+instance.title)        
         return HttpResponseRedirect(instance.get_update_url())
     context = {
         "form": form,
@@ -111,51 +112,67 @@ def subject_update(request, slug=None):
     only_staff(profile)
     school = instance.school
     is_in_school(profile, school)
+    old_title = instance.title
+    old_content = instance.content
+    old_cost = instance.cost
+    old_cost_period = instance.cost_period
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
-    if is_profi(profile, 'Manager'):
-        if form.is_valid():
-            old_cost = instance.cost
-            old_cost_period = instance.cost_period
-            instance = form.save(commit=False)
-            instance.cost_period = request.POST.get('get_subject_period')
-            instance.save()
-            squads = instance.squads.prefetch_related('students')
-            students = get_subject_students(squads)
-            cost = instance.cost
-            cards = school.crm_cards.all()
+    change_time = False
+    change_title = False
+    change_content = False
+    if form.is_valid():
+        instance = form.save(commit=False)
+        print(old_title, instance.title)
+        if old_title != instance.title:
+            change_title = True
+        if old_content != instance.content:
+            change_content = True
+        instance.cost_period = request.POST.get('get_subject_period')
+        instance.save()
+        text = 'Внесены изменения в курс "'+instance.title+'"'
+        if change_title:
+            text += '<br> Название '+old_title+' -> ' + instance.title 
+        if change_content:
+            text += '<br> Описание '+old_content+' -> ' + instance.content
+        instance.subject_histories.create(action_author=profile,edit=text)        
 
-            if old_cost_period == 'lesson':
-                old_lesson_bill = old_cost
-                old_month_bill = 0
-            elif old_cost_period == 'month':
-                old_lesson_bill = 0
-                old_month_bill = old_cost
-            if instance.cost_period == 'lesson':
-                new_lesson_bill = cost
-                new_month_bill = 0
-            elif instance.cost_period == 'month':
-                new_lesson_bill = 0
-                new_month_bill = cost
+        squads = instance.squads.prefetch_related('students')
+        students = get_subject_students(squads)
+        cost = instance.cost
+        cards = school.crm_cards.all()
 
-            for student in students:
-                card = cards.filter(card_user=student)
-                squad = squads.filter(students=student)
-                if len(card) > 0 and len(squad) > 0:
-                    card = card[0]
-                    squad = squad[0]
-                    nm = squad.need_money.get_or_create(card=card)[0]
-                    nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
-                    nm.bill = nm.bill - old_month_bill + new_month_bill
-                    nm.save()
+        if old_cost_period == 'lesson':
+            old_lesson_bill = old_cost
+            old_month_bill = 0
+        elif old_cost_period == 'month':
+            old_lesson_bill = 0
+            old_month_bill = old_cost
+        if instance.cost_period == 'lesson':
+            new_lesson_bill = cost
+            new_month_bill = 0
+        elif instance.cost_period == 'month':
+            new_lesson_bill = 0
+            new_month_bill = cost
 
-        cost = 0
-        for subject in school.school_subjects.all():
-            subject_cost = 0
-            if subject.cost:
-                subject_cost = subject.cost
-            cost += subject_cost
-        school.average_cost = int(cost / len(school.school_subjects.all()))
-        school.save()
+        for student in students:
+            card = cards.filter(card_user=student)
+            squad = squads.filter(students=student)
+            if len(card) > 0 and len(squad) > 0:
+                card = card[0]
+                squad = squad[0]
+                nm = squad.need_money.get_or_create(card=card)[0]
+                nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
+                nm.bill = nm.bill - old_month_bill + new_month_bill
+                nm.save()
+
+    cost = 0
+    for subject in school.school_subjects.all():
+        subject_cost = 0
+        if subject.cost:
+            subject_cost = subject.cost
+        cost += subject_cost
+    school.average_cost = int(cost / len(school.school_subjects.all()))
+    school.save()
     if request.POST: 
         if len(request.FILES) > 0:
             if 'subject_banner' in request.FILES:
@@ -240,6 +257,8 @@ def subject_delete(request, slug=None):
     school = instance.school
     is_in_school(profile, school)
     if request.method == "POST":
+        text = 'Удален курс '+instance.title
+        instance.subject_histories.create(action_author=profile,edit=text)
         instance.delete()
         return HttpResponseRedirect("/subjects/?type=moderator&mod_school_id="+str(school.id))
     context = {
@@ -305,6 +324,8 @@ def change_category(request, id=None):
         if subject in category.category_subjects.all():
             category.students.remove(*students)
             category.category_subjects.remove(subject)
+            text = 'В курсе '+subject.title + ' убран предмет '+category.title
+            subject.subject_histories.create(action_author=profile,edit=text)
             change_lecture_options(students, subject, 'subject', category, False)
 
             if category in hidden_filter_ids():
@@ -318,6 +339,10 @@ def change_category(request, id=None):
         else:
             is_in = True
             category.category_subjects.add(subject)
+
+            text = 'В курсе '+subject.title + ' добавлен предмет '+category.title
+            subject.subject_histories.create(action_author=profile,edit=text)
+
             category.students.add(*students)
             change_lecture_options(students, subject, 'subject', category, True)
             if category in hidden_filter_ids():
@@ -430,7 +455,9 @@ def change_lecture_options(students, subject, option, objectt, is_add):
             if len(hashtag) > 0:
                 hashtag = hashtag[0]
                 remove = True
-            is_add.office_lectures.remove(*lectures)
+            for lecture in lectures:
+                lecture.office = None
+                lecture.save()
         if objectt != None:
             hashtag2 = get_hashtag(school, objectt.title)
             if len(hashtag2) > 0:
@@ -475,19 +502,7 @@ def get_hashtag(school, title):
     return hashtag
 
 def card_add_hashtag(card, hashtag):
-    if not hashtag.id in card.hashtag_ids:
-        card.hashtag_ids.append(hashtag.id)
-        card.hashtag_numbers.append(0)
     card.hashtags.add(hashtag)
-    index = card.hashtag_ids.index(hashtag.id)
-    card.hashtag_numbers[index] += 1
 
 def card_remove_hashtag(card, hashtag):
-    if hashtag.id in card.hashtag_ids:
-        index = card.hashtag_ids.index(hashtag.id)
-        if card.hashtag_numbers[index] > 0:
-            card.hashtag_numbers[index] -= 1
-        if card.hashtag_numbers[index] < 0:
-            card.hashtag_numbers[index] = 0
-        if card.hashtag_numbers[index] == 0:
-            card.hashtags.remove(hashtag)
+    card.hashtags.remove(hashtag)
