@@ -211,7 +211,7 @@ def school_info(request):
     return render(request, "school/info.html", context)
 def get_social_networks(school):
     social_networks = []
-    for i in range(0, min(len(school.social_network_links)), len(school.social_networks)):
+    for i in range(0, min(len(school.social_network_links) , len(school.social_networks) )):
         social_networks.append([school.social_networks[i], school.social_network_links[i]])
     return social_networks
 
