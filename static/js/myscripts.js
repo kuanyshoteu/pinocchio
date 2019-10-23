@@ -4,6 +4,21 @@
         newstatus = $(this).attr('status')
         $('.get_subject_period').attr('value', newstatus)
     })
+    $('.download_report').click(function(e) {
+        url = $(this).attr('url');
+        first_report = $('.first_report').val();
+        second_report = $('.second_report').val();
+        $.ajax({
+            url: url,
+            data: {
+                'first_report':first_report,
+                'second_report':second_report,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        })
+    })
     $('.get_manager_actions').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
