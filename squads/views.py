@@ -130,6 +130,7 @@ def squad_update(request, slug=None):
             change_img = True
             if 'squad_banner' in request.FILES:
                 file = request.FILES['squad_banner']
+                print(file)
                 instance.image_banner = file
             if 'squad_icon' in request.FILES:
                 file = request.FILES['squad_icon']

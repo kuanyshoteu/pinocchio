@@ -56,6 +56,7 @@ urlpatterns = [
     url(r'^api/new_money_object/', new_money_object, name='new_money_object'),
     url(r'^api/show_money_history/', show_money_history, name='show_money_history'),
     url(r'^api/get_manager_actions/', get_manager_actions, name='get_manager_actions'),
+    url(r'^api/get_student_actions/', get_student_actions, name='get_student_actions'),
     url(r'^api/make_zaiavka/(?P<school_id>\d+)/$', make_zaiavka, name='make_zaiavka'),
     url(r'^adilmed/', adilmed, name="adilmed"),
 ]

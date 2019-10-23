@@ -17,7 +17,10 @@
             <div class="mt10">
                 <a class="ui button mini full-w" onclick="$('.payment_history').modal('show')">История оплаты</a>
             </div>
-            <div class="ui modal small payment_history">
+            <div class="mt10">
+                <a class="ui button mini full-w get_manager_actions" url="{% url 'schools:get_student_actions' %}" id="{{hisprofile.id}}">История действий</a>
+            </div>
+            <div class="ui modal payment_history">
                 <i class="close icon"></i>
                 <div class="content">
                     <table class="no_margin" style="font-size: 13px;">
@@ -40,6 +43,12 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="ui modal" style="min-height: 100%;margin-top: 10%;" id="manager_actions{{hisprofile.id}}">
+                <i class="close icon"></i>
+                <div class="content">
+                    <div class="set_manager_actions{{hisprofile.id}}"></div>
                 </div>
             </div>
 

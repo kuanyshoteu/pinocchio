@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <div class="two wide column" id="all_doc{{ doc.id }}">
-  <a id="{{ doc.id }}" class="open_doc_features help20 help40 help60 {% if hint < 100 and forloop.counter == 1 %}help_big_button{% endif %}" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal {% if hint < 100 and forloop.counter == 1 %}help_big_button{% endif %}"></i></a>
+  <a id="{{ doc.id }}" class="open_doc_features" style="cursor: pointer; float: right;"><i class="ui icon ellipsis horizontal {% if hint < 100 and forloop.counter == 1 %}help_big_button{% endif %}"></i></a>
   <div class="ui segment doc_features doc_features{{ doc.id }}" style="position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px; width: 155px;">
       <a  class="file_action" object_type='doc' action='copy' data-href='{{ profile.docfile_action_url }}' id="{{ doc.id }}" parent='{% if this_folder %}{{ this_folder.id}}{% else %}-1{% endif %}'><i class="icon copy outline"></i> Копировать</a>
       {% if folder.author_profile == profile %}

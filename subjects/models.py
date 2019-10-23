@@ -186,6 +186,7 @@ class Attendance(models.Model):
     student = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hisgrades')
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='subject_attendances')
     squad = models.ForeignKey(Squad,null=True, on_delete = models.CASCADE, related_name='squad_attendances')
+    timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['subject_materials', 'squad', 'student']
     def change_url(self):
@@ -203,7 +204,5 @@ class SubjectHistory(models.Model):
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='subject_histories')
     timestamp = models.DateTimeField(auto_now_add=True)
     edit = models.TextField(default='')
-    old = models.CharField(max_length=250)
-    new = models.CharField(max_length=250)
     class Meta:
         ordering = ['-timestamp']

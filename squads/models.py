@@ -148,8 +148,6 @@ class SquadHistory(models.Model):
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='squad_histories')
     timestamp = models.DateTimeField(auto_now_add=True)
     edit = models.TextField(default='')
-    old = models.CharField(max_length=250)
-    new = models.CharField(max_length=250)
     class Meta:
         ordering = ['-timestamp']
 

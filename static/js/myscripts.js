@@ -15,6 +15,10 @@
             },
             dataType: 'json',
             success: function (data) {
+                prof = 'Менеджер'
+                if (data.student) {
+                    prof = 'Студент'
+                }
                 $('.set_manager_actions'+id).empty()
                 res = data.res
                 table = ''
@@ -25,7 +29,7 @@
                     table += '<tr style="color: #222;"> '+crnt+' </tr>'
                 }
                 $('<table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">'+
-                    ' <thead> <tr style="color: #222;"> <th>Менеджер</th> <th>Время</th> <th>Действие</th> </tr>'+
+                    ' <thead> <tr style="color: #222;"> <th>'+prof+'</th> <th>Время</th> <th>Действие</th> </tr>'+
                     ' </thead> <tbody> '+table+
                     ' </tbody> </table>').appendTo('.set_manager_actions'+id)
             }

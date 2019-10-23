@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="ui grid mt50">
+    <div class="one wide column"></div>
+    <div class="seven wide column">
+        <div class="ui segment">
+            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
+                <h3 style="font-size: 17px;font-weight: 600;color: #7e7e7e">Вставьте excel файл</h3>
+                <input type="file" name="file">
+                <input type="submit" class="ui button blue mt15" value="Отправить" name="">
+            </form>
+        </div>
+    </div>
+    <div class="one wide column"></div>
+</div>
+{% endblock content %}

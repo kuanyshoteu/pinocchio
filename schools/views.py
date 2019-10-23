@@ -1480,3 +1480,42 @@ def get_manager_actions(request):
         "res":res,
     }
     return JsonResponse(data)
+
+from subjects.templatetags.ttags import get_date
+def get_student_actions(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    res = []
+    if request.GET.get('id'):
+        school = is_moderator_school(request, profile)
+        student = Profile.objects.get(id=int(request.GET.get('id')))
+        card = school.crm_cards.get(card_user=student)
+        history = sorted(
+            chain(
+                school.payment_history.filter(user=student), 
+                card.history.all(),
+                student.hisgrades.filter(school=school, present='present')),
+            key=lambda item: item.timestamp, reverse=False)
+        for h in history:
+            edit = ''
+            classname = h.__class__.__name__
+            if classname == 'PaymentHistory':
+                edit+='Принята оплата у '+h.user.first_name+', сумма '+str(h.amount)+'тг '
+                if h.squad:
+                    edit+='за группу '+h.squad.title
+            elif classname == 'CRMCardHistory':
+                edit += 'Карточка '+ h.card.name
+                if h.oldcolumn != '' or h.newcolumn != '':
+                    edit += ' <br>"' + h.oldcolumn+ '" -> "' + h.newcolumn+'"'
+                else:
+                    edit += ' изменения данных'
+            elif classname == 'Attendance':
+                edit = 'Посетил урок курса '+ h.subject.title+'<br>Дата: '+get_date(h.subject_materials, h.squad)[0].strftime('%d.%m.%Y')
+
+            res.append([student.first_name, h.timestamp.strftime('%d.%m.%Y %H:%M'), edit])
+    data = {
+        "res":res,
+        'student':True,
+    }
+    return JsonResponse(data)
+

@@ -24,6 +24,7 @@ class Document(models.Model):
     school = models.ForeignKey(School, null = True, on_delete = models.CASCADE, related_name='school_docs') 
     file = models.FileField(upload_to=upload_location, null = True)
     object_type = models.CharField(max_length=255, default='')
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['id']

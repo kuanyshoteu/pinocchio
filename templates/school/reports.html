@@ -1,0 +1,30 @@
+{% load staticfiles %}
+{% load ttags %}
+<script src="{% static 'js/voronka.js' %}"></script>
+<script src="https://www.amcharts.com/lib/3/funnel.js"></script>
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+<div class="ui segment" style="margin-bottom: 0;">
+    Отчет по бухгалтерии
+</div>
+<div class="ui segment no_padding no_margin">
+    <div style="display: flex;">
+        <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
+<!--         <div style="padding: 10px 0 0 10px;">
+            <a class="ui button mini green report_period" value="week" style="height: 29px;">Неделю</a>
+            <a class="ui button mini report_period" value="month" style="height: 29px;">Месяц</a>
+            <a class="ui button mini report_period" value="year" style="height: 29px;">Год</a>
+        </div>
+ -->    </div>
+    <div style="display: flex;">
+        <form class="ui form no_margin" style="padding: 10px 0 0 15px;">
+            <input type="date" class="first_report" style="width: 175px;height: 30px;" value="{{ weekago }}">
+        </form>
+        <span style="padding: 15px 5px;">—</span>
+        <form class="ui form no_margin" style="padding: 10px 0 0 0;">
+            <input type="date" class="second_report" style="width: 175px;height: 30px;" value="{{ today }}">
+        </form>
+        <div style="padding: 10px 0 0 10px;">
+            <a class="ui button mini blue update_voronka" status="get_input" style="height: 29px;">Скачать отчет</a>      
+        </div>
+    </div>
+</div>

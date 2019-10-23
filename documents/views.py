@@ -169,33 +169,21 @@ def paste(request):
 def create_docfolder(request):
     profile = Profile.objects.get(user = request.user.id)
     only_staff(profile)
-    print('0')
     if request.GET.get('school_id'):
-        print('1')
         school = School.objects.get(id=int(request.GET.get('school_id')))
         is_in_school(profile, school)
-        print('9')
         if len(school.school_docfolders.all()) > 0:
             name = 'Папка' + str(school.school_docfolders.all()[len(school.school_docfolders.all())-1].id + 1)
-            print('8')
         else:
             name = 'Папка'
-            print('7')
-        print(name)
         folder = DocumentFolder.objects.create(title = name,author_profile = profile)
-        print(folder)
-        print('6')
         if request.GET.get('school_id'):
-            print('2')
             folder.school = school
         if request.GET.get('parent_id') != 'none':
-            print('3')
             parent = DocumentFolder.objects.get(id = int(request.GET.get('parent_id')))
             folder.parent = parent
             parent.children.add(folder)
-        print('4')
         folder.save()
-    print('5')
     data = {
         'name':name,
         'url':folder.get_absolute_url(),
