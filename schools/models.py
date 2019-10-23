@@ -124,6 +124,8 @@ class School(models.Model):
         return reverse("schools:get_school_ratings", kwargs={"school_id": self.id})
     def get_school_todolists(self):
         return reverse("todolist:get_school_todolists", kwargs={"school_id": self.id})
+    def get_school_report(self):
+        return reverse("todolist:get_school_report", kwargs={"school_id": self.id})
     def crm_option_url(self):
         return reverse("schools:crm_option_url")
     def crm_option_url2(self):
