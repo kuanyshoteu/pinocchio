@@ -26,7 +26,7 @@
 				</div>			
 			{% elif att_subject|get_current_attendance:att_squad == 'No_schedule' %}
 				<div class="highlight_black">
-					Не настроено расписание, может настроить в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы {{att_squad.title}}</a>
+					Не настроено расписание, можетe настроить в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы {{att_squad.title}}</a>
 				</div>
 			{% else %}
 			<div id="slider" class="slider" first_set="no" last_set="no" index="0">

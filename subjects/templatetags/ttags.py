@@ -102,7 +102,7 @@ def get_date(material, squad):
         
         if date > timezone.now().date():
             check_date = 'future'
-        elif date + timedelta(50) >= timezone.now().date():
+        elif date + timedelta(3) >= timezone.now().date():
             check_date = 'now'
         else:
             check_date = 'past'
@@ -158,7 +158,7 @@ def check_date(material, squad):
     date = get_date(material, squad)
     if date > timezone.now().date():
         return 'future'
-    elif date + timedelta(150) >= timezone.now().date():
+    elif date + timedelta(3) >= timezone.now().date():
         return 'now'
     else:
         return 'past'
@@ -166,17 +166,25 @@ def check_date(material, squad):
 def material_number_by_date(date, squad, subject, alldays):
     lectures = squad.squad_lectures.filter(subject = subject)
     num_of_lectures = len(lectures)
-    print(num_of_lectures)
     if num_of_lectures > 0:
         delta = (date - squad.start_date).days
         number_of_weeks = int(delta / 7)
-        finish = delta % 7
         start = int(squad.start_date.strftime('%w'))
+        finish = int(timezone.now().date().strftime('%w'))
+        search = True
         if start == 0:
             start = 7
+        while search:
+            day=alldays.get(number=int(start))
+            if len(lectures.filter(day=day)) > 0:
+                break
+            start += 1
+            if start > 7:
+                start = 1
         if start > finish or finish == 0:
             finish += 7
         extra = 0
+        print(start,finish)
         for i in range(start, finish + 1): # Days of week of last not full week
             i = i % 7
             if i == 0:
@@ -184,6 +192,7 @@ def material_number_by_date(date, squad, subject, alldays):
             day=alldays.get(number=int(i))
             extra += len(lectures.filter(day=day))
         material_number = num_of_lectures * number_of_weeks + extra
+        print(num_of_lectures, number_of_weeks, extra, material_number)
         return material_number   
     return -1 
 
@@ -193,7 +202,6 @@ def get_current_attendance(subject, squad):
         return '_'
     alldays = Day.objects.all() 
     material_number = material_number_by_date(timezone.now().date(), squad, subject,alldays)
-    print(subject.title, squad.title, material_number)
     if material_number >= 0:
         res = []
         i = 0

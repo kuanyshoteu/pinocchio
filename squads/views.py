@@ -117,6 +117,7 @@ def squad_update(request, slug=None):
         old_content = instance.content
         instance = form.save(commit=False)
         start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
+        end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
         if old_title != instance.title:
             change_title = True
         if old_content != instance.content:
@@ -124,6 +125,7 @@ def squad_update(request, slug=None):
         if instance.start_date != start_date:
             change_time = True
             instance.start_date = start_date
+        instance.end_date = end_date
         instance.save()
     if request.POST:
         if len(request.FILES) > 0:
