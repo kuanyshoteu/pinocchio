@@ -283,14 +283,21 @@
     $('.save_office_cabinet').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
+        status = $(this).attr('status')
         title = $('.office_cabinet_create_title'+id).val()
         capacity = $('.office_cabinet_create_capacity'+id).val()
+        type = ''
+        if (status != '') {
+            type = 'moderator'
+        }
         $.ajax({
             url: url,
             data: {
                 'title':title,
                 'id':id,
                 'capacity':capacity,
+                'mod_school_id':status,
+                'type':type
             },
             dataType: 'json',
             success: function (data) {

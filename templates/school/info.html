@@ -320,7 +320,7 @@
                                             <textarea class="no_margin need_clear office_cabinet_create_title office_cabinet_create_title{{ office.id }}" placeholder="Название кабинета"></textarea>
                                             <input placeholder="Вместимость" type="number" class="office_cabinet_create_capacity office_cabinet_create_capacity{{ office.id }}">
                                         </div>
-                                        <a class="ui button mini green save_office_cabinet" url="{{office.create_cabinet_url}}{%if is_moderator%}?mod_school_id={{instance.id}}" id="{{office.id}}" >Создать</a>
+                                        <a class="ui button mini green save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
                                     </form>
                                 </div>
                             </div>

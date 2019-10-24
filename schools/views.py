@@ -600,6 +600,7 @@ def create_cabinet(request):
     only_managers(profile)
     if request.GET.get('title') != '':
         school = is_moderator_school(request, profile)
+        print(school.title)
         office = school.school_offices.get(id=int(request.GET.get('id')))
         office.cabinets.create(
             school=school,

@@ -34,7 +34,7 @@
     <a href="{{ instance.get_payments_url }}" class="{% if payments %}current_option{% else %}other_option{% endif %}" name="teachers">
         Оплата студентов
     </a>
-    <a href="{% url 'schools:get_school_report' %}" class="{% if report %}current_option{% else %}other_option{% endif %}" name="report">
+    <a href="{% url 'schools:get_school_report' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if report %}current_option{% else %}other_option{% endif %}" name="report">
         Финансовый отчет
     </a>
 </div>
