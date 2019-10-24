@@ -878,7 +878,9 @@ def get_school_report(request):
                     subject_res_dates = [squad_title,subject.title]
                     subject_res = ['','']
                     for i in range(0, end-start):
-                        date = get_date(start + i-1, squad, subject,lectures).strftime('%d.%m.%Y')
+                        date = get_date(start + i-1, squad, subject,lectures)
+                        if date != '_':
+                            date.strftime('%d.%m.%Y')
                         subject_res_dates.append(date)
                         sm = list(materails)[start + i-1]
                         cost = 0
