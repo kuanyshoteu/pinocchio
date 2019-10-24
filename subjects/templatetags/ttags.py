@@ -184,7 +184,6 @@ def material_number_by_date(date, squad, subject, alldays):
         if start > finish or finish == 0:
             finish += 7
         extra = 0
-        print(start,finish)
         for i in range(start, finish + 1): # Days of week of last not full week
             i = i % 7
             if i == 0:
@@ -192,7 +191,6 @@ def material_number_by_date(date, squad, subject, alldays):
             day=alldays.get(number=int(i))
             extra += len(lectures.filter(day=day))
         material_number = num_of_lectures * number_of_weeks + extra
-        print(num_of_lectures, number_of_weeks, extra, material_number)
         return material_number   
     return -1 
 

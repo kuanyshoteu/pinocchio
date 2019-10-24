@@ -170,14 +170,6 @@ def subject_attendance(request):
         school = subject.school
         is_in_school(profile, school)
         cache_att.subject = subject
-        if not cache_att.squad in subject.squads.all():
-            if is_profi(profile, "Teacher"):
-                cache_att.squad = subject.squads.first()
-            else:
-                for hissquad in profile.squads.all():
-                    if hissquad in subject.squads.all():
-                        cache_att.squad = hissquad
-                        break
         cache_att.save()
     data = {
     }
@@ -190,6 +182,8 @@ def squad_attendance(request):
         school = squad.school
         is_in_school(profile, school)
         cache_att.squad = squad
+        if not cache_att.subject in squad.subjects.all():
+            cache_att.subject = squad.subjects.first()
         cache_att.save()
     data = {
     }
