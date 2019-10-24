@@ -25,13 +25,13 @@
     </div>
 </div>
 <div class="ui segment" style="background-color: #fafbfc;margin-top: 0; padding: 18px;">
-    <a href="{{ instance.get_absolute_url }}" class="{% if main_school %}current_option{% else %}other_option{% endif %}" name="school_info">
+    <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}" name="school_info">
         Общие 
     </a>
-    <a href="{{ instance.get_salaries_url }}" class="{% if salaries %}current_option{% else %}other_option{% endif %}" name="teachers">
+    <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}" name="teachers">
         Зарплаты
     </a>
-    <a href="{{ instance.get_payments_url }}" class="{% if payments %}current_option{% else %}other_option{% endif %}" name="teachers">
+    <a href="{{ instance.get_payments_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if payments %}current_option{% else %}other_option{% endif %}" name="teachers">
         Оплата студентов
     </a>
     <a href="{% url 'schools:get_school_report' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if report %}current_option{% else %}other_option{% endif %}" name="report">

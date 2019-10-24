@@ -103,9 +103,11 @@ def get_profile(request):
     return profile
 
 def is_in_school(profile, school):
-    if not is_profi(profile, 'Moderator'):
-        if not school in profile.schools.all():
-            raise Http404
+    print(is_profi(profile, 'Moderator'))
+    if is_profi(profile, 'Moderator'):
+        return True
+    if not school in profile.schools.all():
+        raise Http404
 
 def only_teachers(profile):
     profession = Profession.objects.get(title = 'Teacher')

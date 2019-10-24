@@ -1125,8 +1125,11 @@ def save_salary(request):
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('salary'):
         worker = Profile.objects.get(id=int(request.GET.get('id')))
+        print('0')
         school = is_moderator_school(request, profile)
+        print('1')
         is_in_school(worker, school)
+        print('2')
         worker.salary = int(request.GET.get('salary'))
         worker.save()
     data = {
