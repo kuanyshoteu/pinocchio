@@ -882,6 +882,7 @@ def get_school_report(request):
                         if date != '_':
                             date.strftime('%d.%m.%Y')
                         subject_res_dates.append(date)
+                        print(len(list(materails)), start + i-1)
                         sm = list(materails)[start + i-1]
                         cost = 0
                         if teacher in sm.done_by.all():
