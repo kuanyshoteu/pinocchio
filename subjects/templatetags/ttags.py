@@ -102,7 +102,7 @@ def get_date(material, squad):
         
         if date > timezone.now().date():
             check_date = 'future'
-        elif date + timedelta(20) >= timezone.now().date():
+        elif date + timedelta(50) >= timezone.now().date():
             check_date = 'now'
         else:
             check_date = 'past'
@@ -163,18 +163,12 @@ def check_date(material, squad):
     else:
         return 'past'
 
-@register.filter
-def get_current_attendance(subject, squad):
-    if not subject or not squad:
-        return '_'
+def material_number_by_date(date, squad, subject, alldays):
     lectures = squad.squad_lectures.filter(subject = subject)
     num_of_lectures = len(lectures)
-    if timezone.now().date() >= squad.start_date:
-        delta = (timezone.now().date() - squad.start_date).days
-    else:
-        delta = (squad.end_date - squad.start_date).days
+    print(num_of_lectures)
     if num_of_lectures > 0:
-        delta = (timezone.now().date() - squad.start_date).days
+        delta = (date - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7
         start = int(squad.start_date.strftime('%w'))
@@ -187,9 +181,20 @@ def get_current_attendance(subject, squad):
             i = i % 7
             if i == 0:
                 i = 7
-            day=Day.objects.get(number=int(i))
+            day=alldays.get(number=int(i))
             extra += len(lectures.filter(day=day))
         material_number = num_of_lectures * number_of_weeks + extra
+        return material_number   
+    return -1 
+
+@register.filter
+def get_current_attendance(subject, squad):
+    if not subject or not squad:
+        return '_'
+    alldays = Day.objects.all() 
+    material_number = material_number_by_date(timezone.now().date(), squad, subject,alldays)
+    print(subject.title, squad.title, material_number)
+    if material_number >= 0:
         res = []
         i = 0
         counter = 0

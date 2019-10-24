@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
-from main.views import get_landing,adilmed
+from main.views import get_landing,adilmed, get_school_report
 
 app_name = 'schools'
 urlpatterns = [
@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^courses/$', school_courses, name='courses'),
     url(r'^rating/$', school_rating, name='rating'),
     url(r'^payments/$', school_payments, name='payments'),
+    url(r'^reports/$', get_school_report, name='get_school_report'),
     url(r'^api/edit_card/$', edit_card, name='edit_card_url'),
     url(r'^api/add_card/$', add_card, name='add_card_url'),
     url(r'^api/move_card/$', move_card, name='move_card_url'),
@@ -58,5 +59,6 @@ urlpatterns = [
     url(r'^api/get_manager_actions/', get_manager_actions, name='get_manager_actions'),
     url(r'^api/get_student_actions/', get_student_actions, name='get_student_actions'),
     url(r'^api/make_zaiavka/(?P<school_id>\d+)/$', make_zaiavka, name='make_zaiavka'),
+    url(r'^api/get_school_report/(?P<school_id>\d+)/$', get_school_report, name='get_school_report'),
     url(r'^adilmed/', adilmed, name="adilmed"),
 ]

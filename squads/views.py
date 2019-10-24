@@ -299,10 +299,10 @@ def change_curator(request):
         squad.teacher = teacher
         squad.save()
         if oldteacher:
-            text = 'Изменен учитель группы '+instance.title+' '+oldteacher.first_name+' -> '+teacher.first_name
+            text = 'Изменен учитель группы '+squad.title+' '+oldteacher.first_name+' -> '+teacher.first_name
         else:
-            text = 'Установлен учитель '+teacher.first_name+' в группу '+instance.title
-        instance.squad_histories.create(action_author=profile,edit=text)
+            text = 'Установлен учитель '+teacher.first_name+' в группу '+squad.title
+        squad.squad_histories.create(action_author=profile,edit=text)
         for lecture in squad.squad_lectures.all():
             if oldteacher:
                 remove_person_from_lecture(lecture, oldteacher)

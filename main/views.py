@@ -791,6 +791,177 @@ def make_zaiavka(request):
     }
     return JsonResponse(data)
 
+def report_material_number_by_date(date, squad,subject, alldays,lectures):
+    num_of_lectures = len(lectures)
+    if num_of_lectures > 0:
+        delta = (date - squad.start_date).days
+        number_of_weeks = int(delta / 7)
+        finish = delta % 7
+        start = int(squad.start_date.strftime('%w'))
+        if start == 0:
+            start = 7
+        if start > finish or finish == 0:
+            finish += 7
+        extra = 0
+        for i in range(start, finish + 1): # Days of week of last not full week
+            i = i % 7
+            if i == 0:
+                i = 7
+            day=alldays.get(number=int(i))
+            extra += len(lectures.filter(day=day))
+        material_number = num_of_lectures * number_of_weeks + extra
+        return material_number   
+    return -1 
+def get_date(material_number, squad, subject,lectures):
+    if len(lectures) > 0:
+        number_of_weeks = int(material_number/len(lectures))
+        lecture_index = material_number % len(lectures)
+        if lecture_index == 0:
+            number_of_weeks -= 1
+            lecture_index = len(lectures)
+        if squad.id in subject.squad_ids:
+            squad_index = subject.squad_ids.index(squad.id)
+        else:
+            return '_'
+        squad_start_day = subject.start_dates[squad_index]
+        start_day = int(squad_start_day.strftime('%w'))
+        if start_day == 0:
+            start_day = 7
+        start_day_object = Day.objects.get(number = start_day)
+        if len(lectures.filter(day=start_day_object)) == 0:
+            return '_'
+        start_day_lecture = lectures.filter(day=start_day_object)[0]
+        start_day_index = list(lectures).index(start_day_lecture)
+        extra = lectures[(start_day_index + lecture_index-1) % len(lectures)].day.number - start_day
+        if extra < 0:
+            extra += 7
+        x = 7 * number_of_weeks + extra
+        date = squad_start_day + timedelta(x)
+        
+        return date
+    else:
+        return '_'
+def get_school_report(request):
+    profile = get_profile(request)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    if request.POST.get('first_report') and request.POST.get('second_report'):
+        timeago = datetime.datetime.strptime(request.POST.get('first_report'), "%Y-%m-%d").date()
+        timefuture = datetime.datetime.strptime(request.POST.get('second_report'), "%Y-%m-%d").date()
+        alldays = Day.objects.all() 
+        profession = Profession.objects.get(title = 'Teacher')
+        all_materials = school.school_materials.all().select_related('subject').prefetch_related('done_by')
+        res = [['Оплата учителям']]
+        all_costs = 0
+        for teacher in profession.workers.filter(schools=school).prefetch_related('hissquads__subjects'):
+            hislectures = teacher.hislectures.all()
+            res.append([teacher.first_name])
+            sum_teacher = 0
+            costs_subjects = ['Итого по курсам']
+            costs_numbers = ['']
+            for squad in teacher.hissquads.all():
+                add = False
+                for subject in squad.subjects.all():
+                    sum_subject = 0
+                    squad_title = ''
+                    if add == False:
+                        squad_title = squad.title
+                        add = True
+                    materails = all_materials.filter(subject=subject)
+                    lectures = hislectures.filter(squad=squad, subject=subject)
+                    start = report_material_number_by_date(timeago,squad,subject, alldays,lectures)
+                    end = report_material_number_by_date(timefuture,squad,subject, alldays,lectures)
+                    if start > len(materails):
+                        start = len(materails)
+                    if end > len(materails):
+                        end = len(materails)
+                    subject_res_dates = [squad_title,subject.title]
+                    subject_res = ['','']
+                    for i in range(0, end-start):
+                        date = get_date(start + i-1, squad, subject,lectures).strftime('%d.%m.%Y')
+                        subject_res_dates.append(date)
+                        sm = list(materails)[start + i-1]
+                        cost = 0
+                        if teacher in sm.done_by.all():
+                            cost = teacher.salary
+                        sum_subject += cost
+                        subject_res.append(cost)
+                    costs_subjects.append(subject.title)
+                    costs_numbers.append(sum_subject)
+                    res.append(subject_res_dates)
+                    res.append(subject_res)
+                    sum_teacher += sum_subject
+            all_costs += sum_teacher
+            costs_subjects.append('В сумме')
+            costs_numbers.append(sum_teacher)
+            res.append(costs_subjects)
+            res.append(costs_numbers)
+            res.append([])
+            res.append([])
+        res.append(['ИТОГО на зарплаты нужно:', all_costs])
+        data = res
+        df = pd.DataFrame(data)
+
+        students_res = [['Оплата Клиентов'],['В группах']]
+        all_squads_cost = 0
+        for squad in school.groups.all().prefetch_related('students').prefetch_related('payment_history'):
+            squad_cost = 0
+            for subject in squad.subjects.all():
+                squad_cost += subject.cost
+            teacher_name = ''
+            if squad.teacher:
+                teacher_name = squad.teacher.first_name
+            students_res.append(['Группа ' + squad.title+'\nУчитель: '+teacher_name+'\nДата начала: '+squad.start_date.strftime('%d.%m.%Y')+'\nСтоимость в месяц: '+str(squad_cost)+' тг'])
+            phs = squad.payment_history.all().order_by('timestamp')
+            for student in squad.students.all():
+                squad_res = [student.first_name]
+                squad_res2 = ['']
+                student_cost = 0
+                for ph in phs.filter(user=student):
+                    squad_res.append(str(ph.amount) + 'тг')
+                    squad_res2.append(ph.timestamp.strftime('%d.%m.%Y'))
+                    student_cost += ph.amount
+                squad_res.append(student_cost)
+                squad_res2.append('Итого')
+                squad_cost += student_cost
+                students_res.append(squad_res2)
+                students_res.append(squad_res)
+            all_squads_cost += squad_cost
+            students_res.append(['Итого с группы:', squad_cost])
+            students_res.append([])
+            students_res.append([])
+        students_res.append(['Итого со всех групп:', all_squads_cost])
+        data2 = students_res
+        df2 = pd.DataFrame(data2)
+
+
+        datas = {'Оплата учителям':df, 'Оплата Клиентов':df2}
+        output = BytesIO()
+        writer = pd.ExcelWriter(output, engine='xlsxwriter')
+        for key, value in datas.items():
+            data = value
+            data.to_excel(writer, key)
+
+        writer.save()
+        output.seek(0)
+        response = HttpResponse(output,content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % 'Download'
+        return response
+    context = {  
+        'report':True,
+        "profile":profile,
+        "instance": school,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school, 
+        "today":timezone.now().date().strftime('%Y-%m-%d'),
+        "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),         
+    }
+    return render(request, "school/report.html", context)
+
 def cat_filter(request):
     res = []
     if request.GET.get('id') and request.GET.get('mincost') and request.GET.get('maxcost'):
@@ -813,7 +984,6 @@ def cat_filter(request):
             image_url = ''
             if len(school.banners.all()) > 0:
                 image_url = school.banners.first().image_banner.url
-                print(image_url)
             res.append([
                 school.get_landing(),
                 school.title,
