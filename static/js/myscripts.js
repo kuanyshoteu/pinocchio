@@ -590,6 +590,7 @@
     })
     $('.change_mode').click(function(e) {
         if ($('.dataconst').attr('page_mode') == 'norm') {
+            $('.body').addClass('oveflowy_h')
             $('.schedule_body').removeClass('oveflowx_h')
             $('.schedule_body').addClass('oveflowx_a')
             $('#group-details').addClass('oveflowy_h')
@@ -597,6 +598,7 @@
             $('.dataconst').attr('page_mode', 'horz')           
         }
         else{
+            $('.body').removeClass('oveflowy_h')
             $('.schedule_body').addClass('oveflowx_h')
             $('.schedule_body').removeClass('oveflowx_a')
             $('#group-details').removeClass('oveflowy_h')

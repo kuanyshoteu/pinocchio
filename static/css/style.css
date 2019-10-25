@@ -17,7 +17,7 @@
   text-align: center;
 }
 .oveflowx_h{
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   cursor: row-resize;
 }
 .oveflowx_a{
@@ -25,7 +25,7 @@
   overflow-x: auto;
 }
 .oveflowy_h{
-  overflow-y: hidden;
+  overflow-y: hidden !important;
 }
 .oveflowy_a{
   overflow-y: auto;
