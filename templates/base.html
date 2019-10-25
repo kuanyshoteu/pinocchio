@@ -1,10 +1,7 @@
 {% load staticfiles %}
 {% load static compress %}
-<html {% if map_view %} style="overflow-y: hidden;max-height: 100%;"{% endif %}>
+<html>
 <head>
-    {% if map_map_view %}
-    <link rel="canonical" href="https://www.bilimtap.kz" />
-    {% endif %}
     <meta charset="utf-8">
     <meta name="google-site-verification" content="G-3JdvIZH1oSADX0f2I8uRqCFAggIj06lzBKaEeYb3Y" />   
     <meta name="yandex-verification" content="f222118f15d7576b" />
@@ -52,7 +49,7 @@
     {% endcompress %}
     {% block head_extra %} {% endblock head_extra %}
 </head>
-<body {% if map_view %} style="overflow-y: hidden;max-height: 100%;"{% endif %}>
+<body>
 {% include "modals/confirm_delete.html" %}
 {% if is_manager %}
 {% include "modals/new_card_crm.html" %}
@@ -258,7 +255,7 @@
         <div class="five wide column menu_back no_padding">
         </div>
     </div>
-    <div style="padding-top: 10px;min-height: calc(100% - 40px);{% if map_view %}overflow-y: hidden;max-height: 100%;{% endif %}">
+    <div style="padding-top: 10px;min-height: calc(100% - 40px);">
         {% if is_moderator %}<span class="highlight_black ml150 fix_mod">Находитесь внутри школы <b>{{school_crnt.title}}</b>{%endif%}</span>
         {% block content %}{% endblock content %}
     </div>

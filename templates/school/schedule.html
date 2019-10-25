@@ -5,7 +5,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="group-details" >
+<div id="group-details">
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
@@ -109,7 +109,7 @@
                         </div>
                     </form>
                 </div>
-                <div id="calendar" length='7'>
+                <div id="calendar" length='7' style="padding-bottom: 50px;">
                 {% if instance.schedule_type == 'classic' %}
                     <span class="data_update" status="yes" style="display: none;"></span>
                     {% include 'school/classicschedule.html' %}

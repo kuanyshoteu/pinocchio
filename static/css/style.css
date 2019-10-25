@@ -14,6 +14,21 @@
 .thconst{
   padding: 5px !important;
   display: inline-block;
+  text-align: center;
+}
+.oveflowx_h{
+  overflow-x: hidden;
+  cursor: row-resize;
+}
+.oveflowx_a{
+  cursor: col-resize;
+  overflow-x: auto;
+}
+.oveflowy_h{
+  overflow-y: hidden;
+}
+.oveflowy_a{
+  overflow-y: auto;
 }
 .lecture_const{
   line-height: 12px;

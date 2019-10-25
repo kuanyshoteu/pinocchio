@@ -78,6 +78,7 @@ def account_view(request, user = None):
         "school_money":school_money,
         'constant_times':get_times(60),
         "interval":60,
+        'height':28*15+25,        
     }
     return render(request, "profile.html", context)
 

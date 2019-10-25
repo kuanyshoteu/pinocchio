@@ -49,6 +49,9 @@ def squad_detail(request, slug=None):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
+        'height':28*15*int(60/school.schedule_interval)+25,
+        'constant_times':get_times(school.schedule_interval),
+        'interval':school.schedule_interval,        
     }
     return render(request, "squads/squad_detail.html", context)
 
@@ -194,7 +197,8 @@ def squad_update(request, slug=None):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
-        'other_subjects':school.school_subjects.all()
+        'other_subjects':school.school_subjects.all(),
+        'height':28*15*int(60/school.schedule_interval)+25,        
     }
     return render(request, "squads/squad_create.html", context)
 

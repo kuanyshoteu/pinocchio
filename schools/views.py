@@ -269,6 +269,7 @@ def school_crm(request):
         'interval':school.schedule_interval,
         'days':get_days(),
         'crmdays':Day.objects.all(),
+        'height':28*15*int(60/school.schedule_interval)+25,
     }
     return render(request, "school/crm.html", context)
 

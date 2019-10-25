@@ -588,6 +588,22 @@
     $('.open_card_form').click(function(e) {
         $('#card_form'+$(this).attr('id')).modal('show')
     })
+    $('.change_mode').click(function(e) {
+        if ($('.dataconst').attr('page_mode') == 'norm') {
+            $('.schedule_body').removeClass('oveflowx_h')
+            $('.schedule_body').addClass('oveflowx_a')
+            $('#group-details').addClass('oveflowy_h')
+            $('.content-container').addClass('oveflowy_h') 
+            $('.dataconst').attr('page_mode', 'horz')           
+        }
+        else{
+            $('.schedule_body').addClass('oveflowx_h')
+            $('.schedule_body').removeClass('oveflowx_a')
+            $('#group-details').removeClass('oveflowy_h')
+            $('.content-container').removeClass('oveflowy_h') 
+            $('.dataconst').attr('page_mode', 'norm')            
+        }
+    })
     $('.add_card').click(function(e) {
         var id = $(this).attr("id")
         var name = $('.new_card_name' + id).val()
@@ -652,6 +668,7 @@
     });
     update_schedule_lectures();
     function update_schedule_lectures(){
+        var sum_width = 0;
         $(".lecture_const").each(function() {
             console.log('running')
             interval = parseInt($('.dataconst').attr('interval'))
@@ -697,7 +714,7 @@
             }
             $('.constback'+dayp1).css('margin-left', sum*100+53);        
             $('.constback'+dayp1).css('width', 100*maxcount);
-
+            $('.schedule_lines').css('width', sum*100+53+100*maxcount)
             left = 55 + (sum-1)*100 + 100*count;
             oldleft = parseInt($(this).css('margin-left'));
             oldtop = parseInt($(this).css('margin-top'));

@@ -47,12 +47,12 @@
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" style="width: 80%;margin-left: 30px;">
-            	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
-	            	<div class="ui grid stackable">
-	            		<div class="nine wide column" style="padding-right: 0;padding-bottom: 0">
-		    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
-				        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-				        	</div>
+            	<div class="ui grid stackable">
+            		<div class="nine wide column" style="padding-right: 0;padding-bottom: 0">
+	    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+			        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+			        	</div>
+                        <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
 				        	<div class="ui segment" style="margin-top: 0;height: 297px;">
 				        		<div class="ui grid">
 				        			<div class="sixteen wide column">
@@ -96,21 +96,25 @@
 									</div>
 			        			</div>
 			        		</div>
+                        </form>
+		        	</div>
+					{% if not instance %}
+					<div class="nine wide column" style="padding-right: 0;text-align: center;">
+						<div class="ui segment">
+                            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
+				    		    <input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание группы' />
+                            </form>
+						</div>
+		    		</div>
+		        	{% else %}
+					<div class="seven wide column" style="padding-bottom: 0;padding-left: 0">
+						<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
+			        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 			        	</div>
-						{% if not instance %}
-						<div class="nine wide column" style="padding-right: 0;text-align: center;">
-							<div class="ui segment">
-					    		<input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание группы' />								
-							</div>
-			    		</div>
-			        	{% else %}
-						<div class="seven wide column" style="padding-bottom: 0;padding-left: 0">
-							<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;font-family: Tahoma, sans-serif;">
-				        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-				        	</div>
-							<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
-								<div class="ui grid">
-									<div class="sixteen wide column">
+						<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
+                            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}                              
+    							<div class="ui grid">
+    								<div class="sixteen wide column">
                                         <input type="file" name="squad_banner" id="squad_banner" class="postfile">
                                         <label class="file_post" for="squad_banner">
                                             <a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
@@ -119,7 +123,7 @@
                                         <label class="file_post" for="squad_icon">
                                             <a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
                                         </label>
-									</div>
+    								</div>
                                     <div class="seven wide column">
                                         Цвет:
                                         <textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
@@ -142,118 +146,122 @@
                                             {% endif %}
                                         </select>                                       
                                     </div>
-									<div class="sixteen wide column">
-			                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
-	                                        <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"
-			                            </a>
-		                            </div>	
-								</div>
-							</div>
+    								<div class="sixteen wide column">
+    		                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
+                                            <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"
+    		                            </a>
+    	                            </div>	
+    							</div>
+                            </form>
 						</div>
-	        			<div class="sixteen wide column" style="text-align: center;padding-top: 0">
-	        				<div class="ui segment">
-								<input type='submit' class='ui button blue tiny' value='Сохранить' />
-	        				</div>
+					</div>
+        			<div class="sixteen wide column" style="text-align: center;padding-top: 0">
+        				<div class="ui segment">
+                            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}                              
+    							<input type='submit' class='ui button blue tiny' value='Сохранить' />
+                            </form>
         				</div>
-                        <div class="sixteen wide column" style="padding: 0 14px;">
-                            {% include 'squads/squad_change_calendar.html' %}
+    				</div>
+                    <div class="sixteen wide column" style="padding: 0 14px;">
+                        <div id="calendar" length='7' style="padding-bottom: 50px;">
+                        {% include 'squads/squad_change_calendar.html' %}
                         </div>
-        				<div class="sixteen wide column">
-		    				<div class="ui segment mb0" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
-				        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>:
-                                <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
-                                <div class="ui pointing below label dark hint_schedule" style="display: none;">
-                                    Нажимая на кнопки "+" или "-" можете управлять списком
-                                </div>                                
-				        	</div>
-                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
-				        	<div class="ui segment no_margin" style="background-color: #4a4a4a;color: #fff;padding-top: 15px;">
-				        		<div class="ui grid stackable" style="margin-top: 0">
-                                    {% if squad_students|length == 0 %}
-                                    <div class="mb15">
-                                        Еще нет студентов в этой группе, можете добавить их {% if all_students|length > 0 %}ниже из студентов вашей школы или{% endif %} в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a>
-                                    </div>
-                                    {% endif %}
-									{% for student in squad_students %}
-									<div class="five wide column" style="padding:5px;">
-										<div class="test_variant_chosed" style="">
-			        						{% if student.image %}
-			                                    <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
-			                                {% else %}
-			                                    <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
-			                                {% endif %}
-				                            <div style="width: 70%;" class="student_name2">
-				                            	{{ student.first_name }}
-				                            </div>
-			                            	<i class="icon check circle green studenticon{{ student.id }}"></i> 
-				                            <a class="ui button mini blue add_student add_student{{ student.id }}" id="{{ student.id }}" onclick="add_student('{{ student.id }}')" style="float: right;padding: 2px 10px;height: 23px;">-</a>
-										</div>
-				                    </div>
-									{% endfor %}
-                                </div>
-                            </div>
-                            <div class="ui segment" style="background: #fafbfc;margin-bottom: 0;height: 54px;padding: 0 20px;font-size: 15px;">
-                                <span style="line-height: 54px;">Остальные студенты школы:</span>
-                                <form class="ui form no_margin" style="display: inline-block;float: right;right: 6%;">
-                                    <input type="text" class="search_students_group" url="{{ instance.hint_students_group }}" placeholder="Введите имя или телефон">
-                                    <a class="ui button mini blue search_group_show" style="margin-top: 14px;"><i class="icon search" style="color: #fff;"></i> Найти</a>
-                                    <div class="ui segment hint_students_group" style="display: none;">
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент <b class="isalready_subject"></b> уже учит курс в другой группе, студента лучше записывать на курс только из одной группы</div>
-                            <div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
-                                <div class="ui grid stackable not_group_students" style="margin-top: 0;">
-                                    {% if all_students|length == 0 and squad_students == 0 %}
-                                    <div class="mb15">
-                                        В вашей школе еще нет студентов, можете добавить их в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a> вашей школы
-                                    </div>
-                                    {% elif all_students|length == 0 %}
-                                    <div class="mb15">
-                                        Пока все студенты в этой группе, можете добавить новых в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a> вашей школы
-                                    </div>                                    
-                                    {% else %}
-									{% for student in all_students %}
-									<div class="five wide column" style="padding:5px;">
-										<div class="test_variant2">
-			        						{% if student.image %}
-			                                    <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
-			                                {% else %}
-			                                    <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
-			                                {% endif %}
-				                            <span style="width:70%;" class="student_name2">
-				                            	{{ student.first_name }}
-				                            </span>
-			                            	<i style="display: none;" class="icon check circle green studenticon{{ student.id }}"></i> 
-				                            <a class="ui button mini blue add_student add_student{{ student.id }}"  onclick="add_student('{{ student.id }}')"  id="{{ student.id }}">+</a>
-				                        </div>
-				                    </div>
-		                            {% endfor %}
-                                    {% endif %}
-			        			</div>
-                                <div style="text-align: center;font-size: 15px;margin: 25px;">
-                                    {% if number_of_pages > 1 %}
-                                    <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('prev')" id="prev"><i class="icon chevron left" style="color: #fff;"></i>Налево</a>
-                                    <div class="page_numbers" style="min-width: 275px;display: inline-block;">
-                                        <a class="ui button mini green get_page_students page1" onclick="get_page_students('1')" id="1">1</a>
-                                        <a class="ui button mini get_page_students page2" onclick="get_page_students('2')" id="2">2</a>
-                                        <span>. . .</span>
-                                        <a class="ui button mini get_page_students page{{number_of_pages}}" onclick="get_page_students('{{ number_of_pages }}')" id="{{ number_of_pages }}">{{ number_of_pages }}</a>                                        
-                                    </div>
-                                    <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('next')" id="next">Направо<i class="icon chevron right" style="color: #fff;"></i></a>
-                                    <span style="display: none;" length="{{ number_of_pages }}" url="{{ instance.get_page_students }}" class="current_page" number="1"></span>
-                                    {% endif %}
-                                </div>
-                                {% if all_students|length > 0 %}
-                                <div style="text-align: center;">
-                                    <input type='submit' class='ui button blue tiny' value='Сохранить' />
+                    </div>
+    				<div class="sixteen wide column">
+	    				<div class="ui segment mb0" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+			        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>:
+                            <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+                            <div class="ui pointing below label dark hint_schedule" style="display: none;">
+                                Нажимая на кнопки "+" или "-" можете управлять списком
+                            </div>                                
+			        	</div>
+                        <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
+			        	<div class="ui segment no_margin" style="background-color: #4a4a4a;color: #fff;padding-top: 15px;">
+			        		<div class="ui grid stackable" style="margin-top: 0">
+                                {% if squad_students|length == 0 %}
+                                <div class="mb15">
+                                    Еще нет студентов в этой группе, можете добавить их {% if all_students|length > 0 %}ниже из студентов вашей школы или{% endif %} в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a>
                                 </div>
                                 {% endif %}
-			        		</div>
-			        	</div>
-		        		{% endif %}
-	        		</div>
-	    		</form>
+								{% for student in squad_students %}
+								<div class="five wide column" style="padding:5px;">
+									<div class="test_variant_chosed" style="">
+		        						{% if student.image %}
+		                                    <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
+		                                {% else %}
+		                                    <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
+		                                {% endif %}
+			                            <div style="width: 70%;" class="student_name2">
+			                            	{{ student.first_name }}
+			                            </div>
+		                            	<i class="icon check circle green studenticon{{ student.id }}"></i> 
+			                            <a class="ui button mini blue add_student add_student{{ student.id }}" id="{{ student.id }}" onclick="add_student('{{ student.id }}')" style="float: right;padding: 2px 10px;height: 23px;">-</a>
+									</div>
+			                    </div>
+								{% endfor %}
+                            </div>
+                        </div>
+                        <div class="ui segment" style="background: #fafbfc;margin-bottom: 0;height: 54px;padding: 0 20px;font-size: 15px;">
+                            <span style="line-height: 54px;">Остальные студенты школы:</span>
+                            <form class="ui form no_margin" style="display: inline-block;float: right;right: 6%;">
+                                <input type="text" class="search_students_group" url="{{ instance.hint_students_group }}" placeholder="Введите имя или телефон">
+                                <a class="ui button mini blue search_group_show" style="margin-top: 14px;"><i class="icon search" style="color: #fff;"></i> Найти</a>
+                                <div class="ui segment hint_students_group" style="display: none;">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="highlight_red isalready pt15 pb15" style="display: none;">Студент <b class="isalready_subject"></b> уже учит курс в другой группе, студента лучше записывать на курс только из одной группы</div>
+                        <div class="ui segment" style="margin-top: 0;background-color: #4a4a4a;color: #fff;padding-top: 15px;">
+                            <div class="ui grid stackable not_group_students" style="margin-top: 0;">
+                                {% if all_students|length == 0 and squad_students == 0 %}
+                                <div class="mb15">
+                                    В вашей школе еще нет студентов, можете добавить их в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a> вашей школы
+                                </div>
+                                {% elif all_students|length == 0 %}
+                                <div class="mb15">
+                                    Пока все студенты в этой группе, можете добавить новых в <a href="{% url 'schools:crm' %}" class="ui button mini green"><b>СRМ</b></a> вашей школы
+                                </div>                                    
+                                {% else %}
+								{% for student in all_students %}
+								<div class="five wide column" style="padding:5px;">
+									<div class="test_variant2">
+		        						{% if student.image %}
+		                                    <img class="ui avatar image" src="{{ student.image.url }}" style="width: 30px; height: 30px;">
+		                                {% else %}
+		                                    <img class="ui avatar image" style="width: 30px; height: 30px;" src="{% static 'images/nophoto.png' %}">
+		                                {% endif %}
+			                            <span style="width:70%;" class="student_name2">
+			                            	{{ student.first_name }}
+			                            </span>
+		                            	<i style="display: none;" class="icon check circle green studenticon{{ student.id }}"></i> 
+			                            <a class="ui button mini blue add_student add_student{{ student.id }}"  onclick="add_student('{{ student.id }}')"  id="{{ student.id }}">+</a>
+			                        </div>
+			                    </div>
+	                            {% endfor %}
+                                {% endif %}
+		        			</div>
+                            <div style="text-align: center;font-size: 15px;margin: 25px;">
+                                {% if number_of_pages > 1 %}
+                                <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('prev')" id="prev"><i class="icon chevron left" style="color: #fff;"></i>Налево</a>
+                                <div class="page_numbers" style="min-width: 275px;display: inline-block;">
+                                    <a class="ui button mini green get_page_students page1" onclick="get_page_students('1')" id="1">1</a>
+                                    <a class="ui button mini get_page_students page2" onclick="get_page_students('2')" id="2">2</a>
+                                    <span>. . .</span>
+                                    <a class="ui button mini get_page_students page{{number_of_pages}}" onclick="get_page_students('{{ number_of_pages }}')" id="{{ number_of_pages }}">{{ number_of_pages }}</a>                                        
+                                </div>
+                                <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('next')" id="next">Направо<i class="icon chevron right" style="color: #fff;"></i></a>
+                                <span style="display: none;" length="{{ number_of_pages }}" url="{{ instance.get_page_students }}" class="current_page" number="1"></span>
+                                {% endif %}
+                            </div>
+                            {% if all_students|length > 0 %}
+                            <div style="text-align: center;">
+                                <input type='submit' class='ui button blue tiny' value='Сохранить' />
+                            </div>
+                            {% endif %}
+		        		</div>
+		        	</div>
+	        		{% endif %}                   
+        		</div>
 			</div>
 		</div>
 	</div>	
