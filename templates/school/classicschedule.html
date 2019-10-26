@@ -1,7 +1,7 @@
 {% load ttags %}
 {% load staticfiles %}
 <form class="ui grid full-w mt0 change_mode">
-    <div style="width: 53px;position: absolute;z-index: 3000;background-color: #4a4a4a">
+    <div style="width: 53px;position: absolute;z-index: 1000;background-color: #4a4a4a">
         <div style="height: 29px;"></div>
         {% for time in constant_times %}
         <div>
@@ -12,7 +12,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="schedule_body oveflowx_h" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
+    <div class="schedule_body " style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
         <div style="z-index: 100;white-space: nowrap;">
             <div>
                 <div class="thconst" style="width: 53px;z-index: 100"></div>

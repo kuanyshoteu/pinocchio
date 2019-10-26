@@ -15,15 +15,15 @@
 </div>
 <div class="ui segment" style="margin-top: 0; padding: 18px;{% if not is_this_trener %}margin-bottom: 0;{% endif %}">
     {% for squad in hissquads %}
-    <a onclick="load_attendance_squad('{{ squad.id }}')" class="ui button mini load_attendance_squad {% if squad.id == att_squad.id %}blue{% endif %}" id="squad{{ squad.id }}">
-        {{ squad.title }}
-    </a>
+    <a onclick="load_attendance_squad('{{ squad.id }}')" class="ui button small load_attendance_squad {% if squad.id == att_squad.id %}blue{% endif %}" id="squad{{ squad.id }}">
+        {{ squad.title }} {%if is_manager%}<br>{{squad.teacher.first_name}}{%endif%}
+    </a> 
     {% endfor %} 
 </div>
 <div class="ui segment mt0 no_padding">
     <div id="squad_attendance">
     {% if hissquads|length > 0 %}
-    {% if is_this_trener %}
+    {% if is_this_trener or is_manager %}
         <div class="ui stackable grid" style="margin:-1rem 0 0 !important">
         {% for subject in att_squad.subjects.all %}
             <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}green{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}) - 3.5px);">{{ subject.title }}</a>

@@ -16,6 +16,12 @@
   display: inline-block;
   text-align: center;
 }
+.rotateminus{
+  transform: rotate(-90deg);
+}
+.rotateplus{
+  transform: rotate(90deg);
+}
 .oveflowx_h{
   overflow-x: hidden !important;
   cursor: row-resize;
@@ -301,7 +307,7 @@ body{
   background-color: #DB2828;padding: 5 10px;color: #fff;border-radius: 3px;
 }
 .highlight_black{
-  background-color: #4a4a4a;padding: 5 10px;color: #fff;border-radius: 3px;
+  background-color: #4a4a4a;padding: 5 10px !important;color: #fff;border-radius: 3px;
 }
 #search_text{
   margin: 0;border-radius: 3px 0 0 3px;height: 31px;overflow-y: hidden;
@@ -530,11 +536,11 @@ body{
 .delete_card:hover{
   color: red;
 }
-.delete_squad_lesson{
+.redx{
   right: 0;margin: -3px 4px;color: red;font-size: 13px;
   position: absolute;
 }
-.delete_squad_lesson:hover{
+.redx:hover{
   color: red;
 }
 a{

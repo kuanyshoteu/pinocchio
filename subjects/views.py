@@ -254,6 +254,7 @@ def subject_delete(request, slug=None):
     instance = Subject.objects.get(slug=slug)
     profile = get_profile(request)
     only_managers(profile)
+    only_main_managers(profile)
     school = instance.school
     is_in_school(profile, school)
     if request.method == "POST":

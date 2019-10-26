@@ -1,3 +1,53 @@
+    $('.add_job').click(function(e) {
+        id = $(this).attr('id')
+        url = $(this).attr('url')
+        title = $('.new_job_title'+id).val()
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'title':title,
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload()
+            }
+        })        
+    })
+    $('.yes_delete_job').click(function(e) {
+        id = $(this).attr('id')
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    location.reload()
+                }
+                else{
+                    $('.delete_job_error').show()
+                }
+            }
+        })        
+    })
+
+    $('.delete_cabinet').click(function(e) {
+        id = $(this).attr('id')
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.cabinet'+id).hide('fast')
+            }
+        })        
+    })
     $('.subject_period').click(function(e) {
         $('.subject_period').removeClass('green')
         $(this).addClass('green')
@@ -47,6 +97,34 @@
                     ' <thead> <tr style="color: #222;"> <th>'+prof+'</th> <th>Время</th> <th>Действие</th> </tr>'+
                     ' </thead> <tbody> '+table+
                     ' </tbody> </table>').appendTo('.set_manager_actions'+id)
+            }
+        })
+    })
+    $('.get_teacher_actions').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        $('#teacher_actions'+id).modal('show')
+        $.ajax({
+            url: url,
+            data: {
+                "id":id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                prof = 'Преподаватель'
+                $('.set_teacher_actions'+id).empty()
+                res = data.res
+                table = ''
+                for (var i = res.length-1; i >=0 ; i--) {
+                    crnt = '<td class="border">'+res[i][0]+'</td>'
+                    crnt += '<td class="border">'+res[i][1]+'</td>'
+                    crnt += '<td class="border">'+res[i][2]+'</td>'
+                    table += '<tr style="color: #222;"> '+crnt+' </tr>'
+                }
+                $('<table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">'+
+                    ' <thead> <tr style="color: #222;"> <th>'+prof+'</th> <th>Время</th> <th>Действие</th> </tr>'+
+                    ' </thead> <tbody> '+table+
+                    ' </tbody> </table>').appendTo('.set_teacher_actions'+id)
             }
         })
     })
@@ -301,8 +379,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log('ffff')
-                $('<div class="four wide column highlight" style="margin-right: 7px;margin-bottom: 7px;">'+title+' </div>').appendTo('.office_cabinets'+id)
+                $('<div class="four wide column highlight_black" style="margin-right: 7px;margin-bottom: 7px;">'+title+'<br>'+capacity+' </div>').appendTo('.office_cabinets'+id)
             }
         })        
     });

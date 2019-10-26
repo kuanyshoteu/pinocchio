@@ -52,6 +52,8 @@ def account_view(request, user = None):
 
     if is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.all()
+    elif is_profi(hisprofile, 'Manager'):
+        hissquads = profile.schools.first().groups.all()
     else:
         hissquads = hisprofile.squads.all()
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
@@ -306,12 +308,14 @@ def miss_lecture(request):
 
 def att_present(request):
     profile = Profile.objects.get(user = request.user)
-    if request.GET.get('id') and is_profi(profile, 'Teacher'):
+    only_staff(profile)
+    if request.GET.get('id'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
         school = attendance.school
         subject = attendance.subject
         squad = attendance.squad
-        is_in_school(profile, school)        
+        is_in_school(profile, school)
+        profile = squad.teacher
         attendance.present = 'present'
         this_student_card = attendance.student.card.filter(school=school)
         if len(this_student_card) > 0:

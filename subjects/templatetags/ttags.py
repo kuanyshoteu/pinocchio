@@ -354,7 +354,20 @@ def filtercardsall(column, profile):
 
 @register.filter
 def get_professions(school):
-    return Profession.objects.all()
+    return chain(Profession.objects.filter(title="Teacher"), Profession.objects.filter(title="Manager"))
+
+@register.filter
+def get_jobless_workers(prof, school):
+    jobs = prof.job_categories.all()
+    return school.people.filter(profession=prof).exclude(job_categories__in=jobs)
+@register.filter
+def get_jobless_workers_len(prof, school):
+    jobs = prof.job_categories.all()
+    return len(school.people.filter(profession=prof).exclude(job_categories__in=jobs)) > 0
+
+@register.filter
+def get_job_categories(prof, school):
+    return school.job_categories.filter(profession=prof)
 
 @register.filter
 def get_school_workers(job,school):
@@ -449,8 +462,8 @@ def constant_school_lectures(profile, school):
     lectures = school.school_lectures.all()
     if profile.skill.crm_subject:
         lectures = lectures.filter(category=profile.skill.crm_subject)
-    if profile.skill.crm_age:
-        lectures = lectures.filter(age=profile.skill.crm_age)
+    if profile.skill.crm_cabinet:
+        lectures = lectures.filter(cabinet=profile.skill.crm_cabinet)
     if profile.skill.crm_office:
         lectures = lectures.filter(office=profile.skill.crm_office)
     if len(profile.skill.filter_teacher.all()) > 0:

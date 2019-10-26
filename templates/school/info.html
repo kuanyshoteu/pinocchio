@@ -286,7 +286,7 @@
                         <div class="school_office_list" style="display: inline-block;">
                         {% for office in instance.school_offices.all %}
                             <a class="ui button mini green office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.office_subjects.all|length}} курсов)</a>
-                            <div class="ui modal mini" id="office_form{{ office.id }}">
+                            <div class="ui modal small" id="office_form{{ office.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
                                     <form class="ui form">
@@ -309,18 +309,20 @@
                                             Кабинеты:
                                         </div>
                                         {% for cabinet in office.cabinets.all %}
-                                            <div class="three wide column highlight" style="margin-right: 7px;margin-bottom: 7px;">
-                                            {{cabinet.title}}
+                                            <div class="two wide column highlight_black mr5 mb5 cabinet{{cabinet.id}}">
+                                                <a class="redx delete_cabinet" url="{% url 'schools:delete_cabinet' %}" id="{{cabinet.id}}">✖</a>
+                                                {{cabinet.title}}
+                                                <div style="font-size: 12px;">{{cabinet.capacity}} чел.</div>
                                             </div>
                                         {% endfor %}                                    
                                     </div>
                                     <a class="ui button mini blue" style="margin-top: 15px;" onclick="$('#office_cabinet_create{{office.id}}').show();$(this).hide()">Добавить кабинет</a>                                
                                     <form style="display: none;margin-top: 15px;" id="office_cabinet_create{{ office.id }}" class="ui form">
-                                        <div style="display: flex;">
+                                        <div>
                                             <textarea class="no_margin need_clear office_cabinet_create_title office_cabinet_create_title{{ office.id }}" placeholder="Название кабинета"></textarea>
                                             <input placeholder="Вместимость" type="number" class="office_cabinet_create_capacity office_cabinet_create_capacity{{ office.id }}">
                                         </div>
-                                        <a class="ui button mini green save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
+                                        <a class="ui button mini blue mt10 save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
                                     </form>
                                 </div>
                             </div>
@@ -361,6 +363,25 @@
                         </div>
                         {% endfor %}
                     </div>
+                    <div class="ui segment mb0">
+                        Отчеты оп учителям
+                    </div>
+                    <div class="ui segment mt0">
+                        {% for teacher in teachers %}
+                        <a class="ui button small blue get_teacher_actions" 
+                        url="{% url 'schools:get_teacher_actions' %}" id="{{teacher.id}}">
+                            {{teacher.first_name}}
+                        </a>
+                        <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="teacher_actions{{teacher.id}}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <div class="set_teacher_actions{{teacher.id}}">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>                    
                     {% if instance.version == 'standart' or instance.version == 'business' %}
                     <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
                         На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>

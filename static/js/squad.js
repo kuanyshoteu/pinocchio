@@ -185,7 +185,6 @@ $(document).ready(function () {
         })
     });
     $(document).on("click", '.delete_squad_lesson', function () {
-        console.log('bb')
         url = $('.delete_lesson_data').attr('url')
         id = $(this).attr('id')
         $.ajax({
@@ -196,6 +195,7 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (data) {
                 $('#squad_lesson' + id).hide('fast');
+                $('.squad_lesson' + id).hide('fast');                
             }
         })        
     });        

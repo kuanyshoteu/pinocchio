@@ -205,6 +205,7 @@ def squad_update(request, slug=None):
 def squad_delete(request, slug=None):
     profile = get_profile(request)
     only_managers(profile)
+    only_main_managers(profile)    
     instance = Squad.objects.get(slug=slug)
     school = instance.school
     is_in_school(profile, school)

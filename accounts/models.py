@@ -35,6 +35,7 @@ class JobCategory(models.Model):
     title = models.TextField(blank = True,null = True,default='')
     salary = models.IntegerField(default=0)
     profession = models.ForeignKey(Profession, default=1, on_delete = models.CASCADE, related_name='job_categories') 
+    schools = models.ManyToManyField(School, related_name='job_categories')
     class Meta:
         ordering = ['title']
 class Skill(models.Model):
@@ -50,6 +51,7 @@ class Skill(models.Model):
     need_actions = models.IntegerField(default=0)
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_age = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    crm_cabinet = models.ForeignKey(Cabinet, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_subject2 = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     crm_age2 = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 

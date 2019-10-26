@@ -42,14 +42,17 @@
                             {% if is_manager and hisprofile.is_student %}
                                 {% include 'profile/payment.html' %}
                             {% endif %}
+                            {% if is_manager and hisprofile.is_student or is_director %}
+                                {% include 'profile/history.html' %}
+                            {% endif %}                            
                             {% if hisprofile == profile or is_manager %}
                                 {% if is_this_trener or hisprofile.is_student %}
                                     {% include 'profile/classicschedule.html' %}
                                 {% endif %}
                             {% endif %}
                             {% if hisprofile == profile %}
-                                {% if is_this_trener or hisprofile.is_student %}
-                                    {% include 'profile/attendance.html' %}                                    
+                                {% if is_this_trener or hisprofile.is_student or is_manager %}
+                                    {% include 'profile/attendance.html' %}
                                 {% endif %}
                             {% endif %}
                             <br><br><br>

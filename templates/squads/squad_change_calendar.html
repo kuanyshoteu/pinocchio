@@ -14,7 +14,7 @@
     }
 </style>
 {% if instance.school.schedule_type == 'classic' %}
-<div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
+<div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;color: #000;">
     <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}    
         Расписание 
         <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
@@ -24,16 +24,15 @@
         </div>
     </form>
 </div>
-<div class="ui segment no_margin">
-    <form class="ui form grid">
+<div class="ui segment no_margin" style="color: #000;">
+    <form class="ui form grid no_margin">
         <select style="width: 300px;display: inline-block;height: 28px;" class="mr15" id="constselect">
             <option value="-1">Выберите курс</option>            
             {% for subject in other_subjects %}
             <option value="{{subject.id}}">{{subject.title}}</option>
             {% endfor %}
         </select>
-        Напишите время начала и время окончания урока
-        <input type="text" class="conststart" style="width: 100px;padding:5px;display: inline-block;"> - <input class="constend" style="width: 100px;padding:5px;display: inline-block;" type="text" name="">
+        Напишите время начала и время окончания урока: <input type="text" class="conststart ml5" style="width: 100px;padding:5px;display: inline-block;"> - <input class="constend" style="width: 100px;padding:5px;display: inline-block;" type="text" name="">
     </form>
     <div class="mt10">
         Выберите дни недели
@@ -75,7 +74,7 @@
                 <div class="dark_grey constback5 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback7 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
             {% for lecture in instance|constant_schedule_lectures %}
-                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.subject.color_back == ''%}#313a57{%else%}{{ lecture.7.subject.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
+                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}} squad_lesson{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.subject.color_back == ''%}#313a57{%else%}{{ lecture.7.subject.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
                     {{lecture.1}} 
                 </div>
                 <div id="{{lecture.6}}" class="hint_schedule lecture_const" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
@@ -105,10 +104,29 @@
                     <i class="close icon"></i>
                     <div class="content">
                         <div class="text-center">
-                            Редактирование {{lecture.1}}                            
+                            <b>Редактирование {{lecture.1}}</b>
                         </div>
-                        <div>
-                            
+                        <div class="mt15 mb15">
+                            Выберите кабинет:
+                            <select onchange="change_cabinet('change_lecture_cabinet{{lecture.6}}', '{{ instance.change_lecture_cabinet }}')" class="change_lecture_cabinet pt5 pb5 pl10 pr10" lecture_id="{{lecture.6}}" id="change_lecture_cabinet{{lecture.6}}">
+                                {% if lecture.7.cabinet %}
+                                <option value="{{lecture.7.cabinet.id}}">{{lecture.7.cabinet.title}}</option>
+                                {% else %}
+                                <option value="-1">Без кабинета</option>
+                                {% endif %}
+                                {% for cabinet in instance.office.cabinets.all %}
+                                {% if cabinet != lecture.7.cabinet %}
+                                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
+                                {% endif %}
+                                {%endfor%}
+                            </select>
+                            <div class="ok_change_cabinet" style="display: none;"> 
+                                Сохранено
+                                <i class="icon check green"></i>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <a class="ui button mini red delete_squad_lesson" id="{{lecture.7.id}}">Удалить урок из расписания</a>
                         </div>
                     </div>
                 </div>
@@ -201,7 +219,7 @@ max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span
                             v-for="(element, index) in box[1]" 
                             :key="index"
                             :id="'squad_lesson' + box[1][index][0]">
-                        <a class="delete_squad_lesson" :id="box[1][index][0]"><b>×</b></a>
+                        <a class="delete_squad_lesson redx" :id="box[1][index][0]"><b>×</b></a>
                         <p>[[ box[1][index][1] ]]</p>
                         <select class="no_padding change_lecture_cabinet" @change="change_cabinet('change_lecture_cabinet'+[[ box[1][index][0] ]], '{{ instance.change_lecture_cabinet }}')" :id="'change_lecture_cabinet'+[[ box[1][index][0] ]]" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
                             <option v-for="(element, index) in box[1][index][5]" :value="element[0]">[[ element[1] ]]</option>
@@ -238,7 +256,6 @@ max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span
         this_ = $('#'+id);
         cabinet_id = this_.children("option:selected").val()
         lecture_id = $('#'+id).attr('lecture_id')
-        console.log('a', cabinet_id, id, lecture_id)
         $.ajax({
             url: url,
             data: {
@@ -247,7 +264,8 @@ max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span
             },
             dataType: 'json',
             success: function (data) {
-                console.log('ffff1')
+                $('.ok_change_cabinet').show()
+                setTimeout(function(){$('.ok_change_cabinet').hide()}, 3000);
             }
         });
     }

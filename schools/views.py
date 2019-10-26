@@ -94,7 +94,7 @@ def school_schedule(request):
         "profile":profile,
         "instance": school,
         "subject_categories":school.school_subject_categories.all(),
-        "ages":school.school_subject_ages.all(),
+        "crm_cabinets":school.cabinets.all(),
         "offices":school.school_offices.all(),
         "courses":school.school_subjects.all(),
         "teachers":all_teachers(school),        
@@ -167,6 +167,8 @@ def school_info(request):
                 return redirect("schools:info")
     manager_prof = Profession.objects.get(title='Manager')
     managers = school.people.filter(profession=manager_prof)
+    teacher_prof = Profession.objects.get(title='Teacher')
+    teachers = school.people.filter(profession=teacher_prof)
     weekago = timezone.now().date() - timedelta(7)    
     voronka = []
     voronka2 = []
@@ -202,6 +204,7 @@ def school_info(request):
         "today":timezone.now().date().strftime('%Y-%m-%d'),
         "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),
         "managers":managers,
+        "teachers":teachers,
         "voronka_array":voronka,
         "voronka2":voronka2,
         "worktime1":worktime1,
@@ -601,13 +604,25 @@ def create_cabinet(request):
     only_managers(profile)
     if request.GET.get('title') != '':
         school = is_moderator_school(request, profile)
-        print(school.title)
         office = school.school_offices.get(id=int(request.GET.get('id')))
+        capacity = 100
+        if request.GET.get('capacity'):
+            capacity = int(request.GET.get('capacity'))
         office.cabinets.create(
             school=school,
             title=request.GET.get('title'),
-            capacity=int(request.GET.get('capacity')),
+            capacity=capacity,
             )
+    data = {
+    }
+    return JsonResponse(data)
+def delete_cabinet(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = is_moderator_school(request, profile)
+    only_managers(profile)
+    if request.GET.get('id'):
+        cainet = school.cabinets.get(id=int(request.GET.get('id')))
+        cainet.delete()
     data = {
     }
     return JsonResponse(data)
@@ -822,12 +837,12 @@ def crm_option(request):
             else:
                 subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
                 skill.crm_subject = subject
-        if request.GET.get('option') == 'age':
+        if request.GET.get('option') == 'crm_cabinet':
             if int(request.GET.get('object_id')) == -1:
-                skill.crm_age = None
+                skill.crm_cabinet = None
             else:
-                age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_age = age
+                crm_cabinet = Cabinet.objects.get(id = int(request.GET.get('object_id')))
+                skill.crm_cabinet = crm_cabinet
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
                 skill.crm_office = None
@@ -1057,6 +1072,63 @@ def add_card(request):
         "call_helper":card.call_helper(),
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
+    }
+    return JsonResponse(data)
+
+def move_worker(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    ok = False
+    if request.GET.get('worker_id') and request.GET.get('job_id') and request.GET.get('oldjob_id'):
+        school = is_moderator_school(request, profile)
+        oldjob = False
+        job = False
+        jobprof = False
+        worker = school.people.get(id = int(request.GET.get('worker_id')))
+        professions = worker.profession.all()
+        if int(request.GET.get('oldjob_id')) > 0:
+            oldjob = school.job_categories.get(id = int(request.GET.get('oldjob_id')))  
+        if int(request.GET.get('job_id')) > 0:
+            job = school.job_categories.get(id = int(request.GET.get('job_id')))
+            if not job.profession in professions:
+                return JsonResponse({'ok':ok})
+
+        ok = True
+        if oldjob:
+            worker.job_categories.remove(oldjob)
+        if job:
+            worker.job_categories.add(job)
+    data = {
+        'ok':ok
+    }
+    return JsonResponse(data)
+def add_job(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('title'):
+        school = is_moderator_school(request, profile)
+        prof = Profession.objects.get(id = int(request.GET.get('id')))
+        job = prof.job_categories.get_or_create(title=request.GET.get('title'))[0]
+        job.save()
+        job.schools.add(school)
+    data = {
+    }
+    return JsonResponse(data)
+def delete_job(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    ok =  False
+    if request.GET.get('id'):
+        school = is_moderator_school(request, profile)
+        job = school.job_categories.get(id = int(request.GET.get('id')))
+        prof = job.profession
+        if len(prof.job_categories.all()) > 1:
+            ok = True
+            workers = job.job_workers.all()
+            job.job_workers.remove(*workers)
+            school.job_categories.remove(job)
+    data = {
+        'ok':ok
     }
     return JsonResponse(data)
 
@@ -1489,7 +1561,7 @@ def get_manager_actions(request):
 from subjects.templatetags.ttags import get_date
 def get_student_actions(request):
     profile = Profile.objects.get(user = request.user.id)
-    only_directors(profile)
+    only_managers(profile)
     res = []
     if request.GET.get('id'):
         school = is_moderator_school(request, profile)
@@ -1524,3 +1596,27 @@ def get_student_actions(request):
     }
     return JsonResponse(data)
 
+def get_teacher_actions(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    if request.GET.get('id'):
+        school = is_moderator_school(request, profile)
+        teacher = Profile.objects.get(id=int(request.GET.get('id')))
+        history = sorted(
+            chain(
+                teacher.madegrades.filter(school=school, present='present')),
+            key=lambda item: item.timestamp, reverse=False)
+        for h in history:
+            edit = ''
+            classname = h.__class__.__name__
+            if classname == 'Attendance':
+                edit = 'Провел урок курса '+ h.subject.title+'<br>Дата: '+get_date(h.subject_materials, h.squad)[0].strftime('%d.%m.%Y')+'<br>Заработок: '+str(teacher.salary)+'тг'
+            else:
+                edit += h.edit
+            res.append([teacher.first_name, h.timestamp.strftime('%d.%m.%Y %H:%M'), edit])
+    data = {
+        "res":res,
+        'teacher':True,
+    }
+    return JsonResponse(data)

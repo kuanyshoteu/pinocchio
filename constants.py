@@ -121,6 +121,11 @@ def only_managers(profile):
     if not profession in profile.profession.all() and not profession2 in profile.profession.all():
         raise Http404
 
+def only_main_managers(profile):
+    job = JobCategory.objects.get(title='Менджер стажер')
+    if job in profile.job_categories.all():
+        raise Http404
+
 def only_directors(profile):
     profession = Profession.objects.get(title = 'Director')
     if not profession in profile.profession.all():

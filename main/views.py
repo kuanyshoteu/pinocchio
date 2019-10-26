@@ -1086,6 +1086,9 @@ def moderator_run_code(request):
     #         school = subject.school
     #         subject.filter_options.add(*options)
     #         school.filter_options.add(*options)
+    schools = School.objects.all()
+    for j in JobCategory.objects.all():
+        j.schools.add(*schools)
 
     allt = Profession.objects.get(title='Teacher').workers.all()
     tr = JobCategory.objects.get(id=2)
