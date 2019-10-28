@@ -116,7 +116,7 @@ def squad_update(request, slug=None):
     change_content = False
     print('**************')
     if form.is_valid():
-        print(0)
+        print('0')
         old_start_date = instance.start_date
         old_title = instance.title
         old_content = instance.content
@@ -126,7 +126,7 @@ def squad_update(request, slug=None):
         if old_title != instance.title:
             change_title = True
         if old_content != instance.content:
-            print(1)
+            print('1')
             change_content = True
         if instance.start_date != start_date:
             change_time = True
@@ -498,9 +498,9 @@ def remove_person_from_lecture(lecture, person):
 def add_person_to_lecture(lecture, person):
     print('*****************')
     if person != None:
-        print(0)
+        print('0')
         if not person.id in lecture.person_id:
-            print(1)
+            print('1')
             lecture.person_id.append(person.id)
             lecture.person_number.append(0)
         index = lecture.person_id.index(person.id)
