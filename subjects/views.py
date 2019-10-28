@@ -140,6 +140,7 @@ def subject_update(request, slug=None):
         students = get_subject_students(squads)
         cost = instance.cost
         cards = school.crm_cards.all()
+        old_lesson_bill = 0
 
         if old_cost_period == 'lesson':
             old_lesson_bill = old_cost
