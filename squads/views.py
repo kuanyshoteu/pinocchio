@@ -140,7 +140,8 @@ def squad_update(request, slug=None):
             if 'squad_icon' in request.FILES:
                 file = request.FILES['squad_icon']
                 instance.image_icon = file
-        instance.color_back = request.POST.get('color_back')
+        if request.POST.get('color_back'):
+            instance.color_back = request.POST.get('color_back')
         instance.save()
         text = 'Внес изменения в группу '+instance.title
         if change_title:
