@@ -47,63 +47,61 @@
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" style="width: 80%;margin-left: 30px;">
+                <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
+
             	<div class="ui grid stackable">
             		<div class="nine wide column" style="padding-right: 0;padding-bottom: 0">
 	    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
 			        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 			        	</div>
-                        <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
-				        	<div class="ui segment" style="margin-top: 0;height: 297px;">
-				        		<div class="ui grid">
-				        			<div class="sixteen wide column">
-			        					{{ form|crispy }}
-			        					{% if instance %}
-				        					<br>
-				        					Учитель:
-											<select id="change_teacher" class="change_teacher" squad_id="{{ instance.id }}" url="{{ instance.change_curator_url }}" name="change_teacher">
-												<option value="{{ instance.teacher.id }}">{{ instance.teacher.first_name }}</option>
-												{% for teacher in all_teachers %}
-													{% if teacher != instance.teacher %}
-														<option value="{{ teacher.id }}">{{ teacher.first_name }}</option>
-													{% endif %}
-												{% endfor %}
-											</select>
-						    			{% endif %}
-			        				</div>
-									<div class="eight wide column" style="padding-top: 0">
-										<p style="font-size: 13px;padding-top: 2px;">
-				        					Выберите дату <b>начала</b> учебы:
-				        				</p>
-										<input type="date" url="{{ instance.change_start_url }}" squad_id="{{ instance.id }}" name='start' class="start" style="width: 200px;" value="{{ instance.start_date|date:'Y-m-d'}}"> 
-				    					<div class="ui mini modal ws">
-    										<i class="close icon"></i>
-										    <div class="content">
-				    							Начало учебы не может быть позднее конца, выберите другую дату
-				    						</div>
-				    					</div>
-									</div>
-									<div class="eight wide column" style="padding-top: 0">
-										<p style="font-size: 13px;padding-top: 2px;">
-				        					Выберите дату <b>окончания</b> учебы:
-				        				</p>
-										<input type="date" url="{{ instance.change_end_url }}" squad_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
-				    					<div class="ui mini modal we">
-    										<i class="close icon"></i>
-										    <div class="content">
-				    							Конец учебы не может быть раньше начала, выберите другую дату
-				    						</div>
-				    					</div>				        				
-									</div>
-			        			</div>
-			        		</div>
-                        </form>
+			        	<div class="ui segment" style="margin-top: 0;height: 297px;">
+			        		<div class="ui grid">
+			        			<div class="sixteen wide column">
+		        					{{ form|crispy }}
+		        					{% if instance %}
+			        					<br>
+			        					Учитель:
+										<select id="change_teacher" class="change_teacher" squad_id="{{ instance.id }}" url="{{ instance.change_curator_url }}" name="change_teacher">
+											<option value="{{ instance.teacher.id }}">{{ instance.teacher.first_name }}</option>
+											{% for teacher in all_teachers %}
+												{% if teacher != instance.teacher %}
+													<option value="{{ teacher.id }}">{{ teacher.first_name }}</option>
+												{% endif %}
+											{% endfor %}
+										</select>
+					    			{% endif %}
+		        				</div>
+								<div class="eight wide column" style="padding-top: 0">
+									<p style="font-size: 13px;padding-top: 2px;">
+			        					Выберите дату <b>начала</b> учебы:
+			        				</p>
+									<input type="date" url="{{ instance.change_start_url }}" squad_id="{{ instance.id }}" name='start' class="start" style="width: 200px;" value="{{ instance.start_date|date:'Y-m-d'}}"> 
+			    					<div class="ui mini modal ws">
+										<i class="close icon"></i>
+									    <div class="content">
+			    							Начало учебы не может быть позднее конца, выберите другую дату
+			    						</div>
+			    					</div>
+								</div>
+								<div class="eight wide column" style="padding-top: 0">
+									<p style="font-size: 13px;padding-top: 2px;">
+			        					Выберите дату <b>окончания</b> учебы:
+			        				</p>
+									<input type="date" url="{{ instance.change_end_url }}" squad_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
+			    					<div class="ui mini modal we">
+										<i class="close icon"></i>
+									    <div class="content">
+			    							Конец учебы не может быть раньше начала, выберите другую дату
+			    						</div>
+			    					</div>				        				
+								</div>
+		        			</div>
+		        		</div>
 		        	</div>
 					{% if not instance %}
 					<div class="nine wide column" style="padding-right: 0;text-align: center;">
 						<div class="ui segment">
-                            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
-				    		    <input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание группы' />
-                            </form>
+			    		    <input type='submit' style="margin-top: 1rem;height: 30px;" class='ui button blue tiny' value='Продолжить создание группы' />
 						</div>
 		    		</div>
 		        	{% else %}
@@ -112,54 +110,50 @@
 			        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 			        	</div>
 						<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
-                            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}                              
-    							<div class="ui grid">
-    								<div class="sixteen wide column">
-                                        <input type="file" name="squad_banner" id="squad_banner" class="postfile">
-                                        <label class="file_post" for="squad_banner">
-                                            <a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
-                                        </label>
-                                        <input type="file" name="squad_icon" id="squad_icon" class="postfile">
-                                        <label class="file_post" for="squad_icon">
-                                            <a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
-                                        </label>
-    								</div>
-                                    <div class="seven wide column">
-                                        Цвет:
-                                        <textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
-                                    </div>
-                                    <div class="sixteen wide column" style="padding-top: 0">
-                                        <b>Офис:</b>
-                                        <select class="change_squad_office" id="change_squad_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
-                                            {% if instance.office == None %}
-                                                <option value="-1">Другое</option>
-                                            {% elif instance.office %}
-                                                <option value="{{ instance.office.id }}">{{ instance.office.title }}</option>
+							<div class="ui grid">
+								<div class="sixteen wide column">
+                                    <input type="file" name="squad_banner" id="squad_banner" class="postfile">
+                                    <label class="file_post" for="squad_banner">
+                                        <a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
+                                    </label>
+                                    <input type="file" name="squad_icon" id="squad_icon" class="postfile">
+                                    <label class="file_post" for="squad_icon">
+                                        <a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
+                                    </label>
+								</div>
+                                <div class="seven wide column">
+                                    Цвет:
+                                    <textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
+                                </div>
+                                <div class="sixteen wide column" style="padding-top: 0">
+                                    <b>Офис:</b>
+                                    <select class="change_squad_office" id="change_squad_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
+                                        {% if instance.office == None %}
+                                            <option value="-1">Другое</option>
+                                        {% elif instance.office %}
+                                            <option value="{{ instance.office.id }}">{{ instance.office.title }}</option>
+                                        {% endif %}
+                                        {% for office in offices %}
+                                            {% if office != instance.office %}
+                                            <option value="{{ office.id }}">{{ office.title }}</option>
                                             {% endif %}
-                                            {% for office in offices %}
-                                                {% if office != instance.office %}
-                                                <option value="{{ office.id }}">{{ office.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if instance.office != None %}
-                                                <option value="-1">Другое</option>
-                                            {% endif %}
-                                        </select>                                       
-                                    </div>
-    								<div class="sixteen wide column">
-    		                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
-                                            <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"
-    		                            </a>
-    	                            </div>	
-    							</div>
-                            </form>
+                                        {% endfor %}
+                                        {% if instance.office != None %}
+                                            <option value="-1">Другое</option>
+                                        {% endif %}
+                                    </select>                                       
+                                </div>
+								<div class="sixteen wide column">
+		                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
+                                        <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"
+		                            </a>
+	                            </div>	
+							</div>
 						</div>
 					</div>
         			<div class="sixteen wide column" style="text-align: center;padding-top: 0">
         				<div class="ui segment">
-                            <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}                              
-    							<input type='submit' class='ui button blue tiny' value='Сохранить' />
-                            </form>
+							<input type='submit' class='ui button blue tiny' value='Сохранить' />
         				</div>
     				</div>
                     <div class="sixteen wide column" style="padding: 0 14px;">
@@ -262,6 +256,8 @@
 		        	</div>
 	        		{% endif %}                   
         		</div>
+                </form>
+                
 			</div>
 		</div>
 	</div>	

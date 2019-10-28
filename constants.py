@@ -103,7 +103,6 @@ def get_profile(request):
     return profile
 
 def is_in_school(profile, school):
-    print(is_profi(profile, 'Moderator'))
     if is_profi(profile, 'Moderator'):
         return True
     if not school in profile.schools.all():

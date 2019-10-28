@@ -114,7 +114,7 @@ def squad_update(request, slug=None):
     change_img = False
     change_title = False
     change_content = False
-    print('**************')
+    print('************** form ', form.errors)
     if form.is_valid():
         print('0')
         old_start_date = instance.start_date
@@ -138,7 +138,7 @@ def squad_update(request, slug=None):
             change_img = True
             if 'squad_banner' in request.FILES:
                 file = request.FILES['squad_banner']
-                print(file)
+                print('d',file)
                 instance.image_banner = file
             if 'squad_icon' in request.FILES:
                 file = request.FILES['squad_icon']
@@ -496,11 +496,8 @@ def remove_person_from_lecture(lecture, person):
         lecture.person_number[index] = 0
 
 def add_person_to_lecture(lecture, person):
-    print('*****************')
     if person != None:
-        print('0')
         if not person.id in lecture.person_id:
-            print('1')
             lecture.person_id.append(person.id)
             lecture.person_number.append(0)
         index = lecture.person_id.index(person.id)

@@ -45,7 +45,7 @@
                 <div class="dark_grey constback3 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback5 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback7 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
-                {% for lecture in profile|constant_profile_lectures %}
+                {% for lecture in hisprofile|constant_profile_lectures %}
                     <div id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.squad.color_back == ''%}#313a57{%else%}{{ lecture.7.squad.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
                         {{lecture.7.squad.title}} 
                     </div>

@@ -447,6 +447,7 @@ def constant_schedule_lectures(squad):
 def constant_profile_lectures(profile):
     interval = 60
     res = []
+    cl = Lecture.objects.get(id=405)
     for lecture in profile.hislectures.select_related('cell'):
         hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
         minute = int(lecture.cell.time_period.start.split(':')[1])
