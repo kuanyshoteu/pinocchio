@@ -486,7 +486,7 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
 def remove_person_from_lecture(lecture, person):
     if not person.id in lecture.person_id:
         lecture.person_id.remove(person.id)
-        lecture.person_number.append(1)
+        lecture.person_number.remove(1)
     index = lecture.person_id.index(person.id)
     number = lecture.person_number[index]
     if number == 1:
