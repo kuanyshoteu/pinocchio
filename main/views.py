@@ -841,6 +841,7 @@ def get_date(material_number, squad, subject,lectures):
         return date
     else:
         return '_'
+
 def get_school_report(request):
     profile = get_profile(request)
     only_directors(profile)
@@ -851,17 +852,23 @@ def get_school_report(request):
         alldays = Day.objects.all() 
         profession = Profession.objects.get(title = 'Teacher')
         all_materials = school.school_materials.all().select_related('subject').prefetch_related('done_by')
-        res = [['Оплата учителям']]
+        res = [['0'],['2', 'Оплата учителям']]
+        teacher_res = []
+        styles = []
         all_costs = 0
+        index = 1
+        max_len = 0
         for teacher in profession.workers.filter(schools=school).prefetch_related('hissquads__subjects'):
             hislectures = teacher.hislectures.all()
-            res.append([teacher.first_name])
+            teacher_subject = ['5', teacher.first_name]
+            res.append(['5',teacher.first_name+' преподаватель', 'ИТОГО'])
             sum_teacher = 0
-            costs_subjects = ['Итого по курсам']
-            costs_numbers = ['']
+            costs_subjects = ['1', 'Итого '+teacher.first_name]
             for squad in teacher.hissquads.all():
                 add = False
                 for subject in squad.subjects.all():
+                    subject_len = 0
+                    subject_counter = 0
                     sum_subject = 0
                     squad_title = ''
                     if add == False:
@@ -872,43 +879,82 @@ def get_school_report(request):
                     start = report_material_number_by_date(timeago,squad,subject, alldays,lectures)
                     end = report_material_number_by_date(timefuture,squad,subject, alldays,lectures)
                     if start < 0:
+                        start = 0
+                    if end < 0:
                         break
                     if start > len(materails):
                         start = len(materails)
                     if end > len(materails):
                         end = len(materails)
-                    subject_res_dates = [squad_title,subject.title]
-                    subject_res = ['','']
+                    subject_res_dates = ['4', squad_title,subject.title]
+                    subject_res = ['5', '','']
+                    cost = 0
                     for i in range(0, end-start):
                         date = get_date(start + i-1, squad, subject,lectures)
                         if date != '_':
-                            date.strftime('%d.%m.%Y')
+                            date = date.strftime('%d.%b')
                         subject_res_dates.append(date)
-                        print(len(list(materails)), start + i-1)
+                        subject_len += 1
                         sm = list(materails)[start + i-1]
                         cost = 0
                         if teacher in sm.done_by.all():
                             cost = teacher.salary
+                            subject_counter += 1
                         sum_subject += cost
                         subject_res.append(cost)
-                    costs_subjects.append(subject.title)
-                    costs_numbers.append(sum_subject)
+                    subject_res.append(sum_subject)
+                    subject_res_dates.append('')
                     res.append(subject_res_dates)
                     res.append(subject_res)
-                    sum_teacher += sum_subject
+                    index+=2
+                    sum_teacher += sum_subject 
+                    if subject_counter > 0:
+                        teacher_subject.append(str(subject_counter)+'*'+str(teacher.salary))
+                    if subject_len > max_len:
+                        max_len = subject_len
+            teacher_subject.append(sum_teacher)
+            teacher_res.append(teacher_subject)            
             all_costs += sum_teacher
-            costs_subjects.append('В сумме')
-            costs_numbers.append(sum_teacher)
+            costs_subjects.append(sum_teacher)
             res.append(costs_subjects)
-            res.append(costs_numbers)
-            res.append([])
-            res.append([])
-        res.append(['ИТОГО на зарплаты нужно:', all_costs])
+            res.append(['3'])
+            res.append(['3'])
+
+        for i in range(0, len(res)):
+            if len(res[i]) > 3:
+                if res[i][3] != '':
+                    last = res[i][-1]
+                    del res[i][-1]
+                    res[i] = res[i] + ['']*(max_len+3 - len(res[i]))+[last]
+            elif len(res[i]) > 1:
+                if 'Итого' in res[i][1] or 'препод' in res[i][1]:
+                    last = res[i][-1]
+                    del res[i][-1]
+                    res[i] = res[i] + ['']*(max_len+3 - len(res[i]))+[last]
+
+        res.append(['4', 'ИТОГО зарплата за '+str(timeago.strftime('%d.%b'))+' - '+str(timefuture.strftime('%d.%b'))])
+        max_len = 0
+        for t in teacher_res:
+            tlen = len(t)
+            print(tlen)
+            if tlen > max_len:
+                max_len = tlen
+        for t in teacher_res:
+            last = t[-1]
+            del t[-1]
+            t = t + ['']*(max_len - len(t))+[last]
+            res.append(t)
+        last_line = ['4'] + ['']*(max_len-1)
+        last_line.append(all_costs)
+        res.append(last_line)
+        res.append(['3'])
+        res.append(['3'])
         data = res
         df = pd.DataFrame(data)
 
-        students_res = [['Оплата Клиентов'],['В группах']]
+        students_res = [['0'],['2', 'Оплата Клиентов'],['4','В группах']]
         all_squads_cost = 0
+        max_len = 0
         for squad in school.groups.all().prefetch_related('students').prefetch_related('payment_history'):
             squad_cost = 0
             for subject in squad.subjects.all():
@@ -916,26 +962,42 @@ def get_school_report(request):
             teacher_name = ''
             if squad.teacher:
                 teacher_name = squad.teacher.first_name
-            students_res.append(['Группа ' + squad.title+'\nУчитель: '+teacher_name+'\nДата начала: '+squad.start_date.strftime('%d.%m.%Y')+'\nСтоимость в месяц: '+str(squad_cost)+' тг'])
+            students_res.append(['5','Группа ' + squad.title, 'Учитель: '+teacher_name,'Дата начала: '+squad.start_date.strftime('%d.%m.%Y'),'Стоимость в месяц: '+str(squad_cost)+' тг', 'Итого'])
+            squad_students_money = 0
             phs = squad.payment_history.all().order_by('timestamp')
             for student in squad.students.all():
-                squad_res = [student.first_name]
-                squad_res2 = ['']
+                squad_res = ['5','']
+                squad_res2 = ['4',student.first_name]
                 student_cost = 0
                 for ph in phs.filter(user=student):
-                    squad_res.append(str(ph.amount) + 'тг')
-                    squad_res2.append(ph.timestamp.strftime('%d.%m.%Y'))
+                    squad_res.append(str(ph.amount))
+                    squad_res2.append(ph.timestamp.strftime('%d.%b'))
                     student_cost += ph.amount
                 squad_res.append(student_cost)
-                squad_res2.append('Итого')
-                squad_cost += student_cost
+                squad_res2.append('')
+                if max_len < len(squad_res):
+                    max_len = len(squad_res)
+                squad_students_money += student_cost
                 students_res.append(squad_res2)
                 students_res.append(squad_res)
-            all_squads_cost += squad_cost
-            students_res.append(['Итого с группы:', squad_cost])
+            all_squads_cost += squad_students_money
+            students_res.append(['1','Итого с группы:', squad_students_money])
             students_res.append([])
             students_res.append([])
-        students_res.append(['Итого со всех групп:', all_squads_cost])
+        students_res.append(['1','Итого со всех групп:', all_squads_cost])
+
+        for i in range(0, len(students_res)):
+            if len(students_res[i]) > 2:
+                if students_res[i][2] != '':
+                    last = students_res[i][-1]
+                    del students_res[i][-1]
+                    students_res[i] = students_res[i] + ['']*(max_len-len(students_res[i])-1)+[last]
+            elif len(students_res[i]) > 1:
+                if 'Итого' in students_res[i][1]:
+                    last = students_res[i][-1]
+                    del students_res[i][-1]
+                    students_res[i] = students_res[i] + ['']*(max_len-1 - len(students_res[i]))+[last]
+
         data2 = students_res
         df2 = pd.DataFrame(data2)
 
@@ -945,7 +1007,12 @@ def get_school_report(request):
         writer = pd.ExcelWriter(output, engine='xlsxwriter')
         for key, value in datas.items():
             data = value
-            data.to_excel(writer, key)
+            data.style.\
+                apply(backg,axis=1).\
+                apply(backg2,axis=0).\
+                apply(border,axis=1).\
+                apply(fonts,axis=0).\
+                to_excel(writer, key, startrow=0, startcol=0, header=False, index=False)
 
         writer.save()
         output.seek(0)
@@ -966,6 +1033,64 @@ def get_school_report(request):
         "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),         
     }
     return render(request, "school/report.html", context)
+
+def backg(s):
+    res = []
+    c = s[0]
+    color = '#FFF'
+    if c != None:
+        if c != '' and c != '5':
+            if c == '1':
+                color = '#99cc99'
+            elif c == '2':
+                color = '#FBE6D6'
+            elif c == '0':
+                color = '#ededed'
+            elif c == '3':
+                color = '#ededed'
+            else:
+                color = '#FFF3CB'
+    for c in s:
+        res.append('background-color: '+color)
+    return res
+
+def backg2(s):
+    res = []
+    c = s[0]
+    color = ''
+    if c != None:
+        if c == '0':
+            color = 'background-color: #ededed'
+    for c in s:
+        res.append(color)
+    return res
+def fonts(s):
+    res = []
+    for c in s:
+        c = str(c)
+        fw = '400'
+        if c:
+            if 'Итого' in c or 'ИТОГО' in c or 'преподаватель' in c:
+                fw = '600'
+        res.append('font-weight: '+fw)
+    return res
+
+def border(s):
+    res = []
+    c = s[0]
+    ans = ''
+    if c != None:
+        if c != '3' and c != '2' and c != '0':
+            ans = 'border-style: solid'
+    for c in s:
+        res.append(ans)
+    return res
+def border2(s):
+    res = ['']
+    for i in range(1, len(s)):
+        a = 'border-width: 10'
+        res.append(a)
+    return res
 
 def cat_filter(request):
     res = []
@@ -1086,13 +1211,13 @@ def moderator_run_code(request):
     #         school = subject.school
     #         subject.filter_options.add(*options)
     #         school.filter_options.add(*options)
-    schools = School.objects.all()
-    for j in JobCategory.objects.all():
-        j.schools.add(*schools)
+    # schools = School.objects.all()
+    # for j in JobCategory.objects.all():
+    #     j.schools.add(*schools)
 
-    allt = Profession.objects.get(title='Teacher').workers.all()
-    tr = JobCategory.objects.get(id=2)
-    tr.job_workers.add(*allt)
+    # allt = Profession.objects.get(title='Teacher').workers.all()
+    # tr = JobCategory.objects.get(id=2)
+    # tr.job_workers.add(*allt)
 
 
     print('moderator_end_code')
