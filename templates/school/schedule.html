@@ -58,7 +58,7 @@
                                     {% if profile.skill.crm_cabinet %}
                                         <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_cabinet.title }}</option>
                                     {% else %}
-                                        <option value="-1">Все кабинет</option>
+                                        <option value="-1">Все кабинеты</option>
                                     {% endif %}
                                     {% for crm_cabinet in crm_cabinets %}
                                         {% if crm_cabinet != profile.skill.crm_cabinet %}
@@ -66,7 +66,7 @@
                                         {% endif %}
                                     {% endfor %}
                                     {% if profile.skill.crm_cabinet %}
-                                        <option value="-1">Все кабинет</option>
+                                        <option value="-1">Все кабинеты</option>
                                     {% endif %}
                                 </select>
                             </div>
