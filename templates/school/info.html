@@ -310,7 +310,7 @@
                                         </div>
                                         {% for cabinet in office.cabinets.all %}
                                             <div class="two wide column highlight_black mr5 mb5 cabinet{{cabinet.id}}">
-                                                <a class="redx delete_cabinet" url="{% url 'schools:delete_cabinet' %}" id="{{cabinet.id}}">✖</a>
+                                                <a class="redx delete_cabinet" url="{% url 'schools:delete_cabinet' %}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{cabinet.id}}">✖</a>
                                                 {{cabinet.title}}
                                                 <div style="font-size: 12px;">{{cabinet.capacity}} чел.</div>
                                             </div>

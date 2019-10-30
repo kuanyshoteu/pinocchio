@@ -37,6 +37,9 @@
     $('.delete_cabinet').click(function(e) {
         id = $(this).attr('id')
         url = $(this).attr('url')
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }        
         $.ajax({
             url: url,
             data: {

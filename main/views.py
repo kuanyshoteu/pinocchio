@@ -1218,6 +1218,11 @@ def moderator_run_code(request):
     # allt = Profession.objects.get(title='Teacher').workers.all()
     # tr = JobCategory.objects.get(id=2)
     # tr.job_workers.add(*allt)
+    school = School.objects.get(title='PWS')
+    cabinet2 = school.cabinets.get(title='2')
+    cabinet1 = school.cabinets.filter(title='1').first()
+    lects = school.school_lectures.all().exclude(cabinet=cabinet2)
+    cabinet1.cabinet_lecture.add(*lects)
 
 
     print('moderator_end_code')
