@@ -156,7 +156,7 @@ class PaymentHistory(models.Model):
 
 class DiscountSchool(models.Model):
     title = models.CharField(max_length=250)
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='discounts') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='discounts') 
     amount = models.IntegerField(default=0)
     discount_type = models.CharField(max_length=250, default='')
     class Meta:
