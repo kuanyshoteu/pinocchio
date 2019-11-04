@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=250)),
                 ('amount', models.IntegerField(default=0)),
-                ('school', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='discounts', to='schools.School')),
+                ('school', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='discounts', to='schools.School')),
             ],
             options={
                 'ordering': ['id'],

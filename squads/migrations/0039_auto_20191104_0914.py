@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='needmoney',
             name='discount_school',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='nms', to='squads.DiscountSchool'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='nms', to='squads.DiscountSchool'),
         ),
     ]

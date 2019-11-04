@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('action_author', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='made_discounts', to='accounts.Profile')),
-                ('discount_school', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='discounts', to='squads.DiscountSchool')),
+                ('discount_school', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='discounts', to='squads.DiscountSchool')),
                 ('squad', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='discounts', to='squads.Squad')),
                 ('students', models.ManyToManyField(related_name='discounts', to='accounts.Profile')),
             ],
