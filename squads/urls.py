@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^api/const_create_lectures/(?P<id>\d+)/$', const_create_lectures, name='const_create_lectures'),
 
     url(r'^api/update_cards_money/$', update_cards_money, name='update_cards_money'),
+    url(r'^api/get_student_discounts/$', get_student_discounts, name='get_student_discounts'),
+    url(r'^api/set_student_discounts/$', set_student_discounts, name='set_student_discounts'),
 ]

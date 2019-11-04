@@ -329,7 +329,6 @@ def change_category(request, id=None):
             text = 'В курсе '+subject.title + ' убран предмет '+category.title
             subject.subject_histories.create(action_author=profile,edit=text)
             change_lecture_options(students, subject, 'subject', category, False)
-
             if category in hidden_filter_ids():
                 options = SchoolFilterOption.objects.filter(title=category.title)
                 if len(options) > 0:
@@ -351,6 +350,8 @@ def change_category(request, id=None):
                 options = SchoolFilterOption.objects.filter(title=category.title)
                 subject.filter_options.add(*options)
                 school.filter_options.add(*options)
+                school_cats = category.school_categories.all()
+                school.categories.add(*school_cats)
 
         subject.save()
         ok = True
@@ -373,7 +374,7 @@ def change_filter_option(request, id=None):
         if option in subject.filter_options.all():
             subject.filter_options.remove(option)
             text = 'В курсе '+subject.title+' изменен фильтр '+option.title
-            instance.squad_histories.create(action_author=profile,edit=text)        
+            subject.subject_histories.create(action_author=profile,edit=text)        
             if len(school.school_subjects.filter(filter_options=option)) == 0:
                 option.schools.remove(school)
         else:

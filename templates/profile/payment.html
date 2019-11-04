@@ -56,6 +56,23 @@
                             Оплата за уроки: {{ nm.lesson_bill }}
                             <br>
                             Оплата за месяц: {{ nm.bill }}
+                            <br>
+                            Скидки:
+                            {% for dis in nm.discount_school.all %}
+                            <br>
+                            <div class="ui button mini green mt5 show_hint_schedule">{{dis.title}}</div>
+                            <div class="hint_schedule" style="display: none;"> 
+                                <div class="ui segment full-w" style="position: absolute;background-color: #4a4a4a;color: #fff;"> 
+                                    {{dis.amount}} 
+                                    {%if dis.discount_type == 'percent' %}
+                                        процентов
+                                    {%else%}
+                                        тенге
+                                    {%endif%}
+                                </div> 
+                            </div>
+                            {% endfor %}
+
                         </div>
 <!--                     <form class="ui form">
                         <table class="no_margin" class="mb0" cellspacing="0" cellpadding="0" style="font-size: 12px;">

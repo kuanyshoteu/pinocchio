@@ -132,13 +132,6 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
 
 pre_save.connect(pre_save_course_receiver, sender=Squad)
 
-class NeedMoney(models.Model):
-    squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='need_money')
-    card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
-    money = models.IntegerField(default=0)
-    lesson_bill = models.IntegerField(default=0)
-    bill = models.IntegerField(default=0)
-
 class Bug(models.Model):
     text = models.TextField(default='')
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -160,3 +153,23 @@ class PaymentHistory(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['-timestamp']
+
+class DiscountSchool(models.Model):
+    title = models.CharField(max_length=250)
+    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='discounts') 
+    amount = models.IntegerField(default=0)
+    discount_type = models.CharField(max_length=250, default='')
+    class Meta:
+        ordering = ['id']
+    def create_url(self):
+        return reverse("schools:discount_create_url")
+    def delete_url(self):
+        return reverse("schools:discount_delete_url")
+
+class NeedMoney(models.Model):
+    squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='need_money')
+    card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
+    money = models.IntegerField(default=0)
+    lesson_bill = models.IntegerField(default=0)
+    bill = models.IntegerField(default=0)
+    discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')

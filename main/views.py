@@ -114,6 +114,7 @@ def newland(request):
         "school_money":money,
         "newland":True,
         "five":[1,2,3,4,5],
+        'len':int(len(School.objects.all())/10)*10
     }
     return render(request, "newland.html", context)
 
@@ -140,6 +141,8 @@ def category_landing(request, id=None):
         "is_manager":is_manager,
         "is_director":is_director, 
         "school_money":money,
+        "schools":category.schools.all,
+        "url":School.objects.first().get_landing(),        
     }
     return render(request, "catland.html", context)
 
@@ -1094,7 +1097,7 @@ def border2(s):
 
 def cat_filter(request):
     res = []
-    if request.GET.get('id') and request.GET.get('mincost') and request.GET.get('maxcost'):
+    if request.GET.get('id') and request.GET.get('mincost') and request.GET.get('maxcost') and request.GET.get('order'):
         cat = SchoolCategory.objects.get(id=int(request.GET.get('id')))
         schools = cat.schools.all()
         mincost = int(request.GET.get('mincost'))*1000 - 1
@@ -1106,6 +1109,13 @@ def cat_filter(request):
             for i in ids:
                 option = SchoolFilterOption.objects.get(id=int(i))
                 schools = schools.filter(filter_options=option)
+        if request.GET.get('order') == "rating":
+            schools = schools.order_by('rating')
+        if request.GET.get('order') == "cheap":
+            schools = schools.order_by('average_cost')
+        if request.GET.get('order') == "expensive":
+            schools = schools.order_by('-average_cost')
+
         for school in schools:
             address = '-'
             if len(school.school_offices.all())>0:
@@ -1115,7 +1125,7 @@ def cat_filter(request):
             if len(school.banners.all()) > 0:
                 image_url = school.banners.first().image_banner.url
             res.append([
-                school.get_landing(),
+                school.landing(),
                 school.title,
                 image_url, 
                 address, 

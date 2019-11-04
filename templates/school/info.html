@@ -22,7 +22,7 @@
                 <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;margin-top: 0">
                     Информация
                 </div>
-                <div class="ui segment" style="margin: 0;font-size: 15px;">
+                <div class="ui segment mt0 mb15" style="font-size: 15px;">
                     <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Описание (для рекламной страницы): </span> 
                     <span style="display: inline-block;" class="school_content">{{ instance.content }}</span> 
                     {% if is_director %}
@@ -176,8 +176,8 @@
                         </div>
                     </div>
                 </div>
-                {% if is_director %}
-                    <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;">
+                    {% if instance.schedule_type != 'classic' %}
+                    <div class="ui segment mb0" style="padding-left: 17px;">
                         Время уроков:
                         <div class="school_timep_list" style="display: inline-block;">
                         {% for timep in instance.time_periods.all %}
@@ -209,7 +209,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui segment" style="margin: 0;padding-left: 17px;">
+                    {% endif %}
+                    <div class="ui segment no_margin pl15">
                         Предметы школы:
                         <div class="school_subject_list" style="display: inline-block;">
                         {% for subject in instance.school_subject_categories.all %}
@@ -245,7 +246,70 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui segment" style="margin: 0;padding-left: 17px;">
+                    <div class="ui segment no_margin pl15">
+                        Скидки школы:
+                        <div class="school_discounts_list" style="display: inline-block;">
+                        {% for discount in instance.discounts.all %}
+                            <a class="ui button mini green discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;margin-bottom: 7px;">{{ discount.title }}</a>
+                            <div class="ui modal mini" id="discount_form{{ discount.id }}">
+                                <i class="close icon"></i>
+                                <div class="content">
+                                    <form class="ui form">
+                                        <div style="height: 20px;">
+                                            <div class="hint_discount_title{{discount.id}}" style="display: none;"></div>
+                                        </div>
+                                        <textarea id="discount_title{{discount.id}}" class="object_textarea" status='discount'>{{discount.title}}</textarea>
+                                        <div class="ui grid no_margin stackable">
+                                            <div class="eight wide column no_padding">
+                                                <input placeholder="{{discount.amount}}" type="number" class="discount_amount{{discount.id}}" value="{{discount.amount}}">
+                                            </div>
+                                            <div class="eight wide column no_padding">
+                                                <select class="discount_type{{discount.id}}" style="height: 35px;">
+                                                    {% if discount.discount_type == 'percent'%}
+                                                    <option value="percent">Проценты</option>
+                                                    <option value="tenge">Тенге</option>
+                                                    {% else %}
+                                                    <option value="tenge">Тенге</option>
+                                                    <option value="percent">Проценты</option>
+                                                    {% endif %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <a class="ui button mini blue" onclick="create_discount('{{discount.create_url}}', '{{discount.id}}')">Сохранить</a>
+                                        <a class="ui button mini red" onclick="delete_discount('{{discount.delete_url}}', '{{discount.id}}')" style="float: right;">Удалить</a>
+                                    </form>
+                                    <div class="errordiscount{{discount.id}} highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <a class="ui button mini" onclick="$('#discounts_form_new').modal('show')">Добавить Скидку</a>
+                        <div class="ui modal mini" id="discounts_form_new">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <form class="ui form text-center">
+                                    <b>Добавить cкидку</b>
+                                    <textarea class="object_textarea need_clear mt10 mb10" id="discount_title_new" status='discounts' placeholder="Название"></textarea>
+                                    <div class="ui grid no_margin stackable">
+                                        <div class="eight wide column no_padding">
+                                            <input placeholder="Сумма" type="number" class="discount_amount_new">
+                                        </div>
+                                        <div class="eight wide column no_padding">
+                                            <select class="discount_type_new" id="_new" style="height: 35px;">
+                                                <option value="percent">Проценты</option>
+                                                <option value="tenge">Тенге</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <a class="ui button mini blue mt10" onclick="create_discount('/schools/api/discounts_create_url/', '_new');clear_textareas()">
+                                        Создать
+                                    </a>
+                                </form>
+                                <div class="errordiscounts_new highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment no_margin pl15">
                         Уровни курсов:
                         <div class="school_level_list" style="display: inline-block;">
                         {% for level in instance.school_subject_levels.all %}
@@ -281,7 +345,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui segment" style="margin-top: 0;padding-left: 17px;">
+                    <div class="ui segment no_margin pl15">
                         Офисы:
                         <div class="school_office_list" style="display: inline-block;">
                         {% for office in instance.school_offices.all %}
@@ -430,7 +494,6 @@
                         {% include 'school/money_chart.html' %}
                     </div>
                     {% endif %}
-                {% endif %}
                 {% if instance.title == 'Тамос' %}
                     {% include 'school/good_results_chart.html' %}
                 {% endif %}
@@ -522,6 +585,59 @@
             success: function (data) {
                 $('.subject_object'+id).hide('fast');
                 $('#subject_form'+id).modal('hide')
+            }
+        })        
+    };
+   function create_discount(url, id) {
+        title = $('#discount_title'+id).val()
+        type_id = '.discount_type'+id
+        discount_type = $(type_id+' option:selected').val()
+        amount = parseInt($('.discount_amount'+id).val())
+        console.log(discount_type, amount)
+        if (title != '' && (discount_type != 'percent' || (amount <= 100 && amount >= 0) )) {
+            if ($('.check_moderator').attr('status')=='True') {
+                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+            }
+            $.ajax({
+                url: url,
+                data: {
+                    'id':id,
+                    'title':title,                
+                    'discount_type':discount_type,                
+                    'amount':amount,                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.errordiscount'+id).hide()
+                    if (data.taken_name) {
+                        $('.errordiscount'+id).show()
+                    }
+                    else{
+                        if (id == '_new') {
+                            $('<a class="ui button mini green discount_object'+data.idd+'" onclick="$('+"'#discount_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="discount_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="discount_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_discount('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_discount('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errordiscount'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_discount_list'))
+                        }
+                        else{
+                            $('.discount_object'+id).text(title);
+                        }
+                        $('#discount_form'+id).modal('hide')
+                    }
+                }
+            })
+        }
+    };
+    function delete_discount(url, id) {
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
+        $.ajax({
+            url: url,
+            data: {
+                'id':id
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.discount_object'+id).hide('fast');
+                $('#discount_form'+id).modal('hide')
             }
         })        
     };

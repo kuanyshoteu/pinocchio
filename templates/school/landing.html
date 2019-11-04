@@ -3,6 +3,26 @@
 {% load staticfiles %}
 {% load ttags %}
 {% block content %}
+  <div class="full-w full-h darker" style="display: none;"></div>
+  <div class="full-w text-center modal2" id="zaiavka_modal">
+      <a class="close_modal2"><i class="close icon"></i></a>
+      <div class="content pt15 pb30" style="background-color: #fff;width: 600px;margin: 0 auto;box-shadow: 0 30px 30px 0 #222;">
+          <div style="font-weight: 600;color: #696969;" class="mb15">Напишите данные, чтобы центр мог связаться с Вами</div>
+          <form method='POST' style="width: 60%;margin: 0 auto;text-align: center;" action='' enctype='multipart/form-data' class="ui form">{% csrf_token %}
+              <b>Имя</b>
+              <input class="zaiavka_name" placeholder="Введите имя" style="margin-bottom: 15px;margin-top: 10px;">
+              <b>Телефон</b>
+              <input class="zaiavka_phone" placeholder="Введите телефон" style="margin-bottom: 15px;margin-top: 10px;">
+              <div style="text-align: center;">
+                  <input class="ui button green make_zaiavka_new" course="" id="{{ school.id }}" value="Оставить заявку" type="submit" onclick="return false">
+              </div>
+              <div class="ui label ok_zaiavka_new" style="display: none;">
+                  <i class="check icon green"></i> Заявка оставлена
+              </div>
+          </form>
+      </div>
+  </div>            
+
   <div style="display: none;" class="schoolLanding__header-gallery">
       <div class="schoolLanding__header-gallery__nav"><i id="landing__gallery-download" class="icon download"></i><i id="landing__gallery-close" class="icon close"></i></div>
       <div id="schoolLanding__header-gallery__sliderone" class="owl-carousel owl-theme">
@@ -125,23 +145,6 @@
                     <div class="ui label ok_zaiavka-1" style="display: none;">
                         <i class="check icon green"></i> Заявка оставлена
                     </div>
-                    <div class="ui modal" id="zaiavka_modal">
-                        <i class="close icon"></i>
-                        <div class="content">
-                            <form method='POST' style="width: 40%;margin: 0 auto;text-align: center;" action='' enctype='multipart/form-data' class="ui form">{% csrf_token %}
-                                <b>Имя</b>
-                                <input class="zaiavka_name" placeholder="Введите имя" style="margin-bottom: 15px;margin-top: 10px;">
-                                <b>Телефон</b>
-                                <input class="zaiavka_phone" placeholder="Введите телефон" style="margin-bottom: 15px;margin-top: 10px;">
-                                <div style="text-align: center;">
-                                    <input class="ui button green make_zaiavka_new" course="" id="{{ school.id }}" value="Оставить заявку" type="submit" onclick="return false">
-                                </div>
-                                <div class="ui label ok_zaiavka_new" style="display: none;">
-                                    <i class="check icon green"></i> Заявка оставлена
-                                </div>
-                            </form>
-                        </div>
-                    </div>            
               </div>
             </div>
           </div>
@@ -352,6 +355,7 @@
         <div id="map" style="width: 80%; height: 300px;margin: 0 auto;"></div>      
     </div>
   </main>
+
 <script src="https://code.jquery.com/jquery-1.7.2.min.js"></script> 
 <script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"

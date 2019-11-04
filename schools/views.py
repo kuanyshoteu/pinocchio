@@ -13,7 +13,7 @@ from datetime import timedelta
 from .forms import SchoolForm
 from .models import *
 from subjects.models import *
-from squads.models import Squad,PaymentHistory,SquadHistory
+from squads.models import Squad,PaymentHistory,SquadHistory,DiscountSchool
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
 from papers.models import *
 from library.models import Folder
@@ -440,6 +440,54 @@ def subject_delete(request):
     if len(hashtag) > 0:
         hashtag.delete()
     school.school_subject_categories.remove(subject)
+    data = {
+    }
+    return JsonResponse(data)
+
+def discount_create(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    create_url = ''
+    delete_url = ''
+    idd = -1
+    if request.GET.get('id') and request.GET.get('title') and request.GET.get('amount') and request.GET.get('discount_type'):
+        title = request.GET.get('title')
+        amount = int(request.GET.get('amount'))
+        discount_type = request.GET.get('discount_type')
+        school = is_moderator_school(request, manager_profile)
+        if request.GET.get('id') == '_new':
+            if school.discounts.filter(title = title):
+                discount = school.discounts.filter(title = title)[0]
+                return JsonResponse({'taken_name':True})
+            qs = DiscountSchool.objects.filter(title=title)
+            if len(qs) > 0:
+                school.discounts.add(qs[0])
+                discount = qs[0]
+            else:
+                discount = school.discounts.create(title=title,amount=amount,discount_type=discount_type)
+        else:
+            discount = school.discounts.get(id=int(request.GET.get('id')))
+            discount.title = title
+            discount.amount = request.GET.get('amount')
+            discount.discount_type = request.GET.get('discount_type')
+        discount.save()
+        idd = discount.id
+        create_url = discount.create_url()
+        delete_url = discount.delete_url()
+    data = {
+        'taken_name':False,
+        'create_url':create_url,
+        'delete_url':delete_url,
+        'idd':idd,
+    }
+    return JsonResponse(data)
+
+def discount_delete(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = is_moderator_school(request, profile)
+    only_managers(profile)
+    discount = school.discounts.get(id=int(request.GET.get('id')))
+    discount.delete()
     data = {
     }
     return JsonResponse(data)

@@ -19,7 +19,7 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 {% include 'school/head.html' %}
-                <div class="ui segment" style="margin-bottom: 0;">
+                <div class="ui segment mb0">
                     Отчет по бухгалтерии
                 </div>
                 <div class="ui segment no_padding no_margin">
@@ -40,6 +40,26 @@
                                 <input type="submit" name="" class="ui button mini blue" style="height: 29px;" value="Скачать отчет">      
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <div class="ui segment mb0">
+                    На счету <b style="font-size: 14px;">{{ school_money }}тг</b> 
+                </div>
+                <div class="ui segment no_margin">
+                    <div class="ui grid">                        
+                        <div class="sixteen wide column pl5 pr5 ">
+                            <b>Из них по группам:</b>
+                        </div>
+                        {% for sq in instance.groups.all %}
+                        <div class="four wide column pl5 pr5 pt0">
+                            <div class="ui segment">
+                                <b>{{sq.title}}</b>
+                                <br>
+                                {{sq|squad_nms_sum}}тг
+                            </div>
+                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

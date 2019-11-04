@@ -1,3 +1,49 @@
+    $('.dis').click(function(e) {
+        student_id = $('.discount_student_name').attr('id')
+        url = $('.instance_data').attr('set_student_discounts')
+        squad_id = $('.instance_data').attr('id')
+        this_ = $(this)
+        id = this_.attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'student_id':student_id,
+                'squad_id':squad_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.add) {
+                    this_.addClass('green')                    
+                }
+                else{
+                    this_.removeClass('green')                    
+                }
+            }
+        })        
+    })
+    $('.get_student_discounts').click(function(e) {
+        student_id = $(this).attr('id')
+        url = $('.instance_data').attr('get_student_discounts')
+        squad_id = $('.instance_data').attr('id')
+        $('.student_discounts_modal').modal('show')
+        $.ajax({
+            url: url,
+            data: {
+                'student_id':student_id,
+                'squad_id':squad_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.dis').removeClass('green')
+                for (var i = 0; i < data.res.length; i++) { 
+                    $('.dis'+data.res[i]).addClass('green')
+                }
+                $('.discount_student_name').text(data.name)
+                $('.discount_student_name').attr('id', student_id)
+            }
+        })        
+    })
     $('.add_job').click(function(e) {
         id = $(this).attr('id')
         url = $(this).attr('url')
@@ -156,6 +202,22 @@
             }
         })
     })
+    $('.close_modal2').click(function(e) {
+        $('#zaiavka_modal').hide('fast')    
+        $('.darker').hide()
+    })
+    $(".show_school_type").click( function(){
+        if( $(this).is(':checked') ){
+            height = parseInt( $('.cattop').css('height') )
+            $('.schools_show_map').show()
+            $('.schools_show_list').hide()            
+        }
+        else{
+            $('.schools_show_map').hide()
+            $('.schools_show_list').show()
+        } 
+
+    });
     $('.make_zaiavka').click(function(e) {
         course = $(this).attr('course')
         if ($(this).attr('status') == 'auth') {
@@ -179,9 +241,11 @@
             })
         }
         else{
-            $('#zaiavka_modal').modal('show')    
-            $('.make_zaiavka_new').attr('course', course)        
+            $('#zaiavka_modal').show('fast')    
+            $('.make_zaiavka_new').attr('course', course)   
+            $('.darker').show()     
         }
+        e.stopPropagation();
     })
     $('.create_school').click(function(e) {
         url = $(this).attr('url');

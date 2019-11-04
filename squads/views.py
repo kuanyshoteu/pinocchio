@@ -852,3 +852,41 @@ def update_cards_money(request):
                         card.colour = 'orange'
                     card.save()
         return JsonResponse({"id":today})
+
+def get_student_discounts(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    res = []
+    name = ''
+    if request.GET.get('squad_id') and request.GET.get('student_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        school = squad.school
+        is_in_school(profile, school)
+        student = Profile.objects.get(id = int(request.GET.get('student_id')))
+        name = student.first_name
+        card = student.card.get_or_create(school=school)[0]
+        hisnm = card.need_money.get(squad=squad)
+        discs = school.discounts.filter(nms=hisnm)
+        for dis in discs:
+            res.append(dis.id)
+    return JsonResponse({"res":res, "name":name,})
+
+def set_student_discounts(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    add = False
+    if request.GET.get('id') and request.GET.get('squad_id') and request.GET.get('student_id'):
+        squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        school = squad.school
+        is_in_school(profile, school)
+        student = Profile.objects.get(id = int(request.GET.get('student_id')))
+        card = student.card.get_or_create(school=school)[0]
+        hisnm = card.need_money.get(squad=squad)
+        
+        this_disc = school.discounts.get(id=int(request.GET.get('id')))
+        if this_disc in hisnm.discount_school.all():
+            hisnm.discount_school.remove(this_disc)
+        else:
+            hisnm.discount_school.add(this_disc)
+            add = True
+    return JsonResponse({"add":add})

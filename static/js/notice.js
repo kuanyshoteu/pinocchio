@@ -63,6 +63,9 @@ $('.profile_name').click(function(e){
 $('.card_comment-textarea').click(function(e){
     e.stopPropagation();
 });
+$('.content').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
     $('.notice-bar').hide();
     var div = $('.notice');
@@ -79,4 +82,6 @@ $("body").click(function(e){
     $('.profile_links').hide()
     $('.card_comment-helper').hide()
     $('.search_hint').hide();
+    $('#zaiavka_modal').hide('fast')    
+    $('.darker').hide()     
 });

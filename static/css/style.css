@@ -1,3 +1,14 @@
+.modal2{
+  position: fixed;z-index: 3001;margin-top: 100px;display: none;
+}
+.darker{
+  position: fixed;
+  background-color: #000;opacity: 0.7;z-index: 3000;
+}
+.close_modal2{
+  margin-left: 630px;
+  position: absolute;
+}
 .btn_select{
   cursor: pointer;
   box-shadow: 0 2px 2px 0 #d7d7d7;
@@ -83,6 +94,18 @@ body{
 }
 .pr5{
   padding-right: 5px !important;
+}
+.pb30{
+  padding-bottom: 30px !important;
+}
+.pt30{
+  padding-top: 30px !important;
+}
+.pl30{
+  padding-left: 30px !important;
+}
+.pr30{
+  padding-right: 30px !important;
 }
 .mb10{
   margin-bottom: 10px !important;
@@ -820,6 +843,30 @@ a{
 .ui.white:hover {
   background-color: #f1f1f1;
   color: #222;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.darkblue {
+  padding:6px 10px !important;
+  background-color: #2D437C;
+  font-size: 14px;
+  color: lightgrey;
+}
+.ui.darkblue:hover {
+  padding:6px 10px !important;
+  background-color: #1c326b;
+  font-size: 14px;
+  color: lightgrey;
+}
+.ui.freshgreen {
+  background-color: #51aca9;
+  color: #fff;
+  text-shadow: none;
+  background-image: none;
+}
+.ui.freshgreen:hover {
+  background-color: #409b98;
+  color: #fff;
   text-shadow: none;
   background-image: none;
 }
@@ -1927,7 +1974,6 @@ a{
   .map_search_hint{
     position: absolute !important;
     z-index: 3000;
-    margin-top: 38px !important;
   }
 .loading .animation:nth-child(2) {
   -webkit-animation-delay: 250ms;
@@ -2049,29 +2095,22 @@ a{
     display: flex !important;  
 }
 .school_list{
-  overflow-y: scroll;height: 90%;
+  overflow-y: scroll;height: 100%;
 }
 @media screen and (min-width: 900px){
   .mapdivider{
     display: none;
   }
     .back_to_schools{
-      position: fixed;
       z-index: 3000;
       left: 22%;
-      margin-top: -10px;
+      cursor: pointer;
     }
     .mapf{
       margin: 0 10px;
     }
     .map_distance{
       padding: 14px 0 14px 28px !important;
-    }
-    .map_school_list{
-      padding: 0 0 0 29px !important;
-    }
-    .school_list{
-      padding: 0 0 51px 0 !important;
     }
     .school_landing{
       position: absolute;
@@ -2084,12 +2123,10 @@ a{
       border: 1px solid #CCE2FF;
       box-shadow: 0 0px 7px lightgrey;
       margin-top: 0 !important;
-      overflow-y: scroll;
-      padding: 0 0 80px 0 !important;
+      overflow-y: hidden;
     }
     .school_name_big{
       font-size: 22px;
-      padding: 23px 0px 23px 20px;
     }
     .school_phone_landing{
       font-size: 14px;
@@ -2191,7 +2228,7 @@ a{
       margin: 5% auto !important;
     }
     .catland{
-      padding: 30px 50px 200px 50px;
+      padding: 30px 50px 0 50px;
     }
     .catland_found{
       padding-left: 30px;
@@ -2199,7 +2236,7 @@ a{
     .filter_title{
       width: 190px;
     }
-    .newlandhead{padding: 30px 50px 10px 50px;}
+    .newlandhead{padding: 50px 50px 10px 50px;}
     .half-w{
       width: 50%;
     }
@@ -2382,7 +2419,6 @@ a{
     box-shadow: 0 0px 7px lightgrey;
     margin-top: 0px !important;
     overflow-y: scroll;
-    padding: 0 0 100px 0 !important;
   }
   .show_url{ color: blue; }
   .map_distance{

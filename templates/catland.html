@@ -15,158 +15,416 @@
     }
 </style>
 <div class="catland" style="color: #4a4a4a;">
-    <div class="backhome">
-        <a href="{% url 'main:home' %}" class="ui button mini">
-            <i class="arrow left icon"></i>На главную
-        </a>        
-    </div>
-    <div class="text-center" style="font-weight: 600; font-size: 35px;color: #696969;line-height: 35px;">
-        {{category.main_filters.title}}
-    </div>
-    <div class="ui segment catfilters" style="margin-top: 20px;">
-        <div class="ui grid stackable mb0 mt0">
-            <div class="wide column text-center" style="width: 33%;font-size: 20px;padding-top: 20px;">
-                Выберите курсы для изучения
-            </div>
-            <div class="wide column" style="width: 33%;">
-                <div class="text-center">
-                {% for mf in category.main_filters.filter_options.all %}
-                    <a class="ui button choose_cat mb10" status="" id="{{mf.id}}">
-                        {{mf.title}}
-                    </a>
-                {% endfor %}
+    <div class="cattop">
+        <div class="backhome">
+            <a href="{% url 'main:home' %}" class="ui button mini">
+                <i class="arrow left icon"></i>На главную
+            </a>        
+        </div>
+        <div class="text-center" style="font-weight: 600; font-size: 35px;color: #696969;line-height: 35px;">
+            {{category.main_filters.title}}
+        </div>
+        <div class="ui segment catfilters mb5" style="margin-top: 20px;">
+            <div class="ui grid stackable mb0 mt0">
+                <div class="wide column text-center" style="width: 33%;font-size: 20px;padding-top: 20px;">
+                    Выберите курсы для изучения
                 </div>
-            </div>
-            <div class="wide column pb0" style="width: 33%;">
-                <div style="max-width: 250px;margin: 0 auto;">
-                    <div class="full-w back-w" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
-                        <span style="font-size: 15px;font-weight: 600;color: #7e7e7e;" class="pr10">Цена: </span> 
-                        <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;">
-                        <div id="slider-range" class="mt10"></div>
+                <div class="wide column" style="width: 33%;">
+                    <div class="text-center">
+                    {% for mf in category.main_filters.filter_options.all %}
+                        <a class="ui button choose_cat mb10" status="" id="{{mf.id}}">
+                            {{mf.title}}
+                        </a>
+                    {% endfor %}
                     </div>
                 </div>
-            </div>
-            <div class="sixteen wide column no_padding">
-                <div class="ui divider no_margin"></div>
-            </div>
-        </div>
-        <div class="ui grid stackable pb15 pt0">
-            {% for second_filter in category.second_filters.all %}
-            <div class="eight wide column pr0 pb0">
-                <div class="filter_title" style="display: inline-block;font-size: 14px;">
-                    {{second_filter.title}}
-                </div>                
-                {% for sf in second_filter.filter_options.all %}
-                    <a class="ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
-                        {{sf.title}}
-                    </a>
-                {% endfor %}
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="ui grid stackable">
-        <div class="sixteen wide column pl0 pr0">
-            <div class="loading" style="display: none;">
-              <div class="animation"><div class="circle one"></div></div>
-              <div class="animation"><div class="circle two"></div></div>
-              <div class="animation"><div class="circle three"></div></div>
-              <div class="animation"><div class="circle four"></div></div>
-              <div class="animation"><div class="circle five"></div></div>
-              <div class="animation"><div class="circle six"></div></div>
-            </div>
-            <div class="ui segment mpl0 mpr0">
-                <div class="in_mobile mb15 text-center">
-                    <a class="ui button blue" onclick="$('.catfilters').show('fast');$(this).hide()"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
-                </div>
-                <div class="catland_found mt15" style="font-size: 20px;font-weight: 600">
-                    Найдено <span class="schools_len">{{category.schools.all|length}}</span> учебных центров
-                </div>
-                <div class="catland_found" style="font-size: 16px;padding-top: 30px">
-                    Сначала 
-                    <a class="ui button mini">Лучшие</a>
-                    <a class="ui button mini">Дешевые</a>
-                    <a class="ui button mini">Дорогие</a>
-                </div>
-                <div class="mt15 schools_list">
-                    {% for school in category.schools.all %}
-                    <div class="full-w ui grid stackable no_margin pb15">
-                        <div class="four wide column" style="height: 170px;">
-                            <a href="{{school.landing}}">
-                                {% if school.banners.all|length > 0%}
-                                <img src="{{school.banners.first.image_banner.url}}" style="height: 100%;" class="full-w">
-                                {%else%}
-                                <img src="{% static 'images/fon2.jpeg' %}" style="height: 100%;" class="full-w">
-                                {%endif%}
-                            </a>
-                        </div>
-                        <div class="twelve wide column pb0">
-                            <a href="{{school.landing}}"><b style="font-size: 19px;">{{school.title}}</b></a>
-                            <div class="mt15" style="font-size: 15px">
-                                <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
-                            </div>
-                            <div class="mt15">
-                                {{school.content}}
-                            </div>
+                <div class="wide column pb0" style="width: 33%;">
+                    <div style="max-width: 250px;margin: 0 auto;">
+                        <div class="full-w back-w" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
+                            <span style="font-size: 15px;font-weight: 600;color: #7e7e7e;" class="pr10">Цена: </span> 
+                            <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;">
+                            <div id="slider-range" class="mt10"></div>
                         </div>
                     </div>
-                    <div class="ui divider full-w no_margin"></div>
+                </div>
+                <div class="sixteen wide column no_padding">
+                    <div class="ui divider no_margin"></div>
+                </div>
+            </div>
+            <div class="ui grid stackable pb15 pt0">
+                {% for second_filter in category.second_filters.all %}
+                <div class="eight wide column pr0 pb0">
+                    <div class="filter_title" style="display: inline-block;font-size: 14px;">
+                        {{second_filter.title}}
+                    </div>                
+                    {% for sf in second_filter.filter_options.all %}
+                        <a class="ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
+                            {{sf.title}}
+                        </a>
                     {% endfor %}
                 </div>
+                {% endfor %}
             </div>
         </div>
-<!--             <div class="four wide column pr0 pl0 not_in_mobile">
-            <div class="ui segment" style="padding-top: 30px;">
-                <div class="ui grid stackable">
-                    <div class="four wide column no_padding">
-                        <img class="full-w" src="{% static 'images/fon1.png' %}">
-                    </div>
-                    <div class="twelve wide column pt0">
-                        <a href="" style="text-decoration: underline;font-weight: 600;">
-                            OYLA на английском — теперь в Казахстане!
-                        </a>
-                        <div>
-                            Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                        </div>
-                    </div>
+    </div>
+    <div class="ui segment mpl0 mpr0 mb0">
+        <div class="in_mobile mb15 text-center">
+            <a class="ui button blue" onclick="$('.catfilters').show('fast');$(this).hide()"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
+        </div>
+        <div class="catland_found pt15" style="font-size: 20px;font-weight: 600">
+            Найдено <span class="schools_len">{{category.schools.all|length}}</span> учебных центров
+        </div>
+
+        <div class="ui grid stackable ">
+            <div class="sixteen wide column pl0 pr0">
+                <div class="loading" style="display: none;">
+                  <div class="animation"><div class="circle one"></div></div>
+                  <div class="animation"><div class="circle two"></div></div>
+                  <div class="animation"><div class="circle three"></div></div>
+                  <div class="animation"><div class="circle four"></div></div>
+                  <div class="animation"><div class="circle five"></div></div>
+                  <div class="animation"><div class="circle six"></div></div>
                 </div>
-                <div class="ui grid stackable">
-                    <div class="four wide column no_padding">
-                        <img class="full-w" src="{% static 'images/fon1.png' %}">
-                    </div>
-                    <div class="twelve wide column pt0">
-                        <a href="" style="text-decoration: underline;font-weight: 600;">
-                            OYLA на английском — теперь в Казахстане!
-                        </a>
-                        <div>
-                            Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                    <div class="pt30">
+                        <div class="catland_found" style="font-size: 16px;">
+                            Сначала 
+                            <a class="ui button green mini choose_cat cat_order" order="rating">Лучшие</a>
+                            <a class="ui button mini choose_cat cat_order" order="cheap">Дешевые</a>
+                            <a class="ui button mini choose_cat cat_order" order="expensive">Дорогие</a>
                         </div>
-                    </div>
-                </div>
-                <div class="ui grid stackable">
-                    <div class="four wide column no_padding">
-                        <img class="full-w" src="{% static 'images/fon1.png' %}">
-                    </div>
-                    <div class="twelve wide column pt0">
-                        <a href="" style="text-decoration: underline;font-weight: 600;">
-                            OYLA на английском — теперь в Казахстане!
-                        </a>
-                        <div>
-                            Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                        <div class="mt15 schools_list">
+                            {% for school in category.schools.all %}
+                            <div class="full-w ui grid stackable no_margin pb15">
+                                <div class="four wide column" style="height: 170px;">
+                                    <a href="{{school.landing}}">
+                                        {% if school.banners.all|length > 0%}
+                                        <img src="{{school.banners.first.image_banner.url}}" style="height: 100%;" class="full-w">
+                                        {%else%}
+                                        <img src="{% static 'images/fon2.jpeg' %}" style="height: 100%;" class="full-w">
+                                        {%endif%}
+                                    </a>
+                                </div>
+                                <div class="twelve wide column pb0">
+                                    <a href="{{school.landing}}"><b style="font-size: 19px;">{{school.title}}</b></a>
+                                    <div class="mt15" style="font-size: 15px">
+                                        <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
+                                    </div>
+                                    <div class="mt15">
+                                        {{school.content}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui divider full-w no_margin"></div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
---> </div>
+    <!--             <div class="four wide column pr0 pl0 not_in_mobile">
+                <div class="ui segment" style="padding-top: 30px;">
+                    <div class="ui grid stackable">
+                        <div class="four wide column no_padding">
+                            <img class="full-w" src="{% static 'images/fon1.png' %}">
+                        </div>
+                        <div class="twelve wide column pt0">
+                            <a href="" style="text-decoration: underline;font-weight: 600;">
+                                OYLA на английском — теперь в Казахстане!
+                            </a>
+                            <div>
+                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid stackable">
+                        <div class="four wide column no_padding">
+                            <img class="full-w" src="{% static 'images/fon1.png' %}">
+                        </div>
+                        <div class="twelve wide column pt0">
+                            <a href="" style="text-decoration: underline;font-weight: 600;">
+                                OYLA на английском — теперь в Казахстане!
+                            </a>
+                            <div>
+                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui grid stackable">
+                        <div class="four wide column no_padding">
+                            <img class="full-w" src="{% static 'images/fon1.png' %}">
+                        </div>
+                        <div class="twelve wide column pt0">
+                            <a href="" style="text-decoration: underline;font-weight: 600;">
+                                OYLA на английском — теперь в Казахстане!
+                            </a>
+                            <div>
+                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    --> 
+
+
+    </div>
+
 </div>
+    <div class="pt15 pb30" style="background-color: #4a4a4a;text-align: center;color: #fff;">
+        <img src="{% static 'images/logo_clean.jpeg' %}" style="width: 200px;">
+        <div class="ui grid stackable">
+            <div class="four wide column">
+            </div>
+            <div class="four wide column" style="text-align: left;">
+                <div style="line-height: 30px">
+                    <b>Контакты</b>
+                    <br>
+                    Телефон: <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
+                    <br>
+                    Email: aaa.academy.kz@gmail.com
+                </div>
+            </div>
+            <div class="four wide column pt30" style="text-align: center;">
+                <a href="{% url 'main:about' %}" class="ui button  green" style="width: 190px;">Стать партнером</a>
+            </div>
+            <div class="two wide column">
+            </div>
+        </div>
+        <div class="mt15" style="color: grey;font-size: 11px;">
+            <i>made by </i> <a href="" style="text-decoration: underline;color: grey;">Kuanysh Oteu</a>
+        </div>
+        <div class="mt15">
+            &nbsp;© 2019. Все права защищены.            
+        </div>
+    </div>
+<span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
 <span style="display: none;" class="data" id="{{category.id}}" url="{% url 'main:cat_filter' %}"></span>
-<link rel="stylesheet" href="{% static 'css/price-slider.css' %}">
 <script src="{% static 'js/price-slider.js' %}"></script>
-<script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
-<script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>
-<script type="text/javascript" src="{% static 'js/dragmap.js' %}"></script>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
+    type="text/javascript"></script>
+<style type="text/css">
+    .ymaps-2-1-74-controls__control {
+        right: 10px !important;
+        left: auto !important;
+    }
+    .ymaps-2-1-74-search {
+        display: none;
+    }
+    .ymaps-2-1-74-traffic {
+        display: none;
+    }
+    .ymaps-2-1-74-listbox__button {
+        display: none;
+    }
+    .filter {
+        padding-right: 0 !important;
+        width: 180px !important;
+    }
+    .filter2 {
+        padding-right: 0 !important;
+        width: 150px !important;
+    }
+</style>
+
 <script type="text/javascript">
+    ymaps.ready(init);
+    function init(){ 
+        var myMap = new ymaps.Map("map", {
+            center: [43.230, 76.92848],
+            zoom: 12.5
+        },{
+            restrictMapArea: [
+                [42.8, 76.02848],
+                [44.25654, 77.92848]
+            ]
+        })
+        firstCollection = new ymaps.GeoObjectCollection(null)
+        {% for school in category.schools.all %}
+            {% for office in school.school_offices.all %}
+                x = parseFloat('{{office.latitude}}')
+                y = parseFloat('{{office.longtude}}')
+                firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
+                    {
+                        iconLayout: 'default#imageWithContent',
+                        iconImageHref: '{% if school in schools %}{%static "images/pointer.png" %}{% else %}{%static "images/pointer.png" %}{% endif %}',
+                        iconImageSize: [20, 30],
+                        iconImageOffset: [-10, -30],
+                        iconContentOffset: [15, 15],
+                    }
+                ));
+            {% endfor %}
+        {% endfor %}
+        var animatedLayout = ymaps.templateLayoutFactory.createClass(
+            '<div class="placemark"></div>',
+            {
+                build: function () {
+                    animatedLayout.superclass.build.call(this);
+                    var element = this.getParentElement().getElementsByClassName('placemark')[0];
+                    // Если метка выбрана, то увеличим её размер.
+                    var size = this.isActive ? 60 : 34;
+                    // При задании для метки своего HTML макета, фигуру активной области
+                    // необходимо задать самостоятельно - иначе метка будет неинтерактивной.
+                    // Создадим фигуру активной области "Круг".
+                    var smallShape = {type: 'Circle', coordinates: [0, 0], radius: size / 2};
+                    var bigShape = {type: 'Circle', coordinates: [0, -30], radius: size / 2};
+                    // Зададим фигуру активной области.
+                    this.getData().options.set('shape', this.isActive ? bigShape : smallShape);
+                    // Если метка выбрана, то зададим класс и запустим анимацию.
+                    if (this.isActive) {
+                        element.classList.add("active");
+                        element.style.animation = ".35s show-big-placemark";
+                    } else if (this.inited) {
+                        element.classList.remove("active");
+                        element.style.animation = ".35s show-small-placemark";
+                    }
+                    if (!this.inited) {
+                        this.inited = true;
+                        this.isActive = false;
+                        // При клике по метке будем перестраивать макет.
+                        this.getData().geoObject.events.add('click', function () {
+                            this.isActive = !this.isActive;
+                            this.rebuild();
+                        }, this);
+                    }
+                }
+            }
+        );        
+        firstCollection.events
+        .add('click', function (e) {
+            show_school(e.get('target').properties._data.id)
+            e.stopPropagation();
+        })
+        .add('mouseenter', function (e) {
+            e.get('target').options.set('preset', 'islands#greenIcon');
+        })
+        .add('mouseleave', function (e) {
+            e.get('target').options.unset('preset');
+        });
+        myMap.geoObjects.add(firstCollection);
+        $( function() {
+            $( "#slider-range" ).slider({
+                range: true,
+                min: 0,
+                max: 100,
+                values: [ 0, 100 ],
+                slide: function( event, ui ) {
+                    $('.show_url').attr('slider_status', '1')
+                    addzero1 = 'тг'
+                    addzero2 = 'тг'
+                    if(ui.values[0] > 0){addzero1 = ' 000тг'}
+                    if(ui.values[1] > 0){addzero2 = ' 000тг'}
+                    $( "#amount" ).val(ui.values[ 0 ]+addzero1 + " - " + ui.values[ 1 ]+addzero2);
+                    $( "#amount" ).attr( "mincost", ui.values[ 0 ])
+                    $( "#amount" ).attr( "maxcost", ui.values[ 1 ])
+                    update_map(myMap);
+                }
+            });
+        });
+    }
+
+    function show_list(){
+        $('.school_landing').hide();
+        $('.school_landing').attr('status', 'hidden')
+        $('.school_list').show()
+    }
+
+    function down_schools(){
+        if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+            $('.map_school_list').attr('style', 'display:inline-block !important;');
+            $('.map_school_list').animate({'top' : "-=200px"});
+            $('.school_list').show()
+            $('.map_school_list').attr('status','down')
+            $('.map_filters_block').removeClass('back-g')
+        }
+    }
+    function lift_schools(){
+        if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
+            map_school_list = $('.map_school_list').offset()
+            if (map_school_list.top != 150){
+                $('.map_school_list').attr('style', 'display:inline-block !important;');
+                $('.map_school_list').animate({'top' : "150px"});
+                $('.map_school_list').attr('status','up')
+                $('.map_filters_block').addClass('back-g')
+            }
+        }
+    }
+    function show_school(id) {
+        url = $('.show_url').attr('url')
+        lift_schools()
+        $('.school_landing').show();
+        $('.school_landing').attr('status', 'shown')
+        $('.loading').show()
+        $.ajax({
+            url: url,
+            data: {
+                'id': id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 1; i <= 5; i++) {
+                    $('#star'+i).attr('style', '')
+                }
+                $('.map_social-list').empty()
+                for (var i = 0; i < data.social_networks.length; i++) {
+                    $('<li class="map_social-item"> <a class="map_social-item-link" href="'+data.social_networks[i][0]+'"> <i class="icon '+data.social_networks[i][1]+'"></i>'+data.social_networks[i][1]+'</a> </li>').appendTo('.map_social-list');
+                }
+                $('.map_sameorg-item').show()
+                $('.wright_review').hide()
+                $('.thanks_review').hide()
+                $('#addvert'+id).hide()
+                $('.school_name_big').text(data.title)
+                $('.school_worktime_landing').text(data.worktime)
+                $('.school_address_landing').text(data.address)
+                $('.school_phone_landing').text(data.phone+'...')
+                $('.map_photo-wrapper').attr('href', data.landing_url)
+                $('.save_review').attr('url', data.review_url)
+                $('.map_worktime_main-status').text(data.is_open)
+                if (data.is_open == 'Открыто') {
+                    $('.map_worktime_main-status').attr('style', 'color:green')
+                }
+                else{
+                    $('.map_worktime_main-status').attr('style', 'color:#c86478;')                    
+                }
+                if (data.banner){
+                    $('.map_photo-wrapper').attr('style', 'background-image:url('+data.banner+');')                    
+                }
+                if (data.site == '') {
+                    $('.map_site').hide()
+                }
+                else{
+                    $('.map_site-link').text(data.site)
+                }
+                $('.all_phones').empty()
+                for (var i = 0; i < data.phones.length; i++) {
+                    $('<span class="school_phone_landing">'+data.phones[0]+'</span><br>').appendTo('.all_phones')
+                }
+                comma=', '
+                $('.map_aboutpayment-text').empty()
+                for (var i = 0; i < data.subjects.length; i++) {
+                    if(i == data.subjects.length-1){comma = ''}
+                    $('<span>'+data.subjects[i]+comma+'</span>').appendTo('.map_aboutpayment-text')
+                }
+                $('.map_aboutpayment-cost').empty()
+                if (data.average_cost > 0) {
+                    $('.map_aboutpayment_cost_cont').show()
+                    $('<span>'+data.average_cost+' тенге</span>').appendTo('.map_aboutpayment-cost');
+                }
+                else{
+                    $('.map_aboutpayment_cost_cont').hide()                    
+                }
+                end='ов'
+                if(data.offices == 1){end=''}
+                else if(data.offices % 10 < 5 && parseInt((data.offices % 100)/10) != 1 && data.offices > 0){end='а'}
+                $('.map_address-subtitle').text(data.offices + ' филиал'+end)
+                $('.map_other-info-subtext2').text(data.region)
+                $('#school_landing').show()
+                $('.loading').hide()
+            }
+        })
+    }
+    function school_div(id) {
+        show_school(id)
+    }
+
     $('.choose_cat').click(function(e) {
         if ($(this).attr('status') == 'chosen') {
             $(this).removeClass('green')
@@ -178,12 +436,20 @@
         }
         ids = ''
         $('.choose_cat.green').each(function() {
-            ids += $(this).attr('id') + 'p'
+            if ($(this).attr('id')) {
+                ids += $(this).attr('id') + 'p'
+            }
         })
         url = $('.data').attr('url')
         id = $('.data').attr('id')
-        mincost = $( "#amount" ).attr( "mincost")
-        maxcost = $( "#amount" ).attr( "maxcost")
+        mincost = $( "#amount" ).attr("mincost")
+        maxcost = $( "#amount" ).attr("maxcost")
+        order = ''
+        if ($(this).attr('order')) {
+            $('.cat_order').removeClass('green')
+            $(this).addClass('green')
+            order = $('.cat_order.green').attr('order')
+        }
         $('.loading').show()
         $.ajax({
             url: url,
@@ -192,6 +458,7 @@
                 'maxcost':maxcost,
                 'id':id,
                 'ids':ids,
+                'order':order,
             },
             dataType: 'json',
             success: function (data) {

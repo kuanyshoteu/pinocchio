@@ -44,4 +44,9 @@ class BugModelAdmin(admin.ModelAdmin):
         model = Bug
 admin.site.register(Bug, BugModelAdmin)
 
-
+class DiscountSchoolModelAdmin(admin.ModelAdmin):
+    list_display = ['id',"title", 'school', 'amount', 'discount_type']
+    list_display_links = ["title"]
+    class Meta:
+        model = DiscountSchool
+admin.site.register(DiscountSchool, DiscountSchoolModelAdmin)

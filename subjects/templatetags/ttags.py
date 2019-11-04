@@ -13,6 +13,13 @@ def remove_space(title):
     return title.replace(' ', '_')
 
 @register.filter
+def squad_nms_sum(squad):
+    res = 0
+    for nm in squad.need_money.all():
+        res += nm.money
+    return res
+
+@register.filter
 def get_filters(subject):
     school = subject.school
     subject_categories = subject.category.all()
