@@ -2097,6 +2097,9 @@ a{
 .school_list{
   overflow-y: scroll;height: 100%;
 }
+.back_to_schools:hover{
+  background-color: lightgrey;
+}
 @media screen and (min-width: 900px){
   .mapdivider{
     display: none;
@@ -2105,6 +2108,7 @@ a{
       z-index: 3000;
       left: 22%;
       cursor: pointer;
+      background-color: #f1f1f1;
     }
     .mapf{
       margin: 0 10px;
@@ -2406,6 +2410,7 @@ a{
     position: fixed;
     z-index: 3000;
     left: 88%;
+    background-color: #f1f1f1;
   }  
   .school_landing{
     position: absolute;

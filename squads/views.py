@@ -114,19 +114,22 @@ def squad_update(request, slug=None):
     change_img = False
     change_title = False
     change_content = False
-    print('************** form ', form.errors)
     if form.is_valid():
-        print('0')
         old_start_date = instance.start_date
         old_title = instance.title
         old_content = instance.content
         instance = form.save(commit=False)
-        start_date = datetime.datetime.strptime(request.POST.get('start'), "%Y-%m-%d").date()
-        end_date = datetime.datetime.strptime(request.POST.get('end'), "%Y-%m-%d").date()
+        start = request.POST.get('start')
+        end = request.POST.get('end')
+        if start == '':
+            start = timezone.now().strftime("%Y-%m-%d")
+        if end == '':
+            end = timezone.now().strftime("%Y-%m-%d")
+        start_date = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        end_date = datetime.datetime.strptime(end, "%Y-%m-%d").date()
         if old_title != instance.title:
             change_title = True
         if old_content != instance.content:
-            print('1')
             change_content = True
         if instance.start_date != start_date:
             change_time = True
@@ -890,3 +893,37 @@ def set_student_discounts(request):
             hisnm.discount_school.add(this_disc)
             add = True
     return JsonResponse({"add":add})
+
+def move_money(request):
+    profile = get_profile(request)
+    school = profile.schools.first()
+    only_managers(profile)
+    ok = False
+    if request.GET.get('id') and request.GET.get('from') and request.GET.get('to') and request.GET.get('amount'):
+        student = Profile.objects.get(id = int(request.GET.get('id')))
+        card = student.card.get_or_create(school=school)[0]
+        need_money_from = card.need_money.get(id=int(request.GET.get('from')))
+        need_money_to = card.need_money.get(id=int(request.GET.get('to')))
+        squad1 = need_money_from.squad
+        squad2 = need_money_to.squad
+        school1 = squad1.school
+        school2 = squad2.school
+        if school1 != school and school2 != school:
+            return Http404
+
+        amount = int(request.GET.get('amount'))
+        if amount <= need_money_from.money:
+            need_money_from.money -= amount
+            need_money_to.money += amount
+            need_money_from.save()
+            need_money_to.save()
+            ok = True
+        else:
+            ok = 'NotEnouph'
+
+    data = {
+        "ok":ok,
+        "from":need_money_from.money,
+        "to":need_money_to.money
+    }
+    return JsonResponse(data)

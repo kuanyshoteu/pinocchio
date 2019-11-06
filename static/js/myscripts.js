@@ -1,3 +1,43 @@
+    $('.move_money_send').click(function(e) {
+        from = $('.move_money_from').val()
+        to = $('.move_money_to').val()
+        amount = $('.move_money_amount').val()
+        id = $(this).attr('id')
+        $('.move_money_loading').show()
+        url = $(this).attr('url')
+        $('.move_money_success').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'from':from,
+                'to':to,
+                'amount':amount,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok == 'NotEnouph') {
+                }
+                else if (data.ok == true){
+                    $('.move_money_loading').hide()
+                    $('.move_money_success').show()
+                    $('.nm_money'+from).text(data.from)
+                    $('.nm_money'+to).text(data.to)
+                }
+            }
+        })        
+    })
+    $('.change_show_type').change(function(e) {
+        checked = $(this).prop('checked')
+        if (checked) {
+            $('.map_show').show()
+            $('.list_show').hide()
+        } 
+        else{
+            $('.list_show').show()
+            $('.map_show').hide()
+        }
+    })
     $('.dis').click(function(e) {
         student_id = $('.discount_student_name').attr('id')
         url = $('.instance_data').attr('set_student_discounts')

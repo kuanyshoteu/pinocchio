@@ -17,6 +17,9 @@
             <div class="mt10">
                 <a class="ui button mini full-w" onclick="$('.payment_history').modal('show')">История оплаты</a>
             </div>
+            <div class="mt10">
+                <a class="ui button mini full-w" onclick="$('.move_money').modal('show')">Перевод денег</a>
+            </div>
             <div class="ui modal payment_history">
                 <i class="close icon"></i>
                 <div class="content">
@@ -42,6 +45,52 @@
                     </table>
                 </div>
             </div>
+            <div class="ui modal move_money">
+                <i class="close icon"></i>
+                <div class="content">
+                    <div class="text-center mb30">
+                        <b>Перевод денег среди своих счетов</b>
+                    </div>
+                    <form class="ui form" style="font-weight: 600;">
+                        <div class="ui grid">
+                            Из счета группы:
+                            <select class="move_money_from ml15" style="width: 250px;">
+                                {% for nm in profile|get_bills:hisprofile %}
+                                <option value="{{ nm.id }}">
+                                    {{ nm.squad.title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="ml15 mr15">в счет группы:</div>
+                            <select class="move_money_to" style="width: 250px;">
+                                {% for nm in profile|get_bills:hisprofile %}
+                                <option value="{{ nm.id }}">
+                                    {{ nm.squad.title }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <br><br>
+                            <div style=" margin: 15px auto;width: 400px;">
+                                <div style="display: inline-block;" class="mr15">Сумму:</div>
+                                <input type="number" name="" class="move_money_amount" style="width: 250px;">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="text-center">
+                        <div class="move_money_loading loading" style="display: none;">
+                          <div class="animation"><div class="circle one"></div></div>
+                          <div class="animation"><div class="circle two"></div></div>
+                          <div class="animation"><div class="circle three"></div></div>
+                          <div class="animation"><div class="circle four"></div></div>
+                          <div class="animation"><div class="circle five"></div></div>
+                          <div class="animation"><div class="circle six"></div></div>
+                        </div>
+                        <a class="ui button small blue move_money_send" url="{% url 'squads:move_money' %}" id="{{hisprofile.id}}">Перевести</a>
+                        <br>
+                        <div style="width: 400px;margin: 15px auto;display: none;" class="highlight move_money_success">Перевод проведен успешно</div>
+                    </div>
+                </div>
+            </div>
 
 
         </div>
@@ -51,13 +100,13 @@
                 <div class="wide column" style="min-width: 33%;border-right: 1px lightgrey solid;">
                         <b>{{ nm.squad.title }}</b>
                         <div>
-                            На счету: {{ nm.money }}
+                            <b>На счету:</b> <span class="nm_money{{nm.id}}">{{ nm.money }}</span>
                             <br>
-                            Оплата за уроки: {{ nm.lesson_bill }}
+                            <b>Оплата за уроки:</b> {{ nm.lesson_bill }}
                             <br>
-                            Оплата за месяц: {{ nm.bill }}
+                            <b>Оплата за месяц:</b> {{ nm.bill }}
                             <br>
-                            Скидки:
+                            <b>Скидки:</b>
                             {% for dis in nm.discount_school.all %}
                             <br>
                             <div class="ui button mini green mt5 show_hint_schedule">{{dis.title}}</div>
