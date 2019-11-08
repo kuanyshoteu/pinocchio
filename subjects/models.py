@@ -88,6 +88,8 @@ class Subject(models.Model):
     slogan = models.CharField(max_length=250, default='')
     number_of_materials = models.IntegerField(default=0, null=True)
     filter_course_connect = models.ManyToManyField(Skill, related_name='filter_course_connect') 
+    public = models.BooleanField(default=True)
+    public_cost = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['id']

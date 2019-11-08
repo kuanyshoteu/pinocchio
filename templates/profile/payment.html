@@ -106,21 +106,33 @@
                             <br>
                             <b>Оплата за месяц:</b> {{ nm.bill }}
                             <br>
-                            <b>Скидки:</b>
-                            {% for dis in nm.discount_school.all %}
-                            <br>
-                            <div class="ui button mini green mt5 show_hint_schedule">{{dis.title}}</div>
-                            <div class="hint_schedule" style="display: none;"> 
-                                <div class="ui segment full-w" style="position: absolute;background-color: #4a4a4a;color: #fff;"> 
-                                    {{dis.amount}} 
-                                    {%if dis.discount_type == 'percent' %}
-                                        процентов
-                                    {%else%}
-                                        тенге
-                                    {%endif%}
-                                </div> 
+                            <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
+                            <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
+                                <i class="close icon"></i>
+                                <div class="content">
+                                    <b class="text-center">
+                                        Скидки <span class="discount_student_name" id=""></span> в группе {{nm.squad.title}}
+                                    </b>
+                                    <br>
+                                    Нажмите на те скидки, которые нужно дать студенту
+                                    <br>
+                                    Зелеными отмечены те скидки, которые есть у студента
+                                    <div class="mt15 student_discounts_list">
+                                        {% for dis in nm.squad.school.discounts.all %}
+                                        <a class="dis{{dis.id}} dis ui button mini show_hint_schedule" sq_id="{{nm.squad.id}}" id="{{dis.id}}">
+                                            <b>{{dis.title}}</b>
+                                            <br>
+                                            {{dis.amount}} 
+                                            {%if dis.discount_type == 'percent' %}
+                                                процентов
+                                            {%else%}
+                                                тенге
+                                            {%endif%}
+                                        </a> 
+                                        {% endfor %}
+                                    </div>
+                                </div>
                             </div>
-                            {% endfor %}
 
                         </div>
 <!--                     <form class="ui form">
@@ -151,6 +163,8 @@
         </div>
     </div>
 </div>
+<span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}"></span>
+
 <style type="text/css">
     .border{
         border: 1px solid lightgrey;

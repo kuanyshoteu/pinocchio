@@ -511,3 +511,65 @@ def card_add_hashtag(card, hashtag):
 
 def card_remove_hashtag(card, hashtag):
     card.hashtags.remove(hashtag)
+
+def make_public(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('checked'):
+        subject = Subject.objects.get(id=int(request.GET.get('id')) )
+        school = subject.school
+        is_in_school(profile, school)
+        if request.GET.get('checked') == 'false':
+            subject.public = False
+        else:
+            subject.public = True
+        subject.save()
+
+    data = {
+    }
+    return JsonResponse(data)
+def make_public_cost(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('checked'):
+        subject = Subject.objects.get(id=int(request.GET.get('id')) )
+        school = subject.school
+        is_in_school(profile, school)
+        if request.GET.get('checked') == 'false':
+            subject.public_cost = False
+        else:
+            subject.public_cost = True
+        subject.save()
+
+    data = {
+    }
+    return JsonResponse(data)
+
+from django.contrib.postgres.search import TrigramSimilarity
+def searching_subjects(request):
+    profile = get_profile(request)
+    school = profile.schools.first()
+    only_managers(profile)
+
+    text = request.GET.get('text')
+    kef = 1
+    res = []
+    if len(text) > 4:
+        kef = 4
+    if text != '':
+        similarity=TrigramSimilarity('title', text)        
+        subjects = school.school_subjects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for subject in subjects:
+            image_url = ''
+            if subject.image_icon:
+                image_url = subject.image_icon.url
+            res.append([subject.title, subject.get_absolute_url(), image_url])
+            i+=1
+            if i == 4:
+                break
+
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)

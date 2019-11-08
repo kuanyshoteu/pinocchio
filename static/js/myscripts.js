@@ -38,10 +38,40 @@
             $('.map_show').hide()
         }
     })
+    $('.make_public').click(function(e) {
+        checked = $(this).prop('checked')
+        id = $(this).attr('id')
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'checked':checked,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        })        
+    })
+    $('.make_public_cost').click(function(e) {
+        checked = $(this).prop('checked')
+        id = $(this).attr('id')
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'checked':checked,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        })        
+    })
     $('.dis').click(function(e) {
         student_id = $('.discount_student_name').attr('id')
         url = $('.instance_data').attr('set_student_discounts')
-        squad_id = $('.instance_data').attr('id')
+        squad_id = $(this).attr('sq_id')
         this_ = $(this)
         id = this_.attr('id')
         $.ajax({
@@ -54,9 +84,11 @@
             dataType: 'json',
             success: function (data) {
                 if (data.add) {
+                    console.log('add')
                     this_.addClass('green')                    
                 }
                 else{
+                    console.log('remove')
                     this_.removeClass('green')                    
                 }
             }
@@ -65,8 +97,8 @@
     $('.get_student_discounts').click(function(e) {
         student_id = $(this).attr('id')
         url = $('.instance_data').attr('get_student_discounts')
-        squad_id = $('.instance_data').attr('id')
-        $('.student_discounts_modal').modal('show')
+        squad_id = $(this).attr('sq_id')
+        $('.student_discounts_modal'+squad_id).modal('show')
         $.ajax({
             url: url,
             data: {
@@ -911,6 +943,11 @@
             }
             $(this).removeClass('wait' + day);
         });
+        if ($('.dataconst').attr('today')) {
+            $('.schedule_body').animate({
+                scrollLeft: $("#constday" + today).offset().left-80
+            }, 'fast');            
+        }
         return 'ended'
     }
     $('.crm_option').on('change', function(e) {

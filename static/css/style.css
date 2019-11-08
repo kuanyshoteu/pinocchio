@@ -33,20 +33,6 @@
 .rotateplus{
   transform: rotate(90deg);
 }
-.oveflowx_h{
-  overflow-x: hidden !important;
-  cursor: row-resize;
-}
-.oveflowx_a{
-  cursor: col-resize;
-  overflow-x: auto;
-}
-.oveflowy_h{
-  overflow-y: hidden !important;
-}
-.oveflowy_a{
-  overflow-y: auto;
-}
 .lecture_const{
   line-height: 12px;
   overflow: hidden;
@@ -2222,7 +2208,8 @@ a{
       width: 50%;
     }
     .schoolLanding__content-teacher {
-      width: 20%;
+      width: calc(20%-10px);
+      display: inline-block;
     }
     .ymaps-2-1-74-map.ymaps-2-1-74-i-ua_js_yes.ymaps-2-1-74-map-bg.ymaps-2-1-74-islets_map-lang-ru{
         height: 80% !important;
@@ -2251,6 +2238,21 @@ a{
       padding-left: 50px !important;
       padding-right: 50px !important;
     }
+    .oveflowx_h{
+      overflow-x: hidden !important;
+      cursor: row-resize;
+    }
+    .oveflowx_a{
+      cursor: col-resize;
+      overflow-x: auto;
+    }
+    .oveflowy_h{
+      overflow-y: hidden !important;
+    }
+    .oveflowy_a{
+      overflow-y: auto;
+    }
+    
 }
 .back-w{
   background-color: #fff;
@@ -2301,6 +2303,7 @@ a{
     }
     .schoolLanding__content-teacher {
       width: 50%;
+      display: inline-block;      
     }
     .schoolLanding__content-services__item-left {
       display: flex;

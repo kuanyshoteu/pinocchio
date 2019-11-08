@@ -10,24 +10,21 @@
             {% include 'left_menu.html' %}
             <div class="wide column" id="list">
                 <div class="ui grid stackable" id="updater">
-                    <div class="twelve wide column" style="padding-right: 0">
-                        <div class="ui segment" style="background-color: #fafbfc;margin-bottom: 0; padding: 18px;">
-                            <a class="open_option current_option" name='allsubjects'>
-                                Все курсы 
-                                <span style="font-size: 13px;color: #939393;">{{ subjects|length }}</span>
-                            </a>
-                            <a class="open_option other_option" name="mysubjects">
-                                Мои курсы 
-                                <span style="font-size: 13px;color: #939393;">
-                                    {% if is_trener %}
-                                        {{ profile.subject_trener.all|length }}
-                                    {% else %}
-                                        {{ profile.subjects.all|length }}
-                                    {% endif %}
-                                </span>
-                            </a>
+                    <div class="twelve wide column pr0">
+                        <div class="ui segment mb0" style="padding: 18px;">
+                            <div style="font-size: 16px;display: flex;">
+                                <div class="mt5" style="display: flex;">
+                                    Курсы 
+                                    <div class="ml5" style="color: #939393;">{{ subjects|length }}</div>
+                                </div>
+                                <form class="ui form mb0" style="width: 250px;">
+                                    <textarea class="mb0 ml15 start_searching_subjects" placeholder="Поиск курсов" url="{% url 'subjects:searching_subjects' %}" style="height: 32px;overflow: hidden;"></textarea>
+                                </form>
+                            </div>
+                            <div class="ui segment show_search_subjects mt5 no_padding" style="display: none;position: absolute;z-index: 1000;width: 250px;margin-left: 80px;">
+                            </div>
                         </div>
-                        <div class="ui option grid stackable" id="allsubjects" style="margin-top: 0;">
+                        <div class="ui option grid stackable mt0" id="allsubjects">
                             {% for sq in subjects %}
                                 {% include 'subjects/subject_list_info.html' %}
                             {% endfor %}
@@ -35,17 +32,6 @@
                             <div class="eight wide column" style="padding: 0">
                                 <a class="ui button full-w" style="height: 78px;line-height: 55px" href='{% url "subjects:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>+ Создать новый курс</a>
                             </div>
-                            {% endif %}
-                        </div>
-                        <div class="ui segment option" id="mysubjects" style="margin-top: 0; display: none;">
-                            {% if is_manager %}
-                                {% for sq in profile.subject_trener.all %}
-                                    {% include 'subjects/subject_list_info.html' %}
-                                {% endfor %}
-                            {% else %}
-                                {% for sq in profile.subjects.all %}
-                                    {% include 'subjects/subject_list_info.html' %}
-                                {% endfor %}
                             {% endif %}
                         </div>
                     </div>

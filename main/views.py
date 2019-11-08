@@ -576,7 +576,6 @@ def search(request):
     res_profiles = []
     res_subjects = []
     res_squads = []
-    res_courses = []
     text = request.GET.get('text')
     kef = 1
     if len(text) > 4:
@@ -587,7 +586,6 @@ def search(request):
         similarity=TrigramSimilarity('title', text)
         subjects = school.school_subjects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-        courses = school.school_courses.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
         for profile in profiles:
             image_url = ''
@@ -615,21 +613,11 @@ def search(request):
             i+=1
             if i == 4:
                 break
-        i = 0
-        for course in courses:
-            image_url = ''
-            if course.image:
-                image_url = course.image.url
-            res_courses.append([course.title, course.get_absolute_url(), image_url])
-            i+=1
-            if i == 4:
-                break
 
     data = {
         "res_profiles":res_profiles,
         "res_subjects":res_subjects,
         "res_squads":res_squads,
-        "res_courses":res_courses,
     }
     return JsonResponse(data)
 
@@ -1204,35 +1192,11 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    # res = set()
-    # IELTS = SubjectCategory.objects.filter(title="IELTS")
-    # res = chain(IELTS, res)
-    # TOEFL = SubjectCategory.objects.filter(title="TOEFL")
-    # res = chain(TOEFL, res)
-    # langs = SubjectCategory.objects.filter(title__icontains="язык")
-    # res = chain(langs, res)
-    # math = SubjectCategory.objects.filter(title="Математика")
-    # res = chain(math, res)
-    # logic = SubjectCategory.objects.filter(title="Логика")
-    # res = chain(logic, res)
-    # for sc in res:
-    #     options = SchoolFilterOption.objects.filter(title=sc.title)
-    #     for subject in sc.category_subjects.all():
-    #         school = subject.school
-    #         subject.filter_options.add(*options)
-    #         school.filter_options.add(*options)
-    # schools = School.objects.all()
-    # for j in JobCategory.objects.all():
-    #     j.schools.add(*schools)
-
-    # allt = Profession.objects.get(title='Teacher').workers.all()
-    # tr = JobCategory.objects.get(id=2)
-    # tr.job_workers.add(*allt)
-    school = School.objects.get(title='PWS')
-    cabinet2 = school.cabinets.get(title='2')
-    cabinet1 = school.cabinets.filter(title='1').first()
-    lects = school.school_lectures.all().exclude(cabinet=cabinet2)
-    cabinet1.cabinet_lecture.add(*lects)
+    for squad in Squad.objects.all():
+        school = squad.school
+        if len(school.school_offices.all()) == 1:
+            squad.office = school.school_offices.first()
+            squad.save()
 
 
     print('moderator_end_code')

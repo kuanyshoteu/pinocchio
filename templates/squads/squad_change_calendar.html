@@ -76,6 +76,7 @@
             {% for lecture in instance|constant_schedule_lectures %}
                 <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}} squad_lesson{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.subject.color_back == ''%}#313a57{%else%}{{ lecture.7.subject.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
                     {{lecture.1}} 
+                        <span class="redx">✖</span>                    
                 </div>
                 <div id="{{lecture.6}}" class="hint_schedule lecture_const" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
                     <div class="ui segment" style="color: #222;width: 300px;">
@@ -125,7 +126,7 @@
                                 <i class="icon check green"></i>
                             </div>
                         </div>
-                        <div style="text-align: right;">
+                        <div class="text-center">
                             <a class="ui button mini red delete_squad_lesson" id="{{lecture.7.id}}">Удалить урок из расписания</a>
                         </div>
                     </div>

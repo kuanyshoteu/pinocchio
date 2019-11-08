@@ -32,4 +32,5 @@ urlpatterns = [
     url(r'^api/get_student_discounts/$', get_student_discounts, name='get_student_discounts'),
     url(r'^api/set_student_discounts/$', set_student_discounts, name='set_student_discounts'),
     url(r'^api/move_money/$', move_money, name='move_money'),
+    url(r'^api/searching_groups/$', searching_groups, name='searching_groups'),
 ]

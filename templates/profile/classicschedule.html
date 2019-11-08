@@ -87,5 +87,13 @@
         </div>
     </div>   
 </form>
-<span class="dataconst" page_mode="norm" number="0" changed="no" interval="{{interval}}" chosendays=""
+<span class="dataconst" page_mode="norm" number="0" changed="no" interval="{{interval}}" chosendays="" today="{{today}}"
 max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span>
+<script type="text/javascript">
+    today = parseInt($('.dataconst').attr('today')) - 1
+    console.log(today)
+    $('#constday'+today).removeClass('dark_grey')
+    $('#constday'+today).addClass('green')
+
+
+</script>

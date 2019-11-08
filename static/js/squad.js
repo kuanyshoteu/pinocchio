@@ -83,6 +83,64 @@ $(document).ready(function () {
             })
         }
     });
+    $('.start_searching_groups').on('input', function(e) {
+        text = $(this).val()
+        url = $(this).attr('url')
+        if (text.length == 0) {
+            $('.show_search_groups').hide() 
+        }
+        else{
+            $.ajax({
+                url: url,
+                data: {
+                    'text':text,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.show_search_groups').show()
+                    $('.show_search_groups').empty()
+                    for (var i = 0; i < data.res.length; i++) {
+                        title = data.res[i][0]
+                        url = data.res[i][1]
+                        image = data.res[i][2]
+                        if (image == '') {
+                            image = '/static/images/squad.png'
+                        }
+                        $('<div class="full-w "><a style="display:flex" href="'+url+'" class="full-w search-item"> <img class="search-group-img" src="'+image+'" alt="photo"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_groups')
+                    }
+                }
+            })
+        }
+    });
+    $('.start_searching_subjects').on('input', function(e) {
+        text = $(this).val()
+        url = $(this).attr('url')
+        if (text.length == 0) {
+            $('.show_search_subjects').hide() 
+        }
+        else{
+            $.ajax({
+                url: url,
+                data: {
+                    'text':text,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.show_search_subjects').show()
+                    $('.show_search_subjects').empty()
+                    for (var i = 0; i < data.res.length; i++) {
+                        title = data.res[i][0]
+                        url = data.res[i][1]
+                        image = data.res[i][2]
+                        if (image == '') {
+                            image = '/static/images/squad.png'
+                        }
+                        $('<div class="full-w "><a style="display:flex" href="'+url+'" class="full-w search-item"> <img class="search-group-img" src="'+image+'" alt="photo"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_subjects')
+                    }
+                }
+            })
+        }
+    });
     $('.det').on('click', function(e) {
         this_ = $(this)
         console.log('work0')

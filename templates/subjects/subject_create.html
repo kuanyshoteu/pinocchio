@@ -107,6 +107,18 @@
 			        					Цвет:
 			        					<textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
 									</div>
+                                    <div class="eight wide column">
+                                        <div class="ui toggle checkbox">
+                                          <input class="make_public" id="{{instance.id}}" type="checkbox" {% if instance.public %}checked{% endif%} url="{%url 'subjects:make_public'%}" name="public">
+                                          <label>Показывать курс в поиске</label>
+                                        </div>                                        
+                                    </div>
+                                    <div class="eight wide column">
+                                        <div class="ui toggle checkbox">
+                                          <input class="make_public_cost" id="{{instance.id}}" type="checkbox" {% if instance.public_cost %}checked{% endif%} url="{%url 'subjects:make_public_cost'%}" name="public">
+                                          <label>Показывать стоимость в поиске</label>
+                                        </div>                                        
+                                    </div>
 								</div>
 			    			</div>
 						</div>

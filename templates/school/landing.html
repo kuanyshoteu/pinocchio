@@ -189,30 +189,34 @@
       </div>
       <div class="ui divider light full-w"></div>
       {% for course in school.school_subjects.all %}
-      <section class="schoolLanding__content-services__item {%for cat in course.category.all%}category{{ cat.id }} {%endfor%} categoryall ui grid">
-        <div class="no_padding_side schoolLanding__content-services__item-left">
-              <h2 class="schoolLanding__content-services__item-title no_padding no_margin">{{ course.title }}</h2>
-              <div class="not_in_mobile schoolLanding__content-services__item-time">{{ course.content }}</div>
-              <div class="schoolLanding__content-services__item-price no_padding">{% if course.cost > 0 %}{{ course.cost }} тенге{% endif %}</div>
-        </div>
-        <div class="schoolLanding__content-services__item-right no_padding_side">
-          <a style="padding: 5px 7px 7px 0;" class="in_mobile ui button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">
-              <i class="right arrow icon" style="color: #fff;"></i>
-          </a>
-          <a class="not_in_mobile ui right labeled icon button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">
-              {%  if course.cost > 0 %}Оставить заявку на курс{% else %}Уточнить стоимость{% endif %}
-              <i class="right arrow icon" style="color: #fff;"></i>
-          </a>
-          <div class="ui label ok_zaiavka{{course.id}}" style="display: none;">
-              <i class="check icon green"></i> Заявка оставлена
-          </div>
-        </div>
-        <div class="ui divider light full-w"></div>
-      </section>
+      {% if course.public %}
+          <section class="schoolLanding__content-services__item {%for cat in course.category.all%}category{{ cat.id }} {%endfor%} categoryall ui grid">
+            <div class="no_padding_side schoolLanding__content-services__item-left">
+                  <h2 class="schoolLanding__content-services__item-title no_padding no_margin">{{ course.title }}</h2>
+                  <div class="not_in_mobile schoolLanding__content-services__item-time">{{ course.content }}</div>
+                  {% if course.public_cost %}
+                  <div class="schoolLanding__content-services__item-price no_padding">{% if course.cost > 0 %}{{ course.cost }} тенге{% endif %}</div>
+                  {% endif %}
+            </div>
+            <div class="schoolLanding__content-services__item-right no_padding_side">
+              <a style="padding: 5px 7px 7px 0;" class="in_mobile ui button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">
+                  <i class="right arrow icon" style="color: #fff;"></i>
+              </a>
+              <a class="not_in_mobile ui right labeled icon button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">
+                  {%  if course.cost > 0 %}Оставить заявку на курс{% else %}Уточнить стоимость{% endif %}
+                  <i class="right arrow icon" style="color: #fff;"></i>
+              </a>
+              <div class="ui label ok_zaiavka{{course.id}}" style="display: none;">
+                  <i class="check icon green"></i> Заявка оставлена
+              </div>
+            </div>
+            <div class="ui divider light full-w"></div>
+          </section>
+      {% endif %}
       {% endfor %}
     </div>
       {% for teacher in all_teachers %}
-      <div class="schoolLanding__content-teacher ui segment no_padding">
+      <div class="schoolLanding__content-teacher ui segment no_padding mr10">
         <a href="{{ teacher.get_absolute_url }}">
           <div class="schoolLanding__content-teacher__photo">
             <img src="{% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %}" class="full-w">

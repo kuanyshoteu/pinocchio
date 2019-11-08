@@ -86,6 +86,8 @@ def squad_create(request):
         instance.start_date = timezone.now().date()
         instance.end_date = timezone.now().date()
         instance.school = school
+        if len(school.school_offices.all()) > 0:
+            instance.office = school.school_offices.first()
         instance.save()
         instance.squad_histories.create(action_author=profile,edit='Создал группу '+instance.title)
         return HttpResponseRedirect(instance.get_update_url())
@@ -141,7 +143,6 @@ def squad_update(request, slug=None):
             change_img = True
             if 'squad_banner' in request.FILES:
                 file = request.FILES['squad_banner']
-                print('d',file)
                 instance.image_banner = file
             if 'squad_icon' in request.FILES:
                 file = request.FILES['squad_icon']
@@ -357,19 +358,16 @@ def remove_student_from_squad(student, squad):
     squad.students.remove(student)
     school = squad.school
     other_squads = student.squads.all().exclude(id=squad.id)
-    print('hissquads',other_squads)
     other_subjects = Subject.objects.filter(squads__in=other_squads)
     card = student.card.get_or_create(school=school)[0]
     for subject in squad.subjects.all():
         cats = subject.category.all()
         cats = cats.exclude(category_subjects__in=other_subjects)
-        print('cats',cats)
 
         # Subject filter and subject hashtag in crm removing
         student.crm_subject_connect.remove(*cats)
         for cat in cats:
             hs = school.hashtags.filter(title = cat.title.replace(' ', '_'))
-            print(hs[0].title)
             if len(hs) > 0:
                 card.hashtags.remove(hs[0])
         # Money flows
@@ -925,5 +923,35 @@ def move_money(request):
         "ok":ok,
         "from":need_money_from.money,
         "to":need_money_to.money
+    }
+    return JsonResponse(data)
+
+from django.contrib.postgres.search import TrigramSimilarity
+
+def searching_groups(request):
+    profile = get_profile(request)
+    school = profile.schools.first()
+    only_managers(profile)
+
+    text = request.GET.get('text')
+    kef = 1
+    res = []
+    if len(text) > 4:
+        kef = 4
+    if text != '':
+        similarity=TrigramSimilarity('title', text)        
+        squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for squad in squads:
+            image_url = ''
+            if squad.image_icon:
+                image_url = squad.image_icon.url
+            res.append([squad.title, squad.get_absolute_url(), image_url])
+            i+=1
+            if i == 4:
+                break
+
+    data = {
+        "res":res,
     }
     return JsonResponse(data)
