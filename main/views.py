@@ -1188,7 +1188,7 @@ import math
 def upload_cards(request):
     if 'file' in request.FILES:
         x=float('nan')
-        school = School.objects.get(title='loli')
+        school = School.objects.get(id=89)
         file = request.FILES['file']
         data2 = pd.ExcelFile(file)
         datas = pd.read_excel(data2, None)
