@@ -203,6 +203,7 @@ class CRMCard(models.Model):
     extra_phone = models.CharField(max_length=250, default="")
     mail = models.CharField(max_length=250)
     comments = models.CharField(max_length=250)
+    parents = models.CharField(max_length=250, default="")
     timestamp = models.DateTimeField(auto_now_add=True)
     saved = models.BooleanField(default=False)
     was_called = models.BooleanField(default=False)

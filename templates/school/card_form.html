@@ -7,19 +7,24 @@
         <form class="ui form card_form_update_here" method='POST' enctype='multipart/form-data'>{% csrf_token %}
             <span class="wrong_mail_error wrong_mail_error{{card.id}} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
             <div class="ui grid stackable card_form_update">
-                <div class="eight wide column" style="padding-top: 5px;text-align: center;">
+                <div class="third wide column pr0" style="padding-top: 5px;text-align: center;">
                     <div style="height: 10px;"></div>
                     <b>Имя:</b>
                     <textarea class="card_name{{ card.id }}" style="margin-bottom: 8px;" placeholder="Имя">{{ card.name }}</textarea>
                     <b>Телефон:</b>
                     <textarea class="card_phone{{ card.id }}" style="margin-bottom: 8px;" placeholder="Телефон">{{ card.phone }}</textarea>
                 </div>
-                <div class="eight wide column" style="padding-top: 5px;text-align: center;">
+                <div class="third wide column pr0" style="padding-top: 5px;text-align: center;">
                     <div style="height: 10px;"></div>
                     <b>Почта:</b>
                     <textarea class="card_mail{{ card.id }}" style="margin-bottom: 8px;" placeholder="Почта">{{ card.mail }}</textarea>
                     <i>Дополнительный телефон:</i>
                     <textarea class="card_phone_extra{{ card.id }}" style="margin-bottom: 8px;" placeholder="Дополнительный телефон">{{ card.extra_phone }}</textarea>
+                </div>
+                <div class="third wide column" style="padding-top: 5px;text-align: center;">
+                    <div style="height: 10px;"></div>
+                    <b>Родители:</b>
+                    <textarea class="card_parents{{ card.id }}" style="margin-bottom: 8px;" placeholder="Почта">{{ card.parents }}</textarea>
                 </div>
                 <div class="sixteen wide column" style="padding-top: 5px;">
                     <div style="height: 65px;margin-bottom: 0;">

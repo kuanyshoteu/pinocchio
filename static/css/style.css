@@ -1,6 +1,9 @@
 .modal2{
   position: fixed;z-index: 3001;margin-top: 100px;display: none;
 }
+.third.wide.column{
+  width: 33% !important;
+}
 .darker{
   position: fixed;
   background-color: #000;opacity: 0.7;z-index: 3000;

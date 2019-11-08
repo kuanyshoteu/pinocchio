@@ -109,13 +109,17 @@
                                                 @add="move_card({{ column.id }})">
                                             {% if all %}
                                                 {% for card in column|filtercardsall:profile %}
+                                                {%if forloop.counter < 100%}
                                                     {% include 'school/card_details.html' %}                                            
                                                     {% include 'school/card_form.html' %}
+                                                    {%endif%}
                                                 {% endfor %}
                                             {% else %}
                                                 {% for card in column|filtercards:theprofile %}
+                                                 {%if forloop.counter < 100%}
                                                     {% include 'school/card_details.html' %}                                            
                                                     {% include 'school/card_form.html' %}
+                                                    {%endif%}
                                                 {% endfor %}
                                             {% endif %}
                                         </draggable>

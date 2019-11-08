@@ -1184,6 +1184,38 @@ def file_changer(request):
     context = {   
     }
     return render(request, "file_changer.html", context)
+import math
+def upload_cards(request):
+    if 'file' in request.FILES:
+        x=float('nan')
+        school = School.objects.get(title='loli')
+        file = request.FILES['file']
+        data2 = pd.ExcelFile(file)
+        datas = pd.read_excel(data2, None)
+        res = []
+        for key, value in datas.items():
+            data = value
+            for index, row in data.iterrows():
+                comment = ''
+                for i in range(3, len(row)):
+                    s = row[i]
+                    if s:
+                        if isinstance(s, float):
+                            if math.isnan(s):
+                                s = '-'
+                        if s != '-':
+                            comment += str(s) + '; '
+                school.crm_cards.create(
+                    name=row[0],
+                    phone=row[1],
+                    parents=row[2],
+                    comments=comment,
+                    column = CRMColumn.objects.get(id=1)
+                    )
+
+    context = {   
+    }
+    return render(request, "upload_cards.html", context)
 
 def moderator_run_code(request):
     profile = get_profile(request)
@@ -1192,11 +1224,7 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    for squad in Squad.objects.all():
-        school = squad.school
-        if len(school.school_offices.all()) == 1:
-            squad.office = school.school_offices.first()
-            squad.save()
+
 
 
     print('moderator_end_code')
