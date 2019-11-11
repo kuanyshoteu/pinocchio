@@ -465,9 +465,16 @@ def constant_schedule_lectures(squad):
 
 @register.filter
 def constant_profile_lectures(profile):
+    teacher = Profession.objects.get(title = 'Teacher')
+    if teacher in profile.profession.all():
+        squads = profile.hissquads.filter(shown=True)
+    else:
+        squads = profile.squads.filter(shown=True)
+    lectures = Lecture.objects.filter(squad__in=squads).select_related('cell')
+    #lectures = profile.hislectures.select_related('cell')
     interval = 60
     res = []
-    for lecture in profile.hislectures.select_related('cell'):
+    for lecture in lectures:
         hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
         minute = int(lecture.cell.time_period.start.split(':')[1])
         end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8
@@ -479,7 +486,9 @@ def constant_profile_lectures(profile):
 
 @register.filter
 def constant_school_lectures(profile, school):
-    lectures = school.school_lectures.all()
+#    lectures = school.school_lectures.all()
+    squads = school.groups.filter(shown=True)
+    lectures = Lecture.objects.filter(squad__in=squads)
     if profile.skill.crm_subject:
         lectures = lectures.filter(category=profile.skill.crm_subject)
     if profile.skill.crm_cabinet:

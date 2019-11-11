@@ -338,11 +338,6 @@ def change_curator(request):
         else:
             text = 'Установлен учитель '+teacher.first_name+' в группу '+squad.title
         squad.squad_histories.create(action_author=profile,edit=text)
-        for lecture in squad.squad_lectures.all():
-            if oldteacher:
-                remove_person_from_lecture(lecture, oldteacher)
-            add_person_to_lecture(lecture, teacher)
-            lecture.save()
 
     data = {
     }
@@ -401,9 +396,6 @@ def remove_student_from_squad(student, squad, manager_profile):
             nm.save()
 
     student.save()
-    for lecture in squad.squad_lectures.all():
-        remove_person_from_lecture(lecture, student)
-        lecture.save()
     squad.squad_attendances.filter(student=student).delete()
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
@@ -436,9 +428,6 @@ def add_student_to_squad(student, squad, manager_profile):
             nm.save()
 
     school = squad.school
-    for lecture in squad.squad_lectures.all():
-        add_person_to_lecture(lecture, student)
-        lecture.save()
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
         card = card,
@@ -512,28 +501,6 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
                 school.save()
             pass
     return ok_mail
-
-def remove_person_from_lecture(lecture, person):
-    if not person.id in lecture.person_id:
-        lecture.person_id.append(person.id)
-        lecture.person_number.append(1)
-    index = lecture.person_id.index(person.id)
-    number = lecture.person_number[index]
-    if number == 1:
-        lecture.people.remove(person)
-    lecture.person_number[index] -= 1
-    if lecture.person_number[index] < 0:
-        lecture.person_number[index] = 0
-
-def add_person_to_lecture(lecture, person):
-    if person != None:
-        if not person.id in lecture.person_id:
-            lecture.person_id.append(person.id)
-            lecture.person_number.append(0)
-        index = lecture.person_id.index(person.id)
-        number = lecture.person_number[index]
-        lecture.people.add(person)
-        lecture.person_number[index] += 1
 
 def change_office(request, id=None):
     profile = get_profile(request)
@@ -644,9 +611,6 @@ def change_schedule(request, id=None):
                 )
                 lecture.age.add(*ages)
                 lecture.category.add(*categories)
-                lecture.people.add(*subject_students)
-                if squad.teacher:
-                    lecture.people.add(squad.teacher)
         else:
             old_cell = Cell.objects.get(id = int(request.GET.get('old_cell')))
             lecture = Lecture.objects.get(squad=squad,subject=subject,cell=old_cell)
@@ -748,7 +712,7 @@ def change_lecture_cabinet(request):
     only_managers(profile)
     if request.GET.get('cabinet_id') and request.GET.get('lecture_id'):
         lecture = Lecture.objects.get(id=int(request.GET.get('lecture_id')))
-        school = lecture.school
+        school = lecture.squad.school
         is_in_school(profile, school)        
         cabinet = Cabinet.objects.get(id=int(request.GET.get('cabinet_id')))
         lecture.cabinet = cabinet
@@ -818,10 +782,6 @@ def const_create_lectures(request, id=None):
                     office = squad.office,
                     )
                 lecture.save()
-                add_person_to_lecture(lecture, teacher)
-                for student in students:
-                    add_person_to_lecture(lecture, student)
-
                 lecture.category.add(*category)
                 lecture.age.add(*age)
                 lecture.level.add(*level)

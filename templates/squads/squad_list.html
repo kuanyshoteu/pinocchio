@@ -27,11 +27,11 @@
                                 </form>
                                 {%if trash %}
                                 <div style="text-align: right;" class="full-w">
-                                    <a href="{% url 'squads:list' %}" class="ui button mini blue">Рабочие группы</a>
+                                    <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Рабочие группы</a>
                                 </div>
                                 {% else %}        
                                 <div style="text-align: right;" class="full-w">
-                                    <a href="{% url 'squads:trash' %}" class="ui button mini blue">Удаленные группы</a>
+                                    <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Удаленные группы</a>
                                 </div>
                                 {% endif %}        
                             </div>

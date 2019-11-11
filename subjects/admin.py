@@ -37,7 +37,7 @@ admin.site.register(TimePeriod, TimePeriodModelAdmin)
 class LectureModelAdmin(admin.ModelAdmin):
     list_display = ["id", 'cell']
     list_display_links = ["id"]
-    list_filter = ["subject", "squad", "school"]
+    list_filter = ["subject", "squad"]
 
     class Meta:
         model = Lecture
