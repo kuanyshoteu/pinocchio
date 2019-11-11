@@ -313,14 +313,11 @@ def create_school(request):
 def create_worker(request):
     ok = False
     password = False
-    print(0)
     profile = get_profile(request)
     if is_profi(profile, 'Moderator') and request.GET.get('prof_id') and request.GET.get('school') and request.GET.get('name') and request.GET.get('phone'):
-        print(1)
         school = School.objects.filter(title = request.GET.get('school'))
         if len(school) == 0:
             return JsonResponse({'ok':False})
-        print(2)
         school = school[0]
         new_id = str(User.objects.order_by("id").last().id + 1)
         new_name = request.GET.get('name').replace(' ', '')+new_id
@@ -332,7 +329,6 @@ def create_worker(request):
         profile = Profile.objects.get(user = user)
         profile.first_name = request.GET.get('name')
         profile.phone = request.GET.get('phone')
-        print('mail',request.GET.get('mail'))
         profile.mail = request.GET.get('mail')
         profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
         profile.profession.add(profession)
@@ -345,9 +341,7 @@ def create_worker(request):
         profile.skill = skill
         profile.save()
         profile.schools.add(school)
-        print(4)
         ok = True
-    print(5)
     data = {
         "ok":ok,
         "password":password,
@@ -1243,7 +1237,68 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
+    names = ['Елена Викторовна', 'Лариса Ильинична', 'Галина Григорьевна', 'Ирина Александровна','Марина Владимировна', 'Ольга Владимировна','Гульхан Утегеновна','Земфира Юрьевна', 'Оксана Юрьевна', 'Екатерина Сергеевна']
+    phones = ['+77054800171', '+77476056467', '+77015274799', '+77012443759', '+77782556225', '+77011404933', '+77710800945', '+77076696538', '+77014735452','+77054721207']
+    passwords = []
+    school = School.objects.filter(id = 89)
+    office1 = school.school_offices.get(id=163)
+    office2 = school.school_offices.get(id=162)
+    for i in range(0, len(names)):
+        new_id = str(User.objects.order_by("id").last().id + 1)
+        new_name = names[i].replace(' ', '')+new_id
+        password = random_password()
+        passwords.append([phones[i], password])
+        user = User.objects.create(username=new_name, password=password)
+        user.set_password(password)
+        user.save()
+        user2 = authenticate(username = str(user.username), password=password)
+        profile = Profile.objects.get(user = user)
+        profile.first_name = names[i]
+        profile.phone = phones[i]
+        profession = Profession.objects.get(id = 8)
+        profile.profession.add(profession)
+        profile.is_student = False
+        skill = Skill.objects.create(
+            confirmed=True,
+            confirmation_time=timezone.now(),
+            )
+        skill.crm_office2=office1
+        skill.save()
+        profile.skill = skill
+        profile.save()
+        profile.schools.add(school)
 
+    names = ['Алия Амангосовна', 'Альфия Давлетовна','Валентина Никитична','Роза Бахитовна','Карина Степановна','Алтынай Кайратовна','Гаухар Базарбаевна']
+    phones = ['+77473659058','+77013968715','+77785058568','+77078857200','+77021671905','+77758255003','+77022261583']
+    for i in range(0, len(names)):
+        new_id = str(User.objects.order_by("id").last().id + 1)
+        new_name = names[i].replace(' ', '')+new_id
+        password = random_password()
+        passwords.append([phones[i], password])
+        user = User.objects.create(username=new_name, password=password)
+        user.set_password(password)
+        user.save()
+        user2 = authenticate(username = str(user.username), password=password)
+        profile = Profile.objects.get(user = user)
+        profile.first_name = names[i]
+        profile.phone = phones[i]
+        profession = Profession.objects.get(id = 8)
+        profile.profession.add(profession)
+        profile.is_student = False
+        skill = Skill.objects.create(
+            confirmed=True,
+            confirmation_time=timezone.now(),
+            )
+        skill.crm_office2=office2
+        skill.save()
+        profile.skill = skill
+        profile.save()
+        profile.schools.add(school)
+
+    print('moderator_end_code')
+    return JsonResponse({'work_done':'great job','ppp':passwords})
+
+def moder_update_bills():
     for squad in Squad.objects.all():
         cost_month = 0
         cost_lesson = 0
@@ -1261,6 +1316,3 @@ def moderator_run_code(request):
             nm.lesson_bill = cost_lesson
             nm.bill = cost_month
             nm.save()
-
-    print('moderator_end_code')
-    return JsonResponse({'work_done':'great job'})
