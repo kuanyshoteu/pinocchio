@@ -154,15 +154,12 @@ def subject_update(request, slug=None):
             new_month_bill = cost
         for squad in squads:
             for student in squad.students.all():
-                print(student.first_name)
                 card = cards.filter(card_user=student)
                 if len(card) > 0:
                     card = card[0]
                     nm = squad.need_money.get_or_create(card=card)[0]
                     nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
-                    print(squad.title, nm.bill, old_month_bill, new_month_bill)
                     nm.bill = nm.bill - old_month_bill + new_month_bill
-                    print(nm.bill)
                     nm.save()
 
     cost = 0

@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="eight wide column no_padding officefilter office{{sq.office.id}}" style="{%if filter_office != sq.office %}display: none;{%endif%}">
+<div class="eight wide column no_padding officefilter office{{sq.office.id}}" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}">
     <div class="ui grid group-block segment no_margin">
         <div class="three wide column left-side">
             <div class="img-block">
