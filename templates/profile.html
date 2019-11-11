@@ -39,9 +39,7 @@
                             </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
-                            {% if is_manager and hisprofile.is_student %}
-                                {% include 'profile/payment.html' %}
-                            {% endif %}
+                            {% include 'profile/payment.html' %}
                             {% if is_manager and hisprofile.is_student or is_director %}
                                 {% include 'profile/history.html' %}
                             {% endif %}                            

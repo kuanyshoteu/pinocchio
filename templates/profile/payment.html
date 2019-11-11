@@ -1,9 +1,12 @@
 {% load ttags %}
+{% if is_manager and hisprofile.is_student %}
 <div class="ui segment mb0" style="font-size: 15px;">
     Оплата
 </div>
+{%endif%}
 <div class="ui segment mt0">
     <div class="ui grid stackable">
+        {% if is_manager and hisprofile.is_student %}        
         <div class="eight wide column pr5">
             Пожалуйста, укажите за какую группу вносится оплата:
             <form class="ui form mb10" style="display: flex;">
@@ -16,12 +19,18 @@
             </form>
             <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатить</a>
         </div>
+        {%endif%}
         <div class="eight wide column pr5">
             <div class="mt15 pt5">
+                {% if is_manager and hisprofile.is_student %}
                 <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
                 <a class="ui button mini mb10" onclick="$('.payment_history').modal('show')">История оплаты</a>
+                {%endif%}
+                {% if is_manager %}
                 <a class="ui button mini get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
+                {%endif%}
             </div>
+            {% if is_manager and hisprofile.is_student %}
             <div class="ui modal payment_history">
                 <i class="close icon"></i>
                 <div class="content">
@@ -93,15 +102,19 @@
                     </div>
                 </div>
             </div>
+            {%endif%}
+            {% if is_manager %}
             <div class="ui modal" style="min-height: 100%;margin-top: 10%;" id="manager_actions{{hisprofile.id}}">
                 <i class="close icon"></i>
                 <div class="content">
                     <div class="set_manager_actions{{hisprofile.id}}"></div>
                 </div>
-            </div>            
+            </div> 
+            {%endif%}           
         </div>
     </div>
 </div>
+{% if is_manager and hisprofile.is_student %}
 <div class="ui segment mb0" style="font-size: 15px;">
     Клиент записан в данные группы:
 </div>
@@ -193,4 +206,5 @@
         </div>
     </div>
 </div>
+{%endif%}
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}"></span>
