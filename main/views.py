@@ -1249,12 +1249,13 @@ def moderator_run_code(request):
         cost_lesson = 0
         cost_course = 0
         for subject in squad.subjects.all():
-            if subject.cost_period == 'lesson':
-                cost_lesson += subject.cost
-            elif subject.cost_period == 'course':
-                cost_course += subject.cost
-            else:
-                cost_month += subject.cost
+            if subject.cost:
+                if subject.cost_period == 'lesson':
+                    cost_lesson += subject.cost
+                elif subject.cost_period == 'course':
+                    cost_course += subject.cost
+                else:
+                    cost_month += subject.cost
 
         for nm in squad.need_money.all():
             nm.lesson_bill = cost_lesson
