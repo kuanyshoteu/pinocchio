@@ -50,7 +50,7 @@ class Squad(models.Model):
     start_day = models.IntegerField(default=0)
     color_back = models.TextField(default='')
     shown = models.BooleanField(default=True)
-    deleted_time = models.DateTimeField(auto_now_add=False)        
+    deleted_time = models.DateTimeField(auto_now_add=True)        
 
     class Meta:
         ordering = ['title']
