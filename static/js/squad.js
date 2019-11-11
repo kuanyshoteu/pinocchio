@@ -1,5 +1,41 @@
 $(document).ready(function () { 
-
+    $('.right_option').click(function(e) {
+        id = $(this).attr('id')
+        $('.officefilter').hide()
+        $('.office'+id).show()
+        $('.right_option').removeClass('green')
+        $(this).addClass('green')
+    })
+    $('.choose_color').click(function(e) {
+        url = $('.choose_color_def').attr('url')
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.choose_color_def').css('background-color', id)
+            }
+        })
+    })
+    $('.make_alive').click(function(e) {
+        this_ = $(this)
+        url = this_.attr('url')
+        id = this_.attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                this_.hide()
+                $('.success_alive'+id).show()
+            }
+        })
+    })
     $('.constday_choose').click(function(e) {
         if ($(this).attr('class').indexOf("green") >= 0){
             $(this).removeClass('green')

@@ -42,15 +42,15 @@ class Squad(models.Model):
     image_banner = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
-            )
-    
+            )    
     content = models.TextField(default='')
     slogan = models.CharField(max_length=250, default='')
 
     start_date = models.DateField(auto_now_add=False)
     start_day = models.IntegerField(default=0)
-    end_date = models.DateField(auto_now_add=False)
     color_back = models.TextField(default='')
+    shown = models.BooleanField(default=True)
+    deleted_time = models.DateTimeField(auto_now_add=False)        
 
     class Meta:
         ordering = ['title']
@@ -91,6 +91,8 @@ class Squad(models.Model):
         return reverse("squads:add_student_url")   
     def change_office(self):
         return reverse("squads:change_office",kwargs={"id": self.id})     
+    def choose_color(self):
+        return reverse("squads:choose_color",kwargs={"id": self.id})     
 
     def change_schedule_url(self):
         return reverse("squads:change_schedule_url", kwargs={"id": self.id})
@@ -158,7 +160,7 @@ class DiscountSchool(models.Model):
     title = models.CharField(max_length=250)
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='discounts') 
     amount = models.IntegerField(default=0)
-    discount_type = models.CharField(max_length=250, default='')
+    discount_type = models.CharField(max_length=250, default='') #percent or tenge
     class Meta:
         ordering = ['id']
     def create_url(self):
@@ -172,4 +174,5 @@ class NeedMoney(models.Model):
     money = models.IntegerField(default=0)
     lesson_bill = models.IntegerField(default=0)
     bill = models.IntegerField(default=0)
+    course_bill = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')

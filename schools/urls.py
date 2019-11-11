@@ -68,4 +68,6 @@ urlpatterns = [
     url(r'^api/make_zaiavka/(?P<school_id>\d+)/$', make_zaiavka, name='make_zaiavka'),
     url(r'^api/get_school_report/(?P<school_id>\d+)/$', get_school_report, name='get_school_report'),
     url(r'^adilmed/', adilmed, name="adilmed"),
+    url(r'^api/get_extra_cards/', get_extra_cards, name='get_extra_cards'),
+    url(r'^api/payment_history/', payment_history, name='payment_history'),
 ]

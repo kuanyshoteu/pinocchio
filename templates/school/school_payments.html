@@ -21,191 +21,154 @@
                 {% if is_director %}
                 {% include 'school/head.html' %}
                 {% endif %}
-                <div class="ui grid">
-                    <div class="wide column in_mobile full-w no_padding">
-                        <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
-                            <form class="ui form">  
-                                <div style="padding-bottom: 15px;">
-                                    Выберите <b>предмет</b>:
-                                    <div class="controls" style="margin-top: 10px"> 
-                                        <select class="crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
-                                            {% if profile.skill.crm_subject %}
-                                                <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
-                                            {% endif %}
-                                            <option value="-1">Все предметы</option>
-                                            {% for subject_category in subject_categories %}
-                                                {% if subject_category != profile.skill.crm_subject %}
-                                                <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <div style="padding-bottom: 15px;">
-                                    Выберите <b>возраст</b>:
-                                    <div class="controls" style="margin-top: 10px"> 
-                                        <select class="crm_option" id="crm_age_mobile" url="{{ instance.crm_option_url }}" option="age"> 
-                                            {% if profile.skill.crm_age %}
-                                                <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
-                                            {% endif %}
-                                            <option value="-1">Все возрасты</option>
-                                            {% for subject_age in subject_ages %}
-                                                {% if subject_age != profile.skill.crm_age %}
-                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>                            
-                                </div>
-                                <div>
-                                    Выберите <b>класс</b>:
-                                    <div class="controls" style="margin-top: 10px"> 
-                                        <select class="crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
-                                            {% if profile.rating_squad_choice.first %}
-                                                <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
-                                            {% endif %}
-                                            <option value="-1">Все классы</option>
-                                            {% for squad in squads %}
-                                                {% if squad != profile.rating_squad_choice.first %}
-                                                <option value="{{ squad.id }}">{{ squad.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>                            
-                                </div>
-                            </form>
+                <div class="ui segment mb0">
+                    <div class="ui grid">
+                        <div class="one wide column">
+                            <i class="icon list" style="font-size: 17px;"></i>
                         </div>
-                    </div>            
-
-                    <div class="twelve wide column" style="padding: 14px 0 0;">
-                        <div class="ui segment" style="margin-bottom: 0;">
-                            <div class="ui grid">
-                                <div class="one wide column">
-                                    <i class="icon list" style="font-size: 17px;"></i>
-                                </div>
-                                <div class="fifteen wide column" style="padding-right: 25px;font-size: 15px;">
-                                    Список студентов
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui segment" id="calendar" style="margin-top: 0;padding: 0">
-                            <div class="loading" style="display: none;">
-                              <div class="animation"><div class="circle one"></div></div>
-                              <div class="animation"><div class="circle two"></div></div>
-                              <div class="animation"><div class="circle three"></div></div>
-                              <div class="animation"><div class="circle four"></div></div>
-                              <div class="animation"><div class="circle five"></div></div>
-                              <div class="animation"><div class="circle six"></div></div>
-                            </div>                            
-                            <table id="keywords" cellspacing="0" cellpadding="0" style="background: #4A4A4A;margin: 0;width: 100%;">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
-                                        <th><span>Оплата</span></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for student in profile|rating_filter %}
-                                        <tr style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
-                                            <td style="text-align: left;padding: 7px 15px;">
-                                                <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
-                                                    <span style="margin-right: 15px;">{{ forloop.counter }}.</span>
-                                                    <a href="{{ student.get_absolute_url }}" style="color: #fff;">
-                                                        {% if student.image %}
-                                                        <img class="ui image avatar" src="{{ student.image.url }}">
-                                                        {% else %}
-                                                        <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
-                                                        {% endif %}
-                                                        {{ student.first_name }}
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td style="padding: 7px 15px;">
-                                                <form class="ui form grid" >
-                                                    <div class="twelve wide column" style="display: flex;">
-                                                        <input class="payment_amount{{ student.id }} mb0"" placeholder="Сумма" type="number" name="">
-                                                        <select id="pay_for_group{{ student.id }}">
-                                                            {%for squad in student.squads.all%}
-                                                            <option value="{{squad.id}}">{{squad.title}}</option>
-                                                            {%endfor%}
-                                                        </select>
-                                                    </div>
-                                                    <div class="four wide column">
-                                                        <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ student.id }}')">Оплатить</a>
-                                                    </div>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="fifteen wide column" style="padding-right: 25px;font-size: 15px;">
+                            Список студентов
                         </div>
                     </div>
-                    <div class="four wide column not_in_mobile" style="padding-right: 0;">
-                        <div class="ui segment" style="margin-bottom: 0;margin-top: 0">
-                            <form class="ui form">  
-                                <div style="padding-bottom: 15px;">
-                                    Выберите <b>предмет</b>:
-                                    <div class="controls" style="margin-top: 10px"> 
-                                        <select class="crm_option" id="crm_subject" url="{{ instance.crm_option_url }}" option="subject"> 
-                                            {% if profile.skill.crm_subject %}
-                                                <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                </div>
+                <div class="ui segment no_margin">
+                    <form class="ui form">  
+                        <div class="ui grid stackable">
+                            <div class="four wide column pb15">
+                                Выберите <b>предмет</b>:
+                                <div class="controls" style="margin-top: 10px"> 
+                                    <select class="crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
+                                        {% if profile.skill.crm_subject %}
+                                            <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                                        {% endif %}
+                                        <option value="-1">Все предметы</option>
+                                        {% for subject_category in subject_categories %}
+                                            {% if subject_category != profile.skill.crm_subject %}
+                                            <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
                                             {% endif %}
-                                            <option value="-1">Все предметы</option>
-                                            {% for subject_category in subject_categories %}
-                                                {% if subject_category != profile.skill.crm_subject %}
-                                                <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
+                                        {% endfor %}
+                                    </select>
                                 </div>
-                                <div style="padding-bottom: 15px;">
-                                    Выберите <b>возраст</b>:
-                                    <div class="controls" style="margin-top: 10px"> 
-                                        <select class="crm_option" id="crm_age" url="{{ instance.crm_option_url }}" option="age"> 
-                                            {% if profile.skill.crm_age %}
-                                                <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
+                            </div>
+                            <div class="four wide column pb15">
+                                Выберите <b>возраст</b>:
+                                <div class="controls" style="margin-top: 10px"> 
+                                    <select class="crm_option" id="crm_age_mobile" url="{{ instance.crm_option_url }}" option="age"> 
+                                        {% if profile.skill.crm_age %}
+                                            <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
+                                        {% endif %}
+                                        <option value="-1">Все возрасты</option>
+                                        {% for subject_age in subject_ages %}
+                                            {% if subject_age != profile.skill.crm_age %}
+                                            <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
                                             {% endif %}
-                                            <option value="-1">Все возрасты</option>
-                                            {% for subject_age in subject_ages %}
-                                                {% if subject_age != profile.skill.crm_age %}
-                                                <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>                            
-                                </div>
-                                <div>
-                                    Выберите <b>класс</b>:
-                                    <div class="controls" style="margin-top: 10px"> 
-                                        <select class="crm_option" id="crm_squad" url="{{ instance.crm_option_url }}" option="group"> 
-                                            {% if profile.rating_squad_choice.first %}
-                                                <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>                            
+                            </div>
+                            <div class="four wide column ">
+                                Выберите <b>класс</b>:
+                                <div class="controls" style="margin-top: 10px"> 
+                                    <select class="crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
+                                        {% if profile.rating_squad_choice.first %}
+                                            <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                        {% endif %}
+                                        <option value="-1">Все классы</option>
+                                        {% for squad in squads %}
+                                            {% if squad != profile.rating_squad_choice.first %}
+                                            <option value="{{ squad.id }}">{{ squad.title }}</option>
                                             {% endif %}
-                                            <option value="-1">Все классы</option>
-                                            {% for squad in squads %}
-                                                {% if squad != profile.rating_squad_choice.first %}
-                                                <option value="{{ squad.id }}">{{ squad.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>                            
-                                </div>
-                            </form>
+                                        {% endfor %}
+                                    </select>
+                                </div>                            
+                            </div>
                         </div>
-                    </div>            
+                    </form>
+                </div>
+                <div class="ui segment no_margin no_padding" id="calendar">
+                    <div class="loading" style="display: none;">
+                      <div class="animation"><div class="circle one"></div></div>
+                      <div class="animation"><div class="circle two"></div></div>
+                      <div class="animation"><div class="circle three"></div></div>
+                      <div class="animation"><div class="circle four"></div></div>
+                      <div class="animation"><div class="circle five"></div></div>
+                      <div class="animation"><div class="circle six"></div></div>
+                    </div>                            
+                    <table id="keywords" cellspacing="0" class="full-w no_margin" cellpadding="0" style="background: #4A4A4A;">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
+                                <th><span>Оплата</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for student in profile|rating_filter %}
+                                <tr style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
+                                    <td style="text-align: left;padding: 7px 15px;">
+                                        <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                                            <span style="margin-right: 15px;">{{ forloop.counter }}.</span>
+                                            <a href="{{ student.get_absolute_url }}" style="color: #fff;">
+                                                {% if student.image %}
+                                                <img class="ui image avatar" src="{{ student.image.url }}">
+                                                {% else %}
+                                                <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
+                                                {% endif %}
+                                                {{ student.first_name }}
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 7px 15px;">
+                                        <form class="ui form grid" >
+                                            <div class="ten wide column" style="display: flex;">
+                                                <input class="full-h payment_amount{{ student.id }} mb0"" placeholder="Сумма" type="number" name="">
+                                                <select id="pay_for_group{{ student.id }}">
+                                                    {%for squad in student.squads.all%}
+                                                    <option value="{{squad.id}}">{{squad.title}}</option>
+                                                    {%endfor%}
+                                                </select>
+                                            </div>
+                                            <div class="three wide column no_padding_side">
+                                                <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ student.id }}')">Оплатить</a>
+                                                <i class="check icon green success_payment{{ student.id }}" style="display: none;"></i>
+                                            </div>
+                                            <div class="three wide column pr0">
+                                                <a class="ui button mini full-w" onclick="payment_history('{{ student.id }}')">История оплаты</a>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ui modal payment_history">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        <table class="no_margin" style="font-size: 13px;">
+                            <thead>
+                                <tr>
+                                    <th class="border">Время</th>
+                                    <th class="border">Сумма</th>
+                                    <th class="border">Группа</th>
+                                    <th class="border">Менеджер</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fill_payment_history">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<span class="data" payment_history="{% url 'schools:payment_history' %}"></span>
 <script type="text/javascript">
     function make_payment(url, id) {
         amount = $('.payment_amount'+id).val()
         this_ = document.getElementById('pay_for_group'+id);
-        group_id = this_.options[this_.selectedIndex].value;        
+        group_id = this_.options[this_.selectedIndex].value;
+        $('.success_payment').hide()
         $.ajax({
             url: url,
             data: {
@@ -215,7 +178,26 @@
             },
             dataType: 'json',
             success: function (data) {
-                location.reload()
+                $('.payment_amount'+id).val('')
+                $('.success_payment'+id).show()
+            }
+        })        
+    };
+
+    function payment_history(id) {
+        url = $('.data').attr('payment_history')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.payment_history').modal('show')
+                $('.fill_payment_history').empty()
+                for (var i = 0; i < data.res.length; i++) {
+                    $('<tr> <td class="border payment_timestamp">'+data.res[i][0]+'</td> <td class="border payment_amount">'+data.res[i][1]+'</td> <td class="border payment_squad">'+data.res[i][2]+'</td> <td class="border"><a class="payment_manager" href="'+data.res[i][3]+'">'+data.res[i][4]+'</a></td> </tr>').appendTo('.fill_payment_history')
+                }
             }
         })        
     };

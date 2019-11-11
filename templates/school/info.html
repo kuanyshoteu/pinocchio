@@ -354,10 +354,7 @@
                                 <i class="close icon"></i>
                                 <div class="content">
                                     <form class="ui form">
-                                        <div style="height: 20px;">
-                                            <div class="hint_office_title{{office.id}}" style="display: none;"></div>
-                                        </div>
-                                        <textarea class="object_textarea" status='office' id="office_title{{office.id}}">{{office.title}}</textarea>
+                                        <textarea status='office' id="office_title{{office.id}}">{{office.title}}</textarea>
                                         <a class="ui button mini blue" onclick="create_office('{{office.create_url}}', '{{office.id}}');clear_textareas();">Сохранить</a>
                                         <a class="ui button mini red" onclick="$('.show_office_delete{{office.id}}').show()" style="float: right;">Удалить</a>
                                         <div class="show_office_delete{{office.id}}" style="display: none;margin-top: 15px;">
@@ -368,6 +365,7 @@
                                         </div>
                                     </form>
                                     <div class="erroroffice{{office.id}} highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
+                                    <div class="ui divider"></div>      
                                     <div class="ui grid office_cabinets{{office.id}}" style="margin: 25px 0 0 0">
                                         <div class="sixteen wide column no_padding">
                                             Кабинеты:
@@ -388,6 +386,17 @@
                                         </div>
                                         <a class="ui button mini blue mt10 save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
                                     </form>
+                                    <div class="ui divider"></div>      
+                                    {% for manager in office.choosed_by2.all %}
+                                        <a class="ui button mini green mb10 manager_office" office="{{office.id}}" id="{{manager.profile.first.id}}">
+                                            {{manager.profile.first.first_name}}
+                                        </a>
+                                    {%endfor%}
+                                    {% for manager in office|office_other_managers %}
+                                        <a class="ui button mini mb10 manager_office" office="{{office.id}}" id="{{manager.id}}">
+                                            {{manager.first_name}}
+                                        </a>
+                                    {%endfor%}                                    
                                 </div>
                             </div>
                         {% endfor %}
@@ -397,10 +406,7 @@
                             <i class="close icon"></i>
                             <div class="content">
                                 <form class="ui form">
-                                    <div style="height: 20px;">
-                                        <div class="hint_office_title_new" style="display: none;"></div>
-                                    </div>
-                                    <textarea class="object_textarea need_clear" status='office' id="office_title_new" placeholder="Название"></textarea>
+                                    <textarea class="need_clear" status='office' id="office_title_new" placeholder="Название"></textarea>
                                     <a class="ui button mini blue" onclick="create_office('/schools/api/office_create_url/', '_new');clear_textareas()">Создать</a>
                                 </form>
                                 <div class="erroroffice_new highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
@@ -504,6 +510,7 @@
 </div>
 <span class="day_id" group_id='{{ instance.id }}'></span>
 <span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
+<span class="data" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
 <script type="text/javascript">
     function clear_textareas(){
         $('.need_clear').val('')

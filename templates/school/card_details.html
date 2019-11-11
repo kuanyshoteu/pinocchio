@@ -23,7 +23,7 @@
             <a class="show_card_schedule mb5" id="cardsc{{card.id}}" onclick="openNav('{{ card.id }}','{{ card.name }}')" column={{column.id}}>
                 <i class="icontable{{card.id}} icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i>
             </a>
-            <a class="show_card_schedule" onclick="open_crmhist('{{ card.id }}')" style="margin-right: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a>     
+            <a class="show_card_schedule" onclick="open_crmhist('{{ card.id }}')" style="margin-top: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a>     
         </div>
         <div style="width: 80%;">
             {% if card.author_profile %}

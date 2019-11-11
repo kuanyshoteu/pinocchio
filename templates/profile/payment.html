@@ -1,10 +1,11 @@
 {% load ttags %}
-<div class="ui segment mb0">
+<div class="ui segment mb0" style="font-size: 15px;">
     Оплата
 </div>
 <div class="ui segment mt0">
     <div class="ui grid stackable">
-        <div class="five wide column pr5">
+        <div class="eight wide column pr5">
+            Пожалуйста, укажите за какую группу вносится оплата:
             <form class="ui form mb10" style="display: flex;">
                 <input class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
                 <select id="pay_for_group">
@@ -14,11 +15,12 @@
                 </select>
             </form>
             <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатить</a>
-            <div class="mt10">
-                <a class="ui button mini full-w" onclick="$('.payment_history').modal('show')">История оплаты</a>
-            </div>
-            <div class="mt10">
-                <a class="ui button mini full-w" onclick="$('.move_money').modal('show')">Перевод денег</a>
+        </div>
+        <div class="eight wide column pr5">
+            <div class="mt15 pt5">
+                <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
+                <a class="ui button mini mb10" onclick="$('.payment_history').modal('show')">История оплаты</a>
+                <a class="ui button mini get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
             </div>
             <div class="ui modal payment_history">
                 <i class="close icon"></i>
@@ -38,7 +40,7 @@
                                 <td class="border">{{ payment.timestamp }}</td>
                                 <td class="border">{{ payment.amount }} тг</td>
                                 <td class="border">{{ payment.squad.title }}</td>
-                                <td class="border"><a href="{{payment.manager.get_absolute_url}}">{{ payment.manager.first_name }}</a></td>
+                                <td class="border"><a href="{{payment.action_author.get_absolute_url}}">{{ payment.action_author.first_name }}</a></td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -91,21 +93,49 @@
                     </div>
                 </div>
             </div>
-
-
+            <div class="ui modal" style="min-height: 100%;margin-top: 10%;" id="manager_actions{{hisprofile.id}}">
+                <i class="close icon"></i>
+                <div class="content">
+                    <div class="set_manager_actions{{hisprofile.id}}"></div>
+                </div>
+            </div>            
         </div>
-        <div class="eleven wide column pl0">
-            <div class="ui grid">
+    </div>
+</div>
+<div class="ui segment mb0" style="font-size: 15px;">
+    Клиент записан в данные группы:
+</div>
+<div class="ui segment mt0">
+    <div class="ui grid stackable">
+        <div class="sixteen wide column pr0">
+            <div class="ui grid mt0">
             {% for nm in profile|get_bills:hisprofile %}
-                <div class="wide column" style="min-width: 33%;border-right: 1px lightgrey solid;">
-                        <b>{{ nm.squad.title }}</b>
+                <div class="wide column pt5 pl5 pr5" style="min-width: 33%;border: 1px lightgrey solid;">
+                        <a href="{{ nm.squad.get_absolute_url }}"><b>{{ nm.squad.title }}</b></a>
+                        <div class="ui divider mb5 mt5"></div>
+                        <span style="font-size: 14px;">Группа проходит курсы:</span>
                         <div>
-                            <b>На счету:</b> <span class="nm_money{{nm.id}}">{{ nm.money }}</span>
+                            {% for subject in nm.squad.subjects.all %}
+                            <a class="ui button mini full-w mt10" style="padding: 5px;line-height: 15px;" href="{{subject.get_absolute_url}}">
+                                <span style="font-size: 13px;color: #000">{{subject.title}}</span>
+                                <br>
+                                <span style="color: #545454">Стоимость: {{subject.cost}}тг {%if subject.cost_period == 'lesson'%}за урок{%elif subject.cost_period == 'course'%}за курс{% else %}в месяц{%endif%}</span>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div class="ui divider mb5 mt5"></div>
+                        <div>
+                            <b>Оплачено:</b> <span class="nm_money{{nm.id}}">{{ nm.money }}тг</span>
                             <br>
-                            <b>Оплата за уроки:</b> {{ nm.lesson_bill }}
-                            <br>
-                            <b>Оплата за месяц:</b> {{ nm.bill }}
-                            <br>
+                            Итоговая стоимость посещения данной группы:
+                            {% if nm.lesson_bill > 0 %}
+                                {{ nm.lesson_bill }}тг за урок
+                                <br>
+                            {% endif %}
+                            {% if nm.bill > 0 %}
+                                {{ nm.bill }}тг в месяц
+                                <br>
+                            {% endif %}
                             <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
                             <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
                                 <i class="close icon"></i>
@@ -164,10 +194,3 @@
     </div>
 </div>
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}"></span>
-
-<style type="text/css">
-    .border{
-        border: 1px solid lightgrey;
-        padding: 14px;
-    }
-</style>

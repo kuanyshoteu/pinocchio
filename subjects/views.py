@@ -114,15 +114,14 @@ def subject_update(request, slug=None):
     is_in_school(profile, school)
     old_title = instance.title
     old_content = instance.content
-    old_cost = instance.cost
-    old_cost_period = instance.cost_period
     form = SubjectForm(request.POST or None, request.FILES or None, instance=instance)
     change_time = False
     change_title = False
     change_content = False
+    old_cost = instance.cost
+    old_cost_period = instance.cost_period
     if form.is_valid():
         instance = form.save(commit=False)
-        print(old_title, instance.title)
         if old_title != instance.title:
             change_title = True
         if old_content != instance.content:
@@ -137,7 +136,6 @@ def subject_update(request, slug=None):
         instance.subject_histories.create(action_author=profile,edit=text)        
 
         squads = instance.squads.prefetch_related('students')
-        students = get_subject_students(squads)
         cost = instance.cost
         cards = school.crm_cards.all()
         old_lesson_bill = 0
@@ -154,17 +152,18 @@ def subject_update(request, slug=None):
         elif instance.cost_period == 'month':
             new_lesson_bill = 0
             new_month_bill = cost
-
-        for student in students:
-            card = cards.filter(card_user=student)
-            squad = squads.filter(students=student)
-            if len(card) > 0 and len(squad) > 0:
-                card = card[0]
-                squad = squad[0]
-                nm = squad.need_money.get_or_create(card=card)[0]
-                nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
-                nm.bill = nm.bill - old_month_bill + new_month_bill
-                nm.save()
+        for squad in squads:
+            for student in squad.students.all():
+                print(student.first_name)
+                card = cards.filter(card_user=student)
+                if len(card) > 0:
+                    card = card[0]
+                    nm = squad.need_money.get_or_create(card=card)[0]
+                    nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
+                    print(squad.title, nm.bill, old_month_bill, new_month_bill)
+                    nm.bill = nm.bill - old_month_bill + new_month_bill
+                    print(nm.bill)
+                    nm.save()
 
     cost = 0
     for subject in school.school_subjects.all():

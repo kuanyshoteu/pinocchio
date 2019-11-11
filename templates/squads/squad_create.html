@@ -83,18 +83,6 @@
 			    						</div>
 			    					</div>
 								</div>
-								<div class="eight wide column" style="padding-top: 0">
-									<p style="font-size: 13px;padding-top: 2px;">
-			        					Выберите дату <b>окончания</b> учебы:
-			        				</p>
-									<input type="date" url="{{ instance.change_end_url }}" squad_id="{{ instance.id }}" name='end' class="end" style="width: 200px;" value="{{ instance.end_date|date:'Y-m-d'}}">
-			    					<div class="ui mini modal we">
-										<i class="close icon"></i>
-									    <div class="content">
-			    							Конец учебы не может быть раньше начала, выберите другую дату
-			    						</div>
-			    					</div>				        				
-								</div>
 		        			</div>
 		        		</div>
 		        	</div>
@@ -121,11 +109,24 @@
                                         <a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
                                     </label>
 								</div>
-                                <div class="seven wide column">
-                                    Цвет:
-                                    <textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
+                                <div class="eight wide column pt0 pr0 pb0">
+                                    Цвет в расписании: 
+                                    <br>
+                                    <div class="choose_color_def" url="{{instance.choose_color}}" style="background-color:{%if instance.color_back != '' %}{{instance.color_back}}{%else%}rgb(49, 58, 87){%endif%};display: inline-block;"></div>
                                 </div>
-                                <div class="sixteen wide column" style="padding-top: 0">
+                                <div class="eight wide column pl0 pb0 pt0">
+                                    Поменять цвет:
+                                    <br>
+                                    <div class="choose_color" id="#DB2828" style="background-color: #DB2828;"></div>
+                                    <div class="choose_color" id="#5181b8" style="background-color: #5181b8;"></div>
+                                    <div class="choose_color" id="#1b1c1d" style="background-color: #1b1c1d;"></div>
+                                    <div class="choose_color" id="#f2711c" style="background-color: #f2711c;"></div>
+                                    <div class="choose_color" id="#00b5ad" style="background-color: #00b5ad;"></div>
+                                    <div class="choose_color" id="#6435c9" style="background-color: #6435c9;"></div>
+                                    <div class="choose_color" id="#e03997" style="background-color: #e03997;"></div>
+                                    <div class="choose_color" id="#767676" style="background-color: #767676;"></div>
+                                </div>
+                                <div class="sixteen wide column pt0" style="margin-top: -10px;">
                                     <b>Офис:</b>
                                     <select class="change_squad_office" id="change_squad_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
                                         {% if instance.office == None %}
@@ -144,9 +145,15 @@
                                     </select>                                       
                                 </div>
 								<div class="sixteen wide column">
+                                    {% if instance.shown %}
 		                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
                                         <i class="icon trash" style="color: #fff;"></i> Удалить группу "<b>{{ instance.title }}</b>"
 		                            </a>
+                                    {% else %}
+                                    Группа удалена
+                                    <a class="ui button mini green make_alive" url="{% url 'squads:make_alive' %}" id="{{ instance.id }}">Восстановить группу</a>
+                                    <div class="highlight pt0 success_alive{{instance.id}}" style="display: none;width: 200px;">Группа восстановлена</div>
+                                    {% endif %}
 	                            </div>	
 							</div>
 						</div>

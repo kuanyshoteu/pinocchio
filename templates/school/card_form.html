@@ -1,4 +1,4 @@
-<div class="ui modal" id="card_form{{ card.id }}">
+<div class="ui modal card_form" id="card_form{{ card.id }}">
     <i class="close icon"></i>
     <div class="content">
         <div class="card_head">
@@ -41,24 +41,26 @@
                         </div>
                     </div>
                     <div class="ui grid stackable" style="margin-top: 30px;">
-                        <div class="eight wide column" id="card_form-select">
-                            <select {%if not card.was_called%}style="display: none"{%endif%} class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}">
-                                <option value="{{ card.action }}">{{ card.action }}</option>                                
-                                <option value="-1">Как связываться</option>
-                                <option value="call">Позвонить</option>
-                                <option value="whatsapp">Whats app</option>
-                                <option value="sms">СМС</option>
-                                <option value="mail">Почта</option>
+                        <div class="third wide column" id="card_form-select">
+                            <select class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}" onchange="card_called_change('{{card.id}}')">
+                                <option value="{{ card.action }}">{{ card.action }}</option>
+                                <option value="Позвонить">Позвонить</option>
+                                <option value="Whats app">Whats app</option>
+                                <option value="СМС">СМС</option>
+                                <option value="Почта">Почта</option>
+                                <option value="-1">Другое</option>
                             </select>
-                            <a {%if card.was_called%}style="display: none"{%endif%} class="ui button green small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}">Связался(ась) по {{card.action}}</a>
                         </div>
-                        <div class="eight wide column" id="card_form-select">
+                        <div class="third wide column" id="card_form-select">
+                            <a class="ui button {%if not card.was_called%}green{%endif%} small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}" onclick="card_called('{{card.id}}')">{%if not card.was_called%}Связались{%else%}Связывались {{card.timestamp}}{%endif%}</a>
+                        </div>
+                        <div class="third wide column" id="card_form-select">
                             {% if is_director %}
-                            <select class="change_manager change_manager{{card.id}}" url="/schools/api/change_manager/" id="{{card.id}}">
+                            <select onchange="change_manager('{{card.id}}')" class="change_manager change_manager{{card.id}}" id="{{card.id}}">
                                 {% if card.author_profile %}
                                     <option value="-1">{{ card.author_profile.first_name }}</option>
                                 {% else %}
-                                    <option value="-1">Менеджера</option>
+                                    <option value="-1">Без менеджера</option>
                                 {% endif %}
                                 {% for manager in managers %}
                                     {% if card.author_profile != manager %}
@@ -82,25 +84,25 @@
                 <div class="sixteen wide column" style="text-align: center;margin-top: 15px;">
                     <div class="ui grid">
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.0%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="0">Понедельник</a>
+                            <a onclick="card_form_days('c{{card.id}}d0')" class="ui button mini card_form-daysc{{card.id}}d0 full-w {%if card.days_of_weeks.0%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="0">Понедельник</a>
                         </div>
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.1%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="1">Вторник</a>
+                            <a onclick="card_form_days('c{{card.id}}d1')" class="ui button mini card_form-daysc{{card.id}}d1 full-w {%if card.days_of_weeks.1%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="1">Вторник</a>
                         </div>
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.2%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="2">Среда</a>
+                            <a onclick="card_form_days('c{{card.id}}d2')" class="ui button mini card_form-daysc{{card.id}}d2 full-w {%if card.days_of_weeks.2%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="2">Среда</a>
                         </div>
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.3%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="3">Четверг</a>
+                            <a onclick="card_form_days('c{{card.id}}d3')" class="ui button mini card_form-daysc{{card.id}}d3 full-w {%if card.days_of_weeks.3%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="3">Четверг</a>
                         </div>
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.4%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="4">Пятница</a>
+                            <a onclick="card_form_days('c{{card.id}}d4')" class="ui button mini card_form-daysc{{card.id}}d4 full-w {%if card.days_of_weeks.4%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="4">Пятница</a>
                         </div>
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.5%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="5">Суббота</a>
+                            <a onclick="card_form_days('c{{card.id}}d5')" class="ui button mini card_form-daysc{{card.id}}d5 full-w {%if card.days_of_weeks.5%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="5">Суббота</a>
                         </div>
                         <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a class="ui button mini card_form-days full-w {%if card.days_of_weeks.6%}green{%endif%}" url="{{card.change_day_of_week}}" style="padding: 7px 14px !important;" card="{{card.id}}" id="6">Воскресенье</a>
+                            <a onclick="card_form_days('c{{card.id}}d6')" class="ui button mini card_form-daysc{{card.id}}d6 full-w {%if card.days_of_weeks.6%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="6">Воскресенье</a>
                         </div>
                     </div>
                 </div>

@@ -953,12 +953,31 @@ def get_school_report(request):
             teacher_name = ''
             if squad.teacher:
                 teacher_name = squad.teacher.first_name
-            students_res.append(['5','Группа ' + squad.title, 'Учитель: '+teacher_name,'Дата начала: '+squad.start_date.strftime('%d.%m.%Y'),'Стоимость в месяц: '+str(squad_cost)+' тг', 'Итого'])
+            students_res.append(['5','Группа '+squad.title+' Дата начала: '+squad.start_date.strftime('%d.%m.%Y')+' Стоимость в месяц: '+str(squad_cost)+' тг', 'Скидки', 'Учитель: '+teacher_name, 'Итого'])
             squad_students_money = 0
             phs = squad.payment_history.all().order_by('timestamp')
             for student in squad.students.all():
-                squad_res = ['5','']
-                squad_res2 = ['4',student.first_name]
+                card = student.card.filter(school=school)
+                if len(card) > 0:
+                    card = card[0]
+                else:
+                    continue
+                nm = squad.need_money.filter(card=card)
+                if len(nm)>0:
+                    nm = nm[0]
+                else:
+                    continue
+                disc_titles = ''
+                disc_values = ''
+                for discount in nm.discount_school.all():
+                    disc_titles += discount.title+' '
+                    sign = 'тг'
+                    if discount.discount_type == 'percent':
+                        sign = '%'
+                    disc_values += str(discount.amount) + sign+' '
+
+                squad_res = ['5','',disc_values]
+                squad_res2 = ['4',student.first_name, disc_titles]
                 student_cost = 0
                 for ph in phs.filter(user=student):
                     squad_res.append(str(ph.amount))
@@ -1225,7 +1244,22 @@ def moderator_run_code(request):
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
 
+    for squad in Squad.objects.all():
+        cost_month = 0
+        cost_lesson = 0
+        cost_course = 0
+        for subject in squad.subjects.all():
+            if subject.cost_period == 'lesson':
+                cost_lesson += subject.cost
+            elif subject.cost_period == 'course':
+                cost_course += subject.cost
+            else:
+                cost_month += subject.cost
 
+        for nm in squad.need_money.all():
+            nm.lesson_bill = cost_lesson
+            nm.bill = cost_month
+            nm.save()
 
     print('moderator_end_code')
     return JsonResponse({'work_done':'great job'})

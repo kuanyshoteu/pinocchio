@@ -272,26 +272,6 @@ $(document).ready(function () {
       $('.crm_card').show()
     }
   }
-  $('.card_form-select-contact-btn').on('click', function () {
-    url = '/schools/api/card_called/'
-    id = $(this).attr('id')
-    this_ = $(this)
-    selector = document.getElementsByClassName('card_form-select-contact'+id)[0];
-    action = selector.options[selector.selectedIndex].value;
-    console.log(action)
-    $.ajax({
-      url: url,
-      data: {
-        'id': id,
-        'action':action,
-      },
-      dataType: 'json',
-      success: function (data) {
-        this_.hide();
-        $('.card_form-select-contact' + this_.attr('id')).show();
-      }
-    })
-  });
   $('#search_text').on('input', function (e) {
     text = $(this).val()
     if (text.length == 0) {

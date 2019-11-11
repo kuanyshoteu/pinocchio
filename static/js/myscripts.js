@@ -1,3 +1,26 @@
+    $('.manager_office').click(function(e) {
+        this_ = $(this)
+        id = this_.attr('id')
+        office = this_.attr('office')
+        url = $('.data').attr('crm_option_url2')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'office':office,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.added) {
+                    this_.addClass('green')
+                }
+                else{
+                    this_.removeClass('green')
+                }
+            }
+        })
+    })
+
     $('.move_money_send').click(function(e) {
         from = $('.move_money_from').val()
         to = $('.move_money_to').val()

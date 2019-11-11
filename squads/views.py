@@ -59,13 +59,13 @@ def squad_list(request):
     profile = get_profile(request)
     only_staff(profile)
     if is_profi(profile, 'Teacher'):
-        hissquads = profile.hissquads.all()
+        hissquads = profile.hissquads.filter(shown=True)
     else:
-        hissquads = profile.squads.all()
+        hissquads = profile.squads.filter(shown=True)
     school = is_moderator_school(request, profile)
     context = {
         "profile": profile,
-        "squads":school.groups.all(),
+        "squads":school.groups.filter(shown=True),
         "hisschools":profile.schools.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -73,6 +73,28 @@ def squad_list(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
+        "filter_office":profile.skill.crm_office2,
+    }
+    return render(request, "squads/squad_list.html", context)
+
+def squad_trash(request):
+    profile = get_profile(request)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    two_weeks_ago = timezone.now() - timedelta(14)
+    delete_list = school.groups.filter(shown=False, deleted_time__lt=two_weeks_ago)
+    if len(delete_list) > 0:
+        delete_list.delete()
+    context = {
+        "profile": profile,
+        "squads":school.groups.filter(shown=False),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_crnt":school,        
+        "school_money":school.money,
+        "trash":True,
     }
     return render(request, "squads/squad_list.html", context)
 
@@ -84,7 +106,6 @@ def squad_create(request):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.start_date = timezone.now().date()
-        instance.end_date = timezone.now().date()
         instance.school = school
         if len(school.school_offices.all()) > 0:
             instance.office = school.school_offices.first()
@@ -128,7 +149,6 @@ def squad_update(request, slug=None):
         if end == '':
             end = timezone.now().strftime("%Y-%m-%d")
         start_date = datetime.datetime.strptime(start, "%Y-%m-%d").date()
-        end_date = datetime.datetime.strptime(end, "%Y-%m-%d").date()
         if old_title != instance.title:
             change_title = True
         if old_content != instance.content:
@@ -136,7 +156,6 @@ def squad_update(request, slug=None):
         if instance.start_date != start_date:
             change_time = True
             instance.start_date = start_date
-        instance.end_date = end_date
         instance.save()
     if request.POST:
         if len(request.FILES) > 0:
@@ -221,9 +240,10 @@ def squad_delete(request, slug=None):
     if request.method == "POST":
         text = 'Удалил группу '+instance.title
         instance.squad_histories.create(action_author=profile,edit=text)
-        instance.delete()
-        messages.success(request, "Successfully deleted")
-        return redirect("squads:list")
+        instance.shown = False
+        instance.deleted_time = timezone.now()
+        instance.save()
+        return redirect("squads:trash")
     context = {
         "object": instance,
         'is_trener':is_profi(profile, 'Teacher'),
@@ -341,20 +361,20 @@ def add_student(request):
         add = True
         if student in squad.students.all():
             add = False
-            text = 'Убран ученик '+student.first_name+' в группу '+squad.title
-            squad.squad_histories.create(action_author=profile,edit=text)
-            remove_student_from_squad(student, squad)
+            # text = 'Убран ученик '+student.first_name+' в группу '+squad.title
+            # squad.squad_histories.create(action_author=profile,edit=text)
+            remove_student_from_squad(student, squad, profile)
         else:
-            text = 'Добавлен ученик '+student.first_name+' в группу '+squad.title
-            squad.squad_histories.create(action_author=profile,edit=text)
-            problems = add_student_to_squad(student, squad)
+            # text = 'Добавлен ученик '+student.first_name+' в группу '+squad.title
+            # squad.squad_histories.create(action_author=profile,edit=text)
+            problems = add_student_to_squad(student, squad, profile)
     data = {
         'add':add,
         'problems':problems
     }
     return JsonResponse(data)
 
-def remove_student_from_squad(student, squad):
+def remove_student_from_squad(student, squad, manager_profile):
     squad.students.remove(student)
     school = squad.school
     other_squads = student.squads.all().exclude(id=squad.id)
@@ -385,8 +405,13 @@ def remove_student_from_squad(student, squad):
         remove_person_from_lecture(lecture, student)
         lecture.save()
     squad.squad_attendances.filter(student=student).delete()
+    hist = CRMCardHistory.objects.create(
+        action_author = manager_profile,
+        card = card,
+        edit = '*** Убрали из ' + squad.title + ' ***',
+        )
 
-def add_student_to_squad(student, squad):
+def add_student_to_squad(student, squad, manager_profile):
     subjects = squad.subjects.all()
     other_sqs = Squad.objects.filter(subjects__in=subjects).exclude(id=squad.id)
     other_sts = Profile.objects.filter(squads__in=other_sqs)
@@ -400,7 +425,6 @@ def add_student_to_squad(student, squad):
         for cat in categories:
             hs = school.hashtags.get_or_create(title = cat.title.replace(' ', '_'))
             card.hashtags.add(hs[0])
-            print(hs[0].title)
 
         nm = squad.need_money.get_or_create(card=card)[0]
         cost = subject.cost
@@ -415,8 +439,13 @@ def add_student_to_squad(student, squad):
     for lecture in squad.squad_lectures.all():
         add_person_to_lecture(lecture, student)
         lecture.save()
+    hist = CRMCardHistory.objects.create(
+        action_author = manager_profile,
+        card = card,
+        edit = '*** Регистрация в ' + squad.title + ' ***',
+        )    
     if student in other_sts:
-        return student.first_name  
+        return student.first_name
     return 'ok'
 
 def prepare_mail(first_name, phone, mail, squad, password, send_mail):
@@ -953,5 +982,31 @@ def searching_groups(request):
 
     data = {
         "res":res,
+    }
+    return JsonResponse(data)
+
+def choose_color(request, id=None):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        squad = Squad.objects.get(id = id)
+        if squad.school != school:
+            return Http404
+        squad.color_back = request.GET.get('id')
+        squad.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def make_alive(request):
+    profile = get_profile(request)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        squad = Squad.objects.get(id = int(request.GET.get('id')))
+        squad.shown = True
+        squad.save()
+    data = {
     }
     return JsonResponse(data)

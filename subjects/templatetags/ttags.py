@@ -13,6 +13,13 @@ def remove_space(title):
     return title.replace(' ', '_')
 
 @register.filter
+def office_other_managers(office):
+    school = office.school
+    profession = Profession.objects.get(title = 'Manager')
+    skills = office.choosed_by2.all()
+    return school.people.filter(profession=profession).exclude(skill__in=skills)
+
+@register.filter
 def squad_nms_sum(squad):
     res = 0
     for nm in squad.need_money.all():
@@ -343,21 +350,27 @@ def create_atts_student(squad, subject_materials, student):
         squad=squad,
     )
 
+from django.core.paginator import Paginator
 @register.filter
 def filtercards(column, profile):
     school = profile.schools.first()
+    res = []
     if profile.skill:
         if profile.skill.crm_show_free_cards:
-            return column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
-    return column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
+            res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
+    if res == []:
+        res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
+    p = Paginator(res, 30)
+    page1 = p.page(1)
+    return page1.object_list
 
 @register.filter
 def filtercardsall(column, profile):
     school = profile.schools.first()
-    if profile.skill:
-        if profile.skill.crm_show_free_cards:
-            return column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags').select_related('author_profile')
-    return column.cards.filter(school=school).prefetch_related('hashtags').exclude(author_profile__isnull=True).select_related('author_profile')
+    res = column.cards.filter(school=school).prefetch_related('hashtags').exclude(author_profile__isnull=True).select_related('author_profile')
+    p = Paginator(res, 30)
+    page1 = p.page(1)
+    return page1.object_list
 
 @register.filter
 def get_professions(school):

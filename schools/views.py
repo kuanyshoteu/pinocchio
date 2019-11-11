@@ -245,7 +245,6 @@ def school_crm(request):
     theprofile = profile
     if is_profi(profile, 'Moderator'):
         theprofile = school.people.first()
-        print(theprofile.first_name)
     if is_director:
         manager_prof = Profession.objects.get(title='Manager')
         managers = school.people.filter(profession=manager_prof)
@@ -834,20 +833,15 @@ def save_card_as_user(request):
                 #     return JsonResponse({'stop':True, 'problems':'ok'})
                 if profile in squad.students.all():
                     add = False
-                    remove_student_from_squad(profile, squad)
+                    remove_student_from_squad(profile, squad, manager_profile)
                     ok_mail = True
                 else:
-                    problems = add_student_to_squad(profile, squad)
+                    problems = add_student_to_squad(profile, squad, manager_profile)
                     ok_mail = prepare_mail(profile.first_name, card.phone, card.mail, squad, None, True)
                 profile.schools.add(school)
                 card.last_groups = squad_id
                 card.timestamp = timezone.now()
                 card.save()
-                hist = CRMCardHistory.objects.create(
-                    action_author = manager_profile,
-                    card = card,
-                    edit = '*** Регистрация в ' + squad.title + ' ***',
-                    )
             if request.GET.get('predoplata'):
                 add_money(card.card_user, school, squad, card, int(request.GET.get('predoplata')), manager_profile)
     data = {
@@ -918,33 +912,22 @@ def crm_option(request):
     return JsonResponse(data)
 def crm_option2(request):
     profile = Profile.objects.get(user = request.user.id)
-    if request.GET.get('object_id') and request.GET.get('option'):
-        skill = profile.skill
-        if request.GET.get('option') == 'subject':
-            if int(request.GET.get('object_id')) == -1:
-                skill.crm_subject2 = None
-            else:
-                subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_subject2 = subject
-        if request.GET.get('option') == 'age':
-            if int(request.GET.get('object_id')) == -1:
-                skill.crm_age2 = None
-            else:
-                age = SubjectAge.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_age2 = age
-        if request.GET.get('option') == 'office':
-            if int(request.GET.get('object_id')) == -1:
-                skill.crm_office2 = None
-            else:
-                office = Office.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_office2 = office
-        if request.GET.get('option') == 'group':
-            profile.rating_squad_choice.clear()
-            if int(request.GET.get('object_id')) != -1:
-                squad = Squad.objects.get(id = int(request.GET.get('object_id')))
-                profile.rating_squad_choice.add(squad)
+    only_directors(profile)
+    added = False
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id') and request.GET.get('office'):
+        manager = school.people.get(id=int(request.GET.get('id')))
+        skill = manager.skill
+        office = Office.objects.get(id = int(request.GET.get('office')))
+        hisoffice = skill.crm_office2 
+        if office == hisoffice:
+            skill.crm_office2 = None            
+        else:
+            added = True
+            skill.crm_office2 = office
         skill.save()
     data = {
+        "added":added,
     }
     return JsonResponse(data)
 
@@ -1041,17 +1024,21 @@ def card_called(request):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         skill = profile.skill
-        card.action = request.GET.get('action')
-        if card.was_called:
-            card.was_called = False
-            skill.need_actions += 1
-        else:
+        if request.GET.get('action') == 'done':
+            if not card.was_called:
+                skill.need_actions -= 1
             card.was_called = True
-            skill.need_actions -= 1
+        else:
+            card.action = request.GET.get('action')
+            if card.was_called:
+                card.was_called = False
+                skill.need_actions += 1
         skill.save()
+        card.timestamp = timezone.now()
         card.save()
     data = {
-        'is_called':card.was_called
+        'is_called':card.was_called,
+        'time':timezone.now().strftime('%d.%m.%Y %H:%M')
     }
     return JsonResponse(data)
 
@@ -1592,9 +1579,11 @@ def get_manager_actions(request):
                 if h.squad:
                     edit+='за группу '+h.squad.title
             elif classname == 'CRMCardHistory':
-                edit += 'Карточка '+ h.card.name
+                edit += h.card.name
                 if h.oldcolumn != '' or h.newcolumn != '':
                     edit += ' <br>"' + h.oldcolumn+ '" -> "' + h.newcolumn+'"'
+                elif h.edit != '':
+                    edit += h.edit
                 else:
                     edit += ' изменения данных'
             else:
@@ -1632,6 +1621,8 @@ def get_student_actions(request):
                 edit += 'Карточка '+ h.card.name
                 if h.oldcolumn != '' or h.newcolumn != '':
                     edit += ' <br>"' + h.oldcolumn+ '" -> "' + h.newcolumn+'"'
+                elif h.edit != '':
+                    edit += h.edit
                 else:
                     edit += ' изменения данных'
             elif classname == 'Attendance':
@@ -1666,5 +1657,95 @@ def get_teacher_actions(request):
     data = {
         "res":res,
         'teacher':True,
+    }
+    return JsonResponse(data)
+
+def get_extra_cards(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('column') and request.GET.get('page'):
+        page = int(request.GET.get('page'))+1
+        column = CRMColumn.objects.get(id=int(request.GET.get('column')))
+        if profile.skill:
+            if profile.skill.crm_show_free_cards:
+                res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
+        if res == []:
+            res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
+        if len(res) <= (page-1)*30:
+            return JsonResponse({"Ended":True})
+        p = Paginator(res, 30)
+        page1 = p.page(page)
+        res = []
+        for card in page1.object_list:
+            author = False
+            author_id = -1
+            if card.author_profile:
+                author = card.author_profile.first_name
+                author_id = card.author_profile.id
+            color = ''
+            if card.column.id > 3:
+                color = card.colour
+            tags = ''
+            for tag in card.hashtags.all():
+                tags += tag.title.replace(' ', '') + ' '
+            res.append([
+                card.id,                            # 0
+                str(card.saved),                    # 1
+                author,                             # 2
+                card.name,                          # 3
+                card.phone,                         # 4
+                card.mail,                          # 5
+                card.extra_phone,                   # 6
+                card.parents,                       # 7
+                card.comments,                      # 8
+                str(card.was_called),               # 9
+                tags,                               # 10
+                color,                              # 11
+                card.action,                        # 12
+                author_id,                          # 13
+                card.take_url(),                    # 14
+                card.change_day_of_week(),          # 15
+                card.days_of_weeks,                 # 16
+                card.timestamp.strftime('%d.%m.%Y %H:%M'), # 17
+                ])
+
+        managers_res = [] 
+        if is_profi(profile, 'Director'):
+            manager_prof = Profession.objects.get(title='Manager')
+            managers = school.people.filter(profession=manager_prof)
+            for manager in managers:
+                managers_res.append([manager.id,manager.first_name])
+    data = {
+        "res":res,
+        "page":page,
+        "is_director":is_profi(profile, 'Director'),
+        "managers_res":managers_res,
+        "Ended":False,
+    }
+    return JsonResponse(data)
+
+def payment_history(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    res = []
+    if request.GET.get('id'):
+        student = school.people.filter(id=int(request.GET.get('id')))
+        if len(student) > 0:
+            student = student[0]
+            for payment in student.payment_history.all():
+                squad_title = ''
+                if payment.squad:
+                    squad_title = payment.squad.title
+                res.append([
+                    payment.timestamp.strftime('%d.%m.%Y %H:%M'),
+                    payment.amount,
+                    squad_title,
+                    payment.action_author.get_absolute_url(),
+                    payment.action_author.first_name])
+
+    data = {
+        "res":res,
     }
     return JsonResponse(data)

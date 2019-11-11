@@ -1,3 +1,27 @@
+.choose_color{
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+}
+.choose_color_def{
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 3px;  
+}
+.border{
+    border: 1px solid lightgrey;
+    padding: 14px;
+}
+.card_form{
+  height: 70%;
+}
 .modal2{
   position: fixed;z-index: 3001;margin-top: 100px;display: none;
 }

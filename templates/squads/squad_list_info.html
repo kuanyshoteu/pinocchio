@@ -1,6 +1,6 @@
 {% load staticfiles %}
-<div class="eight wide column" style="padding: 0">
-    <div class="ui grid group-block segment" style="margin: 0">
+<div class="eight wide column no_padding officefilter office{{sq.office.id}}" style="{%if filter_office != sq.office %}display: none;{%endif%}">
+    <div class="ui grid group-block segment no_margin">
         <div class="three wide column left-side">
             <div class="img-block">
                 {% if sq.image_icon %}
@@ -14,10 +14,12 @@
         <div class="thirteen wide column right-side" style="padding-top: 25px;padding-left: 0">
             <h5 style="font-size: 13px;margin-bottom: 5px;">
                 <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
-                {% if is_manager %}
                 <a href="{{ sq.get_update_url }}" style="font-size: 13px;">
                     <i class="icon cog"></i>
                 </a>
+                {% if trash %}
+                <a class="ui button mini green make_alive" url="{% url 'squads:make_alive' %}" id="{{ sq.id }}">Восстановить</a>
+                <div class="highlight success_alive{{sq.id}}" style="display: none;">Группа восстановлена</div>
                 {% endif %}
             </h5>
             <span style="color: grey; font-size: 12px;">{% if sq.cabinet %}{{sq.cabinet}} кабинет,{%endif%} {{ sq.teacher.first_name }}</span>
