@@ -2,11 +2,18 @@
 <div class="ui segment" style="background-color: #4a4a4a;width: 100%;border-radius: 10px;">
     <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
       <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" cx="16.91549431" cy="16.91549431" r="15.91549431" fill="none"/>
-      <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="65,100" stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+      <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="100,100" stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
       <g class="circle-chart__info">
-      <text class="circle-chart__percent" stroke="#fff" stroke-width="0.2" fill="#fff" x="16.91549431" y="15.5" alignment-baseline="central" text-anchor="middle" font-size="5">65%</text>
+      <text class="circle-chart__percent" stroke="#fff" stroke-width="0.2" fill="#fff" x="16.91549431" y="15.5" alignment-baseline="central" text-anchor="middle" font-size="5">100%</text>
       <text class="circle-chart__percent" stroke="#b2b2b2;" stroke-width="0.1" fill="#b2b2b2" x="16.91549431" y="21" alignment-baseline="central" text-anchor="middle" font-size="3">Успешность</text>
     </svg>
+    {% if hisprofile == profile %}
+    <div style="color: #fff; font-size: 14px;margin-top: 15px;text-align: center;">
+    <b>{{profile.first_name}}, Вы молодец!</b>
+    <br>
+    Хорошего дня :)
+    </div>
+    {%endif%}
 </div>
 <style type="text/css">
   .circle-chart__circle {
