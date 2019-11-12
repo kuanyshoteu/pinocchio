@@ -400,7 +400,8 @@
             dataType: 'json',
             success: function (data) {
                 $('#squad_lesson' + id).hide('fast');
-                $('.squad_lesson' + id).hide('fast');                
+                $('.squad_lesson' + id).hide('fast');
+                $('.constlect_modal'+id).modal('hide')
             }
         })        
     };
