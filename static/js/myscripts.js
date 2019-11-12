@@ -227,9 +227,14 @@
             },
             dataType: 'json',
             success: function (data) {
-                prof = 'Менеджер'
                 if (data.student) {
                     prof = 'Студент'
+                }
+                else if (data.teacher) {
+                    prof = 'Учитель'
+                }
+                else{
+                    prof = 'Менеджер'                    
                 }
                 $('.set_manager_actions'+id).empty()
                 res = data.res

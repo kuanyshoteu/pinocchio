@@ -1645,18 +1645,16 @@ def get_teacher_actions(request):
     if request.GET.get('id'):
         school = is_moderator_school(request, profile)
         teacher = Profile.objects.get(id=int(request.GET.get('id')))
-        history = sorted(
-            chain(
-                teacher.madegrades.filter(school=school, present='present')),
-            key=lambda item: item.timestamp, reverse=False)
-        for h in history:
-            edit = ''
-            classname = h.__class__.__name__
-            if classname == 'Attendance':
-                edit = 'Провел урок курса '+ h.subject.title+'<br>Дата: '+get_date(h.subject_materials, h.squad)[0].strftime('%d.%m.%Y')+'<br>Заработок: '+str(teacher.salary)+'тг'
-            else:
-                edit += h.edit
-            res.append([teacher.first_name, h.timestamp.strftime('%d.%m.%Y %H:%M'), edit])
+        materials = teacher.done_subject_materials.filter(school=school).select_related('subject')
+        squads = teacher.hissquads.all().prefetch_related('subjects')
+        for mat in materials:
+            subject = mat.subject
+            sq = squads.filter(subjects=subject)[0]
+            date = get_date(mat, sq)[0].strftime('%d.%m.%Y')
+            edit = 'Провел урок курса '+ subject.title
+            edit+='<br>Дата: '+date
+            edit+='<br>Заработок: '+str(teacher.salary)+'тг'
+            res.append([teacher.first_name, date,edit])
     data = {
         "res":res,
         'teacher':True,

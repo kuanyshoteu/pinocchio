@@ -16,11 +16,21 @@ class SquadModelAdmin(admin.ModelAdmin):
 admin.site.register(Squad, SquadModelAdmin)
 
 class AttendanceModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'student']
-    list_display_links = ["id", 'student']
-    list_filter = ["student"]
+    list_display = ["id", 'get_teacher','get_squad', 'get_subject', 'get_student','present']
+    list_display_links = ["id"]
+    list_filter = ["teacher"]
     class Meta:
         model = Attendance
+    def get_squad(self, obj):
+        return obj.squad.title
+    def get_subject(self, obj):
+        return obj.subject.title
+    def get_student(self, obj):
+        return obj.student.first_name
+    def get_teacher(self, obj):
+        if obj.teacher:
+            return obj.teacher.first_name
+        return 'None'
 
 admin.site.register(Attendance, AttendanceModelAdmin)
 
