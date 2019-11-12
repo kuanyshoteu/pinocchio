@@ -824,7 +824,7 @@ def save_card_as_user(request):
                 skill.confirmation_time = timezone.now()
                 skill.confirmed = True
                 skill.save()
-                add_student_to_squad(profile, squad)
+                add_student_to_squad(profile, squad,manager_profile)
             else:
                 profile = card.card_user
                 card.author_profile = manager_profile
