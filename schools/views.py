@@ -1664,6 +1664,7 @@ def get_teacher_actions(request):
 def get_extra_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
+    res = []
     school = is_moderator_school(request, profile)
     if request.GET.get('column') and request.GET.get('page'):
         page = int(request.GET.get('page'))+1
