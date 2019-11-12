@@ -360,7 +360,7 @@ def filtercards(column, profile):
             res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
     if res == []:
         res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
-    p = Paginator(res, 30)
+    p = Paginator(res, 20)
     page1 = p.page(1)
     return page1.object_list
 
@@ -368,7 +368,7 @@ def filtercards(column, profile):
 def filtercardsall(column, profile):
     school = profile.schools.first()
     res = column.cards.filter(school=school).prefetch_related('hashtags').exclude(author_profile__isnull=True).select_related('author_profile')
-    p = Paginator(res, 30)
+    p = Paginator(res, 20)
     page1 = p.page(1)
     return page1.object_list
 

@@ -283,6 +283,7 @@
         var phone = $('.card_phone' + id).val()
         var extra_phone = $('.card_phone_extra' + id).val()
         var mail = $('.card_mail' + id).val()
+        var parents = $('.card_parents' + id).val()
         var comment = $('.card_comment' + id).text()
         ok = false
         if (mail.length > 0) {
@@ -304,6 +305,7 @@
                     'mail':mail,
                     'comment':comment,
                     'id':id,
+                    'parents':parents
                 },
                 dataType: 'json',
                 success: function (data) {

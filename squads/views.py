@@ -243,7 +243,7 @@ def squad_delete(request, slug=None):
         instance.shown = False
         instance.deleted_time = timezone.now()
         instance.save()
-        return redirect("squads:trash")
+        return redirect("squads:list")
     context = {
         "object": instance,
         'is_trener':is_profi(profile, 'Teacher'),
@@ -774,10 +774,9 @@ def const_create_lectures(request, id=None):
                     cell = cell[0]
                 else:
                     cell = day.day_cell.create(time_period=tp,school=school)
-                lecture = school.school_lectures.create(
+                lecture = squad.squad_lectures.create(
                     cell=cell,
                     day=day,
-                    squad=squad,
                     subject=subject,
                     office = squad.office,
                     )
