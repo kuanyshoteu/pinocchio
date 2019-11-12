@@ -390,6 +390,19 @@
             })            
         }
     };
-
+    function delete_squad_lesson(id){
+        url = $('.delete_lesson_data').attr('url')
+        $.ajax({
+            url: url,
+            data: {
+                'lecture_id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#squad_lesson' + id).hide('fast');
+                $('.squad_lesson' + id).hide('fast');                
+            }
+        })        
+    };
 </script>
 {% endblock content %}

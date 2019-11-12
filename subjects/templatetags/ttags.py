@@ -496,7 +496,9 @@ def constant_school_lectures(profile, school):
     if profile.skill.crm_office:
         lectures = lectures.filter(office=profile.skill.crm_office)
     if len(profile.skill.filter_teacher.all()) > 0:
-        lectures = lectures.filter(people=profile.skill.filter_teacher.first())
+        teacher = profile.skill.filter_teacher.first()
+        squads = teacher.hissquads.all()
+        lectures = lectures.filter(squad__in=squads)
     if len(profile.skill.filter_course_connect.all()) > 0:
         lectures = lectures.filter(subject=profile.skill.filter_course_connect.first())
     res = []

@@ -278,22 +278,6 @@ $(document).ready(function () {
             }
         })
     });
-    $(document).on("click", '.delete_squad_lesson', function () {
-        url = $('.delete_lesson_data').attr('url')
-        id = $(this).attr('id')
-        console.log('rfrfrfrfrfrfrfrfrf')
-        $.ajax({
-            url: url,
-            data: {
-                'lecture_id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('#squad_lesson' + id).hide('fast');
-                $('.squad_lesson' + id).hide('fast');                
-            }
-        })        
-    });        
     $('.remove_lesson_from_subject').on('click', function(e) {
         var material_id = $(this).attr('material_id');
         var lesson_id = $(this).attr('lesson_id');
