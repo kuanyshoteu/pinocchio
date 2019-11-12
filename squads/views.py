@@ -79,7 +79,7 @@ def squad_list(request):
 
 def squad_trash(request):
     profile = get_profile(request)
-    only_directors(profile)
+    only_managers(profile)
     school = is_moderator_school(request, profile)
     two_weeks_ago = timezone.now() - timedelta(14)
     delete_list = school.groups.filter(shown=False, deleted_time__lt=two_weeks_ago)
