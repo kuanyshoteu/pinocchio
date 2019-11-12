@@ -281,6 +281,7 @@ $(document).ready(function () {
     $(document).on("click", '.delete_squad_lesson', function () {
         url = $('.delete_lesson_data').attr('url')
         id = $(this).attr('id')
+        console.log('rfrfrfrfrfrfrfrfrf')
         $.ajax({
             url: url,
             data: {
