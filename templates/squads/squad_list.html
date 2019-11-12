@@ -19,7 +19,7 @@
                         <div class="ui segment mb0 pt15 pl15 pr15" style="background-color: #fafbfc;">
                             <div style="font-size: 16px;display: flex;">
                                 <div class="mt5" style="display: flex;">
-                                    {%if trash %}<b style="color: darkred;width: 160px;">Удаленные группы</b>{%else%}Группы{%endif%} 
+                                    {%if trash and is_manager %}<b style="color: darkred;width: 160px;">Удаленные группы</b>{%else%}Группы{%endif%} 
                                     <div class="ml5" style="color: #939393;">{{ squads|length }}</div>
                                 </div>
                                 <form class="ui form mb0" style="width: 250px;">
