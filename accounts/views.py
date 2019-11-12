@@ -53,7 +53,10 @@ def account_view(request, user = None):
     if is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.all()
     elif is_profi(hisprofile, 'Manager'):
-        hissquads = profile.schools.first().groups.all()
+        if profile.skill.crm_office2:
+            hissquads = profile.skill.crm_office2.groups.all()
+        else:
+            hissquads =  profile.schools.first().groups.all()
     else:
         hissquads = hisprofile.squads.all()
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]

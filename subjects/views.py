@@ -183,7 +183,7 @@ def subject_update(request, slug=None):
         else:
             get_number_of_materials = int(request.POST.get('number_of_materials'))
         if instance.number_of_materials < get_number_of_materials:
-            if get_number_of_materials < 100:
+            if get_number_of_materials < 102:
                 for i in range(0, get_number_of_materials - instance.number_of_materials):
                     instance.materials.create(
                         school=instance.school
