@@ -1674,9 +1674,9 @@ def get_extra_cards(request):
                 res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
         if res == []:
             res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
-        if len(res) <= (page-1)*30:
+        if len(res) <= (page-1)*20:
             return JsonResponse({"Ended":True})
-        p = Paginator(res, 30)
+        p = Paginator(res, 20)
         page1 = p.page(page)
         res = []
         for card in page1.object_list:

@@ -13,6 +13,10 @@ def remove_space(title):
     return title.replace(' ', '_')
 
 @register.filter
+def last_payment(squad, profile):
+    return squad.payment_history.filter(user=profile).last()
+
+@register.filter
 def office_other_managers(office):
     school = office.school
     profession = Profession.objects.get(title = 'Manager')

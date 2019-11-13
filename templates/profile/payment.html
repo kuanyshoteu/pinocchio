@@ -127,7 +127,7 @@
                         <a href="{{ nm.squad.get_absolute_url }}"><b>{{ nm.squad.title }}</b></a>
                         <div class="ui divider mb5 mt5"></div>
                         <span style="font-size: 14px;">Группа проходит курсы:</span>
-                        <div>
+                        <div class="nm_subjects">
                             {% for subject in nm.squad.subjects.all %}
                             <a class="ui button mini full-w mt10" style="padding: 5px;line-height: 15px;" href="{{subject.get_absolute_url}}">
                                 <span style="font-size: 13px;color: #000">{{subject.title}}</span>
@@ -138,13 +138,13 @@
                         </div>
                         <div class="ui divider mb5 mt5"></div>
                         <div>
-                            <b>Оплачено:</b> <span class="nm_money{{nm.id}}">{{ nm.money }}тг</span>
-                            <br>
                             Итоговая стоимость посещения данной группы:
                             {% if nm.lesson_bill > 0 %}
                                 {{ nm.lesson_bill }}тг за урок
                                 <br>
                             {% endif %}
+                            <b>Оплачено:</b> <span class="nm_money{{nm.id}}">{{ nm.money }}тг</span>
+                            <br>
                             {% if nm.bill > 0 %}
                                 {{ nm.bill }}тг в месяц
                                 <br>
@@ -208,3 +208,18 @@
 </div>
 {%endif%}
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}"></span>
+<script type="text/javascript">
+    nm_heights()
+    function nm_heights(){
+        var max = 0
+        $('.nm_subjects').each(function() {
+            height = parseInt($(this).css('height'))
+            if (max < height) {
+                max = height
+            }
+        })
+        $('.nm_subjects').each(function() {
+            height = $(this).css('height', height)
+        })
+    }
+</script>

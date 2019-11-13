@@ -99,7 +99,7 @@
 			        	</div>
 						<div class="ui segment" style="line-height: 40px;margin-top: 0;height: 297px;">
 							<div class="ui grid">
-								<div class="sixteen wide column">
+								<div class="sixteen wide column pb0">
                                     <input type="file" name="squad_banner" id="squad_banner" class="postfile">
                                     <label class="file_post" for="squad_banner">
                                         <a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
@@ -109,22 +109,32 @@
                                         <a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
                                     </label>
 								</div>
-                                <div class="eight wide column pt0 pr0 pb0">
+                                <div class="eight wide column pt0 pb0">
                                     Цвет в расписании: 
                                     <br>
-                                    <div class="choose_color_def" url="{{instance.choose_color}}" style="background-color:{%if instance.color_back != '' %}{{instance.color_back}}{%else%}rgb(49, 58, 87){%endif%};display: inline-block;"></div>
+                                    <div class="choose_color_def" url="{{instance.choose_color}}" style="background-color:{%if instance.color_back != '' %}{{instance.color_back}}{%else%}rgb(49, 58, 87){%endif%};display: inline-block;">
+                                        <b>{{instance.title}}</b>
+                                    </div>
                                 </div>
                                 <div class="eight wide column pl0 pb0 pt0">
                                     Поменять цвет:
                                     <br>
                                     <div class="choose_color" id="#DB2828" style="background-color: #DB2828;"></div>
-                                    <div class="choose_color" id="#5181b8" style="background-color: #5181b8;"></div>
-                                    <div class="choose_color" id="#1b1c1d" style="background-color: #1b1c1d;"></div>
-                                    <div class="choose_color" id="#f2711c" style="background-color: #f2711c;"></div>
-                                    <div class="choose_color" id="#00b5ad" style="background-color: #00b5ad;"></div>
-                                    <div class="choose_color" id="#6435c9" style="background-color: #6435c9;"></div>
                                     <div class="choose_color" id="#e03997" style="background-color: #e03997;"></div>
+                                    <div class="choose_color" id="#fbbd08" style="background-color: #fbbd08;"></div>
+                                    <div class="choose_color" id="#f2711c" style="background-color: #f2711c;"></div>
+                                    <div class="choose_color" id="#a5673f" style="background-color: #a5673f;"></div>
+                                    <br>
+                                    <div class="choose_color" id="#1b1c1d" style="background-color: #1b1c1d;"></div>
                                     <div class="choose_color" id="#767676" style="background-color: #767676;"></div>
+                                    <div class="choose_color" id="rgb(49, 58, 87)" style="background-color: rgb(49, 58, 87);"></div>
+                                    <div class="choose_color" id="#6435c9" style="background-color: #6435c9;"></div>
+                                    <div class="choose_color" id="#5181b8" style="background-color: #5181b8;"></div>
+                                    <br>
+                                    <div class="choose_color" id="darkgreen" style="background-color: darkgreen;"></div>
+                                    <div class="choose_color" id="#21ba45" style="background-color: #21ba45;"></div>
+                                    <div class="choose_color" id="lightgreen" style="background-color: lightgreen;"></div>
+                                    <div class="choose_color" id="#00b5ad" style="background-color: #00b5ad;"></div>
                                 </div>
                                 <div class="sixteen wide column pt0" style="margin-top: -10px;">
                                     <b>Офис:</b>
