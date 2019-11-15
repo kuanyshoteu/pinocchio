@@ -20,6 +20,7 @@ from papers.models import *
 from library.models import Folder
 from accounts.models import Profile, CRMCardHistory
 from accounts.forms import *
+from accounts.views import add_money
 from django.contrib.auth import (
     authenticate,
     get_user_model,
@@ -990,25 +991,9 @@ def delete_payment(request):
                 student = payment.user
                 card = student.card.get(school=school)
                 squad = payment.squad
-                remove_money(student, school, squad, card, -1*payment.amount, profile)
-                payment.delete()
+                add_money(student, school, squad, card, -1*payment.amount, profile)
 
     data = {
         "ok":True
     }
     return JsonResponse(data)
-
-def remove_money(profile, school, squad, card, amount, manager):
-    nm = card.need_money.get(squad=squad)
-    nm.money += amount
-    nm.save()
-    if nm.money >= nm.bill + nm.lesson_bill:
-        if card.colour == 'red' or card.colour == 'orange':
-            if not card.was_called:
-                skill = card.author_profile.skill
-                skill.need_actions -= 1
-                skill.save()
-        card.colour = 'white'
-        card.save()
-    change_school_money(school, amount, 'student_payment', profile.first_name)
-    school.save()

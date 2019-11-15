@@ -1578,7 +1578,11 @@ def get_manager_actions(request):
             edit = ''
             classname = h.__class__.__name__
             if classname == 'PaymentHistory':
-                edit+='Принята оплата у '+h.user.first_name+', сумма '+str(h.amount)+'тг '
+                if h.amount < 0:
+                    edit += 'Отмена оплаты у '
+                else:
+                    edit+='Принята оплата у '
+                edit += h.user.first_name+', сумма '+str(h.amount)+'тг '
                 if h.squad:
                     edit+='за группу '+h.squad.title
             elif classname == 'CRMCardHistory':
