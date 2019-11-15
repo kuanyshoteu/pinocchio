@@ -5,7 +5,7 @@
         url = $('.data').attr('crm_option_url2')
         if ($('.check_moderator').attr('status')=='True') {
             url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
-        }        
+        }
         $.ajax({
             url: url,
             data: {

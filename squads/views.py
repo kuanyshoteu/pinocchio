@@ -969,3 +969,46 @@ def make_alive(request):
     data = {
     }
     return JsonResponse(data)
+
+def delete_payment(request):
+    ok = False
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('id'):
+        school = is_moderator_school(request, profile)
+        payment = school.payment_history.filter(id=int(request.GET.get('id')))
+        if len(payment) > 0:
+            do = False
+            payment = payment[0]
+            if profile == payment.action_author:
+                do = True
+            else:
+                director = Profession.objects.get(title = 'Director')
+                if director in profile.profession.all():
+                    do = True
+            if do:
+                student = payment.user
+                card = student.card.get(school=school)
+                squad = payment.squad
+                remove_money(student, school, squad, card, -1*payment.amount, profile)
+                payment.delete()
+
+    data = {
+        "ok":True
+    }
+    return JsonResponse(data)
+
+def remove_money(profile, school, squad, card, amount, manager):
+    nm = card.need_money.get(squad=squad)
+    nm.money += amount
+    nm.save()
+    if nm.money >= nm.bill + nm.lesson_bill:
+        if card.colour == 'red' or card.colour == 'orange':
+            if not card.was_called:
+                skill = card.author_profile.skill
+                skill.need_actions -= 1
+                skill.save()
+        card.colour = 'white'
+        card.save()
+    change_school_money(school, amount, 'student_payment', profile.first_name)
+    school.save()

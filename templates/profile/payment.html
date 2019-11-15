@@ -34,22 +34,38 @@
             <div class="ui modal payment_history">
                 <i class="close icon"></i>
                 <div class="content">
-                    <table class="no_margin" style="font-size: 13px;">
+                    <div class="text-center mb15">
+                        <div style="font-size: 17px;">
+                            <b>История оплаты</b>
+                        </div>
+                        <i style="font-size: 13px;">
+                            Можете отменить оплату в течении 3 суток
+                        </i>
+                    </div>
+                    <table style="font-size: 13px;margin: 0 auto;">
                         <thead>
                             <tr>
-                                <th class="border">Время</th>
-                                <th class="border">Сумма</th>
                                 <th class="border">Группа</th>
+                                <th class="border">Сумма</th>
                                 <th class="border">Менеджер</th>
+                                <th class="border">Время</th>
+                                <th class=""></th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for payment in hisprofile.payment_history.all %}
                             <tr>
-                                <td class="border">{{ payment.timestamp }}</td>
-                                <td class="border">{{ payment.amount }} тг</td>
                                 <td class="border">{{ payment.squad.title }}</td>
+                                <td class="border">{{ payment.amount }} тг</td>
                                 <td class="border"><a href="{{payment.action_author.get_absolute_url}}">{{ payment.action_author.first_name }}</a></td>
+                                <td class="border">{{ payment.timestamp }}</td>
+                                <td class="">
+                                    {% if payment.timestamp|checkdaydif:3 %}
+                                    <a class="ui button mini red" onclick="delete_payment('{{payment.id}}')">Отменить оплату</a>
+                                    {%endif%}
+                                    <br>
+                                    <div class="payment_delete_error highlight_red" style="display: none;">Что-то пошло не так</div>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -118,96 +134,101 @@
 <div class="ui segment mb0" style="font-size: 15px;">
     Клиент записан в данные группы:
 </div>
-<div class="ui segment mt0">
-    <div class="ui grid stackable">
-        <div class="sixteen wide column pr0">
-            <div class="ui grid mt0">
-            {% for nm in profile|get_bills:hisprofile %}
-                <div class="wide column pt5 pl5 pr5" style="min-width: 33%;border: 1px lightgrey solid;">
-                        <a href="{{ nm.squad.get_absolute_url }}"><b>{{ nm.squad.title }}</b></a>
-                        <div class="ui divider mb5 mt5"></div>
-                        <span style="font-size: 14px;">Группа проходит курсы:</span>
-                        <div class="nm_subjects">
-                            {% for subject in nm.squad.subjects.all %}
-                            <a class="ui button mini full-w mt10" style="padding: 5px;line-height: 15px;" href="{{subject.get_absolute_url}}">
-                                <span style="font-size: 13px;color: #000">{{subject.title}}</span>
-                                <br>
-                                <span style="color: #545454">Стоимость: {{subject.cost}}тг {%if subject.cost_period == 'lesson'%}за урок{%elif subject.cost_period == 'course'%}за курс{% else %}в месяц{%endif%}</span>
-                            </a>
-                            {% endfor %}
-                        </div>
-                        <div class="ui divider mb5 mt5"></div>
-                        <div>
-                            Итоговая стоимость посещения данной группы:
-                            {% if nm.lesson_bill > 0 %}
-                                {{ nm.lesson_bill }}тг за урок
-                                <br>
-                            {% endif %}
-                            <b>Оплачено:</b> <span class="nm_money{{nm.id}}">{{ nm.money }}тг</span>
-                            <br>
-                            {% if nm.bill > 0 %}
-                                {{ nm.bill }}тг в месяц
-                                <br>
-                            {% endif %}
-                            <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
-                            <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <b class="text-center">
-                                        Скидки <span class="discount_student_name" id=""></span> в группе {{nm.squad.title}}
-                                    </b>
-                                    <br>
-                                    Нажмите на те скидки, которые нужно дать студенту
-                                    <br>
-                                    Зелеными отмечены те скидки, которые есть у студента
-                                    <div class="mt15 student_discounts_list">
-                                        {% for dis in nm.squad.school.discounts.all %}
-                                        <a class="dis{{dis.id}} dis ui button mini show_hint_schedule" sq_id="{{nm.squad.id}}" id="{{dis.id}}">
-                                            <b>{{dis.title}}</b>
-                                            <br>
-                                            {{dis.amount}} 
-                                            {%if dis.discount_type == 'percent' %}
-                                                процентов
-                                            {%else%}
-                                                тенге
-                                            {%endif%}
-                                        </a> 
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-<!--                     <form class="ui form">
-                        <table class="no_margin" class="mb0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for ph in payment.2 %}
-                                <tr>
-                                    <td>
-                                        {{ph.amount}} тг
-                                        {{ph.timestamp}} тг
-                                        {{ph.manager.first_name}}
-                                    </td>
-                                </tr>
-                                {% endfor %}                    
-                            </tbody>
-                        </table>
-                    </form>
- -->                    <div>
-                    </div>
+<div class="ui segment mt0 no_padding">
+    <div class="ui grid no_margin" style="background-color: #4a4a4a">
+    {% for nm in profile|get_bills:hisprofile %}
+        <div class="wide column pr0" style="width: 33%;">
+            <div class="ui segment">
+                <a href="{{ nm.squad.get_absolute_url }}"><b>{{ nm.squad.title }}</b></a>
+                <div class="ui divider mb5 mt5"></div>
+                <span style="font-size: 14px;">Группа проходит курсы:</span>
+                <div class="nm_subjects">
+                    {% for subject in nm.squad.subjects.all %}
+                    <a class="ui button mini full-w mt10" style="padding: 5px;line-height: 15px;" href="{{subject.get_absolute_url}}">
+                        <span style="font-size: 13px;color: #000">{{subject.title}}</span>
+                        <br>
+                        <span style="color: #545454">Стоимость: {{subject.cost}}тг {%if subject.cost_period == 'lesson'%}за урок{%elif subject.cost_period == 'course'%}за курс{% else %}в месяц{%endif%}</span>
+                    </a>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-            </div>
+                <div class="ui divider mb5 mt5"></div>
+                <div>
+                    <b>Итоговая стоимость посещения данной группы:</b>
+                    {% if nm.lesson_bill > 0 %}
+                        <span class="underline">{{ nm.lesson_bill }}тг за урок</span>
+                        <br>
+                    {% endif %}
+                    {% if nm.bill > 0 %}
+                        <span class="underline">{{ nm.bill }}тг в месяц</span>
+                        <br>
+                    {% endif %}
+                    <div class="mt10"></div>
+                    {% if nm.money > 0 %}
+                        <b>Оплачено:</b> 
+                    {%else%}
+                        <b style="color: red">Задолженность:</b> 
+                    {%endif%}
+                    <span class="nm_money{{nm.id}} underline">{{ nm.money }}тг</span> 
+                    <div class="mt10"></div>
+                    <span>{{ nm.squad|last_payment:hisprofile }}</span>
+                    <br>
+                    <i>(*подробнее в "Истории оплаты" сверху)</i>
+                    <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
+                    <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <b class="text-center">
+                                Скидки <span class="discount_student_name" id=""></span> в группе {{nm.squad.title}}
+                            </b>
+                            <br>
+                            Нажмите на те скидки, которые нужно дать студенту
+                            <br>
+                            Зелеными отмечены те скидки, которые есть у студента
+                            <div class="mt15 student_discounts_list">
+                                {% for dis in nm.squad.school.discounts.all %}
+                                <a class="dis{{dis.id}} dis ui button mini show_hint_schedule" sq_id="{{nm.squad.id}}" id="{{dis.id}}">
+                                    <b>{{dis.title}}</b>
+                                    <br>
+                                    {{dis.amount}} 
+                                    {%if dis.discount_type == 'percent' %}
+                                        процентов
+                                    {%else%}
+                                        тенге
+                                    {%endif%}
+                                </a> 
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+<!--                     <form class="ui form">
+                <table class="no_margin" class="mb0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ph in payment.2 %}
+                        <tr>
+                            <td>
+                                {{ph.amount}} тг
+                                {{ph.timestamp}} тг
+                                {{ph.manager.first_name}}
+                            </td>
+                        </tr>
+                        {% endfor %}                    
+                    </tbody>
+                </table>
+            </form>
+-->                </div>    
         </div>
+    {% endfor %}
     </div>
 </div>
 {%endif%}
-<span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}"></span>
+<span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
 <script type="text/javascript">
     nm_heights()
     function nm_heights(){
@@ -220,6 +241,25 @@
         })
         $('.nm_subjects').each(function() {
             height = $(this).css('height', height)
+        })
+    }
+    function delete_payment(id){
+        url = $('.instance_data').attr('delete_payment')        
+        $('.delete_payment_error').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    location.reload()
+                }
+                else{
+                    $('.payment_delete_error').show()
+                }
+            }
         })
     }
 </script>

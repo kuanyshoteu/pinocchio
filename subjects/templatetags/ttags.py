@@ -13,8 +13,15 @@ def remove_space(title):
     return title.replace(' ', '_')
 
 @register.filter
+def checkdaydif(time, dif):
+    return timezone.now() - timedelta(dif) < time
+
+@register.filter
 def last_payment(squad, profile):
-    return squad.payment_history.filter(user=profile).last()
+    res = squad.payment_history.filter(user=profile).first()
+    if res:
+        return 'Последняя оплата была: '+res.timestamp.strftime('%d.%m.%Y')+' в размере '+str(res.amount)+'тг'
+    return 'Еще не было оплаты'
 
 @register.filter
 def office_other_managers(office):

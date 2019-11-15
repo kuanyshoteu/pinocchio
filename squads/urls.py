@@ -36,4 +36,5 @@ urlpatterns = [
     url(r'^api/searching_groups/$', searching_groups, name='searching_groups'),
     url(r'^api/choose_color/(?P<id>\d+)/$', choose_color, name='choose_color'),
     url(r'^api/make_alive/$', make_alive, name='make_alive'),
+    url(r'^api/delete_payment/$', delete_payment, name='delete_payment'),
 ]
