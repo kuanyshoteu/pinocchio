@@ -991,6 +991,8 @@ def delete_payment(request):
                 student = payment.user
                 card = student.card.get(school=school)
                 squad = payment.squad
+                payment.canceled = True
+                payment.save()
                 add_money(student, school, squad, card, -1*payment.amount, profile)
 
     data = {

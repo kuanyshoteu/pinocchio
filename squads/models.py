@@ -152,6 +152,7 @@ class PaymentHistory(models.Model):
     squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='payment_history')
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='made_payments') 
     amount = models.IntegerField(default=0)
+    canceled = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['-timestamp']

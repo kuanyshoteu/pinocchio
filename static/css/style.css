@@ -1,3 +1,38 @@
+.newcardlight{
+  background-color: #fff;
+  -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+  -webkit-animation-duration: 7s; /* Safari 4.0 - 8.0 */
+  animation-name: example;
+  animation-duration: 7s;
+}
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes example {
+  from {background-color: #fbbd08;}
+  to {background-color: #fff;}
+}
+/* Standard syntax */
+@keyframes example {
+  from {background-color: #fbbd08;}
+  to {background-color: #fff;}
+}
+.backdark{
+  background-color: #4a4a4a !important;
+}
+.backgrey{
+  background-color: #f9f9f9 !important;
+}
+.textw{
+  color: #fff !important;
+}
+.textb{
+  color: #000;
+}
+.text13{
+  font-size:13px; 
+}
+.text15{
+  font-size:15px !important; 
+}
 .underline{
   text-decoration: underline;
 }
@@ -669,11 +704,11 @@ a{
 .crm_column{
   padding-top: 0;text-align: left;
 }
-.crm_card{
+.card_segment{
   padding: 12px 5px 4px 5px !important;
   box-shadow: 0 2px 2px 2px #3a3a3a !important;
   cursor: pointer;
-  margin: 0 !important;
+  margin: 0 0 10px 0 !important;
 }
 .red_card{
   border: 5px solid #ff5828;

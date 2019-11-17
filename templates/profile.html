@@ -16,7 +16,7 @@
 <a id="go-back-btn" class="start_info_btn" style="display: none;">
     <i class="arrow left icon"></i>Назад
 </a>
-<div id="profile" class="">
+<div id="profile" class="mb150">
     <div class="ui container" >
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}            
@@ -33,12 +33,12 @@
                     <div class="sixteen wide column left-side" style="padding: 0 !important;">
                         <div class="twenty mitem" style="padding: 0;float: left;">
                             <div class="not_in_mobile">
-                                {% include 'profile/skills_spider.html' %}
                                 {% include 'profile/circle_chart.html' %}
                                 {% include 'profile/chart.html' %}
                             </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
+                            {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 %}
                             {% include 'profile/payment.html' %}
                             {% if is_manager and hisprofile.is_student or is_director %}
                                 {% include 'profile/history.html' %}
@@ -53,7 +53,11 @@
                                     {% include 'profile/attendance.html' %}
                                 {% endif %}
                             {% endif %}
-                            <br><br><br>
+                            {%else%}
+                            <div class="ui segment mb0 text15">
+                                Еще нет ни одной группы
+                            </div>
+                            {%endif%}
                         </div>
                         <span style="display: none;" class="is_blurred" answer="no"></span>
                     </div>

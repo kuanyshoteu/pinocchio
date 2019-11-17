@@ -853,6 +853,165 @@
             $('.dataconst').attr('page_mode', 'norm')            
         }
     })
+  $('.filter-item').on('click', function () {
+    $(this).children('i').toggleClass('show-icon');
+    if ($(this).attr('status') == '0') {
+      $(this).attr('status', '1')
+    }
+    else {
+      $(this).attr('status', '0')
+    }
+    filtercrm()
+  });
+  $('.search_by_tags').click(function (e) {
+    filtercrm()
+  })
+  function filtercrm() {
+    $('.crm_card').hide()
+    search_text = $('#search_text').val()
+    filterstring = ''
+    if (search_text != '') {
+      filterstring = filterstring + '.' + search_text.replace(' ', '.')
+    }
+    set = document.getElementsByClassName('filter-item')
+    for (var i = set.length - 1; i >= 0; i--) {
+      if (set[i].getAttribute('status') != '0') {
+        title = set[i].getAttribute('id').replace(' ', '').replace(' ', '').replace(' ', '').replace(' ', '')
+        filterstring = filterstring + '.' + title
+      }
+    }
+    $(filterstring).show()
+    if (filterstring == '') {
+      $('.crm_card').show()
+    }
+  }
+  $('#search_text').on('input', function (e) {
+    text = $(this).val()
+    if (text.length == 0) {
+      filtercrm()
+      $('.search_hint').hide();
+    }
+    else {
+      url = '/schools/api/call_helper/'
+      $.ajax({
+        url: url,
+        data: {
+          'text': text,
+          'reverse': 'no',
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data.res.length == 0) {
+            $('.search_hint').hide();
+          }
+          else {
+            $('.search_hint').empty();
+            url = $('.show_url').attr('url')
+            for (var i = 0; i < data.res.length; i++) {
+              var element = $('<div class="hint_item" onclick="hint_item(' + "'" + data.res[i] + "'" + ')">' + data.res[i] + '</div>').appendTo('.search_hint');
+            }
+            $('.search_hint').show();
+          }
+        }
+      })
+    }
+  })
+  $('.search_by_tags').on('click', function (e) {
+    filtercrm()
+  })
+
+    function fill_card_data(data,column,position){
+        for (var i = 0; i < data.res.length; i++) {
+            tags = data.res[i][10]
+            id = data.res[i][0]
+            saved = data.res[i][1]
+            author = data.res[i][2]
+            name = data.res[i][3]
+            phone = data.res[i][4]
+            mail = data.res[i][5]
+            extra_phone = data.res[i][6]
+            parents = data.res[i][7]
+            comments = data.res[i][8]
+            was_called = data.res[i][9]
+            hashtags = data.res[i][10]
+            colour = data.res[i][11]
+            calendar_color = 'green'
+            was_called = data.res[i][9]
+            ishide = 'green'
+            ishide2 = 'Связались'
+            if(was_called == 'false'){
+                ishide = ''    
+                ishide2 = 'Связывались ' + data.res[i][17]
+            }
+            action = data.res[i][12]
+            is_director = ''
+            if(data.is_director){
+                managers = data.managers_res
+                managers_str = ''
+                for(var j = 0; j < managers.length; j++){
+                    if (managers[j][0] != data.res[i][13]){
+                        managers_str += '<option value="'+managers[j][0]+'">'+managers[j][1]+'</option>'
+                    }
+                }
+                if(author){
+                    select_is_author = '<option value="-1">'+name+'</option><option value="-1">Без менеджера</option>'
+                }
+                else{
+                    select_is_author = '<option value="-1">Без менеджера</option>'
+                }
+                is_director = '<select onchange="change_manager('+id+')" class="change_manager change_manager'+id+'" url="/schools/api/change_manager/" id="'+id+'">'+select_is_author+managers_str+'</select>'
+            }
+            else{
+                if(author){
+                    is_director = '<a class="ui button mini takecard" style="float: right;" id="'+id+'" url="'+data.res[i][14]+'">Отказаться от карточки</a>'
+                }
+                else{
+                    is_director = '<a class="ui button mini small green full-w takecard" id="'+id+'" url="'+data.res[i][14]+'">Взять себе</a>'
+                }
+            }
+            days = ''
+            days_of_weeks = ['Понедельник', 'Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье']
+            for (var j = 0; j < 7; j++) {
+                color = ''
+                if (data.res[i][16][j]) {color='green'}
+                days += '<div class="wide column" style="padding: 0 3px;width: 14%;"> <a onclick="card_form_days('+"'c"+id+"d"+j+"'"+')" class="ui button mini card_form-daysc'+id+"d"+j+' full-w '+color+'" style="padding: 7px 14px !important;" card="'+id+'" id="'+j+'">'+days_of_weeks[j]+'</a> </div>'
+            }
+            highlight = ''
+            if (position == 'top') {highlight=' newcardlight '}
+            if (saved == 'True') {calendar_color = 'blue'}
+            html_str = '<div class="crm_card '+name+' '+phone+' '+tags+' crm_card" id="card_container'+id+'" is_saved="'+saved+'"> <div id="card'+id+'" class="ui segment card_segment'+highlight+' '+colour+'" ondragstart="save_card_id('+id+', '+"'"+name+"'"+')" draggable="true" column_id="'+column+'"> <div onclick="open_crmcard('+id+')" style="width: 80%;display: inline-block;"> <span style="font-weight: 600;color:#285473;">'+name+'</span> <div style="color: #707070;font-size: 12px;"> '+phone+' </div> </div> <div style="width: 20%;display: inline-block;float: right;margin-top: 20px;"> <a class="delete_card" onclick="delete_card('+id+')" id="+id+"><b>×</b></a> <a class="show_card_schedule mb5" id="cardsc'+id+'" onclick="openNav('+id+','+"'"+name+"'"+')" column="'+column+'"> <i class="icontable'+id+' icon table '+calendar_color+'"></i> </a> <a class="show_card_schedule" onclick="open_crmhist('+"'"+id+"'"+')" style="margin-top: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a> </div> <div style="width: 80%;"> <a class="nouser'+id+'" style="color: darkblue;font-size: 11px">'+author+'</a> </div> <div style="width: 20%;"> </div> </div> </div> <div class="ui modal card_form" id="card_form'+id+'"> <i class="close icon"></i> <div class="content"> <div class="card_head"> Карточка '+name+' </div> <form class="ui form card_form_update_here" method="POST" enctype="multipart/form-data"> <span class="wrong_mail_error wrong_mail_error'+id+' highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span> <div class="ui grid stackable card_form_update"> <div class="third wide column pr0" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Имя:</b> <textarea class="card_name'+id+'" style="margin-bottom: 8px;" placeholder="Имя">'+name+'</textarea> <b>Телефон:</b> <textarea class="card_phone'+id+'" style="margin-bottom: 8px;" placeholder="Телефон">'+phone+'</textarea> </div> <div class="third wide column pr0" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Почта:</b> <textarea class="card_mail'+id+'" style="margin-bottom: 8px;" placeholder="Почта">'+mail+'</textarea> <i>Дополнительный телефон:</i> <textarea class="card_phone_extra'+id+'" style="margin-bottom: 8px;" placeholder="Дополнительный телефон">'+extra_phone+'</textarea> </div> <div class="third wide column" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Родители:</b> <textarea class="card_parents'+id+'" style="margin-bottom: 8px;" placeholder="Почта">'+parents+'</textarea> </div> <div class="sixteen wide column" style="padding-top: 5px;"> <div style="height: 65px;margin-bottom: 0;"> <b style="margin: 0 44%;">Комментарий:</b> <div contenteditable="true" id="'+id+'" class="card_comment-textarea card_comment'+id+'" placeholder="Комментарий">'+comments+'</div> <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper'+id+'"> <a class="card_comment-item ui button mini card'+id+'helper1" id="'+id+'"> </a> <br> <a class="card_comment-item ui button mini card'+id+'helper2" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper3" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper4" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper5" id="'+id+'"> </a><br> </div> </div> '+' <div class="ui grid stackable" style="margin-top: 30px;"> <div class="third wide column" id="card_form-select"> <select class="card_form-select-contact card_form-select-contact'+id+'" id="'+id+'" onchange="card_called_change('+id+')"> <option value="'+action+'">'+action+'</option> <option value="-1">Другое</option> <option value="Позвонить">Позвонить</option> <option value="Whats app">Whats app</option> <option value="СМС">СМС</option> <option value="Почта">Почта</option> </select></div><div class="third wide column" id="card_form-select"> <a class="ui button '+ishide+' small full-w card_form-select-contact-btn card_form-select-contact-btn'+id+'" id="'+id+'" onclick="card_called('+id+')">Связались '+action+'</a> </div> <div class="third wide column" id="card_form-select"> '+is_director+' </div> <div class="sixteen wide column" style="text-align: center;margin-top: 15px;"> <div class="ui grid"> '+days+' </div> </div> <div class="sixteen wide column center aligned"> <a class="ui button blue tiny" onclick="edit_card('+id+')" id="'+id+'">Сохранить</a> </div> </div> </div> </div> </form> </div> </div> <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist'+id+'"> <i class="close icon"></i> <div class="content"> <div class="card_head"> Карточка '+name+' </div> <div class="ui grid stackable card_form_update"> <div class="sixteen wide column"> <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений </div> </div> <div class="sixteen wide column cardhistory'+id+'" style="color: #6b6d72;font-size: 12px;"> </div> </div> </div> </div>'
+            if (position == 'bottom') {
+                $(html_str).appendTo('.crmbox'+column)
+            }
+            else{
+                $(html_str).prependTo('.crmbox'+column)
+            }
+        }
+    }
+    $('.column_scrollable').on('scroll', function() {
+        this_ = $(this)
+        url = this_.attr('url')
+        column = this_.attr('id')
+        page = this_.attr('page')
+        var licenseElement = this_.get(0);
+        if ((licenseElement.scrollTop + licenseElement.offsetHeight) >= licenseElement.scrollHeight) {
+            $.ajax({
+                url: url,
+                data: {
+                    'column':column,
+                    'page':page,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    this_.attr('page', data.page)
+                    if (data.Ended == false) {
+                        fill_card_data(data,column,'bottom')                        
+                    }
+                }
+            })
+        }
+    });
+
     $('.add_card').click(function(e) {
         var id = $(this).attr("id")
         var name = $('.new_card_name' + id).val()
@@ -888,31 +1047,14 @@
                         $('.alreadyregistered'+id).show()
                     }
                     else{
-                        location.reload()                        
+                        fill_card_data(data,id,'top')
+                        $('#new_card_form'+id).modal('hide')
                     }
-                    // card_id = data.card_id; 
-                    // var element = $('<div style="padding: 5px 0" id="card_container'+card_id+'" is_saved="'+data.is_saved+
-                    //     '"><div id="card'+card_id+'" class="ui segment full-w crm_card mine" ondragstart="save_card_id('
-                    //     +"'"+card_id+"'"+", "+"'"+data.card_name+"'"+')" draggable="true" column_id="'
-                    //     +id+'"> <div onclick="open_crmcard('+"'"+card_id+"'"+')" style="width: 80%;display: inline-block;">'+
-                    //     '<a onclick="delete_card('+"'"+card_id+"'"+')" class="delete_card" id="'
-                    //     +card_id+'"><b>×</b></a><span style="font-weight: 600;color:#285473;">'
-                    //     +data.card_name+'</span><div style="color: darkgrey;font-size: 12px;">'
-                    //     +data.card_phone+' </div></div><div style="width: 20%;display: inline-block;float: right;margin-top: 20px;">'+
-                    //     '<a class="show_card_schedule" onclick="openNav('+"'"+card_id+"'"+', '+"'"+data.card_name+
-                    //     "'"+')"><i class="icon table green"></i></a></div>'+
-                    //     '<div style="width: 100%;"><a class="nouser{{card.id}}" href="'+
-                    //     data.author_url+'" style="color: darkblue;font-size: 11px">'+data.author_profile+'</a> </div></div></div>');
-                    // element.appendTo('.crmbox' + id)
-                    // $('#new_card_form'+id).modal('hide')
-                    // var form = $('<div class="ui modal large" style="margin-top: 10%;min-height: 100%;" id="card_form'+data.card_id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form" method="POST" enctype="multipart/form-data"> <div class="ui grid stackable"> <div class="six wide column"> <textarea class="card_name'+data.card_id+'" placeholder="Имя">'+data.card_name+'</textarea> <textarea class="card_phone'+data.card_id+'" placeholder="Телефон">'+data.card_phone+'</textarea> <textarea class="card_mail'+data.card_id+'" placeholder="Почта">'+data.card_mail+'</textarea> </div> <div class="ten wide column"> <textarea class="card_comment'+data.card_id+'" placeholder="Комментарий">'+data.card_comment+'</textarea> </div> <div class="sixteen wide column center aligned"> <a class="ui button blue tiny" onclick="edit_card('+data.card_id+')" id="'+data.card_id+'">Сохранить</a> </div> <div class="sixteen wide column"> <div class="ui divider full-w"></div> <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений</div> </div> <div class="sixteen wide column cardhistory'+data.card_id+'" style="color: #6b6d72;font-size: 12px;"> </div> </div> </form> </div> </div>');
-                    // form.appendTo('.crmbox' + id)
                 }
             })        
         }
         else{
             $('.wrong_mail_error'+id).show()
-            console.log('sdfsdf', id)
         }
     });
     update_schedule_lectures();

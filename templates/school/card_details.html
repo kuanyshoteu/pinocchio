@@ -1,20 +1,18 @@
 {% load tttags %}
 {% load staticfiles %}
 {% load ttags %}
-<div style="padding: 5px 0" id="card_container{{card.id}}" is_saved="{{ card.saved }}">
-    <div id="card{{card.id}}" class="ui segment crm_card 
+<div is_saved="{{ card.saved }}" id="card_container{{card.id}}" class="crm_card 
     {% for tag in card.hashtags.all %}
         {{tag.title|remove_space}} 
     {% endfor %} 
-    {% if not card.author_profile %}free{%else%}mine{%endif%} 
-    {% if column.id > 3%}
-            {{card.colour}}_card
-    {%endif%}
-    " 
+    {{ card.name }}
+    {{ card.phone }}
+    {% if not card.author_profile %}free{%else%}mine{%endif%} ">
+    <div id="card{{card.id}}" class="ui segment card_segment {% if column.id > 3%}{{card.colour}}_card{%endif%}"
     ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">
         <div onclick="open_crmcard('{{ card.id }}')" style="width: 80%;display: inline-block;">
-            <span style="font-weight: 600;color:#285473;">{{ card.name }}</span>
-            <div style="color: #707070;font-size: 12px;">
+            <b id="cardnameshow{{ card.id }}" style="color:#285473;">{{ card.name }}</b>
+            <div id="cardphoneshow{{ card.id }}" style="color: #707070;font-size: 12px;">
                 {{ card.phone }}                                                    
             </div>
         </div>
@@ -23,7 +21,7 @@
             <a class="show_card_schedule mb5" id="cardsc{{card.id}}" onclick="openNav('{{ card.id }}','{{ card.name }}')" column={{column.id}}>
                 <i class="icontable{{card.id}} icon table {% if not card.saved %}green{%else%}blue{% endif %}"></i>
             </a>
-            <a class="show_card_schedule" onclick="open_crmhist('{{ card.id }}')" style="margin-top: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a>     
+            <a class="show_card_schedule" onclick="open_crmhist('{{ card.id }}')"><i style="font-size: 12px;" class="icon clock"></i></a>     
         </div>
         <div style="width: 80%;">
             {% if card.author_profile %}

@@ -18,7 +18,7 @@ def checkdaydif(time, dif):
 
 @register.filter
 def last_payment(squad, profile):
-    res = squad.payment_history.filter(user=profile).first()
+    res = squad.payment_history.filter(user=profile, canceled=False).first()
     if res:
         return 'Последняя оплата была: '+res.timestamp.strftime('%d.%m.%Y')+' в размере '+str(res.amount)+'тг'
     return 'Еще не было оплаты'

@@ -1238,6 +1238,9 @@ def moderator_run_code(request):
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
     moder_update_bills()
+    a = Profile.objects.get(id=388)
+    a.first_name = 'Дамели'
+    a.save()
     
     print('moderator_end_code')
     return JsonResponse({'YO':'YO'})

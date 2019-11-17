@@ -22,7 +22,14 @@
                 <div style="padding-bottom: 8px;">
                     <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
                         <div class="ui grid">
-                            <div class="wide column" style="width: 155px;padding-left: 5px;padding-bottom: 0">
+                            <div class="three wide column pl5 pr0 pb0">
+                                <textarea id="search_text" placeholder="Поиск оп хештегам"></textarea>
+                                <div class="search_hint ui segment" style="display: none;"></div>                               
+                            </div>
+                            <div class="wide column pl0 pb0" style="width: 28.13px;">
+                                <a class="ui button small blue search_by_tags"><i class="icon search" style="color: white;"></i></a>
+                            </div>
+                            <div class="wide column pb0" style="width: 155px;">
                                 <div class="ui toggle checkbox segment" style="padding: 4px 5px;margin-top: 1px;">
                                   <input type="checkbox" {% if theprofile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
                                   <label style="padding-left: 55px;">Свободные</label>
@@ -34,8 +41,8 @@
                                     <ul class="filter-list filter-list-hide">
                                         {% for subject_category in subject_categories %}
                                         <li class="filter-item filter-item-s" status="0" id="{{ subject_category.title|remove_space }}">
-                                            <i class="icon check green" id="check_subject_category{{ subject_category.title }}"></i>
                                             {{subject_category.title}}
+                                            <i class="icon check green" id="check_subject_category{{ subject_category.title }}"></i>                                            
                                         </li>
                                         {% endfor %}
                                     </ul>
@@ -48,8 +55,8 @@
                                     <ul class="filter-list filter-list-hide">                                    
                                     {% for office in offices %}
                                         <li class="filter-item filter-item-s" status="0" id="{{ office.title }}">
-                                            <i class="icon check green" id="check_office{{ office.title }}"></i>
                                             {{office.title}}
+                                            <i class="icon check green" id="check_office{{ office.title }}"></i>
                                         </li>
                                     {% endfor %}
                                     </ul>
@@ -62,19 +69,12 @@
                                     <ul class="filter-list filter-list-hide">
                                     {% for day in crmdays %}
                                         <li class="filter-item filter-item-s" status="0" id="day{{ day.id }}">
-                                            <i class="icon check green" id="check_day{{ day.title }}"></i>
                                             {{day.title}}
+                                            <i class="icon check green" id="check_day{{ day.title }}"></i>
                                         </li>
                                     {% endfor %}
                                     </ul>
                                 </div>
-                            </div>
-                            <div class="filter wide column" style="padding-right: 0 !important;">
-                                <textarea id="search_text" placeholder="Поиск оп хештегам"></textarea>
-                                <div class="search_hint ui segment" style="display: none;"></div>                               
-                            </div>
-                            <div class="wide column" style="padding:14px 0 0 0 !important;width: 28.13px;">
-                                <a class="ui button small blue search_by_tags"><i class="icon search" style="color: white;"></i></a>
                             </div>
                             {% if is_director %}
                             <div class="wide column" style="padding-bottom: 0">
@@ -309,7 +309,8 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $('#card_container' + id).load(document.URL +  ' #card' + id);
+                    $('#cardnameshow'+id).text(name)
+                    $('#cardphoneshow'+id).text(phone)
                     $('#card_form'+id).modal('hide')
                 }
             })        
@@ -573,7 +574,6 @@
     }
 
 </script>
-{% include 'school/temp.html' %}
 <style type="text/css">
 .ui-draggable-dragging{
     opacity: 1;

@@ -215,7 +215,7 @@ class CRMCard(models.Model):
     colour = models.CharField(max_length=250, default='white')
 
     class Meta:
-        ordering = ['saved', '-timestamp']
+        ordering = ['-timestamp']
     def call_helper(self):
         return reverse("schools:call_helper")
     def change_day_of_week(self):

@@ -24,13 +24,12 @@
                 </div>
                 <div id="main-info-phone">
                     <div class="four wide column de" style="padding-right: 0">
-                        <p style="color: #828282;"><div class="name-responsive">{{ hisprofile.first_name }}</div> </p>
-                        <p style="color: #828282;">День рождения: </p>
-                        <p style="color: #828282;">Место учебы: </p>
+                        <p class="text13"><div class="name-responsive">{{ hisprofile.first_name }}</div> </p>
+                        <p class="text13">Место учебы: </p>
                         {% if hisprofile.phone %}
-                        <p style="color: #828282;">Телефон: </p>
+                        <p class="text13">Телефон: </p>
                         {% endif %}
-                        <p style="color: #828282;">Почта: </p>                   
+                        <p class="text13">Почта: </p>                   
                     </div>
                     <div class="five wide column de" style="padding-left: 0">
                         <p><div class="coins-responsive">
@@ -38,7 +37,6 @@
                         <img  src="{% static 'images/coins_gold.png' %}" style="width: 15px;">
                         <span id="hiscoins">{{ hisprofile.coins }}</span>
                     </div></p>
-                        <p>{{ hisprofile.birthdate }}</p>
                         <a href="{{ hisprofile.schools.first.landing }}">{{ hisprofile.schools.first.title }}</a>
                         <p>{{ hisprofile.phone }}</p>
                         <p>{{ hisprofile.mail }}</p>
@@ -46,34 +44,46 @@
                 </div>
         </div>
         <div class="meta">
-            <a class="open_form_status" style="color: #828282;">
+            <a class="open_form_status" class="text13">
                 <span class="hisstatus">
-                    {% if is_this_director %}
-                        Директор
-                    {% elif is_this_manager %}
-                        Менеджер
-                    {% elif is_this_trener %}
-                        Учитель
-                    {% else %}
+                    {% if hisprofile.is_student %}
                         Студент
+                    {% else %}
+                        {% for prof in hisprofile.profession.all %}
+                            {{prof.title}}
+                        {% endfor %}
                     {% endif %}
                 </span>
             </a>
         </div>
         <div class="description">
             <div class="ui divider not_in_mobile"></div>                                    
-            <div class="ui grid" style="margin-top: 10px;">
-                <div class="four wide column de" id="main-info-desktop" style="padding-right: 0">
-                    <p style="color: #828282;">День рождения: </p>
-                    <p style="color: #828282;">Школа: </p>
-                    {% if hisprofile.phone %}
-                    <p style="color: #828282;">Телефон: </p>
+            <div class="ui grid no_margin">
+                <div class="four wide column no_padding">
+                    <p class="text13">Школа: </p>
+                    {%if not hisprofile.is_student%}
+                    {%if hisprofile.job_categories.all|length > 0%}
+                    <p class="text13">Должности: </p>
+                    {% endif %}                    
                     {% endif %}
-                    <p style="color: #828282;">Почта: </p>                   
+                    <p class="text13">Телефон: </p>
+                    <p class="text13">Почта: </p>                   
                 </div>
-                <div class="five wide column de" id="main-info-desktop" style="padding-left: 0">
-                    <p style="min-height: 18px;">{{ hisprofile.birthdate }}</p>
-                    <p><a href="{{ hisprofile.schools.first.landing }}">{{ hisprofile.schools.first.title }}</a></p>
+                <div class="five wide column no_padding">
+                    <p>
+                        {%for school in hisprofile.schools.all %}
+                        <a href="{{ school.landing }}" class="mr10">{{ school.title }}</a>
+                        {%endfor%}
+                    </p>
+                    {%if not hisprofile.is_student%}
+                    <p>
+                        {% if hisprofile.job_categories.all|length > 0 %}
+                        {%for job in hisprofile.job_categories.all %}
+                            {{ job.title }}
+                        {%endfor%}
+                        {%endif%}
+                    </p>
+                    {%endif%}
                     <p>{{ hisprofile.phone }}</p>
                     <p>{{ hisprofile.mail }}</p>
                 </div>

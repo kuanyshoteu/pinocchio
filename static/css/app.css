@@ -4360,12 +4360,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     justify-content: space-around;
     width: 50%;
   }
-  #main-info-desktop {
-    display: none;
-  }
-  .ui.button.mini.red.help24.help2424hb {
-    display: none;
-  }
   #request-responsive {
     display: inline-block;
   }
@@ -30466,7 +30460,7 @@ a:hover {
   width: 100%;
   margin: 0;
   padding: 0;
-  border-radius: 5px;
+  border-radius: 3px;
   background-color: #fff;
   border: 1px solid #ccc;
   list-style-type: none;
@@ -30476,7 +30470,7 @@ a:hover {
   display: none;
 }
 .filter-item-s {
-  padding: 5px 0 5px 17px;
+  padding: 5px;
   cursor: pointer;
 }
 .filter-item-s:hover {
@@ -30491,9 +30485,6 @@ a:hover {
 }
 .filter-item i {
   opacity: 0;
-}
-.filter-item{
-  padding: 5px 0;
 }
 .show-icon {
   opacity: 1 !important;

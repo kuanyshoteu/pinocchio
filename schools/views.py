@@ -778,6 +778,7 @@ def save_card_as_user(request):
     add = True
     problems = 'ok'
     ok_mail = False
+    res = []
     if request.GET.get('id') and request.GET.get('squad_id'):
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         squad_id = int(request.GET.get('squad_id'))
@@ -828,9 +829,6 @@ def save_card_as_user(request):
             else:
                 profile = card.card_user
                 card.author_profile = manager_profile
-                card.save()
-                # if squad_id == card.last_groups and card.timestamp + timedelta(minutes = 1) > timezone.now():
-                #     return JsonResponse({'stop':True, 'problems':'ok'})
                 if profile in squad.students.all():
                     add = False
                     remove_student_from_squad(profile, squad, manager_profile)
@@ -996,7 +994,6 @@ def edit_card(request):
                 wright = False
                 crnt_tag = ''
         card.save()
-        print(card)
         CRMCardHistory.objects.create(
             action_author = profile,
             card = card,
@@ -1048,6 +1045,7 @@ def card_called(request):
 def add_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
+    res = []
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone'):
         school = is_moderator_school(request, profile)
         found = False
@@ -1097,19 +1095,9 @@ def add_card(request):
         skill = profile.skill
         skill.need_actions += 1
         skill.save()
+        res = get_card_data(card, res)        
     data = {
-        "card_id":card.id,
-        "card_name":card.name,
-        "card_date":card.timestamp.date().strftime('%d.%m.%Y'),
-        "card_phone":card.phone,
-        "card_mail":card.mail,
-        "card_comment":card.comments,
-        "is_saved":card.saved,
-        "author_profile":profile.first_name,
-        "author_url":profile.get_absolute_url(),
-        "call_helper":card.call_helper(),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
+        "res":res,
     }
     return JsonResponse(data)
 
@@ -1684,38 +1672,7 @@ def get_extra_cards(request):
         page1 = p.page(page)
         res = []
         for card in page1.object_list:
-            author = False
-            author_id = -1
-            if card.author_profile:
-                author = card.author_profile.first_name
-                author_id = card.author_profile.id
-            color = ''
-            if card.column.id > 3:
-                color = card.colour
-            tags = ''
-            for tag in card.hashtags.all():
-                tags += tag.title.replace(' ', '') + ' '
-            res.append([
-                card.id,                            # 0
-                str(card.saved),                    # 1
-                author,                             # 2
-                card.name,                          # 3
-                card.phone,                         # 4
-                card.mail,                          # 5
-                card.extra_phone,                   # 6
-                card.parents,                       # 7
-                card.comments,                      # 8
-                str(card.was_called),               # 9
-                tags,                               # 10
-                color,                              # 11
-                card.action,                        # 12
-                author_id,                          # 13
-                card.take_url(),                    # 14
-                card.change_day_of_week(),          # 15
-                card.days_of_weeks,                 # 16
-                card.timestamp.strftime('%d.%m.%Y %H:%M'), # 17
-                ])
-
+            res = get_card_data(card,res)
         managers_res = [] 
         if is_profi(profile, 'Director'):
             manager_prof = Profession.objects.get(title='Manager')
@@ -1730,6 +1687,40 @@ def get_extra_cards(request):
         "Ended":False,
     }
     return JsonResponse(data)
+
+def get_card_data(card, res):
+    author = 'Свободная'
+    author_id = -1
+    if card.author_profile:
+        author = card.author_profile.first_name
+        author_id = card.author_profile.id
+    color = ''
+    if card.column.id > 3:
+        color = card.colour
+    tags = ''
+    for tag in card.hashtags.all():
+        tags += tag.title.replace(' ', '') + ' '
+    res.append([
+        card.id,                            # 0
+        str(card.saved),                    # 1
+        author,                             # 2
+        card.name,                          # 3
+        card.phone,                         # 4
+        card.mail,                          # 5
+        card.extra_phone,                   # 6
+        card.parents,                       # 7
+        card.comments,                      # 8
+        str(card.was_called),               # 9
+        tags,                               # 10
+        color,                              # 11
+        card.action,                        # 12
+        author_id,                          # 13
+        card.take_url(),                    # 14
+        card.change_day_of_week(),          # 15
+        card.days_of_weeks,                 # 16
+        card.timestamp.strftime('%d.%m.%Y %H:%M'), # 17
+        ])
+    return res            
 
 def payment_history(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -1755,3 +1746,4 @@ def payment_history(request):
         "res":res,
     }
     return JsonResponse(data)
+

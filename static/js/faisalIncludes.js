@@ -11,16 +11,6 @@ $(document).ready(function () {
     filterList.toggleClass('filter-list-hide');
   });
 
-  filterItem.on('click', function () {
-    $(this).children('i').toggleClass('show-icon');
-    if ($(this).attr('status') == '0') {
-      $(this).attr('status', '1')
-    }
-    else {
-      $(this).attr('status', '0')
-    }
-    filtercrm()
-  });
 
   // Filter-list end
   // Landing gallery start
@@ -29,21 +19,6 @@ $(document).ready(function () {
     $('.schoolLanding__header-gallery').css('display', 'none');
     // console.log('work');
   });
-
-  // $('#landing__gallery-download').on('click', function(event) {
-  //   var bg_url = $('.owl-item.active').children(0).css('background-image');
-  //   bg_url = /^url\((['"]?)(.*)\1\)$/.exec(bg_url);
-  //   bg_url = bg_url ? bg_url[2] : "";
-  //   console.log(bg_url);
-
-  //   var a = document.createElement('a');
-  //   a.href = bg_url;
-  //   a.download = bg_url;
-  //   console.log(a);
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // });
 
   $('.schoolLanding__header-wrapper').on('click', function () {
     $('.schoolLanding__header-gallery').css('display', 'block');
@@ -250,62 +225,6 @@ $(document).ready(function () {
 
     }, speed);
   }
-  $('.search_by_tags').click(function (e) {
-    filtercrm()
-  })
-  function filtercrm() {
-    $('.crm_card').hide()
-    search_text = $('#search_text').val()
-    filterstring = ''
-    if (search_text != '') {
-      filterstring = filterstring + '.' + search_text.replace(' ', '.')
-    }
-    set = document.getElementsByClassName('filter-item')
-    for (var i = set.length - 1; i >= 0; i--) {
-      if (set[i].getAttribute('status') != '0') {
-        title = set[i].getAttribute('id').replace(' ', '').replace(' ', '').replace(' ', '').replace(' ', '')
-        filterstring = filterstring + '.' + title
-      }
-    }
-    $(filterstring).show()
-    if (filterstring == '') {
-      $('.crm_card').show()
-    }
-  }
-  $('#search_text').on('input', function (e) {
-    text = $(this).val()
-    if (text.length == 0) {
-      filtercrm()
-      $('.search_hint').hide();
-    }
-    else {
-      url = '/schools/api/call_helper/'
-      $.ajax({
-        url: url,
-        data: {
-          'text': text,
-          'reverse': 'no',
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.res.length == 0) {
-            $('.search_hint').hide();
-          }
-          else {
-            $('.search_hint').empty();
-            url = $('.show_url').attr('url')
-            for (var i = 0; i < data.res.length; i++) {
-              var element = $('<div class="hint_item" onclick="hint_item(' + "'" + data.res[i] + "'" + ')">' + data.res[i] + '</div>').appendTo('.search_hint');
-            }
-            $('.search_hint').show();
-          }
-        }
-      })
-    }
-  })
-  $('.search_by_tags').on('click', function (e) {
-    filtercrm()
-  })
 
   // Number counter end
 

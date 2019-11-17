@@ -489,11 +489,15 @@ def add_money(profile, school, squad, card, amount, manager):
                 skill.save()
         card.colour = 'white'
         card.save()
+    canceled = False
+    if amount < 0:
+        canceled = True
     profile.payment_history.create(
         action_author = manager,
         amount = amount,
         school = school,
         squad = squad,
+        canceled = canceled,
     )
     change_school_money(school, amount, 'student_payment', profile.first_name)
     school.save()

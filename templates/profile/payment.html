@@ -4,13 +4,13 @@
     Оплата
 </div>
 {%endif%}
-<div class="ui segment mt0">
+<div class="ui segment mt0 backdark textw">
     <div class="ui grid stackable">
         {% if is_manager and hisprofile.is_student %}        
         <div class="eight wide column pr5">
             Пожалуйста, укажите за какую группу вносится оплата:
-            <form class="ui form mb10" style="display: flex;">
-                <input class="payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
+            <form class="ui form mb10 mt10" style="display: flex;">
+                <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
                 <select id="pay_for_group">
                     {%for squad in hisprofile.squads.all%}
                     <option value="{{squad.id}}">{{squad.title}}</option>
@@ -21,7 +21,7 @@
         </div>
         {%endif%}
         <div class="eight wide column pr5">
-            <div class="mt15 pt5">
+            <div class="pt5">
                 {% if is_manager and hisprofile.is_student %}
                 <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
                 <a class="ui button mini mb10" onclick="$('.payment_history').modal('show')">История оплаты</a>
@@ -123,6 +123,11 @@
             <div class="ui modal" style="min-height: 100%;margin-top: 10%;" id="manager_actions{{hisprofile.id}}">
                 <i class="close icon"></i>
                 <div class="content">
+                    <div class="text-center mb15">
+                        <div style="font-size: 17px;">
+                            <b>История действий {{hisprofile.first_name}}</b>
+                        </div>
+                    </div>                    
                     <div class="set_manager_actions{{hisprofile.id}}"></div>
                 </div>
             </div> 
@@ -131,16 +136,17 @@
     </div>
 </div>
 {% if is_manager and hisprofile.is_student %}
-<div class="ui segment mb0" style="font-size: 15px;">
+<div class="ui segment mb0 text15">
     Клиент записан в данные группы:
 </div>
 <div class="ui segment mt0 no_padding">
-    <div class="ui grid no_margin" style="background-color: #4a4a4a">
+    <div class="ui grid no_margin backdark">
     {% for nm in profile|get_bills:hisprofile %}
         <div class="wide column pr0" style="width: 33%;">
-            <div class="ui segment">
-                <a href="{{ nm.squad.get_absolute_url }}"><b>{{ nm.squad.title }}</b></a>
-                <div class="ui divider mb5 mt5"></div>
+            <div class="ui segment mb0 text-center" style="background-color: {{nm.squad.color_back}};">
+                <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
+            </div>    
+            <div class="ui segment mt0 backgrey">
                 <span style="font-size: 14px;">Группа проходит курсы:</span>
                 <div class="nm_subjects">
                     {% for subject in nm.squad.subjects.all %}
@@ -202,27 +208,7 @@
                     </div>
 
                 </div>
-<!--                     <form class="ui form">
-                <table class="no_margin" class="mb0" cellspacing="0" cellpadding="0" style="font-size: 12px;">
-                    <thead>
-                        <tr>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for ph in payment.2 %}
-                        <tr>
-                            <td>
-                                {{ph.amount}} тг
-                                {{ph.timestamp}} тг
-                                {{ph.manager.first_name}}
-                            </td>
-                        </tr>
-                        {% endfor %}                    
-                    </tbody>
-                </table>
-            </form>
--->                </div>    
+            </div>    
         </div>
     {% endfor %}
     </div>
@@ -240,7 +226,7 @@
             }
         })
         $('.nm_subjects').each(function() {
-            height = $(this).css('height', height)
+            height = $(this).css('height', max)
         })
     }
     function delete_payment(id){
