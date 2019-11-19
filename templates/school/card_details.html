@@ -5,8 +5,7 @@
     {% for tag in card.hashtags.all %}
         {{tag.title|remove_space}} 
     {% endfor %} 
-    {{ card.name }}
-    {{ card.phone }}
+    {{ card.name }} {{ card.phone }}
     {% if not card.author_profile %}free{%else%}mine{%endif%} ">
     <div id="card{{card.id}}" class="ui segment card_segment {% if column.id > 3%}{{card.colour}}_card{%endif%}"
     ondragstart="save_card_id('{{card.id}}', '{{ card.name }}')" draggable='true' column_id="{{column.id}}">

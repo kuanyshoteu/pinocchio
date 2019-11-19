@@ -863,16 +863,9 @@
     }
     filtercrm()
   });
-  $('.search_by_tags').click(function (e) {
-    filtercrm()
-  })
   function filtercrm() {
     $('.crm_card').hide()
-    search_text = $('#search_text').val()
     filterstring = ''
-    if (search_text != '') {
-      filterstring = filterstring + '.' + search_text.replace(' ', '.')
-    }
     set = document.getElementsByClassName('filter-item')
     for (var i = set.length - 1; i >= 0; i--) {
       if (set[i].getAttribute('status') != '0') {
@@ -916,14 +909,29 @@
       })
     }
   })
-  $('.search_by_tags').on('click', function (e) {
-    filtercrm()
-  })
 
-    function fill_card_data(data,column,position){
+    function fill_card_data(data,position){
+        if (position == 'bottom') {
+            ids = $('.data').attr('used_cards')
+            cids = ids.split(',')
+        }        
         for (var i = 0; i < data.res.length; i++) {
             tags = data.res[i][10]
             id = data.res[i][0]
+            cont = false
+            if (position == 'bottom') {
+                if (cids.length > 1) {
+                    for (var j = 0; j < cids.length-1; j++) {
+                        if (parseInt(cids[j]) == id) {
+                            cont = true
+                            break;
+                        }
+                    }
+                    if (cont) {
+                        continue;
+                    }            
+                }
+            }
             saved = data.res[i][1]
             author = data.res[i][2]
             name = data.res[i][3]
@@ -937,6 +945,7 @@
             colour = data.res[i][11]
             calendar_color = 'green'
             was_called = data.res[i][9]
+            column = data.res[i][18]
             ishide = 'green'
             ishide2 = 'Связались'
             if(was_called == 'false'){
@@ -988,6 +997,41 @@
             }
         }
     }
+    $('.search_by_tags').click(function (e) {
+        $('#search_text').val(text)
+        $('.search_hint').hide();
+        hint_item(text)
+    })    
+    function hint_item(text){
+        $('#search_text').val(text)
+        $('.search_hint').hide();
+        url = $('.data').attr('search_crm_cards')
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                ids = ''
+                for (var i = 0; i < data.res.length; i++) {
+                    ids = ids + data.res[i][0] + ','
+                }
+                $('.data').attr('used_cards',ids)
+                crm_remove_unnecessary(ids)
+                fill_card_data(data,'top')
+            }
+        })        
+    }
+    function crm_remove_unnecessary(ids){
+        cids = ids.split(',')
+        if (cids.length > 1) {
+            for (var i = 0; i < cids.length-1; i++) {
+                $('#card_container'+cids[i]).remove()
+            }            
+        }
+    }
+
     $('.column_scrollable').on('scroll', function() {
         this_ = $(this)
         url = this_.attr('url')
@@ -1005,7 +1049,8 @@
                 success: function (data) {
                     this_.attr('page', data.page)
                     if (data.Ended == false) {
-                        fill_card_data(data,column,'bottom')                        
+                        fill_card_data(data,'bottom')
+                        filtercrm()
                     }
                 }
             })
@@ -1047,7 +1092,7 @@
                         $('.alreadyregistered'+id).show()
                     }
                     else{
-                        fill_card_data(data,id,'top')
+                        fill_card_data(data,'top')
                         $('#new_card_form'+id).modal('hide')
                     }
                 }
@@ -1061,7 +1106,6 @@
     function update_schedule_lectures(){
         var sum_width = 0;
         $(".lecture_const").each(function() {
-            console.log('running')
             interval = parseInt($('.dataconst').attr('interval'))
             if ($(this).attr('height')) {
                 height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            

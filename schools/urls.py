@@ -70,4 +70,5 @@ urlpatterns = [
     url(r'^adilmed/', adilmed, name="adilmed"),
     url(r'^api/get_extra_cards/', get_extra_cards, name='get_extra_cards'),
     url(r'^api/payment_history/', payment_history, name='payment_history'),
+    url(r'^api/search_crm_cards/', search_crm_cards, name='search_crm_cards'),
 ]

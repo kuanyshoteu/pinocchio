@@ -1365,18 +1365,80 @@ def call_helper(request):
     if text != '':
         if not request.GET.get('reverse'):
             text = text[::-1]
-        res = []
         school = is_moderator_school(request, profile)
+        res = []
         kef = 1
-        similarity=TrigramSimilarity('title', text)
-        hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        similarity=TrigramSimilarity('name', text)
+        cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
-        for hashtag in hashtags:
-            res.append(hashtag.title)
+        for card in cards:
+            res.append(card.name)
             i+=1
             if i == 5:
                 break
-    
+        if i < 5:
+            similarity=TrigramSimilarity('phone', text)
+            cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            for card in cards:
+                res.append(card.phone)
+                i+=1
+                if i == 5:
+                    break
+        if i < 5:
+            similarity=TrigramSimilarity('parents', text)
+            cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            for card in cards:
+                res.append(card.parents)
+                i+=1
+                if i == 5:
+                    break
+        if i < 5:
+            similarity=TrigramSimilarity('title', text)
+            hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            for hashtag in hashtags:
+                res.append(hashtag.title)
+                i+=1
+                if i == 5:
+                    break
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def search_crm_cards(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    text = request.GET.get('text')
+    res = []
+    if text != '':
+        school = is_moderator_school(request, profile)
+        kef = 16
+        similarity=TrigramSimilarity('name', text)
+        cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        for card in cards:
+            print(card.name)
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('phone', text)
+            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            cards = set(chain(cards, extra))
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('parents', text)
+            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            cards = set(chain(cards, extra))
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('title', text)
+            hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            extra = school.crm_cards.filter(hashtags__in=hashtags)
+            cards = set(chain(cards, extra))
+        i = 0
+        for card in cards:
+            res = get_card_data(card,res)
+            i+=1
+            if i == 5:
+                break
+    res.reverse()
+    print(res)
+
     data = {
         'res':res,
     }
@@ -1719,6 +1781,7 @@ def get_card_data(card, res):
         card.change_day_of_week(),          # 15
         card.days_of_weeks,                 # 16
         card.timestamp.strftime('%d.%m.%Y %H:%M'), # 17
+        card.column.id,                     # 18
         ])
     return res            
 

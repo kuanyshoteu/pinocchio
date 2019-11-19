@@ -23,11 +23,11 @@
                     <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
                         <div class="ui grid">
                             <div class="three wide column pl5 pr0 pb0">
-                                <textarea id="search_text" placeholder="Поиск оп хештегам"></textarea>
+                                <input type="text" id="search_text" placeholder="Поиск по карточкам">
                                 <div class="search_hint ui segment" style="display: none;"></div>                               
                             </div>
                             <div class="wide column pl0 pb0" style="width: 28.13px;">
-                                <a class="ui button small blue search_by_tags"><i class="icon search" style="color: white;"></i></a>
+                                <button class="ui button small blue search_by_tags" type="submit" onclick="return false"><i class="icon search" style="color: white;"></i></button>
                             </div>
                             <div class="wide column pb0" style="width: 155px;">
                                 <div class="ui toggle checkbox segment" style="padding: 4px 5px;margin-top: 1px;">
@@ -148,7 +148,7 @@
 <span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
-<span class="data" change_day_of_week="{% url 'schools:change_day_of_week'%}"></span>
+<span class="data" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
 <script>
     function openNav(id, name) {
         $('#register_students_calendar').modal('show')
@@ -249,7 +249,6 @@
     function open_crmhist(id){
         $('#card_hist'+id).modal('show')
         url = $('.current_card').attr('url')
-        console.log(id, url)
         $.ajax({
             url: url,
             data: {
@@ -257,7 +256,6 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log('hist')
                 $('.cardhistory'+id).empty();
                 for (var i = 0; i < data.res.length; i++){
                     hist = data.res[i]
@@ -323,11 +321,6 @@
         $('.delete_card_data').attr('id', id);
         $('#delete_card_modal').modal('show');
     }
-    function hint_item(text){
-        $('#search_text').val(text)
-        $('.search_hint').hide();
-        filtercrm();
-    }
     function filtercrm(){
         $('.crm_card').hide()
         search_text = $('#search_text').val()
@@ -350,7 +343,6 @@
     function change_manager(id){
         this_ = document.getElementsByClassName('change_manager'+id)[0];
         manager = this_.options[this_.selectedIndex].value;
-        console.log(this_, manager)
         $.ajax({
             url: '/schools/api/change_manager/',
             data: {
