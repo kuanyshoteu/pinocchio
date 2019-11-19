@@ -143,7 +143,7 @@
     <div class="ui grid no_margin backdark">
     {% for nm in profile|get_bills:hisprofile %}
         <div class="wide column pr0" style="width: 33%;">
-            <div class="ui segment mb0 text-center" style="background-color: {{nm.squad.color_back}};">
+            <div class="ui segment mb0 text-center" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
                 <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
             </div>    
             <div class="ui segment mt0 backgrey">
