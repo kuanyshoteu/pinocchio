@@ -200,7 +200,7 @@
                                     {% if school.banners.all|length > 0%}
                                     <img src="{{school.banners.first.image_banner.url}}" style="height: 100%;" class="full-w">
                                     {%else%}
-                                    <img src="{% static 'images/fon2.jpeg' %}" style="height: 100%;" class="full-w">
+                                    <img src="{% static 'images/fon3.jpeg' %}" style="height: 100%;" class="full-w">
                                     {%endif%}
                                 </a>
                             </div>
@@ -630,7 +630,7 @@
             title = schools[i][1]
             img = schools[i][2]
             if (img == '') {
-                img = '/static/images/fon2.jpeg'
+                img = '/static/images/fon3.jpeg'
             }
             address = schools[i][3]
             content = schools[i][4]
