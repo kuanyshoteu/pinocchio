@@ -38,8 +38,8 @@
                             </div>
                         </div>
                         <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
-                            {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 %}
-                            {% include 'profile/payment.html' %}
+                            {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 or is_manager %}
+                                {% include 'profile/payment.html' %}
                             {% if is_manager and hisprofile.is_student or is_director %}
                                 {% include 'profile/history.html' %}
                             {% endif %}                            

@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% load ttttags %}
+{% load ttags %}
 {% block content %}
 <style type="text/css">
     @media only screen and (max-width: 767px) {
@@ -78,12 +79,12 @@
             <div class="ui segment mt0 mb15" style="width: 400px;display: inline-block;">
                 <b style="display: inline-block;font-size: 15px;color: #222;">Показать списком</b>
                 <div class="ui toggle checkbox ml10">
-                    <input type="checkbox" class="change_show_type" checked name="public">
+                    <input type="checkbox" class="change_show_type" name="public">
                     <label style="padding-left: 60px;display: inline-block;">Показать на карте</label>
                 </div>
             </div>
         </div>
-        <div class="ui grid map_show">
+        <div class="ui grid map_show" style="display: none;">
             <div class="four wide column" id="map_school_list" status="down">
                 <div class="mapdivider to_drag" id="mapdivider">
                     <div class="linesmall to_drag"></div>
@@ -174,7 +175,7 @@
                 <div id="map" style="width: 100%; height: 100%;position: relative;"></div>
             </div>
         </div>
-        <div class="ui grid stackable list_show" style="display: none;">
+        <div class="ui grid stackable list_show no_margin">
             <div class="sixteen wide column pl0 pr0">
                 <div class="loading" style="display: none;">
                   <div class="animation"><div class="circle one"></div></div>
@@ -184,7 +185,7 @@
                   <div class="animation"><div class="circle five"></div></div>
                   <div class="animation"><div class="circle six"></div></div>
                 </div>
-                <div class="pt30">
+                <div class="pt0">
                     <div class="catland_found" style="font-size: 16px;">
                         Сначала 
                         <a class="ui button green mini choose_cat cat_order" order="rating">Лучшие</a>
@@ -205,10 +206,23 @@
                             </div>
                             <div class="twelve wide column pb0">
                                 <a href="{{school.landing}}"><b style="font-size: 19px;">{{school.title}}</b></a>
-                                <div class="mt15" style="font-size: 15px">
+                                <div class="mt10" style="height: 33px;color: #646464;">
+                                    <span style="color: #D4C14A;font-weight: 600;">
+                                        {{school.rating}}                            
+                                    </span>
+                                    {% for star in five %}
+                                        {% if forloop.counter <= school.rating %}
+                                            <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for star in school|rating_empty_stars %}
+                                        <i class="icon star" style="margin-right: -3px;"></i>
+                                    {% endfor %}
+                                </div>
+                                <div class="mt10" style="font-size: 15px">
                                     <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
                                 </div>
-                                <div class="mt15">
+                                <div class="mt10">
                                     {{school.content}}
                                 </div>
                             </div>

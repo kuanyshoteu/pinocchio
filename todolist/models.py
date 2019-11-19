@@ -45,10 +45,10 @@ class CommentManager(models.Manager):
 
 
 class Comment(models.Model):
-    author_profile = models.ForeignKey(Profile, default=1, on_delete = models.PROTECT, related_name='comments')
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.PROTECT, related_name='comments')
     content = models.TextField(default='')
     timestamp = models.DateTimeField(auto_now_add=True)
-    card = models.ForeignKey("Card", related_name='comments', default=1, on_delete = models.CASCADE)
+    card = models.ForeignKey("Card", related_name='comments', null=True, on_delete = models.CASCADE)
     ffile = models.ManyToManyField(Document, related_name='ffile')
     image = models.ImageField(upload_to=upload_location, 
             null=True, 

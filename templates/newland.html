@@ -4,13 +4,15 @@
 {% load ttags %}
 {% block content %}
 <div  style="margin-top: -5px;color: #fff;">
-    <div class="text-center newlandhead pb50" style="background-color: #617db9;">
+    <div class="text-center newlandhead pb50" style="background-color: #6ea4e6;background-image: url({% static 'images/icons/11sav.png' %});background-size: 150px;">
         <div id="cloud-intro"></div>
-        <div class="text-center mb15" style="font-size: 27px;line-height: 35px;font-weight: 600;">Введите название интересующего курса</div>
+        <div class="text-center mb15" style="font-size: 27px;line-height: 35px;font-weight: 600;position: relative;">
+            Введите название интересующего курса
+        </div>
         <div style="margin: 0 auto 15px auto;width: 40%;">
             <form class="ui form">
                 <textarea class="map_search_input mb0" url="/api/map_search/" style="width: calc(100% - 120px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;" placeholder="Учебные центры и курсы"></textarea>
-                <a class="ui button green map_search_by_tags" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;">
+                <a class="ui button lightgreen map_search_by_tags" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;">
                     <i class="icon search" style="color: #fff;"></i> 
                     <b class="not_in_mobile">Поиск</b>
                 </a>
@@ -19,7 +21,7 @@
             </form>  
         </div>
         <div class="text-center mb15" style="font-size: 20px;line-height: 35px;">
-            Более <b style="color: #69e781">{{len}}</b> учебных центров Алматы
+            Более <b style="color: yellow">{{len}}</b> учебных центров Алматы
         </div>
     </div>
     <div class="ui grid stackable pl10 pr10 pt10 pb50" style="background-color: #ECECEC">
@@ -42,7 +44,7 @@
                     <div class="ui segment full-w btn_select" style="height: 320px;padding: 20px;">
                         <a href="{{school.landing}}">
                             <div style="font-size: 17px;font-weight: 600;">{{school.title}}</div>
-                            <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon2.jpeg'%}{%endif%});background-size: 100%;" class="full-w mt15"></div>
+                            <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;" class="full-w mt15"></div>
                             <div class="mt15" style="height: 50px;">
                                 <span style="color: #646464;">{{school.school_offices.first.address}}</span>
                                 <br>
@@ -92,7 +94,7 @@
         {%endfor%}
     </div>
  -->
-    <div class="pt15 pb30" style="background-color: #4a4a4a;text-align: center;">
+    <div class="pt15 pb30" style="background-color: #506ca9;text-align: center;">
         <img src="{% static 'images/logo_clean.jpeg' %}" style="width: 200px;">
         <div class="ui grid stackable">
             <div class="four wide column">
@@ -112,8 +114,8 @@
             <div class="two wide column">
             </div>
         </div>
-        <div class="mt15" style="color: grey;font-size: 11px;">
-            <i>made by </i> <a href="" style="text-decoration: underline;color: grey;">Kuanysh Oteu</a>
+        <div class="mt15" style="color: lightgrey;font-size: 11px;">
+            <i>made by </i> <a href="" style="text-decoration: underline;color: lightgrey;">Kuanysh Oteu</a>
         </div>
         <div class="mt15">
             &nbsp;© 2019. Все права защищены.            

@@ -31098,7 +31098,6 @@ i.map_worktime-icon {
 }
 .schoolLanding__content-category__item.active {
   background-color: #9C5FE3;
-  box-shadow: 0 15px 15px rgba(156, 95, 227, 0.35);
 }
 .schoolLanding__content-category__item i {
   color: #4e4e4e;
@@ -31118,6 +31117,10 @@ i.map_worktime-icon {
   font-weight: 400;
   color: #A9A9A9;
   margin: 0;
+}
+.border_service{
+  box-shadow:0px 0px 10px 0px #d3d3d3;
+  padding: 5px;
 }
 .schoolLanding__content-services__item {
   display: flex;
