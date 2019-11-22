@@ -54,6 +54,7 @@ def subject_detail(request, slug=None):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "page":"subjects",
     }
     return render(request, "subjects/subject_detail.html", context)
 
@@ -76,6 +77,7 @@ def subject_list(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "page":"subjects",        
     }
     return render(request, "subjects/subject_list.html", context)
 
@@ -103,6 +105,7 @@ def subject_create(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "page":"subjects",
     }
     return render(request, "subjects/subject_create.html", context)
 
@@ -225,6 +228,7 @@ def subject_update(request, slug=None):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "page":"subjects",
     }
     return render(request, "subjects/subject_create.html", context)
 
@@ -266,6 +270,7 @@ def subject_delete(request, slug=None):
         "is_director":is_profi(profile, 'Director'),
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":profile.schools.first().money,
+        "page":"subjects",
     }
     return render(request, "confirm_delete.html", context)
 

@@ -33,6 +33,7 @@ def news(request):
             'is_trener':is_profi(profile, 'Teacher'),
             "is_manager":is_profi(profile, 'Manager'),
             "is_director":is_profi(profile, 'Director'), 
+            "page":"news",
         }
         return render(request, "news/post_list.html", context)        
     else:
@@ -70,6 +71,7 @@ def post_list(request, school_id):
         "is_manager":is_manager,
         "is_director":is_director, 
         "school_money":school.money,
+        "page":"news",        
     }
     return render(request, "news/post_list.html", context)
 

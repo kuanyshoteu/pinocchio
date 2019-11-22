@@ -188,8 +188,11 @@ def check_date(material, squad):
     else:
         return 'past'
 
-def material_number_by_date(date, squad, subject, alldays):
-    lectures = squad.squad_lectures.filter(subject = subject)
+def material_number_by_date(date, squad, subject, alldays, profile):
+    if profile == None:
+        lectures = squad.squad_lectures.filter(subject = subject)
+    else:
+        lectures = subject.subject_lectures.filter(squad = squad)        
     num_of_lectures = len(lectures)
     if num_of_lectures > 0:
         delta = (date - squad.start_date).days
@@ -224,7 +227,7 @@ def get_current_attendance(subject, squad):
     if not subject or not squad:
         return '_'
     alldays = Day.objects.all() 
-    material_number = material_number_by_date(timezone.now().date(), squad, subject,alldays)
+    material_number = material_number_by_date(timezone.now().date(), squad, subject,alldays, None)
     if material_number >= 0:
         res = []
         i = 0
@@ -273,36 +276,20 @@ def get_current_attendance(subject, squad):
 
 @register.filter
 def get_current_attendance_student(subject, profile):
+
     if not subject or not profile:
         return '_'
-    squad = profile.squads.filter(subjects=subject)
-    if len(squad)>0:
-        squad = squad[0]
-    lectures = profile.hislectures.filter(subject = subject)
-    num_of_lectures = len(lectures)
-    if num_of_lectures > 0 and  timezone.now().date() > squad.start_date:
-        delta = (timezone.now().date() - squad.start_date).days
-        number_of_weeks = int(delta / 7)
-        finish = delta % 7
-        start = int(squad.start_date.strftime('%w'))
-        if start == 0:
-            start = 7
-        if start > finish or finish == 0:
-            finish += 7
-        extra = 0
-        for i in range(start, finish + 1): # Days of week of last not full week
-            i = i % 7
-            if i == 0:
-                i = 7
-            day=Day.objects.get(number=int(i))
-            extra += len(lectures.filter(day=day))
-        material_number = num_of_lectures * number_of_weeks + extra
+    alldays = Day.objects.all() 
+    squad = profile.squads.filter(subjects=subject)[0]
+    material_number = material_number_by_date(timezone.now().date(), squad, subject,alldays,profile)
+    if material_number >= 0:
         res = []
         i = 0
         counter = 0
         subject_materials = subject.materials.prefetch_related('sm_atts')
         if material_number > len(subject_materials):
             material_number = len(subject_materials)
+
         while material_number - i > 0:
             if counter == 4:
                 break
@@ -455,6 +442,7 @@ def get_bills_len(profile, hisprofile):
 
 @register.filter
 def money_percent(first, second):
+    print(first,second)
     if first+second == 0:
         return 0
     num = first+second

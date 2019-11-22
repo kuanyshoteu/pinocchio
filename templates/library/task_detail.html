@@ -27,7 +27,7 @@
                 <div class="content">
                     <form class="ui form {{ task.id }}edit_text_form" method='POST' enctype='multipart/form-data' style="margin-bottom: 0;">{% csrf_token %}
                         <b>Условие: </b>
-                        <textarea type="text" class='change_task_textl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 100px; margin-bottom: 5px;">{{ task.text }}</textarea>
+                        <textarea type="text" class='change_task_textlandl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 100px; margin-bottom: 5px;">{{ task.text }}</textarea>
                         {% if task.is_test %}
                             <b>Варианты:</b>
                             <br>
@@ -40,20 +40,20 @@
                                             {% if variant in task.answer %}checked{% endif %}
                                         >
                                     </label>
-                                    <textarea style="width: 200px;" class="variant_value_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">{{ variant }}</textarea>
+                                    <textarea style="width: 200px;" class="mb10 variant_value_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}v{{ variant }}">{{ variant }}</textarea>
                                 </div>
-                                <br>
                             {% endfor %}
                         {% else %}
                             <b>Ответ:</b>
                             <br>
-                            <textarea type="text" class='change_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
+                            <textarea type="text" class='mb10 change_task_answer_landl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style="width: 100%; height: 60px; margin-bottom: 5px;">{{ task.answer.0 }}</textarea>
                         {% endif %}
                         <b>Возможное колличество баллов: </b>
                         <br>
-                        <textarea type="text" class='change_task_costl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style=" height: 40px; padding: 5px;">{{ task.cost }}</textarea>
-                        <br><br>
-                        <a class="ui button mini blue change_task_text" paper_id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="{{ task.id }}" data-href='{{ task.change_text_url }}'>Сохранить</a>
+                        <textarea type="text" class='mb15 change_task_costlandl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}' style=" height: 40px; padding: 5px;">{{ task.cost }}</textarea>
+                        <div class="text-center">
+                            <a class="ui button mini blue change_task" paper_id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}" id="{{ task.id }}" data-href='{{ task.change_text_url }}'>Сохранить</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -103,13 +103,14 @@
                     {% if is_trener %}
                         <div class="ui segment" style="width: 200px;padding: 7px 14px;">{{ ans }}</div>
                     {% else %}
-                        <textarea class="ans_textarea check_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">{{ task|hisanswer:profile }}</textarea>
+                    <div style="display: flex;" class="mb15">
+                        <textarea class="mb0 ans_textarea check_task_answer_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}">{{ task|hisanswer:profile }}</textarea>
                         {% if task|is_correct:profile == True %}
                             <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
                         {% else %}
                             <span class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}t{{ task.id }}solved_tick" style="font-size: 16px; font-weight: 600;display: none;"><i class="icon check" style="color: #32CD32 !important"></i> </span>
                         {% endif %}
-                        <br>
+                    </div>
                     {% endif %}
                 {% endfor %}
             {% endif %}

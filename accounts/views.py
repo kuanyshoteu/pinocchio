@@ -38,7 +38,9 @@ def account_view(request, user = None):
     hisprofile = Profile.objects.get(user = user)
     skill = hisprofile.skill
     miss_lesson_form=False
+    mypage = ''
     if profile == hisprofile:
+        mypage = 'mypage'
         # Нужна отдельная функция при вызове
         miss_lesson = MissLesson.objects.filter(profile = profile)
         if len(miss_lesson) > 0:
@@ -49,7 +51,7 @@ def account_view(request, user = None):
         if miss_lesson_form.is_valid():
             miss_lesson = miss_lesson_form.save()
             return redirect(profile.get_absolute_url())
-
+    hissubjects = []
     if is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.all()
     elif is_profi(hisprofile, 'Manager'):
@@ -59,6 +61,7 @@ def account_view(request, user = None):
             hissquads =  profile.schools.first().groups.filter(shown=True)
     else:
         hissquads = hisprofile.squads.all()
+        hissubjects = set(Subject.objects.filter(squads__in=hissquads))
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
 
     school_money = 0
@@ -72,6 +75,7 @@ def account_view(request, user = None):
         'att_squad':hiscacheatt.squad,
         'today':int(timezone.now().date().strftime('%w')),
         'hissquads':hissquads,
+        'hissubjects':hissubjects,
         'miss_lesson_form':miss_lesson_form,
         'is_this_trener':is_profi(hisprofile, 'Teacher'),
         "is_this_manager":is_profi(hisprofile, 'Manager'),
@@ -83,7 +87,8 @@ def account_view(request, user = None):
         "school_money":school_money,
         'constant_times':get_times(60),
         "interval":60,
-        'height':28*15+25,        
+        'height':28*15+25, 
+        "page":mypage,       
     }
     return render(request, "profile.html", context)
 
@@ -513,5 +518,27 @@ def make_payment(request):
         card = profile.card.get(school=school)
         add_money(profile, school, squad, card, amount, manager)
     data = {
+    }
+    return JsonResponse(data)
+
+def make_payment_card(request):
+    manager = Profile.objects.get(user = request.user)
+    only_managers(manager)
+    amount = int(request.GET.get('amount'))
+    bills = []
+    if amount > 0 and request.GET.get('id') and request.GET.get('group_id'):
+        card = CRMCard.objects.get(id = int(request.GET.get('id')))
+        profile = card.card_user
+        school = manager.schools.first()
+        squad = school.groups.get(id=int(request.GET.get('group_id')))
+        add_money(profile, school, squad, card, amount, manager)
+        nms = card.need_money.select_related('squad')
+        for squad in profile.squads.all():
+            crnt = nms.filter(squad=squad)
+            if len(crnt) > 0:
+                crnt = crnt[0]
+                bills.append([squad.title, crnt.money, crnt.lesson_bill, crnt.bill,squad.id])
+    data = {
+        'bills':bills,
     }
     return JsonResponse(data)

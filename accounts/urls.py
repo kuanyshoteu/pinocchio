@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^api/hint_url/$', another_hint, name='hint_url'),
     url(r'^api/update_hints/$', update_hints, name='update_hints'),
     url(r'^api/make_payment/$', make_payment, name='make_payment'),
+    url(r'^api/make_payment_card/$', make_payment_card, name='make_payment_card'),
     url(r'^(?P<user>[\w-]+)/$', account_view, name='profile'),
 ]

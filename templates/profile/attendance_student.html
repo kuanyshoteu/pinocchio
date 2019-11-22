@@ -11,11 +11,9 @@
                         <div class="attendance_date{%if forloop.counter == 4%} last_att{%endif%} att{{forloop.counter}}" number="{{forloop.counter}}" id="{{date.0.0.subject_materials.id}}">
                             {{ date.1 }}
                         </div>
-                        {% if date.2 == 'now' %}
                         {% for attendance in date.0 %}
                             {% include 'profile/attendance_block_student.html' %}
                         {% endfor %}
-                        {% endif %}
                     </section>
                 {% endfor %}
                 <div id="next_atts" style="width: max-content;display: flex;"></div>

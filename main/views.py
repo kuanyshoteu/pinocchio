@@ -1034,7 +1034,8 @@ def get_school_report(request):
         "school_money":school.money,
         "school_crnt":school, 
         "today":timezone.now().date().strftime('%Y-%m-%d'),
-        "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),         
+        "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),    
+        "page":"finance",
     }
     return render(request, "school/report.html", context)
 

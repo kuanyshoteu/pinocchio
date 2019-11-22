@@ -33,23 +33,34 @@
 {% endif %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script type="text/javascript">
-  var lineChartDataMoney = {
-    labels: [{% for month in instance.money_months.all %}'{{month.month|date:"M"}}',{% endfor %}],
-    datasets: [{
-        label: "SES 3.4",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "#21BA45",
-        pointColor: "#21BA45",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "#21BA45",
-        data: [{% for month in instance.money_months.all %}'{{month.money_earn.0}}',{% endfor %}]
-    }]
-}
+    var lineChartDataMoney = {
+        labels: [{% for month in instance.money_months.all %}'{{month.month|date:"M"}}',{% endfor %}],
+        datasets: [{
+            label: "SES 3.4",
+            fillColor: "rgba(255,255,255,0)",
+            strokeColor: "#21BA45",
+            pointColor: "#21BA45",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "#21BA45",
+            data: [{% for month in instance.money_months.all %}'{{month.money_earn.0}}',{% endfor %}]
+        },
+        {
+            type: 'line',
+            fillColor: "rgba(255,255,255,0)",
+            strokeColor: "red",
+            pointColor: "red",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "#fff",
+            data: [{% for month in instance.money_months.all %}'{{month.money_spend.0}}',{% endfor %}],
+        }]
+    }
 window.onload = function() {
     var ctx = document.getElementById("canvas_money").getContext("2d");
     window.myLine = new Chart(ctx).Line(lineChartDataMoney, {
-        responsive: true
+        responsive: true,
+        scaleFontColor: "#FFFFFF" 
     });
 }
 </script>

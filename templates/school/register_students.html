@@ -9,10 +9,6 @@
             <form class="ui form predoplata_form" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма оплаты" type="number">
             </form>
-            <a class="show_hint_schedule" style="height: 25px;"><i class="icon info circle blue"></i><span style="font-size: 13px;">Информация о счетах</span></a>
-            <div class="hint_schedule ui segment" style="display: none;position: absolute;margin-top: 30px;margin-left: 300px; width: 500px;height: 200px;z-index: 3000;background-color: #4a4a4a;color: #fff;">
-                <div class="card_money_sch" style="font-weight: 400;font-size: 13px;"></div>
-            </div>    
         </div>
         <div class="ok_predoplata highlight" style="height: 35px;"><b>Оплата принята</b></div>
         <div class="time_stop highlight_red" style="height: 35px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></div>
@@ -193,7 +189,6 @@
                 success: function (data) {
                     $('.loading').hide();
                     $('.ok_predoplata').hide()
-                    console.log(data.problems)
                     if (data.problems != 'ok') {
                         $('.isalready').show()
                         $('.isalready_subject').text(data.problems)

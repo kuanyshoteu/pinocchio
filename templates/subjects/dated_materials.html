@@ -25,7 +25,7 @@
                 <div id="lesson_list{{ material.id }}">
                     {% for lesson in material.lessons.all %}
                     <div id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
-                        <a href="{{ lesson.get_absolute_url }}" style="color: #fff;">
+                        <a href="{{ lesson.get_absolute_url }}" style="text-decoration: underline;" class="textw">
                             {{ lesson.title }}
                         </a>
                         {% if lesson.is_homework %}

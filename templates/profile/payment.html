@@ -4,9 +4,10 @@
     Оплата
 </div>
 {%endif%}
+{% if is_manager %}
 <div class="ui segment mt0 backdark textw">
     <div class="ui grid stackable">
-        {% if is_manager and hisprofile.is_student %}        
+        {% if hisprofile.is_student %}
         <div class="eight wide column pr5">
             Пожалуйста, укажите за какую группу вносится оплата:
             <form class="ui form mb10 mt10" style="display: flex;">
@@ -22,15 +23,13 @@
         {%endif%}
         <div class="eight wide column pr5">
             <div class="pt5">
-                {% if is_manager and hisprofile.is_student %}
+                {% if hisprofile.is_student %}
                 <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
                 <a class="ui button mini mb10" onclick="$('.payment_history').modal('show')">История оплаты</a>
                 {%endif%}
-                {% if is_manager %}
                 <a class="ui button mini get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
-                {%endif%}
             </div>
-            {% if is_manager and hisprofile.is_student %}
+            {% if hisprofile.is_student %}
             <div class="ui modal payment_history">
                 <i class="close icon"></i>
                 <div class="content">
@@ -135,7 +134,8 @@
         </div>
     </div>
 </div>
-{% if is_manager and hisprofile.is_student %}
+
+{% if hisprofile.is_student %}
 <div class="ui segment mb0 text15">
     Клиент записан в данные группы:
 </div>
@@ -214,6 +214,8 @@
     </div>
 </div>
 {%endif%}
+{%endif%}
+
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
 <script type="text/javascript">
     nm_heights()

@@ -451,59 +451,10 @@
                             </div>
                         </div>
                         {% endfor %}
-                    </div>                    
-                    {% if instance.version == 'standart' or instance.version == 'business' %}
+                    </div>
                     <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
                         На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>
                     </div>
-                    <div class="ui segment" style="margin: 0;padding-left: 17px;display: flex;">
-                        <div style="font-size: 13px;">Расходы</div>
-                        <div class="ui pointing below label no_margin green success_new_money" style="display: none;margin-left: 100px !important;">
-                            Расходы записаны, можете посмотреть в истории
-                        </div>
-                    </div>
-                    <div class="ui segment" style="margin: 0;padding-left: 17px;display: flex;">
-                        <form class="ui form" style="display: flex;margin: -5px 15px 0 15px;">
-                            <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
-                            <input type="number" class="new_money_amount" name="" placeholder="Сумма">
-                            <a class="ui button mini no_margin new_money_object" url="{{instance.new_money_object}}">+</a>
-                        </form>
-                        <a style="margin-top: -5px;height: 33px;" url="{{instance.show_money_history}}" class="ui button mini blue show_money_history">История</a>
-                        <div class="ui modal money_history" style="margin-top: 10%;min-height: 100%;">
-                            <i class="close icon"></i>
-                            <div class="content">
-                                <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
-                                    <thead>
-                                        <tr style="color: #222;">
-                                            <th>Название</th>
-                                            <th>Сумма</th>
-                                            <th>Время</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="history_cont">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui segment mt0">
-                        {% include 'school/money_circle_chart.html' %}
-                    </div>
-                    <div class="ui segment mb0 pl15">
-                        <div class="ui grid">
-                            <div class="nine wide column">
-                                Доходы
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui segment mt0" style="height:324px;">
-                        {% include 'school/money_chart.html' %}
-                    </div>
-                    {% endif %}
-                {% if instance.title == 'Тамос' %}
-                    {% include 'school/good_results_chart.html' %}
-                {% endif %}
-                {% include 'school/bad_results_chart.html' %}                
             </div>
         </div>
     </div>

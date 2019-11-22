@@ -44,6 +44,7 @@ def school_rating(request):
             "is_manager":is_profi(profile, 'Manager'),
             "is_director":is_profi(profile, 'Director'),
             "is_moderator":is_profi(profile, 'Moderator'),
+            "page":"ratings",
         }
         return render(request, "school/school_rating.html", context)
     else:
@@ -61,6 +62,7 @@ def school_rating(request):
             "is_moderator":is_profi(profile, 'Moderator'),
             "school_money":school.money,
             "school_crnt":school,
+            "page":"ratings",
         }
         return render(request, "school/school_rating.html", context)
 
@@ -82,6 +84,7 @@ def school_payments(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "page":"payments",
     }
     return render(request, "school/school_payments.html", context)
 
@@ -110,6 +113,7 @@ def school_schedule(request):
         'interval':school.schedule_interval,
         'days':get_days(),
         'height':28*15*int(60/school.schedule_interval)+25,
+        "page":"schedule",
     }
     return render(request, "school/schedule.html", context)
 
@@ -210,6 +214,7 @@ def school_info(request):
         "worktime1":worktime1,
         "worktime2":worktime2,
         "social_networks":get_social_networks(school),
+        "page":"info",        
     }
     return render(request, "school/info.html", context)
 def get_social_networks(school):
@@ -232,6 +237,7 @@ def school_salaries(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "page":"finance",        
     }
     return render(request, "school/salaries.html", context)
 
@@ -272,6 +278,7 @@ def school_crm(request):
         'days':get_days(),
         'crmdays':Day.objects.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
+        "page":"crm",        
     }
     return render(request, "school/crm.html", context)
 
@@ -305,91 +312,9 @@ def school_crm_all(request):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
+        "page":"crm",        
     }
     return render(request, "school/crm.html", context)
-
-def school_students(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = is_moderator_school(request, profile)    
-    context = {
-        "profile":profile,
-        "instance": profile.schools.first(),
-        "all_students":school.people.filter(),
-        "students":"students",
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        "school_money":school.money,
-        "school_crnt":school,
-    }
-    return render(request, "school/all_students.html", context)
-
-def school_requests(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = is_moderator_school(request, profile)
-    context = {
-        "profile":profile,
-        "instance": profile.schools.first(),
-        "all_students":school.zaiavkas.all(),
-        "requests":"requests",
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        "school_money":school.money,
-        "school_crnt":school,
-    }
-    return render(request, "school/all_students.html", context)
-
-def school_recalls(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = is_moderator_school(request, profile)
-    context = {
-        "profile":profile,
-        "instance": school,
-        "all_students":school.people.filter(),
-        "recalls":"recalls",
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        "school_money":school.money,
-        "school_crnt":school,
-    }
-    return render(request, "school/all_students.html", context)
-
-def school_courses(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    context = {
-        "profile":profile,
-        "instance": profile.schools.first(),
-        "courses":"courses",
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        "school_money":school.money,
-        "school_crnt":school,
-    }
-    return render(request, "school/all_courses.html", context)
-
-def school_list(request):
-    profile = get_profile(request)
-    context = {
-        "profile": profile,
-        "schools":School.objects.all(),
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        "school_crnt":school,
-    }
-    return render(request, "schools/school_list.html", context)
 
 def subject_create(request): ### Если нет предмета, то отправить письмо Адилю
     manager_profile = Profile.objects.get(user = request.user.id)
@@ -1295,18 +1220,31 @@ def get_card_squads(request):
     is_in_school(profile, school)
     profile = card.card_user
     res = []
-
-    bills = []
     if profile:
         nms = card.need_money.select_related('squad')
         for squad in profile.squads.all():
             res.append(squad.id)
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def get_card_info(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    card = CRMCard.objects.get(id=int(request.GET.get('id')))
+    school = card.school
+    is_in_school(profile, school)
+    profile = card.card_user
+    bills = []
+    if profile:
+        nms = card.need_money.select_related('squad')
+        for squad in profile.squads.all():
             crnt = nms.filter(squad=squad)
             if len(crnt) > 0:
                 crnt = crnt[0]
-                bills.append([squad.title, crnt.money, crnt.lesson_bill, crnt.bill])
+                bills.append([squad.title, crnt.money, crnt.lesson_bill, crnt.bill,squad.id])
     data = {
-        'res':res,
         'bills':bills,
     }
     return JsonResponse(data)

@@ -441,7 +441,7 @@
             dataType: 'json',
             success: function (data) {
                 for (var i = 0; i < data.res.length; i++) {
-                    $('<tr style="color: #222;"><td>'+data.res[i][0]+'</td><td>'+data.res[i][1]+'</td><td>'+data.res[i][2]+'</td>').appendTo('.history_cont')
+                    $('<tr style="color: #222;"><td class="border">'+data.res[i][0]+'</td><td class="border">'+data.res[i][1]+'</td><td class="border">'+data.res[i][2]+'</td>').appendTo('.history_cont')
                 }
             }
         })
@@ -988,7 +988,7 @@
             highlight = ''
             if (position == 'top') {highlight=' newcardlight '}
             if (saved == 'True') {calendar_color = 'blue'}
-            html_str = '<div class="crm_card '+name+' '+phone+' '+tags+' crm_card" id="card_container'+id+'" is_saved="'+saved+'"> <div id="card'+id+'" class="ui segment card_segment'+highlight+' '+colour+'" ondragstart="save_card_id('+id+', '+"'"+name+"'"+')" draggable="true" column_id="'+column+'"> <div onclick="open_crmcard('+id+')" style="width: 80%;display: inline-block;"> <span style="font-weight: 600;color:#285473;">'+name+'</span> <div style="color: #707070;font-size: 12px;"> '+phone+' </div> </div> <div style="width: 20%;display: inline-block;float: right;margin-top: 20px;"> <a class="delete_card" onclick="delete_card('+id+')" id="+id+"><b>×</b></a> <a class="show_card_schedule mb5" id="cardsc'+id+'" onclick="openNav('+id+','+"'"+name+"'"+')" column="'+column+'"> <i class="icontable'+id+' icon table '+calendar_color+'"></i> </a> <a class="show_card_schedule" onclick="open_crmhist('+"'"+id+"'"+')" style="margin-top: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a> </div> <div style="width: 80%;"> <a class="nouser'+id+'" style="color: darkblue;font-size: 11px">'+author+'</a> </div> <div style="width: 20%;"> </div> </div> </div> <div class="ui modal card_form" id="card_form'+id+'"> <i class="close icon"></i> <div class="content"> <div class="card_head"> Карточка '+name+' </div> <form class="ui form card_form_update_here" method="POST" enctype="multipart/form-data"> <span class="wrong_mail_error wrong_mail_error'+id+' highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span> <div class="ui grid stackable card_form_update"> <div class="third wide column pr0" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Имя:</b> <textarea class="card_name'+id+'" style="margin-bottom: 8px;" placeholder="Имя">'+name+'</textarea> <b>Телефон:</b> <textarea class="card_phone'+id+'" style="margin-bottom: 8px;" placeholder="Телефон">'+phone+'</textarea> </div> <div class="third wide column pr0" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Почта:</b> <textarea class="card_mail'+id+'" style="margin-bottom: 8px;" placeholder="Почта">'+mail+'</textarea> <i>Дополнительный телефон:</i> <textarea class="card_phone_extra'+id+'" style="margin-bottom: 8px;" placeholder="Дополнительный телефон">'+extra_phone+'</textarea> </div> <div class="third wide column" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Родители:</b> <textarea class="card_parents'+id+'" style="margin-bottom: 8px;" placeholder="Почта">'+parents+'</textarea> </div> <div class="sixteen wide column" style="padding-top: 5px;"> <div style="height: 65px;margin-bottom: 0;"> <b style="margin: 0 44%;">Комментарий:</b> <div contenteditable="true" id="'+id+'" class="card_comment-textarea card_comment'+id+'" placeholder="Комментарий">'+comments+'</div> <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper'+id+'"> <a class="card_comment-item ui button mini card'+id+'helper1" id="'+id+'"> </a> <br> <a class="card_comment-item ui button mini card'+id+'helper2" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper3" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper4" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper5" id="'+id+'"> </a><br> </div> </div> '+' <div class="ui grid stackable" style="margin-top: 30px;"> <div class="third wide column" id="card_form-select"> <select class="card_form-select-contact card_form-select-contact'+id+'" id="'+id+'" onchange="card_called_change('+id+')"> <option value="'+action+'">'+action+'</option> <option value="-1">Другое</option> <option value="Позвонить">Позвонить</option> <option value="Whats app">Whats app</option> <option value="СМС">СМС</option> <option value="Почта">Почта</option> </select></div><div class="third wide column" id="card_form-select"> <a class="ui button '+ishide+' small full-w card_form-select-contact-btn card_form-select-contact-btn'+id+'" id="'+id+'" onclick="card_called('+id+')">Связались '+action+'</a> </div> <div class="third wide column" id="card_form-select"> '+is_director+' </div> <div class="sixteen wide column" style="text-align: center;margin-top: 15px;"> <div class="ui grid"> '+days+' </div> </div> <div class="sixteen wide column center aligned"> <a class="ui button blue tiny" onclick="edit_card('+id+')" id="'+id+'">Сохранить</a> </div> </div> </div> </div> </form> </div> </div> <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist'+id+'"> <i class="close icon"></i> <div class="content"> <div class="card_head"> Карточка '+name+' </div> <div class="ui grid stackable card_form_update"> <div class="sixteen wide column"> <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений </div> </div> <div class="sixteen wide column cardhistory'+id+'" style="color: #6b6d72;font-size: 12px;"> </div> </div> </div> </div>'
+            html_str = '<div class="crm_card '+name+' '+phone+' '+tags+' crm_card" id="card_container'+id+'" is_saved="'+saved+'"> <div id="card'+id+'" class="ui segment card_segment'+highlight+' '+colour+'" ondragstart="save_card_id('+id+', '+"'"+name+"'"+')" draggable="true" column_id="'+column+'"> <div onclick="open_crmcard('+id+')" style="width: 80%;display: inline-block;"> <span style="font-weight: 600;color:#285473;">'+name+'</span> <div style="color: #707070;font-size: 12px;"> '+phone+' </div> </div> <div style="width: 20%;display: inline-block;float: right;margin-top: 20px;"> <a class="delete_card" onclick="delete_card('+id+')" id="+id+"><b>×</b></a> <a class="show_card_schedule mb5" id="cardsc'+id+'" onclick="openNav('+id+','+"'"+name+"'"+')" column="'+column+'"> <i class="icontable'+id+' icon table '+calendar_color+'"></i> </a> <a class="show_card_schedule" onclick="open_crmhist('+"'"+id+"'"+')" style="margin-top: 2px;"><i style="font-size: 12px;" class="icon clock"></i></a> </div> <div style="width: 80%;"> <a class="nouser'+id+'" style="color: darkblue;font-size: 11px">'+author+'</a> </div> <div style="width: 20%;"> </div> </div> </div> <div class="ui modal card_form" id="card_form'+id+'"> <i class="close icon"></i> <div class="content"> <div class="card_head"> Карточка '+name+' </div> <form class="ui form card_form_update_here" method="POST" enctype="multipart/form-data"> <span class="wrong_mail_error wrong_mail_error'+id+' highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span> <div class="ui grid stackable card_form_update"> <div class="four wide column pr0" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Имя:</b> <textarea class="card_name'+id+'" style="margin-bottom: 8px;" placeholder="Имя">'+name+'</textarea> <b>Телефон:</b> <textarea class="card_phone'+id+'" style="margin-bottom: 8px;" placeholder="Телефон">'+phone+'</textarea> </div> <div class="four wide column pr0" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Почта:</b> <textarea class="card_mail'+id+'" style="margin-bottom: 8px;" placeholder="Почта">'+mail+'</textarea> <i>Дополнительный телефон:</i> <textarea class="card_phone_extra'+id+'" style="margin-bottom: 8px;" placeholder="Дополнительный телефон">'+extra_phone+'</textarea> </div> <div class="four wide column" style="padding-top: 5px;text-align: center;"> <div style="height: 10px;"> </div> <b>Родители:</b> <textarea class="card_parents'+id+'" style="margin-bottom: 8px;" placeholder="Почта">'+parents+'</textarea><div class="ui segment full-w pt5 pb5"> <a class="show_hint_schedule full-w"> <i class="icon info circle blue"></i> <span style="font-size: 13px;">Информация о счетах</span> </a> <div class="hint_schedule ui segment" style="display: none;position: absolute;margin-top: 50px;margin-left: -300px; width: 400px;height: 200px;z-index: 3000;background-color: #4a4a4a;color: #fff;"> <div class="card_money_sch'+id+'" style="font-weight: 400;font-size: 13px;"></div> </div> </div> </div><div class="four wide column pt5 text-center pl0 pr0"> <div style="height: 10px;"></div> <b>Оплата:</b> <div style="display: flex;" class="mb10"> <input class="mr10 payment_amount'+id+'" placeholder="Сумма" type="number" name=""> <select id="pay_for_group'+id+'"> </select> </div> <a class="ui button mini blue make_payment make_payment'+id+' full-w" onclick="make_payment_card('+"'"+id+"'"+')"> Оплатить </a> <div class="loading_small" id="loadpayment'+id+'" style="display: none;"> <div class="animation"><div class="circle one"></div></div> <div class="animation"><div class="circle two"></div></div> <div class="animation"><div class="circle three"></div></div> <div class="animation"><div class="circle four"></div></div> <div class="animation"><div class="circle five"></div></div> <div class="animation"><div class="circle six"></div></div> </div> <div class="mt10 success_payment'+id+'" style="display: none;"> Оплата принята <i class="icon check green"></i> </div> </div> <div class="sixteen wide column" style="padding-top: 5px;"> <div style="height: 65px;margin-bottom: 0;"> <b style="margin: 0 44%;">Комментарий:</b> <div contenteditable="true" id="'+id+'" class="card_comment-textarea card_comment'+id+'" placeholder="Комментарий">'+comments+'</div> <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper'+id+'"> <a class="card_comment-item ui button mini card'+id+'helper1" id="'+id+'"> </a> <br> <a class="card_comment-item ui button mini card'+id+'helper2" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper3" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper4" id="'+id+'"> </a><br> <a class="card_comment-item ui button mini card'+id+'helper5" id="'+id+'"> </a><br> </div> </div> '+' <div class="ui grid stackable" style="margin-top: 30px;"> <div class="third wide column" id="card_form-select"> <select class="card_form-select-contact card_form-select-contact'+id+'" id="'+id+'" onchange="card_called_change('+id+')"> <option value="'+action+'">'+action+'</option> <option value="-1">Другое</option> <option value="Позвонить">Позвонить</option> <option value="Whats app">Whats app</option> <option value="СМС">СМС</option> <option value="Почта">Почта</option> </select></div><div class="third wide column" id="card_form-select"> <a class="ui button '+ishide+' small full-w card_form-select-contact-btn card_form-select-contact-btn'+id+'" id="'+id+'" onclick="card_called('+id+')">Связались '+action+'</a> </div> <div class="third wide column" id="card_form-select"> '+is_director+' </div> <div class="sixteen wide column" style="text-align: center;margin-top: 15px;"> <div class="ui grid"> '+days+' </div> </div> <div class="sixteen wide column center aligned"> <a class="ui button blue tiny" onclick="edit_card('+id+')" id="'+id+'">Сохранить</a> </div> </div> </div> </div> </form> </div> </div> <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist'+id+'"> <i class="close icon"></i> <div class="content"> <div class="card_head"> Карточка '+name+' </div> <div class="ui grid stackable card_form_update"> <div class="sixteen wide column"> <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений </div> </div> <div class="sixteen wide column cardhistory'+id+'" style="color: #6b6d72;font-size: 12px;"> </div> </div> </div> </div>'
             if (position == 'bottom') {
                 $(html_str).appendTo('.crmbox'+column)
             }
@@ -1474,16 +1474,12 @@
         event.preventDefault();
         var this_ = $(this)
         var id = this_.attr('id')
-        $('.' + id + 'not_test').fadeToggle()
-        $('.' + id + 'test').fadeToggle()
-        if ($('.problem_type_info').attr('info') == 'input'){
-            $('.problem_type_info').attr('info', 'test')
-            this_.text('Ввод ответа')
-        }
-        else{
-            $('.problem_type_info').attr('info', 'input')
-            this_.text('Тест')
-        }
+        type = this_.attr('type')
+        $('.problem_type_info').attr('info')
+        $('.problem_type').removeClass('blue')
+        $('.problem_type_'+type).addClass('blue')
+        $('.problem_form_type').hide()
+        $('.' + id + type).show()
     })
     $(".content-markdown").each(function () {
         var content = $(this).text()
@@ -2043,18 +2039,18 @@
             });
         }
     });
-    $(document).on("click", '.change_task_text', function () {
+    $(".change_task").click(function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")
         id = this_.attr("id")
         paper_id = this_.attr("paper_id")
-        var text = document.getElementsByClassName('change_task_text' + paper_id)[0].value
-        var cost = document.getElementsByClassName('change_task_cost' + paper_id)[0].value
-
+        var text = $('.change_task_textland' + paper_id).val()
+        var cost = $('.change_task_costland' + paper_id).val()
+        console.log(text, cost, $('.change_task_text' + paper_id))
         var answer = ""
         var variant = ""
         if( $(".task_type_" + paper_id).attr("type") == "input" ){
-            answer = answer + document.getElementsByClassName('change_task_answer_' + paper_id)[0].value + "&"
+            answer = answer + document.getElementsByClassName('change_task_answer_land' + paper_id)[0].value + "&"
         }
         if( $(".task_type_" + paper_id).attr("type") == "test" ){
             for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){
@@ -2083,37 +2079,3 @@
             });
         }
     });
-// vmenu2
-
-// $('#toggle').on('ready', function(e) {
-//     $('#vmenu2').toggleClass('menu_active')
-//     console.log(e)
-// })
-// $('.image').on("click", function(e) {
-//     console.log(e)
-// })
-
-// $('.menu-btn').on('click', function(e) {
-//   e.preventDefault();
-//   this_ = $('.vmenu')
-//   if ( this_.attr('stage') == 'passive' ){
-//       this_.attr('stage', 'active');
-//       this_.toggleClass('menu_active');
-//       $('.contenttt').toggleClass('content_active');
-//   }
-//   else{
-//       this_.attr('stage', 'passive');
-//       document.getElementById("contenttt").classList.remove('content_active');
-//       document.getElementById("vmenu2").classList.remove('menu_active');
-//   }
-// })
-// $('.menu_back').on('click', function(e) {
-//   e.preventDefault();
-//   this_ = $('.vmenu')
-//   if ( this_.attr('stage') == 'active' ){
-//       this_.attr('stage', 'passive');
-//       document.getElementById("contenttt").classList.remove('content_active');
-//       document.getElementById("vmenu2").classList.remove('menu_active');
-//   }
-// })
-

@@ -40,6 +40,7 @@ def school_library(request, school_id):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         "school_money":school.money,
+        "page":'library',
     }
     return render(request, 'library/library.html', context=context)
 
@@ -60,6 +61,7 @@ def folder_details(request, folder_id=None):
         "is_director":is_profi(profile, 'Director'), 
         "school_money":profile.schools.first().money,
         "current_school_id":school.id,
+        "page":'library',        
     }
     return render(request, 'library/library.html', context=context)
 

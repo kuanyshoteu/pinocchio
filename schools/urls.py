@@ -9,11 +9,9 @@ urlpatterns = [
     url(r'^crm/$', school_crm, name='crm'),
     url(r'^crm_all/$', school_crm_all, name='crm_all'),
     url(r'^schedule/$', school_schedule, name='schedule'),
-    url(r'^students/$', school_students, name='students'),
     url(r'^info/$', school_info, name='info'),
     url(r'^landing/(?P<school_id>\d+)/$', school_landing, name='landing'),
     url(r'^salaries/$', school_salaries, name='salaries'),
-    url(r'^courses/$', school_courses, name='courses'),
     url(r'^rating/$', school_rating, name='rating'),
     url(r'^payments/$', school_payments, name='payments'),
     url(r'^reports/$', get_school_report, name='get_school_report'),
@@ -71,4 +69,5 @@ urlpatterns = [
     url(r'^api/get_extra_cards/', get_extra_cards, name='get_extra_cards'),
     url(r'^api/payment_history/', payment_history, name='payment_history'),
     url(r'^api/search_crm_cards/', search_crm_cards, name='search_crm_cards'),
+    url(r'^api/get_card_info/', get_card_info, name='get_card_info'),
 ]

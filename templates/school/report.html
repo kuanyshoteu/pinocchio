@@ -19,10 +19,32 @@
             {% include 'left_menu.html' %}
             <div class="twelve wide column">
                 {% include 'school/head.html' %}
-                <div class="ui segment mb0">
-                    Отчет по бухгалтерии
+                <div class="ui segment mb0 text14" style="display: flex;">
+                    <img src="{% static 'images/excel.png' %}" style="width: 30px;"> 
+                    <div class="pt5">Отчет по бухгалтерии</div>
+                    <div class="ml50">
+                        <a url="{{instance.show_money_history}}" class="ui button mini show_money_history">Быстрая история</a>
+                    </div>
+
+                    <div class="ui modal small money_history" style="margin-top: 10%;min-height: 100%;">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
+                                <thead>
+                                    <tr style="color: #222;">
+                                        <th>Название</th>
+                                        <th>Сумма</th>
+                                        <th>Время</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="history_cont">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="ui segment no_padding no_margin">
+                <div class="ui segment no_margin backdark textw">
+                    Выберите период времени, за который нужен отчет:
                     <div style="display: flex;">
                     <!--    <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
                         <div style="padding: 10px 0 0 10px;">
@@ -32,28 +54,34 @@
                         </div>-->    
                     </div>
                     <div style="display: flex;">
-                        <form class="ui form pl15 pt15" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+                        <form class="ui form pt5" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
                             <input type="date" name="first_report" style="width: 175px;height: 30px;" value="{{ weekago }}">
                             <span class="ml15 mr15">—</span>
                             <input type="date" name="second_report" style="width: 175px;height: 30px;" value="{{ today }}">
-                            <div class="mt15">
-                                <input type="submit" name="" class="ui button mini blue" style="height: 29px;" value="Скачать отчет">      
+                            <div class="mt15" style="display: flex;">
+                                <button type="submit" name="" class="ui button mini blue" style="height: 29px;">
+                                    <i class="download icon" style="color: #fff"></i>
+                                    Скачать отчет
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
 
-                <div class="ui segment mb0">
-                    На счету <b style="font-size: 14px;">{{ school_money }}тг</b> 
+                <div class="ui segment mb0" style="display: flex;">
+                    <img src="{% static 'images/chartcircle.png'%}" style="width: 30px;border-radius: 3px;">
+                    <div class="pt5 pl15">
+                        На счету <b style="font-size: 14px;">{{ school_money }}тг</b> 
+                    </div>
                 </div>
-                <div class="ui segment no_margin">
+                <div class="ui segment no_margin backdark textw">
                     <div class="ui grid">                        
                         <div class="sixteen wide column pl5 pr5 ">
                             <b>Из них по группам:</b>
                         </div>
                         {% for sq in instance.groups.all %}
                         <div class="four wide column pl5 pr5 pt0">
-                            <div class="ui segment">
+                            <div class="ui segment" style="color: #222">
                                 <b>{{sq.title}}</b>
                                 <br>
                                 {{sq|squad_nms_sum}}тг
@@ -62,6 +90,13 @@
                         {% endfor %}
                     </div>
                 </div>
+                <div class="ui segment backdark mt0 textw">
+                    {% include 'school/money_chart.html' %}
+                </div>
+                {% if instance.title == 'Тамос' %}
+                    {% include 'school/good_results_chart.html' %}
+                {% endif %}
+                {% include 'school/bad_results_chart.html' %}
             </div>
         </div>
     </div>

@@ -13,22 +13,29 @@
         </div>
     </div>
 </div>
-<div class="ui segment" style="margin-top: 0; padding: 18px;{% if not is_this_trener %}margin-bottom: 0;{% endif %}">
+<div class="ui segment no_margin">
+    {% if is_this_trener or is_manager %}
     {% for squad in hissquads %}
     <a onclick="load_attendance_squad('{{ squad.id }}')" class="ui button small load_attendance_squad {% if squad.id == att_squad.id %}blue{% endif %}" id="squad{{ squad.id }}">
         {{ squad.title }} {%if is_manager%}<br>{{squad.teacher.first_name}}{%endif%}
     </a> 
     {% endfor %} 
+    {% endif %} 
 </div>
 <div class="ui segment mt0 no_padding">
     <div id="squad_attendance">
-    {% if hissquads|length > 0 %}
-    {% if is_this_trener or is_manager %}
         <div class="ui stackable grid" style="margin:-1rem 0 0 !important">
+        {% if is_this_trener or is_manager %}
         {% for subject in att_squad.subjects.all %}
             <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}green{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}) - 3.5px);">{{ subject.title }}</a>
         {% endfor %}
+        {%else%}
+        {% for subject in hissubjects %}
+            <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}green{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);">{{ subject.title }}</a>
+        {% endfor %}
+        {%endif%}
         </div>
+    {% if is_this_trener or is_manager %}
         <div id="subject_attendance">
             <div class="loading" style="display: none;">
               <div class="animation"><div class="circle one"></div></div>
@@ -41,11 +48,10 @@
             {% include "profile/attendance_squad.html" %}
         </div>
     {% else %}
-        <div id="squad_attendance">
+        <div id="subject_attendance">
             {% include "profile/attendance_student.html" %}
         </div>
     {% endif %} 
-    {% endif %}   
     </div>   
 </div>
 <span class="wait" status="no" style="display: none;"></span>

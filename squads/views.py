@@ -52,7 +52,8 @@ def squad_detail(request, slug=None):
         "school_money":school.money,
         'height':28*15*int(60/school.schedule_interval)+25,
         'constant_times':get_times(school.schedule_interval),
-        'interval':school.schedule_interval,        
+        'interval':school.schedule_interval,   
+        'page':'squads',
     }
     return render(request, "squads/squad_detail.html", context)
 
@@ -75,6 +76,7 @@ def squad_list(request):
         "school_crnt":school,        
         "school_money":school.money,
         "filter_office":profile.skill.crm_office2,
+        'page':'squads',    
     }
     return render(request, "squads/squad_list.html", context)
 
@@ -96,6 +98,7 @@ def squad_trash(request):
         "school_crnt":school,        
         "school_money":school.money,
         "trash":True,
+        'page':'squads',
     }
     return render(request, "squads/squad_list.html", context)
 
@@ -124,6 +127,7 @@ def squad_create(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
+        'page':'squads',
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -226,7 +230,8 @@ def squad_update(request, slug=None):
         'interval':school.schedule_interval,
         'days':get_days(),
         'other_subjects':school.school_subjects.all(),
-        'height':28*15*int(60/school.schedule_interval)+25,        
+        'height':28*15*int(60/school.schedule_interval)+25,
+        'page':'squads',
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -253,6 +258,7 @@ def squad_delete(request, slug=None):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":profile.schools.first().money,
+        'page':'squads',
     }
     return render(request, "confirm_delete.html", context)
 

@@ -2,17 +2,14 @@
 <a class="ui button green large" onclick="$('#l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_problem_modal').modal('show')" id='{{ lesson.id }}{{ paper.id }}{{ subtheme.id }}' style="width: 20%;">
   Задачу
 </a>
-
-<div class="ui mini modal" style="width: 70%; padding: 0;height: 100%;" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_problem_modal">
+<div class="ui mini modal" style="width: 70%; padding: 0;height: 100%;top:10%;" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}add_problem_modal">
     <i class="close icon"></i>
     <div class="content" style="background-color: #f4f4f4;padding: 30px;">
-        <div style="width: 50%;margin-left: auto;margin-right: auto;margin-bottom: 15px;">
-            <div class="ui top menu" style="margin-top: 0;">
-                <a style="width: 50%; padding-left: 0; padding-right: 0; text-align: center;display: block;" class="item open_students_table" page='new_probleml{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'>Новая задача</a>
-                <a style="width: 50%; padding-left: 0; padding-right: 0; text-align: center;display: block;" class="item open_students_table" page='problem_listl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'>Список задач</a>            
-            </div>
+        <div class="mb30 text-center">
+            <a class="ui button small" onclick="$('.new_task').show();$('.old_tasks').hide();">Новая задача</a>
+            <a class="ui button small"  onclick="$('.new_task').hide();$('.old_tasks').show();">Список задач</a>
         </div>
-        <div class="ui tab" id="problem_listl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" data-tab="info">
+        <div class="old_tasks" style="display: none;">
             <div class="ui grid">
                 <div class="eleven wide column">
                     {% for task in tasks %}
@@ -21,13 +18,12 @@
                 </div>
             </div>
         </div>
-        <div class="ui active tab" id="new_probleml{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
+        <div class="new_task">
             <form class="ui form add-problem" method='POST' enctype='multipart/form-data'>{% csrf_token %}
                 <div style="text-align: center;">
                     Выберите тип задачи:
-                    <br>
-                    <span class="problem_type_info" info='input' style="display: none;"></span>
-                    <a class="problem_type" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="test">Тест</a>
+                    <a class="problem_type ui button mini blue problem_type_test" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="test">Тест</a>
+                    <a class="problem_type ui button mini problem_type_input" id="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="input">Ввод ответа</a>
                 </div>
                 <div class="ui segment" style="width: 60%;margin: 20px auto;">
                     Условие:
@@ -40,7 +36,7 @@
                     <img class="ui right spaced avatar image" src="{% static 'images/coins_gold.png' %}" style="height: 17px !important;width: 17px;">
                     <textarea  style="height: 33px; width: 70px;" class="new_problem_cost" type="text" id='new_problem_costl{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}'></textarea>
                     <br>
-                    <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}not_test">
+                    <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}input problem_form_type">
                         <div class="answers_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}">
                             Ответ:
                             <textarea  style="height: 33px;width: 200px;" class="new_problem_ans_l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}" type="text"></textarea>
@@ -50,7 +46,7 @@
                             Добавить правильный ответ
                         </a>
                     </div>
-                    <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}test" style="display: none;">
+                    <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}test problem_form_type" style="display: none;">
                         <div class="l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}variants">
                             <div class="is_homework">Отметьте галочкой правильные варианты</div>
                             <br>
@@ -65,8 +61,8 @@
                             Добавить вариант ответа
                         </a>
                     </div>
-                    <div style="text-align: center;">
-                        <a class='ui blue button small new_problem' subtheme_id='{{ subtheme.id }}' id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' data-href='{{ subtheme.new_task_url }}' style="margin-top:10px;">Добавить</a>
+                    <div class="text-center">
+                        <a class='ui blue button small new_problem mt10' subtheme_id='{{ subtheme.id }}' id='l{{ lesson.id }}p{{ paper.id }}s{{ subtheme.id }}' data-href='{{ subtheme.new_task_url }}'>Добавить</a>
                     </div>
                 </div>
             </form>

@@ -1,25 +1,6 @@
 {% load ttags %}
-<div class="ui grid">
-    <div class="sixteen wide column" style="padding-bottom: 35px;">
-        <div class="school-schedule">
-            <div class="schedule-scale">
-                <div class="schedule-scale-num"></div>
-                <div class="schedule-scale-num"></div>
-                <div class="schedule-scale-num"></div>
-                <div class="schedule-scale-num"></div>
-                <div class="schedule-scale-num"></div>
-                <div class="schedule-scale-num"></div>
-            </div>
-            {% for money in instance.money_months.all %}
-            <div class="schedule-column">
-                <div style="height: {{ money.money_spend.0|money_percent:money.money_spend.1 }}%" class="schedule-item-light">{{ money.money_spend.0 }}</div>
-                <div style="height: {{ money.money_spend.1|money_percent:money.money_spend.0 }}%" class="schedule-item-dark">{{ money.money_spend.1 }}</div>
-            <div style="position: absolute;margin-top: 24px;margin-left: 10px;">{{money.month|date:"M"}}</div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
+<canvas style="padding-right: 25px;" id="spend_money" height="50"></canvas>
+
 
 <!-- <div class="donut-chart-block">
     <div id="chart" class="chart-container"></div>
