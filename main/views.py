@@ -1238,11 +1238,9 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    moder_update_bills()
-    a = Profile.objects.get(id=388)
-    a.first_name = 'Дамели'
-    a.save()
-    
+    p = Profile.objects.get(id=441)
+    profession = Profession.objects.get(title = 'Teacher')
+    p.profession.add(profession)
     print('moderator_end_code')
     return JsonResponse({'YO':'YO'})
 
