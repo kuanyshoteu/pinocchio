@@ -52,7 +52,7 @@
             {% endif %}
         </div>
         {% endif %}
-        {% if subtheme.task_list.all|length > 0 and is_trener %}
+        {% if subtheme.task_list.all|length > 0 %}
             <div class="hint40 hint60 highliter" style="position: absolute;margin-left: -70px;margin-top: -110px;"></div>
             <div class="hint41 hint61 highliter" style="position: absolute;margin-left: -20px;margin-top: -110px;"></div>
         {% endif %}
@@ -63,7 +63,7 @@
 {% endif %}
 </div>
 
-{% if is_trener %}
+{% if is_trener or is_director %}
 <span style="display: none;" class="hint_data" hint_type="4" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
 <script type="text/javascript">
     $(document).ready(function() {
