@@ -40,7 +40,7 @@
 			                </div>
 			            </a>
 			        </div>
-			    {% if is_trener and lesson.author_profile == profile %}
+			    {% if is_trener or is_director %}
 			    	{% include 'library/add_paper.html' %}
 			    {% endif %}
 			    {% if paper %}
@@ -49,7 +49,6 @@
 			        {% include 'library/estimate_lesson.html' %}
 			    {% endif %}
 			    </div>
-
 			    <div class="ui segment" style="margin-top: 0;background-color: #f9f9fb;color: #757575;">
 			        <span>
 			            <i class="icon comment"></i>
