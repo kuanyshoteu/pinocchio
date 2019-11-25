@@ -57,7 +57,6 @@ class Subject(models.Model):
     author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='author_subjects') 
     squads = models.ManyToManyField(Squad, related_name='subjects')
     cost = models.IntegerField(default=0, null = True)
-    #Скрыть цену или нет
     cost_period = models.CharField(max_length=250, default="month") #could be 'lesson', 'course', '4weeks'
 
     title = models.CharField(max_length=250)
@@ -174,7 +173,7 @@ class Lecture(models.Model):
 
 class Attendance(models.Model):
     subject_materials = models.ForeignKey(SubjectMaterials,null=True, on_delete = models.CASCADE, related_name='sm_atts')
-    present = models.TextField(default = '')
+    present = models.TextField(default = '') # present, absent, warned or ''
     grade = models.IntegerField(default = -1)
 
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_attendances')     

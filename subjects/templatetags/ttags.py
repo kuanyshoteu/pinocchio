@@ -127,7 +127,7 @@ def get_date(material, squad):
         
         if date > timezone.now().date():
             check_date = 'future'
-        elif date + timedelta(3) >= timezone.now().date():
+        elif date + timedelta(23) >= timezone.now().date():
             check_date = 'now'
         else:
             check_date = 'past'
@@ -157,7 +157,7 @@ def get_material(subject, profile):
         squad = profile.hissquads.filter(subjects=subject)
     if len(squad) > 0:
         squad = squad[0]
-    if num_of_lectures > 0 and  timezone.now().date() > squad.start_date:
+    if num_of_lectures > 0 and timezone.now().date() >= squad.start_date:
         delta = (timezone.now().date() - squad.start_date).days
         number_of_weeks = int(delta / 7)
         finish = delta % 7
@@ -183,7 +183,7 @@ def check_date(material, squad):
     date = get_date(material, squad)
     if date > timezone.now().date():
         return 'future'
-    elif date + timedelta(3) >= timezone.now().date():
+    elif date + timedelta(23) >= timezone.now().date():
         return 'now'
     else:
         return 'past'

@@ -22,16 +22,16 @@
     {% endfor %} 
     {% endif %} 
 </div>
-<div class="ui segment mt0 no_padding">
+<div class="ui segment mt10 no_padding">
     <div id="squad_attendance">
         <div class="ui stackable grid" style="margin:-1rem 0 0 !important">
         {% if is_this_trener or is_manager %}
         {% for subject in att_squad.subjects.all %}
-            <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}green{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}) - 3.5px);">{{ subject.title }}</a>
+            <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}blue{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}) - 3.5px);">{{ subject.title }}</a>
         {% endfor %}
         {%else%}
         {% for subject in hissubjects %}
-            <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}green{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);">{{ subject.title }}</a>
+            <a onclick="load_attendance_subject('{{ subject.id }}')" class=" ui button small switch_btn {% if subject.id == att_subject.id %}blue{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);">{{ subject.title }}</a>
         {% endfor %}
         {%endif%}
         </div>
@@ -75,8 +75,8 @@
                 'subject_id':subject_id,
             },
             success: function (data) {
-                $('.switch_btn').removeClass('green')
-                $('#subject' + subject_id).addClass('green')
+                $('.switch_btn').removeClass('blue')
+                $('#subject' + subject_id).addClass('blue')
                 $( "#subject_attendance" ).load(document.URL +  ' #subject_attendance');
             }, 
             error: function (error) {
@@ -207,10 +207,10 @@
                             grades_div.setAttribute('id', 'grades' + data.columns[i][j][0])
                             for(var k = 5; k >= 2; k--){
                                 if(data.columns[i][j][2] == k){
-                                    grade_button = createEl('a', 'ui button mini save_grade green')
+                                    grade_button = createEl('a', 'ui button mini save_grade blue grade'+data.columns[i][j][0])
                                 }
                                 else{
-                                    grade_button = createEl('a', 'ui button mini save_grade')                                    
+                                    grade_button = createEl('a', 'ui button mini save_grade grade'+data.columns[i][j][0])                        
                                 }
                                 grade_button.setAttribute('id', data.columns[i][j][0])
                                 grade_button.setAttribute('style', 'margin:0 1px')
@@ -220,21 +220,80 @@
                             }
                             attendance = document.createElement('div')
                             attendance.setAttribute('id', 'attendance' + data.columns[i][j][0])
-                            att_present = createEl('a', 'ui button mini full-w blue att_present')
+                            att_present = createEl('a', 'ui button mini full-w blue att_present att_present'+data.columns[i][j][0])
                             att_present.setAttribute('id', data.columns[i][j][0])
+                            att_present.setAttribute('status', 'present')
                             att_present.innerHTML = 'На уроке'
                             attendance.appendChild(att_present)
-                            if(data.columns[i][j][1] != 'present' && data.columns[i][j][1] != 'late'){
+                            ///
+                            twob = createEl('div')
+                            twob.setAttribute('style', 'display: flex;')
+                            firstb = createEl('a','ui button mini orange att_present mt5 mr5')
+                            firstb.setAttribute('style', 'padding: 5px !important;')
+                            firstb.setAttribute('id', data.columns[i][j][0])
+                            firstb.setAttribute('status', 'warned')
+                            bclock = createEl('i', 'icon clock text10 textw mr0')
+                            firstb.appendChild(bclock)
+                            twob.appendChild(firstb)
+
+                            secondb = createEl('a','ui button mini red att_present mt5 mr5')
+                            secondb.setAttribute('style', 'padding: 5px !important;')
+                            secondb.setAttribute('id', data.columns[i][j][0])
+                            secondb.setAttribute('status', 'absent')
+                            bclose = createEl('i', 'icon close text10 textw mr0')
+                            secondb.appendChild(bclose)
+                            twob.appendChild(secondb)
+                            attendance.appendChild(twob)
+                            ///
+                            if(data.columns[i][j][1] != 'present'){
                                 grades_div.setAttribute('style', 'display:none;')
                             }
-                            else{
+                            if (data.columns[i][j][1] != ''){
                                 attendance.setAttribute('style', 'display:none;')
                             }
+                            //////
+                            attresult = createEl('div', 'ui segment attendace_grade attresult'+data.columns[i][j][0])
+                            bacg = '#DB2828'
+                            clockdisplay = 'none;'
+                            closedisplay = 'block;'
+                            if (data.columns[i][j][1] == 'present'){
+                                bacg = '#21BA45'
+                            }
+                            else if (data.columns[i][j][1] == 'warned') {
+                                bacg = '#f2711c'
+                                clockdisplay = 'block;'
+                                closedisplay = 'none;'
+                            }
+                            else if (data.columns[i][j][1] == 'noteacher') {
+                                bacg = '#e03997'
+                                clockdisplay = 'block;'
+                                closedisplay = 'none;'
+                            }
+                            attresult_display='block'
+                            if (data.columns[i][j][1] == 'present' || data.columns[i][j][1] == ''){
+                                attresult_display='none'
+                            }
+                            attresult.setAttribute('style', 'display:'+attresult_display+';background-color:'+bacg)
+                            iconclock = createEl('i', 'icon clock text10 textw')
+                            iconclock.setAttribute('id', 'clock'+data.columns[i][j][0])
+                            iconclock.setAttribute('style', 'margin:0 auto;display:'+clockdisplay)
+                            iconclose = createEl('i', 'icon close text10 textw')
+                            iconclose.setAttribute('id', 'close'+data.columns[i][j][0])
+                            iconclose.setAttribute('style', 'margin:0 auto;display:'+closedisplay)
+                            attresult.appendChild(iconclock);attresult.appendChild(iconclose);
+                            /////
+                            cancel = createEl('a', 'ui button mini att_present attcancel'+data.columns[i][j][0])
+                            cancel.innerHTML = 'Отмена'
+                            cancel.setAttribute('id', data.columns[i][j][0])
+                            cancel.setAttribute('status', 'cancel')
+                            canceldisplay = 'inline-block'
+                            if (data.columns[i][j][1] == '') {canceldisplay = 'none'}
+                            cancel.setAttribute('style', 'padding: 3px 10px !important;margin: 5px auto 0 auto;display:'+canceldisplay)
                             attendance_block.appendChild(grades_div)
+                            attendance_block.appendChild(attresult)
                             attendance_block.appendChild(attendance)
+                            attendance_block.appendChild(cancel)
                             section.appendChild(attendance_block)
-                            divider = createEl('div', 'ui divider grey_divider')
-                            section.appendChild(divider)
                         }
                     }
                     else if (data.columns[i][2] == 'past') {
@@ -243,14 +302,23 @@
                             if(j % 2 == 1){
                                 attendance_block.setAttribute('style', 'background-color: #545454')
                             }
+                            bacg = '#DB2828'
+                            if (data.columns[i][j][1] == 'present'){
+                                bacg = '#21BA45'
+                            }
+                            else if (data.columns[i][j][1] == 'warned') {
+                                bacg = '#fbbd08'
+                            }
+                            else if (data.columns[i][j][1] == 'noteacher') {
+                                bacg = '#e03997'
+                            }
                             attendace_grade = createEl('div', 'ui segment attendace_grade')
+                            attendace_grade.setAttribute('style', 'background-color:'+bacg)
                             if (data.columns[i][j][2] > 0){
                                 attendace_grade.innerHTML = data.columns[i][j][2]
                             }
                             attendance_block.appendChild(attendace_grade)
                             section.appendChild(attendance_block)
-                            divider = createEl('div', 'ui divider grey_divider')
-                            section.appendChild(divider)
                         }
                     }
                     prev_atts = document.getElementById('prev_atts')
@@ -277,10 +345,8 @@
         if ($('.wait').attr('status') == 'no') {
             if($('.att' + nextNumber).length == 0 && last_set == "no"){
                 createColumnRight(nextNumber, index);
-                console.log('created', nextNumber)
             }
             else if($('.att' + nextNumber).length > 0 || last_set == "no"){
-                console.log('moved', nextNumber, 'index', index-130)
                 index = index - 130;
                 slider.animate({
                     marginLeft:(index) + 'px'

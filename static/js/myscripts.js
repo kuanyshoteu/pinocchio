@@ -1372,15 +1372,41 @@
 
     $(document).on("click", '.att_present', function () {    
         var id = $(this).attr('id')
+        var status = $(this).attr('status')
         $.ajax({
             url: $('.attendance_present_url').attr('url'),
             data: {
                 'id':id,
+                'status':status,
             },
             dataType: 'json',
             success: function (data) {
-                $('#grades' + id).show()
-                $('#attendance'+id).hide()
+                if (status == 'cancel') {
+                    $('#attendance'+id).show()
+                    $('.attresult'+id).hide()
+                    $('#grades' + id).hide()
+                    $('.attcancel'+id).hide()
+                }
+                else{
+                    $('.attcancel'+id).show()
+                    $('#attendance'+id).hide()
+                    if (status == 'present') {
+                        $('#grades' + id).show()
+                    }
+                    else {
+                        if (status == 'absent' || status == '') {
+                            $('.attresult'+id).css('background-color', '#DB2828')
+                            $('#clock'+id).hide()
+                            $('#close'+id).show()
+                        }
+                        else if (status == 'warned' || status == 'noteacher') {
+                            $('.attresult'+id).css('background-color', '#f2711c')                        
+                            $('#clock'+id).show()
+                            $('#close'+id).hide()
+                        }
+                        $('.attresult'+id).show()
+                    }
+                }
             }
         });
     })
@@ -1769,8 +1795,8 @@
                     'grade':grade,                        
                 },
                 success: function (data) {
-                    $('.grade'+id).removeClass('green')
-                    this_.addClass('green')
+                    $('.grade'+id).removeClass('blue')
+                    this_.addClass('blue')
                 }, error: function (error) {
                     console.log('error')
                 }

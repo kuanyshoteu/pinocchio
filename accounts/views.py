@@ -52,13 +52,13 @@ def account_view(request, user = None):
             miss_lesson = miss_lesson_form.save()
             return redirect(profile.get_absolute_url())
     hissubjects = []
-    if is_profi(hisprofile, 'Teacher'):
-        hissquads = hisprofile.hissquads.all()
-    elif is_profi(hisprofile, 'Manager'):
+    if is_profi(hisprofile, 'Manager'):
         if profile.skill.crm_office2:
             hissquads = profile.skill.crm_office2.groups.filter(shown=True)
         else:
             hissquads =  profile.schools.first().groups.filter(shown=True)
+    elif is_profi(hisprofile, 'Teacher'):
+        hissquads = hisprofile.hissquads.all()
     else:
         hissquads = hisprofile.squads.all()
         hissubjects = set(Subject.objects.filter(squads__in=hissquads))
@@ -317,50 +317,44 @@ def miss_lecture(request):
 def att_present(request):
     profile = Profile.objects.get(user = request.user)
     only_staff(profile)
-    if request.GET.get('id'):
+    if request.GET.get('id') and request.GET.get('status'):
         attendance = Attendance.objects.get(id = request.GET.get('id'))
         school = attendance.school
         subject = attendance.subject
         squad = attendance.squad
         is_in_school(profile, school)
         profile = squad.teacher
-        attendance.present = 'present'
-        this_student_card = attendance.student.card.filter(school=school)
-        if len(this_student_card) > 0:
-            card = this_student_card[0]
-            if card.column.id == 2:
-                card.column = CRMColumn.objects.get(id=3)
-                card.save()
+        if request.GET.get('status') == 'cancel':
+            attendance.present = ''
         else:
-            CRMCard.objects.create(
-                card_user=attendance.student,
-                column=CRMColumn.objects.get(id=3),
-                name=attendance.student.first_name,
-                phone=attendance.student.phone,
-                mail=attendance.student.mail,
-                school=school,
-                saved=True
-            )   
-        material = attendance.subject_materials
-        if not profile in material.done_by.all():
-            material.done_by.add(profile)
-            profile.money += profile.salary
-            school = subject.school
-            change_school_money(school, -1*profile.salary, 'teacher_salary', profile.first_name)
-            school.save()
+            attendance.present = request.GET.get('status')
+        if request.GET.get('status') == 'present':
+            this_student_card = attendance.student.card.filter(school=school)
+            if len(this_student_card) > 0:
+                card = this_student_card[0]
+                if card.column.id == 2:
+                    card.column = CRMColumn.objects.get(id=3)
+                    card.save()
+            material = attendance.subject_materials
+            if not profile in material.done_by.all():
+                material.done_by.add(profile)
+                profile.money += profile.salary
+                school = subject.school
+                change_school_money(school, -1*profile.salary, 'teacher_salary', profile.first_name)
+                school.save()
 
-            cards = school.crm_cards.all()
-            cost = subject.cost
-            if subject.cost_period == 'lesson':
-                for student in squad.students.all():
-                    card = cards.filter(card_user=student)
-                    if len(card) > 0:
-                        pay_for_lesson(card[0], cost, squad)
-            elif subject.cost_period == '4weeks':
-                for student in squad.students.all():
-                    card = cards.filter(card_user=student)
-                    if len(card) > 0:
-                        pay_for_lesson(card[0], int(cost/4), squad)
+                cards = school.crm_cards.all()
+                cost = subject.cost
+                if subject.cost_period == 'lesson':
+                    for student in squad.students.all():
+                        card = cards.filter(card_user=student)
+                        if len(card) > 0:
+                            pay_for_lesson(card[0], cost, squad)
+                elif subject.cost_period == '4weeks':
+                    for student in squad.students.all():
+                        card = cards.filter(card_user=student)
+                        if len(card) > 0:
+                            pay_for_lesson(card[0], int(cost/4), squad)
         attendance.save()
         profile.save()
     data = {
