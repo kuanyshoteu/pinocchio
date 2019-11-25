@@ -37,7 +37,7 @@ def account_view(request, user = None):
     user = User.objects.get(username = user)
     hisprofile = Profile.objects.get(user = user)
     skill = hisprofile.skill
-    miss_lesson_form=False
+    miss_lesson_form = False
     mypage = ''
     if profile == hisprofile:
         mypage = 'mypage'
