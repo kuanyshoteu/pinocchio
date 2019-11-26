@@ -4,12 +4,17 @@
 <span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
 <br>
 <div class="ui segment shapka">
-    <div class="ui grid">
+    <div class="ui grid stackable">
         <div class="one wide column">
-            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">  
+            <img src="{% static 'images/grades.png' %}" style="width: 28px;border-radius: 3px;">
         </div>
-        <div class="two wide column" style="line-height: 28px;font-size: 15px;">
+        <div class="four wide column" style="line-height: 28px;font-size: 15px;">
             Журналы
+        </div>
+        <div class="eleven wide column">
+            <a class="ui button mini orange" style="padding: 5px !important;"><i class="icon clock textw mr0"></i></a> - Предупредил(а), что не придет 
+            <br>
+            <a class="ui button mini red mt5" style="padding: 5px !important;"><i class="icon close textw mr0"></i></a> - Отсутсвие без предупреждения 
         </div>
     </div>
 </div>
