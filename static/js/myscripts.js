@@ -1105,72 +1105,67 @@
     update_schedule_lectures();
     function update_schedule_lectures(){
         var sum_width = 0;
-        for (var kii = 0; kii <= 6; kii++) {
-            $($('.wait'+kii).get().reverse()).each(function() {
-                interval = parseInt($('.dataconst').attr('interval'))
-                if ($(this).attr('height')) {
-                    height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            
-                }
-                time = $(this).attr('time');
-                id = $(this).attr('id');
-                hour = parseInt($(this).attr('hour')) * 28;
-                minute = parseInt($(this).attr('minute'));
-                day = $(this).attr('day');
-                topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
-                count = 1
-                $($('.wait'+ day).get().reverse()).each(function() {
-                    if ($(this).attr('id') != id) {
-                        hour2 = parseInt($(this).attr('hour')) * 28;
-                        minute2 = parseInt($(this).attr('minute'));
-                        topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
-                        height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
-                        down2 = topp2 + height2;
-                        friends = $('.dataconst').attr('friends')+'d'+down2;
-                        $('.dataconst').attr('friends', friends );
-                        if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
-                            if (friends.indexOf('d'+topp2) == -1) {
-                                if (id) {
-                                    console.log(id, $(this).attr('id'))
-                                }
-                                count += 1
-                            }
+        $(".lecture_const").each(function() {
+            interval = parseInt($('.dataconst').attr('interval'))
+            if ($(this).attr('height')) {
+                height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            
+            }
+            time = $(this).attr('time');
+            id = $(this).attr('id');
+            hour = parseInt($(this).attr('hour')) * 28;
+            minute = parseInt($(this).attr('minute'));
+            day = $(this).attr('day');
+            topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
+            count = 1
+            $('.wait'+ day).each(function() {
+                if ($(this).attr('id') != id) {
+                    hour2 = parseInt($(this).attr('hour')) * 28;
+                    minute2 = parseInt($(this).attr('minute'));
+                    topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
+                    height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
+                    down2 = topp2 + height2;
+                    friends = $('.dataconst').attr('friends')+'d'+down2;
+                    $('.dataconst').attr('friends', friends );
+                    if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
+                        if (friends.indexOf('d'+topp2) == -1) {
+                            console.log(id, $(this).attr('id'))
+                            count += 1
                         }
                     }
-                })
-                $('.dataconst').attr('friends', '')
-                maxcount = count
-                dayp1 = parseInt(day) + 1
-                if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
-                    $('.dataconst').attr('max'+dayp1, count)
                 }
-                else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
-                $('#constday'+day).css('width', 100*maxcount);
-
-                sum = 0
-                for (var i = 1; i < dayp1; i++) {
-                    sum += parseInt($('.dataconst').attr('max' + i))
-                }
-                $('.constback'+dayp1).css('margin-left', sum*100+53);        
-                $('.constback'+dayp1).css('width', 100*maxcount);
-                $('.schedule_lines').css('width', sum*100+53+100*maxcount)
-                left = 55 + (sum-1)*100 + 100*count;
-                oldleft = parseInt($(this).css('margin-left'));
-                oldtop = parseInt($(this).css('margin-top'));
-                $(this).css('margin-top', oldtop+topp);
-                $(this).css('margin-left', oldleft+left);
-                $('.hint_schedule'+id).css('margin-top', oldtop+topp);
-                $('.hint_schedule'+id).css('margin-left', oldleft+left+98);
-                if ($(this).attr('height')) {
-                    $(this).css('height', height);
-                }
-                $(this).removeClass('wait' + day);
-            });
-            if ($('.dataconst').attr('today')) {
-                $('.schedule_body').animate({
-                    scrollLeft: $("#constday" + today).offset().left-80
-                }, 'fast');            
+            })
+            $('.dataconst').attr('friends', '')
+            maxcount = count
+            dayp1 = parseInt(day) + 1
+            if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
+                $('.dataconst').attr('max'+dayp1, count)
             }
+            else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
+            $('#constday'+day).css('width', 100*maxcount);
+
+            sum = 0
+            for (var i = 1; i < dayp1; i++) {
+                sum += parseInt($('.dataconst').attr('max' + i))
+            }
+            $('.constback'+dayp1).css('margin-left', sum*100+53);        
+            $('.constback'+dayp1).css('width', 100*maxcount);
+            $('.schedule_lines').css('width', sum*100+53+100*maxcount)
+            left = 55 + (sum-1)*100 + 100*count;
+            oldleft = parseInt($(this).css('margin-left'));
+            oldtop = parseInt($(this).css('margin-top'));
+            $(this).css('margin-top', oldtop+topp);
+            $(this).css('margin-left', oldleft+left);
+            if ($(this).attr('height')) {
+                $(this).css('height', height);
+            }
+            $(this).removeClass('wait' + day);
+        });
+        if ($('.dataconst').attr('today')) {
+            $('.schedule_body').animate({
+                scrollLeft: $("#constday" + today).offset().left-80
+            }, 'fast');            
         }
+        return 'ended'
     }
     $('.crm_option').on('change', function(e) {
         id = $(this).attr('id')
