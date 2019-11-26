@@ -502,7 +502,7 @@ def constant_school_lectures(profile, school):
         lectures = lectures.filter(subject=profile.skill.filter_course_connect.first())
     res = []
     interval = school.schedule_interval
-    for lecture in lectures.order_by('id'):
+    for lecture in lectures.order_by('cell'):
         hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
         minute = int(lecture.cell.time_period.start.split(':')[1])
         end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8

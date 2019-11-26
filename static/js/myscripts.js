@@ -1106,7 +1106,6 @@
     function update_schedule_lectures(){
         var sum_width = 0;
         for (var kii = 0; kii <= 6; kii++) {
-            console.log('day',kii)
             $($('.wait'+kii).get().reverse()).each(function() {
                 interval = parseInt($('.dataconst').attr('interval'))
                 if ($(this).attr('height')) {
@@ -1114,7 +1113,6 @@
                 }
                 time = $(this).attr('time');
                 id = $(this).attr('id');
-                console.log('crnt',id)
                 hour = parseInt($(this).attr('hour')) * 28;
                 minute = parseInt($(this).attr('minute'));
                 day = $(this).attr('day');
@@ -1130,12 +1128,12 @@
                         friends = $('.dataconst').attr('friends')+'d'+down2;
                         $('.dataconst').attr('friends', friends );
                         if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
-                            if (friends.indexOf('d'+topp2) == -1) {
-                                if (id) {
-                                    console.log('c',$(this).attr('id'))
-                                }
+                        if (id==410 && $(this).attr('id')==385) {
+                            console.log('check')
+                            console.log(down2, topp, topp + height)
+                            console.log(friends,'d'+topp2)
+                        }
                                 count += 1
-                            }
                         }
                     }
                 })
