@@ -1119,7 +1119,7 @@
                 topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
                 count = 1
                 $('.wait'+ day).each(function() {
-                    if ($(this).attr('id') != id) {
+                    if ($(this).attr('id') < id) {
                         hour2 = parseInt($(this).attr('hour')) * 28;
                         minute2 = parseInt($(this).attr('minute'));
                         topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
@@ -1158,7 +1158,6 @@
                 if ($(this).attr('height')) {
                     $(this).css('height', height);
                 }
-                $(this).removeClass('wait' + day);
             });
             if ($('.dataconst').attr('today')) {
                 $('.schedule_body').animate({
