@@ -1124,11 +1124,17 @@
                     topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
                     height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
                     down2 = topp2+height2
+                    friends = $('.dataconst').attr('friends')
+                    $('.dataconst').attr('friends', friends+ 'd'+down2 )
+                    friends = $('.dataconst').attr('friends')
                     if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
-                        count += 1
+                        if (friends.indexOf('d'+topp2) == -1) {
+                            count += 1
+                        }
                     }
                 }
             })
+            $('.dataconst').attr('friends', '')
             maxcount = count
             dayp1 = parseInt(day) + 1
             if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
