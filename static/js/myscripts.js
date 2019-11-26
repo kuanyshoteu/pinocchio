@@ -1128,12 +1128,7 @@
                         friends = $('.dataconst').attr('friends')+'d'+down2;
                         $('.dataconst').attr('friends', friends );
                         if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
-                        if (id==410 && $(this).attr('id')==385) {
-                            console.log('check')
-                            console.log(down2, topp, topp + height)
-                            console.log(friends,'d'+topp2)
-                        }
-                                count += 1
+                            count += 1
                         }
                     }
                 })
