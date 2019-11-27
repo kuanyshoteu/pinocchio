@@ -835,7 +835,8 @@ def get_school_report(request):
         index = 1
         max_len = 0
         for teacher in profession.workers.filter(schools=school).prefetch_related('hissquads__subjects'):
-            hislectures = teacher.hislectures.all()
+            squads = profile.hissquads.filter(shown=True)
+            hislectures = Lecture.objects.filter(squad__in=squads).select_related('cell')
             teacher_subject = ['5', teacher.first_name]
             res.append(['5',teacher.first_name+' преподаватель', 'ИТОГО'])
             sum_teacher = 0
