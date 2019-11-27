@@ -1106,7 +1106,7 @@
     function update_schedule_lectures(){
         var sum_width = 0;
         for (var kii = 0; kii <= 6; kii++) {
-            $($('.wait'+kii).get().reverse()).each(function() {
+            $('.wait'+kii).each(function() {
                 interval = parseInt($('.dataconst').attr('interval'))
                 if ($(this).attr('height')) {
                     height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            
@@ -1118,21 +1118,26 @@
                 day = $(this).attr('day');
                 topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
                 count = 1
-                $('.wait'+ day).each(function() {
-                    if ($(this).attr('id') < id) {
-                        hour2 = parseInt($(this).attr('hour')) * 28;
-                        minute2 = parseInt($(this).attr('minute'));
-                        topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
-                        height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
-                        down2 = topp2 + height2;
-                        friends = $('.dataconst').attr('friends')+'d'+down2;
-                        $('.dataconst').attr('friends', friends );
-                        if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
-                            count += 1
+                $('.wait'+ kii).each(function() {
+                    if ($(this).attr('id') != id) {
+                        couple = $(this).attr('id')+'w'+id                    
+                        friends = $('.dataconst').attr('friends')
+                        console.log(couple,kii,friends)
+                        if (friends.indexOf('d'+couple) == -1) {
+                            console.log('enter')
+                            $('.dataconst').attr('friends',friends+'d'+id+'w'+$(this).attr('id'));
+                            hour2 = parseInt($(this).attr('hour')) * 28;
+                            minute2 = parseInt($(this).attr('minute'));
+                            topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
+                            height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
+                            down2 = topp2 + height2;
+                            if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
+                                console.log('move')
+                                count += 1
+                            }
                         }
                     }
                 })
-                $('.dataconst').attr('friends', '')
                 maxcount = count
                 dayp1 = parseInt(day) + 1
                 if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
@@ -1159,11 +1164,14 @@
                     $(this).css('height', height);
                 }
             });
-            if ($('.dataconst').attr('today')) {
-                $('.schedule_body').animate({
-                    scrollLeft: $("#constday" + today).offset().left-80
-                }, 'fast');            
-            }
+            console.log('endday')
+            $('.dataconst').attr('friends', '')
+            
+        }
+        if ($('.dataconst').attr('today')) {
+            $('.schedule_body').animate({
+                scrollLeft: $("#constday" + today).offset().left-80
+            }, 'fast');            
         }
     }
     $('.crm_option').on('change', function(e) {

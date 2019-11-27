@@ -249,7 +249,7 @@ def get_current_attendance(subject, squad):
             if get_date_results == '_':
                 res = [[attendances, '_','_']] + res
             else:
-                res = [[attendances, get_date_results[0], get_date_results[1]]] + res
+                res = [[attendances, get_date_results[0], get_date_results[1],sm.made]] + res
             counter += 1
             i += 1
         if counter < 4:
@@ -266,7 +266,7 @@ def get_current_attendance(subject, squad):
                     res = [[attendances, '_','_']] + res
                     res.append([attendances, '_','_'])
                 else:
-                    res.append([attendances, get_date_results[0], get_date_results[1]])
+                    res.append([attendances, get_date_results[0], get_date_results[1],sm.made])
                 counter += 1
                 i += 1
         return res

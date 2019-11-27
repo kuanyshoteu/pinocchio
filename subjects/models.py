@@ -151,6 +151,7 @@ class SubjectMaterials(models.Model):
     lessons = models.ManyToManyField(Lesson, related_name='subject_materials')
     number = models.IntegerField(default=0)
     done_by = models.ManyToManyField(Profile, related_name='done_subject_materials')
+    made = models.CharField(max_length=250, default="month") #could be 'yes', 'no', 'warned'
 
     class Meta:
         ordering = ['id']
