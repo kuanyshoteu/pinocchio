@@ -1105,9 +1105,9 @@
     update_schedule_lectures();
     function update_schedule_lectures(){
         var sum_width = 0;
-        for (var kii = 0; kii <= 6; kii++) {
-            $('.wait'+kii).each(function() {
-                interval = parseInt($('.dataconst').attr('interval'))
+        interval = parseInt($('.dataconst').attr('interval'))
+        for (var day = 0; day <= 6; day++) {
+            $('.wait'+day).each(function() {
                 if ($(this).attr('height')) {
                     height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            
                 }
@@ -1115,30 +1115,41 @@
                 id = $(this).attr('id');
                 hour = parseInt($(this).attr('hour')) * 28;
                 minute = parseInt($(this).attr('minute'));
-                day = $(this).attr('day');
+                left = parseInt($(this).attr('left'));
                 topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
+                down = topp+height
                 count = 1
-                $('.wait'+ kii).each(function() {
-                    if ($(this).attr('id') != id) {
-                        couple = $(this).attr('id')+'w'+id                    
-                        friends = $('.dataconst').attr('friends')
-                        console.log(couple,kii,friends)
-                        if (friends.indexOf('d'+couple) == -1) {
-                            console.log('enter')
-                            $('.dataconst').attr('friends',friends+'d'+id+'w'+$(this).attr('id'));
+                go = true
+                console.log('*****',id)
+                while(go){
+                    go = false
+                    $('.wait'+ day+'.left'+count).each(function() {
+                        id2 = $(this).attr('id')
+                        if (id2 != id) {
                             hour2 = parseInt($(this).attr('hour')) * 28;
                             minute2 = parseInt($(this).attr('minute'));
                             topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
                             height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
                             down2 = topp2 + height2;
-                            if ((topp2 < topp + height && topp2 >= topp) || (down2>topp&&down2<= topp + height)) {
-                                console.log('move')
-                                count += 1
+                            if (id == 506 && id2 == 567) {
+                                console.log('checkcchekc')
+                                console.log(down2, topp, down2, topp + height)
+                            }
+                            if ((topp<=topp2&&down>=down2)|(topp2<=topp&&down2>=down)||(topp2 < down && topp2 >= topp) || (down2>topp&&down2<= down)) {
+                                console.log(id2,count)
+                                go = true
+                                count = count + 1;
+                                return 0;
                             }
                         }
-                    }
-                })
+                    })
+                }
+                //
+                console.log(count)
                 maxcount = count
+                $(this).attr('left', count)
+                $(this).removeClass('left'+left)
+                $(this).addClass('left'+count)
                 dayp1 = parseInt(day) + 1
                 if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
                     $('.dataconst').attr('max'+dayp1, count)
@@ -1164,9 +1175,6 @@
                     $(this).css('height', height);
                 }
             });
-            console.log('endday')
-            $('.dataconst').attr('friends', '')
-            
         }
         if ($('.dataconst').attr('today')) {
             $('.schedule_body').animate({
