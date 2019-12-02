@@ -1242,6 +1242,7 @@ def moderator_run_code(request):
         teacher = sq.teacher
         if teacher:
             sq.students.add(teacher)
+    moder_update_bills()
     print('moderator_end_code')
     return JsonResponse({'TY':'KRASAVA'})
 
