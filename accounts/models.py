@@ -61,7 +61,7 @@ class Skill(models.Model):
     interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    user = models.OneToOneField(User, on_delete = models.CASCADE,related_name='profile')
     first_name = models.TextField(blank = True,null = True,default='name')
 
     schools = models.ManyToManyField(School, related_name='people')
