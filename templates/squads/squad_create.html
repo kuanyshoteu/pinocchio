@@ -287,8 +287,12 @@
                                 <div class="page_numbers" style="min-width: 275px;display: inline-block;">
                                     <a class="ui button mini green get_page_students page1" onclick="get_page_students('1')" id="1">1</a>
                                     <a class="ui button mini get_page_students page2" onclick="get_page_students('2')" id="2">2</a>
+                                    {%if number_of_pages > 2%}
+                                    {%if number_of_pages > 3%}
                                     <span>. . .</span>
-                                    <a class="ui button mini get_page_students page{{number_of_pages}}" onclick="get_page_students('{{ number_of_pages }}')" id="{{ number_of_pages }}">{{ number_of_pages }}</a>                                        
+                                    {%endif%}
+                                    <a class="ui button mini get_page_students page{{number_of_pages}}" onclick="get_page_students('{{ number_of_pages }}')" id="{{ number_of_pages }}">{{ number_of_pages }}</a>   
+                                    {%endif%}             
                                 </div>
                                 <a class="ui inverted basic button mini get_page_students" onclick="get_page_students('next')" id="next">Направо<i class="icon chevron right" style="color: #fff;"></i></a>
                                 <span style="display: none;" length="{{ number_of_pages }}" url="{{ instance.get_page_students }}" class="current_page" number="1"></span>

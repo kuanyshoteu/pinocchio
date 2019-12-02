@@ -317,47 +317,70 @@ def miss_lecture(request):
 def att_present(request):
     profile = Profile.objects.get(user = request.user)
     only_staff(profile)
+    ok = False
+    teacher_attendance_id = -1
     if request.GET.get('id') and request.GET.get('status'):
-        attendance = Attendance.objects.get(id = request.GET.get('id'))
+        attendance = Attendance.objects.get(id = int(request.GET.get('id')))
         school = attendance.school
         subject = attendance.subject
         squad = attendance.squad
         is_in_school(profile, school)
         profile = squad.teacher
-        if request.GET.get('status') == 'cancel':
-            attendance.present = ''
-        else:
-            attendance.present = request.GET.get('status')
+        ok = True
+        material = attendance.subject_materials
+        need_change_school_money = False
         if request.GET.get('status') == 'present':
+            attendance.present = 'present'
+            attendance.save()
+            teacher_attendance = material.sm_atts.filter(student=profile)
+            if len(teacher_attendance):
+                teacher_attendance = teacher_attendance[0]
+                teacher_attendance.present = 'present'
+                teacher_attendance.save()
+                teacher_attendance_id = teacher_attendance.id
             this_student_card = attendance.student.card.filter(school=school)
             if len(this_student_card) > 0:
                 card = this_student_card[0]
                 if card.column.id == 2:
                     card.column = CRMColumn.objects.get(id=3)
                     card.save()
-            material = attendance.subject_materials
+            salary = 0
             if not profile in material.done_by.all():
                 material.done_by.add(profile)
                 profile.money += profile.salary
-                school = subject.school
-                change_school_money(school, -1*profile.salary, 'teacher_salary', profile.first_name)
+                salary = -1*profile.salary
+                need_change_school_money = True
+            cost = subject.cost
+        elif request.GET.get('status') == 'cancel':
+            att_present_was = attendance.present
+            attendance.present = ''
+            attendance.save()
+            if len(material.sm_atts.filter(squad=squad,present='present')) == 0:
+                if profile in material.done_by.all():
+                    material.done_by.remove(profile)
+                    profile.money -= profile.salary
+                if att_present_was == 'present':
+                    need_change_school_money = True
+                    salary = profile.salary
+                    cost = -1*subject.cost
+        if request.GET.get('status') == 'cancel' or request.GET.get('status') == 'present':
+            if need_change_school_money:
+                change_school_money(school, salary, 'teacher_salary', profile.first_name)
                 school.save()
-
                 cards = school.crm_cards.all()
-                cost = subject.cost
                 if subject.cost_period == 'lesson':
-                    for student in squad.students.all():
+                    for at in material.sm_atts.exclude(present='warned'):
+                        student = at.student
                         card = cards.filter(card_user=student)
                         if len(card) > 0:
                             pay_for_lesson(card[0], cost, squad)
-                elif subject.cost_period == '4weeks':
-                    for student in squad.students.all():
-                        card = cards.filter(card_user=student)
-                        if len(card) > 0:
-                            pay_for_lesson(card[0], int(cost/4), squad)
-        attendance.save()
+        else:            
+            attendance.present = request.GET.get('status')
+            attendance.save()        
         profile.save()
     data = {
+        'ok':ok,
+        'teacher_id':teacher_attendance_id,
     }
     return JsonResponse(data)
 
@@ -365,25 +388,24 @@ def pay_for_lesson(card, cost, squad):
     nm = squad.need_money.filter(card=card)
     if len(nm) > 0:
         nm = nm[0]
-        nm.money -= int(cost) # Might be bug with int, must be float
+        nm.money -= int(cost)
         if nm.money < nm.lesson_bill:
             card.colour = 'red'
-            card.comments += ' | Закончились деньги на счету для группы '+squad.title+', необходимо мин.'+str(nm.lesson_bill)+', сейчас на счету ' + str(nm.money)+'|'
             if card.was_called:
                 skill = card.author_profile.skill
                 skill.need_actions += 1
                 skill.save()                            
                 card.was_called = False
-            card.save()
         elif nm.money < 2 * nm.lesson_bill:
             card.colour = 'orange'
-            card.comments += ' | Мало денег на счету для группы '+squad.title+', необходимо мин.'+str(nm.lesson_bill)+', сейчас на счету ' + str(nm.money)+' |'
             if card.was_called:
                 skill = student_card.author_profile.skill
                 skill.need_actions += 1
                 skill.save()
                 card.was_called = False
-            card.save()
+        elif nm.money >= 2 * nm.lesson_bill:
+            card.colour = ''
+        card.save()
         nm.save()
     else:
         Bug.objects.create(text='No NeedMoney object of card ' + card.id)

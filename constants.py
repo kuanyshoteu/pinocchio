@@ -58,7 +58,6 @@ def change_school_money(school, amount, reason, name):
         create_money_month(school, first_day, spend, earn)
         last = school.money_months.last()
     if amount > 0:
-        print('plus', amount)
         last.money_earn[0] += amount
     else:
         if reason == 'teacher_salary':

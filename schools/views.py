@@ -1550,41 +1550,47 @@ def show_money_history(request):
 
 def get_manager_actions(request):
     profile = Profile.objects.get(user = request.user.id)
-    only_directors(profile)
+    ok = False
+    profession = Profession.objects.get(title = 'Director')
+    if profession in profile.profession.all():
+        ok = True
     res = []
     if request.GET.get('id'):
         manager = Profile.objects.get(id=int(request.GET.get('id')))
-        school = is_moderator_school(request, profile)
-        history = sorted(
-            chain(
-                PaymentHistory.objects.filter(action_author=manager), 
-                CRMCardHistory.objects.filter(action_author=manager), 
-                SquadHistory.objects.filter(action_author=manager), 
-                SubjectHistory.objects.filter(action_author=manager)),
-            key=lambda item: item.timestamp, reverse=False)
-        for h in history:
-            edit = ''
-            classname = h.__class__.__name__
-            if classname == 'PaymentHistory':
-                if h.amount < 0:
-                    edit += 'Отмена оплаты у '
+        if manager == profile:
+            ok = True
+        if ok:
+            school = is_moderator_school(request, profile)
+            history = sorted(
+                chain(
+                    PaymentHistory.objects.filter(action_author=manager), 
+                    CRMCardHistory.objects.filter(action_author=manager), 
+                    SquadHistory.objects.filter(action_author=manager), 
+                    SubjectHistory.objects.filter(action_author=manager)),
+                key=lambda item: item.timestamp, reverse=False)
+            for h in history:
+                edit = ''
+                classname = h.__class__.__name__
+                if classname == 'PaymentHistory':
+                    if h.amount < 0:
+                        edit += 'Отмена оплаты у '
+                    else:
+                        edit+='Принята оплата у '
+                    edit += h.user.first_name+', сумма '+str(h.amount)+'тг '
+                    if h.squad:
+                        edit+='за группу '+h.squad.title
+                elif classname == 'CRMCardHistory':
+                    edit += h.card.name
+                    if h.oldcolumn != '' or h.newcolumn != '':
+                        edit += ' <br>"' + h.oldcolumn+ '" -> "' + h.newcolumn+'"'
+                    elif h.edit != '':
+                        edit += h.edit
+                    else:
+                        edit += ' изменения данных'
                 else:
-                    edit+='Принята оплата у '
-                edit += h.user.first_name+', сумма '+str(h.amount)+'тг '
-                if h.squad:
-                    edit+='за группу '+h.squad.title
-            elif classname == 'CRMCardHistory':
-                edit += h.card.name
-                if h.oldcolumn != '' or h.newcolumn != '':
-                    edit += ' <br>"' + h.oldcolumn+ '" -> "' + h.newcolumn+'"'
-                elif h.edit != '':
                     edit += h.edit
-                else:
-                    edit += ' изменения данных'
-            else:
-                edit += h.edit
 
-            res.append([manager.first_name, h.timestamp.strftime('%d.%m.%Y %H:%M'), edit])
+                res.append([manager.first_name, h.timestamp.strftime('%d.%m.%Y %H:%M'), edit])
     data = {
         "res":res,
     }

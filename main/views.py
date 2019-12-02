@@ -1230,11 +1230,20 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    p = Profile.objects.get(id=328)
-    profession = Profession.objects.get(title = 'Teacher')
-    p.profession.add(profession)
+    for sm in SubjectMaterials.objects.all():
+        sm.made = 'absent'
+        sm.save()
+    pr = Profession.objects.get(title = 'Teacher')
+    teachers = pr.workers.all()
+    for sm in SubjectMaterials.objects.filter(done_by__in=teachers):
+        sm.made = 'present'
+        sm.save()
+    for sq in Squad.objects.all():
+        teacher = sq.teacher
+        if teacher:
+            sq.students.add(teacher)
     print('moderator_end_code')
-    return JsonResponse({'YO':'YO'})
+    return JsonResponse({'TY':'KRASAVA'})
 
 def moder_update_bills():
     for squad in Squad.objects.all():
@@ -1250,7 +1259,6 @@ def moder_update_bills():
                 else:
                     cost_month += subject.cost
 
-        for nm in squad.need_money.all():
-            nm.lesson_bill = cost_lesson
-            nm.bill = cost_month
-            nm.save()
+        squad.lesson_bill = cost_lesson
+        squad.bill = cost_month
+        squad.course_bill = cost_course

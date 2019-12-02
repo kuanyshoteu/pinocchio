@@ -4,7 +4,7 @@ from .models import *
 
 
 class ProfileModelAdmin(admin.ModelAdmin):
-    list_display = ["first_name", "id"]
+    list_display = ["first_name", "id", "phone"]
     list_display_links = ["first_name"]
     list_filter = ["schools"]
     search_fields = ["first_name"]

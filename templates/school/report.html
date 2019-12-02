@@ -17,7 +17,7 @@
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
+            <div class="wide column" style="width: 80%;">
                 {% include 'school/head.html' %}
                 <div class="ui segment mb0 text14" style="display: flex;">
                     <img src="{% static 'images/excel.png' %}" style="width: 30px;"> 
@@ -77,12 +77,14 @@
                 <div class="ui segment no_margin backdark textw">
                     <div class="ui grid">                        
                         <div class="sixteen wide column pl5 pr5 ">
-                            <b>Из них по группам:</b>
+                            <b>По группам:</b>
                         </div>
                         {% for sq in instance.groups.all %}
                         <div class="four wide column pl5 pr5 pt0">
                             <div class="ui segment" style="color: #222">
                                 <b>{{sq.title}}</b>
+                                <br>
+                                Учитель: <span>{{sq.teacher.first_name}}</span>
                                 <br>
                                 {{sq|squad_nms_sum}}тг
                             </div>

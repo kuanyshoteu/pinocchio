@@ -9,12 +9,12 @@
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="padding-right: 0;width: 85%;">
+            <div class="wide column pr0" style="width: 85%;">
                 <div class="ui segment margin0" style="font-size: 15px;">
                     <b>Расписание школы</b>
                 </div>
                 <div class="ui segment margin0">
-                    <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
+                    <form class="ui form no_margin" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
                         <div class="ui grid">
                             <div class="twenty wide column pr0">
                                 Предмет:

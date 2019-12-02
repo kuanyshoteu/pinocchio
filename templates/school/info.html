@@ -176,285 +176,282 @@
                         </div>
                     </div>
                 </div>
-                    {% if instance.schedule_type != 'classic' %}
-                    <div class="ui segment mb0" style="padding-left: 17px;">
-                        Время уроков:
-                        <div class="school_timep_list" style="display: inline-block;">
-                        {% for timep in instance.time_periods.all %}
-                            <a class="ui button mini green timep_object{{timep.id}}" onclick="$('#timep_form{{timep.id}}').modal('show')" id="{{timep.id}}" style="padding: 7px 10px;">{{ timep.start }}-{{ timep.end }}</a>
-                            <div class="ui modal mini" id="timep_form{{ timep.id }}">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <form class="ui form" style="display: flex;">
-                                        <textarea class="mr15" id="timep_start{{timep.id}}" status='timep'>{{timep.start}}</textarea> - 
-                                        <textarea class="ml15" id="timep_end{{timep.id}}" status='timep'>{{timep.end}}</textarea>
-                                    </form>
-                                        <a class="ui button mini blue" onclick="create_timep('{{timep.create_url}}', '{{timep.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_timep('{{timep.delete_url}}', '{{timep.id}}')" style="float: right;">Удалить</a>
-                                    <div class="errortimep{{timep.id}} highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                        <a class="ui button mini" onclick="$('#timep_form_new').modal('show')">Добавить время</a>
-                        <div class="ui modal mini" id="timep_form_new">
+                {% if instance.schedule_type != 'classic' %}
+                <div class="ui segment mb0" style="padding-left: 17px;">
+                    Время уроков:
+                    <div class="school_timep_list" style="display: inline-block;">
+                    {% for timep in instance.time_periods.all %}
+                        <a class="ui button mini green timep_object{{timep.id}}" onclick="$('#timep_form{{timep.id}}').modal('show')" id="{{timep.id}}" style="padding: 7px 10px;">{{ timep.start }}-{{ timep.end }}</a>
+                        <div class="ui modal mini" id="timep_form{{ timep.id }}">
                             <i class="close icon"></i>
-                            <div class="content" style="text-align: center;">
+                            <div class="content">
                                 <form class="ui form" style="display: flex;">
-                                    <textarea class="need_clear mr15" id="timep_start_new" status='timep' placeholder="Начальное время"></textarea> -
-                                    <textarea class="need_clear ml15" id="timep_end_new" status='timep' placeholder="Конечное время"></textarea>
+                                    <textarea class="mr15" id="timep_start{{timep.id}}" status='timep'>{{timep.start}}</textarea> - 
+                                    <textarea class="ml15" id="timep_end{{timep.id}}" status='timep'>{{timep.end}}</textarea>
                                 </form>
-                                    <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new');clear_textareas()">Создать</a>
-                                <div class="errortimep_new highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
+                                    <a class="ui button mini blue" onclick="create_timep('{{timep.create_url}}', '{{timep.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_timep('{{timep.delete_url}}', '{{timep.id}}')" style="float: right;">Удалить</a>
+                                <div class="errortimep{{timep.id}} highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
                             </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#timep_form_new').modal('show')">Добавить время</a>
+                    <div class="ui modal mini" id="timep_form_new">
+                        <i class="close icon"></i>
+                        <div class="content" style="text-align: center;">
+                            <form class="ui form" style="display: flex;">
+                                <textarea class="need_clear mr15" id="timep_start_new" status='timep' placeholder="Начальное время"></textarea> -
+                                <textarea class="need_clear ml15" id="timep_end_new" status='timep' placeholder="Конечное время"></textarea>
+                            </form>
+                                <a class="ui button mini blue" onclick="create_timep('/schools/api/timep_create_url/', '_new');clear_textareas()">Создать</a>
+                            <div class="errortimep_new highlight_red" style="display: none;">Время с таким промежутком уже сущетсвует</div>
                         </div>
                     </div>
-                    {% endif %}
-                    <div class="ui segment no_margin pl15">
-                        Предметы школы:
-                        <div class="school_subject_list" style="display: inline-block;">
-                        {% for subject in instance.school_subject_categories.all %}
-                            <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;margin-bottom: 7px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
-                            <div class="ui modal mini" id="subject_form{{ subject.id }}">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <form class="ui form">
-                                        <div style="height: 20px;">
-                                            <div class="hint_subject_title{{subject.id}}" style="display: none;"></div>
-                                        </div>
-                                        <textarea id="subject_title{{subject.id}}" class="object_textarea" status='subject'>{{subject.title}}</textarea>
-                                        <a class="ui button mini blue" onclick="create_subject('{{subject.create_url}}', '{{subject.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_subject('{{subject.delete_url}}', '{{subject.id}}')" style="float: right;">Удалить</a>
-                                    </form>
-                                    <div class="errorsubject{{subject.id}} highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                        <a class="ui button mini" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
-                        <div class="ui modal mini" id="subject_form_new">
+                </div>
+                {% endif %}
+                <div class="ui segment no_margin pl15">
+                    Предметы школы:
+                    <div class="school_subject_list" style="display: inline-block;">
+                    {% for subject in instance.school_subject_categories.all %}
+                        <a class="ui button mini green subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;margin-bottom: 7px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
+                        <div class="ui modal mini" id="subject_form{{ subject.id }}">
                             <i class="close icon"></i>
                             <div class="content">
                                 <form class="ui form">
                                     <div style="height: 20px;">
-                                        <div class="hint_subject_title_new" style="display: none;"></div>
+                                        <div class="hint_subject_title{{subject.id}}" style="display: none;"></div>
                                     </div>
-                                    <textarea class="object_textarea need_clear" id="subject_title_new" status='subject' placeholder="Название"></textarea>
-                                    <a class="ui button mini blue" onclick="create_subject('/schools/api/subject_create_url/', '_new');clear_textareas()">Создать</a>
+                                    <textarea id="subject_title{{subject.id}}" class="object_textarea" status='subject'>{{subject.title}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_subject('{{subject.create_url}}', '{{subject.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_subject('{{subject.delete_url}}', '{{subject.id}}')" style="float: right;">Удалить</a>
                                 </form>
-                                <div class="errorsubject_new highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
+                                <div class="errorsubject{{subject.id}} highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
                             </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
+                    <div class="ui modal mini" id="subject_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <div style="height: 20px;">
+                                    <div class="hint_subject_title_new" style="display: none;"></div>
+                                </div>
+                                <textarea class="object_textarea need_clear" id="subject_title_new" status='subject' placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_subject('/schools/api/subject_create_url/', '_new');clear_textareas()">Создать</a>
+                            </form>
+                            <div class="errorsubject_new highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
                         </div>
                     </div>
-                    <div class="ui segment no_margin pl15">
-                        Скидки школы:
-                        <div class="school_discounts_list" style="display: inline-block;">
-                        {% for discount in instance.discounts.all %}
-                            <a class="ui button mini green discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;margin-bottom: 7px;">{{ discount.title }}</a>
-                            <div class="ui modal mini" id="discount_form{{ discount.id }}">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <form class="ui form">
-                                        <div style="height: 20px;">
-                                            <div class="hint_discount_title{{discount.id}}" style="display: none;"></div>
-                                        </div>
-                                        <textarea id="discount_title{{discount.id}}" class="object_textarea" status='discount'>{{discount.title}}</textarea>
-                                        <div class="ui grid no_margin stackable">
-                                            <div class="eight wide column no_padding">
-                                                <input placeholder="{{discount.amount}}" type="number" class="discount_amount{{discount.id}}" value="{{discount.amount}}">
-                                            </div>
-                                            <div class="eight wide column no_padding">
-                                                <select class="discount_type{{discount.id}}" style="height: 35px;">
-                                                    {% if discount.discount_type == 'percent'%}
-                                                    <option value="percent">Проценты</option>
-                                                    <option value="tenge">Тенге</option>
-                                                    {% else %}
-                                                    <option value="tenge">Тенге</option>
-                                                    <option value="percent">Проценты</option>
-                                                    {% endif %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <a class="ui button mini blue" onclick="create_discount('{{discount.create_url}}', '{{discount.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_discount('{{discount.delete_url}}', '{{discount.id}}')" style="float: right;">Удалить</a>
-                                    </form>
-                                    <div class="errordiscount{{discount.id}} highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                        <a class="ui button mini" onclick="$('#discounts_form_new').modal('show')">Добавить Скидку</a>
-                        <div class="ui modal mini" id="discounts_form_new">
+                </div>
+                <div class="ui segment no_margin pl15">
+                    Скидки школы:
+                    <div class="school_discounts_list" style="display: inline-block;">
+                    {% for discount in instance.discounts.all %}
+                        <a class="ui button mini green discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;margin-bottom: 7px;">{{ discount.title }}</a>
+                        <div class="ui modal mini" id="discount_form{{ discount.id }}">
                             <i class="close icon"></i>
                             <div class="content">
-                                <form class="ui form text-center">
-                                    <b>Добавить cкидку</b>
-                                    <textarea class="object_textarea need_clear mt10 mb10" id="discount_title_new" status='discounts' placeholder="Название"></textarea>
+                                <form class="ui form">
+                                    <div style="height: 20px;">
+                                        <div class="hint_discount_title{{discount.id}}" style="display: none;"></div>
+                                    </div>
+                                    <textarea id="discount_title{{discount.id}}" class="object_textarea" status='discount'>{{discount.title}}</textarea>
                                     <div class="ui grid no_margin stackable">
                                         <div class="eight wide column no_padding">
-                                            <input placeholder="Сумма" type="number" class="discount_amount_new">
+                                            <input placeholder="{{discount.amount}}" type="number" class="discount_amount{{discount.id}}" value="{{discount.amount}}">
                                         </div>
                                         <div class="eight wide column no_padding">
-                                            <select class="discount_type_new" id="_new" style="height: 35px;">
+                                            <select class="discount_type{{discount.id}}" style="height: 35px;">
+                                                {% if discount.discount_type == 'percent'%}
                                                 <option value="percent">Проценты</option>
                                                 <option value="tenge">Тенге</option>
+                                                {% else %}
+                                                <option value="tenge">Тенге</option>
+                                                <option value="percent">Проценты</option>
+                                                {% endif %}
                                             </select>
                                         </div>
                                     </div>
-                                    <a class="ui button mini blue mt10" onclick="create_discount('/schools/api/discounts_create_url/', '_new');clear_textareas()">
-                                        Создать
-                                    </a>
+                                    <a class="ui button mini blue" onclick="create_discount('{{discount.create_url}}', '{{discount.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_discount('{{discount.delete_url}}', '{{discount.id}}')" style="float: right;">Удалить</a>
                                 </form>
-                                <div class="errordiscounts_new highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
+                                <div class="errordiscount{{discount.id}} highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
                             </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#discounts_form_new').modal('show')">Добавить Скидку</a>
+                    <div class="ui modal mini" id="discounts_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form text-center">
+                                <b>Добавить cкидку</b>
+                                <textarea class="object_textarea need_clear mt10 mb10" id="discount_title_new" status='discounts' placeholder="Название"></textarea>
+                                <div class="ui grid no_margin stackable">
+                                    <div class="eight wide column no_padding">
+                                        <input placeholder="Сумма" type="number" class="discount_amount_new">
+                                    </div>
+                                    <div class="eight wide column no_padding">
+                                        <select class="discount_type_new" id="_new" style="height: 35px;">
+                                            <option value="percent">Проценты</option>
+                                            <option value="tenge">Тенге</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <a class="ui button mini blue mt10" onclick="create_discount('/schools/api/discounts_create_url/', '_new');clear_textareas()">
+                                    Создать
+                                </a>
+                            </form>
+                            <div class="errordiscounts_new highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
                         </div>
                     </div>
-                    <div class="ui segment no_margin pl15">
-                        Уровни курсов:
-                        <div class="school_level_list" style="display: inline-block;">
-                        {% for level in instance.school_subject_levels.all %}
-                            <a class="ui button mini green level_object{{level.id}}" onclick="$('#level_form{{level.id}}').modal('show')" id="{{level.id}}" style="padding: 7px 10px;">{{ level.title }} ({{ level|get_level_courses_len:instance}} курсов)</a>
-                            <div class="ui modal mini" id="level_form{{ level.id }}">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <form class="ui form">
-                                        <div style="height: 20px;">
-                                            <div class="hint_level_title{{level.id}}" style="display: none;"></div>
-                                        </div>                                    
-                                        <textarea class="object_textarea" status='level' id="level_title{{level.id}}">{{level.title}}</textarea>
-                                        <a class="ui button mini blue" onclick="create_level('{{level.create_url}}', '{{level.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_level('{{level.delete_url}}', '{{level.id}}')" style="float: right;">Удалить</a>
-                                    </form>
-                                    <div class="errorlevel{{level.id}} highlight_red" style="display: none;">Такой уровень уже есть</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                        <a class="ui button mini" onclick="$('#level_form_new').modal('show')">Добавить уровень</a>
-                        <div class="ui modal mini" id="level_form_new">
+                </div>
+                <div class="ui segment no_margin pl15">
+                    Уровни курсов:
+                    <div class="school_level_list" style="display: inline-block;">
+                    {% for level in instance.school_subject_levels.all %}
+                        <a class="ui button mini green level_object{{level.id}}" onclick="$('#level_form{{level.id}}').modal('show')" id="{{level.id}}" style="padding: 7px 10px;">{{ level.title }} ({{ level|get_level_courses_len:instance}} курсов)</a>
+                        <div class="ui modal mini" id="level_form{{ level.id }}">
                             <i class="close icon"></i>
                             <div class="content">
                                 <form class="ui form">
                                     <div style="height: 20px;">
-                                        <div class="hint_level_title_new" style="display: none;"></div>
-                                    </div>
-                                    <textarea class="object_textarea need_clear" status='level' id="level_title_new" placeholder="Название"></textarea>
-                                    <a class="ui button mini blue" onclick="create_level('/schools/api/level_create_url/', '_new');clear_textareas();">Создать</a>
+                                        <div class="hint_level_title{{level.id}}" style="display: none;"></div>
+                                    </div>                                    
+                                    <textarea class="object_textarea" status='level' id="level_title{{level.id}}">{{level.title}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_level('{{level.create_url}}', '{{level.id}}')">Сохранить</a>
+                                    <a class="ui button mini red" onclick="delete_level('{{level.delete_url}}', '{{level.id}}')" style="float: right;">Удалить</a>
                                 </form>
-                                <div class="errorlevel_new highlight_red" style="display: none;">Такой уровень уже есть</div>
+                                <div class="errorlevel{{level.id}} highlight_red" style="display: none;">Такой уровень уже есть</div>
                             </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                    <a class="ui button mini" onclick="$('#level_form_new').modal('show')">Добавить уровень</a>
+                    <div class="ui modal mini" id="level_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <div style="height: 20px;">
+                                    <div class="hint_level_title_new" style="display: none;"></div>
+                                </div>
+                                <textarea class="object_textarea need_clear" status='level' id="level_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_level('/schools/api/level_create_url/', '_new');clear_textareas();">Создать</a>
+                            </form>
+                            <div class="errorlevel_new highlight_red" style="display: none;">Такой уровень уже есть</div>
                         </div>
                     </div>
-                    <div class="ui segment no_margin pl15">
-                        Офисы:
-                        <div class="school_office_list" style="display: inline-block;">
-                        {% for office in instance.school_offices.all %}
-                            <a class="ui button mini green office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.office_subjects.all|length}} курсов)</a>
-                            <div class="ui modal small" id="office_form{{ office.id }}">
-                                <i class="close icon"></i>
-                                <div class="content">
-                                    <form class="ui form">
-                                        <textarea status='office' id="office_title{{office.id}}">{{office.title}}</textarea>
-                                        <a class="ui button mini blue" onclick="create_office('{{office.create_url}}', '{{office.id}}');clear_textareas();">Сохранить</a>
-                                        <a class="ui button mini red" onclick="$('.show_office_delete{{office.id}}').show()" style="float: right;">Удалить</a>
-                                        <div class="show_office_delete{{office.id}}" style="display: none;margin-top: 15px;">
-                                            <div class="highlight_red">Восстановить офис можно только связавшись с нашим менеджером</div>
-                                            <br>
-                                            Вы точно уверены, что хотите удалить?
-                                            <a class="ui button mini red" onclick="delete_office('{{office.delete_url}}', '{{office.id}}')">Да, удалить</a>
-                                        </div>
-                                    </form>
-                                    <div class="erroroffice{{office.id}} highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
-                                    <div class="ui divider"></div>      
-                                    <div class="ui grid office_cabinets{{office.id}}" style="margin: 25px 0 0 0">
-                                        <div class="sixteen wide column no_padding">
-                                            Кабинеты:
-                                        </div>
-                                        {% for cabinet in office.cabinets.all %}
-                                            <div class="two wide column highlight_black mr5 mb5 cabinet{{cabinet.id}}">
-                                                <a class="redx delete_cabinet" url="{% url 'schools:delete_cabinet' %}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{cabinet.id}}">✖</a>
-                                                {{cabinet.title}}
-                                                <div style="font-size: 12px;">{{cabinet.capacity}} чел.</div>
-                                            </div>
-                                        {% endfor %}                                    
-                                    </div>
-                                    <a class="ui button mini blue" style="margin-top: 15px;" onclick="$('#office_cabinet_create{{office.id}}').show();$(this).hide()">Добавить кабинет</a>                                
-                                    <form style="display: none;margin-top: 15px;" id="office_cabinet_create{{ office.id }}" class="ui form">
-                                        <div>
-                                            <textarea class="no_margin need_clear office_cabinet_create_title office_cabinet_create_title{{ office.id }}" placeholder="Название кабинета"></textarea>
-                                            <input placeholder="Вместимость" type="number" class="office_cabinet_create_capacity office_cabinet_create_capacity{{ office.id }}">
-                                        </div>
-                                        <a class="ui button mini blue mt10 save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
-                                    </form>
-                                    <div class="ui divider"></div>      
-                                    {% for manager in office.choosed_by2.all %}
-                                        <a class="ui button mini green mb10 manager_office" office="{{office.id}}" id="{{manager.profile.first.id}}">
-                                            {{manager.profile.first.first_name}}
-                                        </a>
-                                    {%endfor%}
-                                    {% for manager in office|office_other_managers %}
-                                        <a class="ui button mini mb10 manager_office" office="{{office.id}}" id="{{manager.id}}">
-                                            {{manager.first_name}}
-                                        </a>
-                                    {%endfor%}                                    
-                                </div>
-                            </div>
-                        {% endfor %}
-                        </div>
-                        <a class="ui button mini" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
-                        <div class="ui modal mini" id="office_form_new">
+                </div>
+                <div class="ui segment no_margin pl15">
+                    Офисы:
+                    <div class="school_office_list" style="display: inline-block;">
+                    {% for office in instance.school_offices.all %}
+                        <a class="ui button mini green office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.office_subjects.all|length}} курсов)</a>
+                        <div class="ui modal small" id="office_form{{ office.id }}">
                             <i class="close icon"></i>
                             <div class="content">
                                 <form class="ui form">
-                                    <textarea class="need_clear" status='office' id="office_title_new" placeholder="Название"></textarea>
-                                    <a class="ui button mini blue" onclick="create_office('/schools/api/office_create_url/', '_new');clear_textareas()">Создать</a>
+                                    <textarea status='office' id="office_title{{office.id}}">{{office.title}}</textarea>
+                                    <a class="ui button mini blue" onclick="create_office('{{office.create_url}}', '{{office.id}}');clear_textareas();">Сохранить</a>
+                                    <a class="ui button mini red" onclick="$('.show_office_delete{{office.id}}').show()" style="float: right;">Удалить</a>
+                                    <div class="show_office_delete{{office.id}}" style="display: none;margin-top: 15px;">
+                                        <div class="highlight_red">Восстановить офис можно только связавшись с нашим менеджером</div>
+                                        <br>
+                                        Вы точно уверены, что хотите удалить?
+                                        <a class="ui button mini red" onclick="delete_office('{{office.delete_url}}', '{{office.id}}')">Да, удалить</a>
+                                    </div>
                                 </form>
-                                <div class="erroroffice_new highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
-                            </div>
-                        </div>
-                    </div>
-                    {% include 'school/voronka_chart.html' %}
-                    <div class="ui segment mb0">
-                        Отчеты по менеджерам
-                    </div>
-                    <div class="ui segment mt0">
-                        {% for manager in managers %}
-                        <a class="ui button small blue get_manager_actions" 
-                        url="{% url 'schools:get_manager_actions' %}" id="{{manager.id}}">
-                            {{manager.first_name}}
-                        </a>
-                        <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="manager_actions{{manager.id}}">
-                            <i class="close icon"></i>
-                            <div class="content">
-                                <div class="set_manager_actions{{manager.id}}">
-                                    
+                                <div class="erroroffice{{office.id}} highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
+                                <div class="ui divider"></div>      
+                                <div class="ui grid office_cabinets{{office.id}}" style="margin: 25px 0 0 0">
+                                    <div class="sixteen wide column no_padding">
+                                        Кабинеты:
+                                    </div>
+                                    {% for cabinet in office.cabinets.all %}
+                                        <div class="two wide column highlight_black mr5 mb5 cabinet{{cabinet.id}}">
+                                            <a class="redx delete_cabinet" url="{% url 'schools:delete_cabinet' %}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{cabinet.id}}">✖</a>
+                                            {{cabinet.title}}
+                                            <div style="font-size: 12px;">{{cabinet.capacity}} чел.</div>
+                                        </div>
+                                    {% endfor %}                                    
                                 </div>
+                                <a class="ui button mini blue" style="margin-top: 15px;" onclick="$('#office_cabinet_create{{office.id}}').show();$(this).hide()">Добавить кабинет</a>                                
+                                <form style="display: none;margin-top: 15px;" id="office_cabinet_create{{ office.id }}" class="ui form">
+                                    <div>
+                                        <textarea class="no_margin need_clear office_cabinet_create_title office_cabinet_create_title{{ office.id }}" placeholder="Название кабинета"></textarea>
+                                        <input placeholder="Вместимость" type="number" class="office_cabinet_create_capacity office_cabinet_create_capacity{{ office.id }}">
+                                    </div>
+                                    <a class="ui button mini blue mt10 save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
+                                </form>
+                                <div class="ui divider"></div>      
+                                {% for manager in office.choosed_by2.all %}
+                                    <a class="ui button mini green mb10 manager_office" office="{{office.id}}" id="{{manager.profile.first.id}}">
+                                        {{manager.profile.first.first_name}}
+                                    </a>
+                                {%endfor%}
+                                {% for manager in office|office_other_managers %}
+                                    <a class="ui button mini mb10 manager_office" office="{{office.id}}" id="{{manager.id}}">
+                                        {{manager.first_name}}
+                                    </a>
+                                {%endfor%}                                    
                             </div>
                         </div>
-                        {% endfor %}
+                    {% endfor %}
                     </div>
-                    <div class="ui segment mb0">
-                        Отчеты по учителям
+                    <a class="ui button mini" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
+                    <div class="ui modal mini" id="office_form_new">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <form class="ui form">
+                                <textarea class="need_clear" status='office' id="office_title_new" placeholder="Название"></textarea>
+                                <a class="ui button mini blue" onclick="create_office('/schools/api/office_create_url/', '_new');clear_textareas()">Создать</a>
+                            </form>
+                            <div class="erroroffice_new highlight_red" style="display: none;">Офис с таким названием уже сущетсвует</div>
+                        </div>
                     </div>
-                    <div class="ui segment mt0">
-                        {% for teacher in teachers %}
-                        <a class="ui button small blue get_teacher_actions" 
-                        url="{% url 'schools:get_teacher_actions' %}" id="{{teacher.id}}">
-                            {{teacher.first_name}}
-                        </a>
-                        <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="teacher_actions{{teacher.id}}">
-                            <i class="close icon"></i>
-                            <div class="content">
-                                <div class="set_teacher_actions{{teacher.id}}">
-                                    
-                                </div>
+                </div>
+                {% include 'school/voronka_chart.html' %}
+                <div class="ui segment mb0">
+                    Отчеты по менеджерам
+                </div>
+                <div class="ui segment mt0">
+                    {% for manager in managers %}
+                    <a class="ui button small blue get_manager_actions" 
+                    url="{% url 'schools:get_manager_actions' %}" id="{{manager.id}}">
+                        {{manager.first_name}}
+                    </a>
+                    <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="manager_actions{{manager.id}}">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <div class="set_manager_actions{{manager.id}}">
+                                
                             </div>
                         </div>
-                        {% endfor %}
                     </div>
-                    <div class="ui segment" style="margin-bottom: 0;padding-left: 17px;font-size: 15px;">
-                        На счету: <b id="number-counter" style="color: #e09310;">{{ instance.money }}тг.</b>
+                    {% endfor %}
+                </div>
+                <div class="ui segment mb0">
+                    Отчеты по учителям
+                </div>
+                <div class="ui segment mt0">
+                    {% for teacher in teachers %}
+                    <a class="ui button small blue get_teacher_actions" 
+                    url="{% url 'schools:get_teacher_actions' %}" id="{{teacher.id}}">
+                        {{teacher.first_name}}
+                    </a>
+                    <div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="teacher_actions{{teacher.id}}">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <div class="set_teacher_actions{{teacher.id}}">
+                                
+                            </div>
+                        </div>
                     </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

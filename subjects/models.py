@@ -57,7 +57,7 @@ class Subject(models.Model):
     author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='author_subjects') 
     squads = models.ManyToManyField(Squad, related_name='subjects')
     cost = models.IntegerField(default=0, null = True)
-    cost_period = models.CharField(max_length=250, default="month") #could be 'lesson', 'course', '4weeks'
+    cost_period = models.CharField(max_length=250, default="month") #could be 'lesson', 'course', 'month'
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)
@@ -146,12 +146,12 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(pre_save_course_receiver, sender=Subject)
 
 class SubjectMaterials(models.Model):
+    #Убрать school
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_materials')     
     subject = models.ForeignKey(Subject,null=True, on_delete = models.CASCADE, related_name='materials')
     lessons = models.ManyToManyField(Lesson, related_name='subject_materials')
-    number = models.IntegerField(default=0)
+    number = models.IntegerField(default = 0)
     done_by = models.ManyToManyField(Profile, related_name='done_subject_materials')
-    made = models.CharField(max_length=250, default="month") #could be 'yes', 'no', 'warned'
 
     class Meta:
         ordering = ['id']
@@ -176,7 +176,7 @@ class Attendance(models.Model):
     subject_materials = models.ForeignKey(SubjectMaterials,null=True, on_delete = models.CASCADE, related_name='sm_atts')
     present = models.TextField(default = '') # present, absent, warned or ''
     grade = models.IntegerField(default = -1)
-
+    # Убрать school, teacher изменить в author
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_attendances')     
     teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='madegrades')
     student = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='hisgrades')

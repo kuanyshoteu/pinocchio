@@ -1,17 +1,21 @@
 {% load ttttags %}
 {% load ttags %}
 <div style="background-color: #4A4A4A;">
-	<div class="ui grid" style="margin: 0;padding: 0 25px 0 0;">
-		<div style="width: 25%;padding: 0;">
-			<div style="text-align: left;color: white;height: 30px;line-height: 30px;">
+	<div class="ui grid no_margin" style="padding: 0 25px 0 0;">
+		<div class="no_padding" style="width: 25%;">
+			<div class="textw" style="height: 30px;line-height: 30px;">
 		    </div>
 			{% for student in att_squad.students.all %}
 				<div class="student_name" style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
-			        <a href="{{student.get_absolute_url}}" style="color: #fff;">{{ student.first_name }}</a>
+			        <a href="{{student.get_absolute_url}}" class="textw">{{ student.first_name }}</a>
+			        {% if not student.is_student %}
+			        <br>
+			        <span style="color: yellow;">Учитель</span>
+			        {% endif %}
 			    </div>
 			{% endfor %}
 		</div>
-		<div style="width: 75%;padding: 0;overflow: hidden">
+		<div class="no_padding" style="width: 75%;overflow: hidden">
 			<div id="btn-prev" class="btn-prev" onclick="moverLeft()">&#60;</div>
 			{% if att_squad.students.all|length == 0 %}
 				<div class="highlight_black">
@@ -40,10 +44,16 @@
 							<div class="attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
 								{% if date.2 == 'now' %}
 							    <div id="grades{{ attendance.id }}" style="{% if attendance.present != 'present' %}display: none;{% endif %};">
+							    	{% if attendance.student.is_student %}
 							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 5 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="5">5</a>
 							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 4 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="4">4</a>
 							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 3 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="3">3</a>
 							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 2 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="2">2</a>
+							        {%else%}
+							        <div class="ui segment attendace_grade" style="background-color: #21BA45;">
+							        	<i class="icon check text10 textw mr0"></i>
+							        </div>
+							        {%endif%}
 							    </div>
 							    <div id="attendance{{ attendance.id }}" style="{% if attendance.present != '' %}display: none;{% endif %}">
 							        <a status="present" class="ui button mini full-w blue att_present" id="{{attendance.id}}">На уроке</a>
@@ -68,8 +78,8 @@
 							        {% if attendance.grade > 0 %}
 							            {{attendance.grade}}
 							        {%else%}
-							        <i class="icon clock text10 textw mr0" id="clock{{ attendance.id }}" style="{%if attendance.present == 'absent' or attendance.present == ''%}display: none;{%endif%}"></i>
-							        <i class="icon close text10 textw mr0" id="close{{ attendance.id }}" style="{%if attendance.present == 'warned' or attendance.present == 'noteacher'%}display: none;{%endif%}"></i>
+							        <i class="icon clock text10 textw mr0" id="clock{{ attendance.id }}" style="{%if attendance.present == 'absent' or attendance.present == '' or attendance.present == 'present'%}display: none;{%endif%}"></i>
+							        <i class="icon close text10 textw mr0" id="close{{ attendance.id }}" style="{%if attendance.present == 'warned' or attendance.present == 'noteacher' or attendance.present == 'present'%}display: none;{%endif%}"></i>
 							        {%endif%}
 						        </div>
 						        {%if date.2 == 'now'%}

@@ -51,6 +51,9 @@ class Squad(models.Model):
     color_back = models.TextField(default='')
     shown = models.BooleanField(default=True)
     deleted_time = models.DateTimeField(auto_now_add=True)        
+    lesson_bill = models.IntegerField(default=0)
+    bill = models.IntegerField(default=0)
+    course_bill = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['title']
@@ -177,3 +180,4 @@ class NeedMoney(models.Model):
     bill = models.IntegerField(default=0)
     course_bill = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
+    start_date = models.DateField(auto_now_add=False)

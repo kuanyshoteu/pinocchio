@@ -15,11 +15,17 @@
   from {background-color: #fbbd08;}
   to {background-color: #fff;}
 }
+.backdarklow{
+  background-color: #545454 !important;
+}
 .backdark{
   background-color: #4a4a4a !important;
 }
 .backwhite{
   background-color: #fff !important;
+}
+.backwhitelow{
+  background-color: #f1f1f1 !important;
 }
 .backgrey{
   background-color: #f9f9f9 !important;
@@ -439,7 +445,8 @@ body{
   color: #555;
 }
 .no_padding_side{
-  padding:14px 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 .no_padding{
   padding: 0 !important;
@@ -820,13 +827,13 @@ a{
     z-index: 99;
   }
 .student_name{
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 10px;
+  padding: 20px 10px 10px 10px;
   text-align: left;
   color: white;
   height: 65px;
-  line-height: 25px;
+  line-height: 15px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

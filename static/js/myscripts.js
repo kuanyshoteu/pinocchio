@@ -585,6 +585,9 @@
                 $('.school_'+status+'_form')
                 $('.school_'+status+'_form').hide();
                 $('.school_'+status).text(text);
+                if (status == 'site') {
+                    $('.school_site').attr('href', text)
+                }
             }
         })        
     });
@@ -654,6 +657,7 @@
         url = '/api/login/'
         username = $('.username2').val()
         password = $('.password2').val()
+        $('.wrong_login').hide('fast')
         $.ajax({
             url: url,
             data: {
@@ -667,7 +671,7 @@
                     location.reload()
                 }
                 else if (data.res == 'error'){
-                    $('.wrong_login').show()
+                    $('.wrong_login').show('fast')
                 }
             }
         })        
@@ -1120,7 +1124,6 @@
                 down = topp+height
                 count = 1
                 go = true
-                console.log('*****',id)
                 while(go){
                     go = false
                     $('.wait'+ day+'.left'+count).each(function() {
@@ -1131,12 +1134,7 @@
                             topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
                             height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
                             down2 = topp2 + height2;
-                            if (id == 506 && id2 == 567) {
-                                console.log('checkcchekc')
-                                console.log(down2, topp, down2, topp + height)
-                            }
                             if ((topp<=topp2&&down>=down2)|(topp2<=topp&&down2>=down)||(topp2 < down && topp2 >= topp) || (down2>topp&&down2<= down)) {
-                                console.log(id2,count)
                                 go = true
                                 count = count + 1;
                                 return 0;
@@ -1144,8 +1142,6 @@
                         }
                     })
                 }
-                //
-                console.log(count)
                 maxcount = count
                 $(this).attr('left', count)
                 $(this).removeClass('left'+left)
@@ -1178,7 +1174,7 @@
         }
         if ($('.dataconst').attr('today')) {
             $('.schedule_body').animate({
-                scrollLeft: $("#constday" + today).offset().left-80
+                scrollLeft: $("#constday" + $('.dataconst').attr('today')).offset().left-80
             }, 'fast');            
         }
     }
@@ -1407,6 +1403,11 @@
                     $('#attendance'+id).hide()
                     if (status == 'present') {
                         $('#grades' + id).show()
+                        if (data.ok) {
+                            $('#grades' + data.teacher_id).show()
+                            $('.attcancel'+data.teacher_id).show()
+                            $('#attendance'+data.teacher_id).hide()
+                        }
                     }
                     else {
                         if (status == 'absent' || status == '') {
