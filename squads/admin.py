@@ -35,7 +35,7 @@ class AttendanceModelAdmin(admin.ModelAdmin):
 admin.site.register(Attendance, AttendanceModelAdmin)
 
 class NeedMoneyModelAdmin(admin.ModelAdmin):
-    list_display = ["id", 'get_squad', 'get_card', 'money', 'bill', 'lesson_bill']
+    list_display = ["id", 'get_squad', 'get_card', 'money']
     list_display_links = ["id"]
     list_filter = ["squad", 'card']
     class Meta:

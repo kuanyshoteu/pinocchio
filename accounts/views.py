@@ -58,9 +58,9 @@ def account_view(request, user = None):
         else:
             hissquads =  profile.schools.first().groups.filter(shown=True)
     elif is_profi(hisprofile, 'Teacher'):
-        hissquads = hisprofile.hissquads.all()
+        hissquads = hisprofile.hissquads.filter(shown=True)
     else:
-        hissquads = hisprofile.squads.all()
+        hissquads = hisprofile.squads.filter(shown=True)
         hissubjects = set(Subject.objects.filter(squads__in=hissquads))
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
 
@@ -389,21 +389,21 @@ def pay_for_lesson(card, cost, squad):
     if len(nm) > 0:
         nm = nm[0]
         nm.money -= int(cost)
-        if nm.money < nm.lesson_bill:
+        if nm.money < squad.lesson_bill:
             card.colour = 'red'
             if card.was_called:
                 skill = card.author_profile.skill
                 skill.need_actions += 1
                 skill.save()                            
                 card.was_called = False
-        elif nm.money < 2 * nm.lesson_bill:
+        elif nm.money < 2 * squad.lesson_bill:
             card.colour = 'orange'
             if card.was_called:
                 skill = student_card.author_profile.skill
                 skill.need_actions += 1
                 skill.save()
                 card.was_called = False
-        elif nm.money >= 2 * nm.lesson_bill:
+        elif nm.money >= 2 * squad.lesson_bill:
             card.colour = ''
         card.save()
         nm.save()
@@ -502,7 +502,7 @@ def add_money(profile, school, squad, card, amount, manager):
     nm = card.need_money.get(squad=squad)
     nm.money += amount
     nm.save()
-    if nm.money >= nm.bill + nm.lesson_bill:
+    if nm.money >= squad.bill + squad.lesson_bill:
         if card.colour == 'red' or card.colour == 'orange':
             if not card.was_called:
                 skill = card.author_profile.skill
@@ -540,7 +540,9 @@ def make_payment(request):
 def make_payment_card(request):
     manager = Profile.objects.get(user = request.user)
     only_managers(manager)
-    amount = int(request.GET.get('amount'))
+    amount = 0
+    if request.GET.get('amount'):
+        amount = int(request.GET.get('amount'))
     bills = []
     if amount > 0 and request.GET.get('id') and request.GET.get('group_id'):
         card = CRMCard.objects.get(id = int(request.GET.get('id')))
@@ -553,7 +555,7 @@ def make_payment_card(request):
             crnt = nms.filter(squad=squad)
             if len(crnt) > 0:
                 crnt = crnt[0]
-                bills.append([squad.title, crnt.money, crnt.lesson_bill, crnt.bill,squad.id])
+                bills.append([squad.title, crnt.money, squad.lesson_bill, squad.bill,squad.id])
     data = {
         'bills':bills,
     }

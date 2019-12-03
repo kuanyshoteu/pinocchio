@@ -13,7 +13,7 @@
             <form class="ui form mb10 mt10" style="display: flex;">
                 <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
                 <select id="pay_for_group">
-                    {%for squad in hisprofile.squads.all%}
+                    {%for squad in hissquads%}
                     <option value="{{squad.id}}">{{squad.title}}</option>
                     {%endfor%}
                 </select>
@@ -160,12 +160,12 @@
                 <div class="ui divider mb5 mt5"></div>
                 <div>
                     <b>Итоговая стоимость посещения данной группы:</b>
-                    {% if nm.lesson_bill > 0 %}
-                        <span class="underline">{{ nm.lesson_bill }}тг за урок</span>
+                    {% if nm.squad.lesson_bill > 0 %}
+                        <span class="underline">{{ nm.squad.lesson_bill }}тг за урок</span>
                         <br>
                     {% endif %}
-                    {% if nm.bill > 0 %}
-                        <span class="underline">{{ nm.bill }}тг в месяц</span>
+                    {% if nm.squad.bill > 0 %}
+                        <span class="underline">{{ nm.squad.bill }}тг в месяц</span>
                         <br>
                     {% endif %}
                     <div class="mt10"></div>

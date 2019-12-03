@@ -176,8 +176,5 @@ class NeedMoney(models.Model):
     squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='need_money')
     card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
     money = models.IntegerField(default=0)
-    lesson_bill = models.IntegerField(default=0)
-    bill = models.IntegerField(default=0)
-    course_bill = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
     start_date = models.DateField(auto_now_add=False)

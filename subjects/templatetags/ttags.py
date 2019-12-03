@@ -425,7 +425,7 @@ def get_column_cards_len(column, school):
 @register.filter
 def get_bills(profile, hisprofile):
     school = profile.schools.first()
-    squads = hisprofile.squads.filter(school=school)
+    squads = hisprofile.squads.filter(school=school).filter(shown=True)
     card = hisprofile.card.filter(school=school)
     if len(card) > 0:
         card = card[0]
@@ -469,6 +469,8 @@ def constant_profile_lectures(profile):
         squads = profile.hissquads.filter(shown=True)
     else:
         squads = profile.squads.filter(shown=True)
+    for s in squads:
+        print(s.title)
     lectures = Lecture.objects.filter(squad__in=squads).select_related('cell')
     #lectures = profile.hislectures.select_related('cell')
     interval = 60

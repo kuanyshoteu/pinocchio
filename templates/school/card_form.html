@@ -40,7 +40,7 @@
                     <b>Оплата:</b>
                     <div style="display: flex;" class="mb10">
                         <input class="mr10 payment_amount{{ card.id }}" placeholder="Сумма" type="number" name="">
-                        <select id="pay_for_group{{ card.id }}">
+                        <select class="pay_for_group{{ card.id }}" id="pay_for_group{{ card.id }}">
                         </select>
                     </div>
                     <a class="ui button mini blue make_payment make_payment{{ card.id }} full-w" onclick="make_payment_card('{{ card.id }}')">

@@ -39,7 +39,7 @@ def subject_detail(request, slug=None):
             for timep in time_periods:
                 new_cell = Cell.objects.get_or_create(day = day, time_period = timep, school=school)
     if profile.is_student:
-        profile.squads
+        profile.squads.filter(shown=True)
     context = {
         "instance": instance,
         "profile":profile,
@@ -156,14 +156,9 @@ def subject_update(request, slug=None):
             new_lesson_bill = 0
             new_month_bill = cost
         for squad in squads:
-            for student in squad.students.all():
-                card = cards.filter(card_user=student)
-                if len(card) > 0:
-                    card = card[0]
-                    nm = squad.need_money.get_or_create(card=card)[0]
-                    nm.lesson_bill = nm.lesson_bill - old_lesson_bill + new_lesson_bill
-                    nm.bill = nm.bill - old_month_bill + new_month_bill
-                    nm.save()
+            squad.lesson_bill = squad.lesson_bill - old_lesson_bill + new_lesson_bill
+            squad.bill = squad.bill - old_month_bill + new_month_bill
+            squad.save()
 
     cost = 0
     for subject in school.school_subjects.all():
@@ -211,7 +206,7 @@ def subject_update(request, slug=None):
         "form":form,
         'page':'subject_update',
         "profile":profile,
-        'squads':Squad.objects.all(),
+        'squads':Squad.objects.filter(shown=True),
         "subject_categories":school.school_subject_categories.all(),        
         "subject_categories_this":instance.category.all(),        
         "subject_ages":SubjectAge.objects.all(),

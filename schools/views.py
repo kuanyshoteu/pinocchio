@@ -52,7 +52,7 @@ def school_rating(request):
         context = {
             "profile":profile,
             "instance": profile.schools.first(),
-            "squads":school.groups.all(),
+            "squads":school.groups.filter(shown=True),
             "subject_categories":school.school_subject_categories.all(),
             "subject_ages":school.school_subject_ages.all(),
             "all_students":school.people.filter(),
@@ -73,7 +73,7 @@ def school_payments(request):
     context = {
         "profile":profile,
         "instance": school,
-        "squads":school.groups.all(),
+        "squads":school.groups.filter(shown=True),
         "payments":True,
         "subject_categories":school.school_subject_categories.all(),
         "subject_ages":school.school_subject_ages.all(),
@@ -196,7 +196,7 @@ def school_info(request):
     context = {
         "profile":profile,
         "instance": school,
-        "squads":school.groups.all(),
+        "squads":school.groups.filter(shown=True),
         "main_school":True,
         "subjects":school.school_subjects.all(),
         'is_trener':is_profi(profile, 'Teacher'),
@@ -248,6 +248,8 @@ def school_crm(request):
     time_periods = school.time_periods.all()
     managers = None
     is_director = is_profi(profile, 'Director')
+    if is_director:
+        return redirect("schools:crm_all")        
     theprofile = profile
     if is_profi(profile, 'Moderator'):
         theprofile = school.people.first()
@@ -1149,11 +1151,8 @@ def save_salary(request):
     only_directors(profile)
     if request.GET.get('id') and request.GET.get('salary'):
         worker = Profile.objects.get(id=int(request.GET.get('id')))
-        print('0')
         school = is_moderator_school(request, profile)
-        print('1')
         is_in_school(worker, school)
-        print('2')
         worker.salary = int(request.GET.get('salary'))
         worker.save()
     data = {
@@ -1205,8 +1204,7 @@ def show_free_cards(request, school_id):
             skill.crm_show_free_cards = True
         else:
             skill.crm_show_free_cards = False  
-        skill.save()          
-    print(profile.first_name, skill.crm_show_free_cards)
+        skill.save()
     data = {
         'check':request.GET.get('check')
     }
@@ -1222,7 +1220,7 @@ def get_card_squads(request):
     res = []
     if profile:
         nms = card.need_money.select_related('squad')
-        for squad in profile.squads.all():
+        for squad in profile.squads.filter(shown=True):
             res.append(squad.id)
     data = {
         'res':res,
@@ -1239,11 +1237,12 @@ def get_card_info(request):
     bills = []
     if profile:
         nms = card.need_money.select_related('squad')
-        for squad in profile.squads.all():
+        for squad in profile.squads.filter(shown=True):
             crnt = nms.filter(squad=squad)
             if len(crnt) > 0:
+                print('2')
                 crnt = crnt[0]
-                bills.append([squad.title, crnt.money, crnt.lesson_bill, crnt.bill,squad.id])
+                bills.append([squad.title, crnt.money, squad.lesson_bill, squad.bill,squad.id])
     data = {
         'bills':bills,
     }
@@ -1353,8 +1352,6 @@ def search_crm_cards(request):
         kef = 16
         similarity=TrigramSimilarity('name', text)
         cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-        for card in cards:
-            print(card.name)
         if len(cards) < 5:
             similarity=TrigramSimilarity('phone', text)
             extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
@@ -1375,7 +1372,6 @@ def search_crm_cards(request):
             if i == 5:
                 break
     res.reverse()
-    print(res)
 
     data = {
         'res':res,
@@ -1428,7 +1424,6 @@ def change_title(request):
                 school.worktime = request.GET.get('text') 
         if request.GET.get('status') == 'phones':
             phones = request.GET.get('text').split(',')
-            print(phones)
             if len(phones) > 0:
                 school.phones = phones
         if request.GET.get('status') == 'social_networks':

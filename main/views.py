@@ -1230,8 +1230,8 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    moder_update_bills()
-    clear_users()
+
+
     print('moderator_end_code')
     return JsonResponse({'TY':'KRASAVA'})
 

@@ -276,7 +276,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('#pay_for_group'+id).empty()
+                $('.pay_for_group'+id).empty()
                 for (var i = 0; i < data.bills.length; i++) {
                     text =  '<div style="font-weight:600;display:inline-block;" class="mr10">'+ data.bills[i][0] +'</div>' + 
                             '<div class="mr10" style="display:inline-block;">На счету: '+ data.bills[i][1] +'</div>' + 
@@ -284,7 +284,8 @@
                             '<div style="display:inline-block;">Оплата за месяц: '+ data.bills[i][3] +'</div>'
                     $(text).appendTo('.card_money_sch'+id)
                     $('<br><br>').appendTo('.card_money_sch'+id)
-                    $('<option value="'+data.bills[i][4]+'">'+data.bills[i][0]+'</option>').appendTo('#pay_for_group'+id)
+                    console.log(data.bills[i][4], data.bills[i][0], $('.pay_for_group'+id))
+                    $('<option value="'+data.bills[i][4]+'">'+data.bills[i][0]+'</option>').appendTo('.pay_for_group'+id)
                 }
             }
         })
