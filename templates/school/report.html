@@ -87,9 +87,31 @@
                                 Учитель: <span>{{sq.teacher.first_name}}</span>
                                 <br>
                                 {{sq|squad_nms_sum}}тг
+                                <br>
+                                <a class="ui button mini full-w open_sq_finance" id="{{sq.id}}">Подробнее</a>
                             </div>
                         </div>
                         {% endfor %}
+                    </div>
+                </div>
+                <div class="ui modal sq_finance full-h">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        <div class="text-center">
+                            <b class="text15">NJ</b>
+                            <br>
+                            Учитель: 
+                            <a href="">isdjfi</a>
+                        </div>
+                        <b>Стоимость посещения данной группы:</b>
+                        {% if squad.lesson_bill > 0 %}
+                            <span class="underline">{{ squad.lesson_bill }}тг за урок</span>
+                            <br>
+                        {% endif %}
+                        {% if squad.bill > 0 %}
+                            <span class="underline">{{ squad.bill }}тг в месяц</span>
+                            <br>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="ui segment backdark mt0 textw">

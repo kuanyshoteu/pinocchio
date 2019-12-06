@@ -349,7 +349,6 @@ def login_view(request):
             res = 'login'
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, user)
-            print('r')
         elif found:
             res = 'login'
             user = authenticate(username=str(profile.user.username), password=str(request.GET.get('password')))
@@ -431,7 +430,6 @@ def reset_pswrd(request):
             user.set_password(request.GET.get('password1'))
             user.save()
             ok = True
-            print(profile.first_name)
             user = authenticate(username=str(user.username), password=str(request.GET.get('password1')))
             try:
                 login(request, user)

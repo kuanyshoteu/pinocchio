@@ -137,22 +137,10 @@ def change_profile(request):
     if form.is_valid():
         hisprofile = form.save(commit=False)
         hisprofile.save()
-        return redirect(hisprofile.change_url())
-
-    if request.method == 'POST':
-        password_form = PasswordChangeForm(request.user, request.POST)
-        if password_form.is_valid():
-            hisprofile.user = password_form.save()
-            update_session_auth_hash(request, hisprofile.user)  # Important!
-            login(request, hisprofile.user)
-            return redirect(hisprofile.change_url())
-    else:
-        password_form = PasswordChangeForm(request.user)
 
     context = {
         "profile": hisprofile, 
         'form':form,
-        'password_form':password_form,
         'is_trener':is_profi(hisprofile, 'Teacher'),
         "is_manager":is_profi(hisprofile, 'Manager'),
         "is_director":is_profi(hisprofile, 'Director'),

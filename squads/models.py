@@ -178,3 +178,10 @@ class NeedMoney(models.Model):
     money = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
     start_date = models.DateField(auto_now_add=False)
+
+class FinanceClosed(models.Model):
+    need_money = models.ForeignKey(NeedMoney, null=True, on_delete = models.CASCADE, related_name='finance_closed') 
+    start = models.DateField(auto_now_add=False)
+    money = models.IntegerField(default=0)
+    class Meta:
+        ordering = ['id']

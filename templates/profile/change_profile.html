@@ -7,7 +7,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="group-create" class="">
+<div id="group-create" class="pb150">
 	<a id="go-back-btn-before"  href='{{ profile.get_absolute_url }}'>
         <i class="arrow left icon"></i>
     </a>
@@ -15,7 +15,6 @@
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" style="margin-left: 30px;width: 80%;">
-            	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
             		<div class="ui grid stackable">
             			<div class="twelve wide column" >
             				<div class="ui segment" style="margin-bottom: 0;font-weight: 600;">
@@ -32,17 +31,17 @@
 				        		Пароль
 				        	</div>
 				        	<div class="ui segment" style="margin-top: 0;">
-                                <form class="ui form" style="margin: 0 auto;width: 40%;">
-                                    <b>Введите пароль</b>
+                                <form class="ui form text-center" style="margin: 0 auto;width: 40%;">
+                                    <div class="mb10 success_change_pswrd" style="display: none;"><i class="icon check green"></i> Пароль изменен</div>
+                                    <b>Введите новый пароль</b>
                                     <input class="reset_password1" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
-                                    <b>Повторите пароль</b>
+                                    <b>Повторите новый пароль</b>
                                     <input class="reset_password2" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
                                     <input class="ui button green reset_pswd full-w" id="{{ profile.id }}" value="Изменить пароль" type="submit" onclick="return false">
                                 </form>
 			        		</div>
 			        	</div>
-					</div>			
-	    		</form>
+					</div>
 			</div>
 		</div>
 	</div>	

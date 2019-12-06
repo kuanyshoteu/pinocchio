@@ -1,3 +1,6 @@
+    $('.open_sq_finance').click(function(e) {
+        $('.sq_finance').modal('show')  
+    })
     $('.manager_office').click(function(e) {
         this_ = $(this)
         id = this_.attr('id')
@@ -745,6 +748,7 @@
         password1 = $('.reset_password1').val()
         password2 = $('.reset_password2').val()
         id = $(this).attr('id')
+        $('.success_change_pswrd').hide()
         $.ajax({
             url: url,
             data: {
@@ -754,7 +758,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                location.reload()
+                $('.success_change_pswrd').show()
             }
         })        
     });
