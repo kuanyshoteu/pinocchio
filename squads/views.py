@@ -410,12 +410,15 @@ def add_student_to_squad(student, squad, manager_profile):
     for subject in squad.subjects.all():
         categories = subject.category.all()
         student.crm_subject_connect.add(*categories)
-
         for cat in categories:
             hs = school.hashtags.get_or_create(title = cat.title.replace(' ', '_'))
             card.hashtags.add(hs[0])
-
-        nm = squad.need_money.get_or_create(card=card)[0]
+    nm = squad.need_money.get_or_create(card=card)[0]
+    nm.start_date = timezone.now().date()
+    nm.finance_closed.create(
+        start=timezone.now().date(),
+        money=0,
+        )
     school = squad.school
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,

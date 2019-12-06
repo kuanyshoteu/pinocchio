@@ -177,7 +177,8 @@ class NeedMoney(models.Model):
     card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
     money = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
-    start_date = models.DateField(auto_now_add=False)
+    start_date = models.DateField(auto_now_add=True)
+    fixed_date = models.BooleanField(default=False)
 
 class FinanceClosed(models.Model):
     need_money = models.ForeignKey(NeedMoney, null=True, on_delete = models.CASCADE, related_name='finance_closed') 
