@@ -90,7 +90,8 @@ def subject_create(request):
         instance = form.save(commit=False)
         instance.school = school
         instance.cost_period = request.POST.get('get_subject_period')
-        print('period: ', request.POST.get('get_subject_period'))
+        if not instance.cost:
+            instance.cost = 0
         instance.save()
         instance.subject_histories.create(action_author=profile,edit='Создал курс '+instance.title)        
         return HttpResponseRedirect(instance.get_update_url())

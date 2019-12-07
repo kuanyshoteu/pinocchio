@@ -1228,10 +1228,26 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-
-
+    update_subject_costs()
+    check_student_nms()
     print('moderator_end_code')
     return JsonResponse({'TY':'KRASAVA'})
+
+from squads.views import remove_student_from_squad, add_student_to_squad
+def check_student_nms():
+    for s in Profile.objects.filter(is_student=True):
+        cards = s.card.all()
+        if len(cards)>0:
+            card = cards[0]
+            if len(s.squads.all()) > len(NeedMoney.objects.filter(card__in=cards)):
+                for sq in s.squads.all():
+                    remove_student_from_squad(s, sq, card.author_profile)
+                    add_student_to_squad(s, sq, card.author_profile)
+def update_subject_costs():
+    for s in Subject.objects.all():
+        if not s.cost:
+            s.cost = 0
+            s.save()
 
 def moder_update_bills():
     for squad in Squad.objects.all():

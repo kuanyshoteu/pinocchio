@@ -130,7 +130,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'bilimtap',
+            'NAME': 'bilimtap2',
             'USER': 'admin',
             'PASSWORD': '031196Kk',
             'HOST': 'localhost',
