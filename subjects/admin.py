@@ -72,3 +72,15 @@ class CacheAttendanceModelAdmin(admin.ModelAdmin):
         model = CacheAttendance
 
 admin.site.register(CacheAttendance, CacheAttendanceModelAdmin)
+
+
+class FinanceClosedModelAdmin(admin.ModelAdmin):
+    list_display = ["id", 'start', "need_money", "get_subject", "money", "bill", "closed"]
+    list_display_links = ["id"]
+    class Meta:
+        model = FinanceClosed
+    def get_subject(self, obj):
+        if obj.subject:
+            return obj.subject.title
+        return '_'
+admin.site.register(FinanceClosed, FinanceClosedModelAdmin)

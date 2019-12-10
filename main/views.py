@@ -1228,8 +1228,9 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
-    update_subject_costs()
-    check_student_nms()
+    # update_subject_costs()
+    # check_student_nms()
+    delete_all_fcs()
     print('moderator_end_code')
     return JsonResponse({'TY':'KRASAVA'})
 
@@ -1272,3 +1273,6 @@ def clear_users():
     for u in User.objects.all():
         if len(Profile.objects.filter(user = u)) == 0:
             u.delete()
+
+def delete_all_fcs():
+    FinanceClosed.objects.all().delete()

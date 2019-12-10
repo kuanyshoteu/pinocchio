@@ -487,10 +487,59 @@ def test_account(request):
     return render(request, "profile.html", context)
 
 def add_money(profile, school, squad, card, amount, manager):
+    if amount > squad.bill*10:
+        return 'too much'
     nm = card.need_money.get(squad=squad)
     nm.money += amount
     nm.save()
-    if nm.money >= squad.bill + squad.lesson_bill:
+    crnt = amount
+    today = timezone.now().date()
+    need_date = today - relativedelta(months=2) # minus 2, 1 compensates in while
+    ok = True
+    first_circle = True
+    while crnt > 0:
+        need_date += relativedelta(months=1)
+        for subject in squad.subjects.filter(cost_period='month', cost__gt=0):
+            if crnt <= 0:
+                break
+            print(subject.title)
+            fc = nm.finance_closed.filter(subject=subject,start__gt=need_date)
+            if len(fc) == 0:
+                day2 = nm.start_date.strftime('%d')
+                day = need_date.strftime('%d')
+                if int(day) > int(day2):
+                    need_date2 = need_date + relativedelta(months=1)
+                else:
+                    need_date2 = need_date                    
+                month = need_date2.strftime('%m')
+                year = need_date2.strftime('%Y')
+                datestr = year+'-'+month+'-'+day2
+                newdate = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
+                print('was empty', newdate, need_date2)
+                fc = nm.finance_closed.create(
+                    start=newdate,
+                    bill=nm.squad.bill,
+                    subject=subject
+                    )
+                fc.save()
+            elif len(fc) >= 1:
+                if len(fc) >= 2:
+                    Bug.objects.create(text='More than 1 unclosed subject finances, id:'+str(nm.id))
+                    print('too much')
+                fc = fc[0]
+            added_money = min(subject.cost - fc.money, crnt)
+            fc.money += added_money
+            crnt -= added_money
+            print('its money', fc.money, fc.bill)
+            print('crnt', crnt)
+            if fc.money >= fc.bill:
+                print('make closed', fc.start, fc.id)
+                fc.closed = True
+            elif first_circle and today+timedelta(7) <= fc.start+relativedelta(months=1):
+                ok = False
+            fc.save()
+        first_circle = False
+    if ok:
         if card.colour == 'red' or card.colour == 'orange':
             if not card.was_called:
                 skill = card.author_profile.skill

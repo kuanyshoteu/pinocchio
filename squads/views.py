@@ -407,7 +407,7 @@ def add_student_to_squad(student, squad, manager_profile):
     school = squad.school
     card = student.card.get_or_create(school=school)[0]
     squad.students.add(student)
-    for subject in squad.subjects.all():
+    for subject in subjects:
         categories = subject.category.all()
         student.crm_subject_connect.add(*categories)
         for cat in categories:
@@ -415,10 +415,9 @@ def add_student_to_squad(student, squad, manager_profile):
             card.hashtags.add(hs[0])
     nm = squad.need_money.get_or_create(card=card)[0]
     nm.start_date = timezone.now().date()
-    nm.finance_closed.create(
-        start=timezone.now().date(),
-        money=0,
-        )
+    for subject in subjects:
+        if len(nm.finance_closed.filter(subject=subject)) == 0:
+            nm.finance_closed.create(subject=subject)
     school = squad.school
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
@@ -640,6 +639,10 @@ def add_subject_work(school, squad, subject):
         squad.bill -= cost
     elif subject.cost_period == 'lesson':
         squad.lesson_bill -= cost
+    for nm in squad.need_money.all():
+        if len(nm.finance_closed.filter(subject=subject)) == 0:
+            nm.finance_closed.create(subject=subject)
+
     squad.save()
 def delete_subject(request):
     profile = get_profile(request)

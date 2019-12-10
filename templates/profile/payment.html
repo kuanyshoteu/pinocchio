@@ -168,12 +168,12 @@
                         <br>
                     {% endif %}
                     <div class="mt10"></div>
-                    {% if nm.money >= 0 %}
-                        <b>Оплачено:</b> 
-                    {%else%}
-                        <b style="color: red">Задолженность:</b> 
-                    {%endif%}
-                    <span class="nm_money{{nm.id}} underline">{{ nm.money }}тг</span> 
+                    Оплачено за {{nm|get_closed_months}} месяцев
+                    <br>
+                    {% for fc in nm|get_current_month %}
+                        {{fc.0}}: {{fc.1}}тг
+                        <br>
+                    {%endfor%}
                     <div class="mt10"></div>
                     <span>{{ nm.squad|last_payment:hisprofile }}</span>
                     <br>

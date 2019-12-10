@@ -14,7 +14,7 @@ from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
 from accounts.models import Profile, Skill
-from squads.models import Squad
+from squads.models import Squad, NeedMoney
 from papers.models import Lesson
 from schools.models import *
 
@@ -202,3 +202,13 @@ class SubjectHistory(models.Model):
     edit = models.TextField(default='')
     class Meta:
         ordering = ['-timestamp']
+
+class FinanceClosed(models.Model):
+    need_money = models.ForeignKey(NeedMoney, null=True, on_delete = models.CASCADE, related_name='finance_closed')
+    subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='finance_closed')
+    start = models.DateField(auto_now_add=False)
+    money = models.IntegerField(default=0)
+    bill = models.IntegerField(default=0)
+    closed = models.BooleanField(default=False)
+    class Meta:
+        ordering = ['id']

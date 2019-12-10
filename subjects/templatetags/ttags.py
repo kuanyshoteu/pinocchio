@@ -3,6 +3,7 @@ from ..models import Lecture
 register = template.Library()
 from django.utils import timezone
 from datetime import timedelta
+from dateutil.relativedelta import *
 from itertools import chain
 from subjects.models import Day, Cell,Attendance
 from accounts.models import Profession
@@ -11,6 +12,39 @@ from schools.models import *
 @register.filter
 def remove_space(title):
     return title.replace(' ', '_')
+
+@register.filter
+def get_closed_months(nm):
+    return len(nm.finance_closed.filter(closed=True))
+@register.filter
+def get_current_month(nm):
+    if len(nm.finance_closed.all()) == 0:
+        return [['Еще не было оплаты','0']]
+    today = timezone.now().date()
+    need_date = today - relativedelta(months=1)
+    fcs = nm.finance_closed.filter(start__gt=need_date, start__lt=today)
+    if len(fcs) == 0:
+        return [['Еще не было оплаты','0']]
+    paid = 0
+    for fc in fcs:
+        paid += fc.money
+    fc_month_start = fcs[0].start.strftime('%d.%m.%Y')
+    fc_month_end = (fcs[0].start + relativedelta(months=1)).strftime('%d.%m.%Y')
+    res = [[fc_month_start+'-'+fc_month_end, paid]]
+    nexts = nm.finance_closed.filter(closed=False).exclude(start__gt=today, start__lt=today) 
+    if len(nexts) > 0:
+        while True:
+            need_date += relativedelta(months=1)
+            fcs = nm.finance_closed.filter(start__gt=need_date)
+            if len(fcs) == 0:
+                break
+            paid = 0
+            for fc in fcs:
+                paid += fc.money
+            fc_month_start = fcs[0].start.strftime('%d.%m.%Y')
+            fc_month_end = (fcs[0].start + relativedelta(months=1)).strftime('%d.%m.%Y')
+            res.append([fc_month_start+'-'+fc_month_end, paid])
+    return res
 
 @register.filter
 def checkdaydif(time, dif):
