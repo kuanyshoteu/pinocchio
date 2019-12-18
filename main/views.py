@@ -1233,8 +1233,8 @@ def moderator_run_code(request):
     # moder_update_bills()
     # delete_all_fcs()
     create_fcs()
-    update_student_start_dates()
-    update_finance_start_dates()
+    # update_student_start_dates()
+    # update_finance_start_dates()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
