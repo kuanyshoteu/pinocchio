@@ -172,10 +172,11 @@ class DiscountSchool(models.Model):
     def delete_url(self):
         return reverse("schools:discount_delete_url")
 
-class NeedMoney(models.Model):
+class NeedMoney(models.Model): # Rename to SquadBill
     squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='need_money')
     card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
     money = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
-    start_date = models.DateField(auto_now_add=True)
-    fixed_date = models.BooleanField(default=False)    
+    start_date = models.DateField(auto_now_add=False)
+    class Meta:
+        ordering = ['-id']

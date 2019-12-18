@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = False
+toserver = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
 
@@ -130,7 +130,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'bilimtap2',
+            'NAME': 'bilimtap1512',
             'USER': 'admin',
             'PASSWORD': '031196Kk',
             'HOST': 'localhost',

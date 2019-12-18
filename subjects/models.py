@@ -203,12 +203,13 @@ class SubjectHistory(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-class FinanceClosed(models.Model):
+class FinanceClosed(models.Model): ### Rename to SubjectBill
     need_money = models.ForeignKey(NeedMoney, null=True, on_delete = models.CASCADE, related_name='finance_closed')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='finance_closed')
     start = models.DateField(auto_now_add=False)
-    money = models.IntegerField(default=0)
-    bill = models.IntegerField(default=0)
-    closed = models.BooleanField(default=False)
+    first_present = models.DateField(auto_now_add=False)
+    moneys = ArrayField(models.IntegerField(null=True), default=list)
+    bills = ArrayField(models.IntegerField(null=True), default=list)
+    closed_months = models.IntegerField(default=0)
     class Meta:
         ordering = ['id']

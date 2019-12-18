@@ -413,11 +413,21 @@ def add_student_to_squad(student, squad, manager_profile):
         for cat in categories:
             hs = school.hashtags.get_or_create(title = cat.title.replace(' ', '_'))
             card.hashtags.add(hs[0])
-    nm = squad.need_money.get_or_create(card=card)[0]
+    nm = squad.need_money.filter(card=card)
+    today = timezone.now().date()
+    if len(nm) == 0:
+        nm = squad.need_money.create(card=card,start_date = today)
+    else:
+        nm = nm[0]
     nm.start_date = timezone.now().date()
-    for subject in subjects:
+    for subject in subjects.filter(cost_period='month',cost__gt=0):
         if len(nm.finance_closed.filter(subject=subject)) == 0:
-            nm.finance_closed.create(subject=subject)
+            nm.finance_closed.create(
+                subject=subject,
+                start=today,
+                first_present=today,
+                moneys=[0],
+                bills=[subject.cost])
     school = squad.school
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
@@ -624,8 +634,7 @@ def add_subject(request):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')) )
         school = squad.school
         is_in_school(profile, school)
-        subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
-        
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         add_subject_work(school, squad, subject)
     data = {
     }
@@ -636,12 +645,19 @@ def add_subject_work(school, squad, subject):
     cost = subject.cost
     cards = school.crm_cards.all()
     if subject.cost_period == 'month':
-        squad.bill -= cost
+        squad.bill += cost
     elif subject.cost_period == 'lesson':
-        squad.lesson_bill -= cost
-    for nm in squad.need_money.all():
-        if len(nm.finance_closed.filter(subject=subject)) == 0:
-            nm.finance_closed.create(subject=subject)
+        squad.lesson_bill += cost
+    today = timezone.now().date()
+    if subject.cost_period == 'month' and cost > 0:
+        for nm in squad.need_money.all():
+            if len(nm.finance_closed.filter(subject=subject)) == 0:
+                nm.finance_closed.create(
+                    subject=subject,
+                    start=today,
+                    first_present=today,
+                    moneys=[0],
+                    bills=[subject.cost])
 
     squad.save()
 def delete_subject(request):
@@ -672,11 +688,27 @@ def delete_lesson(request, id=None):
         school = squad.school
         is_in_school(profile, school)
         lecture = squad.squad_lectures.get(id=int(request.GET.get('lecture_id')))
+        subject = lecture.subject
         lecture.delete()
+        if len(squad.squad_lectures.filter(subject=subject)) == 0:
+            remove_subject_from_squad(squad, subject)
     data = {
     }
     return JsonResponse(data)
         
+def remove_subject_from_squad(squad, subject):
+    subject.squads.remove(squad)
+    cost = subject.cost
+    if subject.cost_period == 'month':
+        squad.bill -= cost
+    elif subject.cost_period == 'lesson':
+        squad.lesson_bill -= cost
+    elif subject.cost_period == 'course':
+        squad.course_bill -= cost
+    squad.save()
+    nms = squad.need_money.all()
+    subject.finance_closed.filter(need_money__in=nms).delete()
+
 def change_lecture_cabinet(request):
     profile = get_profile(request)
     only_managers(profile)

@@ -786,7 +786,7 @@ def report_material_number_by_date(date, squad,subject, alldays,lectures):
         material_number = num_of_lectures * number_of_weeks + extra
         return material_number   
     return -1 
-def get_date(material_number, squad, subject,lectures):
+def get_date_by_num(material_number, squad, subject,lectures):
     if len(lectures) > 0:
         number_of_weeks = int(material_number/len(lectures))
         lecture_index = material_number % len(lectures)
@@ -865,7 +865,7 @@ def get_school_report(request):
                     subject_res = ['5', '','']
                     cost = 0
                     for i in range(0, end-start):
-                        date = get_date(start + i-1, squad, subject,lectures)
+                        date = get_date_by_num(start + i-1, squad, subject,lectures)
                         if date != '_':
                             date = date.strftime('%d.%b')
                         subject_res_dates.append(date)
@@ -1229,12 +1229,104 @@ def moderator_run_code(request):
         return JsonResponse({'fuck_off':'sucker'})
     print('moderator_run_code')
     # update_subject_costs()
-    # check_student_nms()
+    check_student_nms()
+    moder_update_bills()
     delete_all_fcs()
+    # create_fcs()
+    # update_student_start_dates()
+    # update_finance_start_dates()
     print('moderator_end_code')
-    return JsonResponse({'TY':'KRASAVA'})
+    return render(request, "moder_code.html", {})
+
+def searching_subjects(request):
+    profile = get_profile(request)
+    if is_profi(profile, 'Moderator') == False:
+        return JsonResponse({'fuck_off':'sucker'})
+    if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
+        return JsonResponse({'fuck_off':'sucker'})
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)
 
 from squads.views import remove_student_from_squad, add_student_to_squad
+def update_student_start_dates():
+    for card in CRMCard.objects.all():
+        for nm in card.need_money.all():
+            title = nm.squad.title
+            if title == 'Английский, группа, 18:30':
+                title = 'engl group'
+            text = '*** Регистрация в '+title+' ***'
+            similarity=TrigramSimilarity('edit', text)
+            chx = card.history.annotate(similarity=similarity,).filter(similarity__gt=0.3).order_by('-similarity')
+            if len(chx) > 0:
+                ch = chx[0]
+                date1 = ch.timestamp.date()
+                nm.start_date = date1
+                nm.save()
+
+from subjects.templatetags.ttags import get_date
+def update_finance_start_dates():
+    for fc in FinanceClosed.objects.all():
+        nm = fc.need_money
+        fc.start = nm.start_date
+        student = nm.card.card_user
+        att = fc.subject.subject_attendances.filter(
+            student=student,
+            squad=nm.squad,
+            present='present'
+            )
+        if len(att) > 0:
+            att = att.first()
+            material = att.subject_materials
+            fc.first_present = get_date(material, nm.squad)[0]
+        fc.save()
+
+def create_fcs():
+    for nm in NeedMoney.objects.all():
+        user = nm.card.card_user
+        if user.first_name == 'Ягуз Саид':
+            print(user.first_name)
+            print(nm.squad.title)
+        summ = 0
+        for pm in nm.squad.payment_history.filter(user=user):
+            summ += pm.amount
+        nm.money = summ
+        nm.save()
+        today = nm.start_date
+        crnt = nm.money
+        subjects = nm.squad.subjects.filter(cost_period='month',cost__gt=1)
+        first_round = True
+        if len(subjects) == 0:
+            continue
+        while crnt > 0:
+            for subject in subjects:
+                if crnt <= 0:
+                    break
+                fc = nm.finance_closed.filter(subject=subject)
+                if len(fc) > 0:
+                    fc = fc[0]
+                elif len(fc) == 0:
+                    fc = nm.finance_closed.create(
+                        subject=subject,
+                        start=today,
+                        first_present=today,
+                        moneys=[0],
+                        bills=[subject.cost])
+                added_money = min(subject.cost - fc.moneys[-1], crnt)
+                fc.moneys[-1] += added_money
+                crnt -= added_money
+                finance_update_month(fc, subject.cost)
+                fc.save()
+
+def finance_update_month(fc, subject_cost):
+    if fc.moneys[-1] >= fc.bills[-1]:
+        fc.moneys.append(0)
+        fc.bills.append(subject_cost)
+        fc.closed_months += 1
+        ok = True
+        fc.save()
+
 def check_student_nms():
     for s in Profile.objects.filter(is_student=True):
         cards = s.card.all()
@@ -1250,13 +1342,18 @@ def update_subject_costs():
             s.cost = 0
             s.save()
 
+def clear_fc():
+    pass
+
 def moder_update_bills():
     for squad in Squad.objects.all():
         cost_month = 0
         cost_lesson = 0
         cost_course = 0
         for subject in squad.subjects.all():
-            if subject.cost:
+            if len(squad.squad_lectures.filter(subject=subject)) == 0:
+                squad.subjects.remove(subject)
+            elif subject.cost:
                 if subject.cost_period == 'lesson':
                     cost_lesson += subject.cost
                 elif subject.cost_period == 'course':
@@ -1276,3 +1373,7 @@ def clear_users():
 
 def delete_all_fcs():
     FinanceClosed.objects.all().delete()
+    print('deleted')
+
+def create_nms_fcs():
+    pass

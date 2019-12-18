@@ -15,35 +15,44 @@ def remove_space(title):
 
 @register.filter
 def get_closed_months(nm):
-    return len(nm.finance_closed.filter(closed=True))
+    if len(nm.finance_closed.all()) > 0:
+        return nm.finance_closed.first().closed_months
+    return 0
+
 @register.filter
-def get_current_month(nm):
-    if len(nm.finance_closed.all()) == 0:
-        return [['Еще не было оплаты','0']]
-    today = timezone.now().date()
-    need_date = today - relativedelta(months=1)
-    fcs = nm.finance_closed.filter(start__gt=need_date, start__lt=today)
-    if len(fcs) == 0:
-        return [['Еще не было оплаты','0']]
-    paid = 0
-    for fc in fcs:
-        paid += fc.money
-    fc_month_start = fcs[0].start.strftime('%d.%m.%Y')
-    fc_month_end = (fcs[0].start + relativedelta(months=1)).strftime('%d.%m.%Y')
-    res = [[fc_month_start+'-'+fc_month_end, paid]]
-    nexts = nm.finance_closed.filter(closed=False).exclude(start__gt=today, start__lt=today) 
-    if len(nexts) > 0:
-        while True:
-            need_date += relativedelta(months=1)
-            fcs = nm.finance_closed.filter(start__gt=need_date)
-            if len(fcs) == 0:
-                break
-            paid = 0
-            for fc in fcs:
-                paid += fc.money
-            fc_month_start = fcs[0].start.strftime('%d.%m.%Y')
-            fc_month_end = (fcs[0].start + relativedelta(months=1)).strftime('%d.%m.%Y')
-            res.append([fc_month_start+'-'+fc_month_end, paid])
+def get_start_date(nm):
+    return nm.start_date.strftime('%d.%m.%Y')
+
+@register.filter
+def get_subject_finances(nm):
+    res = []
+    finances = nm.finance_closed.all().select_related('subject')
+    for subject in nm.squad.subjects.all():
+        period = 'за урок'
+        finance = finances.filter(subject=subject)
+        date1 = False
+        payment = -1
+        crnt = 0
+        if len(finance) > 0:
+            finance = finance[0]
+            date1 = finance.first_present.strftime('%d.%m.%Y')
+            payment = finance.closed_months
+            crnt = finance.moneys[-1]
+        elif subject.cost_period == 'month':
+            payment = -2
+        if subject.cost_period == 'month':
+            period = 'в месяц'
+        elif subject.cost_period == 'course':
+            period = 'за весь курс'            
+        elif subject.cost_period == 'lesson':
+            period = 'за урок'
+        res.append([
+                subject.title,
+                str(subject.cost)+'тг '+period,
+                payment,
+                date1,
+                crnt,
+            ])
     return res
 
 @register.filter

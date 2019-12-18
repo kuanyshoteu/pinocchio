@@ -317,21 +317,22 @@ def att_present(request):
         ok = True
         material = attendance.subject_materials
         need_change_school_money = False
+        card = attendance.student.card.get_or_create(school=school)[0]
         if request.GET.get('status') == 'present':
             attendance.present = 'present'
             attendance.save()
+            ##### Teacher made lesson
             teacher_attendance = material.sm_atts.filter(student=profile)
             if len(teacher_attendance):
                 teacher_attendance = teacher_attendance[0]
                 teacher_attendance.present = 'present'
                 teacher_attendance.save()
                 teacher_attendance_id = teacher_attendance.id
-            this_student_card = attendance.student.card.filter(school=school)
-            if len(this_student_card) > 0:
-                card = this_student_card[0]
-                if card.column.id == 2:
-                    card.column = CRMColumn.objects.get(id=3)
-                    card.save()
+            ##### Move CRMCard in columns
+            if card.column.id == 2:
+                card.column = CRMColumn.objects.get(id=3)
+                card.save()
+            ##### Teacher salary increase
             salary = 0
             if not profile in material.done_by.all():
                 material.done_by.add(profile)
@@ -352,6 +353,32 @@ def att_present(request):
                     salary = profile.salary
                     cost = -1*subject.cost
         if request.GET.get('status') == 'cancel' or request.GET.get('status') == 'present':
+            #### Update first presence in squad and subject
+            if subject.cost_period == 'month' and subject.cost > 0:
+                date1 = get_date(attendance.subject_materials, squad)[0]
+                nm = card.need_money.filter(squad=squad)
+                need_fc = False
+                if len(nm) > 0:
+                    nm = nm[0]
+                    fc = nm.finance_closed.filter(subject=subject)
+                    if len(fc) == 0:
+                        need_fc = True
+                    else:
+                        fc = fc[0]
+                else:
+                    nm = card.need_money.create(squad=squad,start_date=date1)
+                    need_fc = True
+                    nm.save()
+                if need_fc:
+                    fc = nm.finance_closed.create(subject=subject,
+                        moneys=[0],
+                        bills=[subject.cost],
+                        start=date1,
+                        first_present=date1)
+                if len(subject.subject_attendances.filter(student=attendance.student,squad=squad,present='present')) == 1:
+                    if request.GET.get('status') == 'present':
+                        fc.first_present=date1
+                        fc.save()
             if need_change_school_money:
                 change_school_money(school, salary, 'teacher_salary', profile.first_name)
                 school.save()
@@ -494,51 +521,27 @@ def add_money(profile, school, squad, card, amount, manager):
     nm.save()
     crnt = amount
     today = timezone.now().date()
-    need_date = today - relativedelta(months=2) # minus 2, 1 compensates in while
     ok = True
-    first_circle = True
+    subjects = squad.subjects.filter(cost_period='month', cost__gt=0)
     while crnt > 0:
-        need_date += relativedelta(months=1)
-        for subject in squad.subjects.filter(cost_period='month', cost__gt=0):
+        for subject in subjects:
             if crnt <= 0:
                 break
-            print(subject.title)
-            fc = nm.finance_closed.filter(subject=subject,start__gt=need_date)
-            if len(fc) == 0:
-                day2 = nm.start_date.strftime('%d')
-                day = need_date.strftime('%d')
-                if int(day) > int(day2):
-                    need_date2 = need_date + relativedelta(months=1)
-                else:
-                    need_date2 = need_date                    
-                month = need_date2.strftime('%m')
-                year = need_date2.strftime('%Y')
-                datestr = year+'-'+month+'-'+day2
-                newdate = datetime.datetime.strptime(datestr, "%Y-%m-%d").date()
-                print('was empty', newdate, need_date2)
-                fc = nm.finance_closed.create(
-                    start=newdate,
-                    bill=nm.squad.bill,
-                    subject=subject
-                    )
-                fc.save()
-            elif len(fc) >= 1:
-                if len(fc) >= 2:
-                    Bug.objects.create(text='More than 1 unclosed subject finances, id:'+str(nm.id))
-                    print('too much')
+            fc = nm.finance_closed.filter(subject=subject)
+            if len(fc) > 0:
                 fc = fc[0]
-            added_money = min(subject.cost - fc.money, crnt)
-            fc.money += added_money
+            elif len(fc) == 0:
+                fc = nm.finance_closed.create(
+                    subject=subject,
+                    start=today,
+                    first_present=today,
+                    moneys=[0],
+                    bills=[subject.cost])
+            added_money = min(subject.cost - fc.moneys[-1], crnt)
+            fc.moneys[-1] += added_money
             crnt -= added_money
-            print('its money', fc.money, fc.bill)
-            print('crnt', crnt)
-            if fc.money >= fc.bill:
-                print('make closed', fc.start, fc.id)
-                fc.closed = True
-            elif first_circle and today+timedelta(7) <= fc.start+relativedelta(months=1):
-                ok = False
+            finance_update_month(fc, subject.cost)
             fc.save()
-        first_circle = False
     if ok:
         if card.colour == 'red' or card.colour == 'orange':
             if not card.was_called:
@@ -559,6 +562,14 @@ def add_money(profile, school, squad, card, amount, manager):
     )
     change_school_money(school, amount, 'student_payment', profile.first_name)
     school.save()
+
+def finance_update_month(fc, subject_cost):
+    if fc.moneys[-1] >= fc.bills[-1]:
+        fc.moneys.append(0)
+        fc.bills.append(subject_cost)
+        fc.closed_months += 1
+        ok = True
+        fc.save()
 
 def make_payment(request):
     manager = Profile.objects.get(user = request.user)

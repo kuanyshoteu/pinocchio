@@ -37,11 +37,11 @@
                         <div style="font-size: 17px;">
                             <b>История оплаты</b>
                         </div>
-                        <i style="font-size: 13px;">
+                        <i style="">
                             Можете отменить оплату в течении 3 суток
                         </i>
                     </div>
-                    <table style="font-size: 13px;margin: 0 auto;">
+                    <table style="margin: 0 auto;">
                         <thead>
                             <tr>
                                 <th class="border">Группа</th>
@@ -145,19 +145,42 @@
             <div class="ui segment mb0 text-center" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
                 <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
             </div>    
-            <div class="ui segment mt0 backgrey">
-                <span style="font-size: 14px;">Группа проходит курсы:</span>
-                <div class="nm_subjects">
-                    {% for subject in nm.squad.subjects.all %}
-                    <a class="ui button mini full-w mt10" style="padding: 5px;line-height: 15px;" href="{{subject.get_absolute_url}}">
-                        <span style="font-size: 13px;color: #000">{{subject.title}}</span>
-                        <br>
-                        <span style="color: #545454">Стоимость: {{subject.cost}}тг {%if subject.cost_period == 'lesson'%}за урок{%elif subject.cost_period == 'course'%}за курс{% else %}в месяц{%endif%}</span>
-                    </a>
+            <div class="ui segment mt0 backgrey text13">
+                <div class="mb5"><b>Дата записи в группу</b> {{nm|get_start_date}}</div>
+                <span>Группа проходит курсы:</span>
+                <div class="nm_subjects text14">
+                    {% for subject in nm|get_subject_finances %}
+                    <div class="full-w mb10" style="padding: 10px;line-height: 20px;color: #222;background-color: #e0e1e2;">
+                        <div class="text-center">
+                            <b>{{subject.0}}</b>
+                        </div>
+                        <div style="display: flex;">
+                            <div class="half-w">Стоимость:</div>
+                            <div class="half-w">{{subject.1}}</div>
+                        </div>
+                        {%if subject.3%}
+                        <div style="display: flex;">
+                            <div class="half-w">Первое занятие: </div>
+                            <div class="half-w">{{subject.3}}</div>
+                        </div>
+                        {% endif %}
+                        {% if subject.2 >= 0 %}
+                        <div style="display: flex;">
+                            <div class="half-w">Оплачено: </div>
+                            <div class="half-w">за {{subject.2}} месяцев</div>
+                        </div>
+                        <div style="display: flex;">
+                            <div class="half-w">Остаток: </div>
+                            <div class="half-w">{{subject.4}}тг</div>
+                        </div>
+                        {%elif subject.2 == -2 %}
+                            Еще не было оплаты
+                        {% endif %}
+                    </div>
                     {% endfor %}
                 </div>
-                <div class="ui divider mb5 mt5"></div>
-                <div>
+                <div class="text14 mt15">
+                    {{ nm.money }}
                     <b>Итоговая стоимость посещения данной группы:</b>
                     {% if nm.squad.lesson_bill > 0 %}
                         <span class="underline">{{ nm.squad.lesson_bill }}тг за урок</span>
@@ -167,14 +190,9 @@
                         <span class="underline">{{ nm.squad.bill }}тг в месяц</span>
                         <br>
                     {% endif %}
-                    <div class="mt10"></div>
+                    <div class="mt5"></div>
                     Оплачено за {{nm|get_closed_months}} месяцев
-                    <br>
-                    {% for fc in nm|get_current_month %}
-                        {{fc.0}}: {{fc.1}}тг
-                        <br>
-                    {%endfor%}
-                    <div class="mt10"></div>
+                    <div class="mt5"></div>
                     <span>{{ nm.squad|last_payment:hisprofile }}</span>
                     <br>
                     <i>(*подробнее в "Истории оплаты" сверху)</i>
