@@ -180,7 +180,7 @@
                     {% endfor %}
                 </div>
                 <div class="text14 mt15">
-                    {{ nm.money }}
+                    <span style="display: none;">{{ nm.money }}</span>
                     <b>Итоговая стоимость посещения данной группы:</b>
                     {% if nm.squad.lesson_bill > 0 %}
                         <span class="underline">{{ nm.squad.lesson_bill }}тг за урок</span>
