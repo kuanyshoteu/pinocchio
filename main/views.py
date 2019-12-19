@@ -1243,9 +1243,9 @@ def update_names():
     for student in Profile.objects.filter(is_student=True):
         if len(student.card.all()) == 1:
             card = student.card.first()
-            if student.first_name == 'Максим':
-                print(card.name)
             student.first_name = card.name
+            student.phone = card.phone
+            student.mail = card.mail
             student.save()
         else:
             print(student.first_name, len(student.card.all()))
