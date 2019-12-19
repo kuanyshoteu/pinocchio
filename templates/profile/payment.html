@@ -5,7 +5,7 @@
 </div>
 {%endif%}
 {% if is_manager %}
-<div class="ui segment mt0 backdark textw">
+<div class="ui segment mt0 backdark textw pb10">
     <div class="ui grid stackable">
         {% if hisprofile.is_student %}
         <div class="eight wide column pr5">
@@ -14,7 +14,7 @@
                 <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
                 <select id="pay_for_group">
                     {%for squad in hissquads%}
-                    <option value="{{squad.id}}">{{squad.title}}</option>
+                        <option value="{{squad.id}}">{{squad.title}}</option>
                     {%endfor%}
                 </select>
             </form>
@@ -22,7 +22,7 @@
         </div>
         {%endif%}
         <div class="eight wide column pr5">
-            <div class="pt5">
+            <div class="pb5">
                 {% if hisprofile.is_student %}
                 <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
                 <a class="ui button mini mb10" onclick="$('.payment_history').modal('show')">История оплаты</a>

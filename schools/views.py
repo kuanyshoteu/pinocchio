@@ -248,8 +248,6 @@ def school_crm(request):
     time_periods = school.time_periods.all()
     managers = None
     is_director = is_profi(profile, 'Director')
-    if is_director:
-        return redirect("schools:crm_all")        
     theprofile = profile
     if is_profi(profile, 'Moderator'):
         theprofile = school.people.first()
@@ -314,7 +312,8 @@ def school_crm_all(request):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
-        "page":"crm",        
+        "page":"crm",
+        "crm_all":True,        
     }
     return render(request, "school/crm.html", context)
 
@@ -1240,7 +1239,6 @@ def get_card_info(request):
         for squad in profile.squads.filter(shown=True):
             crnt = nms.filter(squad=squad)
             if len(crnt) > 0:
-                print('2')
                 crnt = crnt[0]
                 bills.append([squad.title, crnt.money, squad.lesson_bill, squad.bill,squad.id])
     data = {
@@ -1662,11 +1660,14 @@ def get_extra_cards(request):
     if request.GET.get('column') and request.GET.get('page'):
         page = int(request.GET.get('page'))+1
         column = CRMColumn.objects.get(id=int(request.GET.get('column')))
-        if profile.skill:
+        if profile.skill and request.GET.get('all') == 'no':
             if profile.skill.crm_show_free_cards:
                 res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
         if res == []:
-            res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
+            if request.GET.get('all') == 'yes':
+                res = column.cards.filter(school=school).prefetch_related('hashtags')
+            else:
+                res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
         if len(res) <= (page-1)*20:
             return JsonResponse({"Ended":True})
         p = Paginator(res, 20)

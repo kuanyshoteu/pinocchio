@@ -737,6 +737,17 @@ a{
 .subject_cost{
   height: 33px;line-height: 10px;
 }
+.dflex{
+  display: flex;
+}
+.dinline{
+  display: inline-block;
+}
+.marker{
+  border-radius: 5px;
+  padding: 2px !important;
+  width: 30px;
+}
 .crm_marker{
   background-color: #21BA45 !important;
   padding: 2px 2px 4px 2px !important;

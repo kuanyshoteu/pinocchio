@@ -67,7 +67,6 @@
                         </form>
                     </div>
                 </div>
-
                 <div class="ui segment mb0" style="display: flex;">
                     <img src="{% static 'images/chartcircle.png'%}" style="width: 30px;border-radius: 3px;">
                     <div class="pt5 pl15">
@@ -96,22 +95,43 @@
                 </div>
                 <div class="ui modal sq_finance full-h">
                     <i class="close icon"></i>
-                    <div class="content">
+                    <div class="content text15">
                         <div class="text-center">
-                            <b class="text15">NJ</b>
+                            <b style="font-size: 19px;">NJ</b>
                             <br>
                             Учитель: 
                             <a href="">isdjfi</a>
                         </div>
-                        <b>Стоимость посещения данной группы:</b>
-                        {% if squad.lesson_bill > 0 %}
-                            <span class="underline">{{ squad.lesson_bill }}тг за урок</span>
-                            <br>
-                        {% endif %}
-                        {% if squad.bill > 0 %}
-                            <span class="underline">{{ squad.bill }}тг в месяц</span>
-                            <br>
-                        {% endif %}
+                        <div class="mb10">
+                            Группа проходит курсы: 
+                            <div class="ui segment dinline pt5 pb5 ml10">
+                                Оувоуш <i>30000тг в месяц</i>
+                            </div>
+                        </div>
+                        <div class="mb15">
+                            <b>Стоимость посещения данной группы:</b>
+                            <span>30000тг в месяц</span>
+                        </div>
+                        <div class="ui grid no_margin">
+                            <div class="four wide column pl0 pt0">
+                                <div class="ui segment text-center pt5 pb5">
+                                    <b>Омар Жолдубаев</b>
+                                    <br>
+                                    Оплачено за 1 месяцев
+                                    <br>
+                                    Первое занятие: 25.10.2019
+                                </div>
+                            </div>
+                            <div class="four wide column pl0 pt0">
+                                <div class="ui segment text-center pt5 pb5">
+                                    <b>Омар Жолдубаев</b>
+                                    <br>
+                                    Оплачено за 1 месяцев
+                                    <br>
+                                    Первое занятие: 25.10.2019
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="ui segment backdark mt0 textw">

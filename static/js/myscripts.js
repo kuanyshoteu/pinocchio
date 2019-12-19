@@ -1045,12 +1045,15 @@
         column = this_.attr('id')
         page = this_.attr('page')
         var licenseElement = this_.get(0);
+        all = 'no'
+        if ($('.current_card').attr('all') == 'yes') {all = 'yes'}
         if ((licenseElement.scrollTop + licenseElement.offsetHeight) >= licenseElement.scrollHeight) {
             $.ajax({
                 url: url,
                 data: {
                     'column':column,
                     'page':page,
+                    'all':all,
                 },
                 dataType: 'json',
                 success: function (data) {

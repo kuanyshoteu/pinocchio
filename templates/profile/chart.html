@@ -3,12 +3,12 @@
 <div class="ui segment mb0 text15">
     Результаты
 </div>
-<div class="ui segment mt0">
-    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Успеваемость </span>
+<div class="ui segment mt0 pt5">
+    <div class="dinline marker mr5" style="background-color:rgba(236,83,62,1);"></div>
+    <div class="dinline">Успеваемость </div>
     <br>
-    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Посещаемость </span>
+    <div class="dinline marker mr5" style="background-color: rgba(16,133,135,1);"></div>
+    <div class="dinline">Посещаемость </div>
     <br>
     <canvas style="padding-right: 25px;" id="canvas1" height="400" width="500"></canvas>
 </div>
@@ -18,29 +18,19 @@
     Классы
 </div>
 <div class="ui segment mt0">
-    <div class="ui segment" style="padding: 2px;background-color: #daec04;width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">1ЛД-1 </span>
-    <br>
-    <div class="ui segment" style="padding: 2px;background-color: #296847;width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">2ЛД-2 </span>
-    <br>
-    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">2 Прог-1 </span>
-    <br>
-    <div class="ui segment" style="padding: 2px;background-color: #192f54;width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Класс 4 </span>
-    <br>
+    <div class="dinline marker mr5" style="background-color: rgba(16,133,135,1);"></div>
+    <div class="dinline">Группа</div>
     <canvas style="padding-right: 25px;" id="canvas2" height="400" width="500"></canvas>
 </div>
 <div class="ui segment mb0 text15">
     Учителя
 </div>
 <div class="ui segment mt0">
-    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Успеваемость </span>
+    <div class="dinline marker mr5" style="background-color: rgba(16,133,135,1);"></div>
+    <div class="dinline">Успеваемость</div>
     <br>
-    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Посещаемость </span>
+    <div class="dinline marker mr5" style="background-color: rgba(16,133,135,1);"></div>
+    <span>Посещаемость </span>
     <br>
     <canvas style="padding-right: 25px;" id="canvas3" height="400" width="500"></canvas>
 </div>
@@ -50,11 +40,11 @@
     Менеджеры
 </div>
 <div class="ui segment mt0">
-    <div class="ui segment" style="padding: 2px;background-color: rgba(16,133,135,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Задачи </span>
+    <div class="dinline marker mr5" style="background-color: rgba(16,133,135,1);"></div>
+    <span>Задачи </span>
     <br>
-    <div class="ui segment" style="padding: 2px;background-color: rgba(236,83,62,1);width: 30px;display: inline-block;margin-bottom: 2px;margin-right: 5px;"></div>
-    <span style="color: #222">Работа с клиентами </span>
+    <div class="dinline marker mr5" style="background-color: rgba(16,133,135,1);"></div>
+    <span>Работа с клиентами </span>
     <br>
     <canvas style="padding-right: 25px;" id="canvas4" height="400" width="500"></canvas>
 </div>
@@ -94,33 +84,6 @@ var squads = {
         pointHighlightFill: "#fff",
         pointHighlightStroke: "rgba(16,133,135,1)",
         data: ["28.940", "31.397", "32.235", "58.235", "85.636", "47.271", "95.667", "100.554"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "#296847",
-        pointColor: "#296847",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["127.283", "125.147", "124.489", "116.783", "111.696", "110.563", "105.469", "104.332"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "#192f54",
-        pointColor: "#192f54",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["93", "147", "189", "183", "196", "163", "169", "132"]
-    }, {
-        label: "SES 8.9",
-        fillColor: "rgba(255,255,255,0)",
-        strokeColor: "rgba(236,83,62,1)",
-        pointColor: "rgba(236,83,62,1)",
-        pointStrokeColor: "#fff",
-        pointHighlightFill: "#fff",
-        pointHighlightStroke: "rgba(236,83,62,1)",
-        data: ["183", "125", "104.489", "106.783", "101.696", "120.563", "135.469", "114.332"]
     }]
 }
 var teachers = {

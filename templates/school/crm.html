@@ -29,12 +29,14 @@
                             <div class="wide column pl0 pb0" style="width: 28.13px;">
                                 <button class="ui button small blue search_by_tags" type="submit" onclick="return false"><i class="icon search" style="color: white;"></i></button>
                             </div>
+                            {%if not crm_all%}
                             <div class="wide column pb0" style="width: 155px;">
                                 <div class="ui toggle checkbox segment" style="padding: 4px 5px;margin-top: 1px;">
                                   <input type="checkbox" {% if theprofile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
                                   <label style="padding-left: 55px;">Свободные</label>
                                 </div>
                             </div>
+                            {%endif%}
                             <div class="filter wide column">
                                 <div class="filter-element">
                                     <div class="filter-title">Предметы <i class="icon caret down" style="float: right;"></i></div>
@@ -142,7 +144,7 @@
         <a class="ui button mini red" onclick="$('#delete_card_modal').modal('hide')">Нет</a>
     </div>
 </div>
-<span style="display: none;" id="0" class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
+<span style="display: none;" id="0" {%if crm_all%}all='yes'{%endif%} class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}" get_card_info="{% url 'schools:get_card_info' %}"></span>
