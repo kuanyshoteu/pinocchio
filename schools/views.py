@@ -882,18 +882,27 @@ def edit_card(request):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         edit = '***Редактирование*** '
+        student = card.card_user
         if card.name != request.GET.get('name'):
             edit = edit + "Имя: " + card.name + " -> " + request.GET.get('name') + "; "
+            if student:
+                student.first_name = request.GET.get('name')
         if card.phone != request.GET.get('phone'):
             edit = edit + "Номер: " + card.phone + " -> " + request.GET.get('phone') + "; "
+            if student:
+                student.phone = request.GET.get('phone')
         if card.extra_phone != request.GET.get('extra_phone'):
             edit = edit + "Дополнительный номер: " + card.extra_phone + " -> " + request.GET.get('extra_phone') + "; "
         if card.mail != request.GET.get('mail'):
             edit = edit + "Почта: " + card.mail + " -> " + request.GET.get('mail') + "; "
+            if student:
+                student.mail = request.GET.get('mail')
         if card.parents != request.GET.get('parents'):
             edit = edit + "Родители: " + card.parents + " -> " + request.GET.get('parents') + "; "
         if card.comments != request.GET.get('comment'):
             edit = edit + "Коммент: " + card.comments + " -> " + request.GET.get('comment') + "; "
+        if student:
+            student.save()
         card.name = request.GET.get('name')
         card.phone = request.GET.get('phone')
         card.extra_phone = request.GET.get('extra_phone')

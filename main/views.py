@@ -1232,12 +1232,21 @@ def moderator_run_code(request):
     # check_student_nms()
     # moder_update_bills()
     # delete_all_fcs()
-    create_fcs()
-    update_student_start_dates()
-    update_finance_start_dates()
+    # create_fcs()
+    # update_student_start_dates()
+    # update_finance_start_dates()
+    update_names()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
+def update_names():
+    for student in Profile.objects.filter(is_student=False):
+        if len(student.card.all()) == 1:
+            card = student.card.first()
+            student.first_name = card.name
+            student.save()
+        else:
+            print(student.first_name, len(student.card.all()))
 def searching_subjects(request):
     profile = get_profile(request)
     if is_profi(profile, 'Moderator') == False:
