@@ -168,7 +168,8 @@ def school_info(request):
                 banner = school.banners.create()
                 banner.image_banner = file
                 banner.save()
-                return redirect("schools:info")
+                additional = '?type=moderator&mod_school_id='+str(school.id)
+                return redirect(school.get_absolute_url()+additional)
     manager_prof = Profession.objects.get(title='Manager')
     managers = school.people.filter(profession=manager_prof)
     teacher_prof = Profession.objects.get(title='Teacher')
@@ -1756,6 +1757,59 @@ def payment_history(request):
 
     data = {
         "res":res,
+    }
+    return JsonResponse(data)
+
+def group_finance(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    res = []
+    res_squad = []
+    if request.GET.get('id'):
+        squad = school.groups.get(id=int(request.GET.get('id')))
+        teacher = squad.teacher
+        sq_cost = ''
+        if squad.lesson_bill > 0:
+            sq_cost = str(squad.lesson_bill)+' за урок | '
+        if squad.bill > 0:
+            sq_cost += str(squad.bill)+' в месяц | '
+        if squad.course_bill > 0:
+            sq_cost += str(squad.course_bill)+' за курс'
+        res_squad = [squad.title,
+            teacher.first_name,
+            teacher.get_absolute_url(),
+            sq_cost]
+        res_subjects = []
+        for subject in squad.subjects.all():
+            cost = str(subject.cost)
+            if subject.cost_period == 'month':
+                cost += " в месяц"
+            elif subject.cost_period == 'lesson':
+                cost += " за урок"
+            elif subject.cost_period == 'course':
+                cost += " за курс"
+            color_back = subject.color_back
+            if color_back == '':
+                color_back = 'rgb(49, 58, 87)'
+            res_subjects.append([subject.title, cost, color_back])
+        for nm in squad.need_money.all():
+            name = nm.card.name
+            url = nm.card.card_user.get_absolute_url()
+            fcs = nm.finance_closed.all()
+            closed_months = 0
+            first_present = '<i>Еще не было посещения</i>'
+            if len(fcs) > 0:
+                fc = fcs[0]
+                closed_months = fc.closed_months
+                first_present = 'Первое занятие: '
+                first_present += fc.first_present.strftime('%d.%m.%Y')
+            res.append([name,url,first_present,closed_months])
+
+    data = {
+        "res":res,
+        "res_subjects":res_subjects,
+        "res_squad":res_squad,
     }
     return JsonResponse(data)
 
