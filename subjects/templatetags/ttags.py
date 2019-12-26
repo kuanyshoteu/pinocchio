@@ -116,7 +116,10 @@ def rating_filter(profile):
     if squad != None:
         students_query = squad.students.all()
     else:
-        students_query = school.people.filter(is_student=True)
+        students = set()
+        for sq in school.groups.all():
+            students = chain(students, sq.students.all())
+        students_query = set(students)
     if profile.skill.crm_subject:
         students_query = students_query.filter(crm_subject_connect=profile.skill.crm_subject)
     if profile.skill.crm_age:
