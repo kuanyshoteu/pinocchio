@@ -118,7 +118,7 @@ def rating_filter(profile):
     else:
         students = set()
         for sq in school.groups.all():
-            students = chain(students, sq.students.all())
+            students = chain(students, sq.students.filter(is_student=True))
         students_query = set(students)
     if profile.skill.crm_subject:
         students_query = students_query.filter(crm_subject_connect=profile.skill.crm_subject)
