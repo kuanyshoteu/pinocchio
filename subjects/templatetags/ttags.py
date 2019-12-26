@@ -278,17 +278,20 @@ def get_current_attendance(subject, squad):
         res = []
         i = 0
         counter = 0
+        students = squad.students.all()
+        print('teacher',students.filter(is_student=False))
         subject_materials = subject.materials.prefetch_related('sm_atts')
-        len_squad_students = len(squad.students.all())
+        len_squad_students = len(students)
         if material_number > len(subject_materials):
             material_number = len(subject_materials)
         while material_number - i > 0:
             if counter == 4:
                 break
             sm = list(subject_materials)[material_number - i-1]
-            if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
+            print('nums',len(sm.sm_atts.filter(squad = squad, student__in=students)), len_squad_students)
+            if len(sm.sm_atts.filter(squad = squad, student__in=students)) < len_squad_students:
                 create_atts(squad, sm, subject)
-            attendances = sm.sm_atts.filter(squad = squad)
+            attendances = sm.sm_atts.filter(squad = squad, student__in=students)
             get_date_results = '_'
             if len(attendances)>0:
                 get_date_results = get_date(attendances[0].subject_materials, squad)
@@ -302,9 +305,9 @@ def get_current_attendance(subject, squad):
             i = 1
             while counter < 4 and i < 10 and len(subject_materials) > material_number + i-1:
                 sm = list(subject_materials)[material_number + i-1]
-                if len(sm.sm_atts.filter(squad = squad)) < len_squad_students:
+                if len(sm.sm_atts.filter(squad = squad, student__in=students)) < len_squad_students:
                     create_atts(squad, sm, subject)
-                attendances = sm.sm_atts.filter(squad = squad)
+                attendances = sm.sm_atts.filter(squad = squad, student__in=students)
                 get_date_results = '_'
                 if len(attendances)>0:
                     get_date_results = get_date(attendances[0].subject_materials, squad)
@@ -312,7 +315,7 @@ def get_current_attendance(subject, squad):
                     res = [[attendances, '_','_']] + res
                     res.append([attendances, '_','_'])
                 else:
-                    res.append([attendances, get_date_results[0], get_date_results[1],sm.made])
+                    res.append([attendances, get_date_results[0], get_date_results[1]])
                 counter += 1
                 i += 1
         return res
@@ -372,7 +375,7 @@ def create_atts(squad, subject_materials, subject):
     for student in squad.students.all():
         qs = subject_materials.sm_atts.filter(student=student)
         if len(qs) == 0:
-            Attendance.objects.create(
+            Attendance.objects.get_or_create(
                 subject_materials = subject_materials,
                 school=subject.school,
                 teacher=squad.teacher, 
