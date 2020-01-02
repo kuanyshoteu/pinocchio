@@ -18,7 +18,6 @@
         <div class="ui grid">
             {% include 'left_menu.html' %}
             <div class="wide column" style="width: 80%;">
-                {% include 'school/head.html' %}
                 <div class="ui segment mb0 text14" style="display: flex;">
                     <img src="{% static 'images/excel.png' %}" style="width: 30px;"> 
                     <div class="pt5">Отчет по бухгалтерии</div>
@@ -54,7 +53,7 @@
                         </div>-->    
                     </div>
                     <div style="display: flex;">
-                        <form class="ui form pt5" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+                        <form class="ui form pt5 mb0" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
                             <input type="date" name="first_report" style="width: 175px;height: 30px;" value="{{ weekago }}">
                             <span class="ml15 mr15">—</span>
                             <input type="date" name="second_report" style="width: 175px;height: 30px;" value="{{ today }}">
@@ -67,15 +66,31 @@
                         </form>
                     </div>
                 </div>
+                {% if instance.version == 'standart' or instance.version == 'business' %}
+                    <div class="ui segment mb0" style="display: flex;">
+                        <img src="{% static 'images/settings.png' %}" style="width: 30px;height: 30px;border-radius: 3px;"> 
+                        <div class="pt5 pl5" style="font-size: 13px;">Расходы</div>
+                        <div class="ui pointing below label no_margin green success_new_money" style="display: none;margin-left: 100px !important;">
+                            Расходы записаны, можете посмотреть в истории
+                        </div>
+                    </div>
+                    <div class="ui segment mt0 backdark textw" style="display: flex;">
+                        <form class="ui form mb0" style="display: flex;">
+                            <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
+                            <input type="number" class="new_money_amount" name="" placeholder="Сумма">
+                        </form>
+                        <a style="height: 33px;" class="ui button blue mini no_margin new_money_object" url="{{instance.new_money_object}}">Добавить</a>
+                    </div>
+                {%endif%}
                 <div class="ui segment mb0" style="display: flex;">
-                    <img src="{% static 'images/chartcircle.png'%}" style="width: 30px;border-radius: 3px;">
-                    <div class="pt5 pl15">
+                    <img src="{% static 'images/chartcircle.png'%}" style="width: 32px;height: 30px;border-radius: 3px;">
+                    <div class="pl5 pt5">
                         На счету <b style="font-size: 14px;">{{ school_money }}тг</b> 
-                        <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
+<!--                         <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
                             <a class="ui button mini green report_period" value="week" style="height: 29px;">Неделю</a>
                             <a class="ui button mini report_period" value="month" style="height: 29px;">Месяц</a>
                             <a class="ui button mini report_period" value="year" style="height: 29px;">Год</a>
-                    </div>
+ -->                    </div>
                 </div>
                 <div class="ui segment no_margin backdark textw">
                     <div class="ui grid">                        
