@@ -17,26 +17,16 @@
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
-                {% if is_director %}
-                {% include 'school/head.html' %}
-                {% endif %}
-                <div class="ui segment mb0">
-                    <div class="ui grid">
-                        <div class="one wide column">
-                            <i class="icon list" style="font-size: 17px;"></i>
-                        </div>
-                        <div class="fifteen wide column" style="padding-right: 25px;font-size: 15px;">
-                            Список студентов
-                        </div>
-                    </div>
+            <div class="wide column" style="width: 80%;">
+                <div class="ui segment mb0 text15">
+                    <b>Оплата студентов</b>
                 </div>
-                <div class="ui segment no_margin">
+                <div class="ui segment no_margin no_padding">
                     <form class="ui form">  
-                        <div class="ui grid stackable">
+                        <div class="ui grid stackable no_margin">
                             <div class="four wide column pb15">
                                 Выберите <b>предмет</b>:
-                                <div class="controls" style="margin-top: 10px"> 
+                                <div class="controls"> 
                                     <select class="crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
                                         {% if profile.skill.crm_subject %}
                                             <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
@@ -52,7 +42,7 @@
                             </div>
                             <div class="four wide column pb15">
                                 Выберите <b>возраст</b>:
-                                <div class="controls" style="margin-top: 10px"> 
+                                <div class="controls"> 
                                     <select class="crm_option" id="crm_age_mobile" url="{{ instance.crm_option_url }}" option="age"> 
                                         {% if profile.skill.crm_age %}
                                             <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
@@ -67,13 +57,13 @@
                                 </div>                            
                             </div>
                             <div class="four wide column ">
-                                Выберите <b>класс</b>:
-                                <div class="controls" style="margin-top: 10px"> 
+                                Выберите <b>группу</b>:
+                                <div class="controls"> 
                                     <select class="crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
                                         {% if profile.rating_squad_choice.first %}
                                             <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
                                         {% endif %}
-                                        <option value="-1">Все классы</option>
+                                        <option value="-1">Все группы</option>
                                         {% for squad in squads %}
                                             {% if squad != profile.rating_squad_choice.first %}
                                             <option value="{{ squad.id }}">{{ squad.title }}</option>
@@ -94,52 +84,19 @@
                       <div class="animation"><div class="circle five"></div></div>
                       <div class="animation"><div class="circle six"></div></div>
                     </div>                            
-                    <table id="keywords" cellspacing="0" class="full-w no_margin" cellpadding="0" style="background: #4A4A4A;">
-                        <thead>
-                            <tr>
-                                <th style="width: 30%"><span><i class="sort alphabet down icon"></i> Имя</span></th>
-                                <th><span>Оплата</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for student in profile|rating_filter %}
-                                <tr style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
-                                    <td style="text-align: left;padding: 7px 15px;">
-                                        <div style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
-                                            <span style="margin-right: 15px;">{{ forloop.counter }}.</span>
-                                            <a href="{{ student.get_absolute_url }}" style="color: #fff;">
-                                                {% if student.image %}
-                                                <img class="ui image avatar" src="{{ student.image.url }}">
-                                                {% else %}
-                                                <img class="ui image avatar" src="{% static 'images/nophoto.png' %}">
-                                                {% endif %}
-                                                {{ student.first_name }}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 7px 15px;">
-                                        <form class="ui form grid" >
-                                            <div class="ten wide column" style="display: flex;">
-                                                <input class="full-h payment_amount{{ student.id }} mb0"" placeholder="Сумма" type="number" name="">
-                                                <select id="pay_for_group{{ student.id }}">
-                                                    {%for squad in student.squads.all%}
-                                                    <option value="{{squad.id}}">{{squad.title}}</option>
-                                                    {%endfor%}
-                                                </select>
-                                            </div>
-                                            <div class="three wide column no_padding_side">
-                                                <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ student.id }}')">Оплатить</a>
-                                                <i class="check icon green success_payment{{ student.id }}" style="display: none;"></i>
-                                            </div>
-                                            <div class="three wide column pr0">
-                                                <a class="ui button mini full-w" onclick="payment_history('{{ student.id }}')">История оплаты</a>
-                                            </div>
-                                        </form>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="full-w no_margin backdark">
+                    {% for student in profile|rating_filter %}
+                        <div class="{% if forloop.counter|is_odd %}backdarklow{% endif %} pt5 pb5 pl15 pr15" style="display: flex;">
+                            <div class="pt10" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 200px;">
+                                <span>{{ forloop.counter }}.</span>
+                                <a href="{{ student.0.get_absolute_url }}" class="textw">
+                                    <b>{{ student.0.first_name }}</b>
+                                </a>
+                            </div>
+                            {%include 'school/payment_student_form.html' %}
+                        </div>
+                    {% endfor %}
+                    </div>
                 </div>
                 <div class="ui modal payment_history" style="height: 100%;">
                     <i class="close icon"></i>
@@ -170,12 +127,10 @@
         </div>
     </div>
 </div>
-<span class="data" payment_history="{% url 'schools:payment_history' %}"></span>
+<span class="data" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
 <script type="text/javascript">
-    function make_payment(url, id) {
-        amount = $('.payment_amount'+id).val()
-        this_ = document.getElementById('pay_for_group'+id);
-        group_id = this_.options[this_.selectedIndex].value;
+    function make_payment(url, id, group_id) {
+        amount = $('.payment_amounts'+id+'g'+group_id).val()
         $('.success_payment').hide()
         $.ajax({
             url: url,
@@ -186,8 +141,8 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.payment_amount'+id).val('')
-                $('.success_payment'+id).show()
+                $('.payment_amounts'+id+'g'+group_id).val('')
+                $('.success_payments'+id+'g'+group_id).show()
             }
         })        
     };

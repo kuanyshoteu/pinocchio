@@ -71,6 +71,10 @@
                     <img src="{% static 'images/chartcircle.png'%}" style="width: 30px;border-radius: 3px;">
                     <div class="pt5 pl15">
                         На счету <b style="font-size: 14px;">{{ school_money }}тг</b> 
+                        <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
+                            <a class="ui button mini green report_period" value="week" style="height: 29px;">Неделю</a>
+                            <a class="ui button mini report_period" value="month" style="height: 29px;">Месяц</a>
+                            <a class="ui button mini report_period" value="year" style="height: 29px;">Год</a>
                     </div>
                 </div>
                 <div class="ui segment no_margin backdark textw">
@@ -93,44 +97,23 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="ui modal sq_finance full-h">
+                <div class="ui modal sq_finance">
                     <i class="close icon"></i>
                     <div class="content text15">
-                        <div class="text-center">
-                            <b style="font-size: 19px;">NJ</b>
+                        <div class="text-center mb10">
+                            <b class="group_title" style="font-size: 19px;"></b>
                             <br>
                             Учитель: 
-                            <a href="">isdjfi</a>
+                            <a class="group_teacher" href=""></a>
                         </div>
-                        <div class="mb10">
+                        <div class="mb10 group_subjects">
                             Группа проходит курсы: 
-                            <div class="ui segment dinline pt5 pb5 ml10 textw" style="background-color: rgb(242, 113, 28)">
-                                <b>Оувоуш <i>30000тг в месяц</i></b>
-                            </div>
                         </div>
                         <div class="mb15">
                             <b>Стоимость посещения данной группы:</b>
-                            <span>30000тг в месяц</span>
+                            <span class="sq_cost"></span>
                         </div>
-                        <div class="ui grid no_margin">
-                            <div class="four wide column pl0 pt0">
-                                <div class="ui segment text-center pt5 pb5">
-                                    <b>Омар Жолдубаев</b>
-                                    <br>
-                                    Оплачено за 1 месяцев
-                                    <br>
-                                    Первое занятие: 25.10.2019
-                                </div>
-                            </div>
-                            <div class="four wide column pl0 pt0">
-                                <div class="ui segment text-center pt5 pb5">
-                                    <b>Омар Жолдубаев</b>
-                                    <br>
-                                    Оплачено за 1 месяцев
-                                    <br>
-                                    Первое занятие: 25.10.2019
-                                </div>
-                            </div>
+                        <div class="ui grid no_margin sq_students">
                         </div>
                     </div>
                 </div>
@@ -146,7 +129,7 @@
     </div>
 </div>
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>
-<span class="salary_url" url="{{ instance.salary_url }}"></span>
+<span class="salary_url" group_finance="{%url 'schools:group_finance'%}" url="{{ instance.salary_url }}"></span>
 <span class="save_job_salary_url" url="{{ instance.save_job_salary }}"></span>
 
 {% endblock content %}

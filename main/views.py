@@ -816,6 +816,7 @@ def get_date_by_num(material_number, squad, subject,lectures):
     else:
         return '_'
 
+from dateutil.relativedelta import relativedelta
 def get_school_report(request):
     profile = get_profile(request)
     only_directors(profile)
@@ -1024,7 +1025,7 @@ def get_school_report(request):
         "school_money":school.money,
         "school_crnt":school, 
         "today":timezone.now().date().strftime('%Y-%m-%d'),
-        "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),    
+        "weekago":(timezone.now().date()-relativedelta(months=1)).strftime('%Y-%m-%d'),    
         "page":"finance",
     }
     return render(request, "school/report.html", context)
@@ -1235,9 +1236,26 @@ def moderator_run_code(request):
     # create_fcs()
     # update_student_start_dates()
     # update_finance_start_dates()
-    update_names()
+    # update_names()
+    # update_teachers_in_squads()
+    add_paydays()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
+
+def add_paydays():
+    for nm in NeedMoney.objects.all():
+        fc = nm.finance_closed.first()
+        if fc:
+            nm.pay_day = int(fc.first_present.strftime('%d'))
+            print(nm.card.name, nm.pay_day)
+            nm.save()
+
+def update_teachers_in_squads():
+    for t in Profile.objects.filter(is_student=False):
+        if t.first_name == 'Асхат':
+            print('yoyoyoy')
+        ss = t.squads.exclude(teacher=t)
+        t.squads.remove(*ss)
 
 def update_names():
     for student in Profile.objects.filter(is_student=True):
@@ -1323,7 +1341,8 @@ def create_fcs():
                         start=today,
                         first_present=today,
                         moneys=[0],
-                        bills=[subject.cost])
+                        bills=[subject.cost],
+                        pay_date=today,)
                 added_money = min(subject.cost - fc.moneys[-1], crnt)
                 fc.moneys[-1] += added_money
                 crnt -= added_money

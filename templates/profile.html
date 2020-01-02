@@ -23,21 +23,35 @@
             <div class="wide column" style="width: 84%;">
                 <div class="ui stackable grid info">
                     <div class="sixteen wide column left-side" style="padding: 14px 0;">
-                        <div class="twenty mitem" style="float: left;">
-                            {% include 'profile/avatar.html' %}
-                        </div>
-                        <div class="eighty mitem" style="padding: 0 14px;float: left;">
-                            {% include 'profile/main_info.html' %}
-                        </div>
-                    </div>
-                    <div class="sixteen wide column left-side" style="padding: 0 !important;">
-                        <div class="twenty mitem" style="padding: 0;float: left;">
-                            <div class="not_in_mobile">
-                                {% include 'profile/circle_chart.html' %}
-                                {% include 'profile/chart.html' %}
+                        <div class="twenty" style="float: left;">
+                            <div style="position: fixed;">
+                                {% include 'profile/avatar.html' %}
+                                <div class="ui segment">
+                                    <p class="text13">Школа:
+                                        {%for school in hisprofile.schools.all %}
+                                        <a href="{{ school.landing }}" class="mr10">{{ school.title }}</a>
+                                        {%endfor%}
+                                    </p>
+                                    {%if not hisprofile.is_student%}
+                                    {%if hisprofile.job_categories.all|length > 0%}
+                                    <p class="text13">
+                                        Должности: 
+                                        {% if hisprofile.job_categories.all|length > 0 %}
+                                        {%for job in hisprofile.job_categories.all %}
+                                            {{ job.title }}
+                                        {%endfor%}
+                                        {%endif%}
+                                    </p>
+                                    {% endif %}                    
+                                    {% endif %}
+                                    <p class="text13">Телефон: {{ hisprofile.phone }}</p>
+                                    <p class="text13">Почта: {{ hisprofile.mail }}</p>
+                                </div>
                             </div>
+                            <div style="color: #f4f4f4">_</div>
                         </div>
-                        <div class="eighty" id="schedule" style="padding: 0 14px;float: left;">
+                        <div class="eighty" style="padding: 0 14px;float: left;">
+                            {% include 'profile/main_info.html' %}
                             {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 or is_manager %}
                                 {% include 'profile/payment.html' %}
                             {% if is_manager and hisprofile.is_student or is_director %}
@@ -59,7 +73,6 @@
                             </div>
                             {%endif%}
                         </div>
-                        <span style="display: none;" class="is_blurred" answer="no"></span>
                     </div>
                 </div>
             </div>

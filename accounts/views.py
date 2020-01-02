@@ -329,9 +329,10 @@ def att_present(request):
                 teacher_attendance.save()
                 teacher_attendance_id = teacher_attendance.id
             ##### Move CRMCard in columns
-            if card.column.id == 2:
-                card.column = CRMColumn.objects.get(id=3)
-                card.save()
+            if card.column:
+                if card.column.id == 2:
+                    card.column = CRMColumn.objects.get(id=3)
+                    card.save()
             ##### Teacher salary increase
             salary = 0
             if not profile in material.done_by.all():
@@ -374,7 +375,8 @@ def att_present(request):
                         moneys=[0],
                         bills=[subject.cost],
                         start=date1,
-                        first_present=date1)
+                        first_present=date1,
+                        pay_date=date1,)
                 if len(subject.subject_attendances.filter(student=attendance.student,squad=squad,present='present')) == 1:
                     if request.GET.get('status') == 'present':
                         fc.first_present=date1
@@ -536,7 +538,8 @@ def add_money(profile, school, squad, card, amount, manager):
                     start=today,
                     first_present=today,
                     moneys=[0],
-                    bills=[subject.cost])
+                    bills=[subject.cost],
+                    pay_date=today,)
             added_money = min(subject.cost - fc.moneys[-1], crnt)
             fc.moneys[-1] += added_money
             crnt -= added_money

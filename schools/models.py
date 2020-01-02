@@ -38,6 +38,8 @@ class School(models.Model):
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
     money = models.IntegerField(default=0)
+    money_update_person = models.CharField(max_length=50, default='')
+    money_update_date = models.DateTimeField(auto_now_add=True)
     version = models.CharField(max_length=10, default='')
     sms_amount = models.IntegerField(default=0)
     pay_day_diff = models.IntegerField(default=5)

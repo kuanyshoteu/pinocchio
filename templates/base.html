@@ -74,7 +74,7 @@
         {% if request.user.is_authenticated %}
         <div class="item not_in_mobile">
             <form id="search-form" class="ui form" style="margin: 0 1rem 0 0">
-                <textarea id="search-input" url="/search/" type="text" style="margin-bottom: 0;" placeholder="Поиск"></textarea>
+                <textarea class="mb0" id="search-input" url="/search/" type="text" placeholder="Поиск"></textarea>
                 <div class="search-bar">
                     <p class="search-list-title search-list-title-people">Люди</p>
                     <ul class="search-list-people search-list">
@@ -116,7 +116,30 @@
                 <a class="ui button mini ml10 darkblue" href="{% url 'schools:info' %}">
                     Управление
                 </a>
-                <a class="ui button mini ml10 darkblue" href="{% url 'schools:get_school_report'%}">На счету: </span> <b style="color: #e0f310;" id="number-counter">{{ school_money }}</b> <span style="color: #e0f310;">тг.</a>
+                <a class="ui button mini ml10 darkblue" href="{% url 'schools:get_school_report'%}">
+                    На счету: 
+                    <b style="color: #e0f310;" id="school_money">
+                        {{ school_money }}тг.
+                    </b>
+                </a>
+                <a update_url="{%url 'schools:update_finance'%}" get_url="{% url 'schools:show_finance_update' %}" class="update_finance" style="height: 20px;">
+                    <i class="icon sync" style="color: #2D437C;font-size: 17px;"></i>
+                    <span id="hint_f" class="ui segment pt5 pb5 pl5 pr5" style="color: #222;width: 200px;display: none; position: absolute;">
+                        Последнее обновление:
+                        <div class="loading_small" id="loading_f_update" style="display: none;">
+                          <div class="animation"><div class="backwhite circle one"></div></div>
+                          <div class="animation"><div class="backwhite circle two"></div></div>
+                          <div class="animation"><div class="backwhite circle three"></div></div>
+                          <div class="animation"><div class="backwhite circle four"></div></div>
+                          <div class="animation"><div class="backwhite circle five"></div></div>
+                          <div class="animation"><div class="backwhite circle six"></div></div>
+                        </div> 
+                        <br>
+                        <span class="finance_update_author" status="hidden"></span>
+                        <br>
+                        <span class="finance_update_date"></span>
+                    </span>
+                </a>
             {% endif %} 
         </div>
         {% else %}

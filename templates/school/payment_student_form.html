@@ -1,0 +1,40 @@
+<form class="ui form mb0 mt5" style="display: flex;">
+    <div style="width: 570px;">
+    {%for squad in student.1%}
+        <div class="mb5" style="display: flex;width: 570px;">
+            <div style="width: 200px;">
+                <div class="ui segment pt5 pb5 pl5 pr5" style="border-radius: 3px; background-color: {%if squad.0.color_back == ""%}rgb(49, 58, 87);{%else%}{{squad.0.color_back}}{%endif%}"><b>{{squad.0.title}}</b></div>
+            </div>
+            <input style="width: 100px;" class="payment_amounts{{ student.0.id }}g{{squad.0.id}} ml5 pl10 pr5 pb5 pt5" placeholder="Сумма" type="number">
+            <a style="height: 29px;" class="ui button mini blue make_payment ml5" onclick="make_payment('{{ profile.make_payment }}', '{{ student.0.id }}', '{{squad.0.id}}')">Оплатить</a>
+            <div style="width: 14px;">
+                <i class="check icon green success_payment success_payments{{ student.0.id }}g{{squad.0.id}}" style="display: none;"></i>                
+            </div>
+            <div class="ml10 text13" style="width: 140px;">
+                Дата оплаты:<br>
+                <span id="payday_text{{ student.0.id }}g{{squad.0.id}}">{{squad.1}}</span> 
+                <a onclick="$('.block_change_pay_date').hide();$('#change_date{{ student.0.id }}g{{squad.0.id}}').show();"><i class="icon pen square textw"></i></a>
+                <br>
+                <div id="change_date{{ student.0.id }}g{{squad.0.id}}" class="block_change_pay_date" style="display: none;">
+                    <input style="width: 145px;" value="{{squad.2}}" id="payday_input{{ student.0.id }}g{{squad.0.id}}" class="pl5 pr0 pb5 pt0" type="date" name="">
+                    <a class="ui button mini blue pt5 pb5 mt5 change_pay_date" student="{{ student.0.id }}" group="{{squad.0.id}}" style="width: 135px;">
+                        Сохранить 
+                        <div class="loading_small payday_load{{ student.0.id }}g{{squad.0.id}}" style="display: none;">
+                          <div class="animation"><div class="backwhite circle one"></div></div>
+                          <div class="animation"><div class="backwhite circle two"></div></div>
+                          <div class="animation"><div class="backwhite circle three"></div></div>
+                          <div class="animation"><div class="backwhite circle four"></div></div>
+                          <div class="animation"><div class="backwhite circle five"></div></div>
+                          <div class="animation"><div class="backwhite circle six"></div></div>
+                        </div>
+                        <i style="display: none;" class="icon check textw ml5" id="paydate_check{{ student.0.id }}g{{squad.0.id}}"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {%endfor%}
+    </div>
+    <div class="ml10">
+        <a style="right: 0" class="ui button mini full-w pl5 pr5" onclick="payment_history('{{ student.0.id }}')">История оплаты</a>
+    </div>
+</form>

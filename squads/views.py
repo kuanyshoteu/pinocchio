@@ -214,7 +214,7 @@ def squad_update(request, slug=None):
         "form":form,
         "profile":profile,
         "all_teachers":all_teachers(school),
-        "squad_students":instance.students.all(),
+        "squad_students":instance.students.filter(),
         "all_students":free_students,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -337,15 +337,21 @@ def change_curator(request):
         school = squad.school
         is_in_school(profile, school)
         oldteacher = squad.teacher
-        teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
+        newname = '-'
+        squad.students.remove(oldteacher)
+        if request.GET.get('teacher_id') == "-1":
+            teacher = None
+        else:
+            teacher = Profile.objects.get(id = int(request.GET.get('teacher_id')) )
+            newname = teacher.first_name
+            squad.students.add(teacher)
         squad.teacher = teacher
         squad.save()
         if oldteacher:
-            text = 'Изменен учитель группы '+squad.title+' '+oldteacher.first_name+' -> '+teacher.first_name
+            text = 'Изменен учитель группы '+squad.title+' '+oldteacher.first_name+' -> '+newname
         else:
-            text = 'Установлен учитель '+teacher.first_name+' в группу '+squad.title
+            text = 'Установлен учитель '+newname+' в группу '+squad.title
         squad.squad_histories.create(action_author=profile,edit=text)
-
     data = {
     }
     return JsonResponse(data)
@@ -427,7 +433,8 @@ def add_student_to_squad(student, squad, manager_profile):
                 start=today,
                 first_present=today,
                 moneys=[0],
-                bills=[subject.cost])
+                bills=[subject.cost],
+                pay_date=today,)
     school = squad.school
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
@@ -657,7 +664,8 @@ def add_subject_work(school, squad, subject):
                     start=today,
                     first_present=today,
                     moneys=[0],
-                    bills=[subject.cost])
+                    bills=[subject.cost],
+                    pay_date=today)
 
     squad.save()
 def delete_subject(request):

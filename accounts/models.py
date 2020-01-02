@@ -76,7 +76,7 @@ class Profile(models.Model):
     phone = models.TextField(blank = True,null = True, default = '')
     extra_phone = models.TextField(blank = True,null = True, default = '')
     image = models.ImageField(upload_to=upload_location, 
-            null=True, 
+            null=True,
             blank=True, 
             )
 
@@ -251,6 +251,13 @@ class Review(models.Model):
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='reviews')
     to_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='to_reviews')
     rating = models.IntegerField(default=0, null = True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['timestamp']
+
+class SchoolMoneyHistory(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_money_histories')
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='school_money_histories')
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['timestamp']

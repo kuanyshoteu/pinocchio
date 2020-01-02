@@ -2,6 +2,7 @@ from django import template
 from ..models import Lecture
 register = template.Library()
 from django.utils import timezone
+import datetime
 from datetime import timedelta
 from dateutil.relativedelta import *
 from itertools import chain
@@ -112,19 +113,53 @@ def cell_profile_lectures(cell, profile):
 @register.filter
 def rating_filter(profile):
     school = profile.schools.first()
+    cards = school.crm_cards.select_related('card_user')
     squad = profile.rating_squad_choice.first()
+    squads = school.groups.prefetch_related('students')
     if squad != None:
-        students_query = squad.students.all()
+        students = squad.students.filter(is_student=True)
     else:
-        students = set()
-        for sq in school.groups.all():
-            students = chain(students, sq.students.filter(is_student=True))
-        students_query = set(students)
+        students = school.people.filter(is_student=True)
     if profile.skill.crm_subject:
-        students_query = students_query.filter(crm_subject_connect=profile.skill.crm_subject)
+        students = students.filter(crm_subject_connect=profile.skill.crm_subject)
     if profile.skill.crm_age:
-        students_query = students_query.filter(crm_age_connect=profile.skill.crm_age)
-    return students_query
+        students = students.filter(crm_age_connect=profile.skill.crm_age)
+    res = []
+    for student in students:
+        if len(student.squads.all()) == 0:
+            continue
+        card = cards.filter(card_user=student)
+        if len(card) > 0:
+            card = card[0]
+        else:
+            continue
+        sq_res = []
+        for sq in squads.filter(students=student):
+            nm = sq.need_money.filter(card=card)
+            pay_date = '-'
+            pay_date_input = '-'
+            if len(nm) > 0:
+                nm = nm.last()
+                pay_date = get_pay_date(nm)
+            sq_res.append([sq, pay_date.strftime('%d %B'), str(pay_date)])
+        res.append([
+            student,
+            sq_res
+            ])
+    return res
+
+def get_pay_date(nm):
+    today = timezone.now().date()    
+    cnrt_day = today.strftime('%d')
+    crnt_mnth = today.strftime('%m')
+    crnt_year = today.strftime('%Y') 
+    pay_day = nm.pay_day
+    nm_date = datetime.datetime.strptime(str(pay_day)+'-'+crnt_mnth+'-'+crnt_year,"%d-%m-%Y").date()
+    if nm_date < today:
+        pay_date = nm_date + relativedelta(months=1)
+    else:
+        pay_date = nm_date
+    return pay_date
 
 @register.filter
 def cell_school_lectures(cell, profile):

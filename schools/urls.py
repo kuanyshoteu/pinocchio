@@ -70,4 +70,9 @@ urlpatterns = [
     url(r'^api/payment_history/', payment_history, name='payment_history'),
     url(r'^api/search_crm_cards/', search_crm_cards, name='search_crm_cards'),
     url(r'^api/get_card_info/', get_card_info, name='get_card_info'),
+    url(r'^api/group_finance/', group_finance, name='group_finance'),
+    url(r'^api/send_login_url/', send_login_url, name='send_login_url'),
+    url(r'^api/payday_change/', payday_change, name='payday_change'),
+    url(r'^api/show_finance_update/', show_finance_update, name='show_finance_update'),
+    url(r'^api/update_finance/', update_finance, name='update_finance'),
 ]

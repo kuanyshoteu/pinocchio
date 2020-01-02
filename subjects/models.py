@@ -207,6 +207,7 @@ class FinanceClosed(models.Model): ### Rename to SubjectBill
     need_money = models.ForeignKey(NeedMoney, null=True, on_delete = models.CASCADE, related_name='finance_closed')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='finance_closed')
     start = models.DateField(auto_now_add=False)
+    pay_date = models.DateField(auto_now_add=False)
     first_present = models.DateField(auto_now_add=False)
     moneys = ArrayField(models.IntegerField(null=True), default=list)
     bills = ArrayField(models.IntegerField(null=True), default=list)

@@ -1,5 +1,102 @@
+    $('.update_finance').click(function(e) {
+        url = $(this).attr('update_url')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    console.log('gkigog')
+                    $('#school_money').text('0тг')
+                    $('.finance_update_author').text(data.author)
+                    $('.finance_update_date').text(data.date)
+                }
+            }
+        })
+    })
+    $('.update_finance').on({
+        mouseenter: function () {
+            $('#hint_f').show()
+            author = $('.finance_update_author')
+            if (author.attr('status') == 'hidden') {
+                $('#loading_f_update').show()
+                url = $(this).attr('get_url')
+                $.ajax({
+                    url: url,
+                    data: {
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#loading_f_update').hide()
+                        $('.finance_update_author').text(data.author)
+                        $('.finance_update_date').text(data.date)
+                        author.attr('status', 'filled')
+                    }
+                })
+            }
+        },
+        mouseleave: function () {
+            $('#hint_f').hide()
+        }        
+    })
+    $('.change_pay_date').click(function(e) {
+        student = $(this).attr('student')
+        squad = $(this).attr('group')
+        load = $('.payday_load'+student+'g'+squad)
+        load.show()
+        check = $('#paydate_check'+student+'g'+squad)
+        paydate = $('#payday_input'+student+'g'+squad).val()
+        url = $('.data').attr('payday_change_url')
+        $.ajax({
+            url: url,
+            data: {
+                'student':student,
+                'squad':squad,
+                'paydate':paydate,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.pay_date) {
+                    load.hide()
+                    check.show()  
+                    $('#payday_text'+student+'g'+squad).text(data.pay_date)                  
+                }
+            }
+        })
+    })
     $('.open_sq_finance').click(function(e) {
-        $('.sq_finance').modal('show')  
+        $('.sq_finance').modal('show')
+        id = $(this).attr('id')
+        url = $('.salary_url').attr('group_finance')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.group_subjects').empty()
+                $('.sq_students').empty()
+                $('.group_title').text(data.res_squad[0])
+                $('.group_teacher').text(data.res_squad[1])
+                $('.group_teacher').attr('href', data.res_squad[2])
+                $('.sq_cost').text(data.res_squad[3])
+                for (var i = 0; i < data.res_subjects.length; i++) {
+                    title = data.res_subjects[i][0]
+                    cost = data.res_subjects[i][1]
+                    color = data.res_subjects[i][2]
+                    $('<div class="mt0 mb5 ui segment dinline pt5 pb5 ml10 textw" style="background-color: '+color+'"> <b>'+title+': <i>'+cost+'</i></b> </div>').appendTo('.group_subjects')
+                }
+                for (var i = 0; i < data.res.length; i++) {
+                    name = data.res[i][0]
+                    url = data.res[i][1]
+                    first_present = data.res[i][2]
+                    closed_months = data.res[i][3]
+                    $('<div class="four wide column pl0 pt0"><div class="ui segment text-center pt5 pb5"> <b>'+name+'</b><br>'+first_present+'<br> Оплачено за '+closed_months+' месяцев </div> </div>').appendTo('.sq_students')
+                }
+            }
+        })
     })
     $('.manager_office').click(function(e) {
         this_ = $(this)

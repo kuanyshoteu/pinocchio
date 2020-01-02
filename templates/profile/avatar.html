@@ -6,7 +6,7 @@
         width: 100%;
     }
 </style>                      
-<div id="responsive-avatar" class="ui raised card help0 help20 help40 help60" style="padding: 0; margin-top: 0;height: 250px;">
+<div id="responsive-avatar" class="ui raised card no_padding no_margin" style="height: 250px;">
     <div class="image" style="background-color: #fff">
         <div style="height: 200px;">
             {% if hisprofile.image %}
@@ -16,7 +16,7 @@
             {% endif %}
         </div>
         <div style="padding: 0 14px;">
-            <div class="hint0 hint20 hint40 hint60 highliter" style="position: absolute;margin:-40px 0 0 -210px;"></div>
+            <div class="highliter" style="position: absolute;margin:-40px 0 0 -210px;"></div>
             {% if profile == hisprofile %}
             <a href="{{ profile.change_url }}" class="ui button mini full-w" style="margin-top: 10px;">Редактировать</a>
             {% endif %}

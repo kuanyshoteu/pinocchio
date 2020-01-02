@@ -14,6 +14,7 @@ from .forms import SchoolForm
 from .models import *
 from subjects.models import *
 from squads.models import Squad,PaymentHistory,SquadHistory,DiscountSchool
+from subjects.templatetags.ttags import get_date, get_pay_date
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
 from papers.models import *
 from library.models import Folder
@@ -69,7 +70,7 @@ def school_rating(request):
 def school_payments(request):
     profile = get_profile(request)
     only_managers(profile)
-    school = is_moderator_school(request, profile)   
+    school = is_moderator_school(request, profile)
     context = {
         "profile":profile,
         "instance": school,
@@ -77,7 +78,6 @@ def school_payments(request):
         "payments":True,
         "subject_categories":school.school_subject_categories.all(),
         "subject_ages":school.school_subject_ages.all(),
-        "all_students":school.people.filter(is_student=True),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -714,11 +714,12 @@ def save_card_as_user(request):
             if card.saved == False:
                 password = random_password()
                 found = False
+                student = False
                 if card.mail != '' and len(Profile.objects.filter(mail=card.mail)) > 0:
-                    profile = Profile.objects.filter(mail=card.mail)[0]
+                    student = Profile.objects.filter(mail=card.mail)[0]
                     found = True
                 elif len(Profile.objects.filter(phone=card.phone)) > 0:
-                    profile = Profile.objects.filter(phone=card.phone)[0]
+                    student = Profile.objects.filter(phone=card.phone)[0]
                     found = True
                 if found:
                     ok_mail = prepare_mail(card.name, card.phone, card.mail, squad, None, True)
@@ -729,29 +730,7 @@ def save_card_as_user(request):
                     card = card,
                     edit = '*** Регистрация в ' + squad.title + ' ***',
                     )
-                if found == False:
-                    new_id = User.objects.order_by("id").last().id + 1
-                    user = User.objects.create(username='user' + str(new_id))
-                    user.set_password(password)
-                    user.save()
-                    profile = Profile.objects.get(user = user)
-                    profile.first_name = card.name
-                    profile.phone = card.phone
-                    profile.mail = card.mail
-                    profile.save()
-                card.card_user = profile
-                card.author_profile = manager_profile
-                card.timestamp = timezone.now()
-                card.last_groups = squad_id
-                card.saved = True
-                card.save()
-                profile.schools.add(school)
-                skill = Skill.objects.create()
-                profile.skill = skill
-                profile.save()
-                skill.confirmation_time = timezone.now()
-                skill.confirmed = True
-                skill.save()
+                profile = register_new_student(found,card,password,manager_profile,student,squad_id,school)
                 add_student_to_squad(profile, squad,manager_profile)
             else:
                 profile = card.card_user
@@ -882,62 +861,107 @@ def edit_card(request):
     if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone'):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
-        edit = '***Редактирование*** '
         student = card.card_user
-        if card.name != request.GET.get('name'):
-            edit = edit + "Имя: " + card.name + " -> " + request.GET.get('name') + "; "
-            if student:
-                student.first_name = request.GET.get('name')
-        if card.phone != request.GET.get('phone'):
-            edit = edit + "Номер: " + card.phone + " -> " + request.GET.get('phone') + "; "
-            if student:
-                student.phone = request.GET.get('phone')
-        if card.extra_phone != request.GET.get('extra_phone'):
-            edit = edit + "Дополнительный номер: " + card.extra_phone + " -> " + request.GET.get('extra_phone') + "; "
-        if card.mail != request.GET.get('mail'):
-            edit = edit + "Почта: " + card.mail + " -> " + request.GET.get('mail') + "; "
-            if student:
-                student.mail = request.GET.get('mail')
-        if card.parents != request.GET.get('parents'):
-            edit = edit + "Родители: " + card.parents + " -> " + request.GET.get('parents') + "; "
-        if card.comments != request.GET.get('comment'):
-            edit = edit + "Коммент: " + card.comments + " -> " + request.GET.get('comment') + "; "
-        if student:
-            student.save()
-        card.name = request.GET.get('name')
-        card.phone = request.GET.get('phone')
-        card.extra_phone = request.GET.get('extra_phone')
-        card.mail = request.GET.get('mail')
-        card.parents = request.GET.get('parents')
-        card.comments = request.GET.get('comment')
-        crnt_tag = ''
-        wright = False
-        hashtags = school.hashtags.all()
-        for l in request.GET.get('comment')+' ':
-            if wright:
-                crnt_tag += l
-            if l == '!':
-                wright = True
-            elif l == ' ':
-                if wright:
-                    crnt_tag = crnt_tag.replace(' ','')
-                    founttag = hashtags.filter(title=crnt_tag)
-                    if len(founttag) > 0:
-                        card.hashtags.add(founttag[0])
-                    else:
-                        founttag = school.hashtags.create(title=crnt_tag)
-                        card.hashtags.add(founttag)                        
-                wright = False
-                crnt_tag = ''
-        card.save()
-        CRMCardHistory.objects.create(
-            action_author = profile,
-            card = card,
-            edit = edit,
-            )
+        edit_card_detailed(card, student, school,request,profile)
     data = {
     }
     return JsonResponse(data)
+
+def send_login_url(request):
+    manager_profile = Profile.objects.get(user = request.user.id)
+    only_managers(manager_profile)
+    school = is_moderator_school(request, manager_profile)
+    ok = False
+    if request.GET.get('mail') and request.GET.get('id'):
+        card = school.crm_cards.filter(id=int(request.GET.get('id')))
+        if len(card) > 0:
+            card = card[0]
+            found = False
+            student = False
+            if card.mail != '' and len(Profile.objects.filter(mail=card.mail)) > 0:
+                student = Profile.objects.filter(mail=card.mail)[0]
+                found = True
+            elif len(Profile.objects.filter(phone=card.phone)) > 0:
+                student = Profile.objects.filter(phone=card.phone)[0]
+                found = True
+            # Set password
+            password = random_password()
+            register_new_student(found,card,password,manager_profile,student,-1,school)
+            student = card.card_user
+            edit_card_detailed(card, student, school,request,manager_profile)
+            if found:
+                user = student.user
+                user.set_password(password)
+                user.save()
+            # Send login and password to client email
+            mail = request.GET.get('mail')
+            head = 'Bilimtap Логин и Пароль'
+            text = "Здравствуйте " + student.first_name + "! "
+            text += "Вы зарегестрированы на сайте <a href='bilimtap.kz'>bilimtap.kz</a><br><br>"
+            login_text = "<br>Ваш логин: "+student.phone+" или "+student.mail
+            password_text = "<br>Ваш пароль (не говорите никому): "+password
+            text += login_text + password_text
+            send_email(head, text,[mail])
+            ok = True
+    data = {
+        "ok":ok,
+    }
+    return JsonResponse(data)
+
+def edit_card_detailed(card, student, school,request,profile):
+    edit = '***Редактирование*** '
+    print(card.name)
+    if card.name != request.GET.get('name') and card.name:
+        edit = edit + "Имя: " + card.name + " -> " + request.GET.get('name') + "; "
+        if student:
+            student.first_name = request.GET.get('name')
+    if card.phone != request.GET.get('phone'):
+        edit = edit + "Номер: " + card.phone + " -> " + request.GET.get('phone') + "; "
+        if student:
+            student.phone = request.GET.get('phone')
+    if card.extra_phone != request.GET.get('extra_phone'):
+        edit = edit + "Дополнительный номер: " + card.extra_phone + " -> " + request.GET.get('extra_phone') + "; "
+    if card.mail != request.GET.get('mail'):
+        edit = edit + "Почта: " + card.mail + " -> " + request.GET.get('mail') + "; "
+        if student:
+            student.mail = request.GET.get('mail')
+    if card.parents != request.GET.get('parents'):
+        edit = edit + "Родители: " + card.parents + " -> " + request.GET.get('parents') + "; "
+    if card.comments != request.GET.get('comment'):
+        edit = edit + "Коммент: " + card.comments + " -> " + request.GET.get('comment') + "; "
+    if student:
+        student.save()
+    card.name = request.GET.get('name')
+    card.phone = request.GET.get('phone')
+    card.extra_phone = request.GET.get('extra_phone')
+    card.mail = request.GET.get('mail')
+    card.parents = request.GET.get('parents')
+    card.comments = request.GET.get('comment')
+    crnt_tag = ''
+    wright = False
+    hashtags = school.hashtags.all()
+    for l in request.GET.get('comment')+' ':
+        if wright:
+            crnt_tag += l
+        if l == '!':
+            wright = True
+        elif l == ' ':
+            if wright:
+                crnt_tag = crnt_tag.replace(' ','')
+                founttag = hashtags.filter(title=crnt_tag)
+                if len(founttag) > 0:
+                    card.hashtags.add(founttag[0])
+                else:
+                    founttag = school.hashtags.create(title=crnt_tag)
+                    card.hashtags.add(founttag)                        
+            wright = False
+            crnt_tag = ''
+    card.save()
+    CRMCardHistory.objects.create(
+        action_author = profile,
+        card = card,
+        edit = edit,
+        )
 
 def open_card(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -952,6 +976,34 @@ def open_card(request):
         'res':res,
     }
     return JsonResponse(data)
+
+def register_new_student(found,card,password,manager_profile,profile,squad_id,school):
+    if found == False:
+        new_id = User.objects.order_by("id").last().id + 1
+        user = User.objects.create(username='user' + str(new_id))
+        user.set_password(password)
+        user.save()
+        profile = Profile.objects.get(user = user)
+        profile.first_name = card.name
+        profile.phone = card.phone
+        profile.mail = card.mail
+        profile.save()
+    if profile:
+        card.card_user = profile
+    card.author_profile = manager_profile
+    card.timestamp = timezone.now()
+    if squad_id > 0:
+        card.last_groups = squad_id
+    card.saved = True
+    card.save()
+    profile.schools.add(school)
+    skill = Skill.objects.create()
+    profile.skill = skill
+    profile.save()
+    skill.confirmation_time = timezone.now()
+    skill.confirmed = True
+    skill.save()
+    return profile
 
 def card_called(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -1599,7 +1651,6 @@ def get_manager_actions(request):
     }
     return JsonResponse(data)
 
-from subjects.templatetags.ttags import get_date
 def get_student_actions(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -1769,6 +1820,12 @@ def group_finance(request):
     if request.GET.get('id'):
         squad = school.groups.get(id=int(request.GET.get('id')))
         teacher = squad.teacher
+        if teacher:
+            teacher_name = teacher.first_name
+            teacher_url = teacher.get_absolute_url()
+        else:
+            teacher_name = ''
+            teacher_url = ''
         sq_cost = ''
         if squad.lesson_bill > 0:
             sq_cost = str(squad.lesson_bill)+' за урок | '
@@ -1777,8 +1834,8 @@ def group_finance(request):
         if squad.course_bill > 0:
             sq_cost += str(squad.course_bill)+' за курс'
         res_squad = [squad.title,
-            teacher.first_name,
-            teacher.get_absolute_url(),
+            teacher_name,
+            teacher_url,
             sq_cost]
         res_subjects = []
         for subject in squad.subjects.all():
@@ -1813,3 +1870,48 @@ def group_finance(request):
     }
     return JsonResponse(data)
 
+
+def payday_change(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    pay_date = False
+    if request.GET.get('student') and request.GET.get('squad') and request.GET.get('paydate'):
+        ok = True
+        student = school.people.get(id=int(request.GET.get('student')))
+        squad = school.groups.get(id = int(request.GET.get('squad')))
+        card = student.card.get(school=school)
+        nm = card.need_money.get(squad=squad)
+        nm.pay_day = int(request.GET.get('paydate').split('-')[-1])
+        nm.save()
+        pay_date = get_pay_date(nm).strftime('%d %B')
+    data = {
+        "pay_date":pay_date
+    }
+    return JsonResponse(data)
+
+def show_finance_update(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)    
+    data = {
+        "author":school.money_update_person,
+        "date":school.money_update_date.strftime('%d %B'),
+    }
+    return JsonResponse(data)
+
+def update_finance(request):
+    ok = False
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)    
+    school.money_update_person = profile.first_name
+    school.money_update_date = timezone.now()
+    school.money = 0
+    school.save()
+    data = {
+        "ok":True,
+        "author":profile.first_name,
+        "date":timezone.now().strftime('%d %B'),
+    }
+    return JsonResponse(data)

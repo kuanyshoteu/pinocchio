@@ -150,7 +150,7 @@
 <span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}" get_card_info="{% url 'schools:get_card_info' %}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
-<span class="data" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
+<span class="data" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
 <script>
     function make_payment_card(id) {
         amount = $('.payment_amount'+id).val()
@@ -286,7 +286,6 @@
                             '<div style="display:inline-block;">Оплата за месяц: '+ data.bills[i][3] +'</div>'
                     $(text).appendTo('.card_money_sch'+id)
                     $('<br><br>').appendTo('.card_money_sch'+id)
-                    console.log(data.bills[i][4], data.bills[i][0], $('.pay_for_group'+id))
                     $('<option value="'+data.bills[i][4]+'">'+data.bills[i][0]+'</option>').appendTo('.pay_for_group'+id)
                 }
             }
@@ -547,7 +546,6 @@
         position = window.getSelection().anchorOffset
         indexstart = position
         for (var i = position-1; i >= 0; i--) {
-            console.log(text[i])
             if (text[i] === '!') {
                 indexstart = i;
                 break;
@@ -563,6 +561,53 @@
     text.on('input', function () {
         closeHelper();
     })
+    function send_login_cl(id){
+        var name = $('.card_name' + id).val()
+        var phone = $('.card_phone' + id).val()
+        var extra_phone = $('.card_phone_extra' + id).val()
+        var mail = $('.card_mail' + id).val()
+        var parents = $('.card_parents' + id).val()
+        var comment = $('.card_comment' + id).text()
+        this_ = $(this)
+        ok = false
+        if (mail.length > 0) {
+            for (var i = mail.length - 1; i >= 0; i--) {
+                if (mail[i] == '@') {
+                    ok = true;
+                    break;
+                } 
+            }            
+        }
+        else{ok = true}
+        if (ok) {
+            $('.send_login_loading'+id).show()
+            $('.sended_login'+id).hide()
+            this_.addClass('disabled')
+            url = $('.data').attr('send_login_url')
+            $.ajax({
+                url: url,
+                data: {
+                    'name':name,
+                    'phone':phone,
+                    'extra_phone':extra_phone,
+                    'mail':mail,
+                    'comment':comment,
+                    'id':id,
+                    'parents':parents
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.ok) {
+                        $('.send_login_loading'+id).hide()
+                        $('.sended_login'+id).show()
+                        $('.icontable'+id).removeClass('green')
+                        $('.icontable'+id).addClass('blue')   
+                        this_.addClass('disabled')
+                    }
+                }
+            })
+        }
+    }
     function getSelectionCoords(win) {
         win = win || window;
         var doc = win.document;
