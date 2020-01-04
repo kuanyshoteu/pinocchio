@@ -214,7 +214,7 @@ def squad_update(request, slug=None):
         "form":form,
         "profile":profile,
         "all_teachers":all_teachers(school),
-        "squad_students":instance.students.filter(),
+        "squad_students":instance.students.filter(is_student=True),
         "all_students":free_students,
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
