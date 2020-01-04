@@ -1,18 +1,12 @@
 {% load crispy_forms_tags %}  
 {% load staticfiles %} 
-
-<style>
-    .textinput{
-        width: 100%;
-    }
-</style>                      
-<div id="responsive-avatar" class="ui raised card no_padding no_margin" style="height: 250px;">
+<div id="responsive-avatar" class="full-w ui raised card no_padding no_margin" style="height: 250px;">
     <div class="image" style="background-color: #fff">
         <div style="height: 200px;">
             {% if hisprofile.image %}
-            <div class="img" style="background-image: url({{ hisprofile.image.url }});"></div>
+            <div class="img full-w" style="background-image: url({{ hisprofile.image.url }});"></div>
             {% else %}
-            <div class="img" style="background-image: url({% static 'images/nophoto.png' %});"></div>
+            <div class="img full-w" style="background-image: url({% static 'images/nophoto.png' %});"></div>
             {% endif %}
         </div>
         <div style="padding: 0 14px;">

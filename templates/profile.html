@@ -21,10 +21,9 @@
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}            
             <div class="wide column" style="width: 84%;">
-                <div class="ui stackable grid info">
-                    <div class="sixteen wide column left-side" style="padding: 14px 0;">
-                        <div class="twenty" style="float: left;">
-                            <div style="position: fixed;">
+                <div class="ui stackable grid info no_margin">
+                        <div class="twenty pr0">
+                            <div>
                                 {% include 'profile/avatar.html' %}
                                 <div class="ui segment">
                                     <p class="text13">Школа:
@@ -50,7 +49,7 @@
                             </div>
                             <div style="color: #f4f4f4">_</div>
                         </div>
-                        <div class="eighty" style="padding: 0 14px;float: left;">
+                        <div class="eighty pl10">
                             {% include 'profile/main_info.html' %}
                             {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 or is_manager %}
                                 {% include 'profile/payment.html' %}
@@ -73,7 +72,6 @@
                             </div>
                             {%endif%}
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

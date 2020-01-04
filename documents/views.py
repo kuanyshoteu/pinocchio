@@ -56,7 +56,6 @@ def school_documents(request, school_id):
         doc.school = school
         doc.save()
         return redirect('/documents')
-    print('******************** docs')
     context = {
         "profile": profile,
         'yourid':profile.id,
@@ -71,7 +70,8 @@ def school_documents(request, school_id):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
         "school_money":school.money,
-        "page":'documents'
+        "page":'documents',
+        "school_crnt":school,
     }
     return render(request, 'documents/documents.html', context)
 
@@ -99,7 +99,8 @@ def folder_details(request, folder_id=None):
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),  
         "school_money":profile.schools.first().money,      
-        "page":'documents'
+        "page":'documents',
+        "school_crnt":school,
     }
     return render(request, 'documents/documents.html', context)
 

@@ -1238,9 +1238,33 @@ def moderator_run_code(request):
     # update_finance_start_dates()
     # update_names()
     # update_teachers_in_squads()
-    add_paydays()
+    # add_paydays()
+    res = aktobe_money()
     print('moderator_end_code')
-    return render(request, "moder_code.html", {})
+    return render(request, "moder_code.html", {"res":res})
+
+def aktobe_money():
+    school = School.objects.get(id = 89)
+    office = Office.objects.get(id=163)
+    d1 = datetime.datetime.strptime('2019-12-01', "%Y-%m-%d").date()
+    d2 = datetime.datetime.strptime('2019-12-26', "%Y-%m-%d").date()
+    res = []
+    profession = Profession.objects.get(title = 'Teacher')
+    for t in school.people.filter(profession=profession):
+        salary = 0
+        salary2 = 0
+        for squad in t.hissquads.filter():
+            for a in t.madegrades.filter(squad=squad):
+                date = get_date(a.subject_materials, squad)[0]
+                if date != '_':
+                    if date >= d1 and date <= d2:
+                        salary += a.subject.cost
+                        if a.present == 'present':
+                            salary2 += a.subject.cost
+        res.append([t.first_name, salary/2, salary2/2])
+    print(res)
+    return res
+
 
 def add_paydays():
     for nm in NeedMoney.objects.all():

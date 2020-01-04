@@ -116,14 +116,11 @@
                 <a class="ui button mini ml10 darkblue" href="{% url 'schools:info' %}">
                     Управление
                 </a>
-                <a class="ui button mini ml10 darkblue" href="{% url 'schools:get_school_report'%}">
+                <a get_url="{% url 'schools:show_finance_update' %}" class="ui button mini ml10 darkblue show_finance_update" href="{% url 'schools:get_school_report'%}">
                     На счету: 
                     <b style="color: #e0f310;" id="school_money">
                         {{ school_money }}тг.
                     </b>
-                </a>
-                <a update_url="{%url 'schools:update_finance'%}" get_url="{% url 'schools:show_finance_update' %}" class="update_finance" style="height: 20px;">
-                    <i class="icon sync" style="color: #2D437C;font-size: 17px;"></i>
                     <span id="hint_f" class="ui segment pt5 pb5 pl5 pr5" style="color: #222;width: 200px;display: none; position: absolute;">
                         Последнее обновление:
                         <div class="loading_small" id="loading_f_update" style="display: none;">
@@ -138,6 +135,12 @@
                         <span class="finance_update_author" status="hidden"></span>
                         <br>
                         <span class="finance_update_date"></span>
+                    </span>
+                </a>
+                <a update_url="{%url 'schools:update_finance'%}" class="update_finance" style="height: 20px;">
+                    <i class="icon sync" style="color: #2D437C;font-size: 17px;"></i>
+                    <span id="hint_f2" class="ui segment pt5 pb5 pl5 pr5" style="color: #222;width: 200px;display: none; position: absolute;">
+                        Обновить
                     </span>
                 </a>
             {% endif %} 

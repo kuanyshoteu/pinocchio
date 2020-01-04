@@ -18665,11 +18665,13 @@ ol.ui.horizontal.list li:before,
 .ui.menu .active.item:hover,
 .ui.vertical.menu .active.item:hover {
   background-color: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  color: rgba(0, 0, 0, 0.95) !important;
 }
 .ui.vertical.menu .lftitem_crnt.item {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  background-color: #4a4a4a;
+  color: #fff !important;
+  border-radius: 3px;
+  font-weight: 600;
 }
 /*--------------
      Disabled

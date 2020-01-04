@@ -71,7 +71,8 @@ def post_list(request, school_id):
         "is_manager":is_manager,
         "is_director":is_director, 
         "school_money":school.money,
-        "page":"news",        
+        "page":"news",
+        "school_crnt":school,
     }
     return render(request, "news/post_list.html", context)
 

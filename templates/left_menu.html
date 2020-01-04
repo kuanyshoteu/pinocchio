@@ -30,10 +30,12 @@
                 <i class="folder icon"></i>Документы
             </a>
             {% endif %}
+            {%if school_crnt.version == 'business'%}
             {% if is_trener or is_director %}
             <a class="item lftitem {%if page == 'library' %}lftitem_crnt{%endif%}" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="file alternate icon"></i>База уроков
             </a>
+            {% endif %}
             {% endif %}
             {% if is_director %}
             <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>

@@ -7,15 +7,15 @@
             dataType: 'json',
             success: function (data) {
                 if (data.ok) {
-                    console.log('gkigog')
                     $('#school_money').text('0тг')
                     $('.finance_update_author').text(data.author)
                     $('.finance_update_date').text(data.date)
+                    $('#hint_f2').text('Обновлено')
                 }
             }
         })
     })
-    $('.update_finance').on({
+    $('.show_finance_update').on({
         mouseenter: function () {
             $('#hint_f').show()
             author = $('.finance_update_author')
@@ -38,6 +38,14 @@
         },
         mouseleave: function () {
             $('#hint_f').hide()
+        }        
+    })
+    $('.update_finance').on({
+        mouseenter: function () {
+            $('#hint_f2').show()
+        },
+        mouseleave: function () {
+            $('#hint_f2').hide()
         }        
     })
     $('.change_pay_date').click(function(e) {
