@@ -1246,7 +1246,7 @@ def moderator_run_code(request):
 
 def move_to_Mariam():
     school = School.objects.get(id = 86)
-    m = Profile.objects.get(id = 300)
+    m = Profile.objects.get(id = 558)
     for card in school.crm_cards.all():
         card.author_profile = m
         p = Profile.objects.filter(first_name=card.name)
