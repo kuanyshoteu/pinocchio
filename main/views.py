@@ -1239,9 +1239,18 @@ def moderator_run_code(request):
     # update_names()
     # update_teachers_in_squads()
     # add_paydays()
-    res = aktobe_money()
+    # res = aktobe_money()
+    move_to_Mariam()
     print('moderator_end_code')
     return render(request, "moder_code.html", {"res":res})
+
+def move_to_Mariam():
+    school = School.objects.get(id = 86)
+    m = Profile.objects.get(id = 558)
+    for card in school.crm_cards.all():
+        card.card_user = m
+        card.save()    
+
 
 def aktobe_money():
     school = School.objects.get(id = 89)
