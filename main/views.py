@@ -1246,10 +1246,13 @@ def moderator_run_code(request):
 
 def move_to_Mariam():
     school = School.objects.get(id = 86)
-    m = Profile.objects.get(id = 558)
+    m = Profile.objects.get(id = 300)
     for card in school.crm_cards.all():
-        card.card_user = m
-        card.save()    
+        card.author_profile = m
+        p = Profile.objects.filter(first_name=card.name)
+        if len(p) > 0:
+            card.user = p[0]
+        card.save()
 
 
 def aktobe_money():
