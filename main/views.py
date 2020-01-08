@@ -1242,11 +1242,11 @@ def moderator_run_code(request):
     # res = aktobe_money()
     move_to_Mariam()
     print('moderator_end_code')
-    return render(request, "moder_code.html", {"res":res})
+    return render(request, "moder_code.html", {})
 
 def move_to_Mariam():
     school = School.objects.get(id = 86)
-    m = Profile.objects.get(id = 558)
+    m = Profile.objects.get(id = 300)
     for card in school.crm_cards.all():
         card.card_user = m
         card.save()    
