@@ -7,6 +7,14 @@
 {% load staticfiles %}
 
 {% block content %}
+<style type="text/css">
+    #id_phone{
+        margin-bottom: 15px;
+    }
+    #id_image{
+        margin-bottom: 25px;
+    }
+</style>
 <div id="group-create" class="pb150">
 	<a id="go-back-btn-before"  href='{{ profile.get_absolute_url }}'>
         <i class="arrow left icon"></i>
@@ -14,24 +22,27 @@
 	<div class='ui container'>
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="margin-left: 30px;width: 80%;">
+            <div class="eighty wide column ml30">
             		<div class="ui grid stackable">
-            			<div class="twelve wide column" >
-            				<div class="ui segment" style="margin-bottom: 0;font-weight: 600;">
-				        		Основная информация
+            			<div class="eight wide column pr0">
+            				<div class="ui segment mb0 text15">
+				        		<b>Основная информация</b>
 				        	</div>
-				        	<div class="ui segment" style="margin-top: 0;">
-                                <div class="hint40 highliter" style="position: absolute;margin-left: 300px;margin-top: -20px;"></div>
-				        		<form class="ui form help40" class="ui form">{% csrf_token %}
-								    {{ form }}
-								    <input type='submit' class='ui button blue mini' value='Сохранить'/>
+				        	<div class="ui segment mt0">
+				        		<form method='POST' class="ui form text-center" style="width: 80%;margin: 0 auto; font-weight: 600">{% csrf_token %}
+								    {{ form|crispy }}
+                                    <div class="mt10 text-center">      
+                                        <input type='submit' class='ui button green full-w' value='Сохранить'/>
+                                    </div>
 								</form>
 			        		</div>
-            				<div class="ui segment" style="margin-bottom: 0;font-weight: 600;">
-				        		Пароль
+                        </div>
+                        <div class="eight wide column ">                        
+            				<div class="ui segment mb0 text15">
+				        		<b>Пароль</b>
 				        	</div>
-				        	<div class="ui segment" style="margin-top: 0;">
-                                <form class="ui form text-center" style="margin: 0 auto;width: 40%;">
+				        	<div class="ui segment mt0">
+                                <form class="ui form text-center" style="margin: 0 auto;width: 60%;">
                                     <div class="mb10 success_change_pswrd" style="display: none;"><i class="icon check green"></i> Пароль изменен</div>
                                     <b>Введите новый пароль</b>
                                     <input class="reset_password1" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
