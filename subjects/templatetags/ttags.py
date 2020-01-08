@@ -115,7 +115,7 @@ def rating_filter(profile):
     school = profile.schools.first()
     cards = school.crm_cards.select_related('card_user')
     squad = profile.rating_squad_choice.first()
-    squads = school.groups.prefetch_related('students')
+    squads = school.groups.filter(shown=True).prefetch_related('students')
     if squad != None:
         students = squad.students.filter(is_student=True)
     else:
@@ -129,6 +129,7 @@ def rating_filter(profile):
         if len(student.squads.all()) == 0:
             continue
         card = cards.filter(card_user=student)
+        print(card)
         if len(card) > 0:
             card = card[0]
         else:
