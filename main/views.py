@@ -1244,6 +1244,11 @@ def moderator_run_code(request):
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
+def check_student_logos():
+    school = School.objects.get(id = 86)
+    for card in school.crm_cards.all():
+        print(card.card_user.first_name, card.name)
+
 def move_to_Mariam():
     school = School.objects.get(id = 86)
     m = Profile.objects.get(id = 558)
@@ -1251,7 +1256,7 @@ def move_to_Mariam():
         card.author_profile = m
         p = Profile.objects.filter(first_name=card.name)
         if len(p) > 0:
-            card.user = p[0]
+            card.card_user = p[0]
         card.save()
 
 
