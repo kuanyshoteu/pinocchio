@@ -128,22 +128,24 @@ def hisboards(hisprofile):
     return(hisboards)
 
 def change_profile(request):
-    if not request.user.is_authenticated:
-        raise Http404
-    if request.user.is_authenticated:
-        hisprofile = Profile.objects.get(user = request.user.id)
-
-    form = ProfileForm(request.POST or None, request.FILES or None,instance=hisprofile)
+    profile = get_profile(request)
+    form = ProfileForm(request.POST or None, request.FILES or None,instance=profile)
     if form.is_valid():
-        hisprofile = form.save(commit=False)
-        hisprofile.save()
-
+        profile = form.save(commit=False)
+        profile.save()
+    school = profile.schools.all()
+    school_money = 0
+    if len(school) > 0:
+        school = school[0]
+        school_money = school.money
     context = {
-        "profile": hisprofile, 
+        "profile":profile, 
         'form':form,
-        'is_trener':is_profi(hisprofile, 'Teacher'),
-        "is_manager":is_profi(hisprofile, 'Manager'),
-        "is_director":is_profi(hisprofile, 'Director'),
+        "school_crnt":school,        
+        "school_money":school_money,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
     }
     return render(request, "profile/change_profile.html", context)
 

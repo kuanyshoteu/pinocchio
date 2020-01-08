@@ -227,7 +227,6 @@ def reset_pswrd_view(request):
     if request.GET.get('id') and request.GET.get('conf'):
         profile = Profile.objects.get(id=int(request.GET.get('id')))
         skill = profile.skill
-        print(skill.confirmation_code, request.GET.get('conf'), skill.confirmation_time)
         if request.GET.get('conf') == skill.confirmation_code and timezone.now()-skill.confirmation_time < timedelta(1):
             pid = profile.id
         else:
@@ -433,6 +432,7 @@ def reset_pswrd(request):
             user = authenticate(username=str(user.username), password=str(request.GET.get('password1')))
             try:
                 login(request, user)
+                return redirect(profile.get_absolute_url())
             except Exception as e:
                 res = 'error' 
     data = {

@@ -10,10 +10,9 @@ from django.contrib.auth import (
     logout,
     )
 
-
 class ProfileForm(forms.ModelForm):
     image = forms.FileField(label = 'Ава', required = False)
-    phone = forms.CharField(label='Телефон',required=False)
+    phone = forms.CharField(label='Телефон',required=True)
     mail = forms.CharField(label='Почта',required=False)
     class Meta:
         model = Profile

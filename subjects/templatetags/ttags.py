@@ -129,7 +129,6 @@ def rating_filter(profile):
         if len(student.squads.all()) == 0:
             continue
         card = cards.filter(card_user=student)
-        print(card)
         if len(card) > 0:
             card = card[0]
         else:
@@ -315,7 +314,6 @@ def get_current_attendance(subject, squad):
         i = 0
         counter = 0
         students = squad.students.all()
-        print('teacher',students.filter(is_student=False))
         subject_materials = subject.materials.prefetch_related('sm_atts')
         len_squad_students = len(students)
         if material_number > len(subject_materials):
@@ -324,7 +322,6 @@ def get_current_attendance(subject, squad):
             if counter == 4:
                 break
             sm = list(subject_materials)[material_number - i-1]
-            print('nums',len(sm.sm_atts.filter(squad = squad, student__in=students)), len_squad_students)
             if len(sm.sm_atts.filter(squad = squad, student__in=students)) < len_squad_students:
                 create_atts(squad, sm, subject)
             attendances = sm.sm_atts.filter(squad = squad, student__in=students)
@@ -527,7 +524,6 @@ def get_bills_len(profile, hisprofile):
 
 @register.filter
 def money_percent(first, second):
-    print(first,second)
     if first+second == 0:
         return 0
     num = first+second
@@ -554,8 +550,6 @@ def constant_profile_lectures(profile):
         squads = profile.hissquads.filter(shown=True)
     else:
         squads = profile.squads.filter(shown=True)
-    for s in squads:
-        print(s.title)
     lectures = Lecture.objects.filter(squad__in=squads).select_related('cell')
     #lectures = profile.hislectures.select_related('cell')
     interval = 60

@@ -142,6 +142,7 @@ def squad_update(request, slug=None):
     change_img = False
     change_title = False
     change_content = False
+    print(form)
     if form.is_valid():
         old_start_date = instance.start_date
         old_title = instance.title

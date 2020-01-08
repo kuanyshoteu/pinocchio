@@ -910,7 +910,6 @@ def send_login_url(request):
 
 def edit_card_detailed(card, student, school,request,profile):
     edit = '***Редактирование*** '
-    print(card.name)
     if card.name != request.GET.get('name') and card.name:
         edit = edit + "Имя: " + card.name + " -> " + request.GET.get('name') + "; "
         if student:
@@ -1791,23 +1790,31 @@ def payment_history(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     res = []
+    student_name = False
     if request.GET.get('id'):
         student = school.people.filter(id=int(request.GET.get('id')))
         if len(student) > 0:
             student = student[0]
+            student_name = student.first_name
             for payment in student.payment_history.all():
                 squad_title = ''
                 if payment.squad:
                     squad_title = payment.squad.title
+                cancel_access = False
+                if payment.timestamp > timezone.now() - timedelta(3):
+                    cancel_access = True
                 res.append([
-                    payment.timestamp.strftime('%d.%m.%Y %H:%M'),
-                    payment.amount,
-                    squad_title,
-                    payment.action_author.get_absolute_url(),
-                    payment.action_author.first_name])
-
+                    payment.timestamp.strftime('%d.%m.%Y %H:%M'), #0
+                    payment.amount,                               #1
+                    squad_title,                                  #2
+                    payment.action_author.get_absolute_url(),     #3
+                    payment.action_author.first_name,             #4
+                    cancel_access,                                #5
+                    payment.id,                                   #6
+                    ])
     data = {
         "res":res,
+        "student_name":student_name,
     }
     return JsonResponse(data)
 
