@@ -863,7 +863,7 @@ def get_school_report(request):
                     if end > len(materails):
                         end = len(materails)
                     subject_res_dates = ['4', squad_title,subject.title]
-                    subject_res = ['5', '','']
+                    subject_res = ['5', '', '']
                     cost = 0
                     for i in range(0, end-start):
                         date = get_date_by_num(start + i-1, squad, subject,lectures)
@@ -873,6 +873,8 @@ def get_school_report(request):
                         subject_len += 1
                         sm = list(materails)[start + i-1]
                         cost = 0
+                        if teacher.first_name=='Гульназ':
+                            print(sm.id, sm.done_by.all())
                         if teacher in sm.done_by.all():
                             cost = teacher.salary
                             subject_counter += 1

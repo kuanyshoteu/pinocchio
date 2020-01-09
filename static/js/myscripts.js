@@ -1,3 +1,29 @@
+    $('.show_payment_history').click(function(e) {
+        id = $(this).attr('id')
+        url = $('.data').attr('payment_history')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.payment_history').modal('show')
+                $('.fill_payment_history').empty()
+                $('.payment_student_name').text(data.student_name)
+                for (var i = 0; i < data.res.length; i++) {
+                    if (data.res[i][5]) {
+                        cancel = '<td class="border"><a class="ui button mini red" onclick="delete_payment('+data.res[i][6]+')">Отменить оплату</a></td>'
+                    }
+                    else{
+                        cancel = '<td class="border"></td>'                        
+                    }
+                    $('<tr> <td class="border payment_timestamp">'+data.res[i][0]+'</td> <td class="border payment_amount">'+data.res[i][1]+'</td> <td class="border payment_squad">'+data.res[i][2]+'</td> <td class="border"><a class="payment_manager" href="'+data.res[i][3]+'">'+data.res[i][4]+'</a></td>'+cancel+' </tr>').appendTo('.fill_payment_history')
+                }
+            }
+        })        
+    });
+
     $('.update_finance').click(function(e) {
         url = $(this).attr('update_url')
         $.ajax({

@@ -18,19 +18,32 @@
                     {%endfor%}
                 </select>
             </form>
-            <a class="ui button mini blue make_payment full-w" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">Оплатить</a>
+            <div class="text-center">
+                <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">
+                    Оплатить
+                </a>
+                <div class="loading_small payment_loading{{ hisprofile.id }}" style="display: none;">
+                  <div class="animation"><div class="backwhite circle one"></div></div>
+                  <div class="animation"><div class="backwhite circle two"></div></div>
+                  <div class="animation"><div class="backwhite circle three"></div></div>
+                  <div class="animation"><div class="backwhite circle four"></div></div>
+                  <div class="animation"><div class="backwhite circle five"></div></div>
+                  <div class="animation"><div class="backwhite circle six"></div></div>
+                </div>
+                <i style="display: none;" class="icon check textw ml5" id="payment_success{{ hisprofile.id }}"></i>                
+            </div>
         </div>
         {%endif%}
         <div class="eight wide column pr5">
             <div class="pb5">
                 {% if hisprofile.is_student %}
                 <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
-                <a class="ui button mini mb10" onclick="$('.payment_history').modal('show')">История оплаты</a>
+                <a class="ui button mini mb10 show_payment_history" id="{{hisprofile.id}}">История оплаты</a>
                 {%endif%}
                 <a class="ui button mini get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
             </div>
             {% if hisprofile.is_student %}
-            <div class="ui modal payment_history">
+            <div class="ui modal payment_history full-h">
                 <i class="close icon"></i>
                 <div class="content">
                     <div class="text-center mb15">
@@ -51,22 +64,7 @@
                                 <th class=""></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for payment in hisprofile.payment_history.all %}
-                            <tr>
-                                <td class="border">{{ payment.squad.title }}</td>
-                                <td class="border">{{ payment.amount }} тг</td>
-                                <td class="border"><a href="{{payment.action_author.get_absolute_url}}">{{ payment.action_author.first_name }}</a></td>
-                                <td class="border">{{ payment.timestamp }}</td>
-                                <td class="">
-                                    {% if payment.timestamp|checkdaydif:3 %}
-                                    <a class="ui button mini red" onclick="delete_payment('{{payment.id}}')">Отменить оплату</a>
-                                    {%endif%}
-                                    <br>
-                                    <div class="payment_delete_error highlight_red" style="display: none;">Что-то пошло не так</div>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                        <tbody class="fill_payment_history">
                         </tbody>
                     </table>
                 </div>
@@ -141,7 +139,8 @@
 <div class="ui segment mt0 no_padding">
     <div class="ui grid no_margin backdark">
     {% for nm in profile|get_bills:hisprofile %}
-        <div class="wide column pr0" style="width: 33%;">
+    <div class="wide column pr0 squad_bill_block_cont{{nm.squad.id}}" style="width: 33%;">
+        <div class="squad_bill_block{{nm.squad.id}}">
             <div class="ui segment mb0 text-center" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
                 <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
             </div>    
@@ -227,12 +226,13 @@
                 </div>
             </div>    
         </div>
+    </div>
     {% endfor %}
     </div>
 </div>
 {%endif%}
 {%endif%}
-
+<span class="data" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
 <script type="text/javascript">
     nm_heights()
@@ -248,6 +248,32 @@
             height = $(this).css('height', max)
         })
     }
+    function make_payment(url, id) {
+        this_ = document.getElementById('pay_for_group');
+        group_id = this_.options[this_.selectedIndex].value;        
+        amount = $('.payment_amount'+id).val()
+        if (amount) {
+            $('#payment_success'+id).hide()
+            $('.payment_loading'+id).show()
+            $('.make_payment').addClass('disabled')
+            $.ajax({
+                url: url,
+                data: {
+                    'amount':amount,
+                    'id':id,
+                    'group_id':group_id                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.payment_amount'+id).val('')
+                    $('#payment_success'+id).show()
+                    $('.payment_loading'+id).hide()
+                    $('.make_payment').removeClass('disabled')
+                    $('.squad_bill_block_cont'+group_id).load(document.URL +  ' .squad_bill_block'+group_id)
+                }
+            })            
+        }
+    };    
     function delete_payment(id){
         url = $('.instance_data').attr('delete_payment')        
         $('.delete_payment_error').hide()
