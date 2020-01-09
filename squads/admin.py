@@ -60,3 +60,19 @@ class DiscountSchoolModelAdmin(admin.ModelAdmin):
     class Meta:
         model = DiscountSchool
 admin.site.register(DiscountSchool, DiscountSchoolModelAdmin)
+
+class PaymentHistoryModelAdmin(admin.ModelAdmin):
+    list_display = ['id', "get_school", 'timestamp', 'get_user', 'get_squad', 'get_action_author']
+    list_display_links = ["id"]
+    class Meta:
+        model = PaymentHistory
+    def get_school(self, obj):
+        return obj.school.title
+    def get_user(self, obj):
+        return obj.user.first_name
+    def get_squad(self, obj):
+        return obj.squad.title
+    def get_action_author(self, obj):
+        return obj.action_author.first_name
+
+admin.site.register(PaymentHistory, PaymentHistoryModelAdmin)
