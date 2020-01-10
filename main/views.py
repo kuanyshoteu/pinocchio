@@ -1246,16 +1246,18 @@ def moderator_run_code(request):
     return render(request, "moder_code.html", {})
 
 def synchrone_material_with_atts():
-    for sq in Squad.objects.all():
-        t = sq.teacher
+    profession = Profession.objects.get(title = 'Teacher')
+    teachers = profession.workers.all()
+    for att in Attendance.objects.filter(student__in=teachers):
+        t = att.teacher
         if t == None:
             continue
-        for att in t.madegrades.all():
-            m = att.subject_materials
-            if att.present == 'present':
-                m.done_by.add(t)
-            else:
-                m.done_by.remove(t)
+        print(t.first_name)
+        m = att.subject_materials
+        if att.present == 'present':
+            m.done_by.add(t)
+        else:
+            m.done_by.remove(t)
 
 
 def check_student_logos():
