@@ -873,8 +873,6 @@ def get_school_report(request):
                         subject_len += 1
                         sm = list(materails)[start + i-1]
                         cost = 0
-                        if teacher.first_name=='Гульназ':
-                            print(sm.id, sm.done_by.all())
                         if teacher in sm.done_by.all():
                             cost = teacher.salary
                             subject_counter += 1
@@ -1242,9 +1240,23 @@ def moderator_run_code(request):
     # update_teachers_in_squads()
     # add_paydays()
     # res = aktobe_money()
-    move_to_Mariam()
+    # move_to_Mariam()
+    synchrone_material_with_atts()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
+
+def synchrone_material_with_atts():
+    for sq in Squad.objects.all():
+        t = sq.teacher
+        if t == None:
+            continue
+        for att in t.madegrades.all():
+            m = att.subject_materials
+            if att.present == 'present':
+                m.done_by.add(t)
+            else:
+                m.done_by.remove(t)
+
 
 def check_student_logos():
     school = School.objects.get(id = 86)
