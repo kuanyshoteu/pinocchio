@@ -765,29 +765,32 @@ def make_zaiavka(request):
     }
     return JsonResponse(data)
 
-def report_material_number_by_date(date, squad,subject, alldays,lectures):
+def report_material_number_by_date(date, squad,subject, alldays,lectures,isstart):
     num_of_lectures = len(lectures)
     if num_of_lectures > 0:
         delta = (date - squad.start_date).days
         number_of_weeks = int(delta / 7)
-        finish = delta % 7
+        finish = int(date.strftime('%w'))
         start = int(squad.start_date.strftime('%w'))
-        if start == 0:
-            start = 7
-        if start > finish or finish == 0:
-            finish += 7
         extra = 0
-        for i in range(start, finish + 1): # Days of week of last not full week
-            i = i % 7
-            if i == 0:
-                i = 7
-            day=alldays.get(number=int(i))
-            extra += len(lectures.filter(day=day))
+        addto_extra = False
+        if start < finish:
+            days = alldays.filter(number__gt=start-1,number__lt=finish+1)
+        elif finish < start:
+            days1 = alldays.filter(number__gt=start-1,number__lt=8)
+            days2 = alldays.filter(number__gt=0,number__lt=finish+1)
+            days = set(chain(days1, days2))
+            if isstart:
+                extra = 1
+        else:
+            days = alldays.filter(number=start)
+        extra += len(lectures.filter(day__in=days))
         material_number = num_of_lectures * number_of_weeks + extra
         return material_number   
     return -1 
 def get_date_by_num(material_number, squad, subject,lectures):
     if len(lectures) > 0:
+        material_number += 1
         number_of_weeks = int(material_number/len(lectures))
         lecture_index = material_number % len(lectures)
         if lecture_index == 0:
@@ -852,8 +855,8 @@ def get_school_report(request):
                         add = True
                     materails = all_materials.filter(subject=subject)
                     lectures = hislectures.filter(squad=squad, subject=subject)
-                    start = report_material_number_by_date(timeago,squad,subject, alldays,lectures)
-                    end = report_material_number_by_date(timefuture,squad,subject, alldays,lectures)
+                    start = report_material_number_by_date(timeago,squad,subject, alldays,lectures,True)
+                    end = report_material_number_by_date(timefuture,squad,subject, alldays,lectures,False)
                     if start < 0:
                         start = 0
                     if end < 0:
@@ -862,6 +865,7 @@ def get_school_report(request):
                         start = len(materails)
                     if end > len(materails):
                         end = len(materails)
+                    end += 1
                     subject_res_dates = ['4', squad_title,subject.title]
                     subject_res = ['5', '', '']
                     cost = 0
@@ -912,7 +916,6 @@ def get_school_report(request):
         max_len = 0
         for t in teacher_res:
             tlen = len(t)
-            print(tlen)
             if tlen > max_len:
                 max_len = tlen
         for t in teacher_res:
@@ -1252,13 +1255,15 @@ def synchrone_material_with_atts():
         t = att.teacher
         if t == None:
             continue
-        print(t.first_name)
         m = att.subject_materials
-        if att.present == 'present':
+        if len(m.sm_atts.filter(present='present')) > 0:
+            att.present = 'present'
             m.done_by.add(t)
-        else:
-            m.done_by.remove(t)
-
+            att.save()
+        # if att.present == 'present':
+        #     m.done_by.add(t)
+        # else:
+        #     m.done_by.remove(t)
 
 def check_student_logos():
     school = School.objects.get(id = 86)

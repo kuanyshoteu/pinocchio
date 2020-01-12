@@ -413,7 +413,7 @@ def pay_for_lesson(card, cost, squad):
             if card.was_called:
                 skill = card.author_profile.skill
                 skill.need_actions += 1
-                skill.save()                            
+                skill.save()
                 card.was_called = False
         elif nm.money < 2 * squad.lesson_bill:
             card.colour = 'orange'
