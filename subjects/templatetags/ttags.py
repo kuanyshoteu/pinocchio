@@ -140,8 +140,8 @@ def rating_filter(profile):
             pay_date_input = '-'
             if len(nm) > 0:
                 nm = nm.last()
-                pay_date = get_pay_date(nm)
-            sq_res.append([sq, pay_date.strftime('%d %B'), str(pay_date)])
+                pay_date = get_pay_date(nm).strftime('%d %B')
+            sq_res.append([sq, pay_date, str(pay_date)])
         res.append([
             student,
             sq_res
