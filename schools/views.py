@@ -31,6 +31,14 @@ from django.contrib.auth.models import User
 import os
 from constants import *
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from django.http import JsonResponse
+
+from django.contrib.postgres.search import TrigramSimilarity
+from dateutil.relativedelta import relativedelta
+
 def school_rating(request):
     profile = get_profile(request)
     if len(profile.schools.all()) == 0:
@@ -691,12 +699,6 @@ def timep_delete(request):
     }
     return JsonResponse(data)
 
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.http import JsonResponse
-
 def save_card_as_user(request):
     manager_profile = Profile.objects.get(user = request.user.id)
     only_managers(manager_profile)
@@ -1352,7 +1354,6 @@ def change_day_of_week(request):
     }
     return JsonResponse(data)
 
-from django.contrib.postgres.search import TrigramSimilarity
 def call_helper(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -1527,7 +1528,6 @@ def delete_school_banner(request):
     }
     return JsonResponse(data)
 
-from dateutil.relativedelta import relativedelta
 def update_voronka(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
