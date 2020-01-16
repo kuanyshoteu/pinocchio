@@ -31,6 +31,64 @@ from schools.models import School
 from constants import *
 from subjects.templatetags.ttags import get_date, check_date, create_atts, create_atts_student
 
+def test_account(request):
+    profile = Profile.objects.get(id = 621) #621
+    hisprofile = profile
+    skill = hisprofile.skill
+    miss_lesson_form = False
+    mypage = ''
+    if profile == hisprofile:
+        mypage = 'mypage'
+        # Нужна отдельная функция при вызове
+        miss_lesson = MissLesson.objects.filter(profile = profile)
+        if len(miss_lesson) > 0:
+            miss_lesson = miss_lesson[0]
+            miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None, instance=miss_lesson)
+        else:
+            miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None)
+        if miss_lesson_form.is_valid():
+            miss_lesson = miss_lesson_form.save()
+    hissubjects = []
+    if is_profi(hisprofile, 'Manager'):
+        if profile.skill.crm_office2:
+            hissquads = profile.skill.crm_office2.groups.filter(shown=True)
+        else:
+            hissquads =  profile.schools.first().groups.filter(shown=True)
+    elif is_profi(hisprofile, 'Teacher'):
+        hissquads = hisprofile.hissquads.filter(shown=True)
+    else:
+        hissquads = hisprofile.squads.filter(shown=True)
+        hissubjects = set(Subject.objects.filter(squads__in=hissquads))
+    hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+
+    school_money = 0
+    is_director = is_profi(profile, 'Director')
+    if is_director:
+        school_money = profile.schools.first().money
+    context = {
+        "profile":profile,
+        "hisprofile": hisprofile,
+        'att_subject':hiscacheatt.subject,
+        'att_squad':hiscacheatt.squad,
+        'today':int(timezone.now().date().strftime('%w')),
+        'hissquads':hissquads,
+        'hissubjects':hissubjects,
+        'miss_lesson_form':miss_lesson_form,
+        'is_this_trener':is_profi(hisprofile, 'Teacher'),
+        "is_this_manager":is_profi(hisprofile, 'Manager'),
+        "is_this_director":is_profi(hisprofile, 'Director'),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_director,
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school_money,
+        'constant_times':get_times(60),
+        "interval":60,
+        'height':28*15+25, 
+        "page":mypage,       
+    }
+    return render(request, "profile.html", context)
+
 def account_view(request, user = None):
     profile = get_profile(request)
     user = user.replace('_', ' ')
@@ -492,36 +550,6 @@ def update_hints(request):
 def logout_view(request):
     logout(request)
     return redirect("/")
-
-def test_account(request):
-    user = User.objects.get(id = 1)
-    hisprofile = Profile.objects.get(user = user)
-    if is_profi(hisprofile, 'Teacher'):
-        hissubjects = hisprofile.teachers_subjects.all()
-        hissquads = hisprofile.curators_squads.all()
-    else:
-        hissubjects = hisprofile.hissubjects.all()
-        hissquads = hisprofile.squads.all()
-    time_periods = TimePeriod.objects.all()
-    form = ProfileForm(request.POST or None, request.FILES or None,instance=hisprofile)
-    if form.is_valid():
-        hisprofile = form.save(commit=False)
-        hisprofile.save()
-        return HttpResponseRedirect(hisprofile.get_absolute_url())
-  
-    context = {
-        "profile":hisprofile,
-        "hisprofile": hisprofile,
-        "hisprofile_list":[hisprofile],
-        'all_squads':Squad.objects.all(),
-        'all_profiles':Profile.objects.all(),
-        'hisboards':hisboards(hisprofile),
-        'hissubjects':hissubjects,
-        'days':Day.objects.all(),
-        'hissquads':hissquads,
-        'time_periods':time_periods,
-    }
-    return render(request, "profile.html", context)
 
 def add_money(profile, school, squad, card, amount, manager):
     if amount > squad.bill*10:
