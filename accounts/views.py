@@ -37,6 +37,8 @@ def account_view(request, user = None):
     user = User.objects.get(username = user)
     hisprofile = Profile.objects.get(user = user)
     skill = hisprofile.skill
+    if profile.skill.confirmed == False:
+        return redirect(profile.check_confirmation())
     miss_lesson_form = False
     mypage = ''
     if profile == hisprofile:
@@ -50,7 +52,7 @@ def account_view(request, user = None):
             miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None)
         if miss_lesson_form.is_valid():
             miss_lesson = miss_lesson_form.save()
-            return redirect(profile.get_absolute_url())
+            return check_confirmation(hisprofile, skill)
     hissubjects = []
     if is_profi(hisprofile, 'Manager'):
         if profile.skill.crm_office2:
@@ -92,9 +94,11 @@ def account_view(request, user = None):
     }
     return render(request, "profile.html", context)
 
-def check_confirmation(hisprofile, skill):
+def check_confirmation(request):
+    profile = get_profile(request)  
+    skill = profile.skill
     if skill.confirmed == False:
-        if timezone.now() - skill.confirmation_time > timedelta(1):
+        if timezone.now() - skill.confirmation_time:
             skill.confirmation_code = random_secrete_confirm()
             skill.confirmation_time = timezone.now()
             skill.save()
@@ -109,6 +113,8 @@ def check_confirmation(hisprofile, skill):
             "profile": profile,
         }
         return render(request, "confirm.html", context)
+    else:
+        return redirect(profile.get_absolute_url())
 
 def hisboards(hisprofile):
     hisboards = []
@@ -244,9 +250,9 @@ def more_attendance(request):
 
 def more_attendance_student(request):
     profile = get_profile(request)
-    if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
+    if request.GET.get('subject_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
-        squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        squad = subject.squads.filter(students=profile)[0]
         school = subject.school
         is_in_school(profile, school)
         current_sm = int(request.GET.get('sm_id'))

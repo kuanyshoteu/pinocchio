@@ -6,7 +6,10 @@
 {% endblock head_title %}{% block content %}
 
 <div class="ui container" style="overflow-y: hidden;">
-        <form method='POST' action='' enctype='multipart/form-data' CLASS="ui form pl15 pr15">{% csrf_token %}
+        <form method='POST' action='' enctype='multipart/form-data' class="ui form pl15 pr15 mt50">{% csrf_token %}
+                <div class="text-center" style="font-size: 25px;">
+                    Вход в Bilimtap
+                </div>
             <div class="ui segment login_form">
                 <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
                 <b>Номер телефона или Email</b>
@@ -16,7 +19,9 @@
                 <div style="text-align: center;">
                     <input class="ui button green login-btn2 full-w" value="Войти" type="submit" onclick="return false">
                 </div>
-                <div style="margin-top: 20px;text-align: center;">
+            </div>
+            <div class="ui segment login_form mt15">
+                <div class="text-center text15">
                     Еще нет аккаунта? <a href="{% url 'main:sign_up' %}">Создать аккаунт</a>
                 </div>
             </div>

@@ -28,23 +28,25 @@
                                 <div class="ui segment">
                                     <p class="text13">Школа:
                                         {%for school in hisprofile.schools.all %}
-                                        <a href="{{ school.landing }}" class="mr10">{{ school.title }}</a>
+                                        <a href="{{ school.landing }}" class="mr10"><b>{{ school.title }}</b></a>
                                         {%endfor%}
                                     </p>
                                     {%if not hisprofile.is_student%}
                                     {%if hisprofile.job_categories.all|length > 0%}
                                     <p class="text13">
-                                        Должности: 
+                                        Должности:
+                                        <b> 
                                         {% if hisprofile.job_categories.all|length > 0 %}
                                         {%for job in hisprofile.job_categories.all %}
                                             {{ job.title }}
                                         {%endfor%}
                                         {%endif%}
+                                        </b>
                                     </p>
                                     {% endif %}                    
                                     {% endif %}
-                                    <p class="text13">Телефон: {{ hisprofile.phone }}</p>
-                                    <p class="text13">Почта: {{ hisprofile.mail }}</p>
+                                    <p class="text13">Телефон: <b>{{ hisprofile.phone }}</b></p>
+                                    <p class="text13">Почта: <b>{{ hisprofile.mail }}</b></p>
                                 </div>
                             </div>
                             <div style="color: #f4f4f4">_</div>

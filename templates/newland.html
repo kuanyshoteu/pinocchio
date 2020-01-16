@@ -24,23 +24,23 @@
             Более <b style="color: yellow">{{len}}</b> учебных центров Алматы
         </div>
     </div>
-    <div class="ui grid stackable pl10 pr10 pt10 pb50" style="background-color: #ECECEC">
-        <div class="four wide column pb0 pl5 pr5">
+    <div class="ui grid stackable pl0 pr0 pt10 pb50" style="background-color: #ECECEC">
+        <div class="four wide column pb0 pl30 pr0">
             <div style="height: 33px;">
             </div>
             {% for cat in categories %}
-            <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 30px;border: 1px solid #f1f1f1;border-radius:3px 3px 0 0;">
+            <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border: 1px solid #f1f1f1;border-radius:3px 3px 0 0;">
                 <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
             </a>
             {% endfor %}
         </div>
-        <div class="twelve wide column pr0" style="text-align: left;color: #696969">
+        <div class="twelve wide column pr30 pl0" style="text-align: left;color: #696969">
             <div class="ui grid no_margin">
-                <div class="sixteen wide column pt0 pb0" style="font-weight: 600;font-size: 20px;display: inline-block;">
+                <div class="sixteen wide column pl15 pb0 pt0 pr0" style="font-weight: 600;font-size: 20px;display: inline-block;">
                     Рекомендуемые
                 </div>
                 {% for school in schools %}
-                <div class="five wide column">
+                <div class="third wide column pr0 pb0">
                     <div class="ui segment full-w btn_select" style="height: 320px;padding: 20px;">
                         <a href="{{school.landing}}">
                             <div style="font-size: 17px;font-weight: 600;">{{school.title}}</div>
@@ -94,33 +94,7 @@
         {%endfor%}
     </div>
  -->
-    <div class="pt15 pb30" style="background-color: #506ca9;text-align: center;">
-        <img src="{% static 'images/logo_clean.jpeg' %}" style="width: 200px;">
-        <div class="ui grid stackable">
-            <div class="four wide column">
-            </div>
-            <div class="four wide column" style="text-align: left;">
-                <div style="line-height: 30px">
-                    <b>Контакты</b>
-                    <br>
-                    Телефон: <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
-                    <br>
-                    Email: aaa.academy.kz@gmail.com
-                </div>
-            </div>
-            <div class="four wide column pt30" style="text-align: center;">
-                <a href="{% url 'main:about' %}" class="ui button  green" style="width: 190px;">Стать партнером</a>
-            </div>
-            <div class="two wide column">
-            </div>
-        </div>
-        <div class="mt15" style="color: lightgrey;font-size: 11px;">
-            <i>made by </i> <a href="" style="text-decoration: underline;color: lightgrey;">Kuanysh Oteu</a>
-        </div>
-        <div class="mt15">
-            &nbsp;© 2020. Все права защищены.            
-        </div>
-    </div>
+    {% include 'footer.html' %}
 </div>
 <script type="text/javascript">
     $('.map_search_input').on('input', function(e) {

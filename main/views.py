@@ -383,7 +383,12 @@ def register_view(request):
                 profile.first_name = request.GET.get('name')
                 profile.phone = request.GET.get('phone')
                 profile.mail = request.GET.get('mail')
+                skill = Skill.objects.create()
+                profile.skill = skill
                 profile.save()
+                skill.confirmation_time = timezone.now()
+                skill.confirmed = False
+                skill.save()
             else:
                 res = 'second_user'
         else:
@@ -1244,9 +1249,17 @@ def moderator_run_code(request):
     # add_paydays()
     # res = aktobe_money()
     # move_to_Mariam()
-    synchrone_material_with_atts()
+    # synchrone_material_with_atts()
+    check_skills()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
+
+def check_skills():
+    for profile in Profile.objects.filter(schools=None):
+        print(profile.first_name)
+    print('///########')
+    for profile in Profile.objects.filter(skill=None):
+        print(profile.first_name)
 
 def synchrone_material_with_atts():
     profession = Profession.objects.get(title = 'Teacher')

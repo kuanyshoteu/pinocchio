@@ -317,7 +317,12 @@ def get_current_attendance(subject, squad):
         subject_materials = subject.materials.prefetch_related('sm_atts')
         len_squad_students = len(students)
         if material_number > len(subject_materials):
-            material_number = len(subject_materials)
+            for i in range(0, material_number - subject.number_of_materials):
+                subject.materials.create(
+                    school=subject.school
+                )
+            subject.number_of_materials = material_number
+            subject.save()
         while material_number - i > 0:
             if counter == 4:
                 break
@@ -358,7 +363,6 @@ def get_current_attendance(subject, squad):
 
 @register.filter
 def get_current_attendance_student(subject, profile):
-
     if not subject or not profile:
         return '_'
     alldays = Day.objects.all() 
@@ -373,7 +377,7 @@ def get_current_attendance_student(subject, profile):
             material_number = len(subject_materials)
 
         while material_number - i > 0:
-            if counter == 4:
+            if counter == 7:
                 break
             sm = list(subject_materials)[material_number - i-1]
             if len(sm.sm_atts.filter(student = profile)) < 1:
@@ -386,9 +390,9 @@ def get_current_attendance_student(subject, profile):
                 res = [[attendances, get_date_results[0], get_date_results[1]]] + res
             counter += 1
             i += 1
-        if counter < 4:
+        if counter < 7:
             i = 1
-            while counter < 4 and i < 10 and material_number + i-1<len(subject_materials):
+            while counter < 7 and i < 10 and material_number + i-1<len(subject_materials):
                 sm = list(subject_materials)[material_number + i-1]
                 if len(sm.sm_atts.filter(student = profile)) < 1:
                     create_atts_student(squad, sm, profile)

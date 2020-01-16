@@ -95,6 +95,8 @@ class Profile(models.Model):
         self.user.username = self.user.username.replace('қ', 'к')
         return reverse("accounts:profile", kwargs={"user": self.user})
 
+    def check_confirmation(self):
+        return reverse("accounts:check_confirmation")
     # APIs
     def subject_attendance(self):
         return reverse("accounts:subject_attendance")

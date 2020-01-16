@@ -38,7 +38,7 @@
                     <div class="ui divider" style="margin-bottom: 0"></div>
                     {% endfor %}
                 </div>
-                {% if is_trener %}
+                {% if is_trener or is_director %}
                 <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
                 {% endif %}
             </div>

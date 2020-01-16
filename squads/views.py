@@ -482,7 +482,7 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
         if lecture.office:
             address = lecture.office.address
         else:
-            if len(squad.school.school_offices.all())> 0:
+            if len(squad.school.school_offices.all()) > 0:
                 address = squad.school.school_offices.first().address
             else:
                 address = ''

@@ -5,22 +5,30 @@
 Зарегестрироваться | {{ block.super }}
 {% endblock head_title %}{% block content %}
 <div class="ui container" style="overflow-y: hidden;">
-    <div class="ui grid stackable mt0">
+    <div class="ui grid stackable mt0 mb30">
         <div class="five wide column">
         </div>
         <div class="six wide column">
+                <div class="text-center mt15 mb30" style="font-size: 30px;">
+                    Создайте Ваш аккаунт
+                </div>
             <div class="ui segment">
                 <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
                 <div style="display: none;" class="highlight_red reg_fill_all">Заполните все</div>
                 <form method='POST' style="margin-bottom: 0" enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
-                    <input class="new_name2" placeholder="Имя Фамилия" style="margin-bottom: 10px;">
-                    <input class="new_username2" placeholder="Номер телефона" style="margin-bottom: 10px;">
-                    <input class="new_mail2" placeholder="Email" style="margin-bottom: 10px;">
+                    Имя Фамилия
+                    <input class="new_name2 mb10">
+                    Номер телефона
+                    <input class="new_username2 mb10">
+                    Email
+                    <input class="new_mail2 mb10">
                     <div style="display: none;" class="highlight_red reg_wrong_pass">Пароли не совпадают</div>
-                    <input class="new_password22" type="password" placeholder="Пароль" style="margin-bottom: 10px;">
-                    <input class="new_password222" type="password" placeholder="Повторите пароль" style="margin-bottom: 10px;">
-                    <div style="text-align: center;">
-                        <input class="ui button green register-btn2" style="margin-right: 15px;" value="Зарегистрироваться" type="submit" onclick="return false">
+                    Пароль
+                    <input class="new_password22 mb10" type="password">
+                    Повторите пароль
+                    <input class="new_password222 mb10" type="password">
+                    <div class="text-center">
+                        <input class="ui button green register-btn2 mr15 full-w mt15" value="Зарегистрироваться" type="submit" onclick="return false">
                     </div>
                 </form>   
             </div>                 
@@ -29,4 +37,6 @@
         </div>            
     </div>
 </div>
+{% include 'footer.html' %}
+
 {% endblock content %}

@@ -6,16 +6,16 @@
     }
 </style>
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
-<div class="ui segment help1 help2 help41 help43" style="margin-bottom: 0;margin-top: 0">
-    <div class="hint1 highliter hint41" style="position: absolute;margin:-50px 0 0 -225px;"></div>
+<div class="ui segment no_margin">
+    <div class="highliter hint41" style="position: absolute;margin:-50px 0 0 -225px;"></div>
     <div class="ui grid">
-        <div class="responsive-fix">
+        <div class="responsive-fix no_padding">
             <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;position: relative;top: 50%;transform: translateY(-50%);">  
         </div>
-        <div class="seven wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+        <div class="seven wide column pl0 text15" style="line-height: 28px;">
             Расписание
         </div>
-        <div class="seven wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
+        <div class="seven wide column pl0 text15" style="line-height: 28px;">
             {% include 'profile/miss_lecture.html' %}
         </div>
     </div>

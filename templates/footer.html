@@ -1,0 +1,28 @@
+{% load staticfiles %}    
+<div class="mt30 pt15 pb30 text-center backblue textw">
+    <img src="{% static 'images/logo_clean.jpeg' %}" style="width: 200px;">
+    <div class="ui grid stackable">
+        <div class="four wide column">
+        </div>
+        <div class="four wide column" style="text-align: left;">
+            <div style="line-height: 30px">
+                <b>Контакты</b>
+                <br>
+                Телефон: <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
+                <br>
+                Email: aaa.academy.kz@gmail.com
+            </div>
+        </div>
+        <div class="four wide column pt30" style="text-align: center;">
+            <a href="{% url 'main:about' %}" class="ui button  green" style="width: 190px;">Стать партнером</a>
+        </div>
+        <div class="two wide column">
+        </div>
+    </div>
+    <div class="mt15" style="color: lightgrey;font-size: 11px;">
+        <i>made by </i> <a href="" style="text-decoration: underline;color: lightgrey;">Kuanysh Oteu</a>
+    </div>
+    <div class="mt15">
+        &nbsp;© 2020. Все права защищены.            
+    </div>
+</div>

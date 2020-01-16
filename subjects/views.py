@@ -161,14 +161,14 @@ def subject_update(request, slug=None):
             squad.bill = squad.bill - old_month_bill + new_month_bill
             squad.save()
 
-    cost = 0
-    for subject in school.school_subjects.all():
-        subject_cost = 0
-        if subject.cost:
-            subject_cost = subject.cost
-        cost += subject_cost
-    school.average_cost = int(cost / len(school.school_subjects.all()))
-    school.save()
+        cost = 0
+        for subject in school.school_subjects.all():
+            subject_cost = 0
+            if subject.cost:
+                subject_cost = subject.cost
+            cost += subject_cost
+        school.average_cost = int(cost / len(school.school_subjects.all()))
+        school.save()
     if request.POST: 
         if len(request.FILES) > 0:
             if 'subject_banner' in request.FILES:
