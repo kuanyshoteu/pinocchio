@@ -28,7 +28,7 @@ from squads.models import NeedMoney
 def loaderio(request):
     context = {
     }
-    return render(request, "loaderio.txt", context)
+    return render(request, "loaderio-c10fbfa327821a1063a562c197571027.txt", context)
 
 def main_view(request):
     if request.user.is_authenticated:
