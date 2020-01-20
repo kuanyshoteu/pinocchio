@@ -314,19 +314,18 @@ def get_current_attendance(subject, squad):
         i = 0
         counter = 0
         students = squad.students.all()
-        subject_materials = subject.materials.prefetch_related('sm_atts')
+        subject_materials = subject.materials.all()
         len_squad_students = len(students)
         if material_number > len(subject_materials):
-            for i in range(0, material_number - subject.number_of_materials):
+            for i in range(0, material_number - len(subject_materials)):
                 subject.materials.create(
                     school=subject.school
                 )
             subject.number_of_materials = material_number
             subject.save()
+        subject_materials = subject.materials.prefetch_related('sm_atts')
         while material_number - i > 0:
             if counter == 4:
-                break
-            if material_number - i-1 < 0 or len(subject_materials) < material_number - i-1:
                 break
             sm = list(subject_materials)[material_number - i-1]
             if len(sm.sm_atts.filter(squad = squad, student__in=students)) < len_squad_students:
