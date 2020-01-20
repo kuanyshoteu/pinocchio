@@ -2382,7 +2382,8 @@ a{
     .login_form{
       padding: 14px;
       width: 100%;
-      margin: 5% auto;
+      margin-left: auto !important;
+      margin-right: auto !important;
     }
     #main-menu{
       height: 45px;
