@@ -326,7 +326,7 @@ def get_current_attendance(subject, squad):
         while material_number - i > 0:
             if counter == 4:
                 break
-            if material_number - i-1 < 0 or len(subject_materials) > material_number - i-1:
+            if material_number - i-1 < 0 or len(subject_materials) < material_number - i-1:
                 break
             sm = list(subject_materials)[material_number - i-1]
             if len(sm.sm_atts.filter(squad = squad, student__in=students)) < len_squad_students:
