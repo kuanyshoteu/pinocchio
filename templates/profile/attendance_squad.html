@@ -20,13 +20,7 @@
 			{% if att_squad.students.all|length == 0 %}
 				<div class="highlight_black">
 					Еще нет студентов в этой группе,<br> добавить студентов можно в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы</a> или в <a class="ui button mini green" href="/schools/crm/">CRM</a>
-				</div>			
-			{% elif att_subject.number_of_materials == 0 %}
-				<div class="highlight_black">
-					Количество уроков курса равна 0, оценки можно ставить только за урок
-					<br>
-					Изменить количество уроков можно в <a class="ui button mini green" href="{{att_subject.get_update_url}}">Настройках курса {{att_subject.title}}</a>
-				</div>			
+				</div>
 			{% elif att_subject|get_current_attendance:att_squad == 'No_schedule' %}
 				<div class="highlight_black">
 					Не настроено расписание, можетe настроить в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы {{att_squad.title}}</a>

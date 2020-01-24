@@ -112,7 +112,9 @@ def account_view(request, user = None):
             miss_lesson = miss_lesson_form.save()
             return check_confirmation(hisprofile, skill)
     hissubjects = []
-    if is_profi(hisprofile, 'Manager'):
+    if is_profi(hisprofile, 'Director'):
+        hissquads = profile.schools.first().groups.filter(shown=True)
+    elif is_profi(hisprofile, 'Manager'):
         if profile.skill.crm_office2:
             hissquads = profile.skill.crm_office2.groups.filter(shown=True)
         else:
