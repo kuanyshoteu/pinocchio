@@ -79,7 +79,7 @@ def paper_details(request, paper_id = None):
         paper.subthemes.add(subtheme)
         return redirect(paper.get_absolute_url())
     is_director = False
-    if is_profi(profile, 'Director') or is_profi(profile, 'Teacher'):
+    if is_profi(profile, 'Director'):
         is_director = True
     context = {
         "profile": profile,
