@@ -425,8 +425,7 @@ $(document).ready(function(){
             }
         });  
     });
-
-    $(document).on("click", '.change_lesson_name', function () {
+    $(".change_lesson_name").click(function () {
         var this_ = $(this);
         var pageUrl = this_.attr("data-href");
         var name = $('#change_lesson_name' + this_.attr('id')).val();

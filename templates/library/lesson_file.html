@@ -16,7 +16,7 @@
       <span id="lesson_title{{ lesson.id }}">{{ lesson.title }}</span>
   </a>
   <form class="ui form rename_lesson_form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-      <textarea style="padding: 0; height: 60px;" id='change_lesson_name{{ lesson.id }}' type="text">{{ lesson.title }}</textarea>
-      <a class="ui button mini blue change_lesson_name" id="{{ lesson.id }}" data-href='{{ lesson.change_name_url }}' style="width: 100%; margin-top: 5px;">✓</a>
+      <textarea class="mb0 pl5 pr5" style="height: 60px;" id='change_lesson_name{{ lesson.id }}' type="text">{{ lesson.title }}</textarea>
+      <a class="ui button mini blue change_lesson_name full-w" id="{{ lesson.id }}" data-href='{{ lesson.change_name_url }}'>Сохранить</a>
   </form>
 </div>

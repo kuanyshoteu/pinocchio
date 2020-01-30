@@ -127,6 +127,10 @@ def account_view(request, user = None):
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
 
     school_money = 0
+    if len(profile.schools.all()) > 0:
+        school = profile.schools.first()
+    else:
+        school = None
     is_director = is_profi(profile, 'Director')
     if is_director:
         school_money = profile.schools.first().money
@@ -147,6 +151,7 @@ def account_view(request, user = None):
         "is_director":is_director,
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school_money,
+        "school_crnt":school,
         'constant_times':get_times(60),
         "interval":60,
         'height':28*15+25, 
