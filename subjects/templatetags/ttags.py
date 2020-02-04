@@ -125,7 +125,7 @@ def rating_filter(profile):
     if profile.skill.crm_subject:
         students = students.filter(crm_subject_connect=profile.skill.crm_subject)
     res = []
-    for student in students:
+    for student in set(students):
         if len(student.squads.all()) == 0:
             continue
         card = cards.filter(card_user=student)
@@ -138,10 +138,12 @@ def rating_filter(profile):
             nm = sq.need_money.filter(card=card)
             pay_date = '-'
             pay_date_input = '-'
+            pd = ''
             if len(nm) > 0:
                 nm = nm.last()
-                pay_date = get_pay_date(nm).strftime('%d %B')
-            sq_res.append([sq, pay_date, str(pay_date)])
+                pd = get_pay_date(nm)
+                pay_date = pd.strftime('%d %B')
+            sq_res.append([sq, pay_date, str(pay_date), pd.strftime('%Y-%m-%d')])
         res.append([
             student,
             sq_res

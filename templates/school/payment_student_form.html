@@ -16,7 +16,7 @@
                 <a onclick="$('.block_change_pay_date').hide();$('#change_date{{ student.0.id }}g{{squad.0.id}}').show();"><i class="icon pen square textw"></i></a>
                 <br>
                 <div id="change_date{{ student.0.id }}g{{squad.0.id}}" class="block_change_pay_date" style="display: none;">
-                    <input style="width: 145px;" value="{{squad.2}}" id="payday_input{{ student.0.id }}g{{squad.0.id}}" class="pl5 pr0 pb5 pt0" type="date" name="">
+                    <input style="width: 145px;" value="{{squad.3}}" id="payday_input{{ student.0.id }}g{{squad.0.id}}" class="pl5 pr0 pb5 pt0" type="date" name="">
                     <a class="ui button mini blue pt5 pb5 mt5 change_pay_date" student="{{ student.0.id }}" group="{{squad.0.id}}" style="width: 135px;">
                         Сохранить 
                         <div class="loading_small payday_load{{ student.0.id }}g{{squad.0.id}}" style="display: none;">
@@ -35,6 +35,6 @@
     {%endfor%}
     </div>
     <div class="ml10">
-        <a style="right: 0" class="ui button mini full-w pl5 pr5 show_payment_history" id="{{ student.0.id }}">История оплаты</a>
+        <a style="right: 0" class="ui button mini full-w pl5 pr5 show_payment_history" onclick="show_payment_history('{{ student.0.id }}')">История оплаты</a>
     </div>
 </form>
