@@ -116,14 +116,14 @@ def rating_filter(profile):
     cards = school.crm_cards.select_related('card_user')
     squad = profile.rating_squad_choice.first()
     squads = school.groups.filter(shown=True).prefetch_related('students')
+    if profile.skill.crm_office2:
+        squads = squads.filter(office=profile.skill.crm_office2)
     if squad != None:
         students = squad.students.filter(is_student=True)
     else:
-        students = school.people.filter(is_student=True)
+        students = school.people.filter(is_student=True, squads__in=squads)
     if profile.skill.crm_subject:
         students = students.filter(crm_subject_connect=profile.skill.crm_subject)
-    if profile.skill.crm_age:
-        students = students.filter(crm_age_connect=profile.skill.crm_age)
     res = []
     for student in students:
         if len(student.squads.all()) == 0:

@@ -793,10 +793,10 @@ def crm_option(request):
                 skill.crm_cabinet = crm_cabinet
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
-                skill.crm_office = None
+                skill.crm_office2 = None
             else:
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_office = office
+                skill.crm_office2 = office
         if request.GET.get('option') == 'course':
             skill.filter_course_connect.clear()
             if int(request.GET.get('object_id')) != -1:

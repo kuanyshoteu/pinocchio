@@ -41,16 +41,16 @@
                                 </div>
                             </div>
                             <div class="four wide column pb15">
-                                Выберите <b>возраст</b>:
+                                Выберите <b>офис</b>:
                                 <div class="controls"> 
-                                    <select class="crm_option" id="crm_age_mobile" url="{{ instance.crm_option_url }}" option="age"> 
-                                        {% if profile.skill.crm_age %}
-                                            <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
+                                    <select class="crm_option" id="crm_office_mobile" url="{{ instance.crm_option_url }}" option="office"> 
+                                        {% if profile.skill.crm_office2 %}
+                                            <option value="{{ profile.skill.crm_office2.id }}">{{ profile.skill.crm_office2.title }}</option>
                                         {% endif %}
-                                        <option value="-1">Все возрасты</option>
-                                        {% for subject_age in subject_ages %}
-                                            {% if subject_age != profile.skill.crm_age %}
-                                            <option value="{{ subject_age.id }}">{{ subject_age.title }}</option>
+                                        <option value="-1">Все офисы</option>
+                                        {% for office in instance.school_offices.all %}
+                                            {% if office != profile.skill.crm_office2 %}
+                                            <option value="{{ office.id }}">{{ office.title }}</option>
                                             {% endif %}
                                         {% endfor %}
                                     </select>
