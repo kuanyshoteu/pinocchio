@@ -165,15 +165,15 @@ def get_pay_date(nm):
 
 @register.filter
 def cell_school_lectures(cell, profile):
-    # if profile.skill.crm_subject==None and profile.skill.crm_age==None and profile.skill.crm_office==None:
+    # if profile.skill.crm_subject==None and profile.skill.crm_age==None and profile.skill.crm_office2==None:
     #     return []
     lectures = cell.lectures.all()
     if profile.skill.crm_subject:
         lectures = lectures.filter(category=profile.skill.crm_subject)
     if profile.skill.crm_age:
         lectures = lectures.filter(age=profile.skill.crm_age)
-    if profile.skill.crm_office:
-        lectures = lectures.filter(office=profile.skill.crm_office)
+    if profile.skill.crm_office2:
+        lectures = lectures.filter(office=profile.skill.crm_office2)
     return lectures
 
 @register.filter
@@ -580,8 +580,8 @@ def constant_school_lectures(profile, school):
         lectures = lectures.filter(category=profile.skill.crm_subject)
     if profile.skill.crm_cabinet:
         lectures = lectures.filter(cabinet=profile.skill.crm_cabinet)
-    if profile.skill.crm_office:
-        lectures = lectures.filter(office=profile.skill.crm_office)
+    if profile.skill.crm_office2:
+        lectures = lectures.filter(office=profile.skill.crm_office2)
     if len(profile.skill.filter_teacher.all()) > 0:
         teacher = profile.skill.filter_teacher.first()
         squads = teacher.hissquads.all()

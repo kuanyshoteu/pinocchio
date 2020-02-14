@@ -1877,7 +1877,6 @@ def group_finance(request):
     }
     return JsonResponse(data)
 
-
 def payday_change(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)

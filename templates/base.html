@@ -186,14 +186,15 @@
     </div>
 </div>
 <div class="menu profile_links">
-    <div class="ui segment">
+    <div class="ui segment no_padding">
         {% if user.is_authenticated %}
-        <a class="item pod-main" href='{{ profile.get_absolute_url }}'>
-            Моя страница
+        <a class="ui button small full-w white" style="text-align: left;" href='{{ profile.get_absolute_url }}'>
+            <i class="icon user"></i> Моя страница
         </a>
         {% endif %}
-        <div class="ui divider"></div>
-        <a class="item pod-main" href='{% url "logout" %}'>Выйти</a>        
+        <div class="ui divider no_margin"></div>
+        <a class="ui button small full-w white" style="text-align: left;" href='{% url "logout" %}'>
+            <i class="icon close"></i> Выйти</a>
     </div>
 </div>
 <br><br>
@@ -201,23 +202,22 @@
 <div class='content-container'>
     <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
         <div class="eleven wide column no_padding">
-            <div class="ui segment no_padding full-h" style="background-color: #f4f4f4; z-index: 3000;">
+            <div class="ui segment no_padding full-h shadow" style="background-color: #f4f4f4; z-index: 3000;">
                 {% if user.is_authenticated %}
-                <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item mobmenu" href='{{ profile.get_absolute_url }}'>
-                        <i class="home icon blue"></i> Моя страница
+                    <a class="ui button white full-w bt1" href='{{ profile.get_absolute_url }}'>
+                        <i class="home icon"></i> Моя страница
                     </a>
-                    <a class="item mobmenu" href='{% url "news:list" %}'>
-                        <i class="newspaper icon blue"></i>Новости
+                    <a class="ui button white full-w bt1" href='{% url "news:list" %}'>
+                        <i class="newspaper icon"></i>Новости
                     </a>
                     {% if is_director %}
-                    <a class="item mobmenu" href='{% url "schools:info" %}'>
-                        <i class="cog icon blue"></i>Управление
+                    <a class="ui button white full-w bt1" href='{% url "schools:info" %}'>
+                        <i class="cog icon"></i>Управление
                     </a>
                     {% endif %}
                     {% if is_manager or is_director %}
-                    <a class="item mobmenu not_in_mobile" href='{% url "schools:crm" %}'>
-                        <i class="list alternate icon blue"></i>
+                    <a class="ui button white full-w bt1 not_in_mobile" href='{% url "schools:crm" %}'>
+                        <i class="list alternate icon"></i>
                         CRM
                         {% if profile.skill.need_actions > 0 %}
                         <span class="left_menu_number">{{profile.skill.need_actions}}</span>
@@ -225,53 +225,41 @@
                     </a>
                     {% endif %}
                     {% if is_manager or is_trener or is_director %}
-                    <a class="item mobmenu" href='{% url "documents:main" %}'>
-                        <i class="folder icon blue"></i>Документы
+                    <a class="ui button white full-w bt1" href='{% url "documents:main" %}'>
+                        <i class="folder icon"></i>Документы
                     </a>
                     {% endif %}
-                    <a class="item mobmenu" href='{% url "schools:rating" %}'>
-                        <i class="trophy icon blue"></i>Рейтинги
+                    <a class="ui button white full-w bt1" href='{% url "schools:rating" %}'>
+                        <i class="trophy icon"></i>Рейтинги
                     </a>
-<!--                     {% if is_manager or is_trener or is_director %}
-                    <a class="item mobmenu" href='{% url "squads:list" %}'>
-                        <i class="users icon blue"></i>Классы
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "squads:list" %}'>
+                        <i class="users icon"></i>Классы
                     </a>
-                    <a class="item mobmenu" href='{% url "subjects:list" %}'>
-                        <i class="table icon blue"></i>Курсы
+                    <a class="ui button white full-w bt1" href='{% url "subjects:list" %}'>
+                        <i class="table icon"></i>Курсы
                     </a>
                     {% endif %}
- -->                    {% if is_trener or is_director %}
-                    <a class="item mobmenu" href='{% url "library:main" %}'>
-                        <i class="file alternate icon blue"></i>База уроков
+                    {% if is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "library:main" %}'>
+                        <i class="file alternate icon"></i>База уроков
                     </a>
                     {% endif %}
                     {% if is_manager or is_trener or is_director %}
-  <!--                   <a class="item mobmenu" href='/todolist/'>
-                        <i class="check calendar icon blue"></i>Задания
-                    </a> -->
-                    <a class="item mobmenu" href='{% url "schools:payments" %}'>
+                    <a class="ui button white full-w bt1" href='{% url "schools:payments" %}'>
                         <i class="dollar sign icon"></i>Оплата
-                    </a>
-  
-                    {% endif %}
-                    {% if is_trener or profile.is_student and profile.schools.all > 0 %}   
-                    <a class="item mobmenu" href='{{ profile.hislessons }}'>
-                        <i class="arrow right icon blue"></i>Урок
                     </a>  
                     {% endif %}
-                </div>
                 {% else %}
-                <div class="ui vertical menu stackable" style="border:0; box-shadow: none; z-index: 3002;">
-                    <a class="item mobmenu" href='{% url "main:about" %}' style="background-color: #fff">
+                    <a class="ui button white full-w bt1" href='{% url "main:about" %}' style="background-color: #fff">
                         Стать партнером
                     </a>
-                    <a class="item mobmenu" href='{% url "main:pricing" %}' style="background-color: #fff">
+                    <a class="ui button white full-w bt1" href='{% url "main:pricing" %}' style="background-color: #fff">
                         Цены
                     </a>
-                    <a class="item mobmenu" href='{% url "main:team" %}' style="background-color: #fff">
+                    <a class="ui button white full-w bt1" href='{% url "main:team" %}' style="background-color: #fff">
                         О нас
                     </a>
-                </div>
                 {% endif %}           
             </div>
         </div>

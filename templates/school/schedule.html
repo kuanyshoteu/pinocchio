@@ -34,24 +34,26 @@
                                     {% endif %}
                                 </select>
                             </div>
+                            {% if is_director %}
                             <div class="twenty wide column pr0">
                                 Офис:
                                 <select class="crm_option" option="office" id="crm_office" url="{{ instance.crm_option_url }}">
-                                    {% if profile.skill.crm_office %}
-                                        <option value="{{ profile.skill.crm_office.id }}">{{ profile.skill.crm_office.title }}</option>
+                                    {% if profile.skill.crm_office2 %}
+                                        <option value="{{ profile.skill.crm_office2.id }}">{{ profile.skill.crm_office2.title }}</option>
                                     {% else %}
                                         <option value="-1">Все офисы</option>
                                     {% endif %}
                                     {% for office in offices %}
-                                        {% if office != profile.skill.crm_office %}
+                                        {% if office != profile.skill.crm_office2 %}
                                         <option value="{{ office.id }}">{{ office.title }}</option>
                                         {% endif %}
                                     {% endfor %}
-                                    {% if profile.skill.crm_office %}
+                                    {% if profile.skill.crm_office2 %}
                                         <option value="-1">Все офисы</option>
                                     {% endif %}
                                 </select>
                             </div>
+                            {%endif%}
                             <div class="twenty wide column pr0">
                                 Кабинет:
                                 <select class="crm_option" option="crm_cabinet" id="crm_cabinet" url="{{ instance.crm_option_url }}">
@@ -110,8 +112,15 @@
                     </form>
                 </div>
                 <div id="calendar" length='7' style="padding-bottom: 50px;">
+                    <div class="loading" style="display: none;">
+                      <div class="animation"><div class="circle one"></div></div>
+                      <div class="animation"><div class="circle two"></div></div>
+                      <div class="animation"><div class="circle three"></div></div>
+                      <div class="animation"><div class="circle four"></div></div>
+                      <div class="animation"><div class="circle five"></div></div>
+                      <div class="animation"><div class="circle six"></div></div>
+                    </div>
                 {% if instance.schedule_type == 'classic' %}
-                    <span class="data_update" status="yes" style="display: none;"></span>
                     {% include 'school/classicschedule.html' %}
                 {% else %}
                     <div id="week">   

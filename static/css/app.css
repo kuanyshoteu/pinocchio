@@ -16827,11 +16827,11 @@ ol.ui.horizontal.list li:before,
   .ui.column.grid > [class*="eleven wide tablet"].column {
     width: 68.75% !important;
   }
-  .ui.grid > .row > [class*="twelve wide tablet"].column,
-  .ui.grid > .column.row > [class*="twelve wide tablet"].column,
-  .ui.grid > [class*="twelve wide tablet"].column,
-  .ui.column.grid > [class*="twelve wide tablet"].column {
-    width: 75% !important;
+  .ui.grid > .row > [class*="twelve wide column"].column,
+  .ui.grid > .column.row > [class*="twelve wide column"].column,
+  .ui.grid > [class*="twelve wide column"].column,
+  .ui.column.grid > [class*="twelve wide column"].column {
+    width: 100% !important;
   }
   .ui.grid > .row > [class*="thirteen wide tablet"].column,
   .ui.grid > .column.row > [class*="thirteen wide tablet"].column,
@@ -16857,22 +16857,6 @@ ol.ui.horizontal.list li:before,
   .ui.column.grid > [class*="sixteen wide tablet"].column {
     width: 100% !important;
   }
-/* main-info */
-.ui.grid > .row > [class*="four wide"].column,
-.ui.grid > .column.row > [class*="four wide"].column,
-.ui.grid > [class*="four wide"].column,
-.ui.column.grid > [class*="four wide"].column {
-    width: 50% !important;
-  }
-.ui.grid > .row > [class*="five wide"].column,
-.ui.grid > .column.row > [class*="five wide"].column,
-.ui.grid > [class*="five wide"].column,
-.ui.column.grid > [class*="five wide"].column {
-    width: 45% !important;
-  }
-.description > .ui.grid {
-  display: block;
-}
 }
 /* Computer/Desktop Sizing Combinations */
 

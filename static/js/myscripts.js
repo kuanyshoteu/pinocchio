@@ -1268,7 +1268,7 @@
                 for (var i = 1; i < dayp1; i++) {
                     sum += parseInt($('.dataconst').attr('max' + i))
                 }
-                $('.constback'+dayp1).css('margin-left', sum*100+53);        
+                $('.constback'+dayp1).css('margin-left', sum*100 + 53);
                 $('.constback'+dayp1).css('width', 100*maxcount);
                 $('.schedule_lines').css('width', sum*100+53+100*maxcount)
                 left = 55 + (sum-1)*100 + 100*count;

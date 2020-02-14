@@ -25,7 +25,7 @@
                         <div class="twenty pr0">
                             <div>
                                 {% include 'profile/avatar.html' %}
-                                <div class="ui segment">
+                                <div class="ui segment not_in_mobile">
                                     <p class="text13">Школа:
                                         {%for school in hisprofile.schools.all %}
                                         <a href="{{ school.landing }}" class="mr10"><b>{{ school.title }}</b></a>

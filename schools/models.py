@@ -43,7 +43,7 @@ class School(models.Model):
     version = models.CharField(max_length=10, default='')
     sms_amount = models.IntegerField(default=0)
     pay_day_diff = models.IntegerField(default=5)
-    schedule_type = models.CharField(max_length=10, default='') #May be "classic" or "new"
+    schedule_type = models.CharField(max_length=10, default='classic') #May be "classic" or "new"
     schedule_interval = models.IntegerField(default=60)
 
     class Meta:

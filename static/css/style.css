@@ -42,6 +42,22 @@
 .text13{
   font-size:13px !important; 
 }
+.shadow{
+  box-shadow: 0 0 15px 0 #d7d7d7 !important;
+}
+.shadow_blue{
+  box-shadow: 0 0 5px 0 #506ca9 !important;
+}
+.shadow_green{
+  box-shadow: 0 0 5px 0 #21BA45 !important;
+}
+.bt1{
+  border-top: 1px solid #e5e5e5 !important;
+}
+
+.text17{
+  font-size:17px !important; 
+}
 .text10{
   font-size:10px !important; 
 }
@@ -507,21 +523,6 @@ body{
   right: 4.5%;
   height: 90%;
   padding: 200px 10px;
-  width: 50px;
-  font-size: 20px;
-  z-index: 500;
-  color: #5181b8;
-}
-#go-back-btn-before {
-  position: absolute;
-  background-color: transparent;
-  border: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  top: 61px;
-  left: 14.5%;
-  height: 90%;
-  padding: 15px 10px;
   width: 50px;
   font-size: 20px;
   z-index: 500;
@@ -1041,10 +1042,10 @@ a{
 }
 .profile_links{
   display: none;
-  position: fixed;
-  margin-top: 50px;
+  position: absolute;
+  margin-top: 25px;
   right: 1em;
-  margin-right: 100px;
+  margin-right: 30px;
   z-index: 3000;
   width: 150px;
 }
@@ -2177,7 +2178,31 @@ a{
 .back_to_schools:hover{
   background-color: lightgrey;
 }
-@media screen and (min-width: 900px){
+@media screen and (min-width: 992px){
+  #go-back-btn-before {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    top: 61px;
+    left: 14.5%;
+    height: 90%;
+    padding: 15px 10px;
+    width: 50px;
+    font-size: 20px;
+    z-index: 500;
+    color: #5181b8;
+  }
+  .deskpl30{
+    padding-left: 30px !important
+  }
+  .deskpr30{
+    padding-right: 30px !important
+  }
+  .mobmenu{
+    display: none !important;
+  }
   .mapdivider{
     display: none;
   }
@@ -2319,7 +2344,7 @@ a{
     .filter_title{
       width: 190px;
     }
-    .newlandhead{padding: 50px 50px 10px 50px;}
+    .newlandhead{padding: 35px 50px 10px 50px;}
     .half-w{
       width: 50%;
     }
@@ -2352,7 +2377,41 @@ a{
 .schoolLanding__content-services__item-right {
   text-align: center;
 }
-@media only screen and (max-width: 899px) {
+@media only screen and (max-width: 991px) {
+  .mobpt0{
+    padding-top: 0px !important
+  }
+  .catchmob{
+    width: 1px;
+  }
+  .deskmenu{
+    display: none !important;
+  }  
+  .menu-title{
+    width: 200px;
+  }  
+  #go-back-btn-before {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    height: 90%;
+    padding: 15px 5px;
+    width: 25px;
+    font-size: 15px;
+    z-index: 500;
+    color: #5181b8;
+  }
+  .mobmb5{
+    margin-bottom: 5px !important;
+  }
+  .mobpl0{
+    padding-left: 0 !important;
+  }
+  .mobpb30{
+    padding-bottom: 30 !important;
+  }
     .big_pad{
       padding-left: 10px;
       padding-right: 10px;
@@ -2372,7 +2431,7 @@ a{
     .half-w{
       width: 100%;
     }
-    .newlandhead{padding: 50px 10px 10px 10px;}
+    .newlandhead{padding: 35px 10px 10px 10px;}
     .catland{
       padding: 30px 0px 200px 0px;
     }

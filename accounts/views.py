@@ -112,19 +112,32 @@ def account_view(request, user = None):
             miss_lesson = miss_lesson_form.save()
             return check_confirmation(hisprofile, skill)
     hissubjects = []
+    hissquads = profile.skill.crm_office2.groups.filter(shown=True)
+    hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+    if len(hissquads) > 0:
+        if not hiscacheatt.squad in hissquads:
+            hiscacheatt.squad = hissquads.first()
+        if not hiscacheatt.subject in hiscacheatt.squad.subjects.all():
+            hiscacheatt.subject = hiscacheatt.squad.subjects.first()
+    else:
+        hiscacheatt.squad = None
+        hiscacheatt.subject = None
+    hiscacheatt.save()
+    att_squad = hiscacheatt.squad
     if is_profi(hisprofile, 'Director'):
         hissquads = profile.schools.first().groups.filter(shown=True)
     elif is_profi(hisprofile, 'Manager'):
         if profile.skill.crm_office2:
-            hissquads = profile.skill.crm_office2.groups.filter(shown=True)
+            if att_squad in hissquads:
+                hissubjects = att_squad.subjects.all()
         else:
-            hissquads =  profile.schools.first().groups.filter(shown=True)
+            if att_squad in hissquads:
+                hissubjects = att_squad.subjects.all()
     elif is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.filter(shown=True)
     else:
         hissquads = hisprofile.squads.filter(shown=True)
         hissubjects = set(Subject.objects.filter(squads__in=hissquads))
-    hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
 
     school_money = 0
     if len(profile.schools.all()) > 0:
@@ -138,7 +151,7 @@ def account_view(request, user = None):
         "profile":profile,
         "hisprofile": hisprofile,
         'att_subject':hiscacheatt.subject,
-        'att_squad':hiscacheatt.squad,
+        'att_squad':att_squad,
         'today':int(timezone.now().date().strftime('%w')),
         'hissquads':hissquads,
         'hissubjects':hissubjects,
