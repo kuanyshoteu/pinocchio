@@ -112,8 +112,15 @@ def account_view(request, user = None):
             miss_lesson = miss_lesson_form.save()
             return check_confirmation(hisprofile, skill)
     hissubjects = []
-    hissquads = profile.skill.crm_office2.groups.filter(shown=True)
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
+    if is_profi(hisprofile, 'Director'):
+        hissquads = profile.schools.first().groups.filter(shown=True)
+    elif is_profi(hisprofile, 'Manager'):
+        hissquads = profile.skill.crm_office2.groups.filter(shown=True)
+    elif is_profi(hisprofile, 'Teacher'):
+        hissquads = hisprofile.hissquads.filter(shown=True)
+    else:
+        hissquads = hisprofile.squads.filter(shown=True)
     if len(hissquads) > 0:
         if not hiscacheatt.squad in hissquads:
             hiscacheatt.squad = hissquads.first()
@@ -124,19 +131,14 @@ def account_view(request, user = None):
         hiscacheatt.subject = None
     hiscacheatt.save()
     att_squad = hiscacheatt.squad
-    if is_profi(hisprofile, 'Director'):
-        hissquads = profile.schools.first().groups.filter(shown=True)
-    elif is_profi(hisprofile, 'Manager'):
+    if is_profi(hisprofile, 'Manager'):
         if profile.skill.crm_office2:
             if att_squad in hissquads:
                 hissubjects = att_squad.subjects.all()
         else:
             if att_squad in hissquads:
                 hissubjects = att_squad.subjects.all()
-    elif is_profi(hisprofile, 'Teacher'):
-        hissquads = hisprofile.hissquads.filter(shown=True)
     else:
-        hissquads = hisprofile.squads.filter(shown=True)
         hissubjects = set(Subject.objects.filter(squads__in=hissquads))
 
     school_money = 0
