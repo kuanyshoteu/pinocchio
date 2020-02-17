@@ -1294,84 +1294,14 @@ def moderator_run_code(request):
 
 def logos_move():
     aiza = Profile.objects.get(id = 652)
-    school = School.objects.get(id=96)
-    for card in school.crm_cards.all():
-        card.author_profile = aiza
-        card.save()
-
-def logos_create_s():
-    m = [["Саксембаев Санжар", "702450848"], 
-            ["Айзирек Нарынбаева", "558423242"], 
-            ["Таалайбекова Сезим", "703969865"], 
-            ["Омаров Имамназар", "555991556"], 
-            ["Ким Рада", "558558007"], 
-            ["Оморова Аяна", "550111555"], 
-            ["Актан", "778825528"], 
-            ["Эсенбеков Адилет", "778483608"], 
-            ["Акинова Зауре", "700640731"], 
-            ["Салима", "700111075"], 
-            ["Эльвира", "500152615"], 
-            ["Алина", "505122201"], 
-            ["Арууке", "706953374"], 
-            ["Темирбек к Марал", "706130384"], 
-            ["Нурсултан", "555 332 662"], 
-            ["Атай", "552750077"], 
-            ["Акылбекова Аделя", "706313509"], 
-            ["Фаратов Али", "702706063"], 
-            ["Элеся", "558020515"], 
-            ["Нурмухаммед", "505096009"], 
-            ["Асель Абдиева", "708901266"], 
-            ["Рабия", "709014955"], 
-            ["Абдыкеримова Жумайым", "779658431"], 
-            ["Милана", "701104050"], 
-            ["Арина", "990850000"], 
-            ["Сильвия", "553171553"], 
-            ["Алымов Азат", "703970067"], 
-            ["Айдана Асанбекова", "990123486"], 
-            ["Керимкулов Амир", "703418343"], 
-            ["Мадина", "500616216"], 
-            ["Сабыров Ринат", "559000802"], 
-            ["Амаева Айтурган", "500616216"], 
-            ["Санжар", "776993367"], 
-            ["Абдилазиз", "709172517"], 
-            ["Алтай", "990440040"], 
-            ["Унукара Сейлин", "559697286"], 
-            ["Медер", "771427246"], 
-            ["Азамат Ботоев", "706808878"], 
-            ["Алия", "779880874"], 
-            ["Бакиров Алымбек", "501902133"], 
-            ["Акыл", "555999140"]] 
-    teachers = [["Саадат +996700628649"],
-                ["Мирлан +996706865768"],
-                ["Азиза +996555210660"],
-                ["Керим +996507280893"],
-                ["Вадим +996559054545"],
-                ["Марианна+996709922964"],
-                ["Каныкей +996558558840"],
-                ["Вероника +996555723005"],
-                ["Валерия +996552121471"]]   
-
-    school = School.objects.get(id=3)
-    idd = User.objects.order_by("id").last().id
-    for j in m:
-        idd = idd + 1
-        new_id = str(idd)
-        new_name = "ltww"+new_id
-        user = User.objects.create(username=new_name)
-        user.save()
-        school.people.create(user=user,first_name=j[0],phone=j[1])
-        school.crm_cards.create(name=j[0], phone=j[1])
-    prof = Profession.objects.get(title="Teacher")
-    for j in teachers:
-        idd = idd + 1
-        new_id = str(idd)
-        new_name = "ltww"+new_id
-        user = User.objects.create(username=new_name)
-        user.save()
-        teac = school.people.create(user=user,first_name=j[0],phone=j[1], is_student=True)
-        teac.profession.add(prof)
-        school.crm_cards.create(name=j[0], phone=j[1])
-
+    azs = aiza.skill
+    azs.need_actions = 42
+    azs.save()
+    ais = Profile.objects.get(id=638)
+    aiss = ais.skill
+    aiss.need_actions = 0
+    aiss.save()
+    
 def check_skills():
     for profile in Profile.objects.filter(schools=None):
         print(profile.first_name)
