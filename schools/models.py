@@ -230,6 +230,13 @@ class SubjectLevel(models.Model):
 class ElliteSchools(models.Model):
     schools = models.ManyToManyField(School, related_name='elite_list')
 
+class HelpVideos(models.Model):
+    video = models.FileField(default='')
+    title = models.TextField(default='')
+    number = models.IntegerField(default = 0)
+    class Meta:
+        ordering = ['number']
+
 class FilterControl(models.Model):
     levels = models.ManyToManyField(SubjectLevel, related_name='filter_control')
     categories = models.ManyToManyField(SubjectCategory, related_name='filter_control')

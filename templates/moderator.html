@@ -5,7 +5,7 @@
 {% load staticfiles %}
 {% block content %}
 <div class="ui container">
-    <div class="ui grid stackable mt15">
+    <div class="ui grid stackable mt15" style="margin-bottom: 200px;">
         <div class="five wide column">
             <div class="ui segment" style="height: 380px;">
                 <form class="ui form text-center">
@@ -66,7 +66,7 @@
                 </form>
             </div>
         </div>
-        <div class="sixteen wide column" style="margin-bottom: 200px;">
+        <div class="sixteen wide column" >
             <div class="ui segment">
                 <div class="mb15 text-center">
                     <b>Партнеры</b>
@@ -107,6 +107,68 @@
                 </form>
             </div>
         </div>
+        <div class="sixteen wide column">
+            <div class="ui grid stackable no_margin">
+                <div class="four wide column no_padding"></div>
+                <div class="eight wide column no_padding">
+                    <div class="ui segment">
+                        <div class="mb15 text-center">
+                            <b>Видео помощь</b>
+                        </div>
+                        <div>
+                            <form class="ui form text-center">
+                                <textarea class="new_video_title" placeholder="Введите нзавние видео"></textarea>
+                                <input type="file" name="heplfile" id="heplfile" class="postfile pt0">
+                                <label class="file_post" for="heplfile">
+                                    <a class="ui button mini mr15"><i class="icon image blue"></i>Файл</a>
+                                </label>
+                                <div class="loading_small pt5 ml10" style="display: none;" id="add_help_file_load">
+                                    <div class="animation"><div class="circle one"></div></div>
+                                    <div class="animation"><div class="circle two"></div></div>
+                                    <div class="animation"><div class="circle three"></div></div>
+                                    <div class="animation"><div class="circle four"></div></div>
+                                    <div class="animation"><div class="circle five"></div></div>
+                                    <div class="animation"><div class="circle six"></div></div>
+                                    <i style="display: none;" class="icon check add_help_file_done ml10"></i>
+                                </div>
+                                <div class="text-center mt15">
+                                    <a url="{% url 'main:add_help_video' %}" class="ui button mini blue add_help_file">Добавить</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="four wide column no_padding"></div>
+            </div>
+        </div>
     </div>
 </div>
+<script type="text/javascript">
+    $('.add_help_file').click(function () {
+        $('.add_help_file').addClass('disabled')
+        var formData = new FormData();
+        video = $('#heplfile')[0].files[0];
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        formData.append('video_file', video);
+        title = $('.new_video_title').val()
+        add_data = '?title='+title
+        url = $(this).attr('url')+add_data
+        $('#add_help_file_load').show()
+        $('.add_help_file_done').hide()
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(data) {
+                if (data.ok) {
+                    $('.add_help_file').removeClass('disabled')
+                    $('#add_help_file_load').hide()
+                    $('.add_help_file_done').show()                    
+                }
+            }
+        })
+    })
+</script>
 {% endblock content %}

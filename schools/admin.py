@@ -4,6 +4,11 @@ from django.contrib import admin
 from .models import *
 from accounts.models import CRMColumn, CRMCard
 
+class HelpVideosModelAdmin(admin.ModelAdmin):
+    list_display = ["title"]
+    class Meta:
+        model = HelpVideos
+admin.site.register(HelpVideos, HelpVideosModelAdmin)
 class MoneyMonthModelAdmin(admin.ModelAdmin):
     list_display = ["school","month"]
     class Meta:

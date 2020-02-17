@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div id="profile">
+    <div class='ui container'>
+        <div class="ui grid stackable">
+            {% include 'left_menu.html' %}
+            <div class="wide column" id="list" style="width: 84%;">
+                <div class="ui segment">
+                    <div class="ui grid stackable no_margin">
+                        {% for help in helps %}
+                        <div class="eight wide column">
+                            <div class="mb30 text17">
+                                <div class="mb10"><a><b>{{help.title}}</b></a></div>
+                                <video class="full-w" style="height: 300px; border: 1px solid grey;" controls>
+                                <source src="{{ help.video.url }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                                </video>                                
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

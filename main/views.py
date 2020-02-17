@@ -118,6 +118,31 @@ def newland(request):
     }
     return render(request, "newland.html", context)
 
+def help_page(request):
+    is_trener = False
+    is_manager = False
+    is_director = False
+    profile = None
+    money = 0
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        if len(profile.schools.all()):
+            money = profile.schools.first().money
+    context = {
+        "profile":profile,
+        "schools":ElliteSchools.objects.first().schools.all(),
+        "is_trener":is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
+        "school_money":money,
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "helps":HelpVideos.objects.all(),
+    }
+    return render(request, "help.html", context)
+
 def category_landing(request, id=None):
     is_trener = False
     is_manager = False
@@ -163,13 +188,11 @@ def sign_up(request):
 
 def about(request):
     profile = None
-    print('********* 000')         
     if request.user.is_authenticated:
         profile = get_profile(request)
     context = {
         "profile":profile,
     }
-    print('********* 111', profile)         
     return render(request, "about.html", context)
 
 def team(request):
@@ -641,6 +664,21 @@ def get_notifications(request):
                 break
     data = {
         'res':res
+    }
+    return JsonResponse(data)
+
+def add_help_video(request):
+    ok = False
+    profile = get_profile(request)
+    print()
+    if is_profi(profile, 'Moderator'):
+        HelpVideos.objects.create(
+            title=request.GET.get('title'),
+            video=request.FILES.get('video_file'),
+            )
+        ok = True
+    data = {
+        "ok":ok,
     }
     return JsonResponse(data)
 
