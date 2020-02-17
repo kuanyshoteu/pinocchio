@@ -1288,9 +1288,16 @@ def moderator_run_code(request):
     # res = aktobe_money()
     # move_to_Mariam()
     # synchrone_material_with_atts()
-    logos_create_s()
+    logos_move()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
+
+def logos_move():
+    aiza = Profile.objects.get(id = 652)
+    school = School.objects.get(id=96)
+    for card in school.crm_cards.all():
+        card.author_profile = aiza
+        card.save()
 
 def logos_create_s():
     m = [["Саксембаев Санжар", "702450848"], 
