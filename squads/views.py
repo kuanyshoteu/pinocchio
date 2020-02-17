@@ -116,7 +116,6 @@ def squad_create(request):
         instance.save()
         instance.squad_histories.create(action_author=profile,edit='Создал группу '+instance.title)
         return HttpResponseRedirect(instance.get_update_url())
-    
     context = {
         "form": form,
         "profile":profile,
