@@ -781,10 +781,10 @@ def crm_option(request):
         skill = profile.skill
         if request.GET.get('option') == 'subject':
             if int(request.GET.get('object_id')) == -1:
-                skill.crm_subject = None
+                skill.crm_subject2 = None
             else:
                 subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_subject = subject
+                skill.crm_subject2 = subject
         if request.GET.get('option') == 'crm_cabinet':
             if int(request.GET.get('object_id')) == -1:
                 skill.crm_cabinet = None
