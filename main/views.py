@@ -1301,13 +1301,6 @@ def logos_move():
     aiss = ais.skill
     aiss.need_actions = 0
     aiss.save()
-    
-def check_skills():
-    for profile in Profile.objects.filter(schools=None):
-        print(profile.first_name)
-    print('///########')
-    for profile in Profile.objects.filter(skill=None):
-        print(profile.first_name)
 
 def synchrone_material_with_atts():
     profession = Profession.objects.get(title = 'Teacher')
