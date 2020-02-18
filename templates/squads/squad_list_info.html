@@ -17,7 +17,7 @@
                     <i class="icon cog"></i>
                 </a>
                 {% if trash %}
-                <a class="ui button mini green make_alive" url="{% url 'masterclasss:make_alive' %}" id="{{ sq.id }}">Восстановить</a>
+                <a class="ui button mini green make_alive" url="{% url 'squads:make_alive' %}" id="{{ sq.id }}">Восстановить</a>
                 <div class="highlight success_alive{{sq.id}}" style="display: none;">Группа восстановлена</div>
                 {% endif %}
             </h5>
