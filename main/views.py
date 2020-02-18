@@ -912,7 +912,7 @@ def get_school_report(request):
                     subject_res_dates = ['4', squad_title,subject.title]
                     subject_res = ['5', '', '']
                     cost = 0
-                    for i in range(0, end-start):
+                    for i in range(0, min(end-start,len(materails))):
                         date = get_date_by_num(start + i-1, squad, subject,lectures)
                         if date != '_':
                             date = date.strftime('%d.%b')
