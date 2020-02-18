@@ -179,17 +179,21 @@ def cell_school_lectures(cell, profile):
 @register.filter
 def get_date(material, squad):
     if type(material) is str:
+        print('0')
         return '_'
     subject = material.subject
     lectures = squad.squad_lectures.filter(subject = subject)
     material_number = list(subject.materials.all()).index(material)+1
     if len(lectures) > 0:
+        print('1')
         number_of_weeks = int(material_number/len(lectures))
         lecture_index = material_number % len(lectures)
         if lecture_index == 0:
+            print('2')
             number_of_weeks -= 1
             lecture_index = len(lectures)
         if squad.id in subject.squad_ids:
+            print('3')
             squad_index = subject.squad_ids.index(squad.id)
         else:
             return '_'
@@ -198,7 +202,9 @@ def get_date(material, squad):
         if start_day == 0:
             start_day = 7
         start_day_object = Day.objects.get(number = start_day)
+        print('d',lectures.filter(day=start_day_object))
         if len(lectures.filter(day=start_day_object)) == 0:
+            print('4')
             return '_'
         start_day_lecture = lectures.filter(day=start_day_object)[0]
         start_day_index = list(lectures).index(start_day_lecture)
@@ -309,7 +315,7 @@ def material_number_by_date(date, squad, subject, alldays, profile):
 def get_current_attendance(subject, squad):
     if not subject or not squad:
         return '_'
-    alldays = Day.objects.all() 
+    alldays = Day.objects.all()
     material_number = material_number_by_date(timezone.now().date(), squad, subject,alldays, None)
     if material_number >= 0:
         res = []
@@ -318,7 +324,9 @@ def get_current_attendance(subject, squad):
         students = squad.students.all()
         subject_materials = subject.materials.all()
         len_squad_students = len(students)
+        print(material_number, len(subject_materials))
         if material_number > len(subject_materials):
+            print('gere')
             for i in range(0, material_number - len(subject_materials)):
                 subject.materials.create(
                     school=subject.school
@@ -336,6 +344,7 @@ def get_current_attendance(subject, squad):
             get_date_results = '_'
             if len(attendances)>0:
                 get_date_results = get_date(attendances[0].subject_materials, squad)
+            print(get_date_results)
             if get_date_results == '_':
                 res = [[attendances, '_','_']] + res
             else:

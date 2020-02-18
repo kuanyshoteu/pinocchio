@@ -649,6 +649,9 @@ def add_subject(request):
 
 def add_subject_work(school, squad, subject):
     squad.subjects.add(subject)
+    if not squad.id in subject.squad_ids:
+        update_squad_dates(subject, squad)
+        subject.save()
     cost = subject.cost
     cards = school.crm_cards.all()
     if subject.cost_period == 'month':
@@ -706,6 +709,12 @@ def delete_lesson(request, id=None):
         
 def remove_subject_from_squad(squad, subject):
     subject.squads.remove(squad)
+    if squad.id in subject.squad_ids:
+        idx = subject.squad_ids.index(squad.id)
+        print(idx)
+        del subject.squad_ids[idx]
+        del subject.start_dates[idx]
+        subject.save()
     cost = subject.cost
     if subject.cost_period == 'month':
         squad.bill -= cost
@@ -766,7 +775,6 @@ def const_create_lectures(request, id=None):
     is_in_school(profile, school)
     if request.GET.get('start') and request.GET.get('end') and request.GET.get('subject_id'):
         subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
-        add_subject_work(school, squad, subject)
         teacher = squad.teacher
         category = subject.category.all()
         age = subject.age.all()
@@ -794,6 +802,7 @@ def const_create_lectures(request, id=None):
                 lecture.category.add(*category)
                 lecture.age.add(*age)
                 lecture.level.add(*level)
+        add_subject_work(school, squad, subject)        
     data = {
     }
     return JsonResponse(data)
