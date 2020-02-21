@@ -173,7 +173,6 @@ from tripleA.aws.conf import *
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage CompressedManifestStaticFilesStorage'    
     
 import datetime
-#}aqfSAw[8hUI
 AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQW6YRAK43'
 #'AKIAQE4L4EWQRLWPNLEG'
 AWS_SECRET_ACCESS_KEY = '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'
@@ -255,7 +254,7 @@ STATICFILES_FINDERS = [
 # EMAIL
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
-EMAIL_HOST_PASSWORD = 'Huivamv0pidori101'
+EMAIL_HOST_PASSWORD = 'WR48erwf6145r8wT'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
