@@ -173,8 +173,11 @@ from tripleA.aws.conf import *
 #STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage CompressedManifestStaticFilesStorage'    
     
 import datetime
-AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQRLWPNLEG'
-AWS_SECRET_ACCESS_KEY = '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'
+#}aqfSAw[8hUI
+AWS_ACCESS_KEY_ID = 'AKIAQE4L4EWQW6YRAK43'
+#'AKIAQE4L4EWQRLWPNLEG'
+AWS_SECRET_ACCESS_KEY = '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'
+#'A4vH8IFm+toG99z7YtI4Dnk3Vwdwau27Bueq8X0q'
 if toserver:
     AWS_FILE_EXPIRE = 200
     AWS_PRELOAD_METADATA = True
