@@ -18,10 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = True
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'c2+b9fu@bhw=2r-$+ge)7p*l2vx^r%nsb!ivy9le=laznpug%0'
-
+toserver = False
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
     DEBUG = False
@@ -29,7 +26,7 @@ if toserver:
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
-
+    from tripleA.secrets import *
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

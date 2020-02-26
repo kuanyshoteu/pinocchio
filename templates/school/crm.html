@@ -94,7 +94,7 @@
                     <div class="ui grid" style="margin-top: -5px;height: 100%;">
                         {% for column in columns %}
                         <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
-                            <div class="margin0" style="padding: 14px 4px;background-color: #4A4A4A;color: #fff;border-radius: 5px 5px 0 0;">
+                            <div class="margin0 backdark" style="padding: 14px 4px;color: #fff;border-radius: 5px 5px 0 0;">
                                 <div class="crm_title">{{ column.title }}</div>
                                 <div class="crm_divider"></div>
                                 <a class="ui button mini blue full-w" onclick="$('#new_card_form'+$(this).attr('id')).modal('show')" id="{{column.id}}">Добавить</a>
@@ -102,8 +102,8 @@
                                 {% include 'school/new_card_form.html' %}
                                 {% endif %}
                             </div>
-                            <div class="column_scrollable" url="{%url 'schools:get_extra_cards'%}" page="1" id="{{column.id}}" style="height: 70%;overflow-x: hidden;background-color: #4A4A4A;">
-                                <div class="" style="padding: 0 4px;color: #fff;">
+                            <div class="column_scrollable backdark" url="{%url 'schools:get_extra_cards'%}" page="1" id="{{column.id}}" style="height: 70%;overflow-x: hidden;">
+                                <div class="textw" style="padding: 0 4px;">
                                     <div class="column{{ column.id }} crm_column">
                                         <draggable 
                                                 class="crmbox{{ column.id }} full-h"
