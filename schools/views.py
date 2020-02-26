@@ -941,6 +941,8 @@ def edit_card_detailed(card, student, school,request,profile):
     crnt_tag = ''
     wright = False
     hashtags = school.hashtags.all()
+    alltags = card.hashtags.all()
+    card.hashtags.remove(*alltags)
     for l in request.GET.get('comment')+' ':
         if wright:
             crnt_tag += l
