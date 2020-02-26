@@ -1365,6 +1365,8 @@ def call_helper(request):
         school = is_moderator_school(request, profile)
         res = []
         kef = 1
+        if len(text) > 2:
+            kef = 4
         similarity=TrigramSimilarity('name', text)
         cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
