@@ -94,6 +94,9 @@ def newland(request):
     is_director = False
     profile = None
     money = 0
+    if request.POST.get('type'):
+        if request.POST.get('type') == 'confirmation':
+            return '3d511857'
     if request.user.is_authenticated:
         profile = get_profile(request)
         is_trener = is_profi(profile, 'Teacher')
