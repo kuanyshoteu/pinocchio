@@ -26,7 +26,7 @@ if toserver:
 else:
     DEBUG = True
     ALLOWED_HOSTS = ['*'] #['www.bilimtap.kz', 'bilimtap.kz', 'pinocchio.kz', 'www.pinocchio.kz']
-    from tripleA.secrets import *
+from tripleA.secrets import *
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
