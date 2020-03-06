@@ -456,7 +456,7 @@ def filtercards(column, profile):
             res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
     if res == []:
         res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
-    p = Paginator(res, 20)
+    p = Paginator(res, 10)
     page1 = p.page(1)
     return page1.object_list
 
@@ -464,7 +464,7 @@ def filtercards(column, profile):
 def filtercardsall(column, profile):
     school = profile.schools.first()
     res = column.cards.filter(school=school).prefetch_related('hashtags').exclude(author_profile__isnull=True).select_related('author_profile')
-    p = Paginator(res, 20)
+    p = Paginator(res, 10)
     page1 = p.page(1)
     return page1.object_list
 
@@ -582,7 +582,6 @@ def constant_profile_lectures(profile):
 
 @register.filter
 def constant_school_lectures(profile, school):
-#    lectures = school.school_lectures.all()
     squads = school.groups.filter(shown=True)
     lectures = Lecture.objects.filter(squad__in=squads)
     if profile.skill.crm_subject:
@@ -600,11 +599,39 @@ def constant_school_lectures(profile, school):
     res = []
     interval = school.schedule_interval
     for lecture in lectures.order_by('cell'):
-        hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
-        minute = int(lecture.cell.time_period.start.split(':')[1])
-        end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8
-        end_minute = int(lecture.cell.time_period.end.split(':')[1])
+        start = lecture.cell.time_period.start.split(':')
+        hour = int(start[0]) - 8
+        minute = int(start[1])
+        end = lecture.cell.time_period.end.split(':')
+        end_hour = int(end[0]) - 8
+        end_minute = int(end[1])
         height = end_hour - hour + (end_minute - minute)/60
         day = lecture.cell.day.number
-        res.append([height, lecture.subject.title, hour, minute, day-1, hour*interval+minute, lecture.id, lecture])
+        subject = lecture.subject
+        if subject.cost_period == 'month':
+            subject_period = 'в месяц'
+        elif  subject.cost_period == 'lesson':
+            subject_period = 'за урок'
+        elif  subject.cost_period == 'course':
+            subject_period = 'за курс'
+        else:
+            subject_period = ''
+        squad = lecture.squad
+        if squad.color_back == '':
+            color_back = '#313a57'
+        else:
+            color_back = squad.color_back
+        res.append([
+            height,                 #0
+            subject.title,          #1
+            hour,                   #2
+            minute,                 #3
+            day-1,                  #4
+            hour*interval+minute,   #5
+            lecture.id,             #6
+            lecture.squad.id,       #7
+            str(subject.cost) + 'тг '+subject_period, #8
+            color_back,             #9
+            squad.title,            #10
+            ])
     return res

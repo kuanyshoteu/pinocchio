@@ -855,9 +855,9 @@ def update_cards_money(request):
                     nm.save()
                     card = nm.card
                     if nm.money < nm.bill:
-                        card.colour = 'red'
+                        card.color = 'red'
                     elif nm.money < 2*nm.bill:
-                        card.colour = 'orange'
+                        card.color = 'orange'
                     card.save()
         return JsonResponse({"id":today})
 

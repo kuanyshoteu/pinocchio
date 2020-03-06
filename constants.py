@@ -224,3 +224,46 @@ def hidden_filter_ids():
     langs = SubjectCategory.objects.filter(title__icontains="язык")
     res = chain(langs, res)
     return set(res)
+
+def get_card_data_by_column(card, column_id):
+    res = []
+    author_name = 'Свободная'
+    author_url = ''
+    author_id = -1
+    if card.author_profile:
+        author = card.author_profile
+        author_name = author.first_name
+        author_url = author.get_absolute_url()
+        author_id = author.id
+    color = ''
+    if column_id > 3:
+        color = card.color
+    arr = [
+        card.id,                            # 0
+        card.name,                          # 1
+        card.phone,                         # 2
+        color,                              # 3
+        str(card.saved),                    # 4
+        author_name,                        # 5
+        author_url,                         # 6
+        ]
+    res.append(arr)
+    return res
+
+def get_card_form_by_column(card, column_id):
+    res = []
+    author_id = -1
+    if card.author_profile:
+        author_id = card.author_profile.id
+    arr2 = [
+        card.mail,                          # 0
+        card.extra_phone,                   # 1
+        card.parents,                       # 2
+        card.comments,                      # 3
+        author_id,                          # 4
+        card.take_url(),                    # 5
+        card.change_day_of_week(),          # 6
+        card.days_of_weeks,                 # 7
+    ]
+    res.append(arr2)
+    return res    

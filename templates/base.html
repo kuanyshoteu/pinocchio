@@ -34,13 +34,11 @@
 
       gtag('config', 'UA-146621937-1');
     </script>
-    <link rel="shortcut icon" href='{% static "images/fav.ico" %}' type="image/png">
+    <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     {% compress css %}
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="stylesheet" href='{% static "css/slider.css" %}'>
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
-    <link rel="stylesheet" href='{% static "OwlCarousel/owl.carousel.min.css" %}'>
-    <link rel="stylesheet" href='{% static "OwlCarousel/owl.theme.default.min.css" %}'>
     <link rel="stylesheet" href='{% static "css/datepicker.min.css" %}'> 
     {% endcompress %}
     {% compress js %}   
@@ -304,7 +302,7 @@
         $('.notification_exists').text('1')
         $('.bell').attr('style', 'color:#fff;')
         document.getElementById('notification_audio').play();
-        $('<li class="notice-item"> <a class="notice-item-link"> <img class="notice_item_img" src='+data.image_url+' alt="photo"> </a> <div style="display: inline-block;"> <a class="notice-item-link"> '+data.author+' </a> <span class="notice-item-name"> опубликовал новость </span> <a href="">"'+ data.message+'"</a> <br> <div class="notice_time">'+data.time+'</div> </div> </li> <div class="ui divider" style="margin: 10px 0;"></div>').appendTo('.notice-list');
+        $('<li class="notice-item"> <div style="display: inline-block;"> <a class="notice-item-link"> '+data.author+' </a> <span class="notice-item-name"> опубликовал новость </span> <a href="">"'+ data.message+'"</a> <br> <div class="notice_time">'+data.time+'</div> </div> </li> <div class="ui divider" style="margin: 10px 0;"></div>').appendTo('.notice-list');
     }
     socket.onopen = function(e){
         $('.create_post').click(function(event) {

@@ -1,3 +1,6 @@
+.card_dialog{
+  overflow-y: scroll;
+}
 .newcardlight{
   background-color: #fff;
   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
@@ -15,8 +18,15 @@
   from {background-color: #fbbd08;}
   to {background-color: #fff;}
 }
+.no_radius_tl{
+  border-top-left-radius: 0 !important;
+}
+.no_radius_tr{
+  border-top-right-radius: 0 !important;
+}
 .backblue{
-  background-color: #506ca9;
+  background-color: #506ca9 !important;
+  background: #506ca9 !important;
 }
 .backdarklow{
   background-color: #545454 !important;
@@ -41,6 +51,12 @@
 }
 .text13{
   font-size:13px !important; 
+}
+.text12{
+  font-size:12px !important; 
+}
+.text11{
+  font-size:11px !important; 
 }
 .shadow{
   box-shadow: 0 0 15px 0 #d7d7d7 !important;
@@ -69,6 +85,12 @@
 }
 .underline{
   text-decoration: underline;
+}
+.textblue{
+  color:#285473;  
+}
+.textgrey{
+  color: #707070;
 }
 .choose_color{
   cursor: pointer;
@@ -131,7 +153,17 @@
 .rotateplus{
   transform: rotate(90deg);
 }
+.w98{
+  width: 98px;
+}
 .lecture_const{
+  position: absolute;
+  color: #fff;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px solid #fff;
+  text-align: center;
+  cursor: pointer;
   line-height: 12px;
   overflow: hidden;
 }
@@ -497,7 +529,6 @@ body{
   background-color: #f5f5f5;
   padding: 14px;
   text-align: center;
-  margin: -20px -20px 10px -20px;
   border-bottom: 1px solid lightgrey;
 }
 .card_comment-textarea{
@@ -505,7 +536,7 @@ body{
   word-break: break-all;
   min-height: 65px !important;
   margin-bottom: 0 !important;
-  padding: 10px;
+  padding: 2px 5px;
   border: 1px solid lightgrey;
   border-radius: 5px;
 }
@@ -673,13 +704,27 @@ a{
 .help_left_top:after {
     content: "";
     display: block;
-    border-width: 7px 7px 7px 0;
+    border-width: 0px 7px 10px 0;
     border-style: solid;
-    border-color: transparent #5a9eff transparent transparent;
-    margin-top: -7px;
+    border-color: transparent #fff transparent transparent;
     position: absolute;
     left: -7px;
-    top: 20%;
+    top: 0px;
+}
+.my_comment{
+  width: 80%;
+  margin-left: 20% !important;
+  background-color: #effdde !important;
+}
+.help_right_top:after {
+    content: "";
+    display: block;
+    border-width: 10px 7px 0px 0px;
+    border-style: solid;
+    border-color: #effdde transparent transparent transparent;
+    position: absolute;
+    right: -7px;
+    top: 0px;
 }
 .help_left_news:after {
     content: "";

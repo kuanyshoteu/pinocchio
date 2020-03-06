@@ -1,124 +1,79 @@
-<div class="ui modal card_form" id="card_form{{ card.id }}">
+{% load staticfiles %}
+<div class="ui modal card_form mt50 large" style="height: calc(100% - 100px);" id="card_formedit">
     <i class="close icon"></i>
-    <div class="content">
+    <div class="content no_padding">
         <div class="card_head">
-            Карточка {{ card.name }}
+            Карточка <span class="crmform_title"></span>
         </div>
-        <form class="ui form card_form_update_here" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-            <span class="wrong_mail_error wrong_mail_error{{card.id}} highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
-            <div class="ui grid stackable card_form_update">
-                <div class="four wide column pr0 pb0 pl0" style="padding-top: 5px;text-align: center;">
-                    <div style="height: 10px;"></div>
-                    <b>Имя:</b>
-                    <textarea class="card_name{{ card.id }}" style="margin-bottom: 8px;" placeholder="Имя">{{ card.name }}</textarea>
-                    <b>Телефон:</b>
-                    <textarea class="mb5 card_phone{{ card.id }}" style="margin-bottom: 8px;" placeholder="Телефон">{{ card.phone }}</textarea>
-                </div>
-                <div class="four wide column pr0 pb0 pl5" style="padding-top: 5px;text-align: center;">
-                    <div style="height: 10px;"></div>
-                    <b>Почта:</b>
-                    <textarea class="card_mail{{ card.id }}" style="margin-bottom: 8px;" placeholder="Почта">{{ card.mail }}</textarea>
-                    <i style="line-height: 12px;">Oтправить клиенту логин и новый пароль на почту</i>
-                    <br>
-                    <a class="ui button mini blue text pt5 pb5 mr0 mt5" onclick="send_login_cl('{{ card.id }}')">
-                        <i style="font-size: 15px;" class="mr0 icon envelope textw ml0"></i>
-                    </a>
-                    <div class="sended_login{{ card.id }}" style="display: none;">
-                        <i class="icon check green"></i>
-                    </div>
-                    <div style="display: none;" class="loading_small send_login_loading{{ card.id }}">
-                        <div class="animation"><div class="circle one"></div></div>
-                        <div class="animation"><div class="circle two"></div></div>
-                        <div class="animation"><div class="circle three"></div></div>
-                        <div class="animation"><div class="circle four"></div></div>
-                        <div class="animation"><div class="circle five"></div></div>
-                        <div class="animation"><div class="circle six"></div></div>
-                    </div>
-                </div>
-                <div class="four wide column pb0 pr0 pl5" style="padding-top: 5px;text-align: center;">
-                    <div style="height: 10px;"></div>
-                    <b>Родители:</b>
-                    <textarea class="mb5 card_parents{{ card.id }}" placeholder="">{{ card.parents }}</textarea>
-                    <b>Дополнительный телефон:</b>
-                    <textarea class="card_phone_extra{{ card.id }} mb0 pt5 pb0" style="height: 45px;" placeholder="Дополнительный телефон">{{ card.extra_phone }}</textarea>
-                </div>
-                <div class="four wide column pt5 text-center pr0 pb0">
-                    <div style="height: 10px;"></div>
-                    <b>Оплата:</b>
-                    <select class="pay_for_group{{ card.id }} mb5" id="pay_for_group{{ card.id }}">
-                    </select>
-                    <div class="mb5">
-                        <input class="mr5 pt0 pb0 payment_amount{{ card.id }}" placeholder="Сумма" type="number" style="display: inline-block;width: calc(100% - 85px);height: 30px;">
-                        <a class="pl15 pr15 no_margin ui button mini blue make_payment make_payment{{ card.id }} text-center" onclick="make_payment_card('{{ card.id }}')" style="display: inline-block;">
-                            Оплатить
-                        </a>
-                    </div>
-                    <div class="loading_small" id="loadpayment{{ card.id }}" style="display: none;">
-                        <div class="animation"><div class="circle one"></div></div>
-                        <div class="animation"><div class="circle two"></div></div>
-                        <div class="animation"><div class="circle three"></div></div>
-                        <div class="animation"><div class="circle four"></div></div>
-                        <div class="animation"><div class="circle five"></div></div>
-                        <div class="animation"><div class="circle six"></div></div>
-                    </div>
-                    <div class="mt5 success_payment{{card.id}}" style="display: none;">
-                        Оплата принята
-                        <i class="icon check green"></i>
-                    </div>
-                    <div class="ui segment full-w pt5 pb5 mt0">
-                        <a class="show_hint_schedule full-w">
-                            <i class="icon info circle blue"></i>
-                            <span style="font-size: 13px;">Информация о счетах</span>
-                        </a>
-                        <div class="hint_schedule ui segment" style="display: none;position: absolute;margin-top: 50px;margin-left: -300px; width: 400px;height: 200px;z-index: 3000;background-color: #4a4a4a;color: #fff;">
-                            <div class="card_money_sch{{ card.id }}" style="font-weight: 400;font-size: 13px;"></div>
+        <div class="ui grid stackable no_margin full-h">
+            <div class="eight wide column full-h">
+                <form class="ui form form_cont card_form_update_here mb0">
+                    <span class="wrong_mail_error wrong_mail_error highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
+                    <div class="ui grid stackable card_form_update">
+                        <div class="eight wide column text-center pt5 pr0 pb0 pl0">
+                            <div style="height: 10px;"></div>
+                            <b>Имя:</b>
+                            <textarea class="card_nameedit" style="margin-bottom: 8px;" placeholder="Имя"></textarea>
+                            <b>Телефон:</b>
+                            <textarea class="mb5 card_phoneedit" style="margin-bottom: 8px;height: 45px;" placeholder="Телефон"></textarea>
                         </div>
-                    </div>
-                </div>
-                <div class="sixteen wide column" style="padding-top: 5px;">
-                    <div style="height: 65px;margin-bottom: 0;">
-                        <b style="margin: 0 44%;">Комментарий:</b>
-                        <div contenteditable="true" id="{{ card.id }}" class="card_comment-textarea card_comment{{ card.id }}"
-                        placeholder="Комментарий" url="{{ card.call_helper }}" status="stop" position="0">{{ card.comments }}
+                        <div class="eight wide column text-center pt5 pb0 pr0 pl15">
+                            <div style="height: 10px;"></div>
+                            <b>Родители:</b>
+                            <textarea class="card_parentsedit" style="margin-bottom: 8px;" placeholder=""></textarea>
+                            <b>Дополнительный телефон:</b>
+                            <textarea class="card_phone_extraedit mb0 pt5 pb0" style="height: 45px;" placeholder="Дополнительный телефон"></textarea>
                         </div>
-                        <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper{{card.id}}">
-                            <a class="card_comment-item ui button mini card{{ card.id }}helper1" id="{{ card.id }}"> </a><br>
-                            <a class="card_comment-item ui button mini card{{ card.id }}helper2" id="{{ card.id }}"> </a><br>
-                            <a class="card_comment-item ui button mini card{{ card.id }}helper3" id="{{ card.id }}"> </a><br>
-                            <a class="card_comment-item ui button mini card{{ card.id }}helper4" id="{{ card.id }}"> </a><br>
-                            <a class="card_comment-item ui button mini card{{ card.id }}helper5" id="{{ card.id }}"> </a><br>
-                        </div>
-                    </div>
-                    <div class="ui grid stackable" style="margin-top: 30px;">
-                        <div class="third wide column" id="card_form-select">
-                            <select class="card_form-select-contact card_form-select-contact{{card.id}}" id="{{card.id}}" onchange="card_called_change('{{card.id}}')">
-                                <option value="{{ card.action }}">{{ card.action }}</option>
-                                <option value="Позвонить">Позвонить</option>
-                                <option value="Whats app">Whats app</option>
-                                <option value="СМС">СМС</option>
-                                <option value="Почта">Почта</option>
-                                <option value="-1">Другое</option>
+                        <div class="eight wide column text-center no_padding">
+                            <div style="height: 10px;"></div>
+                            <b>Оплата:</b>
+                            <select class="pay_for_groupedit mb5" id="pay_for_groupedit">
                             </select>
+                            <div class="mb5">
+                                <input class="mr5 pt0 pb0 payment_amountedit" placeholder="Сумма" type="number" style="display: inline-block;width: calc(100% - 85px);height: 30px;">
+                                <a class="pl15 pr15 no_margin ui button mini blue make_payment make_paymentedit text-center" onclick="make_payment_card('edit')" style="display: inline-block;">
+                                    Оплатить
+                                </a>
+                            </div>
+                            <div class="loading_small" id="loadpaymentedit" style="display: none;">
+                                <div class="animation"><div class="circle one"></div></div>
+                                <div class="animation"><div class="circle two"></div></div>
+                                <div class="animation"><div class="circle three"></div></div>
+                                <div class="animation"><div class="circle four"></div></div>
+                                <div class="animation"><div class="circle five"></div></div>
+                                <div class="animation"><div class="circle six"></div></div>
+                            </div>
+                            <div class="mt5 success_payment" style="display: none;">
+                                Оплата принята
+                                <i class="icon check green"></i>
+                            </div>
+                            <div class="ui segment full-w pt5 pb5 mt15">
+                                <a class="show_hint_schedule full-w">
+                                    <i class="icon info circle blue"></i>
+                                    <span>Информация о счетах</span>
+                                </a>
+                                <div class="hint_schedule ui segment backblue textw" style="display: none;position: absolute;margin-top: -30px;margin-left: 50px; width: 400px;height: 200px;z-index: 3000;">
+                                    <div class="card_money_schedit"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="third wide column" id="card_form-select">
-                            <a class="ui button {%if not card.was_called%}green{%endif%} small full-w card_form-select-contact-btn card_form-select-contact-btn{{card.id}}" id="{{card.id}}" onclick="card_called('{{card.id}}')">{%if not card.was_called%}Связались{%else%}Связывались {{card.timestamp}}{%endif%}</a>
-                        </div>
-                        <div class="third wide column" id="card_form-select">
+                        <div class="eight wide column pt0 pb0 pl15 pr0">
+                            <div class="mt10">
+                                <div class="text-center"><b>Дни недели:</b></div>
+                                <a onclick="card_form_days('cd0')" class="ui button mini mr0 mb5 card_form-dayscd0" style="padding: 7px 14px !important;" card="" id="0">Пн</a>
+                                <a onclick="card_form_days('cd1')" class="ui button mini mr0 mb5 card_form-dayscd1" style="padding: 7px 14px !important;" card="" id="1">Вт</a>
+                                <a onclick="card_form_days('cd2')" class="ui button mini mr0 mb5 card_form-dayscd2" style="padding: 7px 14px !important;" card="" id="2">Ср</a>
+                                <a onclick="card_form_days('cd3')" class="ui button mini mr0 mb5 card_form-dayscd3" style="padding: 7px 14px !important;" card="" id="3">Чт</a>
+                                <a onclick="card_form_days('cd4')" class="ui button mini mr0 mb5 card_form-dayscd4" style="padding: 7px 14px !important;" card="" id="4">Пт</a>
+                                <a onclick="card_form_days('cd5')" class="ui button mini mr0 mb5 card_form-dayscd5" style="padding: 7px 14px !important;" card="" id="5">Сб</a>
+                                <a onclick="card_form_days('cd6')" class="ui button mini mr0 mb5 card_form-dayscd6" style="padding: 7px 14px !important;" card="" id="6">Вс</a>
+                            </div>
                             {% if is_director %}
-                            <select onchange="change_manager('{{card.id}}')" class="change_manager change_manager{{card.id}}" id="{{card.id}}">
-                                {% if card.author_profile %}
-                                    <option value="-1">{{ card.author_profile.first_name }}</option>
-                                {% else %}
-                                    <option value="-1">Без менеджера</option>
-                                {% endif %}
+                            <select onchange="change_manager('')" class="change_manager" style="margin-top: 19px;" id="{{card.id}}">
+                                <option class="cfmanager cfmanager-1" value="-1">Выберите менеджера</option>
                                 {% for manager in managers %}
-                                    {% if card.author_profile != manager %}
-                                    <option value="{{ manager.id }}">{{ manager.first_name }}</option>
-                                    {% endif %}
+                                    <option class="cfmanager cfmanager{{ manager.id }}" value="{{ manager.id }}">{{ manager.first_name }}</option>
                                 {% endfor %}
-                                {% if card.author_profile %}
-                                    <option value="-1">Без менеджера</option>
-                                {% endif %}
                             </select>
                             {% else %}
                                 {%if card.author_profile%}
@@ -128,52 +83,172 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                    </div>
-                </div>
-                <div class="sixteen wide column" style="text-align: center;margin-top: 15px;">
-                    <div class="ui grid">
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d0')" class="ui button mini card_form-daysc{{card.id}}d0 full-w {%if card.days_of_weeks.0%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="0">Понедельник</a>
+                        <div class="sixteen wide column no_padding" style="padding-top: 5px;">
+                            <div style="height: 10px;"></div>
+                            <div class="mb0" style="height: 84px;">
+                                <div class="text-center"><b>Комментарий:</b></div>
+                                <div contenteditable="true" id="edit" class="card_comment-textarea card_commentedit"
+                                placeholder="Комментарий" url="{% url 'schools:call_helper' %}" status="stop" position="0">
+                                </div>
+                                <div style="display: none;position: absolute;z-index: 1000;height: 50px;" class="card_comment-helper" id="card_comment-helper">
+                                    <a class="card_comment-item ui button mini cardedithelper1" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper2" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper3" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper4" id="edit"> </a><br>
+                                    <a class="card_comment-item ui button mini cardedithelper5" id="edit"> </a><br>
+                                </div>
+                            </div>
                         </div>
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d1')" class="ui button mini card_form-daysc{{card.id}}d1 full-w {%if card.days_of_weeks.1%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="1">Вторник</a>
-                        </div>
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d2')" class="ui button mini card_form-daysc{{card.id}}d2 full-w {%if card.days_of_weeks.2%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="2">Среда</a>
-                        </div>
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d3')" class="ui button mini card_form-daysc{{card.id}}d3 full-w {%if card.days_of_weeks.3%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="3">Четверг</a>
-                        </div>
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d4')" class="ui button mini card_form-daysc{{card.id}}d4 full-w {%if card.days_of_weeks.4%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="4">Пятница</a>
-                        </div>
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d5')" class="ui button mini card_form-daysc{{card.id}}d5 full-w {%if card.days_of_weeks.5%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="5">Суббота</a>
-                        </div>
-                        <div class="wide column" style="padding: 0 3px;width: 14%;">
-                            <a onclick="card_form_days('c{{card.id}}d6')" class="ui button mini card_form-daysc{{card.id}}d6 full-w {%if card.days_of_weeks.6%}green{%endif%}" style="padding: 7px 14px !important;" card="{{card.id}}" id="6">Воскресенье</a>
+                        <div class="sixteen wide column pt10 center aligned">
+                            <a class="ui button blue tiny save_card_form" onclick="edit_card('edit')" id="edit">Сохранить</a>
                         </div>
                     </div>
+                </form>
+            </div>
+            <div class="eight wide column full-h no_padding" style="background-image: url( {%static 'images/icons/22sav.png'%});background-size: 150px;">
+                <div class="ui comments pl10 pr10 pt10 pb10 card_dialog">
+                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
+                        <div class="content">
+                          <a class="author">@zheka</a>
+                          <div class="metadata">
+                            <span class="date">Сегодня at 5:42PM</span>
+                            <span class="date">
+                                <i class="icon instagram mr0"></i>
+                                instagram комментарий
+                            </span>
+                          </div>
+                          <div class="text">
+                            Круто спасибо
+                          </div>
+                          <div class="actions">
+                            <a class="reply">Ответить</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
+                        <div class="content">
+                          <a class="author">@zheka</a>
+                          <div class="metadata">
+                            <span class="date">Сегодня at 5:42PM</span>
+                            <span class="date">
+                                <i class="icon instagram mr0"></i>
+                                instagram комментарий
+                            </span>
+                          </div>
+                          <div class="text">
+                            Круто спасибо
+                          </div>
+                          <div class="actions">
+                            <a class="reply">Ответить</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
+                        <div class="content">
+                          <a class="author">@zheka</a>
+                          <div class="metadata">
+                            <span class="date">Сегодня at 5:42PM</span>
+                            <span class="date">
+                                <i class="icon instagram mr0"></i>
+                                instagram комментарий
+                            </span>
+                          </div>
+                          <div class="text">
+                            Круто спасибо
+                          </div>
+                          <div class="actions">
+                            <a class="reply">Ответить</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
+                        <div class="content">
+                          <a class="author">@zheka</a>
+                          <div class="metadata">
+                            <span class="date">Сегодня at 5:42PM</span>
+                            <span class="date">
+                                <i class="icon instagram mr0"></i>
+                                instagram комментарий
+                            </span>
+                          </div>
+                          <div class="text">
+                            Круто спасибо
+                          </div>
+                          <div class="actions">
+                            <a class="reply">Ответить</a>
+                          </div>
+                        </div>
+                      </div>
+                          <div class="pl10 pr10 pt10 pb10 comment help_right_top no_radius_tr ui segment my_comment">
+                            <div class="content">
+                              <a class="author">@zheka</a>
+                              <div class="metadata">
+                                <span class="date">Сегодня at 5:42PM</span>
+                                <span class="date">
+                                    <i class="icon instagram mr0"></i>
+                                    instagram комментарий
+                                </span>
+                              </div>
+                              <div class="text">
+                                Круто спасибо
+                              </div>
+                              <div class="actions">
+                                <a class="reply">Ответить</a>
+                              </div>
+                            </div>
+                          </div>
+                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment" style="width: 80%;">
+                        <div class="content">
+                          <a class="author">@zheka</a>
+                          <div class="metadata">
+                            <span class="date">Сегодня at 5:42PM</span>
+                            <span class="date">
+                                <i class="icon instagram mr0"></i>
+                                instagram комментарий
+                            </span>
+                          </div>
+                          <div class="text">
+                            Круто спасибо
+                          </div>
+                          <div class="actions">
+                            <a class="reply">Ответить</a>
+                          </div>
+                        </div>
+                      </div>
                 </div>
-                <div class="sixteen wide column center aligned">
-                    <a class="ui button blue tiny" onclick="edit_card('{{ card.id }}')" id="{{ card.id }}">Сохранить</a>
+                <div class="pt10 pb10 pl15 pr15" style="background-color: #f0f0f0;display: flex;">
+                    <div class="pt5" style="width: 26px;">
+                        <a class="">
+                            <i class="smile outline icon mr0" style="font-size: 20px;"></i>
+                        </a>
+                    </div>
+                    <div class="pl10" style="width: calc(100% - 26px);">
+                        <form class="ui form mb0 full-w">
+                            <textarea class="mb0" style="border-radius: 21px;height: 42px;padding-top: 11px;" placeholder="Введите сообщение"></textarea>
+                        </form>
+                    </div>
+                    <div class="pl10" style="width: 26px;padding-top: 12px;">
+                        <a class="">
+                            <img src="{%static 'images/icons/send.jpg'%}" style="width: 20px;">                            
+                        </a>
+                    </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-<div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist{{ card.id }}">
+<div class="ui modal" style="margin-top: 10%;min-height: 100%;" id="card_hist">
     <i class="close icon"></i>
-    <div class="content">
+    <div class="content no_padding">
         <div class="card_head">
-            Карточка {{ card.name }}
+            Карточка <span class="card_hist_name"></span>
         </div>
-        <div class="ui grid stackable card_form_update">
-            <div class="sixteen wide column">
+        <div class="ui grid stackable no_margin card_form_update">
+            <div class="sixteen wide column pb0">
                 <div style="color: #222;font-weight: 600;text-align: center;font-size: 14px;">История изменений
                 </div>
             </div>
-            <div class="sixteen wide column cardhistory{{ card.id }}" style="color: #6b6d72;font-size: 12px;">
+            <div class="sixteen wide column cardhistory pt5" style="color: #6b6d72;font-size: 12px;">
             </div>
         </div>
     </div>

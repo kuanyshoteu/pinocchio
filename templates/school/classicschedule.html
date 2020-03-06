@@ -25,45 +25,45 @@
                 <div class="thconst dark_grey" style="width: 100px;" id="constday6">Вс</div>
             </div>
         </div>
-        <div class="no_margin" style="background: #4A4A4A;white-space: nowrap;">
+        <div class="no_margin backdark" style="white-space: nowrap;">
             <div style="position: relative;margin-top: -29px;">
                 <div class="dark_grey constback1 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback3 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback5 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback7 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 {% for lecture in profile|constant_school_lectures:instance %}
-                    <div id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}} left0" left="0" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.squad.color_back == ''%}#313a57{%else%}{{ lecture.7.squad.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
-                        <span style="font-size: 14px;font-weight: 600;">{{lecture.7.squad.title}}</span>
-                        <br><br>
-                        <span style="font-size: 13px;">Каб. {{lecture.7.cabinet.title}}</span>
-                    </div>
-                    <div class="hint_schedule hint_schedule{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;display: none;">
-                        <div class="ui segment" style="color: #222;width: 300px;">
-                            <div class="text-center">
-                                <b>{{lecture.7.squad.title}}</b>
-                            </div>
-                            <div class="mt10">
-                                <span style="color: grey;">Время</span>
-                                {{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
-                            </div>
-                            <div class="mt10">
-                                <span style="color: grey;">Курс</span>
-                                {{lecture.7.subject.title}}
-                            </div>
-                            <div class="mt10">
-                                <span style="color: grey;">Учитель</span>
-                                {{lecture.7.squad.teacher.first_name}}
-                            </div>
-                            <div class="mt10">
-                                <span style="color: grey;">Кабинет</span>
-                                {{lecture.7.cabinet.title}}
-                            </div>
-                            <div class="mt10">
-                                <span style="color: grey;">Цена</span>
-                                {{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
-                            </div>
+                <div id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}} left0" left="0" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="background-color: {%if lecture.7.squad.color_back == ''%}#313a57{%else%}{{ lecture.7.squad.color_back }}{%endif%};">
+                    <b style="font-size: 14px;">{{lecture.7.squad.title}}</b>
+                    <br><br>
+                    <span style="font-size: 13px;">Каб. {{lecture.7.cabinet.title}}</span>
+                </div>
+                <div class="hint_schedule hint_schedule{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;display: none;">
+                    <div class="ui segment" style="color: #222;width: 300px;">
+                        <div class="text-center">
+                            <b>{{lecture.7.squad.title}}</b>
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Время</span>
+                            {{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Курс</span>
+                            {{lecture.7.subject.title}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Учитель</span>
+                            {{lecture.7.squad.teacher.first_name}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Кабинет</span>
+                            {{lecture.7.cabinet.title}}
+                        </div>
+                        <div class="mt10">
+                            <span style="color: grey;">Цена</span>
+                            {{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
                         </div>
                     </div>
+                </div>
                 {% endfor %}
             </div>
         </div>

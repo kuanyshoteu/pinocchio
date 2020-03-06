@@ -1,11 +1,11 @@
 {% load tttags %}
 {% load staticfiles %}
 {% load ttags %}
-<div class="ui modal large" id="register_students_calendar">
+<div class="ui modal large mt50" id="register_students_calendar">
     <i class="close icon"></i>
-    <div class="content no_padding" style="background-color: #4A4A4A">
-        <div class="ui segment margin0" style="display: flex;padding-bottom: 0;">
-            <span style="font-size: 15px;margin-left: 15px;margin-bottom: 15px;">Регистрация <b id="current_user_name"></b></span>
+    <div class="content no_padding backdark">
+        <div class="ui segment margin0 pb0" style="display: flex;">
+            <span class="text15 ml15 mb15">Регистрация <b id="current_user_name"></b></span>
             <form class="ui form predoplata_form" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма оплаты" type="number">
             </form>
@@ -16,7 +16,7 @@
         <div class="no_predoplata_number highlight_red" style="height: 35px;display: none;"><b>Введите сумму предоплаты</b></div>
         <div class="highlight_red isalready pt15 pb15" style="display: none;"> <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
         <div class="ui segment margin0 choose_group">
-            <form class="ui form" method='POST' action='' enctype='multipart/form-data' style="margin: 0">{% csrf_token %}
+            <form class="ui form no_margin">
                 <div class="ui grid">
                     <div class="twenty wide column pr0">
                         Предмет:
@@ -122,132 +122,7 @@
               <div class="animation"><div class="circle five"></div></div>
               <div class="animation"><div class="circle six"></div></div>
             </div>
-            {% if instance.schedule_type == 'classic' %}
-                {% include 'school/crm_classicschedule.html' %}
-            {% else %}
-            <div id="week">   
-                <div class="week" id="0">
-                    <div class="daysmall daysmall_time">
-                    </div>
-                    {% for day in days %}
-                    <div class="daysmall">
-                        <div class="day-name">
-                            {{ day }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="ui divider margin0" style="padding: 2px;background-color:#4A4A4A "></div>
-                {% for timep in time_periods %}
-                <div class="week" id="{{ forloop.counter }}">
-                    <div class="daysmall daysmall_time" style="padding-top: 17px;">
-                        {{ timep.start }}-{{ timep.end }}
-                    </div>
-                    {% for cell in timep.time_cell.all %}  
-                    <div class="daysmall other" style="padding: 0">                                     
-                        {% for lecture in cell|cell_school_lectures:profile %}
-                            <div class="ui segment in_schedule show_subject_cost save_card_as_user" onclick="save_card_as_user('{{lecture.squad.id}}')" onmouseover="show_subject_cost('{{lecture.subject.cost}}тг в месяц')" squad_id={{lecture.squad.id}} cost="{{lecture.subject.cost}}тг в месяц" style="background-color:{%if lecture.squad.color_back == ''%}#5181b8{%else%}{{ lecture.squad.color_back }}{%endif%};">
-                                {{ lecture.subject.title }}
-                                <i class="icon check circle white insquadicon squad{{lecture.squad.id}}" status="hide" style="font-size: 12px;position: absolute;right: 0;display: none;color: #fff;"></i>
-                                <br>
-                                <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.squad.title }}, {{ lecture.squad.teacher.first_name }}</span>
-                                {% if lecture.cabinet %}
-                                <br>
-                                <span style="color: rgba(255, 255, 255, .5);font-size: 11px">{{ lecture.squad.students.all|length }} из {{lecture.cabinet.capacity}}</span>
-                                {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="ui divider" style="margin: 0; padding: 2px;background-color:#4A4A4A "></div>
-                {% endfor %}
-            </div>
-            {% endif %}            
+            {% include 'school/crm_classicschedule.html' %}
         </div>   
     </div>   
-</div>   
-
-<script type="text/javascript">
-    function save_card_as_user(squad_id){
-        $('.loading').show();
-        id = $('.card_for_save').attr('id');
-        predoplata = $('.predoplata_number').val();
-        sch = parseInt($('.card_money_sch').attr('money'));
-        $('.time_stop').hide()
-        $('.wrong_mail').hide()
-        $('.no_predoplata_number').hide()
-        $('.isalready').hide()
-        in_squad = $('.squad'+squad_id).attr('status')
-        if (in_squad == 'show' || $('.predoplata_number').attr('status') != 'show' || sch != 0 || predoplata != '') {
-            $.ajax({
-                url: $('.card_for_save').attr('url'),
-                data: {
-                    'id':id,
-                    'squad_id':squad_id,
-                    'predoplata':predoplata,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('.loading').hide();
-                    $('.ok_predoplata').hide()
-                    if (data.problems != 'ok') {
-                        $('.isalready').show()
-                        $('.isalready_subject').text(data.problems)
-                    }
-                    else{
-                        $('.isalready').hide()
-                    }
-                    $('.predoplata_number').attr('status', 'hide')
-                    $('.predoplata_number').val('')
-                    if (data.stop) {
-                        $('.time_stop').show()
-                        $('.wrong_mail').hide()
-                    }
-                    else if(data.add){
-                        document.getElementById("school_schedule").style.width = "0";
-                        $('.icontable'+id).removeClass('green')
-                        $('.icontable'+id).addClass('blue')
-                        $('.squad'+squad_id).show()
-                    }
-                    else{
-                        $('.squad'+squad_id).hide()
-                    }
-                }
-            
-            })            
-        }
-        else{
-            $('.no_predoplata_number').show()
-            $('.loading').hide();            
-        }
-    };
-    function save_predoplata(){
-        $('.ok_predoplata').hide()
-        $('.no_predoplata_number').hide()
-        id = $('.card_for_save').attr('id')
-        predoplata = $('.predoplata_number').val()
-        if (predoplata != '') {
-            $('.loading').show();
-            $.ajax({
-                url: $('.card_for_save').attr('predoplata_url'),
-                data: {
-                    'id':id,
-                    'predoplata':predoplata,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('.loading').hide();
-                    $('.predoplata_number').val('')
-                    $('.ok_predoplata').show()
-                    sch = parseInt($('.card_money_sch').attr('money'))+parseInt(predoplata);
-                    $('.card_money_sch').attr('money', sch)
-                    $('.card_money_sch').text('На счету: '+sch+'тг')
-                }
-            })            
-        }
-    };
-    function show_subject_cost(cost){
-        $('.subject_cost').html(cost)
-    }
-</script>
+</div>

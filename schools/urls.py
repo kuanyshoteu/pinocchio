@@ -67,6 +67,8 @@ urlpatterns = [
     url(r'^api/get_school_report/(?P<school_id>\d+)/$', get_school_report, name='get_school_report'),
     url(r'^adilmed/', adilmed, name="adilmed"),
     url(r'^api/get_extra_cards/', get_extra_cards, name='get_extra_cards'),
+    url(r'^api/get_all_cards_first/', get_all_cards_first, name='get_all_cards_first'),
+    url(r'^api/get_all_cards_second/', get_all_cards_second, name='get_all_cards_second'),
     url(r'^api/payment_history/', payment_history, name='payment_history'),
     url(r'^api/search_crm_cards/', search_crm_cards, name='search_crm_cards'),
     url(r'^api/get_card_info/', get_card_info, name='get_card_info'),
@@ -75,4 +77,5 @@ urlpatterns = [
     url(r'^api/payday_change/', payday_change, name='payday_change'),
     url(r'^api/show_finance_update/', show_finance_update, name='show_finance_update'),
     url(r'^api/update_finance/', update_finance, name='update_finance'),
+    url(r'^api/get_schedule/', get_schedule, name='get_schedule'),
 ]

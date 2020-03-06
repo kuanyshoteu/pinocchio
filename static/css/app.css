@@ -23024,11 +23024,6 @@ a.ui.card:hover,
 /*--------------
     Comments
 ---------------*/
-
-.ui.comments {
-  margin: 1.5em 0em;
-  max-width: 650px;
-}
 .ui.comments:first-child {
   margin-top: 0em;
 }
@@ -23041,35 +23036,12 @@ a.ui.card:hover,
 
 .ui.comments .comment {
   position: relative;
-  background: none;
-  margin: 0.5em 0em 0em;
-  padding: 0.5em 0em 0em;
-  border: none;
-  border-top: none;
   line-height: 1.2;
-}
-.ui.comments .comment:first-child {
-  margin-top: 0em;
-  padding-top: 0em;
 }
 /*--------------------
     Nested Comments
 ---------------------*/
 
-.ui.comments .comment .comments {
-  margin: 0em 0em 0.5em 0.5em;
-  padding: 1em 0em 1em 1em;
-}
-.ui.comments .comment .comments:before {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-}
-.ui.comments .comment .comments .comment {
-  border: none;
-  border-top: none;
-  background: none;
-}
 /*--------------
      Avatar
 ---------------*/
@@ -23086,7 +23058,6 @@ a.ui.card:hover,
   display: block;
   margin: 0em auto;
   width: 100%;
-  height: 100%;
   border-radius: 0.25rem;
 }
 /*--------------
@@ -27261,12 +27232,12 @@ select.ui.dropdown {
 .ui.modal > .close {
   cursor: pointer;
   position: absolute;
-  top: -2.5rem;
-  right: -2.5rem;
+  top: 0;
+  right: 0;
   z-index: 1;
   opacity: 0.8;
   font-size: 1.25em;
-  color: #FFFFFF;
+  color: #4a4a4a;
   width: 2.25rem;
   height: 2.25rem;
   padding: 0.625rem 0rem 0rem 0rem;

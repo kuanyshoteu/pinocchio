@@ -14,7 +14,7 @@ from .forms import SchoolForm
 from .models import *
 from subjects.models import *
 from squads.models import Squad,PaymentHistory,SquadHistory,DiscountSchool
-from subjects.templatetags.ttags import get_date, get_pay_date
+from subjects.templatetags.ttags import get_date, get_pay_date,constant_school_lectures
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
 from papers.models import *
 from library.models import Folder
@@ -263,12 +263,15 @@ def school_crm(request):
     if is_director:
         manager_prof = Profession.objects.get(title='Manager')
         managers = school.people.filter(profession=manager_prof)
+        print(managers)
+        # director_prof = Profession.objects.get(title='Manager')
+        # dirs = school.people.filter(profession=director_prof)
+        # managers = set(chain(managers, dirs))
     context = {
         "theprofile":theprofile,
         "profile":profile,
         "instance": school,
         "columns":school.crm_columns.all(),
-        "subject_categories":school.school_subject_categories.all(),
         "ages":SubjectAge.objects.all(),
         "offices":school.school_offices.all(),
         "courses":school.school_subjects.all(),
@@ -301,6 +304,11 @@ def school_crm_all(request):
     if is_director:
         manager_prof = Profession.objects.get(title='Manager')
         managers = school.people.filter(profession=manager_prof)
+        print(managers)
+        director_prof = Profession.objects.get(title='Director')
+        dirs = school.people.filter(profession=director_prof)
+        managers = set(chain(managers, dirs))
+        print('c',managers, dirs)
     context = {
         "profile":profile,
         "instance": school,
@@ -974,7 +982,20 @@ def open_card(request):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         for history in card.history.all():
-            res.append([history.action_author.first_name, history.action_author.get_absolute_url(), history.timestamp.strftime('%d.%m.%Y %H:%M') ,history.oldcolumn,history.newcolumn, history.edit])
+            if history.action_author:
+                author_name = history.action_author.first_name
+                author_url = history.action_author.get_absolute_url()
+            else:
+                author_name = 'Свободная'
+                author_url = ''
+            res.append([
+                author_name,            #0
+                author_url,             #1
+                history.timestamp.strftime('%d.%m.%Y %H:%M'), #2
+                history.oldcolumn,      #3
+                history.newcolumn,      #4  
+                history.edit,           #5
+                ])  
     data = {
         'res':res,
     }
@@ -1086,7 +1107,7 @@ def add_card(request):
         skill = profile.skill
         skill.need_actions += 1
         skill.save()
-        res = get_card_data(card, res)        
+        res += get_card_data_by_column(card, column.id)        
     data = {
         "res":res,
     }
@@ -1283,7 +1304,6 @@ def get_card_squads(request):
     profile = card.card_user
     res = []
     if profile:
-        nms = card.need_money.select_related('squad')
         for squad in profile.squads.filter(shown=True):
             res.append(squad.id)
     data = {
@@ -1292,22 +1312,34 @@ def get_card_squads(request):
     return JsonResponse(data)
 
 def get_card_info(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_managers(profile)
-    card = CRMCard.objects.get(id=int(request.GET.get('id')))
-    school = card.school
-    is_in_school(profile, school)
-    profile = card.card_user
     bills = []
-    if profile:
+    if request.GET.get('id'):
+        profile = Profile.objects.get(user = request.user.id)
+        card = CRMCard.objects.get(id=int(request.GET.get('id')))
+        print(card.mail)
+        only_managers(profile)
+        school = card.school
+        is_in_school(profile, school)
+        profile = card.card_user
         nms = card.need_money.select_related('squad')
-        for squad in profile.squads.filter(shown=True):
-            crnt = nms.filter(squad=squad)
-            if len(crnt) > 0:
-                crnt = crnt[0]
-                bills.append([squad.title, crnt.money, squad.lesson_bill, squad.bill,squad.id])
+        if profile:
+            for squad in profile.squads.filter(shown=True):
+                crnt = nms.filter(squad=squad)
+                if len(crnt) > 0:
+                    crnt = crnt[0]
+                    bills.append([squad.title, 
+                        crnt.money, 
+                        squad.lesson_bill, 
+                        squad.bill,
+                        squad.id])
+        colid = card.column.id
+        res = get_card_data_by_column(card, colid)
+        form_res = get_card_form_by_column(card, colid)
     data = {
         'bills':bills,
+        'res':res,
+        'form_res':form_res,
+        'colid':colid,
     }
     return JsonResponse(data)
 
@@ -1431,12 +1463,12 @@ def search_crm_cards(request):
             cards = set(chain(cards, extra))
         i = 0
         for card in cards:
-            res = get_card_data(card,res)
+            colid = card.column.id
+            res += [colid, get_card_data_by_column(card, colid)]
             i+=1
             if i == 5:
                 break
     res.reverse()
-
     data = {
         'res':res,
     }
@@ -1716,6 +1748,95 @@ def get_teacher_actions(request):
     }
     return JsonResponse(data)
 
+def get_schedule(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = is_moderator_school(request, profile)
+    data = {
+        "res":constant_school_lectures(profile, school),
+    }
+    return JsonResponse(data)    
+
+def get_all_cards_first(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    page = 1
+    all_res = []
+    for column in school.crm_columns.all():
+        res = []
+        if profile.skill and request.GET.get('all') == 'no':
+            if profile.skill.crm_show_free_cards:
+                res = column.cards.filter(author_profile=None, school=school)
+        if res == []:
+            if request.GET.get('all') == 'yes':
+                res = column.cards.filter(school=school)
+            else:
+                res = column.cards.filter(author_profile=profile, school=school)
+        if len(res) <= 0:
+            continue
+        p = Paginator(res, 4)
+        page1 = p.page(page)
+        res = []
+        colid = column.id
+        for card in page1.object_list:
+            res += get_card_data_by_column(card, colid)
+        all_res.append([colid,res])
+    managers_res = [] 
+    if is_profi(profile, 'Director'):
+        manager_prof = Profession.objects.get(title='Manager')
+        managers = school.people.filter(profession=manager_prof)
+        for manager in managers:
+            managers_res.append([manager.id,manager.first_name])
+    data = {
+        "all_res":all_res,
+        "page":page,
+        "is_director":is_profi(profile, 'Director'),
+        "managers_res":managers_res,
+        "Ended":False,
+    }
+    return JsonResponse(data)
+
+def get_all_cards_second(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    all_res = []
+    for column in school.crm_columns.all():
+        query = []
+        if profile.skill and request.GET.get('all') == 'no':
+            if profile.skill.crm_show_free_cards:
+                query = column.cards.filter(author_profile=None, school=school)
+        if query == []:
+            if request.GET.get('all') == 'yes':
+                query = column.cards.filter(school=school)
+            else:
+                query = column.cards.filter(author_profile=profile, school=school)
+        res = []
+        colid = column.id
+        i = 0
+        for card in query:
+            i += 1
+            if i <= 4:
+                continue
+            if i > 10:
+                break
+            res += get_card_data_by_column(card, colid)
+        all_res.append([colid,res])            
+    managers_res = [] 
+    if is_profi(profile, 'Director'):
+        manager_prof = Profession.objects.get(title='Manager')
+        managers = school.people.filter(profession=manager_prof)
+        for manager in managers:
+            managers_res.append([manager.id,manager.first_name])
+    data = {
+        "all_res":all_res,
+        "page":2,
+        "is_director":is_profi(profile, 'Director'),
+        "managers_res":managers_res,
+        "Ended":False,
+    }
+    return JsonResponse(data)
+
 def get_extra_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -1732,13 +1853,14 @@ def get_extra_cards(request):
                 res = column.cards.filter(school=school).prefetch_related('hashtags')
             else:
                 res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
-        if len(res) <= (page-1)*20:
+        if len(res) <= (page-1)*10:
             return JsonResponse({"Ended":True})
-        p = Paginator(res, 20)
+        p = Paginator(res, 10)
         page1 = p.page(page)
         res = []
+        colid = column.id
         for card in page1.object_list:
-            res = get_card_data(card,res)
+            res += get_card_data_by_column(card, colid)
         managers_res = [] 
         if is_profi(profile, 'Director'):
             manager_prof = Profession.objects.get(title='Manager')
@@ -1753,41 +1875,6 @@ def get_extra_cards(request):
         "Ended":False,
     }
     return JsonResponse(data)
-
-def get_card_data(card, res):
-    author = 'Свободная'
-    author_id = -1
-    if card.author_profile:
-        author = card.author_profile.first_name
-        author_id = card.author_profile.id
-    color = ''
-    if card.column.id > 3:
-        color = card.colour
-    tags = ''
-    for tag in card.hashtags.all():
-        tags += tag.title.replace(' ', '') + ' '
-    res.append([
-        card.id,                            # 0
-        str(card.saved),                    # 1
-        author,                             # 2
-        card.name,                          # 3
-        card.phone,                         # 4
-        card.mail,                          # 5
-        card.extra_phone,                   # 6
-        card.parents,                       # 7
-        card.comments,                      # 8
-        str(card.was_called),               # 9
-        tags,                               # 10
-        color,                              # 11
-        card.action,                        # 12
-        author_id,                          # 13
-        card.take_url(),                    # 14
-        card.change_day_of_week(),          # 15
-        card.days_of_weeks,                 # 16
-        card.timestamp.strftime('%d.%m.%Y %H:%M'), # 17
-        card.column.id,                     # 18
-        ])
-    return res            
 
 def payment_history(request):
     profile = Profile.objects.get(user = request.user.id)

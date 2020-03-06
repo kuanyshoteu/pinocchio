@@ -497,21 +497,21 @@ def pay_for_lesson(card, cost, squad):
         nm = nm[0]
         nm.money -= int(cost)
         if nm.money < squad.lesson_bill:
-            card.colour = 'red'
+            card.color = 'red'
             if card.was_called:
                 skill = card.author_profile.skill
                 skill.need_actions += 1
                 skill.save()
                 card.was_called = False
         elif nm.money < 2 * squad.lesson_bill:
-            card.colour = 'orange'
+            card.color = 'orange'
             if card.was_called:
                 skill = student_card.author_profile.skill
                 skill.need_actions += 1
                 skill.save()
                 card.was_called = False
         elif nm.money >= 2 * squad.lesson_bill:
-            card.colour = ''
+            card.color = ''
         card.save()
         nm.save()
     else:
@@ -555,22 +555,6 @@ def another_hint(request):
     }
     return JsonResponse(data)
 
-def update_hints(request):
-    profile = Profile.objects.get(user = request.user)
-    if profile.is_student:
-        profile.skill.hint_numbers = [0,0,0,0,0,0,0]        
-    if is_profi(profile, 'Manager'):
-        profile.skill.hint_numbers = [20,20,20,20,20,20,20]        
-    if is_profi(profile, 'Teacher'):
-        profile.skill.hint_numbers = [40,40,40,40,40,40,40]
-    if is_profi(profile, 'Director'):
-        profile.skill.hint_numbers = [60,60,60,60,60,60,60]
-
-    profile.skill.save()
-    data = {
-    }
-    return JsonResponse(data)
-
 def logout_view(request):
     logout(request)
     return redirect("/")
@@ -606,12 +590,12 @@ def add_money(profile, school, squad, card, amount, manager):
             finance_update_month(fc, subject.cost)
             fc.save()
     if ok:
-        if card.colour == 'red' or card.colour == 'orange':
+        if card.color == 'red' or card.color == 'orange':
             if not card.was_called:
                 skill = card.author_profile.skill
                 skill.need_actions -= 1
                 skill.save()
-        card.colour = 'white'
+        card.color = 'white'
         card.save()
     canceled = False
     if amount < 0:

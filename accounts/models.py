@@ -211,10 +211,9 @@ class CRMCard(models.Model):
     was_called = models.BooleanField(default=False)
     last_groups = models.IntegerField(default=-1)
     days_of_weeks = ArrayField(models.BooleanField(), default = list)
-    action = models.CharField(max_length=250, default='')
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
     premoney = models.IntegerField(default=0)
-    colour = models.CharField(max_length=250, default='white')
+    color = models.CharField(max_length=250, default='white')
 
     class Meta:
         ordering = ['-timestamp']
