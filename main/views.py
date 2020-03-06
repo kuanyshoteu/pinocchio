@@ -94,7 +94,9 @@ def newland(request):
     is_director = False
     profile = None
     money = 0
+    print('0', request.POST)
     if request.POST.get('type'):
+        print('1')
         if request.POST.get('type') == 'confirmation':
             return '3d511857'
     if request.user.is_authenticated:
