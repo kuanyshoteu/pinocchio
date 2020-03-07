@@ -94,11 +94,11 @@ def newland(request):
     is_director = False
     profile = None
     money = 0
-    print('0', request.POST)
-    if request.POST.get('type'):
+    print('0', request.POST, request.method)
+    if request.method == 'POST':
         print('1')
         if request.POST.get('type') == 'confirmation':
-            return '3d511857'
+            return render(request, "modals/vk.html", context)
     if request.user.is_authenticated:
         profile = get_profile(request)
         is_trener = is_profi(profile, 'Teacher')
@@ -1274,12 +1274,19 @@ def upload_cards(request):
     }
     return render(request, "upload_cards.html", context)
 
+def moderator_post_test(request):
+    profile = get_profile(request)
+    if request.POST:
+        print(request.POST.get('type'))
+        return render(request, "modals/vk.html", {})
+    return render(request, "moderator_post_test.html", {})
+
 def moderator_run_code(request):
     profile = get_profile(request)
     if is_profi(profile, 'Moderator') == False:
-        return JsonResponse({'fuck_off':'sucker'})
+        return JsonResponse({'de5a':'e99w9'})
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
-        return JsonResponse({'fuck_off':'sucker'})
+        return JsonResponse({'d8w':'11wd'})
     print('moderator_run_code')
     # update_subject_costs()
     # check_student_nms()
@@ -1294,7 +1301,7 @@ def moderator_run_code(request):
     # res = aktobe_money()
     # move_to_Mariam()
     # synchrone_material_with_atts()
-    card_tags()
+    # card_tags()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 

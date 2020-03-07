@@ -3,6 +3,10 @@
 <div style="width: 14%;">
 </div>
 <div class="fixed_menu">
+    {% if is_moderator %}
+    <a href="/moderator/" style="position: absolute;" class="ui button mini green"><b>{{school_crnt.title}}</b></a>
+    <br>
+    {% endif %}
     <div id="left-main-menu">
         <div class="ui vertical menu" style="background-color: #f4f4f4; border:0; box-shadow: none;">
             <a class="item lftitem {%if page == 'mypage' %}lftitem_crnt{%endif%}" href='{{ profile.get_absolute_url }}'>
@@ -74,12 +78,6 @@
         <a class="lftitemsmall small_text ml10" href='/team/'>
             О нас
         </a>
-        {% if is_moderator %}
-        <br>
-        <a class="lftitemsmall small_text ml10" href='/moderator/'>
-            Модераторская
-        </a>
-        {% endif %}
     </div>
 </div>
 {% endif %}

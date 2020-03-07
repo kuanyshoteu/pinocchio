@@ -1145,7 +1145,14 @@
         $('.new_post_details').hide('fast');
     });
     $('.profile_name').click(function (event){
-        $('.profile_links').fadeToggle('fast')
+        if ($(this).attr('status') == '0') {
+            $('.profile_links').show()
+            $(this).attr('status', '1')
+        }
+        else{
+            $(this).attr('status', '0')
+            $('.profile_links').hide()
+        }
     })
     $('.tell_about_corruption').click(function (event){
         var text = $('.corruption_text').val()

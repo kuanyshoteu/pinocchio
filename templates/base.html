@@ -157,7 +157,7 @@
         <div class="full-w left-main-menu">
             {% if request.user.is_authenticated %}
             <div class="item float_right" style="margin-right: 15%;">
-                <a class="profile_name">
+                <a class="profile_name" status='0'>
                     {{ profile.first_name }}
                     {% if profile.image %}
                         <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
@@ -190,6 +190,9 @@
             <i class="icon user"></i> Моя страница
         </a>
         {% endif %}
+        <div class="ui divider no_margin"></div>
+        <a class="ui button small full-w white" style="text-align: left;" href='/moderator/'>
+            Модераторская</a>
         <div class="ui divider no_margin"></div>
         <a class="ui button small full-w white" style="text-align: left;" href='{% url "logout" %}'>
             <i class="icon close"></i> Выйти</a>
@@ -265,7 +268,6 @@
         </div>
     </div>
     <div style="padding-top: 10px;min-height: calc(100% - 40px);">
-        {% if is_moderator %}<span class="highlight_black ml150 fix_mod">Находитесь внутри школы <b>{{school_crnt.title}}</b>{%endif%}</span>
         {% block content %}{% endblock content %}
     </div>
 </div>

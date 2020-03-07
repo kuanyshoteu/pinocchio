@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center pt50">
+    <form class="ui form" method='POST'>{% csrf_token %}
+        <textarea name="type"></textarea>
+        <input type='submit' value='Отправить' class='ui button green'>
+    </form>
+</div>
+
+
+{% endblock content %}

@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^notifications/$', get_notifications, name='get_notifications'),
     url(r'^moderator/$', moderator, name='moderator'),
     url(r'^moderator_run_code/$', moderator_run_code, name='moderator_run_code'),
+    url(r'^moderator_post_test/$', moderator_post_test, name='moderator_post_test'),
     url(r'^file_changer/$', file_changer, name='file_changer'),
     url(r'^upload_cards/$', upload_cards, name='upload_cards'),
     url(r'^api/create_school/$', create_school, name='create_school'),

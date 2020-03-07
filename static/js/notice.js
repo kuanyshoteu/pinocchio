@@ -67,6 +67,7 @@ $('.content').click(function(e){
     e.stopPropagation();
 });
 $("body").click(function(e){
+    $('.profile_name').attr('status', '0')
     $('.notice-bar').hide();
     var div = $('.notice');
     div.css('color', '#2D437C');
