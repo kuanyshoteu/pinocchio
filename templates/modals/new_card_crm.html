@@ -1,19 +1,28 @@
 <div class="ui modal small" id="new_card_form1">
     <i class="close icon"></i>
     <div class="content">
-        <form style="width: 60%;margin: 0 auto;text-align: center;" class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+        <form style="width: 60%;margin: 0 auto;text-align: center;" class="ui form" method='POST' enctype='multipart/form-data'>
             <div><b style="font-size: 17px;">Новая карточка</b></div>
-            <div class="wrong_mail_error wrong_mail_error1 highlight_red" style="min-height: 25px;margin: 10px 25px;display: none;"><b>Пожалуйста введите существующий email</b></div>
             <div class="alreadyregistered alreadyregistered1 highlight_red" style="min-height: 25px;margin: 10px 25px;display: none;"><b>Карточка с такими контактами уже зарегестрирована</b></div>
             *Имя:
-            <textarea class="new_card_name1" placeholder="Введите имя:">{{ card.name }}</textarea>
+            <textarea class="new_card_name1" placeholder="Введите имя:"></textarea>
             *Телефон:
-            <textarea class="new_card_phone1" placeholder="Введите телефон:">{{ card.phone }}</textarea>
-            *Почта:
-            <textarea class="new_card_mail1" placeholder="Введите почту:">{{ card.mail }}</textarea>
+            <textarea class="new_card_phone1" placeholder="Введите телефон:"></textarea>
+            <div class="wrong_mail_error highlight_red" style="min-height: 25px;margin: 10px 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></div>
+            Почта:
+            <textarea class="new_card_mail1" placeholder="Введите почту:"></textarea>
             Комментарий:
-            <textarea class="new_card_comment1" placeholder="Введите комментарий:">{{ card.comments }}</textarea>
-            <a class="ui button blue tiny add_card" id="1">Сохранить</a>    
+            <textarea class="new_card_comment1" placeholder="Введите комментарий:"></textarea>
+            <a class="ui button blue tiny add_card_head" url="{%url 'schools:add_card_url'%}" id="1">Сохранить</a>
+            <div class="loading_small new_card_load" style="display: none;">
+                <div class="animation"><div class="circle one"></div></div>
+                <div class="animation"><div class="circle two"></div></div>
+                <div class="animation"><div class="circle three"></div></div>
+                <div class="animation"><div class="circle four"></div></div>
+                <div class="animation"><div class="circle five"></div></div>
+                <div class="animation"><div class="circle six"></div></div>
+            </div>
+            <div class="highlight new_card_saved1" style="display: none;">Карточка сохранена <i class="icon check textw"></i></div>
         </form>
     </div>
 </div>

@@ -1,25 +1,29 @@
-<div id="{{lecture.6}}" class="w98 lecture_source lecture_const show_hint_schedule save_card_as_user" onclick="save_card_as_user('{{lecture.7.squad.id}}')" squad_id="{{lecture.7.squad.id}}" cost="{{lecture.7.subject.cost}}тг в месяц" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}">
+<div id="{{lecture.6}}" class="w98 lecture_source lecture_const show_hint_schedule save_card_as_user" squad_id="{{lecture.7.squad.id}}" cost="{{lecture.7.subject.cost}}тг в месяц" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}">
 </div>
-<div id="{{lecture.6}}" class="hint_schedule lecture_const hint_schedule{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
+<div id="{{lecture.6}}" class="hint_schedule hint_schedule_cont" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
     <div class="ui segment" style="color: #222;width: 300px;">
         <div class="text-center">
-            <b>{{lecture.7.squad.title}}</b>
+            <b class="hint_schedule_squad">{{lecture.7.squad.title}}</b>
         </div>
         <div class="mt10">
             <span style="color: grey;">Время</span>
-            {{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
+            <span class="hint_schedule_time">{{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
+            </span>
         </div>
         <div class="mt10">
             <span style="color: grey;">Курс</span>
-            {{lecture.7.subject.title}}
+            <span class="hint_schedule_subject">{{lecture.7.subject.title}}</span>
         </div>
         <div class="mt10">
             <span style="color: grey;">Учитель</span>
-            {{lecture.7.squad.teacher.first_name}}
+            <span class="hint_schedule_teacher">
+                {{lecture.7.squad.teacher.first_name}}
+            </span>
         </div>
         <div class="mt10">
             <span style="color: grey;">Цена</span>
-            {{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
+            <span class="hint_schedule_cost">{{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
+            </span>
         </div>
     </div>
 </div>

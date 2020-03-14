@@ -94,11 +94,6 @@ def newland(request):
     is_director = False
     profile = None
     money = 0
-    print('0', request.POST, request.method)
-    if request.method == 'POST':
-        print('1')
-        if request.POST.get('type') == 'confirmation':
-            return render(request, "modals/vk.html", context)
     if request.user.is_authenticated:
         profile = get_profile(request)
         is_trener = is_profi(profile, 'Teacher')
@@ -1273,13 +1268,6 @@ def upload_cards(request):
     context = {   
     }
     return render(request, "upload_cards.html", context)
-
-def moderator_post_test(request):
-    profile = get_profile(request)
-    if request.POST:
-        print(request.POST.get('type'))
-        return render(request, "modals/vk.html", {})
-    return render(request, "moderator_post_test.html", {})
 
 def moderator_run_code(request):
     profile = get_profile(request)

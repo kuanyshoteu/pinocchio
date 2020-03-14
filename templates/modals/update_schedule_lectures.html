@@ -1,0 +1,110 @@
+function crm_option_change(id){
+    this_ = document.getElementById(id);
+    object_id = this_.options[this_.selectedIndex].value;
+    this_ = $('#'+id)
+    url = this_.attr('url')
+    option = this_.attr('option')
+    $('.loading').show()
+    console.log('crm_option_change 0')
+    $.ajax({
+        url: url,
+        data: {
+            'object_id':object_id,
+            'option':option,
+        },
+        dataType: 'json',
+        success: function (data) {
+            $('.lectures_cont').empty()
+            crm_option_work()
+        }
+    });    
+}
+async function crm_option_work(){
+    await get_schedule_work()
+    set_check_icons()
+}
+function set_check_icons(){
+    if ($('.data').attr('is_crm') == 'yes') {
+        squads = $('#register_students_calendar').attr('squads')
+        res = squads.split('d')
+        console.log(res)
+        for (var i = 0; i < res.length - 1; i++){
+            console.log(res[i])
+            squad_id = res[i]
+            squads += squad_id + 'd'
+            $('.insquadicon'+squad_id).show()
+            $('.insquadicon'+squad_id).attr('status', 'show')
+        }  
+    }
+}
+function update_schedule_lectures(){
+    console.log('ppp')
+    var sum_width = 0;
+    interval = parseInt($('.dataconst').attr('interval'))
+    for (var day = 0; day <= 6; day++) {
+        $('.wait'+day).each(function() {
+            if ($(this).attr('height')) {
+                height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            
+            }
+            time = $(this).attr('time');
+            id = $(this).attr('id');
+            hour = parseInt($(this).attr('hour')) * 28;
+            minute = parseInt($(this).attr('minute'));
+            left = parseInt($(this).attr('left'));
+            topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
+            down = topp+height
+            count = 1
+            go = true
+            while(go){
+                go = false
+                $('.wait'+ day+'.left'+count).each(function() {
+                    id2 = $(this).attr('id')
+                    if (id2 != id) {
+                        hour2 = parseInt($(this).attr('hour')) * 28;
+                        minute2 = parseInt($(this).attr('minute'));
+                        topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
+                        height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
+                        down2 = topp2 + height2;
+                        if ((topp<=topp2&&down>=down2)|(topp2<=topp&&down2>=down)||(topp2 < down && topp2 >= topp) || (down2>topp&&down2<= down)) {
+                            go = true
+                            count = count + 1;
+                            return 0;
+                        }
+                    }
+                })
+            }
+            maxcount = count
+            $(this).attr('left', count)
+            $(this).removeClass('left'+left)
+            $(this).addClass('left'+count)
+            dayp1 = parseInt(day) + 1
+            if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
+                $('.dataconst').attr('max'+dayp1, count)
+            }
+            else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
+            $('#constday'+day).css('width', 100*maxcount);
+            sum = 0
+            for (var i = 1; i < dayp1; i++) {
+                sum += parseInt($('.dataconst').attr('max' + i))
+            }
+            $('.constback'+dayp1).css('margin-left', sum*100 + 53);
+            $('.constback'+dayp1).css('width', 100*maxcount);
+            $('.schedule_lines').css('width', sum*100+53+100*maxcount)
+            left = 55 + (sum-1)*100 + 100*count;
+            oldleft = parseInt($(this).css('margin-left'));
+            oldtop = parseInt($(this).css('margin-top'));
+            $(this).css('margin-top', oldtop+topp);
+            $(this).css('margin-left', oldleft+left);
+            $('.hint_schedule'+id).css('margin-top', oldtop+topp);
+            $('.hint_schedule'+id).css('margin-left', oldleft+left+98);
+            if ($(this).attr('height')) {
+                $(this).css('height', height);
+            }
+        });
+    }
+    if ($('.dataconst').attr('today')) {
+        $('.schedule_body').animate({
+            scrollLeft: $("#constday" + $('.dataconst').attr('today')).offset().left-80
+        }, 'fast');            
+    }
+}

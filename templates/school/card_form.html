@@ -8,7 +8,7 @@
         <div class="ui grid stackable no_margin full-h">
             <div class="eight wide column full-h">
                 <form class="ui form form_cont card_form_update_here mb0">
-                    <span class="wrong_mail_error wrong_mail_error highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
+                    <span class="wrong_mail_error highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
                     <div class="ui grid stackable card_form_update">
                         <div class="eight wide column text-center pt5 pr0 pb0 pl0">
                             <div style="height: 10px;"></div>
@@ -30,22 +30,21 @@
                             <select class="pay_for_groupedit mb5" id="pay_for_groupedit">
                             </select>
                             <div class="mb5">
-                                <input class="mr5 pt0 pb0 payment_amountedit" placeholder="Сумма" type="number" style="display: inline-block;width: calc(100% - 85px);height: 30px;">
-                                <a class="pl15 pr15 no_margin ui button mini blue make_payment make_paymentedit text-center" onclick="make_payment_card('edit')" style="display: inline-block;">
+                                <input class="mr5 pt0 pb0 payment_amountedit dinline" placeholder="Сумма" type="number" style="width: calc(100% - 85px);height: 30px;">
+                                <a style="width: 80px;" class="pl5 pr5 no_margin ui button mini blue make_payment text-center dinline" onclick="make_payment_card('edit')">
                                     Оплатить
+                                    <div class="loading_small" id="loadpayment" style="display: none;">
+                                        <div class="animation"><div class="circle one"></div></div>
+                                        <div class="animation"><div class="circle two"></div></div>
+                                        <div class="animation"><div class="circle three"></div></div>
+                                        <div class="animation"><div class="circle four"></div></div>
+                                        <div class="animation"><div class="circle five"></div></div>
+                                        <div class="animation"><div class="circle six"></div></div>
+                                    </div>
+                                    <span class="mt5 success_payment" style="display: none;">
+                                        <i class="icon check textw"></i>
+                                    </span>                                    
                                 </a>
-                            </div>
-                            <div class="loading_small" id="loadpaymentedit" style="display: none;">
-                                <div class="animation"><div class="circle one"></div></div>
-                                <div class="animation"><div class="circle two"></div></div>
-                                <div class="animation"><div class="circle three"></div></div>
-                                <div class="animation"><div class="circle four"></div></div>
-                                <div class="animation"><div class="circle five"></div></div>
-                                <div class="animation"><div class="circle six"></div></div>
-                            </div>
-                            <div class="mt5 success_payment" style="display: none;">
-                                Оплата принята
-                                <i class="icon check green"></i>
                             </div>
                             <div class="ui segment full-w pt5 pb5 mt15">
                                 <a class="show_hint_schedule full-w">
@@ -53,7 +52,7 @@
                                     <span>Информация о счетах</span>
                                 </a>
                                 <div class="hint_schedule ui segment backblue textw" style="display: none;position: absolute;margin-top: -30px;margin-left: 50px; width: 400px;height: 200px;z-index: 3000;">
-                                    <div class="card_money_schedit"></div>
+                                    <div class="card_money_sch"></div>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +82,7 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        <div class="sixteen wide column no_padding" style="padding-top: 5px;">
+                        <div class="sixteen wide column no_padding">
                             <div style="height: 10px;"></div>
                             <div class="mb0" style="height: 84px;">
                                 <div class="text-center"><b>Комментарий:</b></div>
@@ -107,130 +106,35 @@
             </div>
             <div class="eight wide column full-h no_padding" style="background-image: url( {%static 'images/icons/22sav.png'%});background-size: 150px;">
                 <div class="ui comments pl10 pr10 pt10 pb10 card_dialog">
-                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
-                        <div class="content">
-                          <a class="author">@zheka</a>
-                          <div class="metadata">
-                            <span class="date">Сегодня at 5:42PM</span>
-                            <span class="date">
-                                <i class="icon instagram mr0"></i>
-                                instagram комментарий
-                            </span>
-                          </div>
-                          <div class="text">
-                            Круто спасибо
-                          </div>
-                          <div class="actions">
-                            <a class="reply">Ответить</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
-                        <div class="content">
-                          <a class="author">@zheka</a>
-                          <div class="metadata">
-                            <span class="date">Сегодня at 5:42PM</span>
-                            <span class="date">
-                                <i class="icon instagram mr0"></i>
-                                instagram комментарий
-                            </span>
-                          </div>
-                          <div class="text">
-                            Круто спасибо
-                          </div>
-                          <div class="actions">
-                            <a class="reply">Ответить</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
-                        <div class="content">
-                          <a class="author">@zheka</a>
-                          <div class="metadata">
-                            <span class="date">Сегодня at 5:42PM</span>
-                            <span class="date">
-                                <i class="icon instagram mr0"></i>
-                                instagram комментарий
-                            </span>
-                          </div>
-                          <div class="text">
-                            Круто спасибо
-                          </div>
-                          <div class="actions">
-                            <a class="reply">Ответить</a>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment shadow" style="max-width: 80%;">
-                        <div class="content">
-                          <a class="author">@zheka</a>
-                          <div class="metadata">
-                            <span class="date">Сегодня at 5:42PM</span>
-                            <span class="date">
-                                <i class="icon instagram mr0"></i>
-                                instagram комментарий
-                            </span>
-                          </div>
-                          <div class="text">
-                            Круто спасибо
-                          </div>
-                          <div class="actions">
-                            <a class="reply">Ответить</a>
-                          </div>
-                        </div>
-                      </div>
-                          <div class="pl10 pr10 pt10 pb10 comment help_right_top no_radius_tr ui segment my_comment">
-                            <div class="content">
-                              <a class="author">@zheka</a>
-                              <div class="metadata">
-                                <span class="date">Сегодня at 5:42PM</span>
-                                <span class="date">
-                                    <i class="icon instagram mr0"></i>
-                                    instagram комментарий
-                                </span>
-                              </div>
-                              <div class="text">
-                                Круто спасибо
-                              </div>
-                              <div class="actions">
-                                <a class="reply">Ответить</a>
-                              </div>
-                            </div>
-                          </div>
-                      <div class="pl10 pr10 pt10 pb10 comment help_left_top no_radius_tl ui segment" style="width: 80%;">
-                        <div class="content">
-                          <a class="author">@zheka</a>
-                          <div class="metadata">
-                            <span class="date">Сегодня at 5:42PM</span>
-                            <span class="date">
-                                <i class="icon instagram mr0"></i>
-                                instagram комментарий
-                            </span>
-                          </div>
-                          <div class="text">
-                            Круто спасибо
-                          </div>
-                          <div class="actions">
-                            <a class="reply">Ответить</a>
-                          </div>
-                        </div>
-                      </div>
+                    <div class="empty_dialog" style="position: absolute;top: 45%;color: grey;left: 40%;"><i>Еще ничего нет</i></div>
                 </div>
-                <div class="pt10 pb10 pl15 pr15" style="background-color: #f0f0f0;display: flex;">
-                    <div class="pt5" style="width: 26px;">
+                <div class="pt10 pl15 pr15 backwhitelow dflex">
+                    <div class="ui segment mb0 pl10 pr10 pt5 card_mail backgreenlow" style="height: 30px;"></div>
+                    <form class="ui form mb0 half-w card_mail_form dflex" style="display: none;" >
+                        <textarea style="height: 30px;overflow-y: hidden;" class="card_mail_edit mb0" placeholder="Почта"></textarea>
+                        <a url="{%url 'schools:edit_card_mail'%}" class="ui button mini save_card_mail blue pl10 pr10" style="height: 28px;"><i class="textw icon check mr0 text11"></i></a>
+                        <div class="card_mail_loader ui active inverted dimmer ml10" style="display: none;">
+                            <div class="loader_center ui small text loader"></div>
+                        </div>
+                    </form>
+                </div>
+                <div class="pt10 pb10 pl15 pr15 backwhitelow dflex">
+<!--                     <div class="pt5" style="width: 26px;">
                         <a class="">
                             <i class="smile outline icon mr0" style="font-size: 20px;"></i>
                         </a>
                     </div>
-                    <div class="pl10" style="width: calc(100% - 26px);">
+ -->                    <div class="pl0" style="width: calc(100%);">
                         <form class="ui form mb0 full-w">
-                            <textarea class="mb0" style="border-radius: 21px;height: 42px;padding-top: 11px;" placeholder="Введите сообщение"></textarea>
+                            <textarea class="mb0 card_mail_text" style="border-radius: 21px;height: 42px;padding-top: 11px;" placeholder="Введите сообщение"></textarea>
                         </form>
                     </div>
                     <div class="pl10" style="width: 26px;padding-top: 12px;">
-                        <a class="">
+                        <a url="{%url 'schools:card_send_mail'%}" class="card_send_mail">
                             <img src="{%static 'images/icons/send.jpg'%}" style="width: 20px;">                            
                         </a>
+                        <div class="card_send_mail_loader ui active inline small loader" style="margin-top: -3px;display: none;">
+                        </div>                        
                     </div>
                 </div>
             </div>

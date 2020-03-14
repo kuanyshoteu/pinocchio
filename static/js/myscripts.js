@@ -1,3 +1,75 @@
+    $('.open_new_card_form1').click(function(e) {
+        $('#new_card_form1').modal('show');
+        $('.wrong_mail_error').hide();
+        console.log('open_new_card_form1')
+        $('.alreadyregistered').hide()
+        $('.wrong_mail_error').hide()
+        $('.new_card_load').hide()
+    })
+    $('.add_card_head').click(function(e) {
+        $('.new_card_saved1').hide()
+        this_ = $(this)
+        var id = this_.attr("id")
+        var url = this_.attr("url")
+        var name = $('.new_card_name1').val()
+        var phone = $('.new_card_phone1').val()
+        var mail = $('.new_card_mail1').val()
+        var comment = $('.new_card_comment1').val()
+        $('.alreadyregistered').hide()
+        $('.wrong_mail_error').hide()
+        ok = false
+        if (mail != '') {
+            for (var i = mail.length - 1; i >= 0; i--) {
+                if (mail[i] == '@') {
+                    ok = true;
+                    break;
+                } 
+            }            
+        }
+        else{
+            ok = true;
+        }
+        console.log('dddd', ok)
+        if (ok) {
+            this_.addClass('disabled')
+            $('.new_card_load').show()
+            $.ajax({
+                url: url,
+                data: {
+                    'name':name,
+                    'phone':phone,
+                    'mail':mail,
+                    'comment':comment,
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    this_.removeClass('disabled')
+                    $('.new_card_load').hide()
+                    if (data.already_registered) {
+                        $('.alreadyregistered'+id).show()
+                    }
+                    else{
+                        $('.new_card_saved1').show()
+                    }
+                }
+            })        
+        }
+        else{
+            $('.wrong_mail_error').show()
+        }
+    });
+    $('.connect_instagram').click(function(e) {
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        })
+    })
     $('.update_finance').click(function(e) {
         url = $(this).attr('update_url')
         $.ajax({
@@ -690,7 +762,6 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.school_'+status+'_form')
                 $('.school_'+status+'_form').hide();
                 $('.school_'+status).text(text);
                 if (status == 'site') {
@@ -966,41 +1037,6 @@
             $('.dataconst').attr('page_mode', 'norm')            
         }
     })
-  $('#search_text').on('input', function (e) {
-    text = $(this).val()
-    if (text.length == 0) {
-      $('.search_hint').hide();
-    }
-    else {
-      url = '/schools/api/call_helper/'
-      $.ajax({
-        url: url,
-        data: {
-          'text': text,
-          'reverse': 'no',
-        },
-        dataType: 'json',
-        success: function (data) {
-          if (data.res.length == 0) {
-            $('.search_hint').hide();
-          }
-          else {
-            $('.search_hint').empty();
-            url = $('.show_url').attr('url')
-            for (var i = 0; i < data.res.length; i++) {
-              var element = $('<div class="hint_item" onclick="hint_item(' + "'" + data.res[i] + "'" + ')">' + data.res[i] + '</div>').appendTo('.search_hint');
-            }
-            $('.search_hint').show();
-          }
-        }
-      })
-    }
-  })
-    $('.search_by_tags').click(function (e) {
-        $('#search_text').val(text)
-        $('.search_hint').hide();
-        hint_item(text)
-    })    
     $('.change_subject_category').on('change', function(e) {
         id = $(this).attr('id')
         this_ = document.getElementById(id);

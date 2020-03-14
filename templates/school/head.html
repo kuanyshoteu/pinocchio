@@ -25,10 +25,13 @@
     </div>
 </div>
 <div class="ui segment" style="background-color: #fafbfc;margin-top: 0; padding: 18px;">
-    <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}" name="school_info">
+    <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}">
         Общие 
     </a>
-    <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}" name="teachers">
+    <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
         Зарплаты
+    </a>
+    <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
+        Социальные сети
     </a>
 </div>

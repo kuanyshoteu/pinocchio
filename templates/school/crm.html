@@ -16,15 +16,15 @@
 <script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
 <div id="app" style="overflow-y: hidden;height: 90% !important;">
     <div class='ui container' id="untouch" style="height: 100%;">
-        <div class="ui grid main_crm" style="margin-top: 0;height: 100%;">
+        <div class="ui grid main_crm mt0" style="height: 100%;">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="padding-right: 0;width: 85%;">
+            <div class="pt5 pb5 wide column" style="width: 85%;">
                 <div style="padding-bottom: 8px;">
-                    <form class="ui form" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+                    <form class="ui form">
                         <div class="ui grid">
                             <div class="three wide column pl5 pr0 pb0">
                                 <input type="text" id="search_text" placeholder="Поиск по карточкам">
-                                <div class="search_hint ui segment" style="display: none;"></div>                               
+                                <div class="search_hint ui segment" style="display: none;"></div>                 
                             </div>
                             <div class="wide column pl0 pb0" style="width: 28.13px;">
                                 <button class="ui button small blue search_by_tags" type="submit" onclick="return false"><i class="icon search" style="color: white;"></i></button>
@@ -39,12 +39,15 @@
                             {%endif%}
                             <div class="filter wide column">
                                 <div class="filter-element">
-                                    <div class="filter-title">Предметы <i class="icon caret down" style="float: right;"></i></div>
-                                    <ul class="filter-list filter-list-hide">
-                                        {% for subject_category in subject_categories %}
-                                        <li class="filter-item filter-item-s" status="0" id="{{ subject_category.title|remove_space }}">
-                                            {{subject_category.title}}
-                                            <i class="icon check green" id="check_subject_category{{ subject_category.title }}"></i>                                            
+                                    <div class="filter-title filter-title-group" status="0" onclick="filter_title('group')">
+                                        Группы 
+                                        <i class="icon caret down" style="float: right;"></i>
+                                    </div>
+                                    <ul class="filter-list filter-list-group" style="display: none;">
+                                        {% for squad in squads %}
+                                        <li class="filter-item-s cfsquad" status="sc" id="{{ squad.id}}">
+                                            {{squad.title}}
+                                            <i style="display: none;" class="icon check green" status="0" id="check_sc{{ squad.id }}"></i>
                                         </li>
                                         {% endfor %}
                                     </ul>
@@ -53,28 +56,28 @@
                             {% if offices|length > 1 %}
                             <div class="filter wide column">
                                 <div class="filter-element">
-                                    <div class="filter-title">Офисы<i class="icon caret down" style="float: right;"></i></div>
-                                    <ul class="filter-list filter-list-hide">
-                                    {% for office in offices %}
-                                        <li class="filter-item filter-item-s" status="0" id="{{ office.title }}">
+                                    <div class="filter-title filter-title-office" status="0" onclick="filter_title('office')">Офисы<i class="icon caret down" style="float: right;"></i></div>
+                                    <ul class="filter-list filter-list-office" style="display: none;">
+                                        {% for office in offices %}
+                                        <li class="filter-item-s cfoffice" status="of" id="{{ office.id }}">
                                             {{office.title}}
-                                            <i class="icon check green" id="check_office{{ office.title }}"></i>
+                                            <i style="display: none;" class="icon check green" status="0" id="check_of{{ office.id }}"></i>
                                         </li>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
                             {% endif %}
                             <div class="wide column" style="width: 60px;padding: 14px 0 0 0;">
                                 <div class="filter-element">
-                                    <div class="filter-title" style="padding-right: 1px;">Дни<i class="icon caret down" style="float: right;"></i></div>
-                                    <ul class="filter-list filter-list-hide">
-                                    {% for day in crmdays %}
-                                        <li class="filter-item filter-item-s" status="0" id="day{{ day.id }}">
+                                    <div class="filter-title filter-title-days" status="0" onclick="filter_title('days')">Дни<i class="icon caret down" style="float: right;"></i></div>
+                                    <ul class="filter-list filter-list-days" style="display: none;">
+                                        {% for day in crmdays %}
+                                        <li class="filter-item-s cfday" status="day" id="{{ day.title }}">
                                             {{day.title}}
-                                            <i class="icon check green" id="check_day{{ day.title }}"></i>
+                                            <i style="display: none;" class="icon check green" status="0" id="check_day{{ day.title }}"></i>
                                         </li>
-                                    {% endfor %}
+                                        {% endfor %}
                                     </ul>
                                 </div>
                             </div>
@@ -97,16 +100,15 @@
                             <div class="margin0 backdark" style="padding: 14px 4px;color: #fff;border-radius: 5px 5px 0 0;">
                                 <div class="crm_title">{{ column.title }}</div>
                                 <div class="crm_divider"></div>
-                                <a class="ui button mini blue full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}')" id="{{column.id}}">Добавить</a>
+                                <a class="ui button mini blue full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>
                             </div>
-                            <div class="column_scrollable backdark" page="2" id="{{column.id}}" style="height: 70%;overflow-x: hidden;">
-                                <div class="ui active loader column_loader"></div>
+                            <div onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
+                                <div class="loader_center ui active loader column_loader"></div>
                                 <div class="textw" style="padding: 0 4px;">
                                     <div class="column{{ column.id }} crm_column">
-                                        <draggable 
-                                                class="crmbox{{ column.id }} full-h"
-                                                :options="{group:{ name:'people'}}"
-                                                @add="move_card({{ column.id }})">
+                                        <draggable class="crmbox{{ column.id }} full-h"
+                                            :options="{group:{ name:'people'}}"
+                                            @add="move_card({{ column.id }})">
                                         </draggable>
                                     </div>
                                 </div>
@@ -123,9 +125,10 @@
     </div>    
 </div>
 <div style="display: none;">
-{% include 'school/card_details.html' %}
-{% include 'school/schedule_lecture.html' %}
-{% include 'school/new_card_form.html' %}
+    {% include 'school/card_details.html' %}
+    {% include 'school/schedule_lecture.html' %}
+    {% include 'school/new_card_form.html' %}
+    {% include 'modals/card_dialog.html' %}
 </div>
 {% include 'school/card_form.html' %}
 <div class="ui mini modal" id="delete_card_modal">
@@ -137,13 +140,13 @@
         <a class="ui button mini red" onclick="$('#delete_card_modal').modal('hide')">Нет</a>
     </div>
 </div>
-<span style="display: none;" id="0" {%if crm_all%}all='yes'{%endif%} class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
+<span style="display: none;" id="0" all='{%if crm_all%}yes{%else%}no{%endif%}' class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}" get_card_info="{% url 'schools:get_card_info' %}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
-<span class="data" is_dir="{{is_director}}" hisid="{{profile.id}}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
+<span class="data" is_crm="yes" is_dir="{{is_director}}" hisid="{{profile.id}}" filter_crm_cards="{%url 'schools:filter_crm_cards'%}" get_card_dialog="{%url 'schools:get_card_dialog'%}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
 <script>{% include 'school/crm_scripts.html' %}</script>
 <style type="text/css">
 .ui-draggable-dragging{

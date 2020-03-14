@@ -1,18 +1,4 @@
 $(document).ready(function () { 
-  // Filter-list start
-  let filterElement = $('.filter-element');
-  let filterList = $('.filter-list');
-  let filterTitle = $('.filter-title');
-  let filterItem = $('.filter-item');
-
-
-  filterTitle.on('click', function () {
-    filterTitle.children('i').toggleClass('up');
-    filterList.toggleClass('filter-list-hide');
-  });
-
-
-  // Filter-list end
   // Landing gallery start
 
   $('#landing__gallery-close').on('click', function() {

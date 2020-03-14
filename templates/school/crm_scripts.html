@@ -1,127 +1,14 @@
     get_schedule()
-    function fill_lecture(ld){
-        height = ld[0]
-        subject = ld[1]
-        hour = ld[2]
-        minute = ld[3]
-        day = ld[4]
-        time = ld[5]
-        id = ld[6]
-        sq_id = ld[7]
-        cost = ld[8]
-        color_back = ld[9]
-        sq_title = ld[10]
-        l = $('.lecture_source').clone()
-        l.removeClass('lecture_source')
-        l.attr('id', id)
-        l.attr('onclick', 'save_card_as_user("'+sq_id+'")')
-        l.attr('squad_id', sq_id)
-        l.attr('cost', cost)
-        l.attr('day', day)
-        l.attr('hour', hour)
-        l.attr('minute', minute)
-        l.attr('time', time)
-        l.attr('height', height)
-        l.attr('style', 'background-color:'+color_back)
-        l.text(sq_title)
-        l.addClass('wait'+day)
-        l.appendTo('.lectures_cont')
-        $('<i class="icon check circle white insquadicon insquadicon'+sq_id+' textw text12" status="hide" style="position:absolute;right:0;display:none;"></i>').appendTo(l)
-    }
-    function update_schedule_lectures(){
-        var sum_width = 0;
-        interval = parseInt($('.dataconst').attr('interval'))
-        for (var day = 0; day <= 6; day++) {
-            $('.wait'+day).each(function() {
-                if ($(this).attr('height')) {
-                    height = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);            
-                }
-                time = $(this).attr('time');
-                id = $(this).attr('id');
-                hour = parseInt($(this).attr('hour')) * 28;
-                minute = parseInt($(this).attr('minute'));
-                left = parseInt($(this).attr('left'));
-                topp = (60/interval)*(hour + 2) + 28 * minute / interval + 40;
-                down = topp+height
-                count = 1
-                go = true
-                while(go){
-                    go = false
-                    $('.wait'+ day+'.left'+count).each(function() {
-                        id2 = $(this).attr('id')
-                        if (id2 != id) {
-                            hour2 = parseInt($(this).attr('hour')) * 28;
-                            minute2 = parseInt($(this).attr('minute'));
-                            topp2 = (60/interval)*(hour2 + 2) + 28 * minute2 / interval + 40;
-                            height2 = (60/interval)*((parseFloat($(this).attr('height').replace(",", ".")))*28);
-                            down2 = topp2 + height2;
-                            if ((topp<=topp2&&down>=down2)|(topp2<=topp&&down2>=down)||(topp2 < down && topp2 >= topp) || (down2>topp&&down2<= down)) {
-                                go = true
-                                count = count + 1;
-                                return 0;
-                            }
-                        }
-                    })
-                }
-                maxcount = count
-                $(this).attr('left', count)
-                $(this).removeClass('left'+left)
-                $(this).addClass('left'+count)
-                dayp1 = parseInt(day) + 1
-                if (parseInt($('.dataconst').attr('max'+dayp1)) < count ) {
-                    $('.dataconst').attr('max'+dayp1, count)
-                }
-                else{maxcount = parseInt($('.dataconst').attr('max'+dayp1))}
-                $('#constday'+day).css('width', 100*maxcount);
-
-                sum = 0
-                for (var i = 1; i < dayp1; i++) {
-                    sum += parseInt($('.dataconst').attr('max' + i))
-                }
-                $('.constback'+dayp1).css('margin-left', sum*100 + 53);
-                $('.constback'+dayp1).css('width', 100*maxcount);
-                $('.schedule_lines').css('width', sum*100+53+100*maxcount)
-                left = 55 + (sum-1)*100 + 100*count;
-                oldleft = parseInt($(this).css('margin-left'));
-                oldtop = parseInt($(this).css('margin-top'));
-                $(this).css('margin-top', oldtop+topp);
-                $(this).css('margin-left', oldleft+left);
-                $('.hint_schedule'+id).css('margin-top', oldtop+topp);
-                $('.hint_schedule'+id).css('margin-left', oldleft+left+98);
-                if ($(this).attr('height')) {
-                    $(this).css('height', height);
-                }
-            });
-        }
-        if ($('.dataconst').attr('today')) {
-            $('.schedule_body').animate({
-                scrollLeft: $("#constday" + $('.dataconst').attr('today')).offset().left-80
-            }, 'fast');            
-        }
-    }
-    //update_schedule_lectures()
+    {% include 'modals/update_schedule_lectures.html'%}
+    {% include 'modals/get_schedule_work.html'%}
     async function get_schedule(){
         await get_all_cards_second()
-        url = $('.data').attr('get_schedule');
-        console.log('start schedule')    
-        $.ajax({
-            url: url,
-            data: {
-            },
-            dataType: 'json',
-            success: function (data) {
-                for (var i = 0; i < data.res.length; i++) {
-                    fill_lecture(data.res[i])
-                }
-                update_schedule_lectures()
-            }
-        })        
+        get_schedule_work()
     }
     async function get_all_cards_first(){
         url = $('.data').attr('get_all_cards_first');
         all = 'no'
         if ($('.current_card').attr('all') == 'yes') {all = 'yes'}
-        console.log('start first')    
         $.ajax({
             url: url,
             data: {
@@ -130,7 +17,6 @@
             dataType: 'json',
             success: function (data) {
                 $('.column_loader').hide()
-                console.log($('.column_loader'))
                 for (var i = 0; i < data.all_res.length; i++) {
                     colid = data.all_res[i][0]
                     column_data = data.all_res[i][1]
@@ -176,6 +62,7 @@
                 option_orig = $(this)
                 option_copy = option_orig.clone()
                 option_orig.remove()
+                console.log('manager',option_copy.attr('value'))
                 if (parseInt(option_copy.attr('value')) == author_id) {
                     card_mgr = option_copy
                 }
@@ -190,12 +77,24 @@
             }
         }
         else{
-
         }
+        $('.success_payment').hide()
         $('.card_parentsedit').text(parents)
         $('.card_phone_extraedit').text(extra_phone)
         $('.card_commentedit').text(comments)
         $('.save_card_form').attr('onclick', 'edit_card("'+id+'")')
+        $('.save_card_form').attr('id', id)
+        $('.card_mail').text(mail)
+        $('.card_mail_edit').val(mail)
+        $('.make_payment').attr('onclick', 'make_payment_card("'+id+'")')
+        if (mail == '') {
+            $('.card_mail').hide()
+            $('.card_mail_form').show()
+        }
+        else{
+            $('.card_mail').show()            
+            $('.card_mail_form').hide()
+        }
         days_of_weeks_str = ''
         for (var i = 0; i < 7; i++) {
             daybutton = $('.card_form-dayscd'+i)
@@ -212,6 +111,7 @@
         card.attr('fillform','yes')
         if (fillform != 'yes') {
             card = $('.crm_card'+id)
+            card.attr('mail', mail)
             card.attr('extra_phone', extra_phone)
             card.attr('parents', parents)
             card.attr('comments', comments)
@@ -220,6 +120,32 @@
             card.attr('change_day_of_week', change_day_of_week)
             card.attr('days_of_weeks', days_of_weeks_str)
         }
+    }    
+    function fill_card_dialog(res){
+        $('.card_dialog').empty()
+        for (var i = 0; i < res.length; i++) {
+            id = res[i][0]
+            action_author = res[i][1]
+            text = res[i][2]
+            method = res[i][3]
+            time = res[i][4]
+            is_client = res[i][5]
+            if (is_client) {
+                msg = $('.client_message_cont').clone()
+                msg.removeClass('client_message_cont')
+            }
+            else{
+                msg = $('.manager_message_cont').clone()                
+                msg.removeClass('manager_message_cont')
+            }
+            msg.find('.message_author').text(action_author)
+            msg.find('.message_date').text(time)
+            msg.find('.message_method').text(method)
+            msg.find('.message_method').attr('id',id)
+            msg.find('.message_text').text(text)
+            msg.appendTo('.card_dialog')
+        }        
+        $(".card_dialog").animate({ scrollTop: height}, 1000);
     }
     function fill_card_data(column,res,position){
         for (var i = 0; i < res.length; i++) {
@@ -231,6 +157,7 @@
             is_director = ''
             highlight = ''
             nc = $('.source_card').clone()
+            nc.attr('id', 'card_container'+id)
             nc.addClass('crm_card'+id)
             nc.removeClass('source_card')
             nc.find('#cardnameshow').text(name)
@@ -244,7 +171,7 @@
             nc.find('.card_segment').attr('id', id)
             nc.find('.card_segment').attr('ondragstart', 'save_card_id("'+id+'","'+name+'")')
             nc.find('#cardsc').attr('id', 'cardsc'+id)
-            nc.find('#cardsc'+id).attr('onclick', 'openNav("'+id+'")')//change openNav
+            nc.find('#cardsc'+id).attr('onclick', 'openNav("'+id+'")')
             nc.find('.show_card_hist'+id).attr('onclick','open_crmhist("'+id+'")')
             nc.find('.nouser').attr('href', author_url)
             nc.find('.nouser').text(author_name)
@@ -252,12 +179,14 @@
                 $(nc).appendTo('.crmbox'+column)
             }
             else{
+                $('.newcardlight').removeClass('newcardlight')
+                nc.find('.card_segment').addClass('newcardlight')
                 $(nc).prependTo('.crmbox'+column)
             }
         }
     }
-    $('.column_scrollable').on('scroll', function() {
-        this_ = $(this)
+    function column_scroll(id){
+        this_ = $('.column_scrollable'+id)
         url = $('.data').attr('get_extra_cards')
         column = this_.attr('id')
         page = this_.attr('page')
@@ -265,12 +194,20 @@
         all = 'no'
         if ($('.current_card').attr('all') == 'yes') {all = 'yes'}
         if ((licenseElement.scrollTop + licenseElement.offsetHeight) >= licenseElement.scrollHeight) {
+            filter_data = get_filter_data()
+            squads = filter_data[0]
+            offices = filter_data[1]
+            days = filter_data[2]
+            console.log('yoyoy', offices)
             $.ajax({
                 url: url,
                 data: {
                     'column':column,
                     'page':page,
                     'all':all,
+                    'squads':squads,
+                    'offices':offices,
+                    'days':days,
                 },
                 dataType: 'json',
                 success: function (data) {
@@ -282,7 +219,18 @@
                 }
             })
         }
-    });
+    };
+    function filter_title(id){
+        this_ = $('.filter-title-'+id)
+        $('.filter-list').hide()
+        $('.filter-list-'+id).show()
+        this_.attr('status','1')
+    };
+    $('.card_mail').click(function(e) {
+        $(this).hide()
+        $('.card_mail_form').show()
+        $('.card_mail_edit').focus()
+    })
     $('.add_card').click(function(e) {
         var id = $(this).attr("id")
         var name = $('.new_card_name').val()
@@ -315,7 +263,7 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.already_registered) {
-                        $('.alreadyregistered'+id).show()
+                        $('.alreadyregistered').show()
                     }
                     else{
                         colid,column_data,'bottom'
@@ -326,43 +274,17 @@
             })        
         }
         else{
-            $('.wrong_mail_error'+id).show()
+            $('.wrong_mail_error').show()
         }
     });
-    $('.crm_option').on('change', function(e) {
-        id = $(this).attr('id')
-        this_ = document.getElementById(id);
-        object_id = this_.options[this_.selectedIndex].value;
-        url = $(this).attr('url')
-        option = $(this).attr('option')
-        $('.loading').show()
-        $.ajax({
-            url: url,
-            data: {
-                'object_id':object_id,
-                'option':option,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if ($('.data_update').attr('status')=='yes') {
-                    location.reload()
-                }
-                else{
-                    $( "#calendar" ).load(document.URL +  ' #calendar', function(){
-                        x = update_schedule_lectures()
-                    });
-                }
-            }
-        });
-    }) 
     function make_payment_card(id) {
-        amount = $('.payment_amount'+id).val()
-        this_ = document.getElementById('pay_for_group'+id);
+        amount = $('.payment_amountedit').val()
+        this_ = document.getElementById('pay_for_groupedit');
         group_id = this_.options[this_.selectedIndex].value;  
         url = $('.data').attr('make_payment_card')      
-        $('.make_payment'+id).addClass('disabled')
-        $('.success_payment'+id).hide()
-        $('.loadpayment'+id).show()
+        $('.make_payment').addClass('disabled')
+        $('.success_payment').hide()
+        $('.loadpayment').show()
         $.ajax({
             url: url,
             data: {
@@ -372,17 +294,17 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.loadpayment'+id).hide()
-                $('.make_payment'+id).removeClass('disabled')
-                $('.success_payment'+id).show()
-                $('.card_money_sch'+id).empty()
+                $('.loadpayment').hide()
+                $('.make_payment').removeClass('disabled')
+                $('.success_payment').show()
+                $('.card_money_sch').empty()
                 for (var i = 0; i < data.bills.length; i++) {
-                    text =  '<div style="font-weight:600;display:inline-block;" class="mr10">'+ data.bills[i][0] +'</div>' + 
-                            '<div class="mr10" style="display:inline-block;">На счету: '+ data.bills[i][1] +'</div>' + 
-                            '<div class="mr10" style="display:inline-block;">Оплата за уроки: '+ data.bills[i][2] +'</div>' + 
-                            '<div style="display:inline-block;">Оплата за месяц: '+ data.bills[i][3] +'</div>'
-                    $(text).appendTo('.card_money_sch'+id)
-                    $('<br><br>').appendTo('.card_money_sch'+id)
+                    text =  '<div class="mr10 dinline"><b>'+ data.bills[i][0] +'</b></div>' + 
+                            '<div class="mr10 dinline">На счету: '+ data.bills[i][1] +'</div>' + 
+                            '<div class="mr10 dinline">Оплата за уроки: '+ data.bills[i][2] +'</div>' + 
+                            '<div class="dinline">Оплата за месяц: '+ data.bills[i][3] +'</div>'
+                    $(text).appendTo('.card_money_sch')
+                    $('<br><br>').appendTo('.card_money_sch')
                 }                
             }
         })        
@@ -417,11 +339,14 @@
             },
             dataType: 'json',
             success: function (data) {
+                squads = ''
                 for (var i = 0; i < data.res.length; i++){
                     squad_id = data.res[i]
+                    squads += squad_id + 'd'
                     $('.insquadicon'+squad_id).show()
                     $('.insquadicon'+squad_id).attr('status', 'show')
                 }
+                $('#register_students_calendar').attr('squads',squads)
             }
         })
     }
@@ -473,17 +398,16 @@
         },
     })
     function open_crmcard(id){
-        $('#card_formedit').modal('show')
-        height = parseInt($('.form_cont').css('height'))-32
-        $('.card_dialog').css('height', height)
-        $(".card_dialog").animate({ scrollTop: height}, 1000);
-        $('.card_money_schedit').empty()
-        name = $('#cardnameshow'+id).text()
-        phone = $('#cardphoneshow'+id).text()
-        $('.crmform_title').text(name)
-        $('.card_nameedit').val(name)
-        $('.card_phoneedit').val(phone)
-        card = $('.crm_card'+id)
+        $('#card_formedit').modal('show');
+        height = parseInt($(document).height())-230;
+        $('.card_dialog').css('height', height);
+        $('.card_money_schedit').empty();
+        name = $('#cardnameshow'+id).text();
+        phone = $('#cardphoneshow'+id).text();
+        $('.crmform_title').text(name);
+        $('.card_nameedit').val(name);
+        $('.card_phoneedit').val(phone);
+        card = $('.crm_card'+id);
         if (card.attr('fillform') == 'yes') {
             mail = card.attr('mail')
             extra_phone = card.attr('extra_phone')
@@ -507,6 +431,16 @@
                     days_of_weeks_ar,
                     ]
             fill_card_form(id, res, 'yes')
+            $.ajax({
+                url: $('.data').attr('get_card_dialog'),
+                data: {
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    fill_card_dialog(data.dialog)
+                }
+            })            
         }
         else{
             $.ajax({
@@ -532,6 +466,7 @@
                         $('.card_money_schedit').text("Пока ничего нет")
                     }
                     fill_card_form(id, data.form_res[0], 'no')
+                    fill_card_dialog(data.dialog)
                 }
             })
         }
@@ -568,6 +503,58 @@
             }
         })
     };
+    $('.save_card_mail').click(function(e) {
+        var mail = $('.card_mail_edit').val()
+        $('.card_mail_loader').show()
+        id = $('.save_card_form').attr('id')
+        $.ajax({
+            url: $('.save_card_mail').attr('url'),
+            data: {
+                'id':id,
+                'mail':mail
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.card_mail_loader').hide()
+                $('.card_mail').text(mail)
+                $('.card_mail_form').hide()
+                $('.card_mail').show()
+            }
+        })
+    })
+    $('.card_send_mail').click(function(e) {
+        id = $('.save_card_form').attr('id')
+        var mail = $('.card_mail').text()
+        var text = $('.card_mail_text').val()
+        $('.card_send_mail_loader').show()
+        $('.card_send_mail').hide()
+        $.ajax({
+            url: $('.card_send_mail').attr('url'),
+            data: {
+                'id':id,
+                'mail':mail,
+                'text':text,                
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.card_send_mail_loader').hide()
+                $('.card_send_mail').show()
+                if (data.ok) {
+                    $('.empty_dialog').hide()
+                    $('.card_mail_text').val('')
+                    message = $('.manager_message_cont').clone()
+                    message.removeClass('manager_message_cont')
+                    message.find('.message_date').text(data.time)
+                    message.find('.message_text').text(text)
+                    message.find('.message_author').text(data.author)
+                    message.find('.reply').text(data.message_id)
+                    message.appendTo('.card_dialog')
+                }
+                else{
+                }
+            }
+        })
+    })
     function edit_card(id) {
         var name = $('.card_nameedit').val()
         var phone = $('.card_phoneedit').val()
@@ -580,7 +567,6 @@
                 'name':name,
                 'phone':phone,
                 'extra_phone':extra_phone,
-                'mail':mail,
                 'comment':comment,
                 'id':id,
                 'parents':parents
@@ -599,25 +585,6 @@
         $('.delete_card_data').attr('id', id);
         $('#delete_card_modal').modal('show');
     }
-    function filtercrm(){
-        $('.crm_card').hide()
-        search_text = $('#search_text').val()
-        filterstring = ''
-        if (search_text != '') {
-            filterstring = filterstring + '.'+search_text.replace(' ', '.')
-        }
-        set = document.getElementsByClassName('filter-item')
-        for (var i = set.length - 1; i >= 0; i--) {
-          if (set[i].getAttribute('status') != '0'){
-            title = set[i].getAttribute('id')
-            filterstring = filterstring + '.'+title.replace(' ', '.')
-          }
-        }
-        $(filterstring).show()
-        if (filterstring == '') {
-            $('.crm_card').show()
-        }
-    }
     function change_manager(id){
         this_ = document.getElementsByClassName('change_manager')[0];
         manager = this_.options[this_.selectedIndex].value;
@@ -629,6 +596,10 @@
             },
             dataType: 'json',
             success: function (data) {
+                nc = $('.crm_card'+id)
+                nc.find('.nouser').attr('href', data.author_url)
+                nc.find('.nouser').text(data.author_name)
+                nc.attr('author_id', manager)
             }
         })        
     }
@@ -902,23 +873,68 @@
                 ids = ''
                 for (var i = 0; i < data.res.length; i++) {
                     colid = data.res[i][0]
-                    card_data = data.res[i][1]
-                    ids = ids + card_data[0] + ','
-                    fill_card_data(colid, data.res,'top')
+                    $('#card_container'+data.res[i][1][0][0]).remove()
+                    fill_card_data(colid, data.res[i][1],'top')
                 }
-                $('.data').attr('used_cards',ids)
-                crm_remove_unnecessary(ids)
             }
         })        
     }
-    function crm_remove_unnecessary(ids){
-        cids = ids.split(',')
-        if (cids.length > 1) {
-            for (var i = 0; i < cids.length-1; i++) {
-                $('#card_container'+cids[i]).remove()
-            }
-        }
+    function get_filter_data(){
+        squads = ''
+        $(".cfsquad.chosed").each(function () {
+            squads += $(this).attr('id')+'d'
+        })
+        offices = ''
+        $(".cfoffice.chosed").each(function () {
+            offices += $(this).attr('id')+'d'
+        })
+        days = ''
+        $(".cfday.chosed").each(function () {
+            days += $(this).attr('id')+'d'
+        })
+        return [squads, offices, days]        
     }
+    $('.filter-item-s').click(function(e) {
+        $('.search_hint').hide();
+        id = $(this).attr('id')
+        status = $(this).attr('status')
+        url = $('.data').attr('filter_crm_cards')
+        check = $('#check_'+status+id)
+        is_check = check.attr('status')
+        is_all = $('.edit_card_url').attr('all')
+        if (is_check == '0') {
+            $(this).addClass('chosed')
+            check.show()
+            check.attr('status','1')
+        }
+        else{
+            $(this).removeClass('chosed')
+            check.hide()
+            check.attr('status','0')
+        }
+        filter_data = get_filter_data()
+        squads = filter_data[0]
+        offices = filter_data[1]
+        days = filter_data[2]
+        $.ajax({
+            url: url,
+            data: {
+                'squads':squads,
+                'offices':offices,
+                'days':days,
+                'is_all':is_all,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.all_res.length; i++) {
+                    colid = data.all_res[i][0]
+                    $('.crmbox'+colid).empty()
+                    column_data = data.all_res[i][1]
+                    fill_card_data(colid,column_data,'bottom')
+                }
+            }
+        })
+    })
     function save_card_as_user(squad_id){
         $('.loading').show();
         id = $('.card_for_save').attr('id');
@@ -1000,3 +1016,38 @@
     function show_subject_cost(cost){
         $('.subject_cost').html(cost)
     }
+    $('#search_text').on('input', function (e) {
+        text = $(this).val()
+        if (text.length == 0) {
+          $('.search_hint').hide();
+        }
+        else {
+          url = '/schools/api/call_helper/'
+            $.ajax({
+                url: url,
+                data: {
+                  'text': text,
+                  'reverse': 'no',
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.res.length == 0) {
+                        $('.search_hint').hide();
+                    }
+                    else {
+                        $('.search_hint').empty();
+                        url = $('.show_url').attr('url')
+                        for (var i = 0; i < data.res.length; i++) {
+                          var element = $('<div class="hint_item" onclick="hint_item(' + "'" + data.res[i] + "'" + ')">' + data.res[i] + '</div>').appendTo('.search_hint');
+                        }
+                        $('.search_hint').show();
+                    }
+                }
+            })
+        }
+    })
+    $('.search_by_tags').click(function (e) {
+        $('#search_text').val(text)
+        $('.search_hint').hide();
+        hint_item(text)
+    })    

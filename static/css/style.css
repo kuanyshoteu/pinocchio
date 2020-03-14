@@ -38,13 +38,19 @@
   background-color: #fff !important;
 }
 .backwhitelow{
-  background-color: #f1f1f1 !important;
+  background-color: #f0f0f0 !important;
 }
 .backgrey{
   background-color: #f9f9f9 !important;
 }
+.backgreenlow{
+  background-color: #ccffcc !important;
+}
 .textw{
   color: #fff !important;
+}
+.textg{
+  color: #909090 !important;
 }
 .textb{
   color: #000 !important;
@@ -58,8 +64,14 @@
 .text11{
   font-size:11px !important; 
 }
+.topbr5{
+  border-radius: 5px 5px 0 0;
+}
 .shadow{
   box-shadow: 0 0 15px 0 #d7d7d7 !important;
+}
+.shadow_small{
+  box-shadow: 0 0 5px 0 #d3d3d3 !important;
 }
 .shadow_blue{
   box-shadow: 0 0 5px 0 #506ca9 !important;
@@ -69,6 +81,9 @@
 }
 .bt1{
   border-top: 1px solid #e5e5e5 !important;
+}
+.border1{
+  border: 1px solid #e5e5e5 !important;
 }
 
 .text17{
@@ -225,6 +240,9 @@ body{
 }
 .mb10{
   margin-bottom: 10px !important;
+}
+.bbtm:hover{
+  border-bottom: 1px solid #fff;
 }
 .mt10{
   margin-top: 10px !important;
@@ -435,6 +453,11 @@ body{
 }
 .highlight{
   background-color: #21BA45;padding: 5 10px !important;color: #fff;border-radius: 3px;
+}
+.highlight_line{
+  border:1px solid #5181b8;
+  padding: 5 10px !important;
+  border-radius: 3px;
 }
 .highlight_blue{
   background-color: #5181b8;padding: 5 10px !important;color: #fff;border-radius: 3px;
@@ -649,10 +672,20 @@ body{
   min-height: 100% !important;
 }
 .delete_card{
-  position: absolute;right: 0;margin: -30px 4px 0 4px;color: red;font-size: 14px;
+  position: absolute;
+  right: 0;
+  margin: -20px 4px 0 4px;
+  color: red;
+  font-size: 14px;
+  font-weight: 600;
 }
 .show_card_schedule{
-  float: right; color: red;font-size: 17px;z-index: 200;
+  float: right; 
+  color: red;
+  font-size: 17px;
+  z-index: 200;
+  width: 100%;
+  text-align: right;
 }
 .delete_card:hover{
   color: red;
@@ -767,7 +800,7 @@ a{
   padding-top: 0;text-align: left;
 }
 .card_segment{
-  padding: 12px 5px 4px 5px !important;
+  padding: 5px 5px 4px 5px !important;
   box-shadow: 0 2px 2px 2px #3a3a3a !important;
   cursor: pointer;
   margin: 0 0 10px 0 !important;
@@ -1340,9 +1373,6 @@ a{
 }
 .urok{
   margin-top: 80px !important;
-}
-.inline{
-  display: inline-block !important;
 }
 .small_text{
   font-size: 12px !important;
@@ -2389,7 +2419,7 @@ a{
     .filter_title{
       width: 190px;
     }
-    .newlandhead{padding: 35px 50px 10px 50px;}
+    .newlandhead{padding: 20px 50px 10px 50px;}
     .half-w{
       width: 50%;
     }
@@ -2476,7 +2506,7 @@ a{
     .half-w{
       width: 100%;
     }
-    .newlandhead{padding: 35px 10px 10px 10px;}
+    .newlandhead{padding: 20px 10px 20px 10px;}
     .catland{
       padding: 30px 0px 200px 0px;
     }

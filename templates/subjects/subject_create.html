@@ -52,7 +52,7 @@
 			            	<div class="ui segment mb0" style="height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
 				        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
 				        	</div>
-				        	<div class="ui segment mt0" style="line-height: 40px;">
+				        	<div class="ui segment mt0" style="line-height: 40px;height: 221px;">
 			        			<div class="ui grid">
 			        				<div class="sixteen wide column" style="font-weight: 600;">
 			        					{{ form|crispy }}
@@ -94,18 +94,6 @@
 				                        <label class="file_post" for="subject_banner">
 				                        	<a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
 				                        </label>
-										<input type="file" name="subject_icon" id="subject_icon" class="postfile">
-				                        <label class="file_post" for="subject_icon">
-				                        	<a class="ui button mini"><i class="icon image blue"></i>Иконка</a>
-				                        </label>
-									</div>
-									<div class="eight wide column" style="padding:0 0 0 14px;">
-			        					Количество уроков:
-									    <input type="number" style="width:70px;" name="number_of_materials" value="{{instance.number_of_materials}}">
-									</div>
-									<div class="eight wide column no_padding">
-			        					Цвет:
-			        					<textarea name="color_back" class="no_margin" style="width:100px;">{{ instance.color_back }}</textarea>
 									</div>
                                     <div class="eight wide column">
                                         <div class="ui toggle checkbox">
@@ -146,11 +134,11 @@
                             <div class="ui segment" >
                                 <span class="ml15" style="font-size: 15px;font-weight: 600;">Фильтры</span> 
                                 <div class="filter-element ml50 filter-element-category" url="{{ instance.change_category }}" style="width: 400px;">
-                                    <div class="filter-title-s" onclick="filterTitleS('category{{ subject_category.id }}')" id="category{{ subject_category.id }}" status="closed">
+                                    <div onclick="filterTitleS('category')" class="filter-title-s" id="category" status="closed">
                                         Выберите предметы курса
                                         <i class="icon caret down" style="float: right;color: #222;"></i>
                                     </div>
-                                    <ul class="filter-list filter-list-hide filter-list-hide-category{{ subject_category.id }}" style="z-index: 2000;">
+                                    <ul class="filter-list-n choose_category" style="z-index: 2000;display: none;">
                                         {% for subject_category in subject_categories %}
                                         <li class="filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
                                             {{subject_category.title}}
@@ -180,7 +168,7 @@
                                                     {{ filter.title }}
                                                 </div>
                                             </div>
-                                            <ul style="position: relative;" class="filter-list filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
+                                            <ul style="position: relative;" class="filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
                                                 {% for optn in filter.filter_options.all %}
                                                 <li onclick="filterItemS('{{ optn.id }}')" object="level" class="optn{{ optn.id }} filter-item-s2" id="{{ optn.id }}">
                                                     {{optn.title}}
@@ -234,20 +222,20 @@
 </div>
 <script type="text/javascript">
     function filterTitleS(id){
+        console.log(1,id)
         this_ = $('#'+id)
         status = this_.attr('status')
         if (status == 'closed') {
-            $('.filter-list-hide-'+id).removeClass('filter-list-hide');
+            $('.choose_category').show();
             this_.attr('status','opened')
-            this_.addClass('highlight_blue')
         }
         else{
-            this_.removeClass('highlight_blue')
             this_.attr('status','closed')
-            $('.filter-list-hide-'+id).addClass('filter-list-hide');
+            $('.choose_category').hide();
         }
     };
     $('.filter-item-s').on('click', function () {
+        console.log(2)
         this_ = $(this)
         id = this_.attr('id')
         object = this_.attr('object')
@@ -279,6 +267,7 @@
         })
     });   
     function filterItemS(id){ 
+        console.log(3)
         this_ = $('.optn'+id)
         object = this_.attr('object')
         url = $('.filter-element-'+object).attr('url')

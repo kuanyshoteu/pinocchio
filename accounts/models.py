@@ -224,6 +224,16 @@ class CRMCard(models.Model):
     def take_url(self):
         return reverse("schools:take_url")
 
+class CardMail(models.Model):
+    action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='dialogs')
+    text = models.TextField(blank = True,null = True,default='')
+    card = models.ForeignKey(CRMCard, null=True, on_delete = models.CASCADE, related_name='mails')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    method = models.CharField(max_length=100, default='')
+    is_client = models.BooleanField(default=False)
+    class Meta:
+        ordering = ['id']
+
 class CRMCardHistory(models.Model):
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='card_histories')
     card = models.ForeignKey(CRMCard, null=True, on_delete = models.CASCADE, related_name='history')

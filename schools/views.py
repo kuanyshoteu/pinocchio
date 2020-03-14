@@ -250,6 +250,49 @@ def school_salaries(request):
     }
     return render(request, "school/salaries.html", context)
 
+def social_networks_settings(request):
+    profile = get_profile(request)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    myserver = 'https://testbilimtap.herokuapp.com/schools/social_networks_settings/'
+    if request.GET.get('code'):
+        code = request.GET.get('code')
+        url = 'https://api.instagram.com/oauth/access_token'
+        data = dict(
+            client_id=str(profile.id), 
+            client_secret=profile.first_name+str(profile.id), 
+            grant_type='authorization_code',
+            redirect_uri=myserver, 
+            code=code)
+        r = requests.post(url, data=data, allow_redirects=True)
+        print (r.content)
+
+
+    context = {
+        "profile":profile,
+        "instance": school,
+        "social_networks_settings":True,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "page":"info",        
+    }
+    return render(request, "school/social_networks_settings.html", context)
+
+def connect_instagram(request):
+    ok = False
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    myserver = 'https://testbilimtap.herokuapp.com/schools/social_networks_settings/'
+    return HttpResponseRedirect('https://api.instagram.com/oauth/authorize/?client_id='+str(profile.id)+'&redirect_uri='+myserver+'&response_type=code')
+
+    data = {
+    }
+    return JsonResponse(data)
+
 def school_crm(request):
     profile = get_profile(request)
     only_managers(profile)
@@ -263,10 +306,9 @@ def school_crm(request):
     if is_director:
         manager_prof = Profession.objects.get(title='Manager')
         managers = school.people.filter(profession=manager_prof)
-        print(managers)
-        # director_prof = Profession.objects.get(title='Manager')
-        # dirs = school.people.filter(profession=director_prof)
-        # managers = set(chain(managers, dirs))
+        director_prof = Profession.objects.get(title='Director')
+        dirs = school.people.filter(profession=director_prof)
+        managers = set(chain(managers, dirs))
     context = {
         "theprofile":theprofile,
         "profile":profile,
@@ -288,7 +330,9 @@ def school_crm(request):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
+        "squads":school.groups.all(),
         'crmdays':Day.objects.all(),
+        "subject_categories":school.school_subject_categories.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
         "page":"crm",        
     }
@@ -313,7 +357,7 @@ def school_crm_all(request):
         "profile":profile,
         "instance": school,
         "columns":school.crm_columns.all(),
-        "subject_categories":school.school_subject_categories.all(),
+        "squads":school.groups.all(),
         "ages":school.school_subject_ages.all(),
         "offices":school.school_offices.all(),
         'days':Day.objects.all(),
@@ -330,6 +374,7 @@ def school_crm_all(request):
         'interval':school.schedule_interval,
         'days':get_days(),
         "page":"crm",
+        'crmdays':Day.objects.all(),
         "crm_all":True,        
     }
     return render(request, "school/crm.html", context)
@@ -789,10 +834,10 @@ def crm_option(request):
         skill = profile.skill
         if request.GET.get('option') == 'subject':
             if int(request.GET.get('object_id')) == -1:
-                skill.crm_subject2 = None
+                skill.crm_subject = None
             else:
                 subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_subject2 = subject
+                skill.crm_subject = subject
         if request.GET.get('option') == 'crm_cabinet':
             if int(request.GET.get('object_id')) == -1:
                 skill.crm_cabinet = None
@@ -865,6 +910,57 @@ def move_card(request):
     }
     return JsonResponse(data)
 
+def card_send_mail(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    ok = False
+    if request.GET.get('id') and request.GET.get('mail') and request.GET.get('text'):
+        school = is_moderator_school(request, profile)
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
+        head = school.title
+        text = request.GET.get('text')
+        send_email(head, text,[request.GET.get('mail')])
+        ok = True
+        time = timezone.now()
+        print(card.mail)
+        mail = card.mails.create(
+            text = request.GET.get('text'),
+            method = card.mail,
+            action_author=profile,
+            timestamp=time,
+            )
+        mail.save()
+    data = {
+        'ok':ok,
+        'time':time.strftime('%d %B %H:%M'),
+        'author':profile.first_name,
+        'message_id':mail.id,
+    }
+    return JsonResponse(data)
+
+def edit_card_mail(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('mail'):
+        school = is_moderator_school(request, profile)
+        card = school.crm_cards.get(id = int(request.GET.get('id')))
+        student = card.card_user
+        student.mail = request.GET.get('mail')
+        student.save()
+        card.mail = request.GET.get('mail')
+        card.save()
+        edit = ''
+        if card.mail != request.GET.get('mail'):
+            edit = "Почта: " + card.mail + " -> " + request.GET.get('mail')
+        CRMCardHistory.objects.create(
+            action_author = profile,
+            card = card,
+            edit = edit,
+            )
+    data = {
+    }
+    return JsonResponse(data)
+
 def edit_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -930,10 +1026,6 @@ def edit_card_detailed(card, student, school,request,profile):
             student.phone = request.GET.get('phone')
     if card.extra_phone != request.GET.get('extra_phone'):
         edit = edit + "Дополнительный номер: " + card.extra_phone + " -> " + request.GET.get('extra_phone') + "; "
-    if card.mail != request.GET.get('mail'):
-        edit = edit + "Почта: " + card.mail + " -> " + request.GET.get('mail') + "; "
-        if student:
-            student.mail = request.GET.get('mail')
     if card.parents != request.GET.get('parents'):
         edit = edit + "Родители: " + card.parents + " -> " + request.GET.get('parents') + "; "
     if card.comments != request.GET.get('comment'):
@@ -943,7 +1035,6 @@ def edit_card_detailed(card, student, school,request,profile):
     card.name = request.GET.get('name')
     card.phone = request.GET.get('phone')
     card.extra_phone = request.GET.get('extra_phone')
-    card.mail = request.GET.get('mail')
     card.parents = request.GET.get('parents')
     card.comments = request.GET.get('comment')
     crnt_tag = ''
@@ -1209,6 +1300,8 @@ def make_zaiavka(request, school_id):
 def change_manager(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
+    author_url = ''
+    author_name = 'Свободная'
     if request.GET.get('manager') and request.GET.get('card'):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('card')))
@@ -1217,6 +1310,8 @@ def change_manager(request):
         else:
             manager = Profile.objects.get(id=int(request.GET.get('manager')))
             card.author_profile = manager
+            author_name = manager.first_name
+            author_url = manager.get_absolute_url()
             text = 'У вас новый клиент в CRM'
             Notification.objects.create(
                 text = text,
@@ -1228,6 +1323,8 @@ def change_manager(request):
             )
         card.save()
     data = {
+        'author_url':author_url,
+        'author_name':author_name,
     }
     return JsonResponse(data)
 
@@ -1316,7 +1413,6 @@ def get_card_info(request):
     if request.GET.get('id'):
         profile = Profile.objects.get(user = request.user.id)
         card = CRMCard.objects.get(id=int(request.GET.get('id')))
-        print(card.mail)
         only_managers(profile)
         school = card.school
         is_in_school(profile, school)
@@ -1335,11 +1431,27 @@ def get_card_info(request):
         colid = card.column.id
         res = get_card_data_by_column(card, colid)
         form_res = get_card_form_by_column(card, colid)
+        dialog = get_card_dialog(card)
     data = {
         'bills':bills,
         'res':res,
         'form_res':form_res,
+        'dialog':dialog,
         'colid':colid,
+    }
+    return JsonResponse(data)
+
+def get_card_info_dialog(request):
+    if request.GET.get('id'):
+        profile = Profile.objects.get(user = request.user.id)
+        card = CRMCard.objects.get(id=int(request.GET.get('id')))
+        only_managers(profile)
+        school = card.school
+        is_in_school(profile, school)
+        profile = card.card_user
+        dialog = get_card_dialog(card)
+    data = {
+        'dialog':dialog,
     }
     return JsonResponse(data)
 
@@ -1433,42 +1545,6 @@ def call_helper(request):
                 i+=1
                 if i == 5:
                     break
-    data = {
-        'res':res,
-    }
-    return JsonResponse(data)
-
-def search_crm_cards(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_managers(profile)
-    text = request.GET.get('text')
-    res = []
-    if text != '':
-        school = is_moderator_school(request, profile)
-        kef = 16
-        similarity=TrigramSimilarity('name', text)
-        cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-        if len(cards) < 5:
-            similarity=TrigramSimilarity('phone', text)
-            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-            cards = set(chain(cards, extra))
-        if len(cards) < 5:
-            similarity=TrigramSimilarity('parents', text)
-            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-            cards = set(chain(cards, extra))
-        if len(cards) < 5:
-            similarity=TrigramSimilarity('title', text)
-            hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
-            extra = school.crm_cards.filter(hashtags__in=hashtags)
-            cards = set(chain(cards, extra))
-        i = 0
-        for card in cards:
-            colid = card.column.id
-            res += [colid, get_card_data_by_column(card, colid)]
-            i+=1
-            if i == 5:
-                break
-    res.reverse()
     data = {
         'res':res,
     }
@@ -1837,6 +1913,98 @@ def get_all_cards_second(request):
     }
     return JsonResponse(data)
 
+def search_crm_cards(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    text = request.GET.get('text')
+    res = []
+    if text != '':
+        school = is_moderator_school(request, profile)
+        kef = 16
+        similarity=TrigramSimilarity('name', text)
+        cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('phone', text)
+            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            cards = set(chain(cards, extra))
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('parents', text)
+            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            cards = set(chain(cards, extra))
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('title', text)
+            hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            extra = school.crm_cards.filter(hashtags__in=hashtags)
+            cards = set(chain(cards, extra))
+        i = 0
+        for card in cards:
+            colid = card.column.id
+            res.append([colid, get_card_data_by_column(card, colid)])
+            i+=1
+            if i == 5:
+                break
+    res.reverse()
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def filter_crm_cards_work(cards, request,all_squads,all_students,all_offices):
+    if len(request.GET.get('offices')) > 0:
+        sids = request.GET.get('offices').split('d')
+        del sids[-1]
+        offices = all_offices.filter(id__in=sids)
+        squads = all_squads.filter(office__in=offices)
+        students = all_students.filter(squads__in=squads)
+        cards = cards.filter(card_user__in=students)
+    if len(request.GET.get('squads')) > 0:
+        sids = request.GET.get('squads').split('d')
+        del sids[-1]
+        squads = all_squads.filter(id__in=sids)
+        students = all_students.filter(squads__in=squads)
+        cards = cards.filter(card_user__in=students)
+    if len(request.GET.get('days')) > 0:
+        sids = request.GET.get('days').split('d')
+        del sids[-1]
+        slen = len(sids)
+        for i in range(0,slen):
+            sids[i] = 'day'+str(get_day_text(sids[i]))
+        tags = Hashtag.objects.filter(title__in=sids)
+        cards = cards.filter(hashtags__in=tags)
+    return cards
+
+def filter_crm_cards(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('is_all') == 'yes':
+        all_cards = school.crm_cards.all().select_related('card_user')
+    else:
+        if profile.skill.crm_show_free_cards:
+            all_cards = school.crm_cards.filter(author_profile=None).select_related('card_user')
+        else:
+            all_cards = school.crm_cards.filter(author_profile=profile).select_related('card_user')
+    all_squads = school.groups.all()
+    all_students = school.people.filter(is_student=True).prefetch_related('squads')
+    all_offices = school.school_offices.all()
+    all_res = []
+    for column in school.crm_columns.all():
+        cards = all_cards.filter(column=column)
+        cards = filter_crm_cards_work(cards, request,all_squads,all_students,all_offices)
+        i = 0
+        res = []
+        colid = column.id
+        for card in cards:
+            i+=1
+            if i == 10:
+                break
+            res += get_card_data_by_column(card, colid)
+        all_res.append([colid,res])            
+    data = {
+        'all_res':all_res,
+    }
+    return JsonResponse(data)
+
 def get_extra_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -1847,12 +2015,16 @@ def get_extra_cards(request):
         column = CRMColumn.objects.get(id=int(request.GET.get('column')))
         if profile.skill and request.GET.get('all') == 'no':
             if profile.skill.crm_show_free_cards:
-                res = column.cards.filter(author_profile=None, school=school).prefetch_related('hashtags')
+                res = column.cards.filter(author_profile=None, school=school)
         if res == []:
             if request.GET.get('all') == 'yes':
-                res = column.cards.filter(school=school).prefetch_related('hashtags')
+                res = column.cards.filter(school=school)
             else:
-                res = column.cards.filter(author_profile=profile, school=school).prefetch_related('hashtags')
+                res = column.cards.filter(author_profile=profile, school=school)
+        all_squads = school.groups.all()
+        all_students = school.people.filter(is_student=True).prefetch_related('squads')
+        all_offices = school.school_offices.all()
+        res = filter_crm_cards_work(res, request,all_squads,all_students,all_offices)        
         if len(res) <= (page-1)*10:
             return JsonResponse({"Ended":True})
         p = Paginator(res, 10)

@@ -38,7 +38,7 @@
             <div class="pb5">
                 {% if hisprofile.is_student %}
                 <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
-                <a class="ui button mini mb10 show_payment_history" id="{{hisprofile.id}}">История оплаты</a>
+                <a class="ui button mini mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}">История оплаты</a>
                 {%endif%}
                 <a class="ui button mini get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
             </div>

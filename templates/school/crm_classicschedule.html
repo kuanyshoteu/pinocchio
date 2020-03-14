@@ -1,7 +1,7 @@
 {% load ttags %}
 {% load staticfiles %}
 <form class="ui grid full-w mt0" onclick="change_mode()">
-    <div style="width: 53px;position: absolute;z-index: 3005;background-color: #4a4a4a">
+    <div class="backdark pb50" style="width: 53px;position: absolute;z-index: 3005;">
         <div style="height: 29px;"></div>
         {% for time in constant_times %}
         <div>
@@ -12,7 +12,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="schedule_body oveflowx_h" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
+    <div class="schedule_body oveflowx_h backdark pb50" style="overflow-y:hidden; width: 100%;">
         <div style="z-index: 100;white-space: nowrap;">
             <div>
                 <div class="thconst" style="width: 53px;z-index: 100"></div>
@@ -25,8 +25,8 @@
                 <div class="thconst dark_grey" style="width: 100px;" id="constday6">Вс</div>
             </div>
         </div>
-        <div class="no_margin lectures_cont" style="background: #4A4A4A;white-space: nowrap;">
-            <div style="position: relative;margin-top: -29px;">
+        <div class="no_margin backdark" style="white-space: nowrap;">
+            <div class="lectures_cont" style="position: relative;margin-top: -29px;">
                 <div class="dark_grey constback1 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback3 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback5 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>

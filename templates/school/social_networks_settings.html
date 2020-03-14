@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div class='ui container pt15'>
+    <div class="ui grid">
+        {% include 'left_menu.html' %}
+        <div class="twelve wide column">
+            {% include 'school/head.html' %}
+            <div class="ui raised segment">
+                <a class="ui red ribbon label"><i class="icon instagram textw"></i>Instagram</a>
+                <a class="ui button mini blue connect_instagram" url="{%url 'schools:connect_instagram'%}">Подключить</a>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
+{% endblock content %}

@@ -1,0 +1,60 @@
+function fill_lecture(ld){
+    height = ld[0]
+    subject = ld[1]
+    hour = ld[2]
+    minute = ld[3]
+    day = ld[4]
+    time = ld[5]
+    id = ld[6]
+    sq_id = ld[7]
+    cost = ld[8]
+    color_back = ld[9]
+    sq_title = ld[10]
+    teacher = ld[11]
+    l = $('.lecture_source').clone()
+    l.removeClass('lecture_source')
+    l.attr('id', id)
+    if ($('.data').attr('is_crm') == 'yes') {
+        l.attr('onclick', 'save_card_as_user("'+sq_id+'")')        
+    }
+    l.attr('squad_id', sq_id)
+    l.attr('cost', cost)
+    l.attr('day', day)
+    l.attr('hour', hour)
+    l.attr('minute', minute)
+    l.attr('time', time)
+    l.attr('height', height)
+    l.attr('style', 'background-color:'+color_back)
+    l.text(sq_title)
+    l.addClass('wait'+day)
+    l.appendTo('.lectures_cont')
+    hint = $('.hint_schedule_cont').clone()
+    hint.removeClass('hint_schedule_cont')
+    hint.addClass('hint_schedule'+id)
+    hint.find('.hint_schedule_squad').text(sq_title)
+    hour += 8
+    if ((''+hour).length == 1) {hour = '0'+hour}
+    if ((''+minute).length == 1) {minute = '0'+minute}        
+    hint.find('.hint_schedule_time').text(hour+':'+minute)
+    hint.find('.hint_schedule_subject').text(subject)
+    hint.find('.hint_schedule_teacher').text(teacher)
+    hint.find('.hint_schedule_cost').text(cost)
+    hint.appendTo('.lectures_cont')
+    $('<i class="icon check circle white insquadicon insquadicon'+sq_id+' textw text12" status="hide" style="position:absolute;right:0;display:none;"></i>').appendTo(l)
+}
+async function get_schedule_work(){
+    url = "{%url 'schools:get_schedule'%}"
+    return await $.ajax({
+        url: url,
+        data: {
+        },
+        dataType: 'json',
+        success: function (data) {
+            for (var i = 0; i < data.res.length; i++) {
+                fill_lecture(data.res[i])
+            }
+            update_schedule_lectures()
+            $('.loading').hide()
+        }
+    }) 
+}

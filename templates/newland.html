@@ -4,69 +4,73 @@
 {% load ttags %}
 {% block content %}
 <div  style="margin-top: -5px;color: #fff;">
-    <div class="text-center newlandhead pb30" style="background-color: #6ea4e6;background-image: url({% static 'images/icons/11sav.png' %});background-size: 150px;">
+    <div class="text-center newlandhead pb30" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
         <div id="cloud-intro"></div>
-        <div class="text-center mb15" style="font-size: 27px;line-height: 35px;font-weight: 600;position: relative;">
+        <div class="textw text-center mb10" style="font-size: 23px;line-height: 25px;font-weight: 600;position: relative;color: #232f3e">
             Введите название интересующего курса
         </div>
         <div class="ui grid stackable no_margin full-w">
             <div class="four wide column no_padding"></div>
             <div class="eight wide column no_padding">
-                <form class="ui form">
-                    <textarea class="map_search_input mb0" url="/api/map_search/" style="width: calc(100% - 120px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;" placeholder="Учебные центры и курсы"></textarea>
-                    <a class="ui button lightgreen map_search_by_tags" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;">
-                        <i class="icon search" style="color: #fff;"></i> 
-                        <b class="not_in_mobile">Поиск</b>
-                    </a>
-                    <div class="map_search_hint ml5 ui segment no_padding" style="text-align: left;width: calc(100% - 120px);display: none;">
+                <form class="ui form mb0">
+                    <textarea class="map_search_input mb0" url="/api/map_search/" style="width: calc(100% - 220px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;border-right: 0" placeholder="Учебные центры и курсы"></textarea>
+                    <div class="dinline backwhite" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;border: 1px solid rgba(34, 36, 38, 0.15);border-left: 0">
+                        <i class="icon search mr0" style="color: #232f3e;"></i>
+                        <b class="not_in_mobile textw"></b>
+                    </div>
+                    <div class="map_search_hint ui segment no_padding mt0" style="text-align: left;width: calc(100% - 164px);display: none;margin-left: 82px;">
                     </div>
                 </form>                  
             </div>
             <div class="four wide column no_padding"></div>
         </div>
-        <div class="text-center mb0" style="font-size: 20px;line-height: 35px;">
-            Более <b style="color: yellow">{{len}}</b> учебных центров Алматы
+        <div class="textw text-center mb0 mt5" style="font-size: 18px;line-height: 35px;color: #232f3e">
+            Более <b>{{len}}</b> учебных центров Алматы
         </div>
     </div>
     <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
-        <div class="four wide column pb0 pr0 deskmenu">
-            <div style="height: 33px;">
+        <div class="three wide column pb0 pr0 deskmenu">
+            <div class="ui segment no_padding">
+                {% for cat in categories %}
+                <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border-radius:0px;color: #232f3e;text-align: left;padding: 5px 15px;border-bottom: 1px solid #f0f0f0">
+                    <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
+                </a>
+                {% endfor %}
             </div>
-            {% for cat in categories %}
-            <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border: 1px solid #f1f1f1;border-radius:3px 3px 0 0;">
-                <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
-            </a>
-            {% endfor %}
         </div>
-        <div class="twelve wide column pl0 pt0" style="text-align: left;color: #696969">
+        <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
             <div class="ui grid stackable no_margin">
                 <div class="sixteen wide column pl15 pb0 mobpt0 pr0" style="display: inline-block;">
-                    <span style="font-weight: 600;font-size: 20px;" class="deskmenu">Рекомендуемые</span>
-                    <a class="ui button small blue mobmenu full-w" onclick="$('.categories_modal').modal('show')">Категории</a>
+                    <a class="ui button small blue pt10 pb10 mb10 in_mobile" onclick="$('.categories_modal').modal('show')">
+                        <i class="icon list textw"></i>
+                        Категории
+                    </a>
                 </div>
                 {% for school in schools %}
-                <div class="third wide column pr0 pb0">
-                    <div class="ui segment full-w btn_select" style="height: 320px;padding: 20px;">
+                <div class="four wide column pt0 pr0 pb15">
+                    <div class="topbr5 ui segment full-w btn_select no_padding" style="height: 300px;">
                         <a href="{{school.landing}}">
-                            <div style="font-size: 17px;font-weight: 600;">{{school.title}}</div>
-                            <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;" class="full-w mt15"></div>
-                            <div class="mt15" style="height: 50px;">
-                                <span style="color: #646464;">{{school.school_offices.first.address}}</span>
-                                <br>
-                                <span>{{school.slogan}}</span>
-                            </div>
-                            <div class="mt15" style="height: 33px;color: #646464;">
-                                <span style="color: #D4C14A;font-weight: 600;">
-                                    {{school.rating}}                            
-                                </span>
-                                {% for star in five %}
-                                    {% if forloop.counter <= school.rating %}
-                                        <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for star in school|rating_empty_stars %}
-                                    <i class="icon star" style="margin-right: -3px;"></i>
-                                {% endfor %}
+                            <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;" class="topbr5 full-w"></div>
+                            <div class="pl15 pr15 pb15 pt15">
+                                <div class="text17"><b>{{school.title}}</b></div>
+                                <div class="mt15" style="height: 50px;line-height: 15px;">
+                                    <span style="color: #646464;">{{school.school_offices.first.address}}</span>
+                                    <br>
+                                    <span>{{school.slogan}}</span>
+                                </div>
+                                <div class="mt15" style="height: 33px;color: #646464;">
+                                    <span style="color: #D4C14A;">
+                                        <b>{{school.rating}}</b>   
+                                    </span>
+                                    {% for star in five %}
+                                        {% if forloop.counter <= school.rating %}
+                                            <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% for star in school|rating_empty_stars %}
+                                        <i class="icon star" style="margin-right: -3px;"></i>
+                                    {% endfor %}
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -79,7 +83,7 @@
                 <i class="close icon"></i>
                 <div class="content">
                     {% for cat in categories %}
-                    <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border: 1px solid #f1f1f1;border-radius:3px 3px 0 0;">
+                    <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border: 1px solid #232f3e;border-radius:3px 3px 0 0;">
                         <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
                     </a>
                     {% endfor %}
@@ -107,7 +111,7 @@
                     url = $('.show_url').attr('url')
                     for(var i = 0; i < data.res.length; i++){
                         if (data.res[i][1] == 'category') {
-                            icon = '<b style="font-size:11px;color:grey;">категория:</b> '
+                            icon = '<b style="font-size:11px;color:grey;"></b> '
                         }
                         else 
                             icon = '<b style="font-size:11px;color:grey;">центр: </b>'

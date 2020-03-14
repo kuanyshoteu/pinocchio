@@ -12,6 +12,7 @@ from django.utils import timezone
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from itertools import chain
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def send_sms(phones, message, time):
     login = 'Pinocchio'
@@ -214,6 +215,10 @@ def get_days():
     res = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
     return res
 
+def get_day_text(text):
+    res = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+    return res.index(text)+1
+
 def hidden_filter_ids():
     res = set()
     titles = ['IELTS', 'TOEFL', 'Математика', 'Логика', 'SAT', 'GRE', 'GMAT']
@@ -266,4 +271,21 @@ def get_card_form_by_column(card, column_id):
         card.days_of_weeks,                 # 7
     ]
     res.append(arr2)
-    return res    
+    return res
+
+def get_card_dialog(card):
+    res = []
+    query = card.mails.all()
+    p = Paginator(query, 7)
+    page1 = p.page(1)
+    for mail in page1.object_list:
+        res.append([
+            mail.id,
+            mail.action_author.first_name,
+            mail.text,
+            mail.method,
+            mail.timestamp.strftime('%d %B %H:%M'),
+            mail.is_client,
+            ])
+        print(mail.id, mail.method)
+    return res

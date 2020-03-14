@@ -39,7 +39,7 @@
                 <div class="thconst dark_grey" style="width: 100px;" id="constday6">Вс</div>
             </div>
         </div>
-        <div class="no_margin" style="background: #4A4A4A;white-space: nowrap;">
+        <div class="no_margin backdark" style="white-space: nowrap;">
             <div style="position: relative;margin-top: -29px;">
                 <div class="dark_grey constback1 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback3 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
@@ -90,10 +90,9 @@
 <span class="dataconst" page_mode="norm" number="0" changed="no" interval="{{interval}}" chosendays="" today="{{today}}"
 max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span>
 <script type="text/javascript">
+    {% include 'modals/update_schedule_lectures.html' %}
+    update_schedule_lectures()    
     today = parseInt($('.dataconst').attr('today')) - 1
-    console.log(today)
     $('#constday'+today).removeClass('dark_grey')
     $('#constday'+today).addClass('green')
-
-
 </script>

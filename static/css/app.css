@@ -12917,12 +12917,13 @@ ol.ui.horizontal.list li:before,
 *******************************/
 
 /* Standard Size */
-
+.loader_center{
+  top: 50%;
+  left: 50%;
+}
 .ui.loader {
   display: none;
   position: absolute;
-  top: 50%;
-  left: 50%;
   margin: 0px;
   text-align: center;
   z-index: 1000;
@@ -13048,10 +13049,10 @@ ol.ui.horizontal.list li:before,
   color: rgba(255, 255, 255, 0.9);
 }
 .ui.dimmer .ui.loader:before {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: #ffffff;
 }
 .ui.dimmer .ui.loader:after {
-  border-color: #FFFFFF transparent transparent;
+  border-color: #506ca9 transparent transparent;
 }
 /* White Dimmer (Inverted) */
 
@@ -18245,7 +18246,6 @@ ol.ui.horizontal.list li:before,
   display: flex;
   margin: 1rem 0em;
   font-family: -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif;  
-  background: #FFFFFF;
   font-weight: normal;
   border: 1px solid rgba(34, 36, 38, 0.15);
   -webkit-box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
@@ -23078,7 +23078,6 @@ a.ui.card:hover,
 
 .ui.comments .comment .author {
   font-size: 1em;
-  color: rgba(0, 0, 0, 0.87);
   font-weight: bold;
 }
 .ui.comments .comment a.author {
@@ -29635,11 +29634,11 @@ select.ui.dropdown {
   position: fixed;
   z-index: 2000;
   width: 100%;
-  background-color: #506ca9;
   border: none;
   border-radius: 0;
   margin-top: 0;
   margin-bottom: 0;
+  background-color: #506ca9;  
   border-bottom: 1px solid #506ca9;
 }
 #main-menu .container {
@@ -30191,11 +30190,9 @@ a:hover {
   background: url(../images/search.png) no-repeat 7px;
   background-size: 14px;
   border-radius: 14px;
-  background-color: #2D437C;
+  background-color: #fff;
   outline: none;
-  transition: background-color .2s;
-  transition: color .2s;
-  color: #fff;
+  color: #222;
   width: 230px;
 }
 #search-input:focus {
@@ -30426,8 +30423,16 @@ a:hover {
   list-style-type: none;
   z-index: 1;
 }
-.filter-list-hide {
-  display: none;
+.filter-list-n {
+  position: absolute;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 3px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  list-style-type: none;
+  z-index: 1;
 }
 .filter-item-s {
   padding: 5px;
@@ -30442,9 +30447,6 @@ a:hover {
 }
 .filter-item-s2:hover {
   background-color: #ccc;
-}
-.filter-item i {
-  opacity: 0;
 }
 .show-icon {
   opacity: 1 !important;

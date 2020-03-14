@@ -13,7 +13,6 @@
         height: 25px !important;
     }
 </style>
-{% if instance.school.schedule_type == 'classic' %}
 <div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;color: #000;">
     <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}    
         Расписание 
@@ -149,94 +148,11 @@
 </form>
 <span class="dataconst" page_mode="norm" number="0" changed="no" interval="{{interval}}" chosendays=""
 max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span>
-{% else %}
-<div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
-    Расписание <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-    <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
-    <div class="ui pointing below label dark hint_schedule" style="display: none;">
-        Выберите курс и добавьте в список курсов, затем перетаскиванием добавляйте в расписание
-    </div>
-</div>
-<div id="app">
-    <div class="options">
-        <div class="form addSquadform" style="margin-top: 0">
-            <form @submit.prevent="addSquad">
-                <select v-model="squad">
-                    <option value="Выберите Класс" selected>Выберите курс</option>
-                    <option :value="[outSubjectSquads[0][index],element]" :id="'select_squad'+outSubjectSquads[0][index]" v-for="(element, index) in outSubjectSquads[1]">[[ element ]]</option>
-                    <option :value="[inSubjectSquads[0][index],element]" :id="'select_squad'+inSubjectSquads[0][index]" style="display: none;" v-for="(element, index) in inSubjectSquads[1]">[[ element ]]</option>
-                </select>
-                <a class="ui button mini blue" style="margin-left: 15px;" @click="addSquad">Добавить курс группе <b>{{ instance.title }}</b></a>
-            </form>
-        </div>
-        <div style="font-size: 15px;" class="mb10">
-            Список курсов группы <b>{{ instance.title }}</b>:
-            <a class="show_hint_schedule ml15"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
-            <div class="ui pointing below label dark hint_schedule" style="display: none;position: absolute;">
-                Захватите нужный курс мышкой и перетаскивайте в расписание
-            </div>
-        </div>
-
-        <div class="selected-squad-list">
-            <draggable 
-                    class="daysmall"
-                    v-model="inSubjectSquads[1]" 
-                    :options="{group:{ name:'people',  pull:'clone', put:false}}">
-                <div v-for="(element, index) in inSubjectSquads[1]"
-                    :ondragstart="'save_card_id('+inSubjectSquads[0][index]+')'"
-                    class="item ui segment in_squad_schedule" style="cursor: grab;" >
-                    <p class="dragg">[[ element ]]</p>
-                    <p class="user">[[ trener ]]</p>
-                    <span @click="deleteSquad(index,element)">✖</span>
-                </div>
-            </draggable>
-        </div>
-    </div>
-    <div class="table">
-        <div class="day-list">
-            <div class="daysmall daysmall_time"></div>
-            <div class="daysmall day-name">ПН</div>
-            <div class="daysmall day-name">ВТ</div>
-            <div class="daysmall day-name">СР</div>
-            <div class="daysmall day-name">ЧТ</div>
-            <div class="daysmall day-name">ПТ</div>
-            <div class="daysmall day-name">Сб</div>
-            <div class="daysmall day-name">Вс</div>
-        </div>
-        <div class="week-list">
-            <div class="week" v-for="(item,i) in schedule">
-                <div class="daysmall daysmall_time">[[ item[0] ]]</div>
-                <draggable 
-                        v-for="(box, i) in item[1]" 
-                        class="box daysmall" 
-                        :data-cellid="box[0]"
-                        :list="box[1]"
-                        :options="{group:{ name:'people'}}"
-                        @change="updateSchedule($event, box)"
-                        @add="added($event, box[1])">
-                    <div class="ui segment in_squad_schedule"
-                            :ondragstart="'save_card_id('+box[1][index][2]+')'"
-                            style="cursor: grab;" 
-                            v-for="(element, index) in box[1]" 
-                            :key="index"
-                            :id="'squad_lesson' + box[1][index][0]">
-                        <a class="delete_squad_lesson redx" :id="box[1][index][0]"><b>×</b></a>
-                        <p>[[ box[1][index][1] ]]</p>
-                        <select class="no_padding change_lecture_cabinet" @change="change_cabinet('change_lecture_cabinet'+[[ box[1][index][0] ]], '{{ instance.change_lecture_cabinet }}')" :id="'change_lecture_cabinet'+[[ box[1][index][0] ]]" :lecture_id='[[ box[1][index][0] ]]' style="margin: auto;">
-                            <option v-for="(element, index) in box[1][index][5]" :value="element[0]">[[ element[1] ]]</option>
-                        </select>
-                    </div>
-                </draggable>
-                <div class="ui divider grey_divider"></div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
 <span style="display: none;" id="-1" class="delete_lesson_data" url="{{ instance.delete_lesson_url }}"></span>
 <script>
+    {% include 'modals/update_schedule_lectures.html' %}
+    update_schedule_lectures()
     function change_mode() {
-        console.log('frfr')
         if ($('.dataconst').attr('page_mode') == 'norm') {
             $('.schedule_body').removeClass('oveflowx_h')
             $('.schedule_body').addClass('oveflowx_a')
@@ -252,7 +168,6 @@ max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span
             $('.dataconst').attr('page_mode', 'norm')            
         }
     }
-
     function change_cabinet(id, url){
         this_ = $('#'+id);
         cabinet_id = this_.children("option:selected").val()
@@ -272,10 +187,8 @@ max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span
     }
 
     function save_card_id(id){
-        console.log(id)
         $('.delete_lesson_data').attr('id', id)
     }
-
     new Vue({
         el: '#app',
         delimiters: ['[[', ']]'],

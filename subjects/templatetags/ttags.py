@@ -633,5 +633,6 @@ def constant_school_lectures(profile, school):
             str(subject.cost) + 'тг '+subject_period, #8
             color_back,             #9
             squad.title,            #10
+            squad.teacher.first_name,#11
             ])
     return res

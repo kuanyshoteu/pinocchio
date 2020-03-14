@@ -1,0 +1,109 @@
+<div class="ui segment margin0 choose_group">
+    <form class="ui form no_margin">
+        <div class="ui grid">
+            <div class="twenty wide column pr0">
+                Предмет:
+                <select onchange="crm_option_change('crm_subject')" class="crm_option" option="subject" id="crm_subject" url="{{ instance.crm_option_url }}">
+                    {% if profile.skill.crm_subject %}
+                        <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                    {% else %}
+                        <option value="-1">Все предметы</option>
+                    {% endif %}
+                    {% for subject in subject_categories %}
+                        {% if subject != profile.skill.crm_subject %}
+                        <option value="{{ subject.id }}">{{ subject.title }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if profile.skill.crm_subject %}
+                        <option value="-1">Все предметы</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="twenty wide column pr0">
+                Возраст:
+                <select onchange="crm_option_change('crm_age')" class="crm_option" option="age" id="crm_age" url="{{ instance.crm_option_url }}">
+                    {% if profile.skill.crm_age %}
+                        <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
+                    {% else %}
+                        <option value="-1">Все возрасты</option>
+                    {% endif %}
+                    {% for age in ages %}
+                        {% if age != profile.skill.crm_age %}
+                        <option value="{{ age.id }}">{{ age.title }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if profile.skill.crm_age %}
+                        <option value="-1">Все возрасты</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="twenty wide column pr0">
+                Курс:
+                <select onchange="crm_option_change('crm_course')" class="crm_option" option="course" id="crm_course" url="{{ instance.crm_option_url }}">
+                    {% if profile.skill.filter_course_connect.all|length > 0 %}
+                        <option value="{{ profile.skill.filter_course_connect.first.id }}">{{ profile.skill.filter_course_connect.first.title }}</option>
+                    {% else %}
+                        <option value="-1">Все курсы</option>
+                    {% endif %}
+                    {% for course in courses %}
+                        {% if course != profile.skill.filter_course_connect.first %}
+                        <option value="{{ course.id }}">{{ course.title }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if profile.skill.filter_course_connect.all|length > 0 %}
+                        <option value="-1">Все курсы</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="twenty wide column pr0">
+                Учитель:
+                <select onchange="crm_option_change('crm_teacher')"  class="crm_option" option="teacher" id="crm_teacher" url="{{ instance.crm_option_url }}">
+                    {% if profile.skill.filter_teacher.all|length > 0 %}
+                        <option value="{{ profile.skill.filter_teacher.id }}">{{ profile.skill.filter_teacher.first.first_name }}</option>
+                    {% else %}
+                        <option value="-1">Все учителя</option>
+                    {% endif %}
+                    {% for teacher in teachers %}
+                        {% if teacher != profile.skill.filter_teacher.first %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if profile.skill.filter_teacher.all|length > 0 %}
+                        <option value="-1">Все учителя</option>
+                    {% endif %}
+                </select>
+            </div>
+            {%if is_director %}                    
+            <div class="twenty wide column pr0">
+                Офис:
+                <select onchange="crm_option_change('crm_office')" class="crm_option" option="office" id="crm_office" url="{{ instance.crm_option_url }}">
+                    {% if profile.skill.crm_office2 %}
+                        <option value="{{ profile.skill.crm_office2.id }}">{{ profile.skill.crm_office2.title }}</option>
+                    {% else %}
+                        <option value="-1">Все офисы</option>
+                    {% endif %}
+                    {% for office in offices %}
+                        {% if office != profile.skill.crm_office2 %}
+                        <option value="{{ office.id }}">{{ office.title }}</option>
+                        {% endif %}
+                    {% endfor %}
+                    {% if profile.skill.crm_office2 %}
+                        <option value="-1">Все офисы</option>
+                    {% endif %}
+                </select>
+            </div>
+            {%endif%}
+        </div>
+    </form>
+</div>
+<div id="calendar" length='7'>
+    <div class="loading" style="display: none;">
+      <div class="animation"><div class="circle one"></div></div>
+      <div class="animation"><div class="circle two"></div></div>
+      <div class="animation"><div class="circle three"></div></div>
+      <div class="animation"><div class="circle four"></div></div>
+      <div class="animation"><div class="circle five"></div></div>
+      <div class="animation"><div class="circle six"></div></div>
+    </div>
+    {% include 'school/crm_classicschedule.html' %}
+</div>   

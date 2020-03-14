@@ -40,6 +40,7 @@
     <link rel="stylesheet" href='{% static "css/slider.css" %}'>
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
     <link rel="stylesheet" href='{% static "css/datepicker.min.css" %}'> 
+
     {% endcompress %}
     {% compress js %}   
     <script src='{% static "js/scripts.js" %}'></script>
@@ -60,7 +61,7 @@
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
             </a>
             {% if is_manager %}
-            <a class="ui button mini red help24 help2424hb" id="request-responsive" onclick="$('#new_card_form1').modal('show')" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
+            <a class="ui button mini red mr10 open_new_card_form1" id="request-responsive" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
                 Заявка
             </a>
             {% endif %}
@@ -85,38 +86,29 @@
                     </ul>
                 </div>
             </form>
-            <div class="notice" url="{{ profile.get_notifications }}" status='hide'>
-                {% if profile.skill.notifications_number == 0 %}
-                <i class="icon bell" style="color: #2D437C;"></i>
-                <span class="notification_exists" style="display: none;"></span>
-                {% else %}
-                <i class="icon bell" style="color: #fff;"></i>
-                <span class="notification_exists">{{ profile.skill.notifications_number }}</span>
-                {% endif %}
-            </div>
             <div class="notice_cont">
                 <div class="notice-bar">
                     <b class="notification_title">Уведомления</b>
                     <div class="ui divider"></div>
                     <ul class="notice-list">
                     </ul>
-                    <div style="text-align: center;">
+                    <div class="text-center">
                         <a class="full-w">Показать все</a>                        
                     </div>
                 </div>
             </div>
             {% if is_manager %}
-            <a class="ui button mini darkblue" id="" onclick="$('#new_card_form1').modal('show')">
+            <a class="ui textw mini mr10 pt5 pb5 bbtm open_new_card_form1">
                 Заявка
             </a>
             {% endif %}
             {% if is_director %}
-                <a class="ui button mini ml10 darkblue" href="{% url 'schools:info' %}">
+                <a class="ui textw mini ml10 mr10 pt5 pb5 bbtm" href="{% url 'schools:info' %}">
                     Управление
                 </a>
-                <a get_url="{% url 'schools:show_finance_update' %}" class="ui button mini ml10 darkblue show_finance_update" href="{% url 'schools:get_school_report'%}">
-                    На счету: 
-                    <b style="color: #e0f310;" id="school_money">
+                <a get_url="{% url 'schools:show_finance_update' %}" class="ui textw mini ml10  show_finance_update pt5 pb5" href="{% url 'schools:get_school_report'%}">
+                    <span class="bbtm pb5">На счету:</span> 
+                    <b id="school_money">
                         {{ school_money }}тг.
                     </b>
                     <span id="hint_f" class="ui segment pt5 pb5 pl5 pr5" style="color: #222;width: 200px;display: none; position: absolute;">
@@ -136,7 +128,7 @@
                     </span>
                 </a>
                 <a update_url="{%url 'schools:update_finance'%}" class="update_finance" style="height: 20px;">
-                    <i class="icon sync" style="color: #2D437C;font-size: 17px;"></i>
+                    <i class="icon sync ml10" style="color: #fff;font-size: 14px;"></i>
                     <span id="hint_f2" class="ui segment pt5 pb5 pl5 pr5" style="color: #222;width: 200px;display: none; position: absolute;">
                         Обновить
                     </span>

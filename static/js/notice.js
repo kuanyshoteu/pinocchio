@@ -66,7 +66,14 @@ $('.card_comment-textarea').click(function(e){
 $('.content').click(function(e){
     e.stopPropagation();
 });
+$('.filter-title').click(function(e){
+    e.stopPropagation();
+});
+$('.filter-list').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
+    $('.filter-list').hide()
     $('.profile_name').attr('status', '0')
     $('.notice-bar').hide();
     var div = $('.notice');

@@ -86,3 +86,21 @@ class CRMCardHistoryAdmin(admin.ModelAdmin):
     class Meta:
         model = Review
 admin.site.register(CRMCardHistory, CRMCardHistoryAdmin)
+
+class CardMailAdmin(admin.ModelAdmin):
+    list_display = [
+        "id",
+        "get_author",
+        "card_name",
+        "timestamp",
+        "text"]
+    list_display_links = ["id"]
+    list_filter = ['card', 'action_author']
+    def get_author(self, obj):
+        return obj.action_author.first_name
+    def card_name(self, obj):
+        return obj.card.name
+
+    class Meta:
+        model = CardMail
+admin.site.register(CardMail, CardMailAdmin)

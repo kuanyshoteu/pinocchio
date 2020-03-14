@@ -79,4 +79,8 @@
         </div>
     </div>
 </div>
+<span class="data" payment_history="{% url 'schools:payment_history' %}"></span>
+<script type="text/javascript">
+    {% include 'modals/show_payment_history.html' %}
+</script>
 {% endblock content %}

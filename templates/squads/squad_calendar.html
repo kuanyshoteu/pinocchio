@@ -6,10 +6,10 @@
     }
 </style>
 <span style="display: none;" class="instance_id" id="{{ instance.id }}"></span>
-<div class="ui segment" style="margin-bottom: 0;margin-top: 0">
+<div class="ui segment no_margin">
     <div class="ui grid">
         <div class="one wide column" style="margin-right: 16px;">
-                <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
+            <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;">  
         </div>
         <div class="twelve wide column" style="padding-left: 0;line-height: 28px;font-size: 15px;">
             Расписание 
@@ -91,7 +91,6 @@
                         </div>
                     </div>
                 </div>
-
             {% endfor %}
             </div>
         </div>
@@ -109,3 +108,7 @@
 </form>
 <span class="dataconst" page_mode="norm" number="0" changed="no" interval="{{interval}}" chosendays=""
 max1="1" max2="1" max3="1" max4="1" max5="1" max6="1" max7="1" friends=''></span>
+<script type="text/javascript">
+    {% include 'modals/update_schedule_lectures.html' %}
+    update_schedule_lectures()    
+</script>
