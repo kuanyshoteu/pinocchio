@@ -260,14 +260,18 @@ def social_networks_settings(request):
         print('yo2')
         code = request.GET.get('code')
         url = 'https://api.instagram.com/oauth/access_token'
-        data = dict(
-            client_id=str(profile.id), 
-            client_secret=profile.first_name+str(profile.id), 
-            grant_type='authorization_code',
-            redirect_uri=myserver, 
-            code=code)
+        headers={
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+        data = {
+            'client_id':str(profile.id), 
+            'client_secret':profile.first_name+str(profile.id), 
+            'grant_type':'authorization_code',
+            'redirect_uri':myserver, 
+            'code':code,
+        }
         print('yo3')
-        r = requests.post(url, data=data, allow_redirects=True)
+        r = requests.post(url,data=data,headers=headers,verify=False,allow_redirects=True)
         print('yo4')
         print (r.content)
 
