@@ -621,6 +621,9 @@ def constant_school_lectures(profile, school):
             color_back = '#313a57'
         else:
             color_back = squad.color_back
+        teacher = ''
+        if squads.teacher:
+            teacher = squad.teacher.first_name
         res.append([
             height,                 #0
             subject.title,          #1
@@ -633,6 +636,6 @@ def constant_school_lectures(profile, school):
             str(subject.cost) + 'тг '+subject_period, #8
             color_back,             #9
             squad.title,            #10
-            squad.teacher.first_name,#11
+            teacher,                #11
             ])
     return res
