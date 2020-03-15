@@ -45,9 +45,10 @@ class School(models.Model):
     pay_day_diff = models.IntegerField(default=5)
     schedule_type = models.CharField(max_length=10, default='classic') #May be "classic" or "new"
     schedule_interval = models.IntegerField(default=60)
+    importance = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['version','rating', '-average_cost']
+        ordering = ['importance','version','rating', '-average_cost']
     def __unicode__(self):
         return self.title
     def ___str__(self):
