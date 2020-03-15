@@ -254,7 +254,7 @@ def social_networks_settings(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    myserver = 'https://testbilimtap.herokuapp.com/schools/social_networks_settings/'
+    myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
     if request.GET.get('code'):
         code = request.GET.get('code')
         url = 'https://api.instagram.com/oauth/access_token'
@@ -286,10 +286,10 @@ def connect_instagram(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
-    myserver = 'https://testbilimtap.herokuapp.com/schools/social_networks_settings/'
-    return HttpResponseRedirect('https://api.instagram.com/oauth/authorize/?client_id='+str(profile.id)+'&redirect_uri='+myserver+'&response_type=code')
-
+    myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
+    url = 'https://api.instagram.com/oauth/authorize/?client_id='+str(profile.id)+'&redirect_uri='+myserver+'&response_type=code'
     data = {
+        'url':url,
     }
     return JsonResponse(data)
 

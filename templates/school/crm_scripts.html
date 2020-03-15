@@ -51,10 +51,11 @@
         parents = res[2]
         comments = res[3]
         author_id = res[4]
-        take_url = res[5]
+        take_url = "{% url 'schools:take_url' %}"
         change_day_of_week = res[6]
         days_of_weeks = res[7]
-        if ($('.data').attr('is_dir')) {
+        console.log($('.data').attr('is_dir'))
+        if ($('.data').attr('is_dir') == 'True') {
             $('.change_manager').attr('onchange','change_manager("'+id+'")')
             clones = []
             card_mgr = undefined
@@ -62,7 +63,6 @@
                 option_orig = $(this)
                 option_copy = option_orig.clone()
                 option_orig.remove()
-                console.log('manager',option_copy.attr('value'))
                 if (parseInt(option_copy.attr('value')) == author_id) {
                     card_mgr = option_copy
                 }
@@ -77,6 +77,17 @@
             }
         }
         else{
+            console.log('ddededede0', author_id,$('.data').attr('hisid'))
+            if (author_id == parseInt($('.data').attr('hisid'))) {
+                $('.takecard.green').hide()
+                $('.notm').show()
+            }
+            else{
+                $('.takecard.green').show()
+                $('.notm').hide()
+            }
+            $('.takecard').attr('url',take_url)
+            $('.takecard').attr('id',id)                
         }
         $('.success_payment').hide()
         $('.card_parentsedit').text(parents)

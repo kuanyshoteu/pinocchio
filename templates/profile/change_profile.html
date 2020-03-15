@@ -2,73 +2,179 @@
 {% load crispy_forms_tags %}
 
 {% block head_extra %} 
-	{{ form.media }}
+    {{ form.media }}
 {% endblock head_extra %}
 {% load staticfiles %}
 
 {% block content %}
-<style type="text/css">
-    #id_phone{
-        margin-bottom: 15px;
-    }
-    #id_image{
-        margin-bottom: 25px;
-    }
-</style>
-<div id="group-create" class="pb150">
-	<a id="go-back-btn-before"  href='{{ profile.get_absolute_url }}'>
+<div id="group-create">
+    <a id="go-back-btn-before"  href='{{ profile.get_absolute_url }}'>
         <i class="arrow left icon"></i>
     </a>
-	<div class='ui container'>
-		<div class="ui grid stackable">
+    <div class='ui container'>
+        <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="eighty wide column ml30">
-            		<div class="ui grid stackable">
-            			<div class="eight wide column pr0">
-            				<div class="ui segment mb0 text15">
-				        		<b>Основная информация</b>
-				        	</div>
-				        	<div class="ui segment mt0">
-				        		<form method='POST' class="ui form text-center" style="width: 80%;margin: 0 auto; font-weight: 600">{% csrf_token %}
-								    {{ form|crispy }}
-                                    <div class="mt10 text-center">      
-                                        <input type='submit' class='ui button green full-w' value='Сохранить'/>
-                                    </div>
-								</form>
-			        		</div>
+            <div class="wide column eighty ml50">
+                <div class="ui grid stackable no_margin">
+                    <div class="eight wide column no_padding">
+                        <div class="ui segment mb0">
+                            <b>Основная информация</b>
                         </div>
-                        <div class="eight wide column ">                        
-            				<div class="ui segment mb0 text15">
-				        		<b>Пароль</b>
-				        	</div>
-				        	<div class="ui segment mt0">
-                                <form class="ui form text-center" style="margin: 0 auto;width: 60%;">
-                                    <div class="mb10 success_change_pswrd" style="display: none;"><i class="icon check green"></i> Пароль изменен</div>
-                                    <b>Введите новый пароль</b>
-                                    <input class="reset_password1" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
-                                    <b>Повторите новый пароль</b>
-                                    <input class="reset_password2" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
-                                    <input class="ui button green reset_pswd full-w" id="{{ profile.id }}" value="Изменить пароль" type="submit" onclick="return false">
-                                </form>
-			        		</div>
-			        	</div>
-					</div>
-			</div>
-		</div>
-	</div>	
+                        <div class="ui segment mt0 mb0" style="height: 260px;">
+                            <form class="ui form" class="ui form">
+                                Имя
+                                <textarea style="height: 29px;overflow: hidden;" class="mb15 profile_name_edit" placeholder="Введите имя">{{profile.first_name}}</textarea>
+                                Телефон
+                                <textarea style="height: 29px;overflow: hidden;" class="mb15 profile_phone" placeholder="Напишите номер телефона">{{profile.phone}}</textarea>
+                                Почта
+                                <textarea style="height: 29px;overflow: hidden;" class="mb10 profile_mail" placeholder="Напишите почту">{{profile.mail}}</textarea>
+                                Ава
+                                <div class="mb10" style="height: 29px;">
+                                    <input type="file" name="profile_banner" id="profile_banner" class="postfile pt0">
+                                    <label class="file_post" for="profile_banner">
+                                        <a class="ui button mini mr15"><i class="icon image blue"></i>Выберите картинку</a>
+                                    </label>
+                                </div>                                
+                            </form>
+                        </div>
+                        <div class="ui segment mt0 text-center">
+                            <a url="{%url 'accounts:save_profile'%}" class="ui button green mini save_profile">Сохранить</a>
+                            <div class="loading_small" style="display: none;" id="profile_save_load">
+                              <div class="animation"><div class="circle one"></div></div>
+                              <div class="animation"><div class="circle two"></div></div>
+                              <div class="animation"><div class="circle three"></div></div>
+                              <div class="animation"><div class="circle four"></div></div>
+                              <div class="animation"><div class="circle five"></div></div>
+                              <div class="animation"><div class="circle six"></div></div>
+                            </div>  
+                            <i class="icon check green profile_saved" style="display: none;"></i>                            
+                        </div>                        
+                    </div>
+                    <div class="eight wide column no_padding">
+                        <div class="ui segment mb0">
+                            <b>Изменить пароль</b>
+                        </div>
+                        <div class="ui segment mt0 mb0"  style="height: 260px;">
+                            <form class="ui form">
+                                <div>Новый пароль</div>
+                                <input placeholder="Введите новый пароль" class="reset_password1" type="password" name="password">
+                                <div class="mt15">Повторите новый пароль</div>
+                                <input placeholder="Повторите новый пароль" class="reset_password2" type="password" name="password">
+                            </form>
+                        </div>
+                        <div class="ui segment mt0">
+                            <div class="text-center">
+                                <input class="ui button green reset_pswd mini" id="{{ profile.id }}" value="Сохранить" type="submit" onclick="return false">
+                                <div class="success_change_pswrd mt5" style="display: none;"><i class="icon check green"></i> 
+                                    Пароль сохранен
+                                    <br>
+                                    <span class="text15"><i class="icon left arrow"></i> Вперёд в сказочный мир!</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
 </div>
-{% if is_trener %}
-<span style="display: none;" class="hint_data" hint_type="1" id="{{ hint }}" url="{{ profile.hint_url }}"></span>
+<span style="display: none;" class="instance_data" id="{{instance.id}}"></span>
 <script type="text/javascript">
-    $(document).ready(function() {
-        var hint = parseInt( $('.hint_data').attr('id'))
-        console.log(hint)
-        text = "Ученикам будет легче запомнить Вас, если Вы загрузите свою настоящую фотографию";
-        close_button = '<a id="'+hint+'" class="ui button mini white next close_hint">Ок</a>'
-        var element = $('<div class="help ui segment sec help_div'+hint+' help_left"><a id="'+hint+'" class="close_hint" style="position: absolute;right: 5px;top:5px;"><i class="close icon" style="color:#f1f1f1;font-size:11px;"></i></a>' + text + '<br><span style="color:lightgrey;font-size:11px;font-weight:600;"></span><br>'+close_button+'</div>').appendTo('.hint' + hint);
-    });
+    $('.save_profile').click(function () {
+        this_ = $(this)
+        //loading
+        this_.addClass('disabled')
+        $('#profile_save_load').show()
+        $('.profile_saved').hide()
+        //get_data
+        url = this_.attr('url')
+        name = $('.profile_name_edit').val()
+        console.log(name)
+        content = $('.profile_content').val()
+        slogan = $('.profile_slogan').val()
+        phone = $('.profile_phone').val()
+        mail = $('.profile_mail').val()
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        if (this_.attr('with_image') != 'yes') {
+            img = $('#profile_banner')[0].files[0];
+            formData.append('image', img);            
+        }
+        add_data = '?name='+name+'&content='+content+'&slogan='+slogan+'&phone='+phone+'&mail='+mail
+        url = this_.attr('url')+add_data
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (this_.attr('with_image') == 'yes') {
+                    window.open(data.url, "_self")
+                }
+                else{
+                    this_.removeClass('disabled')
+                    $('#profile_save_load').hide()
+                    $('.profile_saved').show()
+                }
+            }
+        })
+    })
+    function show_edit_statistic(id){
+        $('#number_statistic'+id).hide()
+        $('#text_statistic'+id).hide()
+        $('#number_statistic_edit'+id).show()
+        $('#text_statistic_edit'+id).show()
+        $('#show_edit_statistic'+id).hide()
+        $('#save_statistic'+id).show()
+    }
+    function save_statistic(id, profile){
+        if (id != 'new') {
+            $('#number_statistic'+id).show()
+            $('#text_statistic'+id).show()
+            $('#number_statistic_edit'+id).hide()
+            $('#text_statistic_edit'+id).hide()
+            $('#show_edit_statistic'+id).show()
+            $('#save_statistic'+id).hide()
+        }
+        number = $('#number_statistic_edit'+id).val()
+        text = $('#text_statistic_edit'+id).val()
+        url = $('.instance_data').attr('save_statistic')
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'id':id,
+                'text':text,
+                'number':number,
+                'profile':profile,
+            },
+            success: function (data) {
+                if (id != 'new') {
+                    $('#number_statistic'+id).text(number)
+                    $('#text_statistic'+id).text(text)
+                }
+                else{
+                    new_id = data.new_id
+                    $('<div class="no_padding dinline mr5 mb5 statistic_cont'+new_id+'" style="width: 100px;"> <div class="ui segment pl5 pr5 pt10 pb5 text-center textw backblue shadow_blue textw" style="width: 100px;height: 111px;"><a onclick="delete_statistic('+new_id+')" style="position: absolute;right: 0"><i style="color:red;" class="icon x"></i></a> <b id="number_statistic'+new_id+'" class="text17">'+number+'</b> <input type="number" id="number_statistic_edit'+new_id+'" class="pt5 pb5 pl5 pr5 mb5" value="'+number+'" placeholder="Число" style="height: 25px;display: none;"> <div id="text_statistic'+new_id+'" class="mb5 mt5 text13"> '+text+'</div> <textarea class="pt0 pb0 pl5 pr5 no_margin" id="text_statistic_edit'+new_id+'" placeholder="Текст" style="height: 40px;display: none;">'+text+'</textarea> <a id="show_edit_statistic'+new_id+'" onclick="show_edit_statistic('+new_id+')"><i class="icon pen square textw mr0"></i></a> <a id="save_statistic'+new_id+','+profile+'" style="display: none;" onclick="save_statistic('+new_id+')" class="ui button mini white pt5 pb5 pl5 pr5 mt5">Сохранить</a> </div> </div>').appendTo('.statistics_box')
+                }
+            }
+        })
+    }
+    function delete_statistic(id) {
+        url = $('.instance_data').attr('delete_statistic')
+        $.ajax({
+            url: url,
+            method: "GET",
+            data: {
+                'id':id,
+            },
+            success: function (data) {
+                $('.statistic_cont'+id).hide('slow')
+            }, 
+            error: function (error) {
+            }
+        })
+    };
 </script>
-<script type="text/javascript" src="{% static 'js/hints.js' %}"></script>
-
-{% endif %}
 {% endblock content %}

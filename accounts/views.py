@@ -215,6 +215,19 @@ def hisboards(hisprofile):
                     hisboards.append([board, hiscolumns])
     return(hisboards)
 
+def save_profile(request):
+    profile = get_profile(request)
+    if request.GET.get('name'):
+        profile.first_name = request.GET.get('name')
+        profile.mail = request.GET.get('mail')
+        profile.phone = request.GET.get('phone')
+        if request.FILES.get('image'):
+            profile.image = request.FILES.get('image')
+        profile.save()
+    data = {
+    }
+    return JsonResponse(data)
+
 def change_profile(request):
     profile = get_profile(request)
     form = ProfileForm(request.POST or None, request.FILES or None,instance=profile)

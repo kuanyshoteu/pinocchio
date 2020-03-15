@@ -75,11 +75,10 @@
                                 {% endfor %}
                             </select>
                             {% else %}
-                                {%if card.author_profile%}
-                                    <a class="ui button mini takecard" style="float: right;" id="{{card.id}}" url="{{card.take_url}}">Отказаться от карточки</a>
-                                {% else %}
-                                    <a class="ui button mini small green full-w takecard" id="{{card.id}}" url="{{card.take_url}}">Взять себе</a>
-                                {% endif %}
+                            <div class="mt15">
+                                <a class="ui button mini takecard notm" id="{{card.id}}" url="{{card.take_url}}">Отказаться от карточки</a>
+                                <a class="ui button mini small green full-w takecard" id="{{card.id}}" url="{{card.take_url}}">Взять себе</a>
+                            </div>
                             {% endif %}
                         </div>
                         <div class="sixteen wide column no_padding">

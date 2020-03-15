@@ -23,14 +23,14 @@ function set_check_icons(){
     if ($('.data').attr('is_crm') == 'yes') {
         squads = $('#register_students_calendar').attr('squads')
         if (squads) {
-            res = squads.split('d')            
+            res = squads.split('d')
+            for (var i = 0; i < res.length - 1; i++){
+                squad_id = res[i]
+                squads += squad_id + 'd'
+                $('.insquadicon'+squad_id).show()
+                $('.insquadicon'+squad_id).attr('status', 'show')
+            }            
         }
-        for (var i = 0; i < res.length - 1; i++){
-            squad_id = res[i]
-            squads += squad_id + 'd'
-            $('.insquadicon'+squad_id).show()
-            $('.insquadicon'+squad_id).attr('status', 'show')
-        }  
     }
 }
 function update_schedule_lectures(){

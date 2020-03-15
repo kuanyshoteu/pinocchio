@@ -97,7 +97,7 @@
                     <div class="ui grid" style="margin-top: -5px;height: 100%;">
                         {% for column in columns %}
                         <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
-                            <div class="margin0 backdark" style="padding: 14px 4px;color: #fff;border-radius: 5px 5px 0 0;">
+                            <div class="margin0 backdark pt10 pb10 textw topbr5">
                                 <div class="crm_title">{{ column.title }}</div>
                                 <div class="crm_divider"></div>
                                 <a class="ui button mini blue full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>

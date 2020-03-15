@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^api/make_payment_card/$', make_payment_card, name='make_payment_card'),
     url(r'^check_confirmation/$', check_confirmation, name='check_confirmation'),
     url(r'^(?P<user>[\w-]+)/$', account_view, name='profile'),    
+    url(r'^api/save_profile/$', save_profile, name='save_profile'),
 ]
