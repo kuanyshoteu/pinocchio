@@ -188,11 +188,16 @@ def all_teachers(school):
     return profession.workers.filter(schools=school)
 
 def is_moderator_school(request, profile):
+    print(request.GET.get('type'))
     if request.GET.get('type'):
+        print('ee6')
         if request.GET.get('type') == 'moderator':
+            print('ee0')
             if is_profi(profile, 'Moderator') and request.GET.get('mod_school_id') != '':
+                print('ee1')
                 school = School.objects.get(id=int(request.GET.get('mod_school_id')))
                 return school
+    print('ee2')
     school = profile.schools.first()
     return school
 

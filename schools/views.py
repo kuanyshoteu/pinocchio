@@ -1632,9 +1632,12 @@ def save_review(request, school_id=None):
 def delete_school_banner(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('id'):
+        print('0', request.GET.get('type'))
         school = is_moderator_school(request, profile)
+        print('1', school.title)
         banner = school.banners.filter(id=int(request.GET.get('id')))
         if len(banner) > 0:
+            print('2')
             banner[0].delete()
     data = {
     }

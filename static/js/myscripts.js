@@ -647,6 +647,10 @@
     })
     $('.delete_school_banner').click(function(e) {
         url = $(this).attr('url')
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }
+        console.log($('.check_moderator').attr('status'), $('.day_id').attr('group_id'),'dd')
         id = $(this).attr('id')
         $.ajax({
             url: url,
