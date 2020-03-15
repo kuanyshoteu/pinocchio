@@ -622,7 +622,7 @@ def constant_school_lectures(profile, school):
         else:
             color_back = squad.color_back
         teacher = ''
-        if squads.teacher:
+        if squad.teacher:
             teacher = squad.teacher.first_name
         res.append([
             height,                 #0
