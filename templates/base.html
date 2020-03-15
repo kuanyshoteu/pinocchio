@@ -182,9 +182,11 @@
             <i class="icon user"></i> Моя страница
         </a>
         {% endif %}
+        {% if is_moderator %}
         <div class="ui divider no_margin"></div>
         <a class="ui button small full-w white" style="text-align: left;" href='/moderator/'>
             Модераторская</a>
+        {% endif %}
         <div class="ui divider no_margin"></div>
         <a class="ui button small full-w white" style="text-align: left;" href='{% url "logout" %}'>
             <i class="icon close"></i> Выйти</a>

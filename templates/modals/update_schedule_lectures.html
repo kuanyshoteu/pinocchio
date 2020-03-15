@@ -22,10 +22,10 @@ function crm_option_change(id){
 function set_check_icons(){
     if ($('.data').attr('is_crm') == 'yes') {
         squads = $('#register_students_calendar').attr('squads')
-        res = squads.split('d')
-        console.log(res)
+        if (squads) {
+            res = squads.split('d')            
+        }
         for (var i = 0; i < res.length - 1; i++){
-            console.log(res[i])
             squad_id = res[i]
             squads += squad_id + 'd'
             $('.insquadicon'+squad_id).show()
@@ -34,7 +34,6 @@ function set_check_icons(){
     }
 }
 function update_schedule_lectures(){
-    console.log('ppp')
     var sum_width = 0;
     interval = parseInt($('.dataconst').attr('interval'))
     for (var day = 0; day <= 6; day++) {
