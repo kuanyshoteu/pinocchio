@@ -15,13 +15,9 @@ function crm_option_change(id){
         dataType: 'json',
         success: function (data) {
             $('.lectures_cont').empty()
-            crm_option_work()
+            get_schedule_work()
         }
     });    
-}
-async function crm_option_work(){
-    await get_schedule_work()
-    set_check_icons()
 }
 function set_check_icons(){
     if ($('.data').attr('is_crm') == 'yes') {

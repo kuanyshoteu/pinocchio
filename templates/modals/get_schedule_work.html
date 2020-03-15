@@ -42,9 +42,9 @@ function fill_lecture(ld){
     hint.appendTo('.lectures_cont')
     $('<i class="icon check circle white insquadicon insquadicon'+sq_id+' textw text12" status="hide" style="position:absolute;right:0;display:none;"></i>').appendTo(l)
 }
-async function get_schedule_work(){
+function get_schedule_work(){
     url = "{%url 'schools:get_schedule'%}"
-    return await $.ajax({
+    return $.ajax({
         url: url,
         data: {
         },
@@ -55,6 +55,7 @@ async function get_schedule_work(){
             }
             update_schedule_lectures()
             $('.loading').hide()
+            set_check_icons()
         }
     }) 
 }
