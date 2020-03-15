@@ -254,8 +254,10 @@ def social_networks_settings(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
+    print('yo1')
     myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
     if request.GET.get('code'):
+        print('yo2')
         code = request.GET.get('code')
         url = 'https://api.instagram.com/oauth/access_token'
         data = dict(
@@ -264,9 +266,12 @@ def social_networks_settings(request):
             grant_type='authorization_code',
             redirect_uri=myserver, 
             code=code)
+        print('yo3')
         r = requests.post(url, data=data, allow_redirects=True)
+        print('yo4')
         print (r.content)
 
+    print('yo5')
 
     context = {
         "profile":profile,
@@ -286,6 +291,7 @@ def connect_instagram(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
+    print('yo6')
     myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
     url = 'https://api.instagram.com/oauth/authorize/?client_id='+str(profile.id)+'&redirect_uri='+myserver+'&response_type=code'
     data = {
