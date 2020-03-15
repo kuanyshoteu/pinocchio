@@ -49,7 +49,7 @@
                 {% for school in schools %}
                 <div class="four wide column pt0 pr0 pb15">
                     <div class="topbr5 ui segment full-w btn_select no_padding" style="height: 300px;">
-                        <a href="{{school.landing}}">
+                        <a href="{{school.landing}}" class="backwhite">
                             <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;" class="topbr5 full-w"></div>
                             <div class="pl15 pr15 pb15 pt15">
                                 <div class="text17"><b>{{school.title}}</b></div>
