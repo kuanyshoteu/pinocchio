@@ -271,7 +271,7 @@ def social_networks_settings(request):
         print('yo4')
         print('r', r)
         print ('r.content',r.content)
-        a = json.loads(r)
+        a = json.loads(r.content)
         print(a['access_token'])
 
 
