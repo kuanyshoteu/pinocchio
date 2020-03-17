@@ -35,7 +35,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
-
+import json
 from django.contrib.postgres.search import TrigramSimilarity
 from dateutil.relativedelta import relativedelta
 
@@ -271,7 +271,9 @@ def social_networks_settings(request):
         print('yo4')
         print('r', r)
         print ('r.content',r.content)
-        print ('r access_token',r.content['access_token'])
+        a = json.loads(r)
+        print(a['access_token'])
+
 
 
     print('yo5')
