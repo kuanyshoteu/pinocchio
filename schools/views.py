@@ -36,6 +36,7 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
 import json
+import urllib
 from django.contrib.postgres.search import TrigramSimilarity
 from dateutil.relativedelta import relativedelta
 
@@ -255,6 +256,12 @@ def social_networks_settings(request):
     only_directors(profile)
     school = is_moderator_school(request, profile)
     print('yo1', instagram_id)
+    sm = SocialMedia.objects.get(title='instagram')
+    insta = school.socialmedias.filter(socialmedia=sm)
+    had_insta = False
+    print(insta)
+    if len(insta) > 0:
+        had_insta = True
     if request.GET.get('code'):
         code = request.GET.get('code')
         print('yo2', code, '<-code')
@@ -266,18 +273,22 @@ def social_networks_settings(request):
             'redirect_uri':myserver, 
             'code':code,
         }
-        print('yo3')
         r = requests.post(url,data=data,allow_redirects=True)
-        print('yo4')
-        print('r', r)
-        print ('r.content',r.content)
         a = json.loads(r.content)
-        print(a['access_token'])
+        if had_insta:
+            insta = insta[0]
+        else:
+            insta = school.socialmedias.create(socialmedia=sm)
+        insta.access_token = a['access_token']
+        insta.user_id = a['user_id']
 
+        url2 = 'https://graph.instagram.com/'+a['user_id']+'?fields=username&access_token='+a['access_token']
+        r2 = urllib.request.urlopen(url2).read()
+        a2 = json.loads(r2)
+        insta.username = a2['username']
+        insta.save()
 
-
-    print('yo5')
-
+    print('yo5', had_insta)
     context = {
         "profile":profile,
         "instance": school,
@@ -288,7 +299,9 @@ def social_networks_settings(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
-        "page":"info",        
+        "page":"info",
+        "had_insta":had_insta,
+        "insta":insta,
     }
     return render(request, "school/social_networks_settings.html", context)
 

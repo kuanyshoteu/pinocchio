@@ -151,6 +151,22 @@ class School(models.Model):
     def predoplata(self):
         return reverse("schools:predoplata")
 
+class SocialMedia(models.Model):
+    title = models.CharField(max_length=250)
+    image_icon = models.ImageField(upload_to=upload_location, 
+            null=True,
+            blank=True, 
+            )
+    content = models.TextField(default='')
+    link = models.TextField(default='')
+
+class SocialMediaAccount(models.Model):
+    access_token = models.TextField(default='')
+    user_id = models.TextField(default='')
+    username = models.TextField(default='')
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='socialmedias')
+    socialmedia = models.ForeignKey(SocialMedia, null=True, on_delete = models.CASCADE, related_name='accounts')
+
 class SchoolBanner(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
     image_banner = models.ImageField(upload_to=upload_location, 

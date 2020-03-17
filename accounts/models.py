@@ -57,10 +57,8 @@ class Skill(models.Model):
     crm_age2 = models.ForeignKey(SubjectAge, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     crm_office2 = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     notifications_number = models.IntegerField(default=0)
-    birthdate = models.DateField(null = True, blank = True) 
+    birthdate = models.DateField(null = True, blank = True)
     interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')
-    instagram_access_token = models.CharField(default='', max_length=250)
-    instagram_user_id = models.CharField(default='', max_length=250)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE,related_name='profile')
@@ -231,7 +229,7 @@ class CardMail(models.Model):
     text = models.TextField(blank = True,null = True,default='')
     card = models.ForeignKey(CRMCard, null=True, on_delete = models.CASCADE, related_name='mails')
     timestamp = models.DateTimeField(auto_now_add=True)
-    method = models.CharField(max_length=100, default='')
+    method = models.CharField(max_length=250, default='')
     is_client = models.BooleanField(default=False)
     class Meta:
         ordering = ['id']

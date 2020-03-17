@@ -142,3 +142,18 @@ class MoneyObjectAdmin(admin.ModelAdmin):
     class Meta:
         model = MoneyObject
 admin.site.register(MoneyObject, MoneyObjectAdmin)
+
+class SocialMediaAccountAdmin(admin.ModelAdmin):
+    list_display = ["id", "socialmedia", "username", "school"]
+    list_display_links = ["id"]
+    list_filter = ["school", "socialmedia"]
+    class Meta:
+        model = SocialMediaAccount
+admin.site.register(SocialMediaAccount, SocialMediaAccountAdmin)
+
+class SocialMediaAdmin(admin.ModelAdmin):
+    list_display = ["id", "title"]
+    list_display_links = ["id"]
+    class Meta:
+        model = SocialMedia
+admin.site.register(SocialMedia, SocialMediaAdmin)

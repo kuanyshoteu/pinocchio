@@ -20,7 +20,16 @@
             {% include 'school/head.html' %}
             <div class="ui raised segment">
                 <a class="ui red ribbon label"><i class="icon instagram textw"></i>Instagram</a>
+                {% if had_insta %}
+                <div class="ui image label">
+                    {% if insta.image_icon %}
+                    <img src="{{insta.image_icon.url}}">
+                    {% endif %}
+                    {{insta.username}}
+                </div>
+                {% else %}
                 <a class="ui button mini blue connect_instagram" url="{%url 'schools:connect_instagram'%}">Подключить</a>
+                {% endif %}
             </div>
         </div>
     </div>
