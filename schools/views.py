@@ -271,7 +271,7 @@ def social_networks_settings(request):
         print('yo4')
         print('r', r)
         print ('r.content',r.content)
-        print ('r access_token',r['access_token'])
+        print ('r access_token',r.content['access_token'])
 
 
     print('yo5')
