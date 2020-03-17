@@ -254,13 +254,13 @@ def social_networks_settings(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    print('yo1', facebook_id)
+    print('yo1', instagram_id)
     if request.GET.get('code'):
         code = request.GET.get('code')
         print('yo2', code, '<-code')
         url = 'https://api.instagram.com/oauth/access_token'
         data = {
-            'client_id':facebook_id, 
+            'client_id':instagram_id, 
             'client_secret':secret_instagram, 
             'grant_type':'authorization_code',
             'redirect_uri':myserver, 
@@ -295,7 +295,7 @@ def connect_instagram(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     print('yo6')
-    url = 'https://api.instagram.com/oauth/authorize/?client_id='+facebook_id+'&redirect_uri='+myserver+'&scope=user_profile,user_media&response_type=code'
+    url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+myserver+'&scope=user_profile,user_media&response_type=code'
     data = {
         'url':url,
     }
