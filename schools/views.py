@@ -282,7 +282,7 @@ def social_networks_settings(request):
         insta.access_token = a['access_token']
         insta.user_id = a['user_id']
 
-        url2 = 'https://graph.instagram.com/'+a['user_id']+'?fields=username&access_token='+a['access_token']
+        url2 = 'https://graph.instagram.com/'+str(a['user_id'])+'?fields=username&access_token='+str(a['access_token'])
         r2 = urllib.request.urlopen(url2).read()
         a2 = json.loads(r2)
         insta.username = a2['username']
