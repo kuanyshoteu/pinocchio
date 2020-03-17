@@ -14,7 +14,7 @@ from dateutil.relativedelta import relativedelta
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 instagram_id = '1402067986632477'
-myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
+myserver = 'https://www.bilimtap.kz/schools/social_networks_settings/'
 secret_instagram = '5adaeda9020c02ecf00e6114bf2155c3'
 def send_sms(phones, message, time):
     login = 'Pinocchio'
