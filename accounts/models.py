@@ -59,6 +59,8 @@ class Skill(models.Model):
     notifications_number = models.IntegerField(default=0)
     birthdate = models.DateField(null = True, blank = True) 
     interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')
+    instagram_access_token = models.CharField(default='', max_length=250)
+    instagram_user_id = models.CharField(default='', max_length=250)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE,related_name='profile')

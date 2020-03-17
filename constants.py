@@ -13,7 +13,9 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
+facebook_id = 2550383005204101
+myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
+secret_instagram = '5adaeda9020c02ecf00e6114bf2155c3'
 def send_sms(phones, message, time):
     login = 'Pinocchio'
     password = 'Siski11zhopa'
@@ -188,16 +190,11 @@ def all_teachers(school):
     return profession.workers.filter(schools=school)
 
 def is_moderator_school(request, profile):
-    print(request.GET.get('type'))
     if request.GET.get('type'):
-        print('ee6')
         if request.GET.get('type') == 'moderator':
-            print('ee0')
             if is_profi(profile, 'Moderator') and request.GET.get('mod_school_id') != '':
-                print('ee1')
                 school = School.objects.get(id=int(request.GET.get('mod_school_id')))
                 return school
-    print('ee2')
     school = profile.schools.first()
     return school
 

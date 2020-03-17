@@ -254,26 +254,25 @@ def social_networks_settings(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    print('yo1')
-    myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
+    print('yo1', facebook_id)
     if request.GET.get('code'):
-        print('yo2')
         code = request.GET.get('code')
+        print('yo2', code, '<-code')
         url = 'https://api.instagram.com/oauth/access_token'
-        headers={
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
         data = {
-            'client_id':str(profile.id), 
-            'client_secret':profile.first_name+str(profile.id), 
+            'client_id':facebook_id, 
+            'client_secret':secret_instagram, 
             'grant_type':'authorization_code',
             'redirect_uri':myserver, 
             'code':code,
         }
         print('yo3')
-        r = requests.post(url,data=data,headers=headers,verify=False,allow_redirects=True)
+        r = requests.post(url,data=data,allow_redirects=True)
         print('yo4')
-        print (r.content)
+        print('r', r)
+        print ('r.content',r.content)
+        print ('r access_token',r.get('access_token'))
+
 
     print('yo5')
 
@@ -296,8 +295,7 @@ def connect_instagram(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     print('yo6')
-    myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
-    url = 'https://api.instagram.com/oauth/authorize/?client_id='+str(profile.id)+'&redirect_uri='+myserver+'&response_type=code'
+    url = 'https://api.instagram.com/oauth/authorize/?client_id='+facebook_id+'&redirect_uri='+myserver+'&scope=user_profile,user_media&response_type=code'
     data = {
         'url':url,
     }
