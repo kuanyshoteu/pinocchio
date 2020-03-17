@@ -13,7 +13,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-facebook_id = 2550383005204101
+facebook_id = '2550383005204101'
 myserver = 'https://bilimtap.kz/schools/social_networks_settings/'
 secret_instagram = '5adaeda9020c02ecf00e6114bf2155c3'
 def send_sms(phones, message, time):
