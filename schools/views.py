@@ -279,13 +279,20 @@ def social_networks_settings(request):
             insta = insta[0]
         else:
             insta = school.socialmedias.create(socialmedia=sm)
-        insta.access_token = a['access_token']
-        insta.user_id = a['user_id']
+        user_id = str(a['user_id'])
 
-        url2 = 'https://graph.instagram.com/'+str(a['user_id'])+'?fields=username&access_token='+str(a['access_token'])
+        url2 = 'https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret='+secret_instagram+'&access_token='+str(a['access_token'])
         r2 = urllib.request.urlopen(url2).read()
         a2 = json.loads(r2)
-        insta.username = a2['username']
+        access_token = str(a2['access_token'])
+        print('longtoken',a2['expires_in'], a2['token_type'])
+
+        url3 = 'https://graph.instagram.com/'+user_id+'?fields=username&access_token='+access_token
+        r3 = urllib.request.urlopen(url3).read()
+        a3 = json.loads(r3)
+        insta.user_id = user_id
+        insta.access_token = access_token
+        insta.username = a3['username']
         insta.save()
 
     print('yo5', had_insta)
