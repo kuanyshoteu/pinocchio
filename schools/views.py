@@ -259,9 +259,9 @@ def social_networks_settings(request):
     sm = SocialMedia.objects.get(title='instagram')
     insta = school.socialmedias.filter(socialmedia=sm)
     had_insta = False
-    print(insta)
     if len(insta) > 0:
         had_insta = True
+        insta = insta[0]
     if request.GET.get('code'):
         code = request.GET.get('code')
         print('yo2', code, '<-code')
@@ -295,7 +295,6 @@ def social_networks_settings(request):
         insta.username = a3['username']
         insta.save()
 
-    print('yo5', had_insta, insta)
     context = {
         "profile":profile,
         "instance": school,
