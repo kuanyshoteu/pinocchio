@@ -930,6 +930,7 @@
         password2 = $('.reset_password2').val()
         id = $(this).attr('id')
         $('.success_change_pswrd').hide()
+        console.log('9999999999999')
         $.ajax({
             url: url,
             data: {
@@ -939,6 +940,7 @@
             },
             dataType: 'json',
             success: function (data) {
+                console.log('tototto')
                 $('.success_change_pswrd').show()
             }
         })        

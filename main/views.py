@@ -459,7 +459,6 @@ def reset_pswrd(request):
             user = authenticate(username=str(user.username), password=str(request.GET.get('password1')))
             try:
                 login(request, user)
-                return redirect(profile.get_absolute_url())
             except Exception as e:
                 res = 'error' 
     data = {
@@ -669,7 +668,6 @@ def get_notifications(request):
 def add_help_video(request):
     ok = False
     profile = get_profile(request)
-    print()
     if is_profi(profile, 'Moderator'):
         HelpVideos.objects.create(
             title=request.GET.get('title'),
@@ -911,7 +909,6 @@ def get_school_report(request):
                     subject_res_dates = ['4', squad_title,subject.title]
                     subject_res = ['5', '', '']
                     cost = 0
-                    print('****',start, end, len(materails))
                     for i in range(0, min(end-start,len(materails))):
                         date = get_date_by_num(start + i-1, squad, subject,lectures)
                         if date != '_':
@@ -1370,7 +1367,6 @@ def aktobe_money():
                         if a.present == 'present':
                             salary2 += a.subject.cost
         res.append([t.first_name, salary/2, salary2/2])
-    print(res)
     return res
 
 

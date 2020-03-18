@@ -295,7 +295,7 @@ def social_networks_settings(request):
         insta.username = a3['username']
         insta.save()
 
-    print('yo5', had_insta)
+    print('yo5', had_insta, insta)
     context = {
         "profile":profile,
         "instance": school,

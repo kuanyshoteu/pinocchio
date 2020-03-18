@@ -13,26 +13,28 @@
     <div class='ui container'>
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="wide column" id="list" style="width: 84%;">
+            <div class="wide column w85">
                 <div class="ui grid stackable">
-                    <div class="twelve wide column" style="padding-right: 0">
+                    <div class="twelve wide column pr0">
                         <div class="ui segment mb0 pt15 pl15 pr15" style="background-color: #fafbfc;">
-                            <div style="font-size: 16px;display: flex;">
-                                <div class="mt5" style="display: flex;">
-                                    {%if trash and is_manager %}<b style="color: darkred;width: 160px;">Удаленные группы</b>{%else%}Группы{%endif%} 
-                                    <div class="ml5" style="color: #939393;">{{ squads|length }}</div>
+                            <div class="ui grid stackable no_margin">
+                                <div style="height: 32px">
+                                    <div class="mt5 mr15 text17 ui grid">
+                                        {%if trash and is_manager %}
+                                            <b style="color: darkred;width: 160px;">Удаленные группы</b>
+                                        {%else%}
+                                            Группы
+                                        {%endif%} 
+                                        <div class="pl5 pr0" style="color: #939393;">{{ squads|length }}</div>
+                                    </div>
                                 </div>
-                                <form class="ui form mb0" style="width: 250px;">
-                                    <textarea class="mb0 ml15 start_searching_groups" placeholder="Поиск групп" url="{% url 'squads:searching_groups' %}" style="height: 32px;overflow: hidden;"></textarea>
+                                <form class="ui form mb0 no_padding mr15" style="width: 250px;">
+                                    <textarea class="mb0 start_searching_groups" placeholder="Поиск групп" url="{% url 'squads:searching_groups' %}" style="height: 32px;overflow: hidden;"></textarea>
                                 </form>
                                 {%if trash %}
-                                <div style="text-align: right;" class="full-w">
                                     <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Рабочие группы</a>
-                                </div>
-                                {% else %}        
-                                <div style="text-align: right;" class="full-w">
+                                {% else %}
                                     <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Удаленные группы</a>
-                                </div>
                                 {% endif %}        
                             </div>
                             <div class="ui segment show_search_groups mt5 no_padding" style="display: none;position: absolute;z-index: 1000;width: 250px;margin-left: 80px;">

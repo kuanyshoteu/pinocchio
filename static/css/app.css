@@ -4404,7 +4404,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     width: 100%;
   }
   .eighty{
-    width: 100%;
+    width: 100% !important;
+  }  
+  .w85{
+    width: 100% !important;
   }  
   .description .ui.grid > [class*="seven wide"].column {
     width: 100% !important;
@@ -4465,7 +4468,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     width: 20% !important;
   }
   .eighty{
-    width: 80%;
+    width: 80% !important;
+  }
+  .w85{
+    width: 85% !important;
   }
   .ui.grid.container {
     width: calc( 723px  +  2rem) !important;
@@ -4496,8 +4502,11 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     width: 17%;
   }
   .eighty{
-    width: 83%;
+    width: 83% !important;
   }
+  .w85{
+    width: 85% !important;
+  }  
   .ui.grid.container {
     width: calc( 933px  +  2rem) !important;
   }
@@ -4529,6 +4538,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   .eighty{
     width: 80% !important;
   }
+  .w85{
+    width: 85% !important;
+  }  
   .ui.grid.container {
     width: calc( 1127px  +  2rem) !important;
   }
@@ -30185,7 +30197,7 @@ a:hover {
 #search-input {
   position: relative;
   height: 27px;
-  padding: 6px 0 0 27px;
+  padding: 5px 0 0 27px;
   font-size: 13px;
   background: url(../images/search.png) no-repeat 7px;
   background-size: 14px;

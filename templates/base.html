@@ -55,8 +55,8 @@
 {%endif%}
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
-        <div class="menu-title" style="width: calc(25% + 140px);padding-left: 10px;">
-            <i class="icon bars" id="toggle"></i>
+        <div class="menu-title" style="width: calc(25% + 140px);">
+            <i class="icon bars pl15 mr0 pr30 mt3 pb10" style="height: 30px;" id="toggle"></i>
             <a href='{% if request.user.is_authenticated %}{{profile.get_absolute_url}}{%else%}{% url "main:home" %}{%endif%}' class="header main">
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
             </a>
@@ -245,6 +245,13 @@
                         <i class="dollar sign icon"></i>Оплата
                     </a>  
                     {% endif %}
+                    {% if is_moderator %}
+                    <div class="text-center mt15">
+                        <a class="lftitemsmall ui button mini black" href='/moderator/'>
+                            Модераторская
+                        </a>                        
+                    </div>
+                    {% endif %}                    
                 {% else %}
                     <a class="ui button white full-w bt1" href='{% url "main:about" %}' style="background-color: #fff">
                         Стать партнером

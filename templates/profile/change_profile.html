@@ -14,9 +14,9 @@
     <div class='ui container'>
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="wide column eighty ml50">
+            <div class="wide column eighty" style="margin-left: 30px;">
                 <div class="ui grid stackable no_margin">
-                    <div class="eight wide column no_padding">
+                    <div class="eight wide column pr0 pt0">
                         <div class="ui segment mb0">
                             <b>Основная информация</b>
                         </div>
@@ -50,7 +50,7 @@
                             <i class="icon check green profile_saved" style="display: none;"></i>                            
                         </div>                        
                     </div>
-                    <div class="eight wide column no_padding">
+                    <div class="eight wide column pr0 pt0">
                         <div class="ui segment mb0">
                             <b>Изменить пароль</b>
                         </div>
@@ -65,10 +65,9 @@
                         <div class="ui segment mt0">
                             <div class="text-center">
                                 <input class="ui button green reset_pswd mini" id="{{ profile.id }}" value="Сохранить" type="submit" onclick="return false">
-                                <div class="success_change_pswrd mt5" style="display: none;"><i class="icon check green"></i> 
+                                <div class="success_change_pswrd mt5" style="display: none;">
+                                    <i class="icon check green"></i> 
                                     Пароль сохранен
-                                    <br>
-                                    <span class="text15"><i class="icon left arrow"></i> Вперёд в сказочный мир!</span>
                                 </div>
                             </div>
                         </div>

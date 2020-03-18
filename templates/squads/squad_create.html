@@ -47,9 +47,8 @@
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column" style="width: 80%;margin-left: 30px;">
-                <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}  
-
-            	<div class="ui grid stackable">
+                <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+            	<div class="ui grid stackable no_margin">
             		<div class="nine wide column" style="padding-right: 0;padding-bottom: 0">
 	    				<div class="ui segment" style="margin-bottom: 0;background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
 			        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
@@ -309,7 +308,6 @@
 	        		{% endif %}                   
         		</div>
                 </form>
-                
 			</div>
 		</div>
 	</div>	
