@@ -275,9 +275,7 @@ def social_networks_settings(request):
         }
         r = requests.post(url,data=data,allow_redirects=True)
         a = json.loads(r.content)
-        if had_insta:
-            insta = insta[0]
-        else:
+        if not had_insta:
             insta = school.socialmedias.create(socialmedia=sm)
         user_id = str(a['user_id'])
 
