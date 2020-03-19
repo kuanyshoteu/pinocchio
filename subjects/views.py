@@ -177,17 +177,6 @@ def subject_update(request, slug=None):
             if 'subject_icon' in request.FILES:
                 file = request.FILES['subject_icon']
                 instance.image_icon = file
-        if request.POST.get('number_of_materials') == "":
-            get_number_of_materials = 0
-        else:
-            get_number_of_materials = int(request.POST.get('number_of_materials'))
-        if instance.number_of_materials < get_number_of_materials:
-            if get_number_of_materials < 302:
-                for i in range(0, get_number_of_materials - instance.number_of_materials):
-                    instance.materials.create(
-                        school=instance.school
-                    )
-        instance.number_of_materials = int(request.POST.get('number_of_materials'))
         instance.color_back = request.POST.get('color_back')
         for squad in instance.squads.all():
             update_squad_dates(instance, squad)
