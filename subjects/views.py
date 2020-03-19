@@ -177,7 +177,6 @@ def subject_update(request, slug=None):
             if 'subject_icon' in request.FILES:
                 file = request.FILES['subject_icon']
                 instance.image_icon = file
-        instance.color_back = request.POST.get('color_back')
         for squad in instance.squads.all():
             update_squad_dates(instance, squad)
         instance.save()
