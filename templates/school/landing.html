@@ -36,26 +36,23 @@
         {% endfor %}
       </div>
   </div>
-  <header class="schoolLanding__header-wrapper" style="margin-top: -5px;">
-      {% if school.banners.all|length %}
+  <div class="schoolLanding__header-wrapper {{school.banners.all|length}}">
           {% for banner in school.banners.all %}
               {% if banner.image_banner and forloop.counter < 4 %}
-                  <div style="background-image: url({{banner.image_banner.url}});background-size: 100%;" class="schoolLanding__header-img"></div>
+                  <div style="background-image: url({{banner.image_banner.url}});background-size: 100%;" class="oof schoolLanding__header-img"></div>
               {% endif %}
           {% endfor %}
           {% if school.banners.all|length < 3 %}
-          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="schoolLanding__header-img"></div>
+          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="oof schoolLanding__header-img"></div>
           {% endif %}
           {% if school.banners.all|length < 2 %}
-          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="schoolLanding__header-img"></div>
+          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="oof schoolLanding__header-img"></div>
           {% endif %}
-      {% else %}
-          <div style="background-size: 280%; width: 33%; background-image: url({% static 'images/fon3.jpeg' %});" class="schoolLanding__header-img"></div>
-          <div style="background-size: 100%; width: 33%; background-image: url({% static 'images/fon3.jpeg' %});" class="schoolLanding__header-img"></div>
-          <div style="background-size: 280%; width: 33%; background-image: url({% static 'images/fon3.jpeg' %});" class="schoolLanding__header-img"></div>
-      {% endif %}
-  </header>
-  <main class="schoolLanding__container">
+          {% if school.banners.all|length < 1 %}
+          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="oof schoolLanding__header-img"></div>
+          {% endif %}
+  </div>
+  <div class="schoolLanding__container">
     <div class="schoolLanding__content-header">
       <div class="schoolLanding__content-headerLeft">
         <div class="organization__info-top-part">
@@ -180,7 +177,9 @@
       {%endif%}
     </div>
     <div class="schoolLanding__content-services">
-      <h3 class="schoolLanding__content-services__title">Курсы</h3>
+      <div class="head_round backdarkgrey mb15">
+        <b class="text17">Курсы</b>
+      </div>
       <div style="overflow: hidden;" class="full-w get_width_div">
           <div class="schoolLanding__content-category__list no_margin pt5 pb10" number="{{school.school_subject_categories.all|length}}">
             <div class="schoolLanding__content-category__item active" id="all">
@@ -198,7 +197,7 @@
       <div class="ui divider light full-w"></div>
       {% for course in school.school_subjects.all %}
       {% if course.public %}
-          <section class="schoolLanding__content-services__item {%for cat in course.category.all%}category{{ cat.id }} {%endfor%} categoryall ui grid">
+          <section style="{% if forloop.counter > 4 %}display: none;{%endif%}" class="schoolLanding__content-services__item {%for cat in course.category.all%}category{{ cat.id }} {%endfor%} categoryall ui grid">
             <div class="no_padding_side schoolLanding__content-services__item-left">
                   <h2 class="schoolLanding__content-services__item-title no_padding no_margin">{{ course.title }}</h2>
                   <div class="not_in_mobile schoolLanding__content-services__item-time">{{ course.content }}</div>
@@ -222,20 +221,27 @@
           </section>
       {% endif %}
       {% endfor %}
-    </div>
-      {% for teacher in all_teachers %}
-      <div class="schoolLanding__content-teacher ui segment no_padding mr10">
-        <a href="{{ teacher.get_absolute_url }}">
-          <div class="schoolLanding__content-teacher__photo">
-            <img src="{% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %}" class="full-w">
-          </div>
-          <div class="text-center pl5 pb5 pr5">
-              <div class="schoolLanding__content-teacher__name">{{teacher.first_name}}</div>
-              <div class="schoolLanding__content-teacher__desc"></div>
-          </div>
-        </a>
+      <div class="text-center">
+        <a class="ui button mini" onclick="$('.schoolLanding__content-services__item').show();$(this).hide()">Показать все курсы</a>
       </div>
+    </div>
+    <div class="ui segment">
+      <div class="head_round backdarkgrey">
+        <b class="text17">Команда</b>
+      </div>
+        {% for teacher in all_teachers %}
+          <div class="dinline ui segment no_padding mr10 backblue" style="width: 200px;">
+            <a href="{{ teacher.speaker_landing }}">
+              <div style="width: 200px; height: 200px;background-image: url({% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %});background-size: 100%;background-repeat: no-repeat;">
+              </div>
+              <div class="text-center pt15 pl10 pb15 pr10">
+                  <div class="text17 organisationLanding__content-teacher__name textw">{{teacher.first_name}}</div>
+                  <div class="organisationLanding__content-teacher__desc"></div>
+              </div>
+            </a>
+          </div>
       {% endfor %}
+    </div>
 
     <div class="schoolLanding__content-review">
       <div class="schoolLanding__content-review__left not_in_mobile">
@@ -372,7 +378,7 @@
     <div class="ui segment">
         <div id="map" style="width: 80%; height: 300px;margin: 0 auto;"></div>      
     </div>
-  </main>
+  </div>
 
 <script src="https://code.jquery.com/jquery-1.7.2.min.js"></script> 
 <script src="https://code.jquery.com/ui/1.8.21/jquery-ui.min.js"></script>

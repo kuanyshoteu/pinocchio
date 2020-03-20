@@ -1,0 +1,30 @@
+{% load staticfiles %}
+{% load ttags %}
+<div class="four wide column pt0 pr0 pb15">
+    <div class="topbr5 ui segment full-w btn_select no_padding">
+        <a href="{{school.landing}}" class="backwhite full-w landbox">
+            <div class="land_box1 topbr5" style="background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;background-repeat: no-repeat;"></div>
+            <div class="land_box2 pl15 pr15 pb15 pt15">
+                <div class="text17"><b>{{school.title}}</b></div>
+                <div class="mt5" style="height: 60px;line-height: 15px;">
+                    <span style="color: #646464;">{{school.school_offices.first.address}}</span>
+                    <br>
+                    <span>{{school.slogan}}</span>
+                </div>
+                <div class="mt10" style="height: 33px;color: #646464;">
+                    <span style="color: #D4C14A;">
+                        <b>{{school.rating}}</b>   
+                    </span>
+                    {% for star in five %}
+                        {% if forloop.counter <= school.rating %}
+                            <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
+                        {% endif %}
+                    {% endfor %}
+                    {% for star in school|rating_empty_stars %}
+                        <i class="icon star" style="margin-right: -3px;"></i>
+                    {% endfor %}
+                </div>
+            </div>
+        </a>
+    </div>
+</div>

@@ -2238,6 +2238,18 @@ a{
     padding: 14px 4px 0 4px !important;
     width: 15% !important;
 }
+.head_round{
+  border-radius: 20px;
+  min-width: 200px;
+  max-width: 300px;
+  padding: 10px;
+  text-align: center;
+  margin: 0 auto;
+}
+.backdarkgrey{
+  background-color: #ececec !important;
+}
+
 .map_filter{
     padding: 7px 0 7px 7px !important;
 }
@@ -2250,7 +2262,33 @@ a{
 .back_to_schools:hover{
   background-color: lightgrey;
 }
+.map_search_input{
+  border: 1px solid #fff !important;
+  border-radius: 5px 0 0 5px !important;
+  border-right: 0;
+  height: 50px !important;
+  line-height: 35px !important;
+  overflow:hidden;  
+}
 @media screen and (min-width: 992px){
+  .landbox{
+    height: 300px;
+    display: block;
+  }
+  .land_box1{
+    width: 100%;
+    height: 150px;
+    display: block;
+  }
+  .land_box2{
+    display: block;
+  }
+  .schoolLanding__header-wrapper{
+    height: 150px;
+  }
+  .map_search_input{
+    width: calc(100% - 220px) !important;
+  }
   #go-back-btn-before {
     position: absolute;
     background-color: transparent;
@@ -2332,7 +2370,8 @@ a{
     }
     .schoolLanding__container {
       max-width: 85%;
-      margin: 40px auto;
+      margin-left: auto;
+      margin-right: auto;
       padding-bottom: 2rem;
       position: relative;
     }
@@ -2347,7 +2386,6 @@ a{
       padding-right: 15px;
     }
     .schoolLanding__header-img {
-      height: 50%;
       width: calc(33.333% - 6px);
       display: inline-block;
     }
@@ -2410,9 +2448,6 @@ a{
     .catland{
       padding: 30px 50px 0 50px;
     }
-    .catland_found{
-      padding-left: 30px;
-    }    
     .filter_title{
       width: 190px;
     }
@@ -2449,7 +2484,25 @@ a{
 .schoolLanding__content-services__item-right {
   text-align: center;
 }
-@media only screen and (max-width: 991px) {
+.schoolLanding__header-wrapper{
+  margin-top: -5px;display: flex;
+}
+@media only screen and (max-width: 991px) {  
+  .land_box1{
+    height: 160px;
+    display: inline-block;
+    width: 30% !important;
+  }
+  .land_box2{
+    display: inline-block;
+    width: 70% !important;
+  }
+  .landbox{
+    display: flex;
+  }  
+  .schoolLanding__header-wrapper{
+    height: 100px;
+  }
   .mobpt0{
     padding-top: 0px !important
   }
@@ -2507,9 +2560,7 @@ a{
     .catland{
       padding: 30px 0px 200px 0px;
     }
-    .catland_found{
-      padding-left: 14px;
-    }
+
     .login_form{
       padding: 14px;
       width: 100%;
@@ -2570,7 +2621,6 @@ a{
       display: none;
     }
     .schoolLanding__header-img {
-      height: 30%;
       width: 100%;
       display: inline-block;
     }
@@ -2616,8 +2666,7 @@ a{
     background: #f5f5f5;
   }
   .map_search_input{
-    border: 1px solid #fff !important;
-    border-radius: 4px 0 0 0 !important; 
+    width: calc(100% - 58.69px) !important;
   }
   .map_filter{
     border: 1px solid #fff !important;

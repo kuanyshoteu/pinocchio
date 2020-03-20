@@ -4,314 +4,81 @@
 {% load ttttags %}
 {% load ttags %}
 {% block content %}
-<style type="text/css">
-    @media only screen and (max-width: 767px) {
-        .catfilters{
-            display: none;
-        }
-        .backhome{margin-top: -30px;}
-    }
-    .backhome{
-        position: absolute;        
-    }
-</style>
-<div class="catland" style="color: #4a4a4a;">
-    <div class="cattop">
-        <div class="backhome">
-            <a href="{% url 'main:home' %}" class="ui button mini">
-                <i class="arrow left icon"></i>На главную
-            </a>        
+    <div class="cattop" style="margin-top: -5px;">
+        <div class="text-center newlandhead pb30 textw" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
+            <div style="font-size: 25px;">
+                {{category.main_filters.title}}
+            </div>
+            <div class="mt10">
+                Найдено <b class="schools_len">{{category.schools.all|length}}</b> учебных центров
+            </div>
         </div>
-        <div class="text-center" style="font-weight: 600; font-size: 35px;color: #696969;line-height: 35px;">
-            {{category.main_filters.title}}
-        </div>
-        <div class="ui segment catfilters mb5" style="margin-top: 20px;">
-            <div class="ui grid stackable mb0 mt0" >
-                <div class="wide column text-center" style="width: 33%;font-size: 20px;padding-top: 20px;">
-                    Выберите курсы для изучения
-                </div>
-                <div class="wide column" style="width: 33%;">
-                    <div class="text-center">
+    </div>
+    <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
+        <div class="three wide column pt0 pb0 pr0 deskmenu">
+            <div class="ui segment pl0 pr0 pt5">
+                <div class="pl5 pr5 pt5 pb5">                
+                    <div style="font-size: 14px;">
+                        Выберите курсы для изучения
+                    </div>
+                    <div class="">
                     {% for mf in category.main_filters.filter_options.all %}
-                        <a class="ui button choose_cat mb10" status="" id="{{mf.id}}">
+                        <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5" status="" id="{{mf.id}}">
                             {{mf.title}}
                         </a>
                     {% endfor %}
                     </div>
                 </div>
-                <div class="wide column pb0" style="width: 33%;">
-                    <div style="max-width: 250px;margin: 0 auto;">
-                        <div class="full-w back-w" style="padding: 1px 10px 6px 15px;margin-top: 1px;">
-                            <span style="font-size: 15px;font-weight: 600;color: #7e7e7e;" class="pr10">Цена: </span> 
-                            <input type="text" mincost='0' maxcost='100' id="amount" value="0тг - 100 000тг" readonly style="border:0;height: 20px;font-size: 15px;font-weight: 600;color: #7e7e7e;">
-                            <div id="slider-range" class="mt10"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="sixteen wide column no_padding">
-                    <div class="ui divider no_margin"></div>
-                </div>
-            </div>
-            <div class="ui grid stackable pb15 pt0" >
+                <div class="ui divider mt0 mb0"></div>
                 {% for second_filter in category.second_filters.all %}
-                <div class="eight wide column pr0 pb0">
-                    <div class="filter_title" style="display: inline-block;font-size: 14px;">
+                <div class="pl5 pr5 pt5 pb5">
+                    <div style="font-size: 14px;">
                         {{second_filter.title}}
                     </div>                
                     {% for sf in second_filter.filter_options.all %}
-                        <a class="ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
+                        <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
                             {{sf.title}}
                         </a>
                     {% endfor %}
                 </div>
+                <div class="ui divider mt0 mb0"></div>
                 {% endfor %}
             </div>
-        </div>
-    </div>
-    <div class="ui segment mpl0 mpr0 mb0">
-        <div class="in_mobile mb15 text-center">
-            <a class="ui button blue" onclick="$('.catfilters').show('fast');$(this).hide()"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
-        </div>
-        <div class="catland_found pt15" style="font-size: 20px;font-weight: 600;">
-            <div class="mr15" style="display: inline-block;">
-                Найдено <span class="schools_len">{{category.schools.all|length}}</span> учебных центров
-            </div>
-            <div class="ui segment mt0 mb15" style="width: 400px;display: inline-block;">
-                <b style="display: inline-block;font-size: 15px;color: #222;">Показать списком</b>
-                <div class="ui toggle checkbox ml10">
-                    <input type="checkbox" class="change_show_type" name="public">
-                    <label style="padding-left: 60px;display: inline-block;">Показать на карте</label>
-                </div>
-            </div>
-        </div>
-        <div class="ui grid map_show" style="display: none;">
-            <div class="four wide column" id="map_school_list" status="down">
-                <div class="mapdivider to_drag" id="mapdivider">
-                    <div class="linesmall to_drag"></div>
-                    <div class="linesmall to_drag"></div>
-                    <div class="linesmall to_drag"></div>
-                </div>
-                <div class="school_landing ui segment no_padding mb0" id="school_landing">
+         </div>
+        <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
+            <div class="pl15">
+                <div class="ui segment mpl0 mpr0 mb0">
+                    <div class="in_mobile mb15 text-center">
+                        <a class="ui button blue" onclick="$('.catfilters').show('fast');"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
+                    </div>
                     <div class="loading" style="display: none;">
-                        <div class="animation"><div class="circle one"></div></div>
-                        <div class="animation"><div class="circle two"></div></div>
-                        <div class="animation"><div class="circle three"></div></div>
-                        <div class="animation"><div class="circle four"></div></div>
-                        <div class="animation"><div class="circle five"></div></div>
-                        <div class="animation"><div class="circle six"></div></div>
+                      <div class="animation"><div class="circle one"></div></div>
+                      <div class="animation"><div class="circle two"></div></div>
+                      <div class="animation"><div class="circle three"></div></div>
+                      <div class="animation"><div class="circle four"></div></div>
+                      <div class="animation"><div class="circle five"></div></div>
+                      <div class="animation"><div class="circle six"></div></div>
                     </div>
-                    <div class="ui grid no_margin" style="overflow-x: hidden">
-                        <div class="one wide column no_padding full-h">
-                            <div class="back_to_schools full-h pt15" onclick="show_list()">
-                                <i class="icon left arrow"></i>
-                            </div>
-                        </div>
-                        <div class="fifteen wide column to_drag">
-                            <div class="school_start_landing"></div>
-                            <div class="school_name_big mb10"></div>
-                            <div class="ui divider no_margin"></div>
-                            <div class="map_address no_margin">
-                                <div class="map_address-text">
-                                    <a class="map_address-title school_address_landing"></a>
-                                    <div class="map_address-subtitle"></div>
-                                </div>
-                            </div>
-                            <div class="map_worktime no_margin">
-                                <i class="icon clock map_worktime-icon"></i>
-                                <span style="color: grey;">Время работы:</span>
-                                <div style="display: inline-block;" class="map_worktime-today school_worktime_landing"></div>
-                                <div style="padding-top: 7px;" class="map_aboutpayment_cost_cont">
-                                    <i class="icon tag map_worktime-icon"></i>
-                                    <span style="color: grey;">Средняя цена: </span> <div style="display: inline-block;" class="map_aboutpayment-cost"></div>
-                                </div>
-                            </div>
-                            <div class="map_aboutpayment no_margin">
-                                <div class="map_aboutpayment-text" style="display: inline-block;"></div>
-                            </div>
-                            <ul class="map_icon-list ml0 mr0">
-                                <li class="map_icon-item">
-                                    <div class="map_icon-item-i map_phone-main2"><i class="icon phone"></i></div>
-                                    Телефон
-                                </li>
-                                <li class="map_icon-item">
-                                    <div class="map_icon-item-i"><i class="icon map marker alternate"></i></div>
-                                    На карте
-                                </li>
-                            </ul>
-                            <div class="map_phone map_phone-other2 no_margin" style="display: none;">
-                                <div class="map_phone-number">
-                                    <i class="icon phone"></i>
-                                    <span class="all_phones"></span>
-                                </div>
-                            </div>
-                            <a href="" class="map_photo-wrapper no_margin" style="background-color: #fff;">
-                                <div class="map_photo-label">
-                                    Подробнее
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui segment school_list no_padding no_margin no_drag_p no_drag">
-                    {% for school in schools %}
-                    <div class="ui grid no_margin school_div" onclick="school_div('{{ school.id }}')"
-                        url='{{ school.get_landing }}' id="{{ school.id }}">
-                        <div class="two wide column">
-                            <i class="icon map marker blue no_padding"></i>
-                        </div>
-                        <div class="fourteen wide column no_padding_side">
-                            <a class="school_name">{{ school.title }}</a>
-                            <div class="school_address">{{ school.school_offices.first.address }}</div>
-                            {% if school.slogan != '' %}
-                            <div class="school_slogan">{{ school.slogan }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="ui divider" style="margin: 0"></div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="twelve wide column map_map">
-                <div id="map" style="width: 100%; height: 100%;position: relative;"></div>
-            </div>
-        </div>
-        <div class="ui grid stackable list_show no_margin">
-            <div class="sixteen wide column pl0 pr0">
-                <div class="loading" style="display: none;">
-                  <div class="animation"><div class="circle one"></div></div>
-                  <div class="animation"><div class="circle two"></div></div>
-                  <div class="animation"><div class="circle three"></div></div>
-                  <div class="animation"><div class="circle four"></div></div>
-                  <div class="animation"><div class="circle five"></div></div>
-                  <div class="animation"><div class="circle six"></div></div>
-                </div>
-                <div class="pt0">
-                    <div class="catland_found" style="font-size: 16px;">
+                    <div class="catland_found text15">
                         Сначала 
                         <a class="ui button green mini choose_cat cat_order" order="rating">Лучшие</a>
                         <a class="ui button mini choose_cat cat_order" order="cheap">Дешевые</a>
                         <a class="ui button mini choose_cat cat_order" order="expensive">Дорогие</a>
                     </div>
-                    <div class="mt15 schools_list">
-                        {% for school in category.schools.all %}
-                        <div class="full-w ui grid stackable no_margin pb15">
-                            <div class="four wide column" style="height: 170px;">
-                                <a href="{{school.landing}}">
-                                    {% if school.banners.all|length > 0%}
-                                    <img src="{{school.banners.first.image_banner.url}}" style="height: 100%;" class="full-w">
-                                    {%else%}
-                                    <img src="{% static 'images/fon3.jpeg' %}" style="height: 100%;" class="full-w">
-                                    {%endif%}
-                                </a>
-                            </div>
-                            <div class="twelve wide column pb0">
-                                <a href="{{school.landing}}"><b style="font-size: 19px;">{{school.title}}</b></a>
-                                <div class="mt10" style="height: 33px;color: #646464;">
-                                    <span style="color: #D4C14A;font-weight: 600;">
-                                        {{school.rating}}                            
-                                    </span>
-                                    {% for star in five %}
-                                        {% if forloop.counter <= school.rating %}
-                                            <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% for star in school|rating_empty_stars %}
-                                        <i class="icon star" style="margin-right: -3px;"></i>
-                                    {% endfor %}
-                                </div>
-                                <div class="mt10" style="font-size: 15px">
-                                    <b>{{school.school_offices.first.region}}, {{school.school_offices.first.address}}</b>
-                                </div>
-                                <div class="mt10">
-                                    {{school.content}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui divider full-w no_margin"></div>
-                        {% endfor %}
-                    </div>
                 </div>
             </div>
-        </div>
-    <!--             <div class="four wide column pr0 pl0 not_in_mobile">
-                <div class="ui segment" style="padding-top: 30px;">
-                    <div class="ui grid stackable">
-                        <div class="four wide column no_padding">
-                            <img class="full-w" src="{% static 'images/fon1.png' %}">
-                        </div>
-                        <div class="twelve wide column pt0">
-                            <a href="" style="text-decoration: underline;font-weight: 600;">
-                                OYLA на английском — теперь в Казахстане!
-                            </a>
-                            <div>
-                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui grid stackable">
-                        <div class="four wide column no_padding">
-                            <img class="full-w" src="{% static 'images/fon1.png' %}">
-                        </div>
-                        <div class="twelve wide column pt0">
-                            <a href="" style="text-decoration: underline;font-weight: 600;">
-                                OYLA на английском — теперь в Казахстане!
-                            </a>
-                            <div>
-                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui grid stackable">
-                        <div class="four wide column no_padding">
-                            <img class="full-w" src="{% static 'images/fon1.png' %}">
-                        </div>
-                        <div class="twelve wide column pt0">
-                            <a href="" style="text-decoration: underline;font-weight: 600;">
-                                OYLA на английском — теперь в Казахстане!
-                            </a>
-                            <div>
-                                Казахстанский научно-популярный журнал OYLA издается на казахском, русском, немецком.
-                            </div>
-                        </div>
-                    </div>
+            <div class="mt15 schools_list">
+                <div class="ui grid stackable no_margin">
+                {% for school in category.schools.all %}
+                    {% include 'modals/school_list.html' %}
+                {% endfor %}
                 </div>
             </div>
-    --> 
-
-
-    </div>
-
-</div>
-    <div class="pt15 pb30" style="background-color: #4a4a4a;text-align: center;color: #fff;">
-        <img src="{% static 'images/logo_clean.jpeg' %}" style="width: 200px;">
-        <div class="ui grid stackable">
-            <div class="four wide column">
-            </div>
-            <div class="four wide column" style="text-align: left;">
-                <div style="line-height: 30px">
-                    <b>Контакты</b>
-                    <br>
-                    Телефон: <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
-                    <br>
-                    Email: aaa.academy.kz@gmail.com
-                </div>
-            </div>
-            <div class="four wide column pt30" style="text-align: center;">
-                <a href="{% url 'main:about' %}" class="ui button  green" style="width: 190px;">Стать партнером</a>
-            </div>
-            <div class="two wide column">
-            </div>
-        </div>
-        <div class="mt15" style="color: grey;font-size: 11px;">
-            <i>made by </i> <a href="" style="text-decoration: underline;color: grey;">Kuanysh Oteu</a>
-        </div>
-        <div class="mt15">
-            &nbsp;© 2020. Все права защищены.            
         </div>
     </div>
+{% include 'footer.html' %}
 <span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
 <span style="display: none;" class="data" id="{{category.id}}" url="{% url 'main:cat_filter' %}"></span>
-<script src="{% static 'js/price-slider.js' %}"></script>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
     type="text/javascript"></script>
 <style type="text/css">
@@ -339,7 +106,7 @@
 </style>
 
 <script type="text/javascript">
-    ymaps.ready(init);
+//    ymaps.ready(init);
     function init(){ 
         var myMap = new ymaps.Map("map", {
             center: [43.230, 76.92848],
@@ -538,7 +305,6 @@
     function school_div(id) {
         show_school(id)
     }
-
     $('.choose_cat').click(function(e) {
         if ($(this).attr('status') == 'chosen') {
             $(this).removeClass('green')

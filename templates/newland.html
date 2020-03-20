@@ -13,7 +13,7 @@
             <div class="four wide column no_padding"></div>
             <div class="eight wide column no_padding">
                 <form class="ui form mb0">
-                    <textarea class="map_search_input mb0" url="/api/map_search/" style="width: calc(100% - 220px); height: 50px;line-height: 35px;overflow:hidden;border-radius: 5px 0 0 5px;border-right: 0" placeholder="Учебные центры и курсы"></textarea>
+                    <textarea class="map_search_input mb0" url="/api/map_search/" style="" placeholder="Учебные центры и курсы"></textarea>
                     <div class="dinline backwhite" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;border: 1px solid rgba(34, 36, 38, 0.15);border-left: 0">
                         <i class="icon search mr0" style="color: #232f3e;"></i>
                         <b class="not_in_mobile textw"></b>
@@ -47,48 +47,22 @@
                     </a>
                 </div>
                 {% for school in schools %}
-                <div class="four wide column pt0 pr0 pb15">
-                    <div class="topbr5 ui segment full-w btn_select no_padding" style="height: 300px;">
-                        <a href="{{school.landing}}" class="backwhite">
-                            <div style="height: 150px;background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;" class="topbr5 full-w"></div>
-                            <div class="pl15 pr15 pb15 pt15">
-                                <div class="text17"><b>{{school.title}}</b></div>
-                                <div class="mt15" style="height: 50px;line-height: 15px;">
-                                    <span style="color: #646464;">{{school.school_offices.first.address}}</span>
-                                    <br>
-                                    <span>{{school.slogan}}</span>
-                                </div>
-                                <div class="mt15" style="height: 33px;color: #646464;">
-                                    <span style="color: #D4C14A;">
-                                        <b>{{school.rating}}</b>   
-                                    </span>
-                                    {% for star in five %}
-                                        {% if forloop.counter <= school.rating %}
-                                            <i class="icon star" style="color: #D4C14A;margin-right: -3px;"></i>
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% for star in school|rating_empty_stars %}
-                                        <i class="icon star" style="margin-right: -3px;"></i>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                {% endfor %}                
+                    {% include 'modals/school_list.html' %}
+                {% endfor %}
             </div>
         </div>
     </div>
-            <div class="ui modal categories_modal">
-                <i class="close icon"></i>
-                <div class="content">
-                    {% for cat in categories %}
-                    <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border: 1px solid #232f3e;border-radius:3px 3px 0 0;">
-                        <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
-                    </a>
-                    {% endfor %}
-                </div>
-            </div>
+    <div class="ui modal categories_modal">
+        <i class="close icon" style="margin-right: -15px;margin-top: -15px;"></i>
+        <div class="content">
+            <div style="height: 20px;"></div>
+            {% for cat in categories %}
+            <a href="{{cat.get_absolute_url}}" class="ui button mini white shadow mb5 full-w" style="line-height: 25px;">
+                <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
     {% include 'footer.html' %}
 </div>
 <script type="text/javascript">
