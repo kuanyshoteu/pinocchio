@@ -4,83 +4,87 @@
 {% load ttttags %}
 {% load ttags %}
 {% block content %}
-    <div class="cattop" style="margin-top: -5px;">
-        <div class="text-center newlandhead pb30 textw" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
-            <div style="font-size: 25px;">
-                {{category.main_filters.title}}
-            </div>
-            <div class="mt10">
-                Найдено <b class="schools_len">{{category.schools.all|length}}</b> учебных центров
-            </div>
+<div class="cattop" style="margin-top: -5px;">
+    <div class="text-center newlandhead pb30 textw" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
+        <div style="font-size: 25px;">
+            {{category.main_filters.title}}
+        </div>
+        <div class="mt10">
+            Найдено <b class="schools_len">{{category.schools.all|length}}</b> учебных центров
         </div>
     </div>
-    <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
-        <div class="three wide column pt0 pb0 pr0 deskmenu">
-            <div class="ui segment pl0 pr0 pt5">
-                <div class="pl5 pr5 pt5 pb5">                
-                    <div style="font-size: 14px;">
-                        Выберите курсы для изучения
-                    </div>
-                    <div class="">
-                    {% for mf in category.main_filters.filter_options.all %}
-                        <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5" status="" id="{{mf.id}}">
-                            {{mf.title}}
-                        </a>
-                    {% endfor %}
-                    </div>
+</div>
+<a id="go-back-btn-before-land" href='/'>
+    <i class="arrow left icon"></i>
+</a>
+<div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
+    <div class="three wide column pt0 pb0 pr0 not_in_mobile">
+        <div class="ui segment pl0 pr0 pt5">
+            <div class="pl5 pr5 pt5 pb5">                
+                <div style="font-size: 14px;">
+                    Выберите курсы для изучения
                 </div>
-                <div class="ui divider mt0 mb0"></div>
-                {% for second_filter in category.second_filters.all %}
-                <div class="pl5 pr5 pt5 pb5">
-                    <div style="font-size: 14px;">
-                        {{second_filter.title}}
-                    </div>                
-                    {% for sf in second_filter.filter_options.all %}
-                        <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
-                            {{sf.title}}
-                        </a>
-                    {% endfor %}
-                </div>
-                <div class="ui divider mt0 mb0"></div>
-                {% endfor %}
-            </div>
-         </div>
-        <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
-            <div class="pl15">
-                <div class="ui segment mpl0 mpr0 mb0">
-                    <div class="in_mobile mb15 text-center">
-                        <a class="ui button blue" onclick="$('.catfilters').show('fast');"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
-                    </div>
-                    <div class="loading" style="display: none;">
-                      <div class="animation"><div class="circle one"></div></div>
-                      <div class="animation"><div class="circle two"></div></div>
-                      <div class="animation"><div class="circle three"></div></div>
-                      <div class="animation"><div class="circle four"></div></div>
-                      <div class="animation"><div class="circle five"></div></div>
-                      <div class="animation"><div class="circle six"></div></div>
-                    </div>
-                    <div class="catland_found text15">
-                        Сначала 
-                        <a class="ui button green mini choose_cat cat_order" order="rating">Лучшие</a>
-                        <a class="ui button mini choose_cat cat_order" order="cheap">Дешевые</a>
-                        <a class="ui button mini choose_cat cat_order" order="expensive">Дорогие</a>
-                    </div>
-                </div>
-            </div>
-            <div class="mt15 schools_list">
-                <div class="ui grid stackable no_margin">
-                {% for school in category.schools.all %}
-                    {% include 'modals/school_list.html' %}
+                <div class="">
+                {% for mf in category.main_filters.filter_options.all %}
+                    <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5" status="" id="{{mf.id}}">
+                        {{mf.title}}
+                    </a>
                 {% endfor %}
                 </div>
             </div>
+            <div class="ui divider mt0 mb0"></div>
+            {% for second_filter in category.second_filters.all %}
+            <div class="pl5 pr5 pt5 pb5">
+                <div style="font-size: 14px;">
+                    {{second_filter.title}}
+                </div>                
+                {% for sf in second_filter.filter_options.all %}
+                    <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
+                        {{sf.title}}
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="ui divider mt0 mb0"></div>
+            {% endfor %}
+        </div>
+     </div>
+    <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
+        <div class="pl15">
+            <div class="ui segment mpl0 mpr0 mb0">
+                <div class="in_mobile mb15 text-center">
+                    <a class="ui button blue" onclick="$('.catfilters').show('fast');"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
+                </div>
+                <div class="loading" style="display: none;">
+                  <div class="animation"><div class="circle one"></div></div>
+                  <div class="animation"><div class="circle two"></div></div>
+                  <div class="animation"><div class="circle three"></div></div>
+                  <div class="animation"><div class="circle four"></div></div>
+                  <div class="animation"><div class="circle five"></div></div>
+                  <div class="animation"><div class="circle six"></div></div>
+                </div>
+                <div class="catland_found text15">
+                    Сначала 
+                    <a class="ui button green mini choose_cat cat_order" order="rating">Лучшие по рейтингу</a>
+                    <a class="ui button mini choose_cat cat_order" order="cheap">Экономные</a>
+                    <a class="ui button mini choose_cat cat_order" order="expensive">Дорогие</a>
+                </div>
+            </div>
+        </div>
+        <div class="mt15">
+            <div class="ui grid stackable schools_list no_margin">
+            {% for school in category.schools.all %}
+                {% include 'modals/school_list.html' %}
+            {% endfor %}
+            </div>
         </div>
     </div>
+</div>
+<div style="display: none;">
+{% include 'modals/school_example_land.html' %}
+</div>
 {% include 'footer.html' %}
 <span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
 <span style="display: none;" class="data" id="{{category.id}}" url="{% url 'main:cat_filter' %}"></span>
-<script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
-    type="text/javascript"></script>
 <style type="text/css">
     .ymaps-2-1-74-controls__control {
         right: 10px !important;
@@ -181,23 +185,6 @@
         });
         myMap.geoObjects.add(firstCollection);
         $( function() {
-            $( "#slider-range" ).slider({
-                range: true,
-                min: 0,
-                max: 100,
-                values: [ 0, 100 ],
-                slide: function( event, ui ) {
-                    $('.show_url').attr('slider_status', '1')
-                    addzero1 = 'тг'
-                    addzero2 = 'тг'
-                    if(ui.values[0] > 0){addzero1 = ' 000тг'}
-                    if(ui.values[1] > 0){addzero2 = ' 000тг'}
-                    $( "#amount" ).val(ui.values[ 0 ]+addzero1 + " - " + ui.values[ 1 ]+addzero2);
-                    $( "#amount" ).attr( "mincost", ui.values[ 0 ])
-                    $( "#amount" ).attr( "maxcost", ui.values[ 1 ])
-                    update_map(myMap);
-                }
-            });
         });
     }
 
@@ -304,104 +291,6 @@
     }
     function school_div(id) {
         show_school(id)
-    }
-    $('.choose_cat').click(function(e) {
-        if ($(this).attr('status') == 'chosen') {
-            $(this).removeClass('green')
-            $(this).attr('status', 'none')
-        }
-        else{
-            $(this).addClass('green')
-            $(this).attr('status', 'chosen')
-        }
-        ids = ''
-        $('.choose_cat.green').each(function() {
-            if ($(this).attr('id')) {
-                ids += $(this).attr('id') + 'p'
-            }
-        })
-        url = $('.data').attr('url')
-        id = $('.data').attr('id')
-        mincost = $( "#amount" ).attr("mincost")
-        maxcost = $( "#amount" ).attr("maxcost")
-        order = ''
-        if ($(this).attr('order')) {
-            $('.cat_order').removeClass('green')
-            $(this).addClass('green')
-            order = $('.cat_order.green').attr('order')
-        }
-        $('.loading').show()
-        $.ajax({
-            url: url,
-            data: {
-                'mincost':mincost,
-                'maxcost':maxcost,
-                'id':id,
-                'ids':ids,
-                'order':order,
-            },
-            dataType: 'json',
-            success: function (data) {
-                schools = data.res
-                update_list(schools)
-                $('.loading').hide()
-            }
-        })    
-    })
-    $( "#slider-range" ).slider({
-        range: true,
-        min: 0,
-        max: 100,
-        values: [ 0, 100 ],
-        slide: function( event, ui ) {
-            $('.loading').show()
-            ids = ''
-            $('.choose_cat.green').each(function() {
-                ids += $(this).attr('id') + 'p'
-            })
-            url = $('.data').attr('url')
-            id = $('.data').attr('id')
-            $('.show_url').attr('slider_status', '1')
-            addzero1 = 'тг'
-            addzero2 = 'тг'
-            if(ui.values[0] > 0){addzero1 = ' 000тг'}
-            if(ui.values[1] > 0){addzero2 = ' 000тг'}
-            $( "#amount" ).val(ui.values[ 0 ]+addzero1 + " - " + ui.values[ 1 ]+addzero2);
-            $( "#amount" ).attr( "mincost", ui.values[ 0 ])
-            $( "#amount" ).attr( "maxcost", ui.values[ 1 ])
-
-            $.ajax({
-                url: url,
-                data: {
-                    'mincost':ui.values[ 0 ],
-                    'maxcost':ui.values[ 1 ],
-                    'id':id,
-                    'ids':ids,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    schools = data.res
-                    update_list(schools)
-                    $('.loading').hide()                    
-                }
-            })    
-
-        }
-    });
-    function update_list(schools){
-        $('.schools_list').empty()
-        $('.schools_len').text(schools.length)
-        for (var i = 0; i < schools.length; i++) {
-            url = schools[i][0]
-            title = schools[i][1]
-            img = schools[i][2]
-            if (img == '') {
-                img = '/static/images/fon3.jpeg'
-            }
-            address = schools[i][3]
-            content = schools[i][4]
-            $('<div class="full-w ui grid stackable no_margin pb15"> <div class="four wide column" style="height: 170px;"> <a href="'+url+'"><img src="'+img +'" style="height: 100%;" class="full-w"></a> </div> <div class="nine wide column"> <a href="'+url+'"><b style="font-size: 19px;">'+title+'</b></a> <div class="mt15" style="font-size: 15px"> <b>'+address+'</b> </div> <div class="mt15"> '+content+' </div> </div> </div> <div class="ui divider full-w no_margin"></div>').appendTo('.schools_list')
-        }
     }
 </script>
 {% endblock content %}

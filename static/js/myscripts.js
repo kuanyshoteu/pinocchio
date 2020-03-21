@@ -1,3 +1,89 @@
+    $('.choose_cat').click(function(e) {
+        if ($(this).attr('status') == 'chosen') {
+            $(this).removeClass('green')
+            $(this).attr('status', 'none')
+        }
+        else{
+            $(this).addClass('green')
+            $(this).attr('status', 'chosen')
+        }
+        ids = ''
+        $('.choose_cat.green').each(function() {
+            if ($(this).attr('id')) {
+                ids += $(this).attr('id') + 'p'
+            }
+        })
+        url = $('.data').attr('url')
+        id = $('.data').attr('id')
+        // mincost = $( "#amount" ).attr("mincost")
+        // maxcost = $( "#amount" ).attr("maxcost")
+        if ($(this).attr('order')) {
+            $('.cat_order').removeClass('green')
+            $(this).addClass('green')
+        }
+        order = $('.cat_order.green').attr('order')
+        $('.loading').show()
+        $.ajax({
+            url: url,
+            data: {
+                // 'mincost':mincost,
+                // 'maxcost':maxcost,
+                'id':id,
+                'ids':ids,
+                'order':order,
+            },
+            dataType: 'json',
+            success: function (data) {
+                schools = data.res
+                console.log('started')
+                update_list(schools)
+                $('.loading').hide()
+            }
+        })    
+    })
+    function update_list(schools){
+        $('.schools_list').empty()
+        console.log('len',schools.length)
+        $('.schools_len').text(schools.length)
+        for (var i = 0; i < schools.length; i++) {
+            url = schools[i][0]
+            title = schools[i][1]
+            img = schools[i][2]
+            address = schools[i][3]
+            content = schools[i][4]
+            rating = schools[i][5]
+            if (img == '') {
+                img = 'background-image: url('+img+')'
+                textin = ''
+            }
+            else{
+                img = 'background-color: #506ca9;'                
+                textin = title
+            }
+            school = $('.school_box_orig').clone()
+            school.removeClass('school_box_orig')
+            school.find('.landbox').attr('href', url)
+            school.find('.land_box1').attr('style',img+';padding-top: 50px;')
+            school.find('.land_box1').text(textin)
+            school.find('.school_box_title').text(title)
+            school.find('.school_box_address').text(address)
+            school.find('.school_box_slogan').text(content)
+            school.find('.school_box_rating').text(rating)
+            rating_cont = school.find('.rating_stars')
+            rating = parseInt(rating)
+            for (var j = 0; j < rating; j++) {
+                filled_star = $('.filled_star').clone()
+                filled_star.removeClass('filled_star')
+                filled_star.appendTo(rating_cont)
+            }
+            for (var j = rating; j < 5; j++) {
+                empty_star = $('.empty_star').clone()
+                empty_star.removeClass('empty_star')
+                empty_star.appendTo(rating_cont)
+            }
+            school.appendTo('.schools_list')
+        }
+    }
     $('.open_new_card_form1').click(function(e) {
         $('#new_card_form1').modal('show');
         $('.wrong_mail_error').hide();

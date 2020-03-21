@@ -1136,9 +1136,9 @@ def cat_filter(request):
     if request.GET.get('id') and request.GET.get('order'):
         cat = SchoolCategory.objects.get(id=int(request.GET.get('id')))
         schools = cat.schools.all()
-        # mincost = int(request.GET.get('mincost'))*1000 - 1
-        # maxcost = int(request.GET.get('maxcost'))*1000 + 1
-        # schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost)
+            # mincost = int(request.GET.get('mincost'))*1000 - 1
+            # maxcost = int(request.GET.get('maxcost'))*1000 + 1
+            # schools = schools.filter(average_cost__gt=mincost,average_cost__lt=maxcost)
         if len(request.GET.get('ids')) > 0:
             ids = request.GET.get('ids').split('p')
             del ids[-1]
@@ -1151,7 +1151,6 @@ def cat_filter(request):
             schools = schools.order_by('average_cost')
         if request.GET.get('order') == "expensive":
             schools = schools.order_by('-average_cost')
-        print(schools)
         for school in schools:
             address = '-'
             if len(school.school_offices.all())>0:
@@ -1165,7 +1164,9 @@ def cat_filter(request):
                 school.title,
                 image_url, 
                 address, 
-                school.content])
+                school.content,
+                school.rating,
+                ])
         ## Сортировка по ценам курсов
     data = {
         'res':res,

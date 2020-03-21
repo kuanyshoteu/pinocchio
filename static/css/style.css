@@ -585,6 +585,9 @@ body{
 #go-back-btn-before:hover {
   background-color: #CCE2FF;
 }
+#go-back-btn-before-land:hover {
+  background-color: #CCE2FF;
+}
 #go-back-btn:hover {
   background-color: #CCE2FF;
 }
@@ -2288,6 +2291,20 @@ a{
   }
   .map_search_input{
     width: calc(100% - 220px) !important;
+  }
+  #go-back-btn-before-land {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    top: 61px;
+    height: 90%;
+    padding: 15px 10px;
+    width: 40px;
+    font-size: 18px;
+    z-index: 500;
+    color: #5181b8;
   }
   #go-back-btn-before {
     position: absolute;

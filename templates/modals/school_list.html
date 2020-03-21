@@ -3,7 +3,11 @@
 <div class="four wide column pt0 pr0 pb15">
     <div class="topbr5 ui segment full-w btn_select no_padding">
         <a href="{{school.landing}}" class="backwhite full-w landbox">
-            <div class="land_box1 topbr5" style="background-image: url({%if school.banners.all|length > 0%}{{school.banners.first.image_banner.url}}{%else%}{%static 'images/fon3.jpeg'%}{%endif%});background-size: 100%;background-repeat: no-repeat;"></div>
+            <div class="land_box1 topbr5 textw text-center" style="{%if school.banners.all|length > 0%}background-image: url({{school.banners.first.image_banner.url}}){%else%} background-color: #506ca9;{%endif%};padding-top: 50px;">
+                {%if school.banners.all|length == 0%}
+                    {{school.title}}
+                {%endif%}
+            </div>
             <div class="land_box2 pl15 pr15 pb15 pt15">
                 <div class="text17"><b>{{school.title}}</b></div>
                 <div class="mt5" style="height: 60px;line-height: 15px;">

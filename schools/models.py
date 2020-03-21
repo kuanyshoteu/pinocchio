@@ -178,7 +178,6 @@ class SchoolBanner(models.Model):
     def delete_school_banner(self):
         return reverse("schools:delete_school_banner")
 
-
 class SchoolFilter(models.Model):
     title = models.CharField(max_length=250)
     def delete_url(self):
