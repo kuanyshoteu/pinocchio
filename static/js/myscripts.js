@@ -57,14 +57,14 @@
                 textin = ''
             }
             else{
-                img = 'background-color: #506ca9;'                
+                img = 'background-image: url(/static/images/fon4.jpg)'                
                 textin = title
             }
             school = $('.school_box_orig').clone()
             school.removeClass('school_box_orig')
             school.find('.landbox').attr('href', url)
             school.find('.land_box1').attr('style',img+';padding-top: 50px;')
-            school.find('.land_box1').text(textin)
+            $('<span class="not_in_mobile">'+textin+'</span>').appendTo(school.find('.land_box1'))
             school.find('.school_box_title').text(title)
             school.find('.school_box_address').text(address)
             school.find('.school_box_slogan').text(content)

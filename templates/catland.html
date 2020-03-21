@@ -6,7 +6,7 @@
 {% block content %}
 <div class="cattop" style="margin-top: -5px;">
     <div class="text-center newlandhead pb30 textw" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
-        <div style="font-size: 25px;">
+        <div style="font-size: 25px;line-height:30px;">
             {{category.main_filters.title}}
         </div>
         <div class="mt10">
@@ -50,7 +50,7 @@
      </div>
     <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
         <div class="pl15">
-            <div class="ui segment mpl0 mpr0 mb0">
+            <div class="ui segment pl0 pr0 mb0">
                 <div class="in_mobile mb15 text-center">
                     <a class="ui button blue" onclick="$('.catfilters').show('fast');"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
                 </div>
@@ -62,11 +62,11 @@
                   <div class="animation"><div class="circle five"></div></div>
                   <div class="animation"><div class="circle six"></div></div>
                 </div>
-                <div class="catland_found text15">
+                <div class="catland_found text15 pl10">
                     Сначала 
-                    <a class="ui button green mini choose_cat cat_order" order="rating">Лучшие по рейтингу</a>
-                    <a class="ui button mini choose_cat cat_order" order="cheap">Экономные</a>
-                    <a class="ui button mini choose_cat cat_order" order="expensive">Дорогие</a>
+                    <a class="ui button green mini choose_cat cat_order mobmb5 mr0 pl5 pr5" order="rating">Лучшие по рейтингу</a>
+                    <a class="ui button mini choose_cat cat_order mobmb5 mr0 pl5 pr5" order="cheap">Экономные</a>
+                    <a class="ui button mini choose_cat cat_order mobmb5 mr0 pl5 pr5" order="expensive">Дорогие</a>
                 </div>
             </div>
         </div>
