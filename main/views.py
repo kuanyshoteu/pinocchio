@@ -107,7 +107,7 @@ def newland(request):
         print(request.body)
         a = json.loads(request.body)
         print('yoyoyo', a['type'])
-        return HttpResponse('3d511857')
+        return HttpResponse('3d511857', content_type='text/plain')
         print('yoyoyo2222')
     context = {
         "profile":profile,
