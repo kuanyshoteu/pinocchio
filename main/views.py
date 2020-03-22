@@ -87,7 +87,6 @@ def map_view(request):
     }
     return render(request, "map.html", context)
 
-@csrf_exempt
 def newland(request):
     is_trener = False
     is_manager = False
