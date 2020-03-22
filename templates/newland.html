@@ -9,14 +9,15 @@
         <div class="textw text-center mb10" style="font-size: 23px;line-height: 25px;font-weight: 600;position: relative;color: #232f3e">
             Введите название интересующего курса
         </div>
-        <div class="ui segment">
+<!--         <div class="ui segment">
             <form method="POST" class="ui form">
                 <textarea name="type">confirmation</textarea>
                 <textarea name="group_id">169590398</textarea>
                 <input type='submit' value='go' class='ui button green'>
+                <a class="ui button mini blue gojson">Go json</a>
             </form>
         </div>
-        <div class="ui grid stackable no_margin full-w">
+ -->        <div class="ui grid stackable no_margin full-w">
             <div class="four wide column no_padding"></div>
             <div class="eight wide column no_padding">
                 <form class="ui form mb0">
@@ -73,6 +74,17 @@
     {% include 'footer.html' %}
 </div>
 <script type="text/javascript">
+    $('.gojson').on('click',function(e) {
+        $.ajax({
+            url: '/',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({ "type": "confirmation", "group_id": 169590398 }),
+            dataType: 'text',
+            success: function(result) {
+            }
+        });        
+    })
     $('.map_search_input').on('input', function(e) {
         text = $('.map_search_input').val()
         url = $(this).attr('url')

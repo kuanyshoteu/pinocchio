@@ -88,6 +88,7 @@ def map_view(request):
     return render(request, "map.html", context)
 
 from django.views.decorators.csrf import csrf_exempt
+import json
 @csrf_exempt
 def newland(request):
     is_trener = False
@@ -102,9 +103,12 @@ def newland(request):
         is_director = is_profi(profile, 'Director')
         if len(profile.schools.all()):
             money = profile.schools.first().money
-    print('dededed',request.POST)
-    if request.POST:
+    if request.method == 'POST':
+        print(request.body)
+        a = json.loads(request.body)
+        print('yoyoyo', a['type'])
         return HttpResponse('3d511857')
+        print('yoyoyo2222')
     context = {
         "profile":profile,
         "categories":SchoolCategory.objects.all(),
