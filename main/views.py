@@ -102,10 +102,12 @@ def newland(request):
         is_director = is_profi(profile, 'Director')
         if len(profile.schools.all()):
             money = profile.schools.first().money
-    print('dededed')
-    if request.POST.get('type') == 'confirmation' and request.POST.get('group_id') == '169590398':
-        print('entered')
-        return HttpResponse('3d511857')
+    print('dededed',request.POST)
+    if request.POST:
+        print('888 type', request.POST.get('type'))
+        if request.POST.get('type') == 'confirmation' and request.POST.get('group_id') == '169590398':
+            print('entered')
+            return HttpResponse('3d511857')
     context = {
         "profile":profile,
         "categories":SchoolCategory.objects.all(),
