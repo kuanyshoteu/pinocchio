@@ -30,7 +30,14 @@
                 {% endif %}
                 <a class="ui button mini blue connect_instagram" url="{%url 'schools:connect_instagram'%}">Подключить</a>
             </div>
-        </div>
+<!--             <div class="ui segment">
+                <form method="POST" class="ui form"> {% csrf_token %}
+                    <textarea name="type">confirmation</textarea>
+                    <textarea name="group_id">169590398</textarea>
+                    <input type='submit' value='go' class='ui button green'>
+                </form>
+            </div>
+ -->        </div>
     </div>
 </div>
 <span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
