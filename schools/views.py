@@ -262,9 +262,6 @@ def social_networks_settings(request):
     if len(insta) > 0:
         had_insta = True
         insta = insta[0]
-    if request.POST.get('type') == 'confirmation' and request.POST.get('group_id') == '169590398':
-        print('entered')
-        return HttpResponse('3d511857')
     if request.GET.get('code'):
         code = request.GET.get('code')
         print('yo2', code, '<-code')
