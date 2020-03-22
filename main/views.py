@@ -104,10 +104,7 @@ def newland(request):
             money = profile.schools.first().money
     print('dededed',request.POST)
     if request.POST:
-        print('888 type', request.POST.get('type'))
-        if request.POST.get('type') == 'confirmation' and request.POST.get('group_id') == '169590398':
-            print('entered')
-            return HttpResponse('3d511857')
+        return HttpResponse('3d511857')
     context = {
         "profile":profile,
         "categories":SchoolCategory.objects.all(),
