@@ -2,11 +2,12 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
+from django.views.decorators.csrf import csrf_exempt
 
 app_name = 'Enigmath'
 urlpatterns = [
     url(r'^map/$', map_view, name='map'),
-    url(r'^newland/$', newland, name='newland'),
+    url(r'^newland/$', csrf_exempt(newland), name='newland'),
     url(r'^about/$', about, name='about'),
     url(r'^team/$', team, name='team'),
     url(r'^help/$', help_page, name='help_page'),

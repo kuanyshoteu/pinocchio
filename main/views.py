@@ -87,6 +87,8 @@ def map_view(request):
     }
     return render(request, "map.html", context)
 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def newland(request):
     is_trener = False
     is_manager = False
