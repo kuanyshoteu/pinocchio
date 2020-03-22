@@ -87,6 +87,7 @@ def map_view(request):
     }
     return render(request, "map.html", context)
 
+@csrf_exempt
 def newland(request):
     is_trener = False
     is_manager = False
@@ -1301,7 +1302,7 @@ def columns():
         school.crm_columns.remove(*columns)
         ncs = CRMColumn.objects.filter(id__lt=7)
         school.crm_columns.add(*ncs)
-        
+
 def card_tags():
     for card in CRMCard.objects.all():
         school = card.school
