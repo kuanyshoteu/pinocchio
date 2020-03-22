@@ -291,7 +291,7 @@ def create_school(request):
             worktime='По предварительной записи',
             )
         school.save()
-        for column in CRMColumn.objects.all():
+        for column in CRMColumn.objects.filter(id__lt = 7): 
             school.crm_columns.add(column)
         new_id = str(User.objects.order_by("id").last().id + 1)
         new_name = request.GET.get('name').replace(' ', '')+new_id
@@ -1291,9 +1291,17 @@ def moderator_run_code(request):
     # move_to_Mariam()
     # synchrone_material_with_atts()
     # card_tags()
+    columns()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
+def columns():
+    for school in School.objects.exclude(id=100):
+        columns = school.crm_columns.all()
+        school.crm_columns.remove(*columns)
+        ncs = CRMColumn.objects.filter(id__lt=7)
+        school.crm_columns.add(*ncs)
+        
 def card_tags():
     for card in CRMCard.objects.all():
         school = card.school
