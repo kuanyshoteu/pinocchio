@@ -166,6 +166,8 @@ class SocialMediaAccount(models.Model):
     username = models.TextField(default='')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='socialmedias')
     socialmedia = models.ForeignKey(SocialMedia, null=True, on_delete = models.CASCADE, related_name='accounts')
+    key = models.TextField(default='')
+    server = models.TextField(default='')
 
 class SchoolBanner(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
@@ -247,8 +249,9 @@ class ElliteSchools(models.Model):
     schools = models.ManyToManyField(School, related_name='elite_list')
 
 class HelpVideos(models.Model):
-    video = models.FileField(default='')
+    video = models.FileField(default='',null=True,)
     title = models.TextField(default='')
+    href = models.TextField(default='')
     number = models.IntegerField(default = 0)
     class Meta:
         ordering = ['number']

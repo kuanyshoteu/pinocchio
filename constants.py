@@ -13,9 +13,16 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+#instagram api credentials
+insta_server = 'https://www.bilimtap.kz/schools/instagram_connecting/'
 instagram_id = '1402067986632477'
-myserver = 'https://www.bilimtap.kz/schools/social_networks_settings/'
 secret_instagram = '5adaeda9020c02ecf00e6114bf2155c3'
+#vk.com api credentials
+vk_server = 'https://www.bilimtap.kz/schools/vk_connecting/'
+vk_id = '7346891'
+secret_vk = '6qsFJ2c3GMafUHrf3CK5'
+
 def send_sms(phones, message, time):
     login = 'Pinocchio'
     password = 'Siski11zhopa'

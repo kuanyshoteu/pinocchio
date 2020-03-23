@@ -252,6 +252,40 @@ def school_salaries(request):
     return render(request, "school/salaries.html", context)
 
 def social_networks_settings(request):
+    # Подключение Callback API - уведомления сами приходят на сервер
+    # if request.method == 'POST':
+    #     print(request.body)
+    #     a = json.loads(request.body)
+    #     print('yoyoyo', a['type'])
+    #     return HttpResponse('3d511857', content_type='text/plain')
+    #     print('yoyoyo2222')
+    profile = get_profile(request)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    print('yo1', instagram_id)
+    sm = SocialMedia.objects.get(title='instagram')
+    insta = school.socialmedias.filter(socialmedia=sm)
+    had_insta = False
+    if len(insta) > 0:
+        had_insta = True
+        insta = insta[0]
+    context = {
+        "profile":profile,
+        "instance": school,
+        "social_networks_settings":True,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "page":"info",
+        "had_insta":had_insta,
+        "insta":insta,
+    }
+    return render(request, "school/social_networks_settings.html", context)
+
+def instagram_connecting(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
@@ -270,7 +304,7 @@ def social_networks_settings(request):
             'client_id':instagram_id, 
             'client_secret':secret_instagram, 
             'grant_type':'authorization_code',
-            'redirect_uri':myserver, 
+            'redirect_uri':insta_server, 
             'code':code,
         }
         r = requests.post(url,data=data,allow_redirects=True)
@@ -292,29 +326,87 @@ def social_networks_settings(request):
         insta.access_token = access_token
         insta.username = a3['username']
         insta.save()
+    return redirect('/schools/social_networks_settings')
 
-    context = {
-        "profile":profile,
-        "instance": school,
-        "social_networks_settings":True,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        "school_money":school.money,
-        "school_crnt":school,
-        "page":"info",
-        "had_insta":had_insta,
-        "insta":insta,
-    }
-    return render(request, "school/social_networks_settings.html", context)
+def vk_connecting(request):
+    profile = get_profile(request)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    print('yo1 vk')
+    sm = SocialMedia.objects.get(title='vk')
+    vk = school.socialmedias.filter(socialmedia=sm)
+    had_vk = False
+    if len(vk) > 0:
+        had_vk = True
+        vk = vk[0]
+    if request.GET.get('code'):
+        code = request.GET.get('code')
+        print('yo2', code, '<-code')
+        url = 'https://oauth.vk.com/access_token'
+        data = {
+            'client_id':vk_id, 
+            'client_secret':secret_vk, 
+            'redirect_uri':vk_server, 
+            'code':code,
+        }
+        r = requests.post(url,data=data,allow_redirects=True)
+        a = json.loads(r.content)
+        if not had_vk:
+            vk = school.socialmedias.create(socialmedia=sm)
+        user_id = str(a['user_id'])
+        access_token = str(a['access_token'])
+        vk.user_id = user_id
+        vk.access_token = access_token
+        vk.save()
+
+        vk_longpoll_url = 'https://api.vk.com/method/groups.getLongPollServer'
+        data = {
+            'group_id':user_id, 
+            'access_token':access_token, 
+            'v':'5.103', 
+        }
+        r = requests.post(url,data=data,allow_redirects=True)
+        a = json.loads(r.content)
+        key = a['key']
+        server = a['server']
+        ts = a['ts']
+        vk.key = key
+        vk.server = server
+        vk.save()
+
+        # Надо авто настроить уведомления на сервер https://vk.com/dev/groups.addCallbackServer и https://vk.com/dev/groups.getCallbackConfirmationCode
+        #Надо авто настроить группу  https://vk.com/dev/groups.setLongPollSettings
+
+        #Это получение данных
+        # connect_longpoll_url = server
+        # data = {
+        #     'act':'a_check', 
+        #     'key':key, 
+        #     'ts':ts, 
+        #     'wait':25,
+        # }
+        # r = requests.post(url,data=data,allow_redirects=True)
+        # a = json.loads(r.content)
+
+    return redirect('/schools/social_networks_settings')
 
 def connect_instagram(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     print('yo6')
-    url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+myserver+'&scope=user_profile,user_media&response_type=code'
+    url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
+    data = {
+        'url':url,
+    }
+    return JsonResponse(data)
+
+def connect_vk(request):
+    ok = False
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    print('yo6')
+    url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=photos,messages,manage&response_type=code&v=5.103'
     data = {
         'url':url,
     }

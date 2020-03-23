@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^rating/$', school_rating, name='rating'),
     url(r'^payments/$', school_payments, name='payments'),
     url(r'^reports/$', get_school_report, name='get_school_report'),
-    url(r'^social_networks_settings/$', social_networks_settings, name='social_networks_settings'),
     url(r'^api/edit_card/$', edit_card, name='edit_card_url'),
     url(r'^api/edit_card_mail/$', edit_card_mail, name='edit_card_mail'),
     url(r'^api/add_card/$', add_card, name='add_card_url'),
@@ -82,6 +81,11 @@ urlpatterns = [
     url(r'^api/show_finance_update/', show_finance_update, name='show_finance_update'),
     url(r'^api/update_finance/', update_finance, name='update_finance'),
     url(r'^api/get_schedule/', get_schedule, name='get_schedule'),
-    url(r'^api/connect_instagram/', connect_instagram, name='connect_instagram'),
     url(r'^api/card_send_mail/$', card_send_mail, name='card_send_mail'),
+
+    url(r'^social_networks_settings/$', social_networks_settings, name='social_networks_settings'),
+    url(r'^instagram_connecting/$', instagram_connecting, name='instagram_connecting'),
+    url(r'^vk_connecting/$', vk_connecting, name='vk_connecting'),
+    url(r'^api/connect_instagram/', connect_instagram, name='connect_instagram'),
+    url(r'^api/connect_vk/', connect_vk, name='connect_vk'),
 ]

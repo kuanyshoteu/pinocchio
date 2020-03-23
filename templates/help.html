@@ -15,7 +15,7 @@
                             <div class="mb30 text17">
                                 <div class="mb10"><a><b>{{help.title}}</b></a></div>
                                 <video class="full-w" style="height: 300px; border: 1px solid grey;" controls>
-                                <source src="{{ help.video.url }}" type="video/mp4">
+                                <source src="{%if help.href == ''%}{{ help.video.url }}{%else%}{{help.href}}{%endif%}" type="video/mp4">
                                 Your browser does not support the video tag.
                                 </video>                                
                             </div>
