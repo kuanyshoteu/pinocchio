@@ -1287,9 +1287,16 @@ def moderator_run_code(request):
     # move_to_Mariam()
     # synchrone_material_with_atts()
     # card_tags()
-    columns()
+    # columns()
+    categories_update()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
+
+def categories_update():
+    for sc in SubjectCategory.objects.all():
+        schools = sc.schools.all()
+        for scc in sc.school_categories.all():
+            scc.schools.add(*schools)
 
 def columns():
     for school in School.objects.exclude(id=100):

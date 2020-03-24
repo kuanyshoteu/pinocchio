@@ -511,8 +511,10 @@ def subject_create(request): ### Если нет предмета, то отпр
         if request.GET.get('id') == '_new':
             qs = SubjectCategory.objects.filter(title=title)
             if len(qs) > 0:
-                school.school_subject_categories.add(qs[0])
                 subject = qs[0]
+                school.school_subject_categories.add(subject)
+                school_cats = subject.school_categories.all()
+                school.categories.add(*school_cats)
             else:
                 subject = school.school_subject_categories.create(title=title)
             school.hashtags.get_or_create(title = title.replace(' ', '_'))
@@ -542,6 +544,8 @@ def subject_delete(request):
     school = is_moderator_school(request, profile)
     only_managers(profile)
     subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
+    school_cats = subject.school_categories.all()
+    school.categories.remove(*school_cats)
     hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
     if len(hashtag) > 0:
         hashtag.delete()
