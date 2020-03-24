@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    {{ instance.title }} | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div class='ui container pt15'>
+    <div class="ui grid">
+        {% include 'left_menu.html' %}
+        <div class="eighty wide column">
+            <div class="ui segment">
+                <div class="text15">
+                    Подключение к Вконтакте
+                </div>
+                <div class="ui image label shadow_small backwhite">
+                    {{vk_account.username}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
+{% endblock content %}

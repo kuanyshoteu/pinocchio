@@ -262,13 +262,6 @@ def social_networks_settings(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    print('yo1', instagram_id)
-    sm = SocialMedia.objects.get(title='instagram')
-    insta = school.socialmedias.filter(socialmedia=sm)
-    had_insta = False
-    if len(insta) > 0:
-        had_insta = True
-        insta = insta[0]
     context = {
         "profile":profile,
         "instance": school,
@@ -280,8 +273,7 @@ def social_networks_settings(request):
         "school_money":school.money,
         "school_crnt":school,
         "page":"info",
-        "had_insta":had_insta,
-        "insta":insta,
+        "socialmedias":SocialMedia.objects.all(),
     }
     return render(request, "school/social_networks_settings.html", context)
 
@@ -339,6 +331,7 @@ def vk_connecting(request):
     if len(vk) > 0:
         had_vk = True
         vk = vk[0]
+    group_list = 'kkkk'
     if request.GET.get('code'):
         code = request.GET.get('code')
         print('yo2', code, '<-code')
@@ -357,56 +350,77 @@ def vk_connecting(request):
         access_token = str(a['access_token'])
         vk.user_id = user_id
         vk.access_token = access_token
-        vk.save()
 
-        vk_longpoll_url = 'https://api.vk.com/method/groups.getLongPollServer'
+        get_groups_url = 'https://api.vk.com/method/account.getProfileInfo'
+        data = {}
+        r = requests.post(get_groups_url,data=data,allow_redirects=True)
+        a = json.loads(r.content)
+        vk.username = a['first_name'] + a['last_name']
+
+        get_groups_url = 'https://api.vk.com/method/groups.get'
         data = {
-            'group_id':user_id, 
-            'access_token':access_token, 
+            'user_id':user_id,
+            'extended':1,
+            'filter':admin,
+            'access_token':access_token,
             'v':'5.103', 
         }
-        r = requests.post(url,data=data,allow_redirects=True)
+        r = requests.post(get_groups_url,data=data,allow_redirects=True)
         a = json.loads(r.content)
-        key = a['key']
-        server = a['server']
-        ts = a['ts']
-        vk.key = key
-        vk.server = server
+        group_list = a['items']
+        print(group_list)
         vk.save()
-
-        # Надо авто настроить уведомления на сервер https://vk.com/dev/groups.addCallbackServer и https://vk.com/dev/groups.getCallbackConfirmationCode
-        #Надо авто настроить группу  https://vk.com/dev/groups.setLongPollSettings
-
-        #Это получение данных
-        # connect_longpoll_url = server
-        # data = {
-        #     'act':'a_check', 
-        #     'key':key, 
-        #     'ts':ts, 
-        #     'wait':25,
-        # }
-        # r = requests.post(url,data=data,allow_redirects=True)
-        # a = json.loads(r.content)
-
-    return redirect('/schools/social_networks_settings')
-
-def connect_instagram(request):
-    ok = False
-    profile = Profile.objects.get(user = request.user.id)
-    only_directors(profile)
-    print('yo6')
-    url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
-    data = {
-        'url':url,
+    context = {
+        "profile":profile,
+        "instance": school,
+        "salaries":True,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "vk_account":vk,
+        "group_list":group_list,
+        "page":"finance",        
     }
-    return JsonResponse(data)
+    return render(request, "socialmedias/vk_connecting.html", context)
 
-def connect_vk(request):
+def long_poll():
+    vk_longpoll_url = 'https://api.vk.com/method/groups.getLongPollServer'
+    data = {
+        'group_id':group_id,  # Надо достать его из бд 
+        'access_token':access_token, 
+        'v':'5.103', 
+    }
+    r = requests.post(vk_longpoll_url,data=data,allow_redirects=True)
+    a = json.loads(r.content)
+    key = a['key']
+    server = a['server']
+    ts = a['ts']
+    vk.key = key
+    vk.server = server
+    vk.save()
+    #Это получение данных
+    # connect_longpoll_url = server
+    # data = {
+    #     'act':'a_check', 
+    #     'key':key, 
+    #     'ts':ts, 
+    #     'wait':25,
+    # }
+    # r = requests.post(url,data=data,allow_redirects=True)
+    # a = json.loads(r.content)
+
+def connect_sm(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     print('yo6')
-    url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=photos,messages,manage&response_type=code&v=5.103'
+    if request.GET.get('status') == 'Instagram':
+        url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
+    elif request.GET.get('status') == 'Вконтакте':
+        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=photos,messages,groups,manage&response_type=code&v=5.103'
     data = {
         'url':url,
     }

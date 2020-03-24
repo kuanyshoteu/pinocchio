@@ -145,11 +145,13 @@
             $('.wrong_mail_error').show()
         }
     });
-    $('.connect_instagram').click(function(e) {
+    $('.connect_sm').click(function(e) {
         url = $(this).attr('url')
+        status = $(this).attr('status')
         $.ajax({
             url: url,
             data: {
+                'status':status,
             },
             dataType: 'json',
             success: function (data) {

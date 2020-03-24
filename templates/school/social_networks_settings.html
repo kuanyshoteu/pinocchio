@@ -16,20 +16,27 @@
 <div class='ui container pt15'>
     <div class="ui grid">
         {% include 'left_menu.html' %}
-        <div class="twelve wide column">
+        <div class="eighty wide column">
             {% include 'school/head.html' %}
+            {% for sm in socialmedias %}
             <div class="ui raised segment">
-                <div class="ui red ribbon label"><i class="icon instagram textw"></i>Instagram</div>
-                {% if had_insta %}
-                <div class="ui image label">
-                    {% if insta.image_icon %}
-                    <img src="{{insta.image_icon.url}}">
+                <div style="width: 150px;" class="dinline ui {%if sm.title == 'Instagram'%}pink{%else%}blue{%endif%} ribbon label "><i class="icon {{sm.content}} textw"></i>{{sm.title}}</div>
+                <div class="mb10 mt10 dinline" >
+                    {% if sm.accounts.all|length > 0 %}
+                    <div class="ui image label shadow_small backwhite mr15">
+                        {% if sm.accounts.first.image_icon %}
+                        <img src="{{sm.accounts.first.image_icon.url}}">
+                        {% endif %}
+                        {{sm.accounts.first.username}}
+                    </div>
                     {% endif %}
-                    {{insta.username}}
+                    <a class="ui button mini {% if sm.accounts.all|length == 0 %}green shadow_green{%endif%} connect_sm" status="{{sm.title}}" url="{%url 'schools:connect_sm'%}">
+                        {% if sm.accounts.all|length == 0 %}Подключить{%else%}Переподключить{%endif%}
+                        <i class="icon right arrow {% if sm.accounts.all|length == 0 %}textw{%endif%}"></i>
+                    </a>
                 </div>
-                {% endif %}
-                <a class="ui button mini blue connect_instagram" url="{%url 'schools:connect_instagram'%}">Подключить</a>
             </div>
+            {% endfor %}
 <!--             <div class="ui segment">
                 <form method="POST" class="ui form"> {% csrf_token %}
                     <textarea name="type">confirmation</textarea>

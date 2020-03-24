@@ -86,6 +86,5 @@ urlpatterns = [
     url(r'^social_networks_settings/$', social_networks_settings, name='social_networks_settings'),
     url(r'^instagram_connecting/$', instagram_connecting, name='instagram_connecting'),
     url(r'^vk_connecting/$', vk_connecting, name='vk_connecting'),
-    url(r'^api/connect_instagram/', connect_instagram, name='connect_instagram'),
-    url(r'^api/connect_vk/', connect_vk, name='connect_vk'),
+    url(r'^api/connect_sm/', connect_sm, name='connect_sm'),
 ]
