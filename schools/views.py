@@ -354,7 +354,8 @@ def vk_connecting(request):
         get_groups_url = 'https://api.vk.com/method/account.getProfileInfo'
         data = {}
         r = requests.post(get_groups_url,data=data,allow_redirects=True)
-        a = json.loads(r.content)
+        print(a)
+        a = json.loads(r.content)['response']
         vk.username = a['first_name'] + a['last_name']
 
         get_groups_url = 'https://api.vk.com/method/groups.get'
@@ -367,6 +368,7 @@ def vk_connecting(request):
         }
         r = requests.post(get_groups_url,data=data,allow_redirects=True)
         a = json.loads(r.content)
+        print(a)
         group_list = a['items']
         print(group_list)
         vk.save()
