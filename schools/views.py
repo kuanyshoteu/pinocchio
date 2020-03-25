@@ -352,7 +352,10 @@ def vk_connecting(request):
         vk.access_token = access_token
 
         get_groups_url = 'https://api.vk.com/method/account.getProfileInfo'
-        data = {}
+        data = {
+            'access_token':access_token,
+            'v':'5.103',        
+        }
         r = requests.post(get_groups_url,data=data,allow_redirects=True)
         a = json.loads(r.content)
         print(a)
