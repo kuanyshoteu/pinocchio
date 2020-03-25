@@ -325,7 +325,7 @@ def vk_connecting(request):
     only_directors(profile)
     school = is_moderator_school(request, profile)
     print('yo1 vk')
-    sm = SocialMedia.objects.get(title='vk')
+    sm = SocialMedia.objects.get(title='Вконтакте')
     vk = school.socialmedias.filter(socialmedia=sm)
     had_vk = False
     if len(vk) > 0:
