@@ -420,7 +420,7 @@ def connect_sm(request):
     if request.GET.get('status') == 'Instagram':
         url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
     elif request.GET.get('status') == 'Вконтакте':
-        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=photos,messages,groups,manage&response_type=code&v=5.103'
+        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=groups,manage&response_type=code&v=5.103'
     data = {
         'url':url,
     }
