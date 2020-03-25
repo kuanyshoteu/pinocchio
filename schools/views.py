@@ -366,7 +366,7 @@ def vk_connecting(request):
         data = {
             'user_id':user_id,
             'extended':1,
-            'filter':admin,
+            'filter':'admin',
             'access_token':access_token,
             'v':'5.103', 
         }
