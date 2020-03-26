@@ -368,7 +368,7 @@ def vk_edit_server(groupid, server_id, secretkey, group_access_token):
     data = {
         'group_id':groupid,
         'server_id':server_id,
-        'url':'https://www.bilimtap.kz/api/vk_get_callback/',
+        'url':'https://www.bilimtap.kz/schools/api/vk_get_callback/',
         'title':'Bilimtap',
         'secret_key':secretkey,
         'access_token':group_access_token,
@@ -380,7 +380,7 @@ def vk_add_server(groupid, secretkey, group_access_token):
     url = 'https://api.vk.com/method/groups.addCallbackServer'
     data = {
         'group_id':groupid,
-        'url':'https://www.bilimtap.kz/api/vk_get_callback/',
+        'url':'https://www.bilimtap.kz/schools/api/vk_get_callback/',
         'title':'Bilimtap',
         'secret_key':secretkey,
         'access_token':group_access_token,
