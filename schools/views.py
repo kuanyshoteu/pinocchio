@@ -425,7 +425,7 @@ def vk_get_callback(request):
             vks = SocialMediaAccount.objects.filter(groupid=group_id)
             if len(vks) > 0:
                 vk = vks[0]
-                confirmation_code = vk.confirmation_cod
+                confirmation_code = vk.confirmation_code
             return HttpResponse(confirmation_code, content_type='text/plain')
         elif a['type'] == 'message_new':
             print("0 0 0 MESSAGE 0 0 0 0")
