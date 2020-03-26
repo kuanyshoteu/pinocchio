@@ -275,7 +275,7 @@ def instagram_connecting(request):
     only_directors(profile)
     school = is_moderator_school(request, profile)
     print('yo1', instagram_id)
-    sm = SocialMedia.objects.get(title='instagram')
+    sm = SocialMedia.objects.get(title='Instagram')
     insta = school.socialmedias.filter(socialmedia=sm)
     had_insta = False
     if len(insta) > 0:
