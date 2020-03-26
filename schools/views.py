@@ -252,13 +252,6 @@ def school_salaries(request):
     return render(request, "school/salaries.html", context)
 
 def social_networks_settings(request):
-    # Подключение Callback API - уведомления сами приходят на сервер
-    # if request.method == 'POST':
-    #     print(request.body)
-    #     a = json.loads(request.body)
-    #     print('yoyoyo', a['type'])
-    #     return HttpResponse('3d511857', content_type='text/plain')
-    #     print('yoyoyo2222')
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
@@ -320,6 +313,20 @@ def instagram_connecting(request):
         insta.save()
     return redirect('/schools/social_networks_settings')
 
+def connect_sm(request):
+    ok = False
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    print('yo6')
+    if request.GET.get('status') == 'Instagram':
+        url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
+    elif request.GET.get('status') == 'Вконтакте':
+        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=groups&response_type=code&v=5.103'
+    data = {
+        'url':url,
+    }
+    return JsonResponse(data)
+
 def vk_connecting(request):
     profile = get_profile(request)
     only_directors(profile)
@@ -327,55 +334,30 @@ def vk_connecting(request):
     print('yo1 vk')
     sm = SocialMedia.objects.get(title='Вконтакте')
     vk = school.socialmedias.filter(socialmedia=sm)
-    had_vk = False
     if len(vk) > 0:
-        had_vk = True
         vk = vk[0]
-    group_list = 'kkkk'
+    else:
+        vk = school.socialmedias.create(socialmedia=sm)
+    group_list = []
+    print('vk_connecting 1')
+    forward = False
     if request.GET.get('code'):
-        code = request.GET.get('code')
-        print('yo2', code, '<-code')
-        url = 'https://oauth.vk.com/access_token'
-        data = {
-            'client_id':vk_id, 
-            'client_secret':secret_vk, 
-            'redirect_uri':vk_server, 
-            'code':code,
-        }
-        r = requests.post(url,data=data,allow_redirects=True)
-        a = json.loads(r.content)
-        if not had_vk:
-            vk = school.socialmedias.create(socialmedia=sm)
-        user_id = str(a['user_id'])
-        access_token = str(a['access_token'])
-        vk.user_id = user_id
-        vk.access_token = access_token
-
-        # getProfileInfo_url = 'https://api.vk.com/method/account.getProfileInfo'
-        # data = {
-        #     'access_token':access_token,
-        #     'v':'5.103',        
-        # }
-        # r = requests.post(getProfileInfo_url,data=data,allow_redirects=True)
-        # a = json.loads(r.content)
-        # print(a)
-        # a = a['response']
-        # vk.username = a['first_name'] + a['last_name']
-
-        get_groups_url = 'https://api.vk.com/method/groups.get'
-        data = {
-            'user_id':user_id,
-            'extended':1,
-            'filter':'admin',
-            'access_token':access_token,
-            'v':'5.103', 
-        }
-        r = requests.post(get_groups_url,data=data,allow_redirects=True)
-        a = json.loads(r.content)
-        print(a)
-        group_list = a['items']
-        print(group_list)
-        vk.save()
+        print('vk_connecting code')
+        if vk.first_connect:
+            print('getting user')
+            code = request.GET.get('code')
+            group_list = vk_get_user_access(code, vk)
+            vk.first_connect = False
+            vk.save()
+        else:
+            print('getting group')
+            code = request.GET.get('code')
+            vk.group_access_token = vk_get_group_access(code, vk)
+            vk_set_callback(vk)
+            vk.first_connect = True
+            vk.save()
+            forward = social_networks_settings_url
+            return redirect('/schools/social_networks_settings')
     context = {
         "profile":profile,
         "instance": school,
@@ -388,9 +370,25 @@ def vk_connecting(request):
         "school_crnt":school,
         "vk_account":vk,
         "group_list":group_list,
-        "page":"finance",        
+        "page":"info",        
     }
     return render(request, "socialmedias/vk_connecting.html", context)
+def save_vk_group(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        sm = SocialMedia.objects.get(title='Вконтакте')
+        vk = school.socialmedias.filter(socialmedia=sm)[0]
+        vk.groupid = request.GET.get('id')
+        vk.groupname = request.GET.get('name')
+        vk.save()
+        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&group_ids='+vk.groupid+'&scope=messages,manage&response_type=code&v=5.103'
+        print('save_vk_group')
+    data = {
+        "url":url,
+    }
+    return JsonResponse(data)
 
 def long_poll():
     vk_longpoll_url = 'https://api.vk.com/method/groups.getLongPollServer'
@@ -418,19 +416,101 @@ def long_poll():
     # r = requests.post(url,data=data,allow_redirects=True)
     # a = json.loads(r.content)
 
-def connect_sm(request):
-    ok = False
-    profile = Profile.objects.get(user = request.user.id)
-    only_directors(profile)
-    print('yo6')
-    if request.GET.get('status') == 'Instagram':
-        url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
-    elif request.GET.get('status') == 'Вконтакте':
-        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&scope=groups,manage&response_type=code&v=5.103'
+def vk_get_callback(request):
+#    Подключение Callback API - уведомления сами приходят на сервер
+    if request.method == 'POST':
+        a = json.loads(request.body)
+        print('yoyoyo', a['type'],a)
+        confirmation_code = '0'
+        if a['type'] == 'confirmation':
+            group_id = str(a['group_id'])
+            vks = SocialMediaAccount.objects.filter(groupid=group_id)
+            if len(vks) > 0:
+                vk = vks[0]
+                confirmation_code = vk.confirmation_cod
+            return HttpResponse(confirmation_code, content_type='text/plain')
+        elif a['type'] == 'message_new':
+            print("0 0 0 MESSAGE 0 0 0 0")
+
+def vk_set_callback(vk):
+    groupid = vk.groupid
+    group_access_token = vk.group_access_token
+    print('00000000000000000000000')
+    print('vk_set_callback')
+    check_url = 'https://api.vk.com/method/groups.getCallbackServers'
     data = {
-        'url':url,
+        'group_id':groupid,
+        'access_token':group_access_token,
+        'v':'5.103', 
     }
-    return JsonResponse(data)
+    r = requests.post(check_url,data=data,allow_redirects=True)
+    a = json.loads(r.content)
+    allservers = a['response']['items']
+    count = 0
+    server_id = -1
+    servers = []
+    for server in allservers:
+        if server['title'] == 'Bilimtap':
+            count += 1
+            servers.append(server)
+    if count > 1:
+        for i in range(1, len(servers)):
+            print('deleting servers', i)
+            server = servers[i]
+            delete_url = 'https://api.vk.com/method/groups.deleteCallbackServer'
+            data = {
+                'group_id':groupid,
+                'server_id':server['id'],
+                'access_token':group_access_token,
+                'v':'5.103', 
+            }
+            r = requests.post(delete_url,data=data,allow_redirects=True)
+    secretkey = random_secrete_confirm()
+    if count > 0:
+        print('editing server vk')
+        server_id = servers[0]['id']
+        edit_url = 'https://api.vk.com/method/groups.editCallbackServer'
+        data = {
+            'group_id':groupid,
+            'server_id':server_id,
+            'url':'https://www.bilimtap.kz/api/vk_get_callback/',
+            'title':'Bilimtap',
+            'secret_key':secretkey,
+            'access_token':group_access_token,
+            'v':'5.103', 
+        }
+        r = requests.post(edit_url,data=data,allow_redirects=True)
+    else:
+        print('adding server to vk')
+        callback_url = 'https://api.vk.com/method/groups.addCallbackServer'
+        data = {
+            'group_id':groupid,
+            'url':'https://www.bilimtap.kz/api/vk_get_callback/',
+            'title':'Bilimtap',
+            'secret_key':secretkey,
+            'access_token':group_access_token,
+            'v':'5.103', 
+        }
+        r = requests.post(callback_url,data=data,allow_redirects=True)
+        a = json.loads(r.content)
+        print(a)
+        server_id = a['response']['server_id']
+
+    confirmcode_url = 'https://api.vk.com/method/groups.getCallbackConfirmationCode'
+    data = {
+        'group_id':groupid,
+        'access_token':group_access_token,
+        'v':'5.103', 
+    }
+    r = requests.post(confirmcode_url,data=data,allow_redirects=True)
+    a = json.loads(r.content)
+    confirmation_code = a['response']['code']
+
+    vk.serverid = str(server_id)
+    vk.secretkey = secretkey
+    vk.confirmation_code = confirmation_code
+    vk.save()
+
 
 def school_crm(request):
     profile = get_profile(request)

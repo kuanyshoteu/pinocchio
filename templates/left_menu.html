@@ -25,8 +25,27 @@
                 <span class="left_menu_number">{{profile.skill.need_actions}}</span>
                 {% endif %}                    
             </a>
+            {% endif %}
+            {% if is_manager or is_director %}
+            <a class="item lftitem {%if page == 'payments' %}lftitem_crnt{%endif%}" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <i class="dollar sign icon"></i>Оплата
+            </a>
             <a class="item lftitem {%if page == 'schedule' %}lftitem_crnt{%endif%}" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="table icon"></i>Расписание
+            </a>
+            {% endif %}
+            {% if is_manager or is_trener or is_director %}
+            <a class="item lftitem {%if page == 'squads' %}lftitem_crnt{%endif%}" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <i class="users icon"></i>Группы
+            </a>
+            <a class="item lftitem {%if page == 'subjects' %}lftitem_crnt{%endif%}" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <i class="book icon"></i>Курсы
+            </a>
+            {% endif %}
+            {% if is_director %}
+            <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <img src="{% static 'images/iconchart.png'%}" style="width: 16px;margin-right: 10px;margin-top: -8px;">
+                <span>Финансы</span>
             </a>
             {% endif %}
             {% if is_manager or is_trener or is_director %}
@@ -41,31 +60,6 @@
             </a>
             {% endif %}
             {% endif %}
-            {% if is_director %}
-            <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <img src="{% static 'images/iconchart.png'%}" style="width: 16px;margin-right: 10px;margin-top: -8px;">
-                <span>Финансы</span>
-            </a>
-            {% endif %}
-            {% if is_manager or is_director %}
-            <a class="item lftitem {%if page == 'payments' %}lftitem_crnt{%endif%}" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="dollar sign icon"></i>Оплата
-            </a>
-            {% endif %}
-            <a class="item lftitem {%if page == 'news' %}lftitem_crnt{%endif%}" href='{% url "news:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="newspaper icon"></i>Новости
-            </a>
-            {% if is_manager or is_trener or is_director %}
-            <a class="item lftitem {%if page == 'squads' %}lftitem_crnt{%endif%}" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="users icon"></i>Группы
-            </a>
-            <a class="item lftitem {%if page == 'subjects' %}lftitem_crnt{%endif%}" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="book icon"></i>Курсы
-            </a>
-            {% endif %}
-            <a class="item lftitem {%if page == 'ratings' %}lftitem_crnt{%endif%}" href='{% url "schools:rating" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="trophy icon"></i>Рейтинги
-            </a>
         </div>
         <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:home' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
             Поиск курсов

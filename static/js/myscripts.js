@@ -1,3 +1,21 @@
+    $('.save_vk_group').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        name = $(this).attr('name')
+        console.log('save_vk_group aoaoaoa')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'name':name,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log('sended yoooooo', data.url)
+                window.location.replace(data.url);
+            }
+        })
+    })
     $('.choose_cat').click(function(e) {
         if ($(this).attr('status') == 'chosen') {
             $(this).removeClass('green')

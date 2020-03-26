@@ -87,4 +87,6 @@ urlpatterns = [
     url(r'^instagram_connecting/$', instagram_connecting, name='instagram_connecting'),
     url(r'^vk_connecting/$', vk_connecting, name='vk_connecting'),
     url(r'^api/connect_sm/', connect_sm, name='connect_sm'),
+    url(r'^api/save_vk_group/', save_vk_group, name='save_vk_group'),
+    url(r'^api/vk_get_callback/$', vk_get_callback, name='vk_get_callback'),
 ]

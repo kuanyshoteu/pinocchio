@@ -27,7 +27,11 @@
                         {% if sm.accounts.first.image_icon %}
                         <img src="{{sm.accounts.first.image_icon.url}}">
                         {% endif %}
+                        {% if sm.accounts.first.username != '-' %}
                         {{sm.accounts.first.username}}
+                        {% else %}
+                        Сообщество {{sm.accounts.first.groupname}}                        
+                        {% endif %}
                     </div>
                     {% endif %}
                     <a class="ui button mini {% if sm.accounts.all|length == 0 %}green shadow_green{%endif%} connect_sm" status="{{sm.title}}" url="{%url 'schools:connect_sm'%}">

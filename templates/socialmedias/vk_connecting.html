@@ -17,14 +17,28 @@
     <div class="ui grid">
         {% include 'left_menu.html' %}
         <div class="eighty wide column">
-            <div class="ui segment">
-                <div class="text15">
-                    Подключение к Вконтакте
+                <div class="ui grid stackable no_margin">
+                    <div class="one wide column no_padding"></div>
+                    <div class="eight wide column no_padding mt50">
+                        <div class="ui raised segment">
+                            <div style="width: 150px;" class="dinline ui blue ribbon label"><i class="icon vk textw text15"></i><span class="text15">Подключение к Вконтакте</span></div>
+                            {% if group_list|length > 0 %}
+                            <div class="mt15 text15">
+                                Выберите группу для подключения
+                            </div>
+                            <div class="mt15">
+                            {% for group in group_list %}
+                                <a url="{% url 'schools:save_vk_group' %}" class="ui button small white shadow_small mr15 save_vk_group" name="{{group.name}}" id="{{group.id}}">
+                                {{group.name}}
+                                </a>
+                            {% endfor %}
+                            </div>
+                            {% else %}
+                            <div class="loader_center ui active loader column_loader"></div>                            
+                            {% endif %}
+                        </div>                        
+                    </div>
                 </div>
-                <div class="ui image label shadow_small backwhite">
-                    {{vk_account.username}}
-                </div>
-            </div>
         </div>
     </div>
 </div>

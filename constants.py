@@ -13,13 +13,20 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import json
 
 #instagram api credentials
-insta_server = 'https://www.bilimtap.kz/schools/instagram_connecting/'
+toserver2 = True
+if toserver2:
+    myserver = 'https://www.bilimtap.kz/'
+else:
+    myserver = 'http://127.0.0.1:8000/'
+social_networks_settings_url = myserver + 'schools/social_networks_settings/'
+insta_server = myserver + 'schools/instagram_connecting/'
 instagram_id = '1402067986632477'
 secret_instagram = '5adaeda9020c02ecf00e6114bf2155c3'
 #vk.com api credentials
-vk_server = 'https://www.bilimtap.kz/schools/vk_connecting/'
+vk_server = myserver + 'schools/vk_connecting/'
 vk_id = '7346891'
 secret_vk = '6qsFJ2c3GMafUHrf3CK5'
 
@@ -298,3 +305,48 @@ def get_card_dialog(card):
             ])
         print(mail.id, mail.method)
     return res
+
+def vk_get_user_access(code, vk):
+    url = 'https://oauth.vk.com/access_token'
+    data = {
+        'client_id':vk_id, 
+        'client_secret':secret_vk, 
+        'redirect_uri':vk_server, 
+        'code':code,
+    }
+    r = requests.post(url,data=data,allow_redirects=True)
+    a = json.loads(r.content)
+    user_id = str(a['user_id'])
+    access_token = str(a['access_token'])
+    vk.user_id = user_id
+    vk.access_token = access_token
+    vk.save()
+    get_groups_url = 'https://api.vk.com/method/groups.get'
+    data = {
+        'user_id':user_id,
+        'extended':1,
+        'filter':'admin',
+        'access_token':access_token,
+        'v':'5.103', 
+    }
+    r = requests.post(get_groups_url,data=data,allow_redirects=True)
+    a = json.loads(r.content)
+    group_list = a['response']['items']
+    return group_list
+
+def vk_get_group_access(code, vk):
+    url = 'https://oauth.vk.com/access_token'
+    data = {
+        'client_id':vk_id, 
+        'client_secret':secret_vk, 
+        'redirect_uri':vk_server, 
+        'code':code,
+    }
+    r = requests.post(url,data=data,allow_redirects=True)
+    print('ffffffffffffff')
+    print(r.content)
+    print('fffffffffffffff')
+    a = json.loads(r.content)
+    print(a)
+    group_access_token = str(a['access_token_'+vk.groupid])
+    return group_access_token

@@ -168,6 +168,13 @@ class SocialMediaAccount(models.Model):
     socialmedia = models.ForeignKey(SocialMedia, null=True, on_delete = models.CASCADE, related_name='accounts')
     key = models.TextField(default='')
     server = models.TextField(default='')
+    groupname = models.TextField(default='')
+    groupid = models.TextField(default='')
+    group_access_token = models.TextField(default='')
+    secretkey = models.TextField(default='')
+    serverid = models.TextField(default='')
+    confirmation_code = models.TextField(default='')
+    first_connect = models.BooleanField(default=True)
 
 class SchoolBanner(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='banners')
