@@ -340,7 +340,6 @@ def vk_connecting(request):
         vk = school.socialmedias.create(socialmedia=sm)
     group_list = []
     print('vk_connecting 1')
-    forward = False
     if request.GET.get('code'):
         print('vk_connecting code')
         if vk.first_connect:
@@ -356,7 +355,6 @@ def vk_connecting(request):
             vk_set_callback(vk)
             vk.first_connect = True
             vk.save()
-            forward = social_networks_settings_url
             return redirect('/schools/social_networks_settings')
     context = {
         "profile":profile,
@@ -435,17 +433,8 @@ def vk_get_callback(request):
 def vk_set_callback(vk):
     groupid = vk.groupid
     group_access_token = vk.group_access_token
-    print('00000000000000000000000')
     print('vk_set_callback')
-    check_url = 'https://api.vk.com/method/groups.getCallbackServers'
-    data = {
-        'group_id':groupid,
-        'access_token':group_access_token,
-        'v':'5.103', 
-    }
-    r = requests.post(check_url,data=data,allow_redirects=True)
-    a = json.loads(r.content)
-    allservers = a['response']['items']
+    allservers = vk_get_servers(groupid, group_access_token)
     count = 0
     server_id = -1
     servers = []
@@ -457,54 +446,20 @@ def vk_set_callback(vk):
         for i in range(1, len(servers)):
             print('deleting servers', i)
             server = servers[i]
-            delete_url = 'https://api.vk.com/method/groups.deleteCallbackServer'
-            data = {
-                'group_id':groupid,
-                'server_id':server['id'],
-                'access_token':group_access_token,
-                'v':'5.103', 
-            }
-            r = requests.post(delete_url,data=data,allow_redirects=True)
+            vk_delete_server(groupid, server, group_access_token)
     secretkey = random_secrete_confirm()
     if count > 0:
         print('editing server vk')
         server_id = servers[0]['id']
-        edit_url = 'https://api.vk.com/method/groups.editCallbackServer'
-        data = {
-            'group_id':groupid,
-            'server_id':server_id,
-            'url':'https://www.bilimtap.kz/api/vk_get_callback/',
-            'title':'Bilimtap',
-            'secret_key':secretkey,
-            'access_token':group_access_token,
-            'v':'5.103', 
-        }
-        r = requests.post(edit_url,data=data,allow_redirects=True)
+        vk_edit_server(groupid, server_id, secretkey, group_access_token)
     else:
         print('adding server to vk')
-        callback_url = 'https://api.vk.com/method/groups.addCallbackServer'
-        data = {
-            'group_id':groupid,
-            'url':'https://www.bilimtap.kz/api/vk_get_callback/',
-            'title':'Bilimtap',
-            'secret_key':secretkey,
-            'access_token':group_access_token,
-            'v':'5.103', 
-        }
-        r = requests.post(callback_url,data=data,allow_redirects=True)
-        a = json.loads(r.content)
-        print(a)
-        server_id = a['response']['server_id']
+        server_id = vk_add_server(groupid, secretkey, group_access_token)
 
-    confirmcode_url = 'https://api.vk.com/method/groups.getCallbackConfirmationCode'
-    data = {
-        'group_id':groupid,
-        'access_token':group_access_token,
-        'v':'5.103', 
-    }
-    r = requests.post(confirmcode_url,data=data,allow_redirects=True)
-    a = json.loads(r.content)
-    confirmation_code = a['response']['code']
+    api_version = vk_get_callback_api_version(groupid,server_id,group_access_token)
+    vk_set_callback_settings(groupid, server_id, api_version,group_access_token)
+
+    confirmation_code = vk_get_confirmation_code(groupid, group_access_token)
 
     vk.serverid = str(server_id)
     vk.secretkey = secretkey
