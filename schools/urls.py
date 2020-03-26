@@ -3,6 +3,7 @@ from django.contrib import admin
 
 from .views import *
 from main.views import get_landing,adilmed, get_school_report
+from django.views.decorators.csrf import csrf_exempt
 
 app_name = 'schools'
 urlpatterns = [
@@ -88,5 +89,5 @@ urlpatterns = [
     url(r'^vk_connecting/$', vk_connecting, name='vk_connecting'),
     url(r'^api/connect_sm/', connect_sm, name='connect_sm'),
     url(r'^api/save_vk_group/', save_vk_group, name='save_vk_group'),
-    url(r'^api/vk_get_callback/$', vk_get_callback, name='vk_get_callback'),
+    url(r'^api/vk_get_callback/$', csrf_exempt(vk_get_callback), name='vk_get_callback'),
 ]
