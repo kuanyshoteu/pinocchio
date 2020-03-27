@@ -460,7 +460,7 @@ def vk_set_callback(vk):
 
     api_version = vk_get_callback_api_version(groupid,server_id,group_access_token)
     vk_set_callback_settings(groupid, server_id, api_version,group_access_token)
-
+    print('group_id', groupid, 'server_id',server_id)
     confirmation_code = vk_get_confirmation_code(groupid, group_access_token)
 
     vk.serverid = str(server_id)
