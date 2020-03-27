@@ -430,7 +430,7 @@ def vk_get_callback(request):
             return HttpResponse(confirmation_code, content_type='text/plain')
         elif a['type'] == 'message_new':
             print("0 0 0 MESSAGE 0 0 0 0")
-            return HttpResponse('1', content_type='text/plain')
+            return HttpResponse('ok', content_type='text/plain')
 
 def vk_set_callback(vk):
     groupid = vk.groupid
