@@ -360,6 +360,7 @@ def vk_get_confirmation_code(groupid,group_access_token):
     }
     r = requests.post(confirmcode_url,data=data,allow_redirects=True)
     a = json.loads(r.content)
+    print('confirmation_code00', a)
     confirmation_code = a['response']['code']
     return confirmation_code
 
