@@ -426,9 +426,11 @@ def vk_get_callback(request):
             if len(vks) > 0:
                 vk = vks[0]
                 confirmation_code = vk.confirmation_code
+                print('return confirmation', confirmation_code)
             return HttpResponse(confirmation_code, content_type='text/plain')
         elif a['type'] == 'message_new':
             print("0 0 0 MESSAGE 0 0 0 0")
+            return HttpResponse('1', content_type='text/plain')
 
 def vk_set_callback(vk):
     groupid = vk.groupid
@@ -464,6 +466,7 @@ def vk_set_callback(vk):
     vk.serverid = str(server_id)
     vk.secretkey = secretkey
     vk.confirmation_code = confirmation_code
+    print('confirmation_code', confirmation_code)
     vk.save()
 
 
