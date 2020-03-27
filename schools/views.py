@@ -458,8 +458,8 @@ def vk_set_callback(vk):
         print('adding server to vk')
         server_id = vk_add_server(groupid, secretkey, group_access_token)
 
-    api_version = vk_get_callback_api_version(groupid,server_id,group_access_token)
-    vk_set_callback_settings(groupid, server_id, api_version,group_access_token)
+    # api_version = vk_get_callback_api_version(groupid,server_id,group_access_token)
+    vk_set_callback_settings(groupid, server_id,'5.103',group_access_token)
     print('group_id', groupid, 'server_id',server_id)
     confirmation_code = vk_get_confirmation_code(groupid, group_access_token)
 
