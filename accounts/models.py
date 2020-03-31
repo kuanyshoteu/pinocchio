@@ -214,6 +214,7 @@ class CRMCard(models.Model):
     hashtags = models.ManyToManyField(Hashtag, related_name='cards')
     premoney = models.IntegerField(default=0)
     color = models.CharField(max_length=250, default='white')
+    social_media_id = models.CharField(max_length=50, default='')
 
     class Meta:
         ordering = ['-timestamp']
@@ -231,6 +232,8 @@ class CardMail(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     method = models.CharField(max_length=250, default='')
     is_client = models.BooleanField(default=False)
+    social_media = models.ForeignKey(SocialMediaAccount, null=True, on_delete = models.CASCADE, related_name='mails')
+
     class Meta:
         ordering = ['id']
 

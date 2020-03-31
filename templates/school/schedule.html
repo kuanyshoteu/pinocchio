@@ -11,9 +11,20 @@
             {% include 'left_menu.html' %}
             <div class="wide column pr0" style="width: 85%;">
                 <div class="ui segment margin0" style="font-size: 15px;">
-                    <b>Расписание школы</b>
+                    <b class="text15 textdg">Расписание школы</b>
+                    {% include 'modals/schedule_filters.html' %}
                 </div>
-                {% include 'modals/schedule.html' %}
+                <div id="calendar" length='7'>
+                    <div class="loading" style="display: none;">
+                      <div class="animation"><div class="circle one"></div></div>
+                      <div class="animation"><div class="circle two"></div></div>
+                      <div class="animation"><div class="circle three"></div></div>
+                      <div class="animation"><div class="circle four"></div></div>
+                      <div class="animation"><div class="circle five"></div></div>
+                      <div class="animation"><div class="circle six"></div></div>
+                    </div>
+                    {% include 'school/crm_classicschedule.html' %}
+                </div>   
             </div>
         </div>
     </div>

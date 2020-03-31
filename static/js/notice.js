@@ -72,7 +72,11 @@ $('.filter-title').click(function(e){
 $('.filter-list').click(function(e){
     e.stopPropagation();
 });
+$('.show_hint_schedule').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
+    $('.hint_schedule').hide()
     $('.filter-list').hide()
     $('.profile_name').attr('status', '0')
     $('.notice-bar').hide();

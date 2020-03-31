@@ -13,32 +13,44 @@
         height: 25px !important;
     }
 </style>
-<div class="ui segment segment_head no_margin" style="background: #fafbfc;height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;color: #000;">
-    <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}    
-        Расписание 
-        <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-        <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
-        <div class="ui pointing below label dark hint_schedule" style="display: none;">
-            Выберите курс, напишите время урока, затем выберите дни недели для урока и нажмите добавить
+<div class="ui segment shadow_small segment_head no_margin textb">
+    <div>
+        <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}    
+            <b class="text15 textdg">Расписание</b> 
+            <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+            <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+            <div class="ui pointing below label dark hint_schedule" style="display: none;position: absolute;">
+                Выберите курс, напишите время урока, затем выберите дни недели для урока и нажмите добавить
+            </div>
+        </form>
+    </div>
+    <div class="ui grid stackable mr0 mt15 mb15">
+        <div class="ui segment shadow_small full-w">
+            <div>
+                <form class="ui form grid no_margin">
+                    <div class="dinline pl0 pb5">
+                        Выберите курс
+                        <select style="max-width: 300px;height: 28px;" class="mr15 full-w" id="constselect">
+                            <option value="-1">Курсы</option>            
+                            {% for subject in other_subjects %}
+                            <option value="{{subject.id}}">{{subject.title}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="dinline pl0 pb15">
+                        <div>Время начала и время окончания урока:</div> 
+                        <input type="time" class="conststart dinline mb0" style="width: 100px;padding:5px;"> - <input class="constend dinline mb0" style="width: 100px;padding:5px;" type="time" name="">
+                    </div>
+                </form>  
+            </div>  
+            <div class="mb15">
+                <div>Выберите дни недели</div>
+                {% for day in days %}
+                <a class="ui button mini constday_choose mb5" id="{{forloop.counter}}">{{day}}</a>
+                {% endfor %}
+            </div>
+            <a class="ui button mini blue no_margin const_create_lectures" url="{{instance.const_create_lectures}}">Добавить</a>            
         </div>
-    </form>
-</div>
-<div class="ui segment no_margin" style="color: #000;">
-    <form class="ui form grid no_margin">
-        <select style="width: 300px;display: inline-block;height: 28px;" class="mr15" id="constselect">
-            <option value="-1">Выберите курс</option>            
-            {% for subject in other_subjects %}
-            <option value="{{subject.id}}">{{subject.title}}</option>
-            {% endfor %}
-        </select>
-        Напишите время начала и время окончания урока: <input type="time" class="conststart ml5" style="width: 100px;padding:5px;display: inline-block;"> - <input class="constend" style="width: 100px;padding:5px;display: inline-block;" type="time" name="">
-    </form>
-    <div class="mt10">
-        Выберите дни недели
-        {% for day in days %}
-        <a class="ui button mini no_margin constday_choose" id="{{forloop.counter}}">{{day}}</a>
-        {% endfor %}
-        <a class="ui button mini blue no_margin const_create_lectures" url="{{instance.const_create_lectures}}">Добавить</a>
     </div>
 </div>
 <form class="ui grid full-w mt0 change_mode">

@@ -30,7 +30,7 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 import os
 from constants import *
-
+from .social_media import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -420,6 +420,7 @@ def vk_get_callback(request):
         a = json.loads(request.body)
         print('yoyoyo', a['type'],a)
         confirmation_code = '0'
+        sm = SocialMedia.objects.get(title='Вконтакте')
         if a['type'] == 'confirmation':
             group_id = str(a['group_id'])
             vks = SocialMediaAccount.objects.filter(groupid=group_id)
@@ -430,6 +431,34 @@ def vk_get_callback(request):
             return HttpResponse(confirmation_code, content_type='text/plain')
         elif a['type'] == 'message_new':
             print("0 0 0 MESSAGE 0 0 0 0")
+            message = a['object']['message']
+            group_id = str(a['peer_id'])
+            vks = SocialMediaAccount.objects.filter(groupid=group_id)
+            if len(vks) > 0:
+                vk = vks[0]
+                user_id = message['from_id']
+                username = vk_get_user(user_id,group_access_token)
+                text = message['text']
+                date = message['date']
+                reply_message = message['reply_message']
+                print(username)
+                school = vk.school
+                search_card = school.crm_cards.filter(social_media_id='vk'+user_id)
+                if len(search_card) == 0:
+                    card = school.crm_cards.create(
+                        column=school.crm_columns.first(),
+                        name=username,
+                        color='greencard',
+                        )
+                    card.save()
+                    search_card = [card]
+                for card in search_card:
+                    card.mails.create(
+                        text=text,
+                        method='vk',
+                        is_client=True,
+                        social_media=sm,
+                        )
             return HttpResponse('ok', content_type='text/plain')
 
 def vk_set_callback(vk):
@@ -445,18 +474,13 @@ def vk_set_callback(vk):
             count += 1
             servers.append(server)
     if count > 1:
-        for i in range(1, len(servers)):
+        for i in range(0, len(servers)):
             print('deleting servers', i)
             server = servers[i]
             vk_delete_server(groupid, server, group_access_token)
     secretkey = random_secrete_confirm()
-    if count > 0:
-        print('editing server vk')
-        server_id = servers[0]['id']
-        vk_edit_server(groupid, server_id, secretkey, group_access_token)
-    else:
-        print('adding server to vk')
-        server_id = vk_add_server(groupid, secretkey, group_access_token)
+    print('adding server to vk')
+    server_id = vk_add_server(groupid, secretkey, group_access_token)
 
     # api_version = vk_get_callback_api_version(groupid,server_id,group_access_token)
     vk_set_callback_settings(groupid, server_id,'5.103',group_access_token)
@@ -512,47 +536,6 @@ def school_crm(request):
         "subject_categories":school.school_subject_categories.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
         "page":"crm",        
-    }
-    return render(request, "school/crm.html", context)
-
-def school_crm_all(request):
-    profile = get_profile(request)
-    only_directors(profile)
-    school = is_moderator_school(request, profile)
-    time_periods = school.time_periods.all()
-    managers = None
-    is_director = is_profi(profile, 'Director')
-    if is_director:
-        manager_prof = Profession.objects.get(title='Manager')
-        managers = school.people.filter(profession=manager_prof)
-        print(managers)
-        director_prof = Profession.objects.get(title='Director')
-        dirs = school.people.filter(profession=director_prof)
-        managers = set(chain(managers, dirs))
-        print('c',managers, dirs)
-    context = {
-        "profile":profile,
-        "instance": school,
-        "columns":school.crm_columns.all(),
-        "squads":school.groups.all(),
-        "ages":school.school_subject_ages.all(),
-        "offices":school.school_offices.all(),
-        'days':Day.objects.all(),
-        'time_periods':time_periods,
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_director,
-        "is_moderator":is_profi(profile, 'Moderator'),
-        'managers':managers,
-        "school_money":school.money,
-        "school_crnt":school,
-        "all":True,
-        'constant_times':get_times(school.schedule_interval),
-        'interval':school.schedule_interval,
-        'days':get_days(),
-        "page":"crm",
-        'crmdays':Day.objects.all(),
-        "crm_all":True,        
     }
     return render(request, "school/crm.html", context)
 
@@ -2161,13 +2144,12 @@ def filter_crm_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    if request.GET.get('is_all') == 'yes':
+    if request.GET.get('kind') == 'allcards':
         all_cards = school.crm_cards.all().select_related('card_user')
+    elif request.GET.get('kind') == 'freecards':
+        all_cards = school.crm_cards.filter(author_profile=None).select_related('card_user')
     else:
-        if profile.skill.crm_show_free_cards:
-            all_cards = school.crm_cards.filter(author_profile=None).select_related('card_user')
-        else:
-            all_cards = school.crm_cards.filter(author_profile=profile).select_related('card_user')
+        all_cards = school.crm_cards.filter(author_profile=profile).select_related('card_user')
     all_squads = school.groups.all()
     all_students = school.people.filter(is_student=True).prefetch_related('squads')
     all_offices = school.school_offices.all()

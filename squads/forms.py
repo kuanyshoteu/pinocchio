@@ -6,13 +6,11 @@ from django.forms import CharField
 
 class SquadForm(forms.ModelForm):
     title = forms.CharField(label='Название')
-    slogan = forms.CharField(label='Краткое описание',required=False)
     content = forms.CharField(label='Описание',required=False)
     class Meta:
         model = Squad
         fields = [      
             "title",
-            "slogan",
             "content",
         ]
 

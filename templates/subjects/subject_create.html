@@ -9,12 +9,6 @@
 
 {% block content %}
 <style type="text/css">
-	.ten.wide.column{
-		padding-bottom: 0 !important;
-	}
-	.six.wide.column{
-		padding-bottom: 0 !important;
-	}
 	.form-group{
 		width: 46%;
 	}
@@ -42,26 +36,38 @@
         <i class="arrow left icon"></i>
     </a>
     {% endif %}
-	<div class='ui container'>
+	<div class='ui container mb150'>
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="width: 80%;margin-left: 30px;">
+            <div class="w85 wide column mlback deskpr30">
             	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+                    <div class="ui shadow_small segment mt0">
+                        <a href="{{ instance.get_absolute_url }}" class="mr30">
+                            <b class="text15">{{ instance.title }}</b>
+                        </a>
+                        <div class="in_mobile mb15"></div>
+                        <a href="{{ instance.get_delete_url }}" class="ui button red mini">
+                            <i class="icon trash" style="color: #fff;"></i> Удалить
+                        </a>
+                    </div>
 	            	<div class="ui grid stackable">
-			            <div class="eight wide column pr0 pb0">
-			            	<div class="ui segment mb0" style="height: 54px;padding: 0 20px;line-height: 54px;font-size: 15px;">
-				        		Основная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-				        	</div>
-				        	<div class="ui segment mt0" style="line-height: 40px;height: 221px;">
-			        			<div class="ui grid">
-			        				<div class="sixteen wide column" style="font-weight: 600;">
+			            <div class="nine wide column pl0 pb0 mobpr0">
+				        	<div class="ui shadow_small segment" style="min-height: 251px;">
+			        			<div class="ui grid no_margin" style="line-height: 40px;">
+			        				<div class="sixteen wide column no_padding" style="font-weight: 600;">
 			        					{{ form|crispy }}
                                         <input class="get_subject_period" name="get_subject_period" style="display: none;" value="month">
                                         <div class="pl10" style="width: 70%;display: inline-block;">
+                                            За
+                                            <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'lesson'%}green{%endif%} subject_period" status="lesson">Урок</a>
+                                            <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'month' or not instance%}green{%endif%} subject_period" status="month">Месяц</a>
+                                            <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'course'%}green{%endif%} subject_period" status="course">Курс</a>
+                                        </div>
+                                        <div style="position: absolute;width: 100%;">
                                             {% if instance %}
                                             <a class="show_hint_schedule" style="float: right;"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
                                             <div class="hint_schedule" style="display: none;">
-                                                <div class="ui segment full-w" style="position: absolute;z-index: 3000;margin-top: -100px;background-color: #4a4a4a;color: #fff;line-height: 15px;margin-left: 70%;">
+                                                <div class="ui segment cost_hint">
                                                     <b>Внимание!</b> 
                                                     <br><br>
                                                     Укажите стоимость за 1 урок, за 1 месяц или за весь курс. 
@@ -72,22 +78,17 @@
                                                 </div>
                                             </div>
                                             {% endif %}
-
-                                            За
-                                            <a class="ui button mini {%if instance.cost_period == 'lesson'%}green{%endif%} subject_period" status="lesson">Урок</a>
-                                            <a class="ui button mini {%if instance.cost_period == 'month' or not instance%}green{%endif%} subject_period" status="month">Месяц</a>
-                                            <a class="ui button mini {%if instance.cost_period == 'course'%}green{%endif%} subject_period" status="course">Курс</a>
                                         </div>
 			        				</div>
 			        			</div>
+                                <div class="text-center mt15">
+                                    <input type='submit' class='ui button blue tiny' value='Сохранить' />
+                                </div>
 							</div>
 						</div>
 						{% if instance %}
-						<div class="eight wide column pb0 pl0">
-							<div class="ui segment mb0" style="height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;">
-				        		Детальная информация <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-				        	</div>
-							<div class="ui segment mt0" style="line-height: 40px;height: 221px;">
+						<div class="seven wide column pl0 pr0">
+							<div class="ui shadow_small segment mt0" style="line-height: 40px;min-height: 251px;">
 								<div class="ui grid">
 									<div class="sixteen wide column">
 										<input type="file" name="subject_banner" id="subject_banner" class="postfile">
@@ -108,6 +109,9 @@
                                         </div>                                        
                                     </div>
 								</div>
+                                <div class="text-center mt15">
+                                    <input type='submit' class='ui button blue tiny' value='Сохранить' />
+                                </div>                                
 			    			</div>
 						</div>
                         {% else %}
@@ -124,14 +128,9 @@
                         </div>
 						{% endif %}
 						{% if instance %}
-                        <div class="sixteen wide column pt0">
-                            <div class="ui segment text-center">
-                                <input type='submit' class='ui button blue tiny' value='Сохранить' />
-                            </div>
-                        </div>
                         {% if is_director %}
-                        <div class="sixteen wide column pt0 pb0">
-                            <div class="ui segment" >
+                        <div class="sixteen wide column pl0 pr0">
+                            <div class="ui shadow_small segment">
                                 <span class="ml15" style="font-size: 15px;font-weight: 600;">Фильтры</span> 
                                 <div class="filter-element ml50 filter-element-category" url="{{ instance.change_category }}" style="width: 400px;">
                                     <div onclick="filterTitleS('category')" class="filter-title-s" id="category" status="closed">
@@ -155,20 +154,16 @@
                                         {% endfor %}
                                     </ul>
                                 </div>                                
-                            </div>
-                        </div>
-                        <div class="sixteen wide column pt0">
-                            <div class="ui segment">
                                 <div class="subject_filters">
-                                    <div class="ui grid"> 
+                                    <div class="ui grid stackable no_margin"> 
                                         {% for filter in instance|get_filters %}
-                                        <div class="four wide column pt5">
+                                        <div class="four wide column pt5 pr0">
                                             <div class="mt10 filter-element filter-element-level" url="{{ instance.change_filter_option }}">
                                                 <div class="filter-title-s highlight_blue" id="filter{{filter.id}}" status="closed">
                                                     {{ filter.title }}
                                                 </div>
                                             </div>
-                                            <ul style="position: relative;" class="filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
+                                            <ul style="position: relative;" class=" filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
                                                 {% for optn in filter.filter_options.all %}
                                                 <li onclick="filterItemS('{{ optn.id }}')" object="level" class="optn{{ optn.id }} filter-item-s2" id="{{ optn.id }}">
                                                     {{optn.title}}
@@ -198,18 +193,15 @@
 								</div>
 							</div>
 						{% endif %}
-                        <div class="sixteen wide column">
-                            <div class="ui segment mb0" style="height: 54px;padding: 0 20px; line-height: 54px;font-size: 15px;">
-                                Группы проходящие курс <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
-                            </div>                            
-                            <div class="ui segment mt0">
+                        <div class="sixteen wide column pl0 pr0 pb50">
+                            <div class="ui shadow_small segment mt0">
+                                <div class="text15 textdg mb15">
+                                    Группы проходящие курс <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+                                </div>
                                 {% for squad in instance.squads.all %}
                                     <a href="{{squad.get_absolute_url}}" class="ui button mini dark">{{squad.title}}</a>
                                 {% endfor %}
-                            </div>                            
-                            <a href="{{ instance.get_delete_url }}" class="ui button red small">
-                                <i class="icon trash" style="color: #fff;"></i> Удалить курс "<b>{{ instance.title }}</b>"
-                            </a>
+                            </div>
                         </div>                        
 					</div>
 				</form>

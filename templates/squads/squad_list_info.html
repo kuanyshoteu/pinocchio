@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <div class="eight wide column no_padding officefilter office{{sq.office.id}}" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}">
-    <div class="ui grid group-block segment no_margin">
+    <div class="ui grid group-block no_margin">
         <div class="wide column left-side" style="width: 80px;">
             <div class="img-block">
                 {% if sq.image_icon %}
@@ -10,7 +10,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="wide column right-side" style="width: calc(100% - 80px); padding-top: 25px;padding-left: 0">
+        <div class="wide column right-side" style="width: calc(100% - 80px); padding-top: 15px;padding-left: 0">
             <h5 style="font-size: 13px;margin-bottom: 5px;">
                 <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
                 <a href="{{ sq.get_update_url }}" style="font-size: 13px;">
@@ -21,7 +21,7 @@
                 <div class="highlight success_alive{{sq.id}}" style="display: none;">Группа восстановлена</div>
                 {% endif %}
             </h5>
-            <span style="color: grey; font-size: 12px;">{% if sq.cabinet %}{{sq.cabinet}} кабинет,{%endif%} {{ sq.teacher.name }}</span>
+            <span style="color: grey; font-size: 12px;">{{ sq.teacher.first_name }}</span>
         </div>
     </div>
 </div>

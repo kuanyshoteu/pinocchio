@@ -4,17 +4,28 @@
 <div class="ui modal large mt50" id="register_students_calendar">
     <i class="close icon"></i>
     <div class="content no_padding backdark">
-        <div class="ui segment margin0 pb0" style="display: flex;">
-            <span class="text15 ml15 mb15">Регистрация <b id="current_user_name"></b></span>
+        <div class="ui segment margin0 pb0">
+            <div class="text15 textdg ml15 mb15">Регистрация <b id="current_user_name"></b></div>
             <form class="ui form predoplata_form" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма оплаты" type="number">
             </form>
+            <div class="ok_predoplata highlight" style="height: 35px;"><b>Оплата принята</b></div>
+            <div class="time_stop highlight_red" style="height: 35px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></div>
+            <div class="wrong_mail highlight_red" style="height: 35px;display: none;"><b>Пожалуйста введите существующий email</b></div>
+            <div class="no_predoplata_number highlight_red" style="height: 35px;display: none;"><b>Введите сумму предоплаты</b></div>
+            <div class="highlight_red isalready pt15 pb15" style="display: none;"> <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
+            {% include 'modals/schedule_filters.html' %}
         </div>
-        <div class="ok_predoplata highlight" style="height: 35px;"><b>Оплата принята</b></div>
-        <div class="time_stop highlight_red" style="height: 35px;"><b>В эту группу регистрировали карту недавно, можно будет изменить через 1 минуту</b></div>
-        <div class="wrong_mail highlight_red" style="height: 35px;display: none;"><b>Пожалуйста введите существующий email</b></div>
-        <div class="no_predoplata_number highlight_red" style="height: 35px;display: none;"><b>Введите сумму предоплаты</b></div>
-        <div class="highlight_red isalready pt15 pb15" style="display: none;"> <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
-        {% include 'modals/schedule.html' %}
+        <div id="calendar" length='7'>
+            <div class="loading" style="display: none;">
+              <div class="animation"><div class="circle one"></div></div>
+              <div class="animation"><div class="circle two"></div></div>
+              <div class="animation"><div class="circle three"></div></div>
+              <div class="animation"><div class="circle four"></div></div>
+              <div class="animation"><div class="circle five"></div></div>
+              <div class="animation"><div class="circle six"></div></div>
+            </div>
+            {% include 'school/crm_classicschedule.html' %}
+        </div>        
     </div>   
 </div>

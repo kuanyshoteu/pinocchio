@@ -159,7 +159,7 @@ class SocialMedia(models.Model):
             )
     content = models.TextField(default='')
     link = models.TextField(default='')
-
+        
 class SocialMediaAccount(models.Model):
     access_token = models.TextField(default='')
     user_id = models.TextField(default='')

@@ -890,6 +890,12 @@
             }
         })        
     }
+    $('.cfkind').click(function(e) {
+        $('.cfkind').removeClass('green')
+        $('.cfkind').addClass('white')        
+        $(this).addClass('green')
+        update_crm()
+    })
     function get_filter_data(){
         squads = ''
         $(".cfsquad.chosed").each(function () {
@@ -903,37 +909,24 @@
         $(".cfday.chosed").each(function () {
             days += $(this).attr('id')+'d'
         })
-        return [squads, offices, days]        
+        kind = $(".cfkind.green").attr('id')
+        return [squads, offices, days, kind]        
     }
-    $('.filter-item-s').click(function(e) {
-        $('.search_hint').hide();
-        id = $(this).attr('id')
-        status = $(this).attr('status')
+    function update_crm(){
         url = $('.data').attr('filter_crm_cards')
-        check = $('#check_'+status+id)
-        is_check = check.attr('status')
-        is_all = $('.edit_card_url').attr('all')
-        if (is_check == '0') {
-            $(this).addClass('chosed')
-            check.show()
-            check.attr('status','1')
-        }
-        else{
-            $(this).removeClass('chosed')
-            check.hide()
-            check.attr('status','0')
-        }
         filter_data = get_filter_data()
         squads = filter_data[0]
         offices = filter_data[1]
         days = filter_data[2]
+        kind = filter_data[3]
+        console.log('update_crm', kind)
         $.ajax({
             url: url,
             data: {
                 'squads':squads,
                 'offices':offices,
                 'days':days,
-                'is_all':is_all,
+                'kind':kind,
             },
             dataType: 'json',
             success: function (data) {
@@ -944,7 +937,25 @@
                     fill_card_data(colid,column_data,'bottom')
                 }
             }
-        })
+        })        
+    }
+    $('.filter-item-s').click(function(e) {
+        $('.search_hint').hide();
+        id = $(this).attr('id')
+        status = $(this).attr('status')
+        check = $('#check_'+status+id)
+        is_check = check.attr('status')
+        if (is_check == '0') {
+            $(this).addClass('chosed')
+            check.show()
+            check.attr('status','1')
+        }
+        else{
+            $(this).removeClass('chosed')
+            check.hide()
+            check.attr('status','0')
+        }
+        update_crm()
     })
     function save_card_as_user(squad_id){
         $('.loading').show();

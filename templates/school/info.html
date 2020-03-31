@@ -16,19 +16,21 @@
 <div class='ui container pb150 pt15'>
     <div class="ui grid stackable">
         {% include 'left_menu.html' %}
-        <div class="eighty wide column">
+        <div class="w85 wide column">
             {% include 'school/head.html' %}
-            <div class="ui segment no_margin pl15 text15">
-                Информация
-            </div>
             <div class="ui segment mt0 mb15 text15">
+                <div class="text15 mb15 textdg">
+                    <b>Основная информация</b>
+                </div>
                 <div class="ui grid stackable no_margin">
-                    <div class="eight wide column no_padding">
-                        <span class="dinline text14 textg">Описание (для рекламной страницы): </span> 
-                        <span style="display: inline-block;" class="school_content">{{ instance.content }}</span> 
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="dinline text14 textg">Полное описание: </span> 
+                    </div>
+                    <div class="twelve wide column mb15 no_padding">
+                        <span class="school_content">{{ instance.content }}</span> 
                         {% if is_director %}
                         <div class="mb10">
-                            <a onclick="$('.school_content_form').show()"><i class="icon pen square blue text15"></i></a>                            
+                            <a onclick="$('.school_content_form').show()"><i class="icon pen square blue text15"></i></a>
                         </div>
                         <form class="ui form school_content_form" style="width: 800px; display: none;">
                             <div class="ui grid no_margin stackable">
@@ -41,8 +43,12 @@
                             </div>
                         </form>
                         {% endif %}
-                        <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Короткий слоган (для карты):</span>
-                        <span style="display: inline-block;" class="school_slogan">{{ instance.slogan }}</span>
+                    </div>
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="dinline text14 textg">Короткое описание: </span> 
+                    </div>
+                    <div class="twelve wide column mb15 no_padding">
+                        <span class="school_slogan">{{ instance.slogan }}</span>
                         {% if is_director %}
                         <a onclick="$('.school_slogan_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
                         <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
@@ -56,8 +62,11 @@
                             </div>
                         </form>
                         {% endif %} 
-                        <br>
-                        <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Номер телефона:</span>
+                    </div>
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="dinline text14 textg">Номер телефона: </span> 
+                    </div>
+                    <div class="twelve wide column mb15 no_padding">
                         <span style="display: inline-block;" class="school_phones">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%} {%endfor%}</span>
                         {% if is_director %}
                         <a onclick="$('.school_phones_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
@@ -74,10 +83,13 @@
                                 </div>
                             </div>
                         </form>
-                        {% endif %}                     
-                        <br>
-                        <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Сайт (если есть):</span>
-                        <span style="display: inline-block;" class="school_site">{{ instance.site }}</span>
+                        {% endif %}  
+                    </div>                   
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="dinline text14 textg">Сайт: </span> 
+                    </div>
+                    <div class="twelve wide column mb15 no_padding">                    
+                        <span class="school_site">{{ instance.site }}</span>
                         {% if is_director %}
                         <a onclick="$('.school_site_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
                         <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
@@ -91,8 +103,11 @@
                             </div>
                         </form>
                         {% endif %} 
-                        <br>
-                        <span class="mb10 dinline" style="color: #909090;font-size: 14px;">Время работы (для карты):</span>
+                    </div>
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="text14 textg">Время работы: </span> 
+                    </div>
+                    <div class="twelve wide column mb15 no_padding">                    
                         <span style="display: inline-block;" class="school_worktime">
                             {% if worktime1 == '' or worktime2 == '' %}
                                 По предварительной записи
@@ -123,11 +138,13 @@
                         </form>
                         {% endif %} 
                     </div>
-                    <div class="eight wide column pt0 pb0">
-                        <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Социальные сети:</span> 
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="text14 textg">Социальные сети: </span> 
+                    </div>
+                    <div class="twelve wide column mb15 no_padding">                    
                         <div style="display: inline-block;" class="school_social_list">
                             {% for social in social_networks %}
-                                <a class="ui button mini social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">
+                                <a class="ui button small white shadow_small mr15 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">
                                     <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
                                     {{ social.1 }}
                                 </a>
@@ -144,7 +161,7 @@
                                 </div>                        
                             {% endfor %}
                         </div>
-                        <a class="ui button mini blue" onclick="$('.social_form_new').modal('show')" style="padding: 7px 10px;">Добавить социальную сеть</a>
+                        <a class="ui button mini" onclick="$('.social_form_new').modal('show')" style="padding: 7px 10px;">Добавить социальную сеть</a>
                         <div class="ui modal mini social_form_new">
                             <i class="close icon"></i>
                             <div class="content">
@@ -156,33 +173,39 @@
                                 <div class="errorsocial_new highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
                             </div>
                         </div>
-                        <br>                        
-                        <span style="display: inline-block;color: #909090;font-size: 14px;margin-bottom: 8px;">Фотографии (для рекламной страницы):</span> 
-                        <div style="display: inline-block;">
-                            <form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+                    </div>
+                    <div class="three wide column pt0 pb0 pl0">
+                        <span class="text14 textg">Фотографии: </span> 
+                    </div>
+                    <div class="twelve wide column no_padding">
+                        <div class="dinline">
+                            <div class="dflex">
+                                {% for banner in instance.banners.all %}
+                                    {% if banner.image_banner %}
+                                    <div class="mr15 dflex" id="banner{{banner.id}}">
+                                        <img class="mr15" src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;border-radius: 5px;">
+                                        <a class="delete_school_banner" id="{{ banner.id }}" url="{{ banner.delete_school_banner }}"><b style="color: red;">×</b></a>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>                            
+                        </div>
+                        <div class="dinline">
+                            <form method='POST' class="mb0" action='' enctype='multipart/form-data'>{% csrf_token %}
                                 <input type="file" name="school_banner" id="school_banner" class="postfile">
                                 <label class="file_post" for="school_banner">
                                     <a class="ui button mini"><i class="icon image blue"></i>Выбрать картинку</a>
                                 </label>
-                                <input type="submit" class="ui button mini blue save_banner" name="" value="Добавить">
+                                <input type="submit" class="ui button mini  save_banner" name="" value="Добавить">
                             </form>
-                        </div>
-                        <br>
-                        <div style="display: flex;">
-                            {% for banner in instance.banners.all %}
-                                {% if banner.image_banner %}
-                                <div class="mr15 dflex" id="banner{{banner.id}}">
-                                    <img class="mr15" src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;border-radius: 5px;">
-                                    <a class="delete_school_banner" id="{{ banner.id }}" url="{{ banner.delete_school_banner }}"><b style="color: red;">×</b></a>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
                         </div>
                     </div>
                 </div>                
             </div>
-            <div class="ui segment mt15 mb0 pl15">
-                <div class="text15 pb10">Предметы школы:</div>
+            <div class="ui segment">
+                <div class="text15 mb15 textdg">
+                    <b>Предметы школы</b>
+                </div>
                 <div class="school_subject_list">
                     <div class="ui grid stackable no_margin">
                         {% for subject in instance.school_subject_categories.all %}
@@ -206,7 +229,7 @@
                         {% endfor %}
                     </div>                    
                 </div>
-                <a class="ui button mini mt5 blue" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
+                <a class="ui button mini mt5" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
                 <div class="ui modal mini" id="subject_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -221,10 +244,10 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment no_margin pl15">
-                <div class="text15 pb10">Скидки школы:</div>
-                <div class="school_discounts_list">
-                    <div class="ui grid stackable no_margin">
+            <div class="ui segment">
+                <div class="text14 textdg"><b>Скидки школы</b></div>
+                <div class="">
+                    <div class="ui grid stackable no_margin school_discounts_list">
                         {% for discount in instance.discounts.all %}
                         <div class="twenty wide column pl0 pt0 pb10">
                             <a class="full-w full-h ui button small white shadow_small discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;">{{ discount.title }}</a>
@@ -262,8 +285,8 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini mt5 blue" onclick="$('#discounts_form_new').modal('show')">Добавить Скидку</a>
-                <div class="ui modal mini" id="discounts_form_new">
+                <a class="ui button mini mt5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
+                <div class="ui modal mini" id="discount_form_new">
                     <i class="close icon"></i>
                     <div class="content">
                         <form class="ui form text-center">
@@ -287,9 +310,7 @@
                         <div class="errordiscounts_new highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
                     </div>
                 </div>
-            </div>
-            <div class="ui segment no_margin pl15">
-                <div class="text15 pb10">Уровни курсов:</div>
+                <div class="text14 textdg mt15"><b>Уровни курсов</b></div>
                 <div class="school_level_list">
                     <div class="ui grid stackable no_margin">
                         {% for level in instance.school_subject_levels.all %}
@@ -313,7 +334,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini mt5 blue" onclick="$('#level_form_new').modal('show')">Добавить уровень</a>
+                <a class="ui button mini mt5" onclick="$('#level_form_new').modal('show')">Добавить уровень</a>
                 <div class="ui modal mini" id="level_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -329,7 +350,7 @@
                 </div>
             </div>
             <div class="ui segment no_margin pl15">
-                <div class="text15 pb10">Офисы:</div>
+                <div class="text14 textdg pb10"><b>Офисы:</b></div>
                 <div class="school_office_list">
                     <div class="ui grid stackable no_margin">
                         {% for office in instance.school_offices.all %}
@@ -388,7 +409,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini mt5 blue" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
+                <a class="ui button mini mt5" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
                 <div class="ui modal mini" id="office_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -502,7 +523,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini green subject_object'+data.idd+'" onclick="$('+"'#subject_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="subject_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="subject_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_subject('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_subject('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsubject'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_subject_list'))
+                            $('<a class="ui button mini white shadow_small subject_object'+data.idd+'" onclick="$('+"'#subject_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="subject_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="subject_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_subject('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_subject('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsubject'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_subject_list'))
                         }
                         else{
                             $('.subject_object'+id).text(title);
@@ -534,7 +555,6 @@
         type_id = '.discount_type'+id
         discount_type = $(type_id+' option:selected').val()
         amount = parseInt($('.discount_amount'+id).val())
-        console.log(discount_type, amount)
         if (title != '' && (discount_type != 'percent' || (amount <= 100 && amount >= 0) )) {
             if ($('.check_moderator').attr('status')=='True') {
                 url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
@@ -555,7 +575,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini green discount_object'+data.idd+'" onclick="$('+"'#discount_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="discount_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="discount_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_discount('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_discount('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errordiscount'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_discount_list'))
+                            $('<a class="ui button mini white shadow_small discount_object'+data.idd+'" onclick="$('+"'#discount_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="discount_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="discount_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_discount('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_discount('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errordiscount'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_discounts_list'))
                         }
                         else{
                             $('.discount_object'+id).text(title);
@@ -602,7 +622,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini green level_object'+data.idd+'" onclick="$('+"'#level_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="level_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="level_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_level('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_level('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorlevel'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_level_list'))
+                            $('<a class="ui button mini white shadow_small level_object'+data.idd+'" onclick="$('+"'#level_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="level_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="level_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_level('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_level('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorlevel'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_level_list'))
                         }
                         else{
                             $('.level_object'+id).text(title);
@@ -649,7 +669,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini green office_object'+data.idd+'" onclick="$('+"'#office_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="office_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="office_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_office('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_office('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="erroroffice'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_office_list'))
+                            $('<a class="ui button mini white shadow_small office_object'+data.idd+'" onclick="$('+"'#office_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="office_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="office_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_office('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_office('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="erroroffice'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_office_list'))
                         }
                         else{
                             $('.office_object'+id).text(title);
@@ -699,7 +719,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini green timep_object'+data.idd+'" onclick="$('+"'#timep_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+start+'-'+end+'</a> <div class="ui modal mini" id="timep_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="timep_title'+data.idd+'">'+start+'-'+end+'</textarea> <a class="ui button mini blue" onclick="create_timep('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_timep('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errortimep'+data.idd+' highlight_red" style="display: none;">Предмет с таким промежутком уже сущетсвует</div></div> </div>').appendTo($('.school_timep_list'))
+                            $('<a class="ui button mini white shadow_small timep_object'+data.idd+'" onclick="$('+"'#timep_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+start+'-'+end+'</a> <div class="ui modal mini" id="timep_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="timep_title'+data.idd+'">'+start+'-'+end+'</textarea> <a class="ui button mini blue" onclick="create_timep('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_timep('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errortimep'+data.idd+' highlight_red" style="display: none;">Предмет с таким промежутком уже сущетсвует</div></div> </div>').appendTo($('.school_timep_list'))
                         }
                         else{
                             $('.timep_object'+id).text(start+'-'+end);
@@ -746,7 +766,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini social_object'+id+'" onclick="$('+"'"+'#social_form'+id+"'"+').modal('+"'show'"+')" id="'+id+'" style="padding: 7px 10px;">'+data.social_name+'</a> <div class="ui modal mini" id="social_form'+id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="social_link'+id+'">'+link+'</textarea> <a class="ui button mini blue" onclick="create_social('+"'"+data.create_url+"'"+','+"'"+id+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_social('+"'"+data.delete_url+"'"+','+"'"+id+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsocial'+id+' highlight_red" style="display: none;">Эта социальная сеть уже записана</div></div> </div>').appendTo($('.school_social_list'))
+                            $('<a class="ui button mini white shadow_small social_object'+id+'" onclick="$('+"'"+'#social_form'+id+"'"+').modal('+"'show'"+')" id="'+id+'" style="padding: 7px 10px;">'+data.social_name+'</a> <div class="ui modal mini" id="social_form'+id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="social_link'+id+'">'+link+'</textarea> <a class="ui button mini blue" onclick="create_social('+"'"+data.create_url+"'"+','+"'"+id+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_social('+"'"+data.delete_url+"'"+','+"'"+id+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsocial'+id+' highlight_red" style="display: none;">Эта социальная сеть уже записана</div></div> </div>').appendTo($('.school_social_list'))
                         }
                         else{
                             $('.social_object'+id).text(data.social_name);

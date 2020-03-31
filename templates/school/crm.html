@@ -14,29 +14,30 @@
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
 <script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
 <script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
-<div id="app" style="overflow-y: hidden;height: 90% !important;">
+<div id="app" style="overflow-y: hidden;height: 91% !important;">
     <div class='ui container' id="untouch" style="height: 100%;">
         <div class="ui grid main_crm mt0" style="height: 100%;">
             {% include 'left_menu.html' %}
-            <div class="pt5 pb5 wide column" style="width: 85%;">
+            <div class="pt5 pb5 w85 wide column">
                 <div style="padding-bottom: 8px;">
                     <form class="ui form">
                         <div class="ui grid">
-                            <div class="three wide column pl5 pr0 pb0">
-                                <input type="text" id="search_text" placeholder="Поиск по карточкам">
+                            <div class="wide column pl0 pr0 pb0" style="width: 200px;">
+                                <input style="border-right: none;" type="text" id="search_text" placeholder="Поиск по карточкам">
                                 <div class="search_hint ui segment" style="display: none;"></div>                 
                             </div>
                             <div class="wide column pl0 pb0" style="width: 28.13px;">
-                                <button class="ui button small blue search_by_tags" type="submit" onclick="return false"><i class="icon search" style="color: white;"></i></button>
+                                <button class="ui button small white search_by_tags" type="submit" style="border: 1px solid rgba(34, 36, 38, 0.15);border-left: none;padding-top: 9px;" onclick="return false"><i class="icon search"></i></button>
                             </div>
-                            {%if not crm_all%}
-                            <div class="wide column pb0" style="width: 155px;">
-                                <div class="ui toggle checkbox segment" style="padding: 4px 5px;margin-top: 1px;">
-                                  <input type="checkbox" {% if theprofile.skill.crm_show_free_cards %}checked{% endif%} class="show_free_cards" url="{{ instance.show_free_cards }}" name="public">
-                                  <label style="padding-left: 55px;">Свободные</label>
+                            <div class="wide column ml10 pb0 pl0 pr0" style="width: 222px;">
+                                <div class="dflex ui segment pt0 pb0 pl0 pr0">
+                                    {% if is_director %}
+                                    <a class="ui button small white mr0 cfkind" status="kind" id="allcards" style="padding: 9px 8px;">Все</a>
+                                    {% endif %}
+                                    <a class="ui button small green mr0 cfkind chosed" status="kind" id="mycards" style="padding: 9px 8px;">Мои карточки</a>
+                                    <a class="ui button small white mr0 cfkind" status="kind" id="freecards" style="padding: 9px 8px;">Свободные</a>
                                 </div>
                             </div>
-                            {%endif%}
                             <div class="filter wide column">
                                 <div class="filter-element">
                                     <div class="filter-title filter-title-group" status="0" onclick="filter_title('group')">
@@ -68,7 +69,7 @@
                                 </div>
                             </div>
                             {% endif %}
-                            <div class="wide column" style="width: 60px;padding: 14px 0 0 0;">
+                            <div class="wide column pl0 pr0 pb0 ml10" style="width: 60px;">
                                 <div class="filter-element">
                                     <div class="filter-title filter-title-days" status="0" onclick="filter_title('days')">Дни<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-days" style="display: none;">
@@ -81,26 +82,18 @@
                                     </ul>
                                 </div>
                             </div>
-                            {% if is_director %}
-                            <div class="wide column" style="padding-bottom: 0">
-                                {% if all %}
-                                <a class="ui button mini blue" style="padding: 8px;" href='{% url "schools:crm" %}'>Мои</a>
-                                {% else %}
-                                <a class="ui button mini blue" style="padding: 8px;" href='{% url "schools:crm_all" %}'>Все</a>
-                                {% endif %}
-                            </div>
-                            {% endif %}
                         </div>
                     </form>
                 </div>
                 <div id="all_columns" style="height: 100%;">
-                    <div class="ui grid" style="margin-top: -5px;height: 100%;">
+                    <div class="ui grid" style="margin-top: 0px;height: 100%;">
                         {% for column in columns %}
-                        <div class="wide column center aligned" style="padding: 3px;width: 16.65%;">
+                        <div class="wide column center aligned pr5 pl0 pt5 pb0" style="width: 16.65%;">
                             <div class="margin0 backdark pt10 pb10 textw topbr5">
-                                <div class="crm_title">{{ column.title }}</div>
-                                <div class="crm_divider"></div>
-                                <a class="ui button mini blue full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>
+                                <div class="crm_title mb10">{{ column.title }}</div>
+                                <div class="text-center pl5 pr5">
+                                    <a class="ui button mini pt5 pb5 full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>
+                                </div>
                             </div>
                             <div onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
                                 <div class="loader_center ui active loader column_loader"></div>

@@ -8,7 +8,6 @@ from django.views.decorators.csrf import csrf_exempt
 app_name = 'schools'
 urlpatterns = [
     url(r'^crm/$', school_crm, name='crm'),
-    url(r'^crm_all/$', school_crm_all, name='crm_all'),
     url(r'^schedule/$', school_schedule, name='schedule'),
     url(r'^info/$', school_info, name='info'),
     url(r'^landing/(?P<school_id>\d+)/$', school_landing, name='landing'),

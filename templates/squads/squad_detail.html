@@ -12,18 +12,18 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="group-details" class="pt15">
+<div>
     <a id="go-back-btn-before"  href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
     </a>
     <div class='ui container'>
-        <div class="ui grid">
+        <div class="ui grid stackable no_margin">
             {% include 'left_menu.html' %}
-            <div class="wide column pt0" style="width: 80%;margin-left: 30px;">
-                <div class="ui grid no_margin">
-                    <div class="sixteen wide column">
-                        <div class="ui segment pt0 pl0 pr0 pb15 mb0">
-                            <div class="ui grid no_margin">
+            <div class="w85 wide column no_padding mlback">
+                <div class="ui grid stackable no_margin">
+                    <div class="sixteen wide column pl0 pr30">
+                        <div class="ui segment pt0 pl0 pb15 mb0">
+                            <div class="ui grid stackable no_margin">
                                 {% if instance.image_banner %}
                                 <div class="sixteen wide column no_padding">
                                     <img src="{{ instance.image_banner.url }}" class="full-w" style="height: 200px;">

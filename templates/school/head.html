@@ -1,13 +1,6 @@
 {% load staticfiles %}
-<div class="ui segment" style="margin-bottom: 0;">
+<div class="ui segment">
     <div class="group-name">
-        {% if instance.image_banner %}
-            {% if instance.image_icon %}
-            <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-            {% else %}
-            <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
-            {% endif %}
-        {% endif %}
         <span class="ui header ava-title school_title"><a href="{{instance.landing}}">{{ instance.title }}</a></span>
         {% if is_director %}
         <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
@@ -23,17 +16,17 @@
         </form>
         {% endif %}
     </div>
-</div>
-<div class="ui segment" style="background-color: #fafbfc;margin-top: 0; padding: 18px;">
-    <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}">
-        Общие 
-    </a>
-    <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
-        Зарплаты
-    </a>
-    {% if is_moderator %}
-    <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
-        Социальные сети
-    </a>
-    {% endif %}    
+    <div class="mt15 mb10 pt5">
+        <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}">
+            Общие 
+        </a>
+        <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
+            Зарплаты
+        </a>
+        {% if is_moderator %}
+        <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
+            Социальные сети
+        </a>
+        {% endif %}        
+    </div>
 </div>
