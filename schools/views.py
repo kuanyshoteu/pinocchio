@@ -443,7 +443,7 @@ def vk_get_callback(request):
                 fwd_messages = message['fwd_messages']
                 print(username,fwd_messages)
                 school = vk.school
-                search_card = school.crm_cards.filter(social_media_id='vk'+user_id)
+                search_card = school.crm_cards.filter(social_media_id='vk'+str(user_id))
                 if len(search_card) == 0:
                     card = school.crm_cards.create(
                         column=school.crm_columns.first(),
