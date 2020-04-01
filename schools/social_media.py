@@ -1,3 +1,6 @@
+import requests
+import json
+
 #instagram api credentials
 toserver2 = True
 if toserver2:
