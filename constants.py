@@ -279,9 +279,14 @@ def get_card_dialog(card):
     p = Paginator(query, 7)
     page1 = p.page(1)
     for mail in page1.object_list:
+        action_author = ''
+        if mail.action_author:
+            action_author = mail.action_author.first_name
+        elif mail.social_media:
+            action_author = mail.social_media.username
         res.append([
             mail.id,
-            mail.action_author.first_name,
+            action_author,
             mail.text,
             mail.method,
             mail.timestamp.strftime('%d %B %H:%M'),
