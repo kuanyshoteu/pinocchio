@@ -96,20 +96,24 @@
 				                        	<a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
 				                        </label>
 									</div>
-                                    <div class="eight wide column">
+                                    <div class="eight wide column pl0">
                                         <div class="ui toggle checkbox">
                                           <input class="make_public" id="{{instance.id}}" type="checkbox" {% if instance.public %}checked{% endif%} url="{%url 'subjects:make_public'%}" name="public">
                                           <label>Показывать курс в поиске</label>
                                         </div>                                        
                                     </div>
-                                    <div class="eight wide column">
+                                    <div class="eight wide column pr0">
                                         <div class="ui toggle checkbox">
                                           <input class="make_public_cost" id="{{instance.id}}" type="checkbox" {% if instance.public_cost %}checked{% endif%} url="{%url 'subjects:make_public_cost'%}" name="public">
                                           <label>Показывать стоимость в поиске</label>
                                         </div>                                        
                                     </div>
+                                    <div class="sixteen wide column no_padding dflex">
+                                        <span class="text15">Количество уроков:</span>
+                                        <input class="mt5 ml5 pl5 pr5" type="number" style="width:100px;" name="number_of_materials" value="{{instance.number_of_materials}}">
+                                    </div>
 								</div>
-                                <div class="text-center mt15">
+                                <div class="text-center mt30">
                                     <input type='submit' class='ui button blue tiny' value='Сохранить' />
                                 </div>                                
 			    			</div>
@@ -159,8 +163,8 @@
                                         {% for filter in instance|get_filters %}
                                         <div class="four wide column pt5 pr0">
                                             <div class="mt10 filter-element filter-element-level" url="{{ instance.change_filter_option }}">
-                                                <div class="filter-title-s highlight_blue" id="filter{{filter.id}}" status="closed">
-                                                    {{ filter.title }}
+                                                <div class="filter-title-s textdg" id="filter{{filter.id}}" status="closed">
+                                                    <b>{{ filter.title }}</b>
                                                 </div>
                                             </div>
                                             <ul style="position: relative;" class=" filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
