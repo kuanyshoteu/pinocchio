@@ -179,4 +179,4 @@ def vk_get_user(user_id,group_access_token):
     user = a['response'][0]
     name = user['first_name'] + user['last_name']
     photo_link = user['photo_50']
-    return [name, photo_link]
+    return name

@@ -457,7 +457,7 @@ def vk_get_callback(request):
                         text=text,
                         method='vk',
                         is_client=True,
-                        social_media=sm,
+                        social_media=vk,
                         )
             return HttpResponse('ok', content_type='text/plain')
 
