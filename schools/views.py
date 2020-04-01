@@ -432,7 +432,7 @@ def vk_get_callback(request):
         elif a['type'] == 'message_new':
             print("0 0 0 MESSAGE 0 0 0 0")
             message = a['object']['message']
-            group_id = str(a['object']['group_id'])
+            group_id = str(a['group_id'])
             vks = SocialMediaAccount.objects.filter(groupid=group_id)
             if len(vks) > 0:
                 vk = vks[0]
