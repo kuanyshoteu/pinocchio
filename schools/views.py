@@ -440,8 +440,8 @@ def vk_get_callback(request):
                 username = vk_get_user(user_id,vk.group_access_token)
                 text = message['text']
                 date = message['date']
-                reply_message = message['reply_message']
-                print(username)
+                fwd_messages = message['fwd_messages']
+                print(username,fwd_messages)
                 school = vk.school
                 search_card = school.crm_cards.filter(social_media_id='vk'+user_id)
                 if len(search_card) == 0:
