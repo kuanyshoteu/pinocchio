@@ -437,7 +437,7 @@ def vk_get_callback(request):
             if len(vks) > 0:
                 vk = vks[0]
                 user_id = message['from_id']
-                username = vk_get_user(user_id,group_access_token)
+                username = vk_get_user(user_id,vk.group_access_token)
                 text = message['text']
                 date = message['date']
                 reply_message = message['reply_message']
