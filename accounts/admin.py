@@ -97,7 +97,8 @@ class CardMailAdmin(admin.ModelAdmin):
     list_display_links = ["id"]
     list_filter = ['card', 'action_author']
     def get_author(self, obj):
-        return obj.action_author.first_name
+        if obj.action_author:
+            return obj.action_author.first_name
     def card_name(self, obj):
         return obj.card.name
 
