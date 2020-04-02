@@ -266,7 +266,7 @@ def get_card_form_by_column(card, column_id):
         card.parents,                       # 2
         card.comments,                      # 3
         author_id,                          # 4
-        '',                                 # 5
+        card.social_media_id,               # 5
         card.change_day_of_week(),          # 6
         card.days_of_weeks,                 # 7
     ]

@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% load ttags %}
+{% load ttttags %}
 {% block content %}
 <div  style="margin-top: -5px;color: #fff;">
     <div class="text-center newlandhead pb30" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
@@ -31,9 +32,10 @@
     </div>
     <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
         <div class="three wide column pb0 pr0 deskmenu">
-            <div class="ui segment no_padding">
+            <div class="ui segment shadow no_padding">
+                <div class="ui segment mb0 textw backlightblue" style="line-height: 25px;border-radius:7px 7px 0px 0px;color: #232f3e;text-align: left;padding: 5px 15px;"><b>Категории:</b></div>
                 {% for cat in categories %}
-                <a href="{{cat.get_absolute_url}}" class="ui button full-w white" style="line-height: 25px;border-radius:0px;color: #232f3e;text-align: left;padding: 5px 15px;border-bottom: 1px solid #f0f0f0">
+                <a href="{{cat.get_absolute_url}}" class="ui button full-w {%if forloop.counter|is_odd %}white{%else%}lightgrey{%endif%}" style="line-height: 25px;border-radius:{%if forloop.counter > 1%}0{%else%}7px 7px 0px 0{%endif%}px;color: #232f3e;text-align: left;padding: 5px 15px;border-bottom: 1px solid #e5e5e5">
                     <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
                 </a>
                 {% endfor %}

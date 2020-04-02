@@ -1,6 +1,6 @@
 import requests
 import json
-
+from random import randint
 #instagram api credentials
 toserver2 = True
 if toserver2:
@@ -180,3 +180,17 @@ def vk_get_user(user_id,group_access_token):
     name = user['first_name'] + user['last_name']
     photo_link = user['photo_50']
     return name
+
+def vk_send_message(vk, text, user_id):
+    url = 'https://api.vk.com/method/messages.send'
+    random = randint(100,999)
+    data = {
+        'message':text,
+        'user_id':user_id,
+        'random_id':random,
+        'access_token':vk.group_access_token,
+        'v':'5.103',
+    }
+    r = requests.post(url,data=data,allow_redirects=True)
+    a = json.loads(r.content)
+    print(a)

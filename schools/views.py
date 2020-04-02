@@ -381,7 +381,7 @@ def save_vk_group(request):
         vk.groupid = request.GET.get('id')
         vk.groupname = request.GET.get('name')
         vk.save()
-        url = 'https://oauth.vk.com/authorize?client_id='+vk_id+'&display=page&redirect_uri='+vk_server+'&group_ids='+vk.groupid+'&scope=messages,manage&response_type=code&v=5.103'
+        url = 'https://oauth.vk.com/authorize?client_id=' + vk_id + '&display=page&redirect_uri='+vk_server+'&group_ids='+vk.groupid+'&scope=messages,manage&response_type=code&v=5.103'
         print('save_vk_group')
     data = {
         "url":url,
@@ -449,6 +449,7 @@ def vk_get_callback(request):
                         column=school.crm_columns.first(),
                         name=username,
                         color='greencard',
+                        social_media_id='vk'+str(user_id)
                         )
                     card.save()
                     search_card = [card]
@@ -1078,15 +1079,31 @@ def card_send_mail(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     ok = False
-    if request.GET.get('id') and request.GET.get('mail') and request.GET.get('text'):
+    if request.GET.get('id') and request.GET.get('text'):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         head = school.title
         text = request.GET.get('text')
-        send_email(head, text,[request.GET.get('mail')])
+        method = ''
+        if '@' in request.GET.get('mail'):
+            send_email(head, text,[request.GET.get('mail')])
+            method = card.mail
+        elif request.GET.get('social_media_id'):
+            smid = request.GET.get('social_media_id')
+            print('smid0', smid)
+            if smid[0]+smid[1] == 'vk':
+                smid = smid[2:]
+                print('smid1', smid)
+                sm = SocialMedia.objects.get(title='Вконтакте')
+                vk = school.socialmedias.filter(socialmedia=sm)
+                if len(vk) > 0:
+                    vk = vk[0]
+                    print('foundvk', vk)
+                    vk_send_message(vk, text, int(smid))
+                    print('sended', text)
+                    method = 'vk'+smid
         ok = True
         time = timezone.now()
-        print(card.mail)
         mail = card.mails.create(
             text = request.GET.get('text'),
             method = card.mail,
