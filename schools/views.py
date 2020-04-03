@@ -429,9 +429,13 @@ def vk_get_callback(request):
                 confirmation_code = vk.confirmation_code
                 print('return confirmation', confirmation_code)
             return HttpResponse(confirmation_code, content_type='text/plain')
-        elif a['type'] == 'message_new':
+        else:
             print("0 0 0 MESSAGE 0 0 0 0")
-            message = a['object']['message']
+            if a['type'] == 'message_new':
+                message = a['object']['message']
+                fwd_messages = message['fwd_messages']
+            elif a['type'] == 'wall_reply_new':
+                message = a['object']
             group_id = str(a['group_id'])
             vks = SocialMediaAccount.objects.filter(groupid=group_id)
             if len(vks) > 0:
@@ -440,7 +444,6 @@ def vk_get_callback(request):
                 username = vk_get_user(user_id,vk.group_access_token)
                 text = message['text']
                 date = message['date']
-                fwd_messages = message['fwd_messages']
                 print(text, username,fwd_messages)
                 school = vk.school
                 search_card = school.crm_cards.filter(social_media_id='vk'+str(user_id))
@@ -460,7 +463,7 @@ def vk_get_callback(request):
                         is_client=True,
                         social_media=vk,
                         )
-            return HttpResponse('ok', content_type='text/plain')
+    return HttpResponse('ok', content_type='text/plain')
 
 def vk_set_callback(vk):
     groupid = vk.groupid

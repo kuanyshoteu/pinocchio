@@ -89,14 +89,20 @@
             $('.takecard').attr('id',id)                
         }
         $('.card_send_mail').attr('id', social_media_id)
+        if (social_media_id.length > 1) {
+            $('.vk_dialog_logo').show()
+        }
+        else{
+            $('.vk_dialog_logo').hide()            
+        }
         $('.success_payment').hide()
         $('.card_parentsedit').text(parents)
         $('.card_phone_extraedit').text(extra_phone)
         $('.card_commentedit').text(comments)
         $('.save_card_form').attr('onclick', 'edit_card("'+id+'")')
         $('.save_card_form').attr('id', id)
-        if (mail == '') {
-            $('.card_mail').text('Почта')
+        if (mail.length < 2) {
+            $('.card_mail').text('Введите почту')
         }
         else{
             $('.card_mail').text(mail)

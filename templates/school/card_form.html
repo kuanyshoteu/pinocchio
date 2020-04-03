@@ -2,31 +2,31 @@
 <div class="ui modal card_form mt50 large" style="height: calc(100% - 100px);" id="card_formedit">
     <i class="close icon"></i>
     <div class="content no_padding">
-        <div class="card_head">
-            Карточка <span class="crmform_title"></span>
-        </div>
         <div class="ui grid stackable no_margin full-h">
+            <div class="sixteen wide column text-center textblue text17">
+                <b>Карточка <span class="crmform_title"></span></b>
+            </div>
             <div class="eight wide column full-h">
                 <form class="ui form form_cont card_form_update_here mb0">
-                    <span class="wrong_mail_error highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b>Пожалуйста введите существующий email или оставьте поле пустым</b></span>
+                    <span class="wrong_mail_error highlight_red" style="height: 25px;margin-left: 25px;display: none;"><b class="textdg">Пожалуйста введите существующий email или оставьте поле пустым</b></span>
                     <div class="ui grid stackable card_form_update">
                         <div class="eight wide column text-center pt5 pr0 pb0 pl0">
                             <div style="height: 10px;"></div>
-                            <b>Имя:</b>
+                            <b class="textdg">Имя:</b>
                             <textarea class="card_nameedit" style="margin-bottom: 8px;" placeholder="Имя"></textarea>
-                            <b>Телефон:</b>
+                            <b class="textdg">Телефон:</b>
                             <textarea class="mb5 card_phoneedit" style="margin-bottom: 8px;height: 45px;" placeholder="Телефон"></textarea>
                         </div>
                         <div class="eight wide column text-center pt5 pb0 pr0 pl15">
                             <div style="height: 10px;"></div>
-                            <b>Родители:</b>
+                            <b class="textdg">Родители:</b>
                             <textarea class="card_parentsedit" style="margin-bottom: 8px;" placeholder=""></textarea>
-                            <b>Дополнительный телефон:</b>
+                            <b class="textdg">Дополнительный телефон:</b>
                             <textarea class="card_phone_extraedit mb0 pt5 pb0" style="height: 45px;" placeholder="Дополнительный телефон"></textarea>
                         </div>
                         <div class="eight wide column text-center no_padding">
                             <div style="height: 10px;"></div>
-                            <b>Оплата:</b>
+                            <b class="textdg">Оплата:</b>
                             <select class="pay_for_groupedit mb5" id="pay_for_groupedit">
                             </select>
                             <div class="mb5">
@@ -58,7 +58,7 @@
                         </div>
                         <div class="eight wide column pt0 pb0 pl15 pr0">
                             <div class="mt10">
-                                <div class="text-center"><b>Дни недели:</b></div>
+                                <div class="text-center"><b class="textdg">Дни недели:</b></div>
                                 <a onclick="card_form_days('cd0')" class="ui button mini mr0 mb5 card_form-dayscd0" style="padding: 7px 14px !important;" card="" id="0">Пн</a>
                                 <a onclick="card_form_days('cd1')" class="ui button mini mr0 mb5 card_form-dayscd1" style="padding: 7px 14px !important;" card="" id="1">Вт</a>
                                 <a onclick="card_form_days('cd2')" class="ui button mini mr0 mb5 card_form-dayscd2" style="padding: 7px 14px !important;" card="" id="2">Ср</a>
@@ -84,7 +84,7 @@
                         <div class="sixteen wide column no_padding">
                             <div style="height: 10px;"></div>
                             <div class="mb0" style="height: 84px;">
-                                <div class="text-center"><b>Комментарий:</b></div>
+                                <div class="text-center"><b class="textdg">Комментарий:</b></div>
                                 <div contenteditable="true" id="edit" class="card_comment-textarea card_commentedit"
                                 placeholder="Комментарий" url="{% url 'schools:call_helper' %}" status="stop" position="0">
                                 </div>
@@ -108,7 +108,7 @@
                     <div class="empty_dialog" style="position: absolute;top: 45%;color: grey;left: 40%;"><i>Еще ничего нет</i></div>
                 </div>
                 <div class="pt10 pl15 pr15 backwhitelow dflex">
-                    <div class="ui segment mb0 pl10 pr10 pt5 card_mail backgreenlow" style="height: 30px;"></div>
+                    <div class="ui segment mb0 pl10 pr10 pt5 card_mail" style="height: 30px;"></div>
                     <form class="ui form mb0 half-w card_mail_form dflex" style="display: none;" >
                         <textarea style="height: 30px;overflow-y: hidden;" class="card_mail_edit mb0" placeholder="Почта"></textarea>
                         <a url="{%url 'schools:edit_card_mail'%}" class="ui button mini save_card_mail blue pl10 pr10" style="height: 28px;"><i class="textw icon check mr0 text11"></i></a>
@@ -116,6 +116,7 @@
                             <div class="loader_center ui small text loader"></div>
                         </div>
                     </form>
+                    <div class="vk_dialog_logo ui segment backblue mt0 pt5 pb5 ml15"><i class="icon vk mr0 textw"></i></div>
                 </div>
                 <div class="pt10 pb10 pl15 pr15 backwhitelow dflex">
 <!--                     <div class="pt5" style="width: 26px;">
