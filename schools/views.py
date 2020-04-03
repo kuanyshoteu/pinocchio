@@ -436,6 +436,7 @@ def vk_get_callback(request):
                 fwd_messages = message['fwd_messages']
             elif a['type'] == 'wall_reply_new':
                 message = a['object']
+                fwd_messages = message['parents_stack']
             group_id = str(a['group_id'])
             vks = SocialMediaAccount.objects.filter(groupid=group_id)
             if len(vks) > 0:
