@@ -293,3 +293,5 @@ def get_card_dialog(card):
             mail.is_client,
             ])
     return res
+
+img_formats = ['jpg', 'jpeg', 'png']

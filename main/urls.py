@@ -5,8 +5,6 @@ from .views import *
 
 app_name = 'Enigmath'
 urlpatterns = [
-    url(r'^map/$', map_view, name='map'),
-    url(r'^newland/$', newland, name='newland'),
     url(r'^about/$', about, name='about'),
     url(r'^team/$', team, name='team'),
     url(r'^help/$', help_page, name='help_page'),
@@ -29,6 +27,7 @@ urlpatterns = [
     url(r'^api/cat_filter/$', cat_filter, name='cat_filter'),
     url(r'^notifications/$', get_notifications, name='get_notifications'),
     url(r'^moderator/$', moderator, name='moderator'),
+    url(r'^blog/$', blog, name='blog'),
     url(r'^moderator_run_code/$', moderator_run_code, name='moderator_run_code'),
     url(r'^file_changer/$', file_changer, name='file_changer'),
     url(r'^upload_cards/$', upload_cards, name='upload_cards'),

@@ -1,3 +1,35 @@
+    $('.newpost_title').on('input', function () {
+        $('.save_post.disabled').addClass('blue')
+        $('.save_post.disabled').removeClass('disabled')
+        val = $(this).val()
+        $('.pred_title').text(val)
+    })
+    $('.newpost_text').on('input', function () {
+        val = $(this).val()
+        $('.pred_text').text(val)
+    })
+    $('.save_post').click(function(e) {
+        url = $(this).attr('url')
+        id = $(this).attr('id')
+        title = $('.newpost_title').val()
+        $('.create_post_loader').show()
+        $('.newpost_saved').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'title':title,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.save_post').attr('id', data.id)
+                $('.save_post').addClass('disabled')
+                $('.save_post').removeClass('blue')
+                $('.create_post_loader').hide()
+                $('.newpost_saved').show()
+            }
+        })
+    })
     $('.save_vk_group').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
@@ -11,7 +43,6 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log('sended yoooooo', data.url)
                 window.location.replace(data.url);
             }
         })

@@ -17,7 +17,6 @@ from django.contrib.auth import (
     get_user_model,
     login,
     logout,
-
     )
 from django.contrib.auth.models import User
 from constants import *
@@ -30,67 +29,11 @@ def loaderio(request):
     }
     return render(request, "loaderio-c10fbfa327821a1063a562c197571027.txt", context)
 
-def main_view(request):
-    if request.user.is_authenticated:
-        profile = Profile.objects.get(user = request.user.id)
-        return redirect(profile.get_absolute_url())
-    is_trener = False
-    is_manager = False
-    is_director = False
-    profile = None
-    if request.user.is_authenticated:
-        profile = get_profile(request)
-        is_trener = is_profi(profile, 'Teacher')
-        is_manager = is_profi(profile, 'Manager')
-        is_director = is_profi(profile, 'Director')
-    context = {
-        "profile":profile,
-        "schools":School.objects.all(),
-        "schools_all":School.objects.all(),
-        "url":School.objects.first().get_landing(),
-        'is_trener':is_trener,
-        "is_manager":is_manager,
-        "is_director":is_director, 
-        'main':True,
-        "subjects":SubjectCategory.objects.all(),
-        "ages":SubjectAge.objects.all(),
-        'map_view':True
-    }
-    return render(request, "map.html", context)
-
-def map_view(request):
-    is_trener = False
-    is_manager = False
-    is_director = False
-    profile = None
-    money = 0
-    if request.user.is_authenticated:
-        profile = get_profile(request)
-        is_trener = is_profi(profile, 'Teacher')
-        is_manager = is_profi(profile, 'Manager')
-        is_director = is_profi(profile, 'Director')
-        if len(profile.schools.all()):
-            money = profile.schools.first().money
-    context = {
-        "profile":profile,
-        "schools":School.objects.all(),
-        "schools_all":School.objects.all(),
-        "url":School.objects.first().get_landing(),
-        'is_trener':is_trener,
-        "is_manager":is_manager,
-        "is_director":is_director, 
-        "subjects":FilterControl.objects.first().categories.all(),
-        "ages":SubjectAge.objects.all(),
-        "school_money":money,
-        "map_view":True,
-        "map_map_view":True,
-    }
-    return render(request, "map.html", context)
-
 def newland(request):
     is_trener = False
     is_manager = False
     is_director = False
+    is_moderator = False
     profile = None
     money = 0
     if request.user.is_authenticated:
@@ -98,6 +41,7 @@ def newland(request):
         is_trener = is_profi(profile, 'Teacher')
         is_manager = is_profi(profile, 'Manager')
         is_director = is_profi(profile, 'Director')
+        is_moderator = is_profi(profile, 'Moderator')
         if len(profile.schools.all()):
             money = profile.schools.first().money
     context = {
@@ -107,7 +51,8 @@ def newland(request):
         "url":School.objects.first().get_landing(),
         'is_trener':is_trener,
         "is_manager":is_manager,
-        "is_director":is_director, 
+        "is_director":is_director,
+        "is_moderator":is_moderator,
         "subjects":FilterControl.objects.first().categories.all(),
         "ages":SubjectAge.objects.all(),
         "school_money":money,
@@ -267,8 +212,27 @@ def moderator(request):
         "profile":profile,
         "schools":School.objects.all(),
         "professions":Profession.objects.all(),
+        "is_moderator":is_profi(profile, 'Moderator'),
     }
     return render(request, "moderator.html", context)
+
+def blog(request):
+    profile = get_profile(request)
+    profession = Profession.objects.get(title = 'Moderator')
+    if not profession in profile.profession.all():
+        raise Http404
+    
+    context = {
+        "profile":profile,
+        "schools":School.objects.all(),
+        "professions":Profession.objects.all(),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),        
+    }
+    return render(request, "blog.html", context)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response

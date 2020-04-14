@@ -184,7 +184,10 @@
         {% if is_moderator %}
         <div class="ui divider no_margin"></div>
         <a class="ui button small full-w white" style="text-align: left;" href='/moderator/'>
-            Модераторская</a>
+            <i class="chess queen icon"></i> Модератор</a>
+        <div class="ui divider no_margin"></div>
+        <a class="ui button small full-w white" style="text-align: left;" href='/blog/'>
+            <i class="newspaper icon"></i>Блог</a>
         {% endif %}
         <div class="ui divider no_margin"></div>
         <a class="ui button small full-w white" style="text-align: left;" href='{% url "logout" %}'>
@@ -200,9 +203,6 @@
                 {% if user.is_authenticated %}
                     <a class="ui button white full-w bt1" href='{{ profile.get_absolute_url }}'>
                         <i class="home icon"></i> Моя страница
-                    </a>
-                    <a class="ui button white full-w bt1" href='{% url "news:list" %}'>
-                        <i class="newspaper icon"></i>Новости
                     </a>
                     {% if is_director %}
                     <a class="ui button white full-w bt1" href='{% url "schools:info" %}'>

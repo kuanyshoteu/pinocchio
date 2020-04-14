@@ -6,7 +6,7 @@
     <div id="left-main-menu">
         <div class="ui vertical menu" style="background-color: #fafafa; border:none; box-shadow: none;">
             {% if is_moderator %}
-                <a href="/moderator/" class="pt5 pb5 textw full-w ui button mini green not_in_mobile"><b>{{school_crnt.title}}</b></a>
+                <a href="/moderator/" class="pt5 pb5 textw full-w ui button mini not_in_mobile"><b>{{school_crnt.title}}</b></a>
             {% endif %}
             <a class="item lftitem {%if page == 'mypage' %}lftitem_crnt{%endif%}" href='{{ profile.get_absolute_url }}'>
                 <i class="home icon mr15"></i> Моя страница

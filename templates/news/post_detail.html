@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+    {{post.title}} | bilimtap.kz
+{% endblock head_title %}
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<a id="go-back-btn-before"  href='/blog'>
+    <i class="arrow left icon"></i>
+</a>
+<div class='ui container pb150 pt15'>
+    <div class="ui grid stackable">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column mlback">
+            <div class="ui grid stackable no_margin">
+                <div class="twelve wide column no_padding">
+                    <div class="ui segment shadow_small mb0">
+                        <div class="mb15 textdg pt10">
+                            <b style="font-size: 24px;"><i>{{post.title}}</i></b>
+                            {% if post.author_profile == profile %}
+                            <a class="ml5" href="{{post.get_edit_url}}">
+                                <i class="icon cog"></i>
+                            </a>
+                            {%endif%}
+                            <div class="textg text15 mt15">
+                                {{post.author_profile.first_name}}
+                                <span class="ml15">{{post.timestamp}}</span>
+                            </div>
+                        </div>
+                        {% include 'news/post_detail_work.html' %}
+                        <div class="head_round backdarkgrey mt50 mb15">
+                            <b class="text15 textdg">Комментарии</b>
+                        </div>
+                        <div class="ui segment shadow_small">
+                            <div class="textg"><b>Добавьте комментарий</b></div>
+                            <form class="ui form mb0">
+                                <textarea style="height: 60px;" class="mb5" placeholder="Введите комментарий"></textarea>
+                                <a class="ui button mini blue">Отправить</a>
+                            </form>                            
+                        </div>
+                        <div class="" style="min-height: 50px;"></div>
+                    </div>
+                    <div class="ui segment mt30">
+                        <div class="text-center text15 textg"><b>Рекомендованные статьи</b></div>
+                        <div class="ui grid stackable no_margin">
+                            {% for recpost in recposts %}
+                            <div class="four wide column">
+                                
+                            </div>
+                            {% endfor %}
+                        </div>                        
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="ui segment">
+                        <div class="text-center text15 textg"><b>Тренды</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -4409,6 +4409,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   .w85{
     width: 100% !important;
   }  
+  .w66{
+    width: 100% !important;
+  }  
   .description .ui.grid > [class*="seven wide"].column {
     width: 100% !important;
     display: -webkit-flex;
@@ -4473,6 +4476,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   .w85{
     width: calc(100% - 180px)!important;
   }
+  .w66{
+    width: calc(100% - 180px)!important;
+  }
   .ui.grid.container {
     width: calc( 723px  +  2rem) !important;
   }
@@ -4507,6 +4513,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   .w85{
     width: calc(100% - 180px) !important;
   }  
+  .w66{
+    width: 66.6% !important;
+  }  
   .ui.grid.container {
     width: calc( 933px  +  2rem) !important;
   }
@@ -4540,6 +4549,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   }
   .w85{
     width: calc(100% - 180px) !important;
+  }  
+  .w66{
+    width: 66.6% !important;
   }  
   .ui.grid.container {
     width: calc( 1127px  +  2rem) !important;

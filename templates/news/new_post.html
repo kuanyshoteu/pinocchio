@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+    Создать новость
+{% endblock head_title %}
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<a id="go-back-btn-before"  href='{%if post%}{{post.get_absolute_url}}{%else%}{%url "main:blog"%}{%endif%}'>
+    <i class="arrow left icon"></i>
+</a>
+<div class='ui container pb150 pt15'>
+    <div class="ui grid stackable">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column mlback">
+            <div class="ui grid stackable no_margin">
+                <div class="eight wide column no_padding">
+                    <div class="ui segment shadow_small mb0">
+                        <div class="text15 mb15 textdg">
+                            <b>
+                                Редактировать пост
+                            </b>
+                            <a class="ml5 ui button mini disabled save_post" url="{% url 'news:save_post' %}" id="{%if post%}{{post.id}}{%else%}-1{%endif%}">
+                                Сохранить
+                            </a>
+                            <div style="display: none;" class="ui active loader create_post_loader"></div>
+                            <i style="display: none;" class="newpost_saved icon check textw ml5 mr0"></i>
+                        </div>
+                        <form class="ui form text13 mb0">
+                            <div class="textdg mb5">
+                                <b>Заголовок</b>
+                                <span style="display: none;" class="newpost_notitle highlight_red">Введите заголовок</span>
+                            </div>
+                            <textarea oninput="auto_grow(this)" class="newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
+                            <div class="textdg"><b>Пост</b></div>
+                            <div class="empty_post text-center" style="height: 200px;padding-top: 50px;{%if post%}display: none;{%endif%}">
+                                <span style="color:grey">Пока пусто</span>
+                            </div>
+                            <div style="display: none;">
+                                <textarea oninput="auto_grow(this)" class="edit_text_orig mb10"></textarea>
+                                <div class="mb10 edit_img_orig">
+                                    <span class="edit_img_name"></span>
+                                    <a class="ui button mini white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
+                                </div>
+                            </div>                                   
+                            <div class="post_cont" style="min-height: 200px;">
+                            {%if post%}
+                                {%for part in post.parts.all%}
+                                <div class="mb15 part_edit{{part.id}}">
+                                    {% if part.content|length > 0 %}
+                                    <textarea oninput="auto_grow(this)" class="mb0 part_content{{part.id}}">{{ part.content }}</textarea>
+                                    {% endif %}
+                                    {% if part.image %}
+                                    <div class="ui segment shadow_small no_margin">
+                                        <b>Картинка</b> {{part.image}}
+                                        <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="postfile">
+                                        <label class="part_file{{part.id}}" for="part_file{{part.id}}">
+                                            <a class="ui button mini white shadow_small border1 pl10 pr10"><i class="icon upload textdg"></i> Выбрать другую</a>
+                                        </label>   
+                                    </div>
+                                    {% endif %}
+                                    {% if part.file %}
+                                    <div class="ui segment shadow_small no_margin">
+                                        <b>Файл</b> {{part.file}}
+                                        <a class="ui button mini white border1 shadow_small"><i class="icon upload textdg"></i> Выбрать другую</a>
+                                    </div>
+                                    {%endif%}  
+                                    <div class="mt5">
+                                        <a class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}"><i class="icon check blue mr0"></i></a>
+                                        <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" id="{{part.id}}"><i class="icon x red mr0"></i></a>
+                                    </div>  
+                                </div>                                
+                                {% endfor %}
+                            {%endif%}
+                            </div>
+                        </form>                        
+                    </div>
+                    <div class="ui segment backgreenlow dflex mt0">
+                        <div class="pl0" style="width: calc(100% - 40px);">
+                            <form class="ui form mb0 full-w">
+                                <textarea oninput="auto_grow(this)" class="mb0 newpost_text part_content-1" style="height: 150px;padding-top: 11px;" placeholder="Введите текст"></textarea>
+                            </form>
+                        </div>
+                        <div class="ml5">
+                            <input type="file" name="part_file-1" id="part_file-1" class="postfile">
+                            <label class="part_file-1" for="part_file-1">
+                                <a class="ui button mini white shadow_small pl10 pr10"><i class="icon paperclip blue mr0 text15"></i></a>
+                            </label>   
+                            <br>    
+                            <a id="-1" class="mt5 ui button mini white shadow_small pl10 post_add_part" style="padding-right: 7px;">
+                                <i class="icon check mr0 blue text15"></i> 
+                                <div class="create_post_loader ui active inline small loader" style="margin-top: -3px;display: none;">
+                                </div>                        
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="eight wide column pt0">
+                    <div class="mb0 ui segment shadow_small">
+                        <div class="text15 mb15 textdg">
+                            <b>Предпросмотр</b>
+                        </div>
+                        <div class="mb15">
+                            <b style="font-size: 24px;"><i class="pred_title">{% if post%}{{post.title}}{%else%}Заголовок{%endif%}</i></b>
+                            {%if post%}
+                            <div class="textg text15 mt10">
+                                {{post.author_profile.first_name}}
+                                <span class="ml15">{{post.timestamp}}</span>
+                            </div>
+                            {%endif%}
+                        </div>
+                        <div class="empty_post text-center" style="height: 200px;padding-top: 50px;{%if post%}display: none;{%endif%}">
+                            <span style="color:grey">Пока пусто</span>
+                        </div>
+                        <div style="display: none;">
+                            <div class="pred_text_orig mb10"></div>
+                            <img class="pred_img_orig mb10" style="max-width: 100%;" src="">
+                        </div>
+                        <div class="pred_cont" style="min-height: 200px;">
+                            {% include 'news/post_detail_work.html' %}
+                        </div>
+                    </div>
+                    <div class="pred_text backgreenlow ui segment mt0" style="min-height: 45px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<span style="display: none;" class="data" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}"></span>
+<script type="text/javascript">
+    ts = document.getElementsByTagName('textarea')
+    for(var i=0; i < ts.length; i++){
+        auto_grow(ts[i])
+    }
+    function auto_grow(element) {
+        element.style.height = element.scrollHeight+"px"
+    }
+    $('.post_delete_part').click(function(e) {
+        url = $('.data').attr('delete_part')
+        id = $(this).attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.pred_part'+id).hide('fast')
+                    $('.part_edit'+id).hide('fast')                    
+                }
+            }
+        })
+    })
+    $('.post_add_part').click(function(e) {
+        url = $('.data').attr('save_part')
+        id = $(this).attr('id')
+        post_id = $('.save_post').attr('id')
+        title = $('.newpost_title').val()
+        $('.newpost_notitle').hide()
+        if (title) {
+            $('.check').hide()
+            $('.create_post_loader').show()
+            $('.newpost_saved').hide()
+            text = $('.part_content'+id).val()
+            if (id == '-1') {
+                $('.newpost_text').val("")
+                $('.pred_text').text('')                
+            }
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            if ($('#part_file'+id).length > 0) {
+                file = $('#part_file'+id)[0].files[0];
+                formData.append('file', file);
+            }
+            add_data = '?id='+id+'&post_id='+post_id+'&title='+title+'&text='+text
+            url += add_data
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    $('.save_post').attr('id', data.id)
+                    $('.save_post').addClass('disabled')
+                    $('.save_post').removeClass('blue')
+                    $('.create_post_loader').hide()
+                    $('.check').show()
+                    $('.newpost_saved').show()
+                    $('.empty_post').hide()
+                    if (text) {
+                        text_div = $('.pred_text_orig').clone()
+                        text_div.removeClass('pred_text_orig')
+                        text_div.text(text)
+                        text_div.appendTo('.pred_cont')
+                        text_div.addClass('part'+data.partid)
+                        text_edit = $('.edit_text_orig').clone()
+                        text_edit.removeClass('edit_text_orig')
+                        text_edit.val(text)
+                        text_edit.appendTo('.post_cont')
+                        text_edit.attr('id', data.partid)
+                    }
+                    img_url = data.img
+                    console.log('img', img_url,)
+                    if (img_url.length > 0) {
+                        console.log('to')
+                        img = $('.pred_img_orig').clone()
+                        img.removeClass('pred_img_orig')
+                        img.attr("src", img_url)
+                        img.appendTo('.pred_cont')
+                        img.addClass('part'+data.partid)
+                        img_edit = $('.edit_img_orig').clone()
+                        img_edit.removeClass('edit_img_orig')
+                        img_edit.find('.edit_img_name').text(data.img_name)
+                        img_edit.appendTo('.post_cont')
+                        img_edit.attr('id', data.partid)
+                    }
+                }
+            })
+        }
+        else{
+            $('.newpost_notitle').show('fast')
+        }
+    })    
+</script>
+{% endblock content %}

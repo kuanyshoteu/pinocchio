@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+    Блог Bilimtap
+{% endblock head_title %}
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<div class='ui container pb150 pt15'>
+    <div class="ui grid stackable">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column">
+            <div class="ui grid stackable">
+                <div class="twelve wide column">
+                    <div class="ui segment mt0 mb15 text15">
+                        <div class="text15 mb15 textdg">
+                            <b>Блог Bilimtap.kz</b>
+                            <a class="ui button mini green shadow_green ml30" href="{% url 'news:new_post' %}">Новый пост</a>
+                        </div>
+                        <div class="posts_box ui grid stackable mt0">
+                        </div>
+                        <div style="display: none;">
+                            <div class="pl0 pt0 third wide column post_cont_orig">
+                                <a href="" style="display: block;" class="post_link">
+                                    <div style="height: 180px;overflow: hidden;">
+                                        <img class="post_img full-w" src="">
+                                    </div>
+                                    <div class="post_title text17" style="font-weight: 600;"></div>
+                                    <div class="post_text mb5 textg"></div>
+                                    <div>
+                                        <span class="ui button mini white shadow_small post_file"></span>
+                                    </div>
+                                </a>                                
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+                <div class="four wide column">
+                    <div class="ui segment">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.ajax({
+            url: '{% url "news:get_posts" %}',
+            data: {
+                'page':1,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (var i = 0; i < data.posts.length; i++) {
+                    post = data.posts[i]
+                    title = post[0]
+                    text = post[1]
+                    img = post[2]
+                    href = post[3]
+                    file = post[4]
+                    priority = post[9]
+                    console.log(title)
+                    post = $('.post_cont_orig').clone()
+                    post.removeClass('post_cont_orig')
+                    post.find('.post_link').attr('href', href)
+                    post.find('.post_title').text(title)
+                    post.find('.post_text').text(text)
+                    if (img.length < 2) {
+                        img = "/static/images/fon4.jpg"
+                    }
+                    post.find('.post_img').attr('src', img)
+                    console.log(file)
+                    if (file.length > 1) {
+                        post.find('.post_file').attr('src', file)
+                    }
+                    else{
+                        post.find('.post_file').hide()
+                    }
+                    if (priority == 2) {
+                        post.removeClass('third')
+                        post.addClass('w66')
+                    }
+                    console.log(i, data.posts[i])
+                    post.appendTo('.posts_box')
+                }
+            }
+        })
+    })
+</script>
+{% endblock content %}

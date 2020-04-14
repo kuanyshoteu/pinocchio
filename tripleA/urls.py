@@ -19,8 +19,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from accounts.views import (logout_view, confirm_email)
-from papers.views import courses
-from main.views import(main_view, loaderio, handler404)
+from main.views import(loaderio, handler404)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

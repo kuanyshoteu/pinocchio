@@ -26,28 +26,48 @@ def upload_location(instance, filename):
 
 
 class Post(models.Model):
+    title = models.TextField(default='')
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_posts') 
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(Profile, related_name='liked_posts')
+    dislikes = models.ManyToManyField(Profile, related_name='disliked_posts')
+    done_by = models.ManyToManyField(Profile, related_name='read_posts')
+    slug = models.SlugField(unique=True, default="")
+    order = models.IntegerField(default=0)
+    priority = models.IntegerField(default=1)
+    class Meta:
+        ordering = ['order','timestamp']
+    def __unicode__(self):
+        return self.id
+    def get_absolute_url(self):
+        return reverse("news:detail", kwargs={"slug": self.slug})
+    def get_edit_url(self):
+        return reverse("news:post_edit", kwargs={"slug": self.slug})
 
+class PostPart(models.Model):
+    post = models.ForeignKey(Post, null=True, on_delete = models.CASCADE, related_name='parts')
     content = models.TextField(default='')
+    video = models.FileField(null=True, blank=True)
+    file = models.FileField(null=True,blank=True)
+    youtube_video_link = models.TextField(default='')
     image = models.ImageField(upload_to=upload_location, 
             null=True,
             blank=True, 
             )
-
+    order = models.IntegerField(default=0)
+    show = models.BooleanField(default=True)
+    class Meta: 
+        ordering = ['order']
+            
+class Comment(models.Model):
+    post = models.ForeignKey(Post, null=True, on_delete = models.CASCADE, related_name='comments')
+    level = models.IntegerField(default=1)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='postcomments')
+    content = models.TextField(default='')
+    parent = models.ForeignKey('self', null=True, on_delete = models.CASCADE, related_name='children')
+    likes = models.ManyToManyField(Profile, related_name='liked_post_comments')
+    dislikes = models.ManyToManyField(Profile, related_name='disliked_post_comments')
     class Meta:
-        ordering = ['-id']
-    def __unicode__(self):
-        return self.id
-    def get_absolute_url(self):
-        return reverse("news:detail", kwargs={"id": self.id})
-    def get_delete_url(self):
-        return reverse("news:delete")
-    def get_update_url(self):
-        return reverse("news:update", kwargs={"id": self.id})
-    def get_list_url(self):
-        return reverse("news:list")
-    def get_markdown(self):
-        return mark_safe(markdown(self.content))
-
+        ordering = ['timestamp']
