@@ -4,9 +4,11 @@
         val = $(this).val()
         $('.pred_title').text(val)
     })
-    $('.newpost_text').on('input', function () {
+    $('.partcontent').on('input', function (e) {
         val = $(this).val()
-        $('.pred_text').text(val)
+        id = $(this).attr('id')
+        val = val.replace(/\n/g,'<br>')
+        $('.pred_part_content'+id).html(val)
     })
     $('.save_post').click(function(e) {
         url = $(this).attr('url')
@@ -1509,6 +1511,7 @@
     })
     $(".content-markdown").each(function () {
         var content = $(this).text()
+        console.log('f',content, $(this).attr('id'))
         var markedContent = marked(content)
         $(this).html(markedContent)
     });

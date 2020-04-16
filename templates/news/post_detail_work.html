@@ -1,7 +1,7 @@
 <div class="post_box">
     {% for part in post.parts.all %}
     <div class="mb5 pred_part{{part.id}}">
-        <div class="text15 pred_part_content{{part.id}}">{{ part.content }}</div>
+        <div class="text15 pred_part_content{{part.id}}">{{ part.content|safe }}</div>
         {% if part.image %}
             <img src="{{part.image.url}}" class="full-w pred_part_img{{part.id}}">
         {% endif %}

@@ -59,6 +59,8 @@ class PostPart(models.Model):
     show = models.BooleanField(default=True)
     class Meta: 
         ordering = ['order']
+    def get_markdown(self):
+        return mark_safe(markdown(self.content))
             
 class Comment(models.Model):
     post = models.ForeignKey(Post, null=True, on_delete = models.CASCADE, related_name='comments')

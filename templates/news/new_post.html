@@ -48,7 +48,8 @@
                                 {%for part in post.parts.all%}
                                 <div class="mb15 part_edit{{part.id}}">
                                     {% if part.content|length > 0 %}
-                                    <textarea oninput="auto_grow(this)" class="mb0 part_content{{part.id}}">{{ part.content }}</textarea>
+                                    <textarea oninput="auto_grow(this)" id="{{part.id}}" class="partcontent mb0 part_content{{part.id}}">{{ part.content }}</textarea>
+                                    <span style="display: none;" class="parttextof{{part.id}}" text=""></span>
                                     {% endif %}
                                     {% if part.image %}
                                     <div class="ui segment shadow_small no_margin">
@@ -78,7 +79,8 @@
                     <div class="ui segment backgreenlow dflex mt0">
                         <div class="pl0" style="width: calc(100% - 40px);">
                             <form class="ui form mb0 full-w">
-                                <textarea oninput="auto_grow(this)" class="mb0 newpost_text part_content-1" style="height: 150px;padding-top: 11px;" placeholder="Введите текст"></textarea>
+                                <textarea id="-1" oninput="auto_grow(this)" class="partcontent mb0 newpost_text part_content-1" style="height: 150px;padding-top: 11px;" placeholder="Введите текст"></textarea>
+                                <span style="display: none;" class="parttextof-1" text=""></span>
                             </form>
                         </div>
                         <div class="ml5">
@@ -120,20 +122,31 @@
                             {% include 'news/post_detail_work.html' %}
                         </div>
                     </div>
-                    <div class="pred_text backgreenlow ui segment mt0" style="min-height: 45px;"></div>
+                    <div class="pred_part_content-1 backgreenlow ui segment mt0" style="min-height: 45px;"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<style type="text/css">
+    textarea{
+        overflow-y:hidden;
+    }
+</style>
 <span style="display: none;" class="data" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}"></span>
-<script type="text/javascript">
+<script type="text/javascript">    
     ts = document.getElementsByTagName('textarea')
     for(var i=0; i < ts.length; i++){
-        auto_grow(ts[i])
+        auto_grow_f(ts[i])
     }
     function auto_grow(element) {
-        element.style.height = element.scrollHeight+"px"
+        element.style.height = element.scrollHeight+"px"            
+    }
+    function auto_grow_f(element) {
+        val = element.value
+        val = val.replace(/<br>/g,'\n')
+        element.value = val
+        element.style.minHeight = element.scrollHeight+"px"            
     }
     $('.post_delete_part').click(function(e) {
         url = $('.data').attr('delete_part')
@@ -159,10 +172,9 @@
         title = $('.newpost_title').val()
         $('.newpost_notitle').hide()
         if (title) {
-            $('.check').hide()
             $('.create_post_loader').show()
             $('.newpost_saved').hide()
-            text = $('.part_content'+id).val()
+            text = $('.pred_part_content'+id).html()
             if (id == '-1') {
                 $('.newpost_text').val("")
                 $('.pred_text').text('')                
@@ -190,19 +202,25 @@
                     $('.newpost_saved').show()
                     $('.empty_post').hide()
                     if (text) {
-                        text_div = $('.pred_text_orig').clone()
-                        text_div.removeClass('pred_text_orig')
-                        text_div.text(text)
-                        text_div.appendTo('.pred_cont')
-                        text_div.addClass('part'+data.partid)
-                        text_edit = $('.edit_text_orig').clone()
-                        text_edit.removeClass('edit_text_orig')
+                        if (id == '-1') {
+                            text_div = $('.pred_text_orig').clone()
+                            text_div.removeClass('pred_text_orig')
+                            text_div.appendTo('.pred_cont')
+                            text_div.addClass('part'+data.partid)
+                            text_edit = $('.edit_text_orig').clone()
+                            text_edit.removeClass('edit_text_orig')
+                            text_edit.appendTo('.post_cont')
+                            text_edit.attr('id', data.partid)
+                        }
+                        else{
+                            text_div = $('.pred_part_content'+id)
+                            text_edit = $('.part_content'+id)
+                        }
+                        text_div.html(text)
+                        text = text.replace(/<br>/g,'\n')
                         text_edit.val(text)
-                        text_edit.appendTo('.post_cont')
-                        text_edit.attr('id', data.partid)
                     }
                     img_url = data.img
-                    console.log('img', img_url,)
                     if (img_url.length > 0) {
                         console.log('to')
                         img = $('.pred_img_orig').clone()
