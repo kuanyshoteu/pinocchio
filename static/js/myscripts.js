@@ -24,6 +24,9 @@
             },
             dataType: 'json',
             success: function (data) {
+                if (id == '-1') {
+                    window.location.replace(data.url);
+                }
                 $('.save_post').attr('id', data.id)
                 $('.save_post').addClass('disabled')
                 $('.save_post').removeClass('blue')

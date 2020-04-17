@@ -42,6 +42,10 @@
                                     <span class="edit_img_name"></span>
                                     <a class="ui button mini white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
                                 </div>
+                                <div class="mt5 part_buttons_orig">
+                                    <a class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}"><i class="icon check blue mr0"></i></a>
+                                    <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" id="{{part.id}}"><i class="icon x red mr0"></i></a>
+                                </div>                                
                             </div>                                   
                             <div class="post_cont" style="min-height: 200px;">
                             {%if post%}
@@ -133,7 +137,7 @@
         overflow-y:hidden;
     }
 </style>
-<span style="display: none;" class="data" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}"></span>
+<span style="display: none;" class="data" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}" temp_part_id=''></span>
 <script type="text/javascript">    
     ts = document.getElementsByTagName('textarea')
     for(var i=0; i < ts.length; i++){
@@ -166,80 +170,131 @@
         })
     })
     $('.post_add_part').click(function(e) {
-        url = $('.data').attr('save_part')
-        id = $(this).attr('id')
+        init_url = $('.data').attr('save_part')
+        init_part_id = $(this).attr('id')
         post_id = $('.save_post').attr('id')
         title = $('.newpost_title').val()
         $('.newpost_notitle').hide()
         if (title) {
             $('.create_post_loader').show()
             $('.newpost_saved').hide()
-            text = $('.pred_part_content'+id).html()
-            if (id == '-1') {
+            alltext = $('.pred_part_content'+init_part_id).html()
+            alltext2 = alltext
+            if (init_part_id == '-1') {
                 $('.newpost_text').val("")
-                $('.pred_text').text('')                
+                $('.pred_text').text('')          
             }
-            var formData = new FormData();
-            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-            if ($('#part_file'+id).length > 0) {
-                file = $('#part_file'+id)[0].files[0];
-                formData.append('file', file);
+            texts = []
+            cnt = 0
+            while(cnt <= parseInt(alltext2.length/500)){
+                cnt += 1
+                ptext = alltext.substr(0, 500)
+                texts.push(ptext)
+                alltext = alltext.substr(500)
             }
-            add_data = '?id='+id+'&post_id='+post_id+'&title='+title+'&text='+text
-            url += add_data
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    $('.save_post').attr('id', data.id)
-                    $('.save_post').addClass('disabled')
-                    $('.save_post').removeClass('blue')
-                    $('.create_post_loader').hide()
-                    $('.check').show()
-                    $('.newpost_saved').show()
-                    $('.empty_post').hide()
-                    if (text) {
-                        if (id == '-1') {
-                            text_div = $('.pred_text_orig').clone()
-                            text_div.removeClass('pred_text_orig')
-                            text_div.appendTo('.pred_cont')
-                            text_div.addClass('part'+data.partid)
-                            text_edit = $('.edit_text_orig').clone()
-                            text_edit.removeClass('edit_text_orig')
-                            text_edit.appendTo('.post_cont')
-                            text_edit.attr('id', data.partid)
-                        }
-                        else{
-                            text_div = $('.pred_part_content'+id)
-                            text_edit = $('.part_content'+id)
-                        }
-                        text_div.html(text)
-                        text = text.replace(/<br>/g,'\n')
-                        text_edit.val(text)
-                    }
-                    img_url = data.img
-                    if (img_url.length > 0) {
-                        console.log('to')
-                        img = $('.pred_img_orig').clone()
-                        img.removeClass('pred_img_orig')
-                        img.attr("src", img_url)
-                        img.appendTo('.pred_cont')
-                        img.addClass('part'+data.partid)
-                        img_edit = $('.edit_img_orig').clone()
-                        img_edit.removeClass('edit_img_orig')
-                        img_edit.find('.edit_img_name').text(data.img_name)
-                        img_edit.appendTo('.post_cont')
-                        img_edit.attr('id', data.partid)
-                    }
-                }
-            })
+            if (texts.length == 0) {texts = ['']}
+            part_id = init_part_id
+            sendTexts(0, texts, part_id,init_part_id, post_id, title, init_url)
         }
         else{
             $('.newpost_notitle').show('fast')
         }
-    })    
+    })
+    function sendTexts(i, texts, part_id, init_part_id, post_id, title, init_url){
+        text = texts[i]
+        console.log('part_id', part_id)
+        add_data = '?id='+part_id+'&post_id='+post_id+'&title='+title+'&text='+text
+        console.log('url', add_data)
+        if (i == 0) {
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+            if ($('#part_file'+init_part_id).length > 0) {
+                file = $('#part_file'+init_part_id)[0].files[0];
+                formData.append('file', file);
+            }            
+        }
+        else{
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        }
+        if (i == texts.length - 1) {add_data += '&portion=last'}
+        else if(i == 0){add_data += '&portion=first'}
+        else {add_data += '&portion=mid';}
+
+        url = init_url + add_data
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                part_id = data.part_id
+                if (i == texts.length - 1) {
+                    img_url = data.img
+                    file_name = data.file_name
+                    fillPred(post_id, part_id, init_part_id, alltext2, img_url, file_name)
+                }
+                if (i < texts.length - 1) {
+                    i += 1
+                    sendTexts(i, texts, part_id,init_part_id, post_id, title, init_url)
+                }
+            }
+        })
+    }
+    function fillPred(post_id, part_id, init_part_id, alltext2, img_url, file_name){
+        console.log('init_part_id',init_part_id)
+        if (post_id == '-1') {
+            window.location.replace(data.url);
+        }
+        else{
+            $('.save_post').addClass('disabled')
+            $('.save_post').removeClass('blue')
+            $('.create_post_loader').hide()
+            $('.check').show()
+            $('.newpost_saved').show()
+            $('.empty_post').hide()
+            $('.pred_part_content-1').html("")
+            if (text) {
+                if (init_part_id == '-1') {
+                    text_div = $('.pred_text_orig').clone()
+                    text_div.removeClass('pred_text_orig')
+                    text_div.addClass('pred_part_content'+part_id)
+                    text_edit = $('.edit_text_orig').clone()
+                    text_edit.removeClass('edit_text_orig')
+                    text_edit.addClass('part_content'+part_id)
+                    btns = $('.part_buttons_orig').clone()
+                    btns.removeClass('part_buttons_orig')
+                    btns.find('.post_add_part').attr('id', part_id)
+                    btns.find('.post_delete_part').attr('id', part_id)
+                    text_div.appendTo('.pred_cont')
+                    text_edit.appendTo('.post_cont')
+                    btns.appendTo('.post_cont')
+                }
+                else{
+                    text_div = $('.pred_part_content'+part_id)
+                    text_edit = $('.part_content'+part_id)
+                }
+                text_div.html(alltext2)
+                text = alltext2.replace(/<br>/g,'\n')
+                text_edit.val(text)
+            }
+            if (img_url) {
+                if (img_url.length > 0) {
+                    console.log('to')
+                    img = $('.pred_img_orig').clone()
+                    img.removeClass('pred_img_orig')
+                    img.attr("src", img_url)
+                    img.appendTo('.pred_cont')
+                    img.addClass('part'+data.partid)
+                    img_edit = $('.edit_img_orig').clone()
+                    img_edit.removeClass('edit_img_orig')
+                    img_edit.find('.edit_img_name').text(data.file_name)
+                    img_edit.appendTo('.post_cont')
+                    img_edit.attr('id', data.partid)
+                }
+            }
+        }
+    }
 </script>
 {% endblock content %}

@@ -129,9 +129,9 @@ def save_post(request):
     school = is_moderator_school(request, profile)
     title = request.GET.get('title')
     pid = request.GET.get('id')
-    post_id = save_post_work(title, pid, profile, school)[0]
+    post = save_post_work(title, pid, profile, school)
     data = {
-        "id":post_id,
+        "url":post.get_edit_url(),
     }
     return JsonResponse(data)
 
@@ -141,17 +141,24 @@ def post_add_part(request):
     school = is_moderator_school(request, profile)
     title = request.GET.get('title')
     pid = request.GET.get('post_id')
-    post_id, post = save_post_work(title, pid, profile, school)
+    post = save_post_work(title, pid, profile, school)
     partid = int(request.GET.get('id'))
     img = ""
     file_name = ""
+    url = post.get_edit_url()
+    print('part', partid)
     if partid == -1:
         part = post.parts.create(
             order=len(post.parts.all()),
         )
     else:
         part = post.parts.get(id=partid)
-    part.content = request.GET.get('text')
+    portion = request.GET.get('portion')
+    print(portion)
+    if portion == 'first':
+        part.content = request.GET.get('text')
+    else:
+        part.content += request.GET.get('text')
     if request.FILES.get('file'):
         file_name = str(request.FILES.get('file'))
         its_img = False
@@ -165,17 +172,22 @@ def post_add_part(request):
         else:
             part.file = request.FILES.get('file')
     part.save()
-    data = {
-        "id":post_id,
-        "img":img,
-        "file_name":file_name,
-    }
+    if portion == 'last':
+        data = {
+            "part_id":part.id,
+            "img":img,
+            "file_name":file_name,
+            "url":url,
+        }
+    else:
+        data = {
+            "part_id":part.id,
+        }
     return JsonResponse(data)
 
 def save_post_work(title, pid, profile, school):
     post_id = -1
     post = None
-    print(pid, pid=='-1')
     if pid == '-1':
         if title:
             slug = title.replace(' ', '_')
@@ -187,13 +199,11 @@ def save_post_work(title, pid, profile, school):
                 author_profile = profile,
                 slug = slug,
                 )
-            post_id = post.id
     else:
         post = school.school_posts.get(id=int(pid))
         post.title = title
         post.save()
-        post_id = post.id
-    return post_id, post
+    return post
 
 def get_posts(request):
     res = []
