@@ -38,9 +38,13 @@
                             </div>
                             <div style="display: none;">
                                 <textarea oninput="auto_grow(this)" class="edit_text_orig mb10"></textarea>
-                                <div class="mb10 edit_img_orig">
-                                    <span class="edit_img_name"></span>
-                                    <a class="ui button mini white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
+                                <div class="edit_img_orig ui segment shadow_small mb15">
+                                    <b>Картинка</b> <span class="edit_img_name"></span>
+                                    <a class="ui button mini shadow_small white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
+                                </div>
+                                <div class="edit_file_orig ui segment shadow_small mb15">
+                                    <b>Файл</b> <span class="edit_file_name"></span>
+                                    <a class="ui button mini shadow_small white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
                                 </div>
                                 <div class="mt5 part_buttons_orig">
                                     <a class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}"><i class="icon check blue mr0"></i></a>
@@ -56,7 +60,7 @@
                                     <span style="display: none;" class="parttextof{{part.id}}" text=""></span>
                                     {% endif %}
                                     {% if part.image %}
-                                    <div class="ui segment shadow_small no_margin">
+                                    <div class="part_img{{part.id}} ui segment shadow_small mb15">
                                         <b>Картинка</b> {{part.image}}
                                         <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="postfile">
                                         <label class="part_file{{part.id}}" for="part_file{{part.id}}">
@@ -65,7 +69,7 @@
                                     </div>
                                     {% endif %}
                                     {% if part.file %}
-                                    <div class="ui segment shadow_small no_margin">
+                                    <div class="part_file{{part.id}} ui segment shadow_small mb15">
                                         <b>Файл</b> {{part.file}}
                                         <a class="ui button mini white border1 shadow_small"><i class="icon upload textdg"></i> Выбрать другую</a>
                                     </div>
@@ -74,7 +78,7 @@
                                         <a class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}"><i class="icon check blue mr0"></i></a>
                                         <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" id="{{part.id}}"><i class="icon x red mr0"></i></a>
                                     </div>  
-                                </div>                                
+                                </div>
                                 {% endfor %}
                             {%endif%}
                             </div>
@@ -143,8 +147,23 @@
     for(var i=0; i < ts.length; i++){
         auto_grow_f(ts[i])
     }
+    $('textarea').keyup(function(e) {
+        if (e.keyCode == 8) {
+            l = 16
+            text = $(this).val()
+            var count = (text.match(/\n/g) || []).length + 1;
+            height = count * l
+            console.log(count, l, height)
+            $(this).height(height)
+            $(this).height($(this).prop('scrollHeight') - 17)
+        }
+        else{
+            height = $(this).prop('scrollHeight') - 17
+            $(this).height(height)
+        }
+    })
     function auto_grow(element) {
-        element.style.height = element.scrollHeight+"px"            
+//        element.style.height = element.scrollHeight+"px"          
     }
     function auto_grow_f(element) {
         val = element.value
@@ -202,9 +221,7 @@
     })
     function sendTexts(i, texts, part_id, init_part_id, post_id, title, init_url){
         text = texts[i]
-        console.log('part_id', part_id)
         add_data = '?id='+part_id+'&post_id='+post_id+'&title='+title+'&text='+text
-        console.log('url', add_data)
         if (i == 0) {
             var formData = new FormData();
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
@@ -217,10 +234,9 @@
             var formData = new FormData();
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
         }
-        if (i == texts.length - 1) {add_data += '&portion=last'}
-        else if(i == 0){add_data += '&portion=first'}
-        else {add_data += '&portion=mid';}
-
+        if (i == texts.length - 1) {is_last = 'yes'}else{is_last = 'no'}
+        if(i == 0){is_first = 'yes'}else{is_first='no'}
+        add_data += '&first='+is_first+'&last='+is_last
         url = init_url + add_data
         $.ajax({
             url: url,
@@ -263,13 +279,8 @@
                     text_edit = $('.edit_text_orig').clone()
                     text_edit.removeClass('edit_text_orig')
                     text_edit.addClass('part_content'+part_id)
-                    btns = $('.part_buttons_orig').clone()
-                    btns.removeClass('part_buttons_orig')
-                    btns.find('.post_add_part').attr('id', part_id)
-                    btns.find('.post_delete_part').attr('id', part_id)
                     text_div.appendTo('.pred_cont')
                     text_edit.appendTo('.post_cont')
-                    btns.appendTo('.post_cont')
                 }
                 else{
                     text_div = $('.pred_part_content'+part_id)
@@ -278,21 +289,37 @@
                 text_div.html(alltext2)
                 text = alltext2.replace(/<br>/g,'\n')
                 text_edit.val(text)
+                element = document.getElementsByClassName('part_content'+part_id)[0]
+                auto_grow(element)
             }
+            console.log(img_url)
             if (img_url) {
-                if (img_url.length > 0) {
-                    console.log('to')
+                if (img_url.length > 0) {                    
+                    console.log('img')
+                    if (init_part_id != '-1') {
+                        $('.pred_part_img'+part_id).hide()
+                    }
+                    else{
+                        img_edit = $('.edit_img_orig').clone()
+                        img_edit.removeClass('edit_img_orig')
+                        img_edit.find('.edit_img_name').text(file_name)
+                        img_edit.appendTo('.post_cont')
+                        img_edit.attr('id', part_id)                        
+                    }
                     img = $('.pred_img_orig').clone()
                     img.removeClass('pred_img_orig')
+                    img.addClass('pred_part_img'+part_id)
                     img.attr("src", img_url)
                     img.appendTo('.pred_cont')
-                    img.addClass('part'+data.partid)
-                    img_edit = $('.edit_img_orig').clone()
-                    img_edit.removeClass('edit_img_orig')
-                    img_edit.find('.edit_img_name').text(data.file_name)
-                    img_edit.appendTo('.post_cont')
-                    img_edit.attr('id', data.partid)
+                    $('.pred_part_img'+part_id).load(document.URL +  '.pred_part_img'+part_id, function(){});
                 }
+            }
+            if (init_part_id == '-1') {
+                btns = $('.part_buttons_orig').clone()
+                btns.removeClass('part_buttons_orig')
+                btns.find('.post_add_part').attr('id', part_id)
+                btns.find('.post_delete_part').attr('id', part_id)
+                btns.appendTo('.post_cont')
             }
         }
     }

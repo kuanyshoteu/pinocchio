@@ -153,9 +153,7 @@ def post_add_part(request):
         )
     else:
         part = post.parts.get(id=partid)
-    portion = request.GET.get('portion')
-    print(portion)
-    if portion == 'first':
+    if request.GET.get('first') == 'yes':
         part.content = request.GET.get('text')
     else:
         part.content += request.GET.get('text')
@@ -172,7 +170,7 @@ def post_add_part(request):
         else:
             part.file = request.FILES.get('file')
     part.save()
-    if portion == 'last':
+    if request.GET.get('last') == 'yes':
         data = {
             "part_id":part.id,
             "img":img,
