@@ -20,10 +20,7 @@
                             <b>
                                 Редактировать пост
                             </b>
-                            <a class="ml5 ui button mini disabled save_post" url="{% url 'news:save_post' %}" id="{%if post%}{{post.id}}{%else%}-1{%endif%}">
-                                Сохранить
-                            </a>
-                            <div style="display: none;" class="ui active loader create_post_loader"></div>
+                            <div class="create_post_loader ui active inline mini loader" style="display: none;"></div>
                             <i style="display: none;" class="newpost_saved icon check textw ml5 mr0"></i>
                         </div>
                         <form class="ui form text13 mb0">
@@ -31,13 +28,17 @@
                                 <b>Заголовок</b>
                                 <span style="display: none;" class="newpost_notitle highlight_red">Введите заголовок</span>
                             </div>
-                            <textarea oninput="auto_grow(this)" class="newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
+                            <textarea class="mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
+                            <a class="mb15 pt5 pb5 ui button white border1 shadow_small save_post" url="{% url 'news:save_post' %}" id="{%if post%}{{post.id}}{%else%}-1{%endif%}">
+                                <i class="icon check blue mr0"></i>
+                                <div class="create_post_loader ui active inline mini loader" style="display: none;"></div>
+                            </a>                            
                             <div class="textdg"><b>Пост</b></div>
                             <div class="empty_post text-center" style="height: 200px;padding-top: 50px;{%if post%}display: none;{%endif%}">
                                 <span style="color:grey">Пока пусто</span>
                             </div>
                             <div style="display: none;">
-                                <textarea oninput="auto_grow(this)" class="edit_text_orig mb10"></textarea>
+                                <textarea class="edit_text_orig mb10"></textarea>
                                 <div class="edit_img_orig ui segment shadow_small mb15">
                                     <b>Картинка</b> <span class="edit_img_name"></span>
                                     <a class="ui button mini shadow_small white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
@@ -47,36 +48,42 @@
                                     <a class="ui button mini shadow_small white border1"><i class="icon upload textdg"></i> Загрузить другую</a>
                                 </div>
                                 <div class="mt5 part_buttons_orig">
-                                    <a class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}"><i class="icon check blue mr0"></i></a>
-                                    <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" id="{{part.id}}"><i class="icon x red mr0"></i></a>
+                                    <a class="pt5 pb5 ui button white border1 shadow_small post_add_part">
+                                        <i class="icon check blue mr0"></i>
+                                        <div class="create_post_loader ui active inline mini loader" style="display: none;"></div>
+                                    </a>
+                                    <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part"><i class="icon x red mr0"></i></a>
                                 </div>                                
                             </div>                                   
                             <div class="post_cont" style="min-height: 200px;">
                             {%if post%}
                                 {%for part in post.parts.all%}
-                                <div class="mb15 part_edit{{part.id}}">
+                                <div class="pb5 mb15 part_edit{{part.id}}">
                                     {% if part.content|length > 0 %}
-                                    <textarea oninput="auto_grow(this)" id="{{part.id}}" class="partcontent mb0 part_content{{part.id}}">{{ part.content }}</textarea>
+                                    <textarea id="{{part.id}}" class="partcontent mb0 part_content{{part.id}}">{{ part.content }}</textarea>
                                     <span style="display: none;" class="parttextof{{part.id}}" text=""></span>
                                     {% endif %}
                                     {% if part.image %}
-                                    <div class="part_img{{part.id}} ui segment shadow_small mb15">
+                                    <div class="part_img{{part.id}} ui segment shadow_small no_margin">
                                         <b>Картинка</b> {{part.image}}
-                                        <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="postfile">
+                                        <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="part_file{{part.id}} postfile">
                                         <label class="part_file{{part.id}}" for="part_file{{part.id}}">
                                             <a class="ui button mini white shadow_small border1 pl10 pr10"><i class="icon upload textdg"></i> Выбрать другую</a>
                                         </label>   
                                     </div>
                                     {% endif %}
                                     {% if part.file %}
-                                    <div class="part_file{{part.id}} ui segment shadow_small mb15">
+                                    <div class="part_file{{part.id}} ui segment shadow_small no_margin">
                                         <b>Файл</b> {{part.file}}
                                         <a class="ui button mini white border1 shadow_small"><i class="icon upload textdg"></i> Выбрать другую</a>
                                     </div>
                                     {%endif%}  
-                                    <div class="mt5">
-                                        <a class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}"><i class="icon check blue mr0"></i></a>
-                                        <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" id="{{part.id}}"><i class="icon x red mr0"></i></a>
+                                    <div class="mt5 dflex">
+                                        <a onclick="post_add_part('{{part.id}}')" class="pt5 pb5 ui button white border1 shadow_small post_add_part" id="{{part.id}}">
+                                            <i class="icon check blue mr0"></i>
+                                            <div class="create_post_loader ui active inline mini loader" style="display: none;"></div>
+                                        </a>
+                                        <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" onclick="post_delete_part('{{part.id}}')" id="{{part.id}}"><i class="icon x red mr0"></i></a>
                                     </div>  
                                 </div>
                                 {% endfor %}
@@ -87,28 +94,35 @@
                     <div class="ui segment backgreenlow dflex mt0">
                         <div class="pl0" style="width: calc(100% - 40px);">
                             <form class="ui form mb0 full-w">
-                                <textarea id="-1" oninput="auto_grow(this)" class="partcontent mb0 newpost_text part_content-1" style="height: 150px;padding-top: 11px;" placeholder="Введите текст"></textarea>
+                                <textarea id="-1" class="partcontent mb0 newpost_text part_content-1" style="height: 150px;padding-top: 11px;" placeholder="Введите текст"></textarea>
                                 <span style="display: none;" class="parttextof-1" text=""></span>
                             </form>
                         </div>
                         <div class="ml5">
-                            <input type="file" name="part_file-1" id="part_file-1" class="postfile">
+                            <input type="file" name="part_file-1" id="part_file-1" part_id="-1" class="postfile">
                             <label class="part_file-1" for="part_file-1">
-                                <a class="ui button mini white shadow_small pl10 pr10"><i class="icon paperclip blue mr0 text15"></i></a>
-                            </label>   
+                                <a class="ui button mini white shadow_small pl10" style="padding-right: 7px;"><i class="icon paperclip blue mr0 text15"></i></a>
+                            </label>
                             <br>    
-                            <a id="-1" class="mt5 ui button mini white shadow_small pl10 post_add_part" style="padding-right: 7px;">
+                            <a onclick="post_add_part('-1')" id="-1" class="mt5 ui button mini white shadow_small pl10 post_add_part" style="padding-right: 7px;">
                                 <i class="icon check mr0 blue text15"></i> 
-                                <div class="create_post_loader ui active inline small loader" style="margin-top: -3px;display: none;">
-                                </div>                        
+                                <div class="create_post_loader ui active inline mini loader" style="display: none;">
+                                </div>
                             </a>
                         </div>
                     </div>
+                    <div class="backgreenlow ui segment mt0" style="min-height: 45px;">
+                        <div class="text15 mb15 textdg">
+                            <b>Предпросмотр</b>
+                        </div>
+                        <div class="pred_part_content-1"></div>
+                        <img style="max-width: 70px;" class="pred_part_img-1" src="">
+                    </div>                    
                 </div>
                 <div class="eight wide column pt0">
                     <div class="mb0 ui segment shadow_small">
                         <div class="text15 mb15 textdg">
-                            <b>Предпросмотр</b>
+                            <b>Пост</b>
                         </div>
                         <div class="mb15">
                             <b style="font-size: 24px;"><i class="pred_title">{% if post%}{{post.title}}{%else%}Заголовок{%endif%}</i></b>
@@ -124,13 +138,13 @@
                         </div>
                         <div style="display: none;">
                             <div class="pred_text_orig mb10"></div>
-                            <img class="pred_img_orig mb10" style="max-width: 100%;" src="">
+                            <img class="pred_img_orig mb10 full-w" src="">
+                            <a href="" class="pred_file_orig full-w ui button mini white border1 shadow_small text15"><i class="icon download textblue"></i> {{part.file}}</a>
                         </div>
                         <div class="pred_cont" style="min-height: 200px;">
                             {% include 'news/post_detail_work.html' %}
                         </div>
                     </div>
-                    <div class="pred_part_content-1 backgreenlow ui segment mt0" style="min-height: 45px;"></div>
                 </div>
             </div>
         </div>
@@ -142,28 +156,49 @@
     }
 </style>
 <span style="display: none;" class="data" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}" temp_part_id=''></span>
-<script type="text/javascript">    
+<script type="text/javascript">
+    $('.clear_input_file').click(function(e) {
+        id = $(this).attr('id')
+        $('#part_file'+id).val('')
+        $('.')
+    })
+    $('.postfile').change(function() {
+        id = $(this).attr('part_id') 
+        console.log(id)
+        readURL(this, id);
+    })
+    function readURL(input, id) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        console.log('totototo')        
+        reader.onload = function(e) {
+            $('.pred_part_img'+id).attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]); // convert to base64 string
+      }
+    }
+
     ts = document.getElementsByTagName('textarea')
     for(var i=0; i < ts.length; i++){
         auto_grow_f(ts[i])
     }
     $('textarea').keyup(function(e) {
         if (e.keyCode == 8) {
-            l = 16
-            text = $(this).val()
-            var count = (text.match(/\n/g) || []).length + 1;
-            height = count * l
-            console.log(count, l, height)
-            $(this).height(height)
-            $(this).height($(this).prop('scrollHeight') - 17)
+            auto_grow($(this))
         }
         else{
-            height = $(this).prop('scrollHeight') - 17
+            height = $(this).prop('scrollHeight') - 19
             $(this).height(height)
+            console.log(height)
         }
     })
-    function auto_grow(element) {
-//        element.style.height = element.scrollHeight+"px"          
+    function auto_grow(element){
+        text = element.val()
+        l = 16
+        var count = (text.match(/\n/g) || []).length + 1;
+        height = count * l
+        element.height(height)
+        element.height(element.prop('scrollHeight') - 17)
     }
     function auto_grow_f(element) {
         val = element.value
@@ -171,9 +206,8 @@
         element.value = val
         element.style.minHeight = element.scrollHeight+"px"            
     }
-    $('.post_delete_part').click(function(e) {
+    function post_delete_part(id){
         url = $('.data').attr('delete_part')
-        id = $(this).attr('id')
         $.ajax({
             url: url,
             data: {
@@ -187,16 +221,16 @@
                 }
             }
         })
-    })
-    $('.post_add_part').click(function(e) {
+    }
+    function post_add_part(init_part_id){
         init_url = $('.data').attr('save_part')
-        init_part_id = $(this).attr('id')
         post_id = $('.save_post').attr('id')
         title = $('.newpost_title').val()
         $('.newpost_notitle').hide()
         if (title) {
             $('.create_post_loader').show()
             $('.newpost_saved').hide()
+            $('.check').hide()
             alltext = $('.pred_part_content'+init_part_id).html()
             alltext2 = alltext
             if (init_part_id == '-1') {
@@ -218,7 +252,7 @@
         else{
             $('.newpost_notitle').show('fast')
         }
-    })
+    }
     function sendTexts(i, texts, part_id, init_part_id, post_id, title, init_url){
         text = texts[i]
         add_data = '?id='+part_id+'&post_id='+post_id+'&title='+title+'&text='+text
@@ -247,9 +281,9 @@
             success: function (data) {
                 part_id = data.part_id
                 if (i == texts.length - 1) {
-                    img_url = data.img
+                    file_url = data.file_url
                     file_name = data.file_name
-                    fillPred(post_id, part_id, init_part_id, alltext2, img_url, file_name)
+                    fillPred(post_id, part_id, init_part_id, alltext2, file_url, file_name)
                 }
                 if (i < texts.length - 1) {
                     i += 1
@@ -258,19 +292,13 @@
             }
         })
     }
-    function fillPred(post_id, part_id, init_part_id, alltext2, img_url, file_name){
+    function fillPred(post_id, part_id, init_part_id, alltext2, file_url, file_name){
         console.log('init_part_id',init_part_id)
         if (post_id == '-1') {
             window.location.replace(data.url);
         }
         else{
-            $('.save_post').addClass('disabled')
-            $('.save_post').removeClass('blue')
-            $('.create_post_loader').hide()
-            $('.check').show()
-            $('.newpost_saved').show()
-            $('.empty_post').hide()
-            $('.pred_part_content-1').html("")
+            clear_pred()
             if (text) {
                 if (init_part_id == '-1') {
                     text_div = $('.pred_text_orig').clone()
@@ -289,15 +317,14 @@
                 text_div.html(alltext2)
                 text = alltext2.replace(/<br>/g,'\n')
                 text_edit.val(text)
-                element = document.getElementsByClassName('part_content'+part_id)[0]
+                element = $('.part_content'+part_id)
                 auto_grow(element)
             }
-            console.log(img_url)
-            if (img_url) {
-                if (img_url.length > 0) {                    
+            if (file_url) {
+                if (file_url.length > 0) {                    
                     console.log('img')
                     if (init_part_id != '-1') {
-                        $('.pred_part_img'+part_id).hide()
+                        img = $('.pred_part_img'+part_id)
                     }
                     else{
                         img_edit = $('.edit_img_orig').clone()
@@ -305,23 +332,33 @@
                         img_edit.find('.edit_img_name').text(file_name)
                         img_edit.appendTo('.post_cont')
                         img_edit.attr('id', part_id)                        
+                        img = $('.pred_img_orig').clone()
+                        img.removeClass('pred_img_orig')
+                        img.addClass('pred_part_img'+part_id)
+                        img.appendTo('.pred_cont')
                     }
-                    img = $('.pred_img_orig').clone()
-                    img.removeClass('pred_img_orig')
-                    img.addClass('pred_part_img'+part_id)
-                    img.attr("src", img_url)
-                    img.appendTo('.pred_cont')
-                    $('.pred_part_img'+part_id).load(document.URL +  '.pred_part_img'+part_id, function(){});
+                    img.attr("src", file_url)
+                    img.load(document.URL +  '.pred_part_img'+part_id);
                 }
             }
             if (init_part_id == '-1') {
                 btns = $('.part_buttons_orig').clone()
                 btns.removeClass('part_buttons_orig')
-                btns.find('.post_add_part').attr('id', part_id)
-                btns.find('.post_delete_part').attr('id', part_id)
+                btns.find('.post_add_part').attr('onclick', "post_add_part('"+part_id+"')")
+                btns.find('.post_delete_part').attr('onclick', "post_delete_part('"+part_id+"')")
                 btns.appendTo('.post_cont')
             }
         }
+    }
+    function clear_pred(){
+        $('.save_post').addClass('disabled')
+        $('.save_post').removeClass('blue')
+        $('.create_post_loader').hide()
+        $('.check').show()
+        $('.newpost_saved').show()
+        $('.empty_post').hide()
+        $('.pred_part_content-1').html("")
+        $('.pred_part_img-1').attr('src', "");
     }
 </script>
 {% endblock content %}

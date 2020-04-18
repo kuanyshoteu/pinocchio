@@ -60,13 +60,12 @@
                     img = post[2]
                     href = post[3]
                     file = post[4]
-                    priority = post[9]
-                    console.log(title)
+                    priority = post[5]
                     post = $('.post_cont_orig').clone()
                     post.removeClass('post_cont_orig')
                     post.find('.post_link').attr('href', href)
                     post.find('.post_title').text(title)
-                    post.find('.post_text').text(text)
+                    post.find('.post_text').html(text)
                     if (img.length < 2) {
                         img = "/static/images/fon4.jpg"
                     }

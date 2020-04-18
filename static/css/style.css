@@ -1,3 +1,9 @@
+.post_add_part{
+  height: 24px !important;
+}
+.save_post{
+  height: 24px !important;
+}
 .card_dialog{
   overflow-y: scroll;
 }

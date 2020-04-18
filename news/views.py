@@ -143,7 +143,7 @@ def post_add_part(request):
     pid = request.GET.get('post_id')
     post = save_post_work(title, pid, profile, school)
     partid = int(request.GET.get('id'))
-    img = ""
+    file_url = ""
     file_name = ""
     url = post.get_edit_url()
     print('part', partid)
@@ -166,14 +166,17 @@ def post_add_part(request):
                 break
         if its_img:
             part.image = request.FILES.get('file')
-            img = str(part.image.url)
+            part.save()
+            file_url = str(part.image.url)
         else:
             part.file = request.FILES.get('file')
+            part.save()
+            file_url = str(part.file.url)
     part.save()
     if request.GET.get('last') == 'yes':
         data = {
             "part_id":part.id,
-            "img":img,
+            "file_url":file_url,
             "file_name":file_name,
             "url":url,
         }
@@ -213,9 +216,9 @@ def get_posts(request):
             schools.append(school)
         bilimtap = School.objects.get(title='Штаб квартира ЦРУ')
         schools.append(bilimtap)
-        posts = Post.objects.filter(school__in=[school, bilimtap])
+        posts = Post.objects.filter(school__in=[school, bilimtap]).select_related('author_profile').select_related('school').prefetch_related('parts')
         page = int(request.GET.get('page'))
-        p = Paginator(posts, 5)
+        p = Paginator(posts, 20)
         page1 = p.page(page)
         for post in page1.object_list:
             text = ""
@@ -229,27 +232,19 @@ def get_posts(request):
                 parts = post.parts.filter(show=True)
                 for part in parts:
                     if part.content != "":
-                        text = part.content
+                        text = part.content[:70]
+                        if len(text) >= 68:
+                            text += '...'
                     elif part.image:
                         img = part.image.url
                     elif part.file:
                         file = part.file.url
-            if post.author_profile:
-                author = post.author_profile.first_name
-                author_url = post.author_profile.get_absolute_url()
-            if post.school:
-                school_title = post.school.title
-                school_url = post.school.landing()
             res.append([
                 post.title,                 #0
                 text,                       #1
                 img,                        #2
                 post.get_absolute_url(),    #3
                 file,                       #4
-                author,                     #5
-                author_url,                 #6
-                school_title,               #7
-                school_url,                 #8
                 post.priority,              #9
                 ])
     data = {

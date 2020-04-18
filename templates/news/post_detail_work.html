@@ -1,12 +1,12 @@
 <div class="post_box">
     {% for part in post.parts.all %}
     <div class="mb15 pred_part{{part.id}}">
-        <div class="text15 pred_part_content{{part.id}}">{{ part.content|safe }}</div>
+        <div class="mb10 text15 pred_part_content{{part.id}}">{{ part.content|safe }}</div>
         {% if part.image %}
             <img src="{{part.image.url}}" class="full-w pred_part_img{{part.id}}">
         {% endif %}
         {% if part.file %}
-            <a href="{{part.file.url}}" class="pred_part_file{{part.id}} ui button mini white shadow_small"><i class="icon download"></i> {{part.file}}</a>
+            <a href="{{part.file.url}}" class="full-w pred_part_file{{part.id}} ui button mini white border1 shadow_small text15"><i class="icon download textblue"></i> {{part.file}}</a>
         {%endif%}
     </div>
     {%endfor%}
