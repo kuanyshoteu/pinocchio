@@ -129,7 +129,8 @@ def save_post(request):
     school = is_moderator_school(request, profile)
     title = request.GET.get('title')
     pid = request.GET.get('id')
-    post = save_post_work(title, pid, profile, school)
+    priority = int(request.GET.get('priority'))
+    post = save_post_work(title, pid, profile, school, priority)
     data = {
         "url":post.get_edit_url(),
     }
@@ -141,7 +142,8 @@ def post_add_part(request):
     school = is_moderator_school(request, profile)
     title = request.GET.get('title')
     pid = request.GET.get('post_id')
-    post = save_post_work(title, pid, profile, school)
+    priority = int(request.GET.get('priority'))
+    post = save_post_work(title, pid, profile, school, priority)
     partid = int(request.GET.get('id'))
     file_url = ""
     file_name = ""
@@ -186,7 +188,7 @@ def post_add_part(request):
         }
     return JsonResponse(data)
 
-def save_post_work(title, pid, profile, school):
+def save_post_work(title, pid, profile, school, priority):
     post_id = -1
     post = None
     if pid == '-1':
@@ -199,10 +201,12 @@ def save_post_work(title, pid, profile, school):
                 title = title,
                 author_profile = profile,
                 slug = slug,
+                priority = priority,
                 )
     else:
         post = school.school_posts.get(id=int(pid))
         post.title = title
+        post.priority = priority
         post.save()
     return post
 
@@ -229,16 +233,21 @@ def get_posts(request):
             school_title = ""
             school_url = ""
             if len(post.parts.all()) > 0:
-                parts = post.parts.filter(show=True)
+                parts = post.parts.all()
+                found_text = False
+                found_img = False
                 for part in parts:
-                    if part.content != "":
+                    if part.content != "" and found_text == False:
                         text = part.content[:70]
                         if len(text) >= 68:
                             text += '...'
-                    elif part.image:
+                        found_text = True
+                    if part.image and found_img == False:
+                        found_img = True
+                        print('found_img', post.title)
                         img = part.image.url
-                    elif part.file:
-                        file = part.file.url
+                    if found_text and found_img:
+                        break
             res.append([
                 post.title,                 #0
                 text,                       #1

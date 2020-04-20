@@ -3,7 +3,13 @@
     <div class="mb15 pred_part{{part.id}}">
         <div class="mb10 text15 pred_part_content{{part.id}}">{{ part.content|safe }}</div>
         {% if part.image %}
-            <img src="{{part.image.url}}" class="full-w pred_part_img{{part.id}}">
+        <div class="ui grid stackable no_margin">
+            <div class="four wide column no_padding"></div>
+            <div class="eight wide column no_padding">
+                <img src="{{part.image.url}}" class="full-w pred_part_img{{part.id}}">
+            </div>
+            <div class="four wide column no_padding"></div>
+        </div>
         {% endif %}
         {% if part.file %}
             <a href="{{part.file.url}}" class="full-w pred_part_file{{part.id}} ui button mini white border1 shadow_small text15"><i class="icon download textblue"></i> {{part.file}}</a>

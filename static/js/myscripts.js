@@ -4,16 +4,11 @@
         val = $(this).val()
         $('.pred_title').text(val)
     })
-    $('.partcontent').on('input', function (e) {
-        val = $(this).val()
-        id = $(this).attr('id')
-        val = val.replace(/\n/g,'<br>')
-        $('.pred_part_content'+id).html(val)
-    })
     $('.save_post').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
         title = $('.newpost_title').val()
+        priority = $('.newpost_priority').val()
         $('.create_post_loader').show()
         $('.newpost_saved').hide()
         $.ajax({
@@ -21,6 +16,7 @@
             data: {
                 'id':id,
                 'title':title,
+                'priority':priority,
             },
             dataType: 'json',
             success: function (data) {
