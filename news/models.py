@@ -44,6 +44,8 @@ class Post(models.Model):
         return reverse("news:detail", kwargs={"slug": self.slug})
     def get_edit_url(self):
         return reverse("news:post_edit", kwargs={"slug": self.slug})
+    def get_delete_url(self):
+        return reverse("news:post_delete", kwargs={"slug": self.slug})
 
 class PostPart(models.Model):
     post = models.ForeignKey(Post, null=True, on_delete = models.CASCADE, related_name='parts')

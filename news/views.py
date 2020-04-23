@@ -77,6 +77,24 @@ def post_detail(request, slug):
     }
     return render(request, "news/post_detail.html", context)
 
+def post_delete(request, slug):
+    profile = Profile.objects.get(user = request.user)
+    post = Post.objects.get(slug = slug)
+    if post.author_profile == profile:
+        post.delete()
+        return redirect("main:blog")
+    context = {
+        "profile": profile,
+        "post":post,
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director, 
+        "school_money":school_money,
+        "page":"news",
+        "school_crnt":school,
+    }
+    return render(request, "news/post_detail.html", context)
+
 def new_post(request):
     profile = get_profile(request)
     only_managers(profile)
@@ -113,16 +131,6 @@ def post_edit(request, slug):
     }
     return render(request, "news/new_post.html", context)
 
-def post_delete(request):
-    profile = Profile.objects.get(user = request.user.id)
-    if is_profi(profile, 'Manager'):
-        post = Post.objects.get(id=int(request.GET.get('post_id')))
-        is_in_school(profile, post.school)       
-        post.delete()
-    data = {
-    }
-    return JsonResponse(data)
-
 def save_post(request):
     profile = get_profile(request)
     only_managers(profile)
@@ -136,6 +144,12 @@ def save_post(request):
     }
     return JsonResponse(data)
 
+def reorder_parts(post):
+    i = 1
+    for part in post.parts.all():
+        part.order = i
+        part.save()
+        i+=1
 def post_add_part(request):
     profile = get_profile(request)
     only_managers(profile)
@@ -150,8 +164,9 @@ def post_add_part(request):
     url = post.get_edit_url()
     print('part', partid)
     if partid == -1:
+        reorder_parts(post)
         part = post.parts.create(
-            order=len(post.parts.all()),
+            order=len(post.parts.all())+1,
         )
     else:
         part = post.parts.get(id=partid)
@@ -186,6 +201,39 @@ def post_add_part(request):
         data = {
             "part_id":part.id,
         }
+    return JsonResponse(data)
+
+def post_move_part(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    ok = False
+    if request.GET.get('id') and request.GET.get('new_order'):
+        move_part = PostPart.objects.get(id=int(request.GET.get('id')))
+        post = move_part.post
+        if school != post.school:
+            return JsonResponse('Wrong')
+        old_order = move_part.order
+        new_order = int(request.GET.get('new_order'))
+        move_part.order = new_order
+        move_part.save()
+        if old_order > new_order:
+            qs = post.parts.filter(order__gte=new_order).exclude(id=move_part.id)
+            for next_part in qs:
+                new_order += 1
+                next_part.order = new_order
+                next_part.save()
+        else:
+            qs = post.parts.filter(order__lte=new_order).exclude(id=move_part.id)
+            new_order = 0
+            for next_part in qs:
+                new_order += 1
+                next_part.order = new_order
+                next_part.save()
+        ok = True
+    data = {
+        'ok':ok,
+    }
     return JsonResponse(data)
 
 def save_post_work(title, pid, profile, school, priority):

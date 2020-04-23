@@ -31396,13 +31396,7 @@ i.map_worktime-icon {
   background-color: red;
 }
 .sortable-ghost {
-  background-color: rgba(0,0,0, .2);
-  color: rgba(0,0,0, .0);
-}
-
-.sortable-chosen {
-  background-color: rgba(0,0,0, .2);
-  color: rgba(0,0,0, .0);
+  background-color: #ccffcc;
 }
 .kanban-modal {
   display: inline-flex;
