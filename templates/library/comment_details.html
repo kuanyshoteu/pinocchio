@@ -2,12 +2,12 @@
 {% load staticfiles %}
 <div class="mt30 dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
 	<a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
-		<img src="{% static 'images/nophoto.png' %}" style="width: 35px;height: 35px;border-radius: 4px;">
+		<img src="{% static 'images/nophoto.png' %}" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
 	</a>
 	<div class="dinline full-w">
 		<div class="full-w dinline">
 			<a class="mr15 textbold comment_author" href="{{ comment.author_profile.get_absolute_url }}">{{ comment.author_profile.first_name }}</a>
-			<span class="textdg">{{ comment.timestamp }}</span>
+			<span class="textdg comment_time">{{ comment.timestamp }}</span>
 		</div>
 		<div class="text14 comment_content">{{ comment.content }}</div>
 		<div class="dflex">

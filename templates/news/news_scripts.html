@@ -265,7 +265,7 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                if (is_last == 'yes') {
+                if (is_last == 'yes' && init_part_id=='-1') {
                     window.location.replace(data.url);
                 }
                 part_id = data.part_id
