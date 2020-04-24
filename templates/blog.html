@@ -18,6 +18,9 @@
                             <a class="ui button mini green shadow_green ml30" href="{% url 'news:new_post' %}">Новый пост</a>
                         </div>
                         <div class="posts_box ui grid stackable mt0">
+                            <div class="mt50" style="padding-left: 40%">
+                                <div class="post_list_loader ui active inline large loader" style="display: none;"></div>
+                            </div>
                         </div>
                         <div style="display: none;">
                             <div class="pl0 pt0 third wide column post_cont_orig">
@@ -46,6 +49,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        $('.post_list_loader').show()
         $.ajax({
             url: '{% url "news:get_posts" %}',
             data: {
@@ -53,6 +57,7 @@
             },
             dataType: 'json',
             success: function (data) {
+                $('.post_list_loader').hide()
                 for (var i = 0; i < data.posts.length; i++) {
                     post = data.posts[i]
                     title = post[0]
