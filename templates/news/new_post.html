@@ -69,15 +69,15 @@
                                 </div>                                
                             </div>
                             <draggable
-                                :options="{group:{ name:'people'}}"
+                                :options="{handle:'.dragarea'}"
                                 @end="move_part()"
                                 class="post_cont">
                             {%if post%}
                                 {%for part in post.parts.all%}
-                                <div class="part_edit{{part.id}}" ondragstart="save_part_id('{{part.id}}')" draggable='true'>
+                                <div class="part_edit{{part.id}}" ondragstart="save_part_id('{{part.id}}')">
                                     <div class="pt15 pl15 pr15 pb15 part_edit_div">
                                         {% if part.content|length > 0 %}
-                                        <textarea id="{{part.id}}" class="mb5 part_content{{part.id}}" oninput="fill_pred_text('{{part.id}}')">{{ part.content }}</textarea>
+                                        <textarea id="{{part.id}}" draggable='false' class="mb5 part_content{{part.id}}" oninput="fill_pred_text('{{part.id}}')">{{ part.content }}</textarea>
                                         <span style="display: none;" class="parttextof{{part.id}}" text=""></span>
                                         {% endif %}
                                         {% if part.image %}
@@ -101,6 +101,9 @@
                                                 <div class="create_post_loader{{part.id}} ui active inline mini loader" style="display: none;"></div>
                                             </a>
                                             <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" onclick="post_delete_part('{{part.id}}')" id="{{part.id}}"><i class="icon x red mr0"></i></a>
+                                            <a style="position: absolute;right: 15px;" class="dragarea pt5 pb5 ui button white mini border1">
+                                                <i class="icon mr0 hand blue paper text13 outline"></i>
+                                            </a>
                                             <div style="position: absolute;right: 15px;">
                                                 <div class="load_move{{part.id}} ui active inline mini loader" style="display: none;"></div>
                                             </div>
@@ -200,7 +203,7 @@
         overflow-y:hidden;
     }
 </style>
-<span style="display: none;" class="data" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}" temp_part_id='' crnt_part='-1'></span>
+<span style="display: none;" class="data" slug="{%if post%}post.slug{%else%}none7569wjd{%endif%}" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}" temp_part_id='' crnt_part='-1'></span>
 <script src='{% static "js/vue-drag/vue.min.js" %}'></script>
 <script src='{% static "js/vue-drag/axios.min.js" %}'></script>
 <script src='{% static "js/vue-drag/sortable.min.js" %}'></script>

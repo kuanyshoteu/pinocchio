@@ -1,0 +1,59 @@
+<script>
+    function post_new_comment(id){
+        var parent_id = $('.post_new_comment'+id).attr('parent_id')
+        var comment_id = $('.post_new_comment'+id).attr('comment_id')
+        var content = $('#comment_content'+parent_id).val()
+        $.ajax({
+            url: $('.data').attr('post_new_comment'),
+            data: {
+                'parent_id':parent_id,
+                'comment_id':comment_id,
+                'post_id':$('.data').attr('post_id'),
+                'content':content,
+            },
+            dataType: 'json',
+            success: function (data) {
+                add_comment(data, content)
+            }
+        });
+    }
+    function post_like_object(id){
+        var object = $('#'+id).attr('object')
+        $.ajax({
+            url: $('.data').attr('post_like_object'),
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                like_buttons(data.like_num, id, status)
+            }
+        });
+    }
+    function like_buttons(like_num, id, status){
+        if(status == 'liked'){
+            $("#likeup"+id).addClass('green')
+            $("#dislikedown"+id).removeClass('red')
+        }
+        else if(status == 'none'){
+            $("#dislikedown"+id).removeClass('red')
+            $("#likeup"+id).removeClass('green')
+        }
+        else if(status == 'disliked'){
+            $("#dislikedown"+id).addClass('red')
+            $("#likeup"+id).removeClass('green')
+        }
+        $('#likes_number'+id).text(like_num)        
+    }
+    function add_comment(data, content){
+        comment = $('.comment_orig').clone()
+        comment.removeClass('comment_orig')
+        comment.find('.comment_content').html(content)
+        comment_author = comment.find('.comment_author')
+        comment_author.text(data.author)
+        comment_author.attr('href',data.author_url)
+        comment.find('.comment_author_img').attr('src', data.avatar)
+        comment.find('.comment_time').text(data.time)
+        comment.prependTo('.comments_box')
+    }
+</script>

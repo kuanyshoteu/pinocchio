@@ -1,34 +1,33 @@
 {% load ttttags %}
 {% load staticfiles %}
-
-
-<div style="padding: 5px 0;">
-	<div style="color: #757575;font-size: 13px;font-weight: 500;">
-		<span id="likes_number{{ comment.id }}" style="margin-right: 7px;">{{ comment|count_likes }}</span>
-		<a class="like_comment" id="{{ comment.id }}" url="{{ comment.like_url }}" style="font-size: 23px;">
-			<i class="ui icon triangle up" id="likeup{{ comment.id }}" {% if profile in comment.likes.all %} style="color: #6c9b45 !important;" {% else %} style="color: #e8e8e8;"{% endif %}></i>
-		</a>
-		<a class="dislike_comment" id="{{ comment.id }}" url="{{ comment.dislike_url }}" style="color: #e8e8e8;font-size: 23px;">
-			<i class="icon triangle down" id="dislikedown{{ comment.id }}" {% if profile in comment.dislikes.all %} style="color: red !important;" {% else %} style="color: #e8e8e8;"{% endif %}></i>
-		</a>
-		<a href="{{ comment.author_profile.get_absolute_url }}">
-			<img src="{% static 'images/nophoto.png' %}" style="width: 20px;height: 20px;border-radius: 100%;margin-left: 20px;">
-		</a>
-		<a href="{{ comment.author_profile.get_absolute_url }}" style="margin-left: 5px;">{{ comment.author_profile.first_name }}</a>
-		<span style="margin-left: 20px;">{{ comment.timestamp }}</span>
+<div class="mt30 dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
+	<a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
+		<img src="{% static 'images/nophoto.png' %}" style="width: 35px;height: 35px;border-radius: 4px;">
+	</a>
+	<div class="dinline full-w">
+		<div class="full-w dinline">
+			<a class="mr15 textbold comment_author" href="{{ comment.author_profile.get_absolute_url }}">{{ comment.author_profile.first_name }}</a>
+			<span class="textdg">{{ comment.timestamp }}</span>
+		</div>
+		<div class="text14 comment_content">{{ comment.content }}</div>
+		<div class="dflex">
+			<a class="like_comment" id="{{ comment.id }}" url="{{ comment.like_url }}">
+				<i class="mr0 icon triangle text21 up {% if profile in comment.likes.all %}green{% endif %}" id="likeup{{ comment.id }}"></i>
+			</a>
+			<a class="dislike_comment" id="{{ comment.id }}" url="{{ comment.dislike_url }}">
+				<i class="mr0 icon triangle text21 down {% if profile in comment.dislikes.all %}red{% endif %}" id="dislikedown{{ comment.id }}"></i>
+			</a>
+			<b id="likes_number{{ comment.id }}" class="mr15 textg">{{ comment|count_likes }}</b>
+			<a onclick="$('#comment'+$(this).attr('id')).fadeToggle('fast')" id="{{ comment.id }}" class="textdg">Ответить</a>
+		</div>
 	</div>
-	<p style="font-size: 14px;margin: 0;padding: 4px 0; font-weight: 400">{{ comment.content }}</p>
-	<a onclick="$('#comment'+$(this).attr('id')).fadeToggle('fast')" id="{{ comment.id }}" style="font-size: 13px;font-weight: 500;color: #6c9b45;">Ответить</a>
-	<div style="display: none;" id="comment{{ comment.id }}">
-		<form class="ui form">
-			<div class="ui segment" style="background-color: #fff;margin-top: 0;padding: 0;margin-bottom: 0">
-				<textarea id="comment_content{{ comment.id }}" placeholder="Введите текст комментария" style="margin-bottom: 0;padding: 15px;height: 50px;border-radius: 0;border: none;"></textarea>
-			</div>
-			<div class="ui segment" style="background-color: #e8e8e8;margin-top: 0">
-				<a class="ui button mini blue new_comment" url="{{ lesson.new_comment_url }}" parent_id="{{ comment.id }}">Отправить</a>
-			</div>
-		</form>
-	</div>
+</div>
+<div class="mt10" style="display: none; margin-left: 45px;" id="comment{{ comment.id }}">
+	<form class="ui form">
+		<textarea class="mb5" id="comment_content{{ comment.id }}" placeholder="Введите текст комментария"></textarea>
+		<a class="ui button mini blue new_comment" url="{{ lesson.new_comment_url }}" parent_id="{{ comment.id }}">Отправить</a>
+		<a class="ui button mini">Отмена</a>
+	</form>
 </div>
 {% if comment.children.all|length > 0 %}
 <div style="border-left: solid 1px #e8e8e8">

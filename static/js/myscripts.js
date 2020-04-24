@@ -9,6 +9,7 @@
         id = $(this).attr('id')
         title = $('.newpost_title').val()
         priority = $('.newpost_priority').val()
+        slug = request.GET.get('slug')
         $('.create_post_loader').show()
         $('.newpost_saved').hide()
         $.ajax({
@@ -17,6 +18,7 @@
                 'id':id,
                 'title':title,
                 'priority':priority,
+                'slug':slug,
             },
             dataType: 'json',
             success: function (data) {

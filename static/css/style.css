@@ -107,9 +107,14 @@
 .border1{
   border: 1px solid #e5e5e5 !important;
 }
-
+.textbold{
+  font-weight: 600;
+}
 .text17{
   font-size:17px !important; 
+}
+.text21{
+  font-size:21px !important; 
 }
 .text10{
   font-size:10px !important; 

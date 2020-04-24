@@ -204,6 +204,7 @@
         post_id = $('.save_post').attr('id')
         title = $('.newpost_title').val()
         priority = $('.newpost_priority').val()
+        slug = $('.data').attr('slug')
         $('.newpost_notitle').hide()
         if (title) {
             $('.create_post_loader'+init_part_id).show()
@@ -211,29 +212,36 @@
             $('.check'+init_part_id).hide()
             alltext = $('.pred_part_content'+init_part_id).html()
             alltext2 = alltext
+            console.log('length: '+alltext2.length)
             if (init_part_id == '-1') {
                 $('.newpost_text').val("")
                 $('.pred_text').text('')
             }
             texts = []
             cnt = 0
-            while(cnt <= parseInt(alltext2.length/500)){
+            len = alltext2.length
+            console.log('delenie: '+len/500)
+            if (len % 500 == 0) {len -= 1}
+            while(cnt <= parseInt(len/500)){
+                console.log('cnt', cnt)
                 cnt += 1
                 ptext = alltext.substr(0, 500)
+                console.log('ptext', ptext)
                 texts.push(ptext)
                 alltext = alltext.substr(500)
             }
             if (texts.length == 0) {texts = ['']}
             part_id = init_part_id
-            sendTexts(0, texts, part_id,init_part_id, post_id, title, init_url, priority)
+            sendTexts(0, texts, part_id,init_part_id, post_id, title, init_url, priority, slug)
         }
         else{
             $('.newpost_notitle').show('fast')
         }
     }
-    function sendTexts(i, texts, part_id, init_part_id, post_id, title, init_url, priority){
+    function sendTexts(i, texts, part_id, init_part_id, post_id, title, init_url, priority, slug){
+        console.log('send', i)
         text = texts[i]
-        add_data = '?id='+part_id+'&post_id='+post_id+'&title='+title+'&priority='+priority+'&text='+text
+        add_data = '?id='+part_id+'&post_id='+post_id+'&title='+title+'&priority='+priority+'&text='+text+'&slug='+slug
         if (i == 0) {
             var formData = new FormData();
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
@@ -257,11 +265,11 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                if (post_id == '-1') {
+                if (is_last == 'yes') {
                     window.location.replace(data.url);
                 }
-
                 part_id = data.part_id
+                slug = data.slug
                 if (i == texts.length - 1) {
                     file_url = data.file_url
                     file_name = data.file_name
@@ -269,7 +277,7 @@
                 }
                 if (i < texts.length - 1) {
                     i += 1
-                    sendTexts(i, texts, part_id,init_part_id, post_id, title, init_url,priority)
+                    sendTexts(i, texts, part_id,init_part_id, post_id, title, init_url,priority, slug)
                 }
             }
         })

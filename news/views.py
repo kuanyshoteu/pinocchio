@@ -138,7 +138,8 @@ def save_post(request):
     title = request.GET.get('title')
     pid = request.GET.get('id')
     priority = int(request.GET.get('priority'))
-    post = save_post_work(title, pid, profile, school, priority)
+    slug = request.GET.get('slug')
+    post = save_post_work(title, pid, profile, school, priority, slug)
     data = {
         "url":post.get_edit_url(),
     }
@@ -157,7 +158,10 @@ def post_add_part(request):
     title = request.GET.get('title')
     pid = request.GET.get('post_id')
     priority = int(request.GET.get('priority'))
-    post = save_post_work(title, pid, profile, school, priority)
+    slug = request.GET.get('slug')
+    post = save_post_work(title, pid, profile, school, priority, slug)
+    if slug == 'none7569wjd':
+        slug = post.slug
     partid = int(request.GET.get('id'))
     file_url = ""
     file_name = ""
@@ -200,6 +204,7 @@ def post_add_part(request):
     else:
         data = {
             "part_id":part.id,
+            "slug":slug,
         }
     return JsonResponse(data)
 
@@ -236,11 +241,17 @@ def post_move_part(request):
     }
     return JsonResponse(data)
 
-def save_post_work(title, pid, profile, school, priority):
+def save_post_work(title, pid, profile, school, priority,slug):
     post_id = -1
     post = None
     if pid == '-1':
-        if title:
+        found = False
+        if slug != 'none7569wjd':
+            find_by_slug = Post.objects.filter(slug=slug)
+            if len(find_by_slug) > 0:
+                post = find_by_slug[0]
+                found = True
+        if title and not found:
             slug = title.replace(' ', '_')
             last = len(Post.objects.filter(slug=slug))
             if last > 0:
@@ -325,3 +336,69 @@ def post_delete_part(request):
         "ok":ok,
     }
     return JsonResponse(data)
+
+def post_new_comment(request):
+    profile = get_profile(request)
+    ok = False 
+    if profile.image:
+        avatar = profile.image.url
+    else:
+        avatar = 'images/nophoto.png'
+    time = '' 
+    comment_id = int(request.GET.get('comment_id'))
+    if request.GET.get('post_id') and request.GET.get('content') and comment_id:
+        post = Post.objects.get(id=int(request.GET.get('post_id')))
+        if comment_id > 0:
+            comment = post.comments.filter(id=int(comment_id))
+            if len(comment) > 0:
+                comment = comment[0]
+        else:
+            comment = post.comments.create(
+                author_profile = profile,
+                )
+        parent_id = int(request.GET.get('parent_id'))
+        if parent_id > 0:
+            parent = post.comments.filter(id=parent_id)
+            if len(parent) > 0:
+                parent = parent[0]
+                comment.parent = parent
+                comment.level = parent.level + 1
+        comment.content = request.GET.get('content')
+        comment.save()
+        ok = True
+        time = comment.timestamp.strftime('%H:%M %d.%B.%Y')
+
+    data = {
+        "ok":ok,
+        "author":profile.first_name,
+        "author_url":profile.get_absolute_url(),
+        'avatar':avatar,
+        'time':avatar,
+    }
+    return JsonResponse(data)
+
+def post_like_object(request):
+    profile = get_profile(request)
+    status = request.GET.get('status')
+    if request.GET.get('id') and status:
+        if request.GET.get('object') == 'comment':
+            obj = Comment.objects.get(id=int(request.GET.get('id')))
+        else:
+            obj = Post.objects.get(id=int(request.GET.get('id')))
+        if status == 'like':
+            obj.likes.add(profile)
+            obj.dislikes.remove(profile)
+        elif status == 'nothing':
+            obj.likes.remove(profile)
+            obj.dislikes.remove(profile)
+        elif status == 'dislike':
+            obj.likes.remove(profile) 
+            obj.dislikes.add(profile) 
+    res = len(obj.likes.all()) - len(obj.dislikes.all())
+    if res > 0:
+        res = "+" + str(res)
+    data = {
+        "like_num":res,
+    }
+    return JsonResponse(data)
+

@@ -53,7 +53,6 @@ $(document).ready(function(){
     $(".new_comment").click(function () {
         var parent_id = $(this).attr('parent_id')
         var content = document.getElementById('comment_content' + parent_id).value
-
         $.ajax({
             url: $(this).attr('url'),
             data: {

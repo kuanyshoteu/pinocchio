@@ -15,4 +15,6 @@ urlpatterns = [
     url(r'^post_edit/(?P<slug>[\w-]+)$', post_edit, name='post_edit'),
     url(r'^api/post_delete_part$', post_delete_part, name='post_delete_part'),
     url(r'^post_delete/(?P<slug>[\w-]+)$', post_delete, name='post_delete'),
+    url(r'^api/post_new_comment$', post_new_comment, name='post_new_comment'),
+    url(r'^api/post_like_object$', post_like_object, name='post_like_object'),
 ]
