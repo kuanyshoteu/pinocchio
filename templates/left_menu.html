@@ -1,9 +1,9 @@
 {% load staticfiles %}
-{% if user.is_authenticated %}
 <div style="width: 180px;">
 </div>
 <div class="deskmenu fixed_menu ui segment pl5 pr0 shadow_mini" style="background-color: #fafafa;position: fixed;width: 165px;border-right: none;margin-top: 14px;margin-left: 14px;">
     <div id="left-main-menu">
+        {% if user.is_authenticated %}
         <div class="ui vertical menu" style="background-color: #fafafa; border:none; box-shadow: none;">
             {% if is_moderator %}
                 <a href="/moderator/" class="pt5 pb5 textw full-w ui button mini not_in_mobile"><b>{{school_crnt.title}}</b></a>
@@ -60,6 +60,7 @@
             {% endif %}
             {% endif %}
         </div>
+        {% endif %}
         <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:home' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
             Поиск курсов
         </a>
@@ -73,4 +74,3 @@
         </a>
     </div>
 </div>
-{% endif %}

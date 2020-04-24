@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         {% include 'news/post_detail_work.html' %}
-                        <div class="head_round backdarkgrey mt50 mb15">
+<!--                         <div class="head_round backdarkgrey mt50 mb15">
                             <b class="text15 textdg">Комментарии</b>
                         </div>
                         <div class="textg"><b>Добавьте комментарий</b></div>
@@ -44,8 +44,8 @@
                                 {% endif %}
                             {% endfor %}                            
                         </div>
-                    </div>
-                    <div class="ui segment mt30">
+ -->                    </div>
+<!--                     <div class="ui segment mt30">
                         <div class="text-center text15 textg"><b>Рекомендованные статьи</b></div>
                         <div class="ui grid stackable no_margin">
                             {% for recpost in recposts %}
@@ -55,17 +55,16 @@
                             {% endfor %}
                         </div>                        
                     </div>
-                </div>
-                <div class="four wide column">
+ -->                </div>
+<!--                 <div class="four wide column">
                     <div class="ui segment">
                         <div class="text-center text15 textg"><b>Тренды</b>
                         </div>
                     </div>
                 </div>
-            </div>
+ -->            </div>
         </div>
     </div>
 </div>
 <span class="data" post_id="{{post.id}}" post_new_comment="{% url 'news:post_new_comment' %}" post_like_object="{%url 'news:post_like_object'%}"></span>
-{% include 'news/comments_scripts.html' %}
 {% endblock content %}

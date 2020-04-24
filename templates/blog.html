@@ -15,7 +15,9 @@
                     <div class="ui segment mt0 mb15 text15">
                         <div class="text15 mb15 textdg">
                             <b>Блог Bilimtap.kz</b>
+                            {% if is_moderator %}
                             <a class="ui button mini green shadow_green ml30" href="{% url 'news:new_post' %}">Новый пост</a>
+                            {% endif %}
                         </div>
                         <div class="posts_box ui grid stackable mt0">
                         <div class="mt50 post_list_loader ui active inline large loader" style="display: none;margin: 0 auto"></div>

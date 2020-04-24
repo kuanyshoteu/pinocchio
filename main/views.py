@@ -217,20 +217,29 @@ def moderator(request):
     return render(request, "moderator.html", context)
 
 def blog(request):
-    profile = get_profile(request)
-    profession = Profession.objects.get(title = 'Moderator')
-    if not profession in profile.profession.all():
-        raise Http404
-    
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_moderator = is_profi(profile, 'Moderator')
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        is_moderator = is_profi(profile, 'Moderator')        
+    else:
+        profile = False    
+        is_moderator = False
+        is_trener = False
+        is_manager = False
+        is_director = False
+        is_moderator = False        
     context = {
         "profile":profile,
         "schools":School.objects.all(),
         "professions":Profession.objects.all(),
-        "is_moderator":is_profi(profile, 'Moderator'),
-        'is_trener':is_profi(profile, 'Teacher'),
-        "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_profi(profile, 'Director'),
-        "is_moderator":is_profi(profile, 'Moderator'),        
+        "is_moderator":is_moderator,
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director,
+        "is_moderator":is_moderator,        
     }
     return render(request, "blog.html", context)
 

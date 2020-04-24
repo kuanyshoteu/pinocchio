@@ -57,6 +57,7 @@ def post_detail(request, slug):
     is_director = False
     is_manager = False
     school_money = 0
+    school = False
     if request.user.is_authenticated:
         profile = Profile.objects.get(user = request.user)
         is_trener = is_profi(profile, 'Teacher')
@@ -279,7 +280,7 @@ def get_posts(request):
             schools.append(school)
         bilimtap = School.objects.get(title='Штаб квартира ЦРУ')
         schools.append(bilimtap)
-        posts = Post.objects.filter(school__in=[school, bilimtap]).select_related('author_profile').select_related('school').prefetch_related('parts')
+        posts = Post.objects.filter(school__in=schools).select_related('author_profile').select_related('school').prefetch_related('parts')
         page = int(request.GET.get('page'))
         p = Paginator(posts, 20)
         page1 = p.page(page)
