@@ -29,23 +29,17 @@
                             </div>
                         </div>
                         {% include 'news/post_detail_work.html' %}
-<!--                         <div class="head_round backdarkgrey mt50 mb15">
+                        <div class="head_round backdarkgrey mt50 mb15">
                             <b class="text15 textdg">Комментарии</b>
                         </div>
                         <div class="textg"><b>Добавьте комментарий</b></div>
                         <form class="ui form mb0">
                             <textarea id="comment_content-1" style="height: 60px;" class="mb5" placeholder="Введите комментарий"></textarea>
-                            <a parent_id="-1" onclick="post_new_comment('-1')" id="-1" class="ui button mini blue post_new_comment-1" comment_id='-1'>Отправить</a>
-                        </form>                            
-                        <div class="comments_box" style="min-height: 50px;">
-                            {% for comment in post.comments.all %}
-                                {% if comment.level == 1 %}
-                                    {% include 'library/comment_details.html' %}
-                                {% endif %}
-                            {% endfor %}                            
-                        </div>
- -->                    </div>
-<!--                     <div class="ui segment mt30">
+                            <a parent_id="-1" onclick="post_new_comment('-1')" id="-1" class="ui button mini green border1 shadow_small post_new_comment-1">Отправить</a>
+                        </form>
+                        <div class="comments_box"></div>
+                    </div>
+                    <div class="ui segment mt30">
                         <div class="text-center text15 textg"><b>Рекомендованные статьи</b></div>
                         <div class="ui grid stackable no_margin">
                             {% for recpost in recposts %}
@@ -55,16 +49,50 @@
                             {% endfor %}
                         </div>                        
                     </div>
- -->                </div>
-<!--                 <div class="four wide column">
+                </div>
+                <div class="four wide column pt0" style="display: none;">
                     <div class="ui segment">
                         <div class="text-center text15 textg"><b>Тренды</b>
                         </div>
                     </div>
                 </div>
- -->            </div>
+            </div>
         </div>
     </div>
 </div>
-<span class="data" post_id="{{post.id}}" post_new_comment="{% url 'news:post_new_comment' %}" post_like_object="{%url 'news:post_like_object'%}"></span>
+<div style="display: none;">
+    <div class="comment_orig">
+        <div class="mt30 dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
+            <a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
+                <img src="{% static 'images/nophoto.png' %}" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
+            </a>
+            <div class="dinline full-w">
+                <div class="full-w dinline">
+                    <a class="mr15 textbold comment_author"></a>
+                    <span class="textdg comment_time"></span>
+                </div>
+                <div class="mt5 text14 comment_content"></div>
+                <div class="dflex mt5">
+                    <a class="like_comment mr5" id="">
+                        <i class="mr0 icon triangle text21 up {% if profile in comment.likes.all %}green{% endif %}" id=""></i>
+                    </a>
+                    <a class="dislike_comment mr5">
+                        <i class="mr0 icon triangle text21 down {% if profile in comment.dislikes.all %}red{% endif %}" id="dislikedown{{ comment.id }}"></i>
+                    </a>
+                    <span id="likes_number{{ comment.id }}" class="likes_number mr15 textdg text14"></span>
+                    <a onclick="$('#comment'+$(this).attr('id')).fadeToggle('fast')" id="{{ comment.id }}" class="textdg">Ответить</a>
+                </div>
+            </div>
+        </div>
+        <div class="mt10" style="display: none; margin-left: 45px;" id="comment{{ comment.id }}">
+            <form class="ui form">
+                <textarea class="mb5" id="comment_content{{ comment.id }}" placeholder="Введите текст комментария"></textarea>
+                <a class="ui button mini green border1 shadow_small new_comment" url="{{ lesson.new_comment_url }}" parent_id="{{ comment.id }}">Отправить</a>
+                <a class="ui button mini">Отмена</a>
+            </form>
+        </div>
+    </div>
+</div>
+<span class="data" get_comments="{% url 'news:get_comments' %}" post_id="{{post.id}}" post_new_comment="{% url 'news:post_new_comment' %}" post_like_object="{%url 'news:post_like_object'%}"></span>
+{% include 'news/comments_scripts.html' %}
 {% endblock content %}

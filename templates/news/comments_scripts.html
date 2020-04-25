@@ -1,24 +1,58 @@
 <script>
+    get_comments(1)
+    function get_comments(page) {
+        console.log('get_comments')
+        $.ajax({
+            url: $('.data').attr('get_comments'),
+            data: {
+                'post_id':$('.data').attr('post_id'),
+                'page':page,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log('fffff')
+                comments = data.comments
+                for (var i = 0; i < comments.length; i++) {
+                    author = comments[i][0]
+                    author_url = comments[i][1]
+                    avatar = comments[i][2]
+                    time = comments[i][3]
+                    console.log(time)
+                    content = comments[i][4]
+                    id = comments[i][5]
+                    parent_id = comments[i][6]
+                    rating = comments[i][7]
+                    add_comment(author, author_url, avatar, time, content, id, parent_id, rating)
+                }
+            }
+        });
+    }
     function post_new_comment(id){
         var parent_id = $('.post_new_comment'+id).attr('parent_id')
-        var comment_id = $('.post_new_comment'+id).attr('comment_id')
         var content = $('#comment_content'+parent_id).val()
         $.ajax({
             url: $('.data').attr('post_new_comment'),
             data: {
                 'parent_id':parent_id,
-                'comment_id':comment_id,
+                'comment_id':id,
                 'post_id':$('.data').attr('post_id'),
                 'content':content,
             },
             dataType: 'json',
             success: function (data) {
-                add_comment(data, content)
+                author = data.author
+                author_url = data.author_url
+                avatar = data.avatar
+                time = data.time
+                id = data.id
+                console.log('content', content)
+                add_comment(author, author_url, avatar, time, content, id, parent_id, 0)
             }
         });
     }
-    function post_like_object(id){
-        var object = $('#'+id).attr('object')
+    function post_like_object(id, selector){
+        var object = $('.'+selector).attr('object')
+        status =  $('.'+selector).attr('status')
         $.ajax({
             url: $('.data').attr('post_like_object'),
             data: {
@@ -45,15 +79,30 @@
         }
         $('#likes_number'+id).text(like_num)        
     }
-    function add_comment(data, content){
+    function add_comment(author, author_url, avatar, time, content, id, parent_id, rating){
         comment = $('.comment_orig').clone()
         comment.removeClass('comment_orig')
         comment.find('.comment_content').html(content)
         comment_author = comment.find('.comment_author')
-        comment_author.text(data.author)
-        comment_author.attr('href',data.author_url)
-        comment.find('.comment_author_img').attr('src', data.avatar)
-        comment.find('.comment_time').text(data.time)
+        comment_author.text(author)
+        comment_author.attr('href', author_url)
+        comment.find('.comment_author_img').attr('src', avatar)
+        comment.find('.comment_time').text(time)
+        comment.find('.new_comment').attr('onclick', 'post_new_comment('+id+')')
+        comment.find('.new_comment').attr('parent_id', parent_id)
+        comment.find('.new_comment').attr('id', id)
+        comment.find('.new_comment').addClass('post_new_comment'+id)
+        like_comment = comment.find('.like_comment')
+        like_comment.attr('onclick', 'post_like_object('+id+', like_comment'+id+')')
+        like_comment.attr('object', 'comment')
+        like_comment.attr('status', 'like')
+        dislike_comment = comment.find('.dislike_comment')
+        dislike_comment.attr('onclick', 'post_like_object('+id+', dislike_comment'+id+')')
+        dislike_comment.attr('object', 'comment')
+        dislike_comment.attr('status', 'dislike')
+        like_comment.find('.up').attr('id', 'likeup' + id)
+        like_comment.find('.down').attr('id', 'likedown' + id)
+        comment.find('.likes_number').text(rating)
         comment.prependTo('.comments_box')
     }
 </script>

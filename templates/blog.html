@@ -10,8 +10,8 @@
     <div class="ui grid stackable">
         {% include 'left_menu.html' %}
         <div class="w85 wide column">
-            <div class="ui grid stackable">
-                <div class="twelve wide column">
+            <div class="ui grid stackable ml30 mt0">
+                <div class="twelve wide column no_padding">
                     <div class="ui segment mt0 mb15 text15">
                         <div class="text15 mb15 textdg">
                             <b>Блог Bilimtap.kz</b>
@@ -38,7 +38,7 @@
                         </div>                    
                     </div>
                 </div>
-                <div class="four wide column">
+                <div class="four wide column" style="display: none;">
                     <div class="ui segment">
                         
                     </div>
@@ -49,6 +49,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
+        console.log('loading')
         $('.post_list_loader').show()
         $.ajax({
             url: '{% url "news:get_posts" %}',

@@ -271,7 +271,9 @@ def save_post_work(title, pid, profile, school, priority,slug):
     return post
 
 def get_posts(request):
+    print('get_posts')
     res = []
+    print('page', request.GET.get('page'))
     if request.GET.get('page'):
         schools = []
         if request.user.is_authenticated:
@@ -285,6 +287,7 @@ def get_posts(request):
         p = Paginator(posts, 20)
         page1 = p.page(page)
         for post in page1.object_list:
+            print('post', post.title)
             text = ""
             img = ""
             file = ""
@@ -346,6 +349,7 @@ def post_new_comment(request):
     else:
         avatar = 'images/nophoto.png'
     time = '' 
+    cid = -1
     comment_id = int(request.GET.get('comment_id'))
     if request.GET.get('post_id') and request.GET.get('content') and comment_id:
         post = Post.objects.get(id=int(request.GET.get('post_id')))
@@ -366,15 +370,16 @@ def post_new_comment(request):
                 comment.level = parent.level + 1
         comment.content = request.GET.get('content')
         comment.save()
+        cid = comment.id
         ok = True
-        time = comment.timestamp.strftime('%H:%M %d.%B.%Y')
-
+        time = comment.timestamp.strftime('%H:%M %d %B %Y')
     data = {
         "ok":ok,
         "author":profile.first_name,
         "author_url":profile.get_absolute_url(),
         'avatar':avatar,
-        'time':avatar,
+        'time':time,
+        'id':cid,
     }
     return JsonResponse(data)
 
@@ -403,3 +408,37 @@ def post_like_object(request):
     }
     return JsonResponse(data)
 
+def get_comments(request):
+    res = []
+    if request.GET.get('post_id') and request.GET.get('page'):
+        post = Post.objects.get(id=int(request.GET.get('post_id')))
+        p = Paginator(post.comments.filter(level=1).select_related('parent'), 20)
+        page1 = p.page(int(request.GET.get('page')))
+        if request.user.is_authenticated:
+            profile = get_profile(request)
+        for comment in page1.object_list:
+            author = comment.author_profile
+            name = author.first_name
+            url = author.get_absolute_url()
+            like_status = 'nothing'
+            parent_id = ''
+            if comment.parent:
+                parent_id = comment.parent.id
+            if author.image:
+                img = author.image.url
+            else:
+                img = "images/nophoto.png"
+            res.append([
+                name,
+                url,
+                img,
+                comment.timestamp.strftime('%H:%M %d %B %Y'),
+                comment.content,
+                comment.id,
+                parent_id,
+                len(comment.likes.all()) - len(comment.dislikes.all()),
+                ])
+    data = {
+        "comments":res,
+    }
+    return JsonResponse(data)
