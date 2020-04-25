@@ -253,10 +253,11 @@ def save_post_work(title, pid, profile, school, priority,slug):
                 post = find_by_slug[0]
                 found = True
         if title and not found:
-            slug = title.replace(' ', '_')
+            slug = slugify(translit(title[:45], 'ru', reversed=True))
             last = len(Post.objects.filter(slug=slug))
             if last > 0:
                 slug += str(last+1)
+            print(slug)
             post = school.school_posts.create(
                 title = title,
                 author_profile = profile,
