@@ -1,12 +1,12 @@
 {% load staticfiles %}
 <div style="width: 180px;">
 </div>
-<div class="deskmenu fixed_menu ui segment pl5 pr0 shadow_mini" style="background-color: #fafafa;position: fixed;width: 165px;border-right: none;margin-top: 14px;margin-left: 14px;">
+<div class="deskmenu fixed_menu ui segment pl5 pr0 shadow_small" style="background-color: #fafafa;position: fixed;width: 165px;border-right: none;margin-top: 14px;margin-left: 14px;">
     <div id="left-main-menu">
         {% if user.is_authenticated %}
         <div class="ui vertical menu" style="background-color: #fafafa; border:none; box-shadow: none;">
             {% if is_moderator %}
-                <a href="/moderator/" class="pt5 pb5 textw full-w ui button mini not_in_mobile"><b>{{school_crnt.title}}</b></a>
+                <a href="/moderator/" class="pt5 pb5 white shadow_small mb5 full-w ui button mini not_in_mobile"><b>{{school_crnt.title}}</b></a>
             {% endif %}
             <a class="item lftitem {%if page == 'mypage' %}lftitem_crnt{%endif%}" href='{{ profile.get_absolute_url }}'>
                 <i class="home icon mr15"></i> Моя страница

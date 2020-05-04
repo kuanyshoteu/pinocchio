@@ -1,7 +1,38 @@
+<div style="display: none;">
+    <div class="comment_orig">
+        <div class="mt30 dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
+            <a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
+                <img src="" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
+            </a>
+            <div class="dinline full-w">
+                <div class="full-w dinline">
+                    <a class="mr15 textbold comment_author"></a>
+                    <span class="textdg comment_time"></span>
+                </div>
+                <div class="mt5 text14 comment_content"></div>
+                <div class="dflex mt5">
+                    <a class="like_comment pr10" id="">
+                        <i class="mr0 icon triangle text24 up"></i>
+                    </a>
+                    <a class="dislike_comment pr10">
+                        <i class="mr0 icon triangle text24 down"></i>
+                    </a>
+                    <span class="likes_number mr20 textdg text14"></span>
+                </div>
+            </div>
+        </div>
+<!--         <div class="mt10" style="display: none; margin-left: 45px;" id="comment{{ comment.id }}">
+            <form class="ui form">
+                <textarea class="mb5" id="comment_content{{ comment.id }}" placeholder="Введите текст комментария"></textarea>
+                <a class="ui button mini green border1 shadow_small new_comment" url="{{ lesson.new_comment_url }}" parent_id="{{ comment.id }}">Отправить</a>
+                <a class="ui button mini">Отмена</a>
+            </form>
+        </div>
+ -->    </div>
+</div>
 <script>
     get_comments(1)
     function get_comments(page) {
-        console.log('get_comments')
         $.ajax({
             url: $('.data').attr('get_comments'),
             data: {
@@ -10,19 +41,18 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log('fffff')
                 comments = data.comments
                 for (var i = 0; i < comments.length; i++) {
                     author = comments[i][0]
                     author_url = comments[i][1]
                     avatar = comments[i][2]
                     time = comments[i][3]
-                    console.log(time)
                     content = comments[i][4]
                     id = comments[i][5]
                     parent_id = comments[i][6]
                     rating = comments[i][7]
-                    add_comment(author, author_url, avatar, time, content, id, parent_id, rating)
+                    like_status = comments[i][8]
+                    add_comment(author, author_url, avatar, time, content, id, parent_id, rating, like_status)
                 }
             }
         });
@@ -45,8 +75,7 @@
                 avatar = data.avatar
                 time = data.time
                 id = data.id
-                console.log('content', content)
-                add_comment(author, author_url, avatar, time, content, id, parent_id, 0)
+                add_comment(author, author_url, avatar, time, content, id, parent_id, 0, '')
             }
         });
     }
@@ -57,15 +86,17 @@
             url: $('.data').attr('post_like_object'),
             data: {
                 'id':id,
+                'object':object,
+                'status':status,
             },
             dataType: 'json',
             success: function (data) {
-                like_buttons(data.like_num, id, status)
+                like_buttons(data.like_num, id, data.status)
             }
         });
     }
     function like_buttons(like_num, id, status){
-        if(status == 'liked'){
+        if(status == 'like'){
             $("#likeup"+id).addClass('green')
             $("#dislikedown"+id).removeClass('red')
         }
@@ -73,13 +104,13 @@
             $("#dislikedown"+id).removeClass('red')
             $("#likeup"+id).removeClass('green')
         }
-        else if(status == 'disliked'){
+        else if(status == 'dislike'){
             $("#dislikedown"+id).addClass('red')
             $("#likeup"+id).removeClass('green')
         }
         $('#likes_number'+id).text(like_num)        
     }
-    function add_comment(author, author_url, avatar, time, content, id, parent_id, rating){
+    function add_comment(author, author_url, avatar, time, content, id, parent_id, rating, like_status){
         comment = $('.comment_orig').clone()
         comment.removeClass('comment_orig')
         comment.find('.comment_content').html(content)
@@ -88,20 +119,32 @@
         comment_author.attr('href', author_url)
         comment.find('.comment_author_img').attr('src', avatar)
         comment.find('.comment_time').text(time)
-        comment.find('.new_comment').attr('onclick', 'post_new_comment('+id+')')
+        comment.find('.new_comment').attr('onclick', '"post_new_comment('+id+')"')
         comment.find('.new_comment').attr('parent_id', parent_id)
         comment.find('.new_comment').attr('id', id)
         comment.find('.new_comment').addClass('post_new_comment'+id)
         like_comment = comment.find('.like_comment')
-        like_comment.attr('onclick', 'post_like_object('+id+', like_comment'+id+')')
+        like_comment.addClass('like_comment'+id)
+        like_comment.attr('onclick', 'post_like_object('+id+', "like_comment'+id+'")')
         like_comment.attr('object', 'comment')
         like_comment.attr('status', 'like')
+        like_icon = like_comment.find('.triangle.up')
+        like_icon.attr('id', 'likeup' + id)
+        like_comment.find('.down').attr('id', 'likedown' + id)
         dislike_comment = comment.find('.dislike_comment')
-        dislike_comment.attr('onclick', 'post_like_object('+id+', dislike_comment'+id+')')
+        dislike_comment.addClass('dislike_comment'+id)
+        dislike_comment.attr('onclick', 'post_like_object('+id+', "dislike_comment'+id+'")')
         dislike_comment.attr('object', 'comment')
         dislike_comment.attr('status', 'dislike')
-        like_comment.find('.up').attr('id', 'likeup' + id)
-        like_comment.find('.down').attr('id', 'likedown' + id)
+        dislike_icon = dislike_comment.find('.triangle.down')
+        dislike_icon.attr('id', 'dislikedown' + id)
+        if (like_status == 'like') {
+            like_icon.addClass('green')
+        }
+        else if (like_status == 'dislike') {
+            dislike_icon.addClass('red')
+        }
+        comment.find('.likes_number').attr('id', 'likes_number'+id)
         comment.find('.likes_number').text(rating)
         comment.prependTo('.comments_box')
     }

@@ -1,28 +1,23 @@
 {% load staticfiles %}
-<div class="eight wide column no_padding officefilter office{{sq.office.id}}" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}">
-    <div class="ui grid group-block no_margin">
-        <div class="wide column left-side" style="width: 80px;">
-            <div class="img-block">
-                {% if sq.image_icon %}
-                <a href="{{ sq.get_absolute_url }}"><img style="width: 50px; height: 50px;border-radius: 5px;" class="olymp-image" src="{{ sq.image_icon.url }}"></a>
-                {% else %}
-                <a href="{{ sq.get_absolute_url }}"><img style="width: 50px; height: 50px;border-radius: 5px;" class="olymp-image" src="{% static 'images/squad.png' %}"></a>
-                {% endif %}
+<div class="eight wide column pt0 pr0 officefilter office{{sq.office.id}}" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}">
+    <a style="text-align: left;" class="pt10 pb10 ui button mini shadow_small white full-w full-h" href="{{ sq.get_update_url }}">
+        <div class="ui grid group-block no_margin">
+            <div class="wide column left-side" style="width: 80px;">
+                <div class="textg text17 textbold">
+                    {{sq.students.all|length}}
+                </div>
+            </div>
+            <div class="wide column right-side no_padding" style="width: calc(100% - 80px);">
+                <h5 style="font-size: 13px;margin-bottom: 5px;">
+                    <span class="textblue">{{ sq.title }}</span>
+                    {% if trash %}
+                    <a class="ui button mini green make_alive" url="{% url 'squads:make_alive' %}" id="{{ sq.id }}">Восстановить</a>
+                    <div class="highlight success_alive{{sq.id}}" style="display: none;">Группа восстановлена</div>
+                    {% endif %}
+                </h5>
+                <span style="color: grey; font-size: 12px;">{{ sq.teacher.first_name }}</span>
             </div>
         </div>
-        <div class="wide column right-side" style="width: calc(100% - 80px); padding-top: 15px;padding-left: 0">
-            <h5 style="font-size: 13px;margin-bottom: 5px;">
-                <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
-                <a href="{{ sq.get_update_url }}" style="font-size: 13px;">
-                    <i class="icon cog"></i>
-                </a>
-                {% if trash %}
-                <a class="ui button mini green make_alive" url="{% url 'squads:make_alive' %}" id="{{ sq.id }}">Восстановить</a>
-                <div class="highlight success_alive{{sq.id}}" style="display: none;">Группа восстановлена</div>
-                {% endif %}
-            </h5>
-            <span style="color: grey; font-size: 12px;">{{ sq.teacher.first_name }}</span>
-        </div>
-    </div>
+    </a>
 </div>
 

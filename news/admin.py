@@ -12,9 +12,11 @@ class PostModelAdmin(admin.ModelAdmin):
 admin.site.register(Post, PostModelAdmin)
 
 class PostPartModelAdmin(admin.ModelAdmin):
-    list_display = ["id","content"]
+    list_display = ["id", 'get_post']
     list_display_links = ["id"]
-    search_fields = ["content"]
     class Meta:
         model = PostPart
+    def get_post(self, obj):
+        return obj.post.title + '; id=' + str(obj.post.id)
+
 admin.site.register(PostPart, PostPartModelAdmin)

@@ -4,9 +4,6 @@
 .post_add_part{
   height: 24px !important;
 }
-.save_post{
-  height: 24px !important;
-}
 .card_dialog{
   overflow-y: scroll;
 }
@@ -62,6 +59,9 @@
 .textw{
   color: #fff !important;
 }
+.textred{
+  color: #DB2828 !important;
+}
 .textg{
   color: #909090 !important;
 }
@@ -107,17 +107,23 @@
 .bt1{
   border-top: 1px solid #e5e5e5 !important;
 }
+.hoverable:hover{
+  cursor: pointer;
+}
 .border1{
   border: 1px solid #e5e5e5 !important;
 }
 .textbold{
   font-weight: 600;
 }
+.texti{
+  font-style: italic;
+}
 .text17{
   font-size:17px !important; 
 }
-.text21{
-  font-size:21px !important; 
+.text24{
+  font-size:24px !important; 
 }
 .text10{
   font-size:10px !important; 
@@ -131,11 +137,8 @@
 .underline{
   text-decoration: underline;
 }
-.textblue{
-  color:#285473;  
-}
 .textdark{
-  color:#4A4A4A;  
+  color:#4A4A4A !important;  
 }
 .textgrey{
   color: #707070;
@@ -1015,6 +1018,10 @@ a{
 .grey_divider{
   margin: 0 !important;
   background-color:grey;
+}
+.light_grey_divider{
+  padding: 1px;
+  background-color:#e3e3e3;
 }
 .crm_divider{
   padding: 2px;background-color:#99ccff;

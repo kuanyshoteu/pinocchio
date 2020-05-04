@@ -30,16 +30,9 @@
 	}
 </style>
 <div id="group-create">
-	{% if instance %}
-	<span class="add_student_url" id="{{instance.id}}" style="display: none;" url="{{ instance.add_student_url }}"></span>
-	<a id="go-back-btn-before"  href='{{ instance.get_absolute_url }}'>
-        <i class="arrow left icon"></i>
-    </a>
-	{% else %}
 	<a id="go-back-btn-before" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
     </a>
-    {% endif %}
 	<div class='ui container'>
 		<div class="ui grid stackable">
             {% include 'left_menu.html' %}

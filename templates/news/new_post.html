@@ -9,174 +9,77 @@
 <a id="go-back-btn-before"  href='{%if post%}{{post.get_absolute_url}}{%else%}{%url "main:blog"%}{%endif%}'>
     <i class="arrow left icon"></i>
 </a>
-<div class='ui container pb150 pt15' id="app">
-    <div class="ui grid stackable">
+<div class='ui container pt15' id="app" style="height: calc(100% - 70px);overflow-y: hidden;">
+    <div class="ui grid stackable" style="height: 100%;">
         {% include 'left_menu.html' %}
-        <div class="w85 wide column mlback">
-            <div class="ui grid stackable no_margin">
-                <div class="eight wide column no_padding">
-                    <div class="ui segment shadow_small">
-                        <form class="ui form mb0">
-                            <div class="textdg mb5">
-                                <span style="display: none;" class="newpost_notitle highlight_red">Введите заголовок</span>
+        <div class="w85 wide column mlback pb0 full-h">
+            <div class="ui grid stackable no_margin" style="height: 100%;">
+                <div class="twelve wide column pt0 pl0 pb0" style="height: 100%;">
+                    <div class="pr0" style="display: none;">
+                        <a class="dragarea pt5 pb5 ui button white mini border1">
+                            <i class="icon mr0 hand blue paper text13 outline"></i>
+                        </a>
+                        <div>
+                            <div class="load_move{{part.id}} ui active inline mini loader" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="ui mt0 segment shadow_small" style="height: 100%; overflow-y: scroll;">
+                        <form class="ui form text13 content_form">
+                            <div class="textdg">
+                                <span style="display: none;" class="newpost_notitle highlight_red mb5">Введите заголовок</span>
                             </div>
-                            <textarea class="text17 mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
-                            <div class="dflex">
+                            <textarea class="pl0 text24 texti textdg textbold mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
+                            <div class="ui divider mb0"></div>
+                            <div style="border: none;outline: none;min-height: 300px;" contenteditable="true" class="text15 pb150 post_content mt30">
+                            </div>
+                        </form>        
+                    </div>
+                </div>
+                <div class="four wide column no_padding">
+                    <div>
+                        <div class="ui segment shadow_small">
+                            <a class="mr5 ui button mini white shadow_small pl10 pr10">
+                                <i class="icon bold textdark text15 mr0"></i>
+                            </a>
+                            <a class="mr5 ui button mini white shadow_small pl10 pr10">
+                                <i class="icon italic textdark text15 mr0"></i>
+                            </a>
+                            <a style="font-size: 12.1px;" class="textblue ui button mini white shadow_small pl10 pr10">
+                                Ссылка
+                            </a>
+                        </div>
+                        <div class="ui segment shadow_small pb30 input_box" style="max-height: 230px;height: 230px;">
+                            <div class="textdg text13"><b>Добавление файла</b></div>
+                            <input type="file" name="post_img" id="post_img" class="postfile">
+                            <label class="file_post" for="post_img">
+                                <a class="ui button mini"><i class="icon image blue"></i>Выберите файл</a>
+                            </label>  
+                            <div style="display: none;line-height: 13px;" class="text13 file_hint textdg mt10">Схватите и перетащите в нужное место</div>
+                            <div class="mt5" style="height: 135px;">
+                                <div style="display: none;height: 135px;" class="hoverable dragarea pl10 pt10 pr10 pb10" id="dragarea0" onmouseover="drag_show_box('dragarea0')" draggabe="true" onmouseleave="drag_hide_box('dragarea0')">
+                                    <img src="" style="max-height:100%;max-width: 90%;margin: 0 5%;" class="new_image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb0 ui segment shadow_small">
+                            <div class="dflex mb15">
                                 <div class="textdg text13 mr5">Размер превью:</div>
                                 <form class="ui form mb0">
                                     <input style="width: 50px;height: 24px" type="number" class="newpost_priority pl5 pr0 mr10 pb0 pt0" value="{%if post%}{{post.priority}}{%else%}1{%endif%}" name="">
                                 </form>
-                                <a class="mr15 pt5 pb5 ui button white border1 shadow_small save_post" url="{% url 'news:save_post' %}" id="{%if post%}{{post.id}}{%else%}-1{%endif%}">
-                                    <i class="icon check blue mr0"></i>
-                                    <div class="create_post_loader ui active inline mini loader" style="display: none;"></div>
+                            </div>
+                            <div class="text-center">
+                                <a id="{{post.id}}" slug="{{post.slug}}" class="disabled ui button green shadow_green save_post" onclick="save_post()" url="{% url 'news:save_post' %}">
+                                    <b>Сохранить пост</b>
                                 </a>
-                                <a onclick="$('.sure_delete').modal('show')" class="white pt5 pb5 ui button white border1 shadow_small"><i class="icon trash mr0 red"></i></a>
-                            </div>   
-                        </form>                     
-                    </div>
-                    <div class="ui mb0 ui segment shadow_small no_padding">
-                        <form class="ui form text13 mb0">
-                            <div style="display: none;">
-                                <div class="part_edit_orig" draggable='true'>
-                                    <div class="pt15 pl15 pr15 pb15 part_edit_div">
-                                    </div>
-                                    <div class="ui divider no_margin"></div> 
+                                <div class="dinline" style="width: 20px;">
+                                    <i style="display: none;" class="newpost_saved icon check green text17 mr0"></i>
+                                    <div style="margin-top: -7px;display: none;" class="ml10 tiny ui active loader create_post_loader"></div>
                                 </div>
-                                <textarea class="edit_text_orig partcontent mb5"></textarea>
-                                <div class="edit_img_orig">
-                                    <b>Картинка</b> <span class="file_name_orig"></span>
-                                    <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="input_file_orig part_file{{part.id}} postfile">
-                                    <label class="label_file_orig part_file{{part.id}}" for="part_file{{part.id}}">
-                                        <a class="ui button mini white shadow_small border1 pl10 pr10"><i class="icon upload textdg"></i> Выбрать другую</a>
-                                    </label>   
-                                </div>
-                                <div class="edit_file_orig part_file{{part.id}} ui segment shadow_small no_margin">
-                                    <b>Файл</b> <span class="file_name_orig"></span>
-                                    <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="input_file_orig part_file{{part.id}} postfile">
-                                    <label class="label_file_orig part_file{{part.id}}" for="part_file{{part.id}}">
-                                        <a class="ui button mini white shadow_small border1 pl10 pr10"><i class="icon upload textdg"></i> Выбрать другую</a>
-                                    </label>   
-                                </div>
-                                <div class="dflex part_buttons_orig">
-                                    <a style="height: 24px;" class="pt5 pb5 ui button white disabled border1 shadow_small post_add_part">
-                                        <i class="icon check blue mr0"></i>
-                                        <div class="create_post_loader ui active inline mini loader" style="display: none;"></div>
-                                    </a>
-                                    <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part"><i class="icon x red mr0"></i></a>
-                                    <div class="load_move_orig" style="position: absolute;right: 15px;">
-                                        <div class="load_move ui active inline mini loader" style="display: none;"></div>
-                                    </div>                                    
-                                </div>                                
-                            </div>
-                            <draggable
-                                :options="{handle:'.dragarea'}"
-                                @end="move_part()"
-                                class="post_cont">
-                            {%if post%}
-                                {%for part in post.parts.all%}
-                                <div class="part_edit{{part.id}}" ondragstart="save_part_id('{{part.id}}')">
-                                    <div class="pt15 pl15 pr15 pb15 part_edit_div">
-                                        {% if part.content|length > 0 %}
-                                        <textarea id="{{part.id}}" draggable='false' class="mb5 part_content{{part.id}}" oninput="fill_pred_text('{{part.id}}')">{{ part.content }}</textarea>
-                                        <span style="display: none;" class="parttextof{{part.id}}" text=""></span>
-                                        {% endif %}
-                                        {% if part.image %}
-                                        <div class="part_img{{part.id}} no_margin">
-                                            <b>Картинка</b> {{part.image}}
-                                            <input type="file" name="part_file{{part.id}}" id="part_file{{part.id}}" class="part_file{{part.id}} postfile">
-                                            <label class="part_file{{part.id}}" for="part_file{{part.id}}">
-                                                <a class="ui button mini white shadow_small border1 pl10 pr10"><i class="icon upload textdg"></i> Выбрать другую</a>
-                                            </label>   
-                                        </div>
-                                        {% endif %}
-                                        {% if part.file %}
-                                        <div class="part_file{{part.id}} ui segment shadow_small no_margin">
-                                            <b>Файл</b> {{part.file}}
-                                            <a class="ui button mini white border1 shadow_small"><i class="icon upload textdg"></i> Выбрать другую</a>
-                                        </div>
-                                        {%endif%}  
-                                        <div class="dflex">
-                                            <a style="height: 24px;" onclick="post_add_part('{{part.id}}')" class="pt5 pb5 mr10 ui button white border1 shadow_small disabled post_add_part{{part.id}}" id="{{part.id}}">
-                                                <i class="icon check check{{part.id}} blue mr0"></i>
-                                                <div class="create_post_loader{{part.id}} ui active inline mini loader" style="display: none;"></div>
-                                            </a>
-                                            <a class="pt5 pb5 ui button white border1 shadow_small post_delete_part" onclick="post_delete_part('{{part.id}}')" id="{{part.id}}"><i class="icon x red mr0"></i></a>
-                                            <a style="position: absolute;right: 15px;" class="dragarea pt5 pb5 ui button white mini border1">
-                                                <i class="icon mr0 hand blue paper text13 outline"></i>
-                                            </a>
-                                            <div style="position: absolute;right: 15px;">
-                                                <div class="load_move{{part.id}} ui active inline mini loader" style="display: none;"></div>
-                                            </div>
-                                        </div> 
-                                    </div>
-                                    <div class="ui divider no_margin"></div> 
-                                </div>
-                                {% endfor %}
-                            {%endif%}
-                            </draggable> 
-                        </form>                        
-                    </div>
-                    <div class="ui segment backgreenlow mt0">
-                        <div class="full-w text15 mb5 textdg">
-                            <b>Добавить блок</b>
-                        </div>
-                        <div class="dflex">
-                            <div class="pl0" style="width: calc(100% - 40px);">
-                                <form class="ui form mb0 full-w">
-                                    <textarea id="-1" oninput="fill_pred_text('-1')" class="mb0 newpost_text part_content-1" style="height: 70px;padding-top: 11px;" placeholder="Введите текст"></textarea>
-                                    <span style="display: none;" class="parttextof-1" text=""></span>
-                                </form>
-                            </div>
-                            <div class="ml5">
-                                <input type="file" name="part_file-1" id="part_file-1" part_id="-1" class="postfile">
-                                <label class="part_file-1" for="part_file-1">
-                                    <a class="ui button mini white shadow_small pl10" style="padding-right: 7px;"><i class="icon paperclip blue mr0 text15"></i></a>
-                                </label>
-                                <br>
-                                <a onclick="post_add_part('-1')" id="-1" class="mt5 ui button mini white shadow_small pl10 post_add_part-1 disabled" style="padding-right: 7px;">
-                                    <i class="icon check check-1 mr0 blue text15"></i> 
-                                    <div class="create_post_loader-1 ui active inline mini loader" style="display: none;">
-                                    </div>
-                                </a>
                             </div>
                         </div>
-                    </div>
-                    <div class="backgreenlow ui segment mt0" style="min-height: 45px;">
-                        <div class="text15 mb15 textdg">
-                            <b>Предпросмотр</b>
-                        </div>
-                        <div class="pred_part_content-1"></div>
-                        <img style="max-width: 70px;" class="pred_part_img-1" src="">
-                        <a style="display: none;" class="pred_part_file-1 full-w ui button mini white shadow_small"><i class="icon download blue"></i> File</a>
-                        <br>
-                        <a style="display: none;" id="-1" class="clear_input_file-1 clear_input_file ui button mini white shadow_small mt5 pt5 pb5"><i class="icon x red mr0"></i></a>
-                    </div>
-                </div>
-                <div class="eight wide column pt0">
-                    <div class="mb0 ui segment shadow_small">
-                        <div class="text15 mb15 textdg">
-                            <b>Так выглядит пост</b>
-                        </div>
-                        <div class="mb15">
-                            <b style="font-size: 24px;"><i class="pred_title">{% if post%}{{post.title}}{%else%}Заголовок{%endif%}</i></b>
-                            {%if post%}
-                            <div class="textg text15 mt10">
-                                {{post.author_profile.first_name}}
-                                <span class="ml15">{{post.timestamp}}</span>
-                            </div>
-                            {%endif%}
-                        </div>
-                        <div class="empty_post text-center" style="height: 200px;padding-top: 50px;{%if post%}display: none;{%endif%}">
-                            <span style="color:grey">Пока пусто</span>
-                        </div>
-                        <div style="display: none;">
-                            <div class="pred_part_orig mb15"></div>
-                            <div class="pred_text_orig mb10"></div>
-                            <img class="pred_img_orig mb10 half-w" src="">
-                            <a href="" class="pred_file_orig full-w ui button mini white border1 shadow_small text15"><i class="icon download textblue"></i> {{part.file}}</a>
-                        </div>
-                        <div class="pred_cont" style="min-height: 200px;">
-                            {% include 'news/post_detail_work.html' %}
+                        <div class="mt15 ui segment shadow_small text-center">
+                            <a onclick="$('.sure_delete').modal('show')" class="ui button mini red"><i class="icon trash textw"></i> <b>Удалить пост</b></a>                        
                         </div>
                     </div>
                 </div>
@@ -201,12 +104,15 @@
 <style type="text/css">
     textarea{
         overflow-y:hidden;
+        border: none !important;
     }
+    .box__dragndrop,
+    .box__uploading,
+    .box__success,
+    .box__error {
+      display: none;
+    }    
 </style>
-<span style="display: none;" class="data" slug="{%if post%}post.slug{%else%}none7569wjd{%endif%}" save_part="{%url 'news:post_add_part'%}" delete_part="{% url 'news:post_delete_part' %}" temp_part_id='' crnt_part='-1'></span>
-<script src='{% static "js/vue-drag/vue.min.js" %}'></script>
-<script src='{% static "js/vue-drag/axios.min.js" %}'></script>
-<script src='{% static "js/vue-drag/sortable.min.js" %}'></script>
-<script src='{% static "js/vue-drag/vue-draggable.min.js" %}'></script>
+<span style="display: none;" id="{{post.id}}" class="data" slug="{%if post%}post.slug{%else%}none7569wjd{%endif%}" get_post_url="{%url 'news:get_post'%}" crnt_file_number="-1" drag_file_id=""></span>
 {% include 'news/news_scripts.html' %}
 {% endblock content %}

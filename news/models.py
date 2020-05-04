@@ -30,9 +30,9 @@ class Post(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_posts') 
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
+    text = models.TextField(default='')
     likes = models.ManyToManyField(Profile, related_name='liked_posts')
     dislikes = models.ManyToManyField(Profile, related_name='disliked_posts')
-    done_by = models.ManyToManyField(Profile, related_name='read_posts')
     slug = models.SlugField(unique=True, default="")
     order = models.IntegerField(default=0)
     priority = models.IntegerField(default=1)
@@ -49,7 +49,6 @@ class Post(models.Model):
 
 class PostPart(models.Model):
     post = models.ForeignKey(Post, null=True, on_delete = models.CASCADE, related_name='parts')
-    content = models.TextField(default='')
     video = models.FileField(null=True, blank=True)
     file = models.FileField(null=True,blank=True)
     youtube_video_link = models.TextField(default='')
@@ -58,11 +57,8 @@ class PostPart(models.Model):
             blank=True, 
             )
     order = models.IntegerField(default=0)
-    show = models.BooleanField(default=True)
     class Meta: 
         ordering = ['order']
-    def get_markdown(self):
-        return mark_safe(markdown(self.content))
             
 class Comment(models.Model):
     post = models.ForeignKey(Post, null=True, on_delete = models.CASCADE, related_name='comments')

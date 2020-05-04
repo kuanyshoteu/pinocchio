@@ -140,7 +140,7 @@
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
 <span class="data" is_crm="yes" is_dir="{{is_director}}" hisid="{{profile.id}}" filter_crm_cards="{%url 'schools:filter_crm_cards'%}" get_card_dialog="{%url 'schools:get_card_dialog'%}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
-<script>{% include 'school/crm_scripts.html' %}</script>
+{% include 'school/crm_scripts.html' %}
 <style type="text/css">
 .ui-draggable-dragging{
     opacity: 1;

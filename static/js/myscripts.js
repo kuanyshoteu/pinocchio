@@ -4,35 +4,6 @@
         val = $(this).val()
         $('.pred_title').text(val)
     })
-    $('.save_post').click(function(e) {
-        url = $(this).attr('url')
-        id = $(this).attr('id')
-        title = $('.newpost_title').val()
-        priority = $('.newpost_priority').val()
-        slug = request.GET.get('slug')
-        $('.create_post_loader').show()
-        $('.newpost_saved').hide()
-        $.ajax({
-            url: url,
-            data: {
-                'id':id,
-                'title':title,
-                'priority':priority,
-                'slug':slug,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (id == '-1') {
-                    window.location.replace(data.url);
-                }
-                $('.save_post').attr('id', data.id)
-                $('.save_post').addClass('disabled')
-                $('.save_post').removeClass('blue')
-                $('.create_post_loader').hide()
-                $('.newpost_saved').show()
-            }
-        })
-    })
     $('.save_vk_group').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')

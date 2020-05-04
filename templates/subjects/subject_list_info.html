@@ -1,22 +1,18 @@
 {% load staticfiles %}
-<div class="eight wide column no_padding catall {%for cat in sq.category.all%}cat{{cat.id}}{%endfor%}">
-    <div class="ui grid group-block no_margin">
-        <div class="wide column left-side pl0 pb0" style="width: 60px;">
-            <div class="img-block">
-                {% if sq.image_icon %}
-                <a href="{{ sq.get_absolute_url }}"><img style="width: 50px; height: 50px;border-radius: 5px;" class="olymp-image" src="{{ sq.image_icon.url }}"></a>
-                {% else %}
-                <a href="{{ sq.get_absolute_url }}"><img style="width: 50px; height: 50px;border-radius: 5px;" class="olymp-image" src="{% static 'images/squad.png' %}"></a>
-                {% endif %}
+<div class="eight wide column pt0 pr0 catall {%for cat in sq.category.all%}cat{{cat.id}}{%endfor%}">
+    <div style="text-align: left;" class="pt10 pb10 border1 ui segment shadow_small full-w full-h">
+        <div class="ui grid group-block no_margin">
+            <div class="wide column left-side pl5 pb10" style="width: 40px;">
+                <div class="textg text17 textbold">
+                    {{sq.squads.all|length}}
+                </div>
             </div>
-        </div>
-        <div class="wide column right-side" style="width: calc(100% - 80px); padding-top: 20px;padding-left: 0">
-            <h5 style="font-size: 13px;margin-bottom: 5px;">
-                <a href="{{ sq.get_absolute_url }}">{{ sq.title }}</a>
-                <a href="{{ sq.get_update_url }}" style="font-size: 13px;">
-                    <i class="icon cog"></i>
-                </a>
-            </h5>
+            <div class="wide column right-side no_padding" style="width: calc(100% - 40px);">
+                <h5 style="font-size: 13px;margin-bottom: 5px;">
+                    <a  href="{{ sq.get_absolute_url }}" class="textblue">{{ sq.title }}</a>
+                </h5>
+                <a href="{{sq.get_update_url}}" class="textdg" style="text-decoration: underline;">Настройки курса</a>                
+            </div>
         </div>
     </div>
 </div>

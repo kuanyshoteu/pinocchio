@@ -3,8 +3,8 @@ $(document).ready(function () {
         id = $(this).attr('id')
         $('.officefilter').hide()
         $('.office'+id).show()
-        $('.right_option').removeClass('green')
-        $(this).addClass('green')
+        $('.right_option').removeClass('shadow_small')
+        $(this).addClass('shadow_small')
     })
     $('.choose_color').click(function(e) {
         url = $('.choose_color_def').attr('url')
@@ -138,11 +138,7 @@ $(document).ready(function () {
                     for (var i = 0; i < data.res.length; i++) {
                         title = data.res[i][0]
                         url = data.res[i][1]
-                        image = data.res[i][2]
-                        if (image == '') {
-                            image = '/static/images/squad.png'
-                        }
-                        $('<div class="full-w "><a style="display:flex" href="'+url+'" class="full-w search-item"> <img class="search-group-img" src="'+image+'" alt="photo"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_groups')
+                        $('<div class="full-w "><a style="display:flex" href="'+url+'" class="full-w search-item"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_groups')
                     }
                 }
             })

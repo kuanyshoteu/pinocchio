@@ -136,139 +136,70 @@ def save_post(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    title = request.GET.get('title')
+    content = request.GET.get('content')
     pid = request.GET.get('id')
-    priority = int(request.GET.get('priority'))
-    slug = request.GET.get('slug')
-    post = save_post_work(title, pid, profile, school, priority, slug)
-    data = {
-        "url":post.get_edit_url(),
-    }
-    return JsonResponse(data)
-
-def reorder_parts(post):
-    i = 1
-    for part in post.parts.all():
-        part.order = i
-        part.save()
-        i+=1
-def post_add_part(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = is_moderator_school(request, profile)
-    title = request.GET.get('title')
-    pid = request.GET.get('post_id')
-    priority = int(request.GET.get('priority'))
-    slug = request.GET.get('slug')
-    post = save_post_work(title, pid, profile, school, priority, slug)
-    if slug == 'none7569wjd':
-        slug = post.slug
-    partid = int(request.GET.get('id'))
-    file_url = ""
-    file_name = ""
-    url = post.get_edit_url()
-    print('part', partid)
-    if partid == -1:
-        reorder_parts(post)
-        part = post.parts.create(
-            order=len(post.parts.all())+1,
-        )
-    else:
-        part = post.parts.get(id=partid)
-    if request.GET.get('first') == 'yes':
-        part.content = request.GET.get('text')
-    else:
-        part.content += request.GET.get('text')
-    if request.FILES.get('file'):
-        file_name = str(request.FILES.get('file'))
-        its_img = False
-        for frmt in img_formats:
-            if frmt in file_name:
-                its_img = True
-                break
-        if its_img:
-            part.image = request.FILES.get('file')
-            part.save()
-            file_url = str(part.image.url)
-        else:
-            part.file = request.FILES.get('file')
-            part.save()
-            file_url = str(part.file.url)
-    part.save()
-    if request.GET.get('last') == 'yes':
-        data = {
-            "part_id":part.id,
-            "file_url":file_url,
-            "file_name":file_name,
-            "url":url,
-        }
-    else:
-        data = {
-            "part_id":part.id,
-            "slug":slug,
-        }
-    return JsonResponse(data)
-
-def post_move_part(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = is_moderator_school(request, profile)
-    ok = False
-    if request.GET.get('id') and request.GET.get('new_order'):
-        move_part = PostPart.objects.get(id=int(request.GET.get('id')))
-        post = move_part.post
-        if school != post.school:
-            return JsonResponse('Wrong')
-        old_order = move_part.order
-        new_order = int(request.GET.get('new_order'))
-        move_part.order = new_order
-        move_part.save()
-        if old_order > new_order:
-            qs = post.parts.filter(order__gte=new_order).exclude(id=move_part.id)
-            for next_part in qs:
-                new_order += 1
-                next_part.order = new_order
-                next_part.save()
-        else:
-            qs = post.parts.filter(order__lte=new_order).exclude(id=move_part.id)
-            new_order = 0
-            for next_part in qs:
-                new_order += 1
-                next_part.order = new_order
-                next_part.save()
-        ok = True
-    data = {
-        'ok':ok,
-    }
-    return JsonResponse(data)
-
-def save_post_work(title, pid, profile, school, priority,slug):
-    post_id = -1
-    post = None
+    is_first = request.GET.get('first')
     if pid == '-1':
-        found = False
-        if slug != 'none7569wjd':
-            find_by_slug = Post.objects.filter(slug=slug)
-            if len(find_by_slug) > 0:
-                post = find_by_slug[0]
-                found = True
-        if title and not found:
-            slug = slugify(translit(title[:45], 'ru', reversed=True))
-            last = len(Post.objects.filter(slug=slug))
-            if last > 0:
-                slug += str(last+1)
-            print(slug)
-            post = school.school_posts.create(
-                title = title,
-                author_profile = profile,
-                slug = slug,
-                priority = priority,
-                )
+        title = request.GET.get('title')
+        priority = int(request.GET.get('priority'))
+        slug = request.GET.get('slug')
+        post = save_post_work(title, pid, profile, school, priority, slug, content)
     else:
         post = school.school_posts.get(id=int(pid))
+    if is_first == 'yes':
+        title = request.GET.get('title')
+        priority = int(request.GET.get('priority'))
+        slug = request.GET.get('slug')
+        old_files = request.GET.get('old_files').split(',')
         post.title = title
         post.priority = priority
-        post.save()
+        post.text = content
+        for part in post.parts.all():
+            if str(part.id) in old_files:
+                part.order = 0
+                part.save()
+            else:
+                part.delete()
+        for file in request.FILES:
+            print(file)
+            part = post.parts.create()
+            part.image = request.FILES.get(file)
+            part.order = int(file)
+            part.save()
+    else:
+        post.text += content
+    post.save()
+    if request.GET.get('last') == 'yes':
+        data = {
+            "url":post.get_edit_url(),
+        }
+    else:
+        data = {
+        }
+    return JsonResponse(data)
+
+def save_post_work(title, pid, profile, school, priority,slug,content):
+    post_id = -1
+    post = None
+    found = False
+    if slug != 'none7569wjd':
+        find_by_slug = Post.objects.filter(slug=slug)
+        if len(find_by_slug) > 0:
+            post = find_by_slug[0]
+            found = True
+    if title and not found:
+        slug = slugify(translit(title[:45], 'ru', reversed=True))
+        last = len(Post.objects.filter(slug=slug))
+        if last > 0:
+            slug += str(last+1)
+        print(slug)
+        post = school.school_posts.create(
+            title = title,
+            author_profile = profile,
+            slug = slug,
+            priority = priority,
+            text = content,
+            )
     return post
 
 def get_posts(request):
@@ -288,8 +219,10 @@ def get_posts(request):
         p = Paginator(posts, 20)
         page1 = p.page(page)
         for post in page1.object_list:
-            print('post', post.title)
-            text = ""
+            limit = 70*post.priority
+            text = post.text[:limit]
+            if len(text) >= limit - 2:
+                text += '...'                
             img = ""
             file = ""
             author = ""
@@ -298,19 +231,12 @@ def get_posts(request):
             school_url = ""
             if len(post.parts.all()) > 0:
                 parts = post.parts.all()
-                found_text = False
                 found_img = False
                 for part in parts:
-                    if part.content != "" and found_text == False:
-                        text = part.content[:70]
-                        if len(text) >= 68:
-                            text += '...'
-                        found_text = True
                     if part.image and found_img == False:
                         found_img = True
-                        print('found_img', post.title)
                         img = part.image.url
-                    if found_text and found_img:
+                    if found_img:
                         break
             res.append([
                 post.title,                 #0
@@ -322,23 +248,6 @@ def get_posts(request):
                 ])
     data = {
         "posts":res,
-    }
-    return JsonResponse(data)
-
-def post_delete_part(request):
-    profile = get_profile(request)
-    only_managers(profile)
-    school = is_moderator_school(request, profile)  
-    ok = False  
-    if request.GET.get('id'):
-        part = PostPart.objects.get(id=int(request.GET.get('id')))
-        post = part.post
-        pschool = post.school
-        if pschool == school:
-            part.delete()
-            ok = True
-    data = {
-        "ok":ok,
     }
     return JsonResponse(data)
 
@@ -387,25 +296,49 @@ def post_new_comment(request):
 def post_like_object(request):
     profile = get_profile(request)
     status = request.GET.get('status')
+    object_name = request.GET.get('object')
     if request.GET.get('id') and status:
-        if request.GET.get('object') == 'comment':
+        new_status = 'none'
+        if object_name == 'comment':
             obj = Comment.objects.get(id=int(request.GET.get('id')))
         else:
             obj = Post.objects.get(id=int(request.GET.get('id')))
         if status == 'like':
-            obj.likes.add(profile)
+            if profile in obj.likes.all():
+                obj.likes.remove(profile)
+            else:
+                obj.likes.add(profile)
+                new_status = 'like'
             obj.dislikes.remove(profile)
-        elif status == 'nothing':
+        elif status == 'none':
             obj.likes.remove(profile)
             obj.dislikes.remove(profile)
         elif status == 'dislike':
+            if profile in obj.dislikes.all():
+                obj.dislikes.remove(profile) 
+            else:
+                obj.dislikes.add(profile) 
+                new_status = 'dislike'
             obj.likes.remove(profile) 
-            obj.dislikes.add(profile) 
     res = len(obj.likes.all()) - len(obj.dislikes.all())
     if res > 0:
         res = "+" + str(res)
     data = {
         "like_num":res,
+        "status":new_status,
+    }
+    return JsonResponse(data)
+
+def get_post(request):
+    res = []
+    if request.GET.get('id'):
+        post = Post.objects.get(id=int(request.GET.get('id')))
+        for part in post.parts.all():
+            if part.image:
+                res.append([part.image.url, part.id, part.order])
+    data = {
+        "content":post.text,
+        "images":res,
     }
     return JsonResponse(data)
 
@@ -413,7 +346,7 @@ def get_comments(request):
     res = []
     if request.GET.get('post_id') and request.GET.get('page'):
         post = Post.objects.get(id=int(request.GET.get('post_id')))
-        p = Paginator(post.comments.filter(level=1).select_related('parent'), 20)
+        p = Paginator(post.comments.filter(level=1).select_related('parent').prefetch_related('likes').prefetch_related('dislikes'), 20)
         page1 = p.page(int(request.GET.get('page')))
         if request.user.is_authenticated:
             profile = get_profile(request)
@@ -421,7 +354,6 @@ def get_comments(request):
             author = comment.author_profile
             name = author.first_name
             url = author.get_absolute_url()
-            like_status = 'nothing'
             parent_id = ''
             if comment.parent:
                 parent_id = comment.parent.id
@@ -429,6 +361,12 @@ def get_comments(request):
                 img = author.image.url
             else:
                 img = "images/nophoto.png"
+            if author in comment.likes.all():
+                like_status = 'like'
+            elif author in comment.dislikes.all():
+                like_status = 'dislike'
+            else:
+                like_status = 'none'
             res.append([
                 name,
                 url,
@@ -438,6 +376,7 @@ def get_comments(request):
                 comment.id,
                 parent_id,
                 len(comment.likes.all()) - len(comment.dislikes.all()),
+                like_status,
                 ])
     data = {
         "comments":res,

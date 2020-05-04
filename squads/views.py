@@ -950,10 +950,7 @@ def searching_groups(request):
         squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
         for squad in squads:
-            image_url = ''
-            if squad.image_icon:
-                image_url = squad.image_icon.url
-            res.append([squad.title, squad.get_absolute_url(), image_url])
+            res.append([squad.title, squad.get_absolute_url()])
             i+=1
             if i == 4:
                 break
