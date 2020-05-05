@@ -12,7 +12,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                content = data.content.replace('(', '<').replace(')', '>').replace('andsign1', '&')
+                content = replace_back_work(data.content)
                 $('.post_content').html(content)
                 $('.post_for_save').html(content)
                 console.log(data.content)
@@ -53,11 +53,29 @@
             this_.remove()
         })
     }
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(find, 'g'), replace);
+    }    
+    original_signs = ['<', '>', ';', '&']
+    function replace_work(text){
+        for (var i = 0; i < original_signs.length; i++) {
+            text = replaceAll(text, original_signs[i], 'sign'+i)
+        }
+        return text
+    }
+    function replace_back_work(text){
+        for (var i = 0; i < original_signs.length; i++) {
+            text = replaceAll(text, 'sign'+i, original_signs[i])
+        }
+        return text
+    }
     async function save_post_work(){
         this_ = $('.save_post')
         this_.addClass('disabled')
         id = $('.data').attr('id')
-        content = $('.post_for_save').html().replace(';', ' ').replace('<', '(').replace('&', 'andsign1')
+        content = $('.post_for_save').html()
+        content = replace_work(content)
+        console.log(content)
         $('.create_post_loader').show()
         $('.newpost_saved').hide()
         url = this_.attr('url')
