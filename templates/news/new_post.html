@@ -126,6 +126,6 @@
       display: none;
     }    
 </style>
-<span style="display: none;" id="{{post.id}}" class="data" slug="{%if post%}post.slug{%else%}none7569wjd{%endif%}" get_post_url="{%url 'news:get_post'%}" crnt_file_number="-1" drag_file_id=""></span>
+<span style="display: none;" id="{%if post%}{{post.id}}{%else%}-1{%endif%}" class="data" slug="{%if post%}post.slug{%else%}none7569wjd{%endif%}" get_post_url="{%url 'news:get_post'%}" crnt_file_number="-1" drag_file_id=""></span>
 {% include 'news/news_scripts.html' %}
 {% endblock content %}

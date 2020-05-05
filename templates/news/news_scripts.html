@@ -12,7 +12,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                content = data.content.replace('(', '<').replace(')', '>')
+                content = data.content.replace('(', '<').replace(')', '>').replace('andsign1', '&')
                 $('.post_content').html(content)
                 $('.post_for_save').html(content)
                 console.log(data.content)
@@ -53,11 +53,11 @@
             this_.remove()
         })
     }
-    async function save_post_work(id, slug){
+    async function save_post_work(){
         this_ = $('.save_post')
         this_.addClass('disabled')
-        id = this_.attr('id')
-        content = $('.post_for_save').html().replace(';', ' ').replace('<', '(').replace('>', ')')
+        id = $('.data').attr('id')
+        content = $('.post_for_save').html().replace(';', ' ').replace('<', '(').replace('&', 'andsign1')
         $('.create_post_loader').show()
         $('.newpost_saved').hide()
         url = this_.attr('url')
@@ -86,7 +86,7 @@
             $('.file_alr').each(function(){
                 old_files.push(parseInt($(this).attr('id')))
             })
-            slug = this_.attr('slug')        
+            slug = $('.data').attr('slug')        
             title = $('.newpost_title').val()
             priority = $('.newpost_priority').val()
             add_data = '?id='+id+'&title='+title+'&content='+text+'&priority='+priority+'&slug='+slug+'&old_files='+old_files

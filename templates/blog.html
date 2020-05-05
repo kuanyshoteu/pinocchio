@@ -71,7 +71,7 @@
                     post.removeClass('post_cont_orig')
                     post.find('.post_link').attr('href', href)
                     post.find('.post_title').text(title)
-                    post.find('.post_text').html(text)
+                    post.find('.post_text').html(text.replace('(', '<').replace(')', '>').replace('(div)', ''))
                     if (img.length < 2) {
                         img = "/static/images/fon4.jpg"
                     }
