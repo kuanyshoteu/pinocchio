@@ -12,8 +12,9 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.post_content').html(data.content)
-                $('.post_for_save').html(data.content)
+                content = data.content.replace('(', '<').replace(')', '>')
+                $('.post_content').html(content)
+                $('.post_for_save').html(content)
                 console.log(data.content)
                 for (var i = 0; i < data.images.length; i++) {
                     img_url = data.images[i][0]
@@ -56,7 +57,7 @@
         this_ = $('.save_post')
         this_.addClass('disabled')
         id = this_.attr('id')
-        content = $('.post_for_save').html().replace(';', ' ')
+        content = $('.post_for_save').html().replace(';', ' ').replace('<', '(').replace('>', ')')
         $('.create_post_loader').show()
         $('.newpost_saved').hide()
         url = this_.attr('url')
@@ -201,6 +202,42 @@
                 }
             }
             reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+    }
+    var rangeM = 79
+    function saveSelection() {
+        if (window.getSelection) {
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                var ranges = [];
+                for (var i = 0; i < sel.rangeCount; ++i) {
+                    console.log('sav', i, sel.getRangeAt(i).startOffset, sel.getRangeAt(i).endOffset)
+                    ranges.push(sel.getRangeAt(i));
+                    $('.data').attr('sel_start', sel.getRangeAt(i).startOffset)
+                    $('.data').attr('sel_end', sel.getRangeAt(i).endOffset)
+                }
+                console.log('0',ranges)
+                rangeM = ranges
+                return ranges;
+            }
+        } else if (document.selection && document.selection.createRange) {
+            return document.selection.createRange();
+        }
+        return null;
+    }
+    function restoreSelection() {
+        console.log(rangeM)
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(rangeM[0]);        
+    }
+    function createLink() {
+        restoreSelection()
+        var url = $('.link_address').val()
+        if (url != '' && url) {
+            document.execCommand("CreateLink", false, url); 
+            $('.link_address').val('')   
+            $('.create_link_box').modal('hide')        
         }
     }
 </script>

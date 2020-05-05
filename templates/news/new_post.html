@@ -28,7 +28,7 @@
                             <div class="textdg">
                                 <span style="display: none;" class="newpost_notitle highlight_red mb5">Введите заголовок</span>
                             </div>
-                            <textarea class="pl0 text24 texti textdg textbold mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
+                            <textarea style="border: none !important;overflow-y: hidden;" class="pl0 text24 texti textdg textbold mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
                             <div class="ui divider mb0"></div>
                             <div style="border: none;outline: none;min-height: 300px;" contenteditable="true" class="text15 pb150 post_content mt30">
                             </div>
@@ -44,7 +44,7 @@
                             <a class="mr5 ui button mini white shadow_small pl10 pr10">
                                 <i class="icon italic textdark text15 mr0"></i>
                             </a>
-                            <a style="font-size: 12.1px;" class="textblue ui button mini white shadow_small pl10 pr10">
+                            <a style="font-size: 12.1px;" class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
                                 Ссылка
                             </a>
                         </div>
@@ -87,6 +87,23 @@
         </div>
     </div>
 </div>
+<div class="create_link_box ui modal tiny">
+    <i class="close icon"></i>
+    <div class="content text-center">
+        <div>
+            <span class="text15">Введите адрес ссылка</span>
+        </div>
+        <div>
+            <form class="ui form mb0">
+                <textarea class="link_address"></textarea>
+            </form>
+        </div>
+        <div class="mt15">
+            <a class="ui button mini white border1 shadow_small" onclick="createLink()"><b>Добавить ссылку</b></a>
+        </div>
+    </div>
+</div>
+
 <div class="sure_delete ui modal tiny">
     <i class="close icon"></i>
     <div class="content text-center">
@@ -102,10 +119,6 @@
     </div>
 </div>
 <style type="text/css">
-    textarea{
-        overflow-y:hidden;
-        border: none !important;
-    }
     .box__dragndrop,
     .box__uploading,
     .box__success,
