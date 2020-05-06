@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
-
+from news.views import blog
 app_name = 'Enigmath'
 urlpatterns = [
     url(r'^about/$', about, name='about'),

@@ -23,6 +23,45 @@ from django.template import RequestContext
 from constants import *
 from django.http import JsonResponse
 
+def blog(request):
+    schools = []
+    if request.user.is_authenticated:
+        profile = get_profile(request)
+        is_moderator = is_profi(profile, 'Moderator')
+        is_trener = is_profi(profile, 'Teacher')
+        is_manager = is_profi(profile, 'Manager')
+        is_director = is_profi(profile, 'Director')
+        is_moderator = is_profi(profile, 'Moderator')        
+        profile = get_profile(request)
+        school = is_moderator_school(request, profile)
+        schools.append(school)
+    else:
+        profile = False    
+        is_moderator = False
+        is_trener = False
+        is_manager = False
+        is_director = False
+        is_moderator = False   
+
+    bilimtap = School.objects.get(title='Штаб квартира ЦРУ')
+    schools.append(bilimtap)
+    posts = Post.objects.all().select_related('author_profile').select_related('school').prefetch_related('parts')
+    p = Paginator(posts, 20)
+    page1 = p.page(1)
+
+    context = {
+        "profile":profile,
+        "schools":School.objects.all(),
+        "professions":Profession.objects.all(),
+        "is_moderator":is_moderator,
+        'is_trener':is_trener,
+        "is_manager":is_manager,
+        "is_director":is_director,
+        "is_moderator":is_moderator,
+        "posts":page1.object_list,
+    }
+    return render(request, "blog.html", context)
+
 def post_list(request, school_id):
     profile = ''
     hisschools = []
