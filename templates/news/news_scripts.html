@@ -1,43 +1,5 @@
 {% load static %}
 <script type="text/javascript">
-    get_post()
-    function get_post(){
-        console.log('get_post')
-        url = $('.data').attr('get_post_url')
-        id = $('.data').attr('id')
-        $.ajax({
-            url: url,
-            data: {
-                'id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                content = replace_back_work(data.content)
-                $('.post_content').html(content)
-                $('.post_for_save').html(content)
-                console.log(data.content)
-                for (var i = 0; i < data.images.length; i++) {
-                    img_url = data.images[i][0]
-                    part_id = data.images[i][1]
-                    order = data.images[i][2]
-                    img = $('.img_orig').clone()
-                    img.removeClass('img_orig')
-                    img.attr('src', img_url)
-                    img.attr('ondragstart', 'save_drag_id('+part_id+')')
-                    img.addClass('file_alr post_file'+part_id)
-                    img.attr('id', part_id)
-                    if (order < 0) {
-                        place = $('.file_box'+order)
-                    }
-                    else{                        
-                        place = $('.file_box'+part_id)
-                    }
-                    img.insertBefore(place)
-                    place.remove()
-                }
-            }
-        })
-    }
     function save_drag_id(id){
         $('.data').attr('drag_file_id', id)
     }
@@ -47,99 +9,87 @@
     }
     async function replace_images(){
         $('.post_for_save').html($('.post_content').html())
-        $('.post_for_save').find('.post_file').each(function(){
+        $('.post_for_save').find('.post_file_new').each(function(){
             this_ = $(this)
-            $('<div class="file_box file_box'+this_.attr('id')+'"></div>').insertBefore(this_)
+            $('<div>new_file_place'+this_.attr('id')+'</div>').insertBefore(this_)
             this_.remove()
         })
-    }
-    function replaceAll(str, find, replace) {
-        return str.replace(new RegExp(find, 'g'), replace);
-    }    
-    original_signs = ['<', '>', ';', '&']
-    function replace_work(text){
-        for (var i = 0; i < original_signs.length; i++) {
-            text = replaceAll(text, original_signs[i], 'sign'+i)
-        }
-        return text
-    }
-    function replace_back_work(text){
-        for (var i = 0; i < original_signs.length; i++) {
-            text = replaceAll(text, 'sign'+i, original_signs[i])
-        }
-        return text
     }
     async function save_post_work(){
         this_ = $('.save_post')
         this_.addClass('disabled')
         id = $('.data').attr('id')
         content = $('.post_for_save').html()
-        content = replace_work(content)
         console.log(content)
         $('.create_post_loader').show()
         $('.newpost_saved').hide()
         url = this_.attr('url')
-        //*******************
         texts = []
         cnt = 0
         len = content.length
-        console.log('delenie: '+len/500)
         if (len % 500 == 0) {len -= 1}
         while(cnt <= parseInt(len/500)){
-            console.log('cnt', cnt)
             cnt += 1
             ptext = content.substr(0, 500)
-            console.log('ptext', ptext)
             texts.push(ptext)
             content = content.substr(500)
         }
         if (texts.length == 0) {texts = ['']}
         sendTexts(0, texts, id, url)
     }
-    function sendTexts(i, texts, id, init_url){
-        console.log('send', i)
-        text = texts[i]
-        if (i == 0) {
-            old_files = []
-            $('.file_alr').each(function(){
-                old_files.push(parseInt($(this).attr('id')))
-            })
-            slug = $('.data').attr('slug')        
-            title = $('.newpost_title').val()
-            priority = $('.newpost_priority').val()
-            add_data = '?id='+id+'&title='+title+'&content='+text+'&priority='+priority+'&slug='+slug+'&old_files='+old_files
-            var formData = new FormData();
-            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-            $('.post_input').each(function() {
-                file = $('#'+$(this).attr('id'))[0].files[0]
-                formData.append($(this).attr('order'), file); 
-            })
-        }
-        else{
-            add_data = '?id='+id+'&content='+text
-            var formData = new FormData();
-            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
-        }
-        if (i == texts.length - 1) {is_last = 'yes'}else{is_last = 'no'}
-        if(i == 0){is_first = 'yes'}else{is_first='no'}
-        add_data += '&first='+is_first+'&last='+is_last
-        url = init_url + add_data
+    function sendImages(id, url){
+        old_files = []
+        $('.file_alr').each(function(){
+            old_files.push(parseInt($(this).attr('id')))
+        })
+        priority = $('.newpost_priority').val()
+        add_data = '?id='+id+'&is_images='+'1&priority='+priority+'&old_files='+old_files
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        $('.post_input').each(function() {
+            file = $('#'+$(this).attr('id'))[0].files[0]
+            formData.append($(this).attr('order'), file); 
+        })
         $.ajax({
-            url: url,
+            url: url+add_data,
             type: 'POST',
             data: formData,
             processData: false,
             contentType: false,
             success: function (data) {
-                if (is_last == 'yes' && id=='-1') {
+                if (is_last == 'yes' && data.update) {
                     window.location.replace(data.url);
                 }
-                else if (is_last == 'yes'){
-                    saved_true()
+                saved_true()
+            }
+        })
+    }
+    function sendTexts(i, texts, id, url){
+        console.log('send', i)
+        text = texts[i]
+        if (i == texts.length - 1) {is_last = 'yes'}else{is_last = 'no'}
+        if(i == 0){is_first = 'yes'}else{is_first='no'}
+        newdata = {
+            'id':id,
+            'first':is_first,
+            'last':is_last,
+            'text':text,
+            'is_images':'0',
+        }
+        if (i == 0) {
+            newdata['title'] = $('.newpost_title').val()
+        }
+        $.ajax({
+            url: url,
+            data: newdata,
+            dataType: 'json',
+            success: function (data) {
+                if (is_last == 'yes'){
+                    sendImages(id, url)
                 }
                 else if (i < texts.length - 1) {
                     i += 1
-                    sendTexts(i, texts, id, init_url)
+                    sendTexts(i, texts, id, url)
                 }
             }
         })
@@ -186,9 +136,10 @@
                 post_input.attr('order', id)
                 file.removeClass('new_image')
                 file.addClass('post_file'+id)
+                file.addClass('post_file_new')
             }
-            $('<br><br>').insertBefore(file)
-            $('<br><br>').insertAfter(file)
+            $('<br>').insertBefore(file)
+            $('<br>').insertAfter(file)
             window.getSelection().removeAllRanges()
         }, 100);
     }
@@ -256,6 +207,7 @@
             document.execCommand("CreateLink", false, url); 
             $('.link_address').val('')   
             $('.create_link_box').modal('hide')        
+            saved_false()
         }
     }
 </script>

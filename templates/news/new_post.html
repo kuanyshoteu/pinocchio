@@ -31,6 +31,7 @@
                             <textarea style="border: none !important;overflow-y: hidden;" class="pl0 text24 texti textdg textbold mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
                             <div class="ui divider mb0"></div>
                             <div style="border: none;outline: none;min-height: 300px;" contenteditable="true" class="text15 pb150 post_content mt30">
+                                {{post.text|safe}}
                             </div>
                         </form>        
                     </div>
@@ -126,6 +127,6 @@
       display: none;
     }    
 </style>
-<span style="display: none;" id="{%if post%}{{post.id}}{%else%}-1{%endif%}" class="data" slug="{%if post%}post.slug{%else%}none7569wjd{%endif%}" get_post_url="{%url 'news:get_post'%}" crnt_file_number="-1" drag_file_id=""></span>
+<span style="display: none;" id="{%if post%}{{post.id}}{%else%}-1{%endif%}" class="data" get_post_url="{%url 'news:get_post'%}" crnt_file_number="-1" drag_file_id=""></span>
 {% include 'news/news_scripts.html' %}
 {% endblock content %}

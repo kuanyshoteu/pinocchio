@@ -134,40 +134,34 @@
 						{% if instance %}
                         {% if is_director %}
                         <div class="sixteen wide column pl0 pr0">
-                            <div class="ui shadow_small segment">
-                                <span class="ml15" style="font-size: 15px;font-weight: 600;">Фильтры</span> 
-                                <div class="filter-element ml50 filter-element-category" url="{{ instance.change_category }}" style="width: 400px;">
-                                    <div onclick="filterTitleS('category')" class="filter-title-s" id="category" status="closed">
-                                        Выберите предметы курса
-                                        <i class="icon caret down" style="float: right;color: #222;"></i>
-                                    </div>
-                                    <ul class="filter-list-n choose_category" style="z-index: 2000;display: none;">
-                                        {% for subject_category in subject_categories %}
-                                        <li class="filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
-                                            {{subject_category.title}}
-                                            <i class="icon check green" id="check_subject_category{{ subject_category.id }}" style="{%if not subject_category in subject_categories_this%}display: none;{% endif %}"></i>
-                                            <div class="loading_small" style="display: none;" id="loadcategory{{ subject_category.id }}">
-                                              <div class="animation"><div class="circle one"></div></div>
-                                              <div class="animation"><div class="circle two"></div></div>
-                                              <div class="animation"><div class="circle three"></div></div>
-                                              <div class="animation"><div class="circle four"></div></div>
-                                              <div class="animation"><div class="circle five"></div></div>
-                                              <div class="animation"><div class="circle six"></div></div>
-                                            </div>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
+                            <div class="ui segment shadow_small">
+                                <div><b class="ml15 text15 textdg">Фильтры</b></div> 
+                                <div class="ui grid stackable mt15 ml15 mr15 mb0">
+                                    {% for subject_category in subject_categories %}
+                                    <a class="mr10 mb10 ui button mini white shadow_small border1 filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
+                                        {{subject_category.title}}
+                                        <i class="icon check green" id="check_subject_category{{ subject_category.id }}" style="{%if not subject_category in subject_categories_this%}display: none;{% endif %}"></i>
+                                        <div class="loading_small" style="display: none;" id="loadcategory{{ subject_category.id }}">
+                                          <div class="animation"><div class="circle one"></div></div>
+                                          <div class="animation"><div class="circle two"></div></div>
+                                          <div class="animation"><div class="circle three"></div></div>
+                                          <div class="animation"><div class="circle four"></div></div>
+                                          <div class="animation"><div class="circle five"></div></div>
+                                          <div class="animation"><div class="circle six"></div></div>
+                                        </div>
+                                    </a>
+                                    {% endfor %}
                                 </div>                                
                                 <div class="subject_filters">
                                     <div class="ui grid stackable no_margin"> 
                                         {% for filter in instance|get_filters %}
-                                        <div class="four wide column pt5 pr0">
-                                            <div class="mt10 filter-element filter-element-level" url="{{ instance.change_filter_option }}">
-                                                <div class="filter-title-s textdg" id="filter{{filter.id}}" status="closed">
-                                                    <b>{{ filter.title }}</b>
+                                        <div class="four wide column pt5 pr0 full-h">
+                                            <div class="mt10 filter-element  filter-element-level" url="{{ instance.change_filter_option }}">
+                                                <div style="border: none;" class="topbr5 shadow_blue backblue filter-title-s" id="filter{{filter.id}}" status="closed">
+                                                    <b class="textw">{{ filter.title }}</b>
                                                 </div>
                                             </div>
-                                            <ul style="position: relative;" class=" filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
+                                            <ul style="position: relative;height: calc(100% - 37px);border: none;" class="bottombr5 shadow_small filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
                                                 {% for optn in filter.filter_options.all %}
                                                 <li onclick="filterItemS('{{ optn.id }}')" object="level" class="optn{{ optn.id }} filter-item-s2" id="{{ optn.id }}">
                                                     {{optn.title}}

@@ -4,6 +4,14 @@
 .post_add_part{
   height: 24px !important;
 }
+.post_file{
+  width: 90%;
+  margin: 0 5%;
+}
+.post_file_new{
+  width: 90%;
+  margin: 0 5%;
+}
 .card_dialog{
   overflow-y: scroll;
 }
@@ -86,8 +94,11 @@
 .topbr5{
   border-radius: 5px 5px 0 0 !important;
 }
-.shadow{
-  box-shadow: 0 0 15px 0 #d7d7d7 !important;
+.bottombr5{
+  border-radius: 0 0 5px 5px !important;
+}
+.br5{
+  border-radius: 5px !important;
 }
 .shadow{
   box-shadow: 0 0 15px 0 #d7d7d7 !important;
@@ -103,6 +114,9 @@
 }
 .shadow_green{
   box-shadow: 0 0 5px 0 #21BA45 !important;
+}
+.shadow_dark{
+  box-shadow: 0 0 5px 0 #4a4a4a !important;
 }
 .bt1{
   border-top: 1px solid #e5e5e5 !important;
@@ -337,6 +351,18 @@ body{
 }
 .pr15{
   padding-right: 15px !important;
+}
+.pb20{
+  padding-bottom: 20px !important;
+}
+.pt20{
+  padding-top: 20px !important;
+}
+.pl20{
+  padding-left: 20px !important;
+}
+.pr20{
+  padding-right: 20px !important;
 }
 .mb15{
   margin-bottom: 15px !important;
@@ -1118,7 +1144,7 @@ a{
 }
 .lftitem{
     padding: 8px !important;
-    color: #4a4a4a;
+    color: #fff;
 }
 .lftitemsmall:hover{
     background: none !important;
@@ -1167,16 +1193,6 @@ a{
   overflow: hidden;
   position: absolute;
   z-index: -1;
-}
-.remove_lesson_from_subject{
-  font-size: 10px;
-  color: red;
-  font-weight: 600;
-}
-.remove_lesson_from_subject:hover{
-  font-size: 10px;
-  color: red;
-  font-weight: 600;
 }
 .profile_name{
   color: #fff;
@@ -2860,12 +2876,6 @@ a{
     padding-bottom: 2px;
   }
 }
-
-.filter-element {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
 .filter-title {
   background-color: #fff;
   display: inline-block;
@@ -2899,7 +2909,6 @@ a{
 }
 .filter-list-n {
   position: absolute;
-  width: 100%;
   margin: 0;
   padding: 0;
   border-radius: 3px;

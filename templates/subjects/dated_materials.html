@@ -1,11 +1,12 @@
 {% load ttags %}
 <div class="ui segment mb0">
-    <span style="font-size: 15px;"><i class="icon book blue" style="font-size: 17px;"></i> Уроки</span>
+    <b class="text17 textdg">Уроки</b>
     {% if is_trener or is_manager %}
     <a class="ml15" href="{{ instance.get_update_url }}"><span style="font-size: 13px;">Изменить количество</span></a>
     {% endif %}    
 </div>
-<div class="ui segment no_margin" style="background: #4A4A4A;">
+<div class="ui segment no_margin " style="background: rgb(81,129,184);
+background: linear-gradient(180deg, rgba(81,129,184,0.6) 0%, rgba(33,186,69,0.5) 50%, rgba(33,186,69,0.6) 100%);">
     {% if materials|length == 0 %}
     <div style="color: #fff;">
     Пока у курса {{instance.title}} нет уроков, изменить количество уроков можете в <a class="ui button mini green" href="{{instance.get_update_url}}">Настроках курса</a>        
@@ -14,32 +15,32 @@
     <div class="ui grid no_margin">
         {% for material in materials %}
         {% if forloop.counter <= instance.number_of_materials %}
-        <div class="four wide column pb0">
-            <a class="ui button green open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
-                <span class="is_homework">{{ forloop.counter }} урок</span>
+        <div class="four wide column pb0 pl5 pr5 full-h">
+            <a class="ui button small dark shadow_dark open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
+                <span class="is_homework text14 textw">{{ forloop.counter }} урок</span>
             </a>
-            <div style="display: none;padding: 15px 5px;background-color: #333333;" id="time_lessons{{ material.id }}"> 
+            <div class="pl10 pb15 pr10 br5 backdark" style="display: none;margin-top: 2px;height: calc(100% - 34px);" id="time_lessons{{ material.id }}"> 
                 {% if material.lessons.all|length == 0 %}
-                    <span id="pusto{{ material.id }}" style="color: grey; font-size: 12px;">Пока нет материалов</span>
+                    <div class="pt15 textg" id="pusto{{ material.id }}">Пока нет материалов</div>
                 {% endif %}
                 <div id="lesson_list{{ material.id }}">
                     {% for lesson in material.lessons.all %}
-                    <div id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
-                        <a href="{{ lesson.get_absolute_url }}" style="text-decoration: underline;" class="textw">
-                            {{ lesson.title }}
+                    <div class="pt15" id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
+                        <a href="{{ lesson.get_absolute_url }}" class="textw text14">
+                            <b>{{ lesson.title }}</b>
                         </a>
                         {% if lesson.is_homework %}
                             <span style="color: #21BA45; font-size: 10px;">Домашка</span>
                         {% endif %}
                         {% if is_trener %}
-                        <a class="remove_lesson_from_subject" url="{{ material.remove_lesson }}" material_id="{{ material.id }}" lesson_id="{{ lesson.id }}">Убрать</a>
+                        <a style="float: right;" class="ui button mini red pt5 pb5 pl5 pr5 remove_lesson_from_subject" url="{{ material.remove_lesson }}" material_id="{{ material.id }}" lesson_id="{{ lesson.id }}">Убрать</a>
                         {% endif %}
                     </div>
                     <div class="ui divider" style="margin-bottom: 0"></div>
                     {% endfor %}
                 </div>
                 {% if is_trener or is_director %}
-                <a class="day_window ui button mini blue" id="{{ material.id }}" onclick="$('#materials').modal('show')" style="margin-top: 14px;">+</a>
+                <a class="day_window ui button mini white pt5 pb5 mt15 full-w" id="{{ material.id }}" onclick="$('#materials').modal('show')">Добавить урок</a>
                 {% endif %}
             </div>
             {% if profile.is_student %}

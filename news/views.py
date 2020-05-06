@@ -136,24 +136,22 @@ def save_post(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    content = request.GET.get('content')
     pid = request.GET.get('id')
-    is_first = request.GET.get('first')
-    if pid == '-1':
-        title = request.GET.get('title')
-        priority = int(request.GET.get('priority'))
-        slug = request.GET.get('slug')
-        post = save_post_work(title, pid, profile, school, priority, slug, content)
+    post = save_post_work(pid, profile, school)
+    oldslug = post.slug
+    if request.GET.get('is_images') == '0':
+        text = request.GET.get('text')
+        is_first = request.GET.get('first')
+        if is_first == 'yes':
+            title = request.GET.get('title')
+            post.title = title
+            post.slug = create_slug(title)
+            post.text = text
+        else:
+            post.text += text
     else:
-        post = school.school_posts.get(id=int(pid))
-    if is_first == 'yes':
-        title = request.GET.get('title')
-        priority = int(request.GET.get('priority'))
-        slug = request.GET.get('slug')
+        post.priority = int(request.GET.get('priority'))
         old_files = request.GET.get('old_files').split(',')
-        post.title = title
-        post.priority = priority
-        post.text = content
         for part in post.parts.all():
             if str(part.id) in old_files:
                 part.order = 0
@@ -161,45 +159,47 @@ def save_post(request):
             else:
                 part.delete()
         for file in request.FILES:
-            print(file)
+            print('file', file)
             part = post.parts.create()
             part.image = request.FILES.get(file)
             part.order = int(file)
             part.save()
-    else:
-        post.text += content
+            print('new_file_place'+file)
+            print(post.text)
+            post.text = post.text.replace('new_file_place'+file, '<img class="post_file" src="'+part.image.url+'">')
+            print('after replace', post.text)
     post.save()
+    newslug = post.slug
     if request.GET.get('last') == 'yes':
+        if newslug != oldslug:
+            update = True
+        else:
+            update = False
         data = {
             "url":post.get_edit_url(),
+            'update':update,    
         }
+    elif request.GET.get('is_images') == '1':
+        data = {'id':post.id}
     else:
-        data = {
-        }
+        data = {}
     return JsonResponse(data)
 
-def save_post_work(title, pid, profile, school, priority,slug,content):
-    post_id = -1
-    post = None
-    found = False
-    if slug != 'none7569wjd':
-        find_by_slug = Post.objects.filter(slug=slug)
-        if len(find_by_slug) > 0:
-            post = find_by_slug[0]
-            found = True
-    if title and not found:
-        slug = slugify(translit(title[:45], 'ru', reversed=True))
-        last = len(Post.objects.filter(slug=slug))
-        if last > 0:
-            slug += str(last+1)
-        print(slug)
+def create_slug(title):
+    slug = slugify(translit(title[:45], 'ru', reversed=True))
+    last = len(Post.objects.filter(slug=slug))
+    if last > 1:
+        slug += str(last+1)
+    return slug
+
+def save_post_work(pid, profile, school):
+    if pid == '-1':
         post = school.school_posts.create(
             title = title,
             author_profile = profile,
-            slug = slug,
-            priority = priority,
-            text = content,
             )
+    else:
+        post = school.school_posts.get(id=int(pid))
     return post
 
 def get_posts(request):

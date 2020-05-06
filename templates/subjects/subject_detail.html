@@ -11,7 +11,7 @@
 {% load ttags %}
 {% load staticfiles %}
 {% block content %}
-<div id="group-details" style="padding-bottom: 100px;">
+<div id="group-details" class="pb150">
     {% if is_manager %}
     <a id="go-back-btn-before"  href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
         <i class="arrow left icon"></i>
@@ -27,55 +27,19 @@
             <div class="w85 wide column mlback deskpr30">
                 <div class="ui grid stackable no_margin">
                     <div class="sixteen wide column no_padding">
-                        <div class="ui segment no_padding mb0">
-                            <div class="ui grid no_margin">
-                                {% if instance.image_banner %}
-                                <div class="sixteen wide column no_padding">
-                                    <img src="{{ instance.image_banner.url }}" style="height: 200px; width: 100%;border-radius: 7px 7px 0 0;">
+                        <div class="pt20 pl20 pb20 pr20 ui segment shadow_small">
+                            <b class="text24 textdg mr15">{{ instance.title }}</b>
+                            {% if is_trener or is_manager %}
+                            <a href="{{ instance.get_update_url }}">
+                                <i class="icon cog blue text17"></i>
+                            </a>
+                            {% endif %}
+                            <div class="mt20">
+                                <div class="dflex mb15">
+                                    <span class="text15">{{ instance.get_markdown }}</span>
                                 </div>
-                                {% endif %}
-                                <div class="group-name" style="padding-top: 15px;">
-                                    {% if instance.image_icon %}
-                                    <img src="{{ instance.image_icon.url }}" class="ui avatar image" style="width: 39px; height: 39px;">
-                                    {% else %}
-                                    <img class="ui avatar image" style="width: 39px; height: 39px;" src="{% static 'images/squad.png' %}">
-                                    {% endif %}
-                                    <span class="ui header ava-title pl10">{{ instance.title }}</span>
-                                </div>
-                                {% if is_trener or is_manager %}
-                                <div style="padding-top: 23px;">
-                                    <a href="{{ instance.get_update_url }}" style="font-size: 17px;">
-                                        <i class="icon cog blue" ></i>
-                                    </a>
-                                </div>  
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="ui segment" style="{% if not course.image %}margin-top: 0{% endif %}">
-                            <div class="ui grid">
-                                <div class="one wide column" style="padding-bottom: 0">
-                                    <i class="icon list" style="font-size: 17px; padding-bottom: 0"></i>
-                                </div>
-                                <div class="fifteen wide column" style="padding-right: 25px; padding-bottom: 0">
-                                    <span>{{ instance.get_markdown }}</span>
-                                </div>
-                                <div class="one wide column" style="padding-bottom: 0">
-                                    <i class="icon certificate" style="font-size: 17px; padding-bottom: 0"></i>
-                                </div>
-                                <div class="fifteen wide column" style="padding-right: 25px; padding-bottom: 0">
-                                    <span>Стоимость: <b>{{ instance.cost }} тг</b></span>
-                                </div>
-                                <div class="one wide column" style="padding-bottom: 0">
-                                    <i class="icon book" style="font-size: 17px; padding-bottom: 0"></i>
-                                </div>
-                                <div class="fifteen wide column" style="padding-right: 25px; padding-bottom: 0">
-                                    <span>Предмет: <b>{{ instance.category.title }}</b></span>
-                                </div>
-                                <div class="one wide column">
-                                    <i class="icon address book" style="font-size: 17px; padding-bottom: 0"></i>
-                                </div>
-                                <div class="fifteen wide column" style="padding-right: 25px;">
-                                    <span>Возраст: <b>{{ instance.age.title }}</b></span>
+                                <div class="dflex">
+                                    <span class="text15">Стоимость: <b>{{ instance.cost }} тг</b></span>
                                 </div>
                             </div>                            
                         </div>
