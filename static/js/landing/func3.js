@@ -44,7 +44,7 @@ $(function(){
 			$('.land_fill_error'+id).show()
 		}
 		else {
-        	$('.loading').show()
+        	$('.loading_small').show()
 			$('.land_fill_error'+id).hide()
 			url = $('.request_url').attr('url')
 	        $.ajax({

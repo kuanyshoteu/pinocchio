@@ -3091,9 +3091,6 @@
     .captions{
         height: 55px;
     }
-    .how-it-works{
-        padding: 0 0 155px 0 !important;
-    }
     .caption-texts{
         height: 90px;
     }    
@@ -3486,9 +3483,6 @@
     .captions{
         height: 55px;
     }
-    .how-it-works{
-        padding: 0 0 155px 0 !important;
-    }
     .caption-texts{
         height: 90px;
     }
@@ -3496,9 +3490,6 @@
 @media (max-width:767.98px){
     .captions{
         height: 55px;
-    }
-    .how-it-works{
-        padding: 0 0 155px 0 !important;
     }
     .caption-texts{
         height: 100px;
@@ -3528,8 +3519,9 @@
     .captions{
         height: 55px;
     }
-    .how-it-works{
-        padding: 0 0 205px 0 !important;
+    .slide_images{
+        margin-top: 150px;
+        height: 320px;
     }
     .caption-texts{
         height: 150px;
@@ -6929,10 +6921,6 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
 #carousel .board .to-do{
     display:none
 }
-.slide_images{
-    margin-top: 90px;
-    height: 320px;
-}
 #carousel .board .captions{
     color:white;
     font-weight:bold;
@@ -7140,6 +7128,10 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     
 }
 @media (max-width:991px){
+    .slide_images{
+        margin-top: 200px;
+        height: 180px;
+    }
     #hero .col-lg-5{
         -webkit-box-ordinal-group:2;
         -webkit-order:1;
@@ -7174,6 +7166,10 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     }
 }
 @media (min-width:768px){
+    .slide_images{
+        margin-top: 90px;
+        height: 320px;
+    }
     #carousel .arrow{
         display:-webkit-box;
         display:-webkit-flex;
