@@ -7,7 +7,7 @@ $(function(){
 	});
 	$document.scroll();
 	$carousel.on("click","a.arrow",function(b){
-		var a=parseInt($carousel.attr("data-step")),a=$(this).hasClass("arrow-left")?1==a?5:a-1:5==a?1:a+1;
+		var a=parseInt($carousel.attr("data-step")),a=$(this).hasClass("arrow-left")?1==a?3:a-1:3==a?1:a+1;
 		$carousel.attr("data-step",a);
 		$('.land_img').hide()
 		$('.land_img'+a).show()
@@ -22,7 +22,7 @@ $(function(){
 	})
 	$carousel.on("click",function(b){
 		var a=parseInt($carousel.attr("data-step"))+1;
-		if (a == 6) {
+		if (a == 4) {
 			a = 1
 		}
 		$carousel.attr("data-step",a);
