@@ -310,13 +310,13 @@ def get_subject_students(squads):
         students = chain(students, sq_students)
     return students
 
-def change_category(request, id=None):
+def change_category(request):
     profile = get_profile(request)
     only_managers(profile)
     ok = False
     is_in = False
-    if request.GET.get('object_id'):
-        subject = Subject.objects.prefetch_related('category').get(id = id)
+    if request.GET.get('object_id') and request.GET.get('subject_id'):
+        subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         school = subject.school
         is_in_school(profile, school)
         category = school.school_subject_categories.get(id=int(request.GET.get('object_id')))

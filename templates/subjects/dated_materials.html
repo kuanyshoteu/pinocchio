@@ -16,8 +16,8 @@ background: linear-gradient(180deg, rgba(81,129,184,0.6) 0%, rgba(33,186,69,0.5)
         {% for material in materials %}
         {% if forloop.counter <= instance.number_of_materials %}
         <div class="four wide column pb0 pl5 pr5 full-h">
-            <a class="ui button small dark shadow_dark open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
-                <span class="is_homework text14 textw">{{ forloop.counter }} урок</span>
+            <a class="ui button small white shadow_small open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
+                <span class="is_homework text14 textblue">{{ forloop.counter }} урок</span>
             </a>
             <div class="pl10 pb15 pr10 br5 backdark" style="display: none;margin-top: 2px;height: calc(100% - 34px);" id="time_lessons{{ material.id }}"> 
                 {% if material.lessons.all|length == 0 %}

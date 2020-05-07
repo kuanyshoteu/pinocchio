@@ -64,6 +64,9 @@
 .backgreenlow{
   background-color: #ccffcc !important;
 }
+.backgreen{
+  background-color: #21BA45 !important;
+}
 .textw{
   color: #fff !important;
 }
@@ -80,8 +83,8 @@
   color: #000 !important;
 }
 .backrb{
-  background: rgb(81,129,184);
-  background: linear-gradient(180deg, rgba(33,186,69,0.1) 0%, rgba(33,186,69,0.2) 100%);  
+  background:  rgba(33,186,69,0.3);
+  background: linear-gradient(180deg, rgba(81,129,184,0) 50%, rgba(33,186,69,0.2) 100%);
 }
 .textblue{
   color: #285473 !important;

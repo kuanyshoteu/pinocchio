@@ -135,10 +135,10 @@
                         {% if is_director %}
                         <div class="sixteen wide column pl0 pr0">
                             <div class="ui segment shadow_small">
-                                <div><b class="ml15 text15 textdg">Фильтры</b></div> 
+                                <div><b class="ml15 text15 textdg">Фильтры</b></div>
                                 <div class="ui grid stackable mt15 ml15 mr15 mb0">
                                     {% for subject_category in subject_categories %}
-                                    <a class="mr10 mb10 ui button mini white shadow_small border1 filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
+                                    <a style="height: 32px" class="mr10 mb10 ui button mini white shadow_small border1 filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
                                         {{subject_category.title}}
                                         <i class="icon check green" id="check_subject_category{{ subject_category.id }}" style="{%if not subject_category in subject_categories_this%}display: none;{% endif %}"></i>
                                         <div class="loading_small" style="display: none;" id="loadcategory{{ subject_category.id }}">
@@ -206,7 +206,7 @@
 			</div>
 		</div>
 	</div>	
-	<span id='{{ instance.id }}' data-href='{{ instance.calendar_url }}' style="display: none;" name='data' class="data" days='' >
+	<span id='{{ instance.id }}' change_category_url='{% url "subjects:change_category" %}' data-href='{{ instance.calendar_url }}' style="display: none;" name='data' class="data" days='' >
 	<span style="display: none;" class="change_urls">
 	</span>
 </div>
@@ -229,12 +229,15 @@
         this_ = $(this)
         id = this_.attr('id')
         object = this_.attr('object')
-        url = $('.filter-element-'+object).attr('url')
+        url = $('.data').attr('change_category_url')
+        subject = $('.data').attr('id')
         $('#load'+object+id).show()
+        console.log(url, id)
         $.ajax({
             url: url,
             data: {
                 "object_id":id,
+                "subject_id":subject,
             },
             dataType: 'json',
             success: function (data) {
