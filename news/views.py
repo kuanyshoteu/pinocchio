@@ -201,7 +201,6 @@ def save_post(request):
             print('file', file)
             part = post.parts.create()
             part.image = request.FILES.get(file)
-            part.order = int(file)
             part.save()
             print('new_file_place'+file)
             print(post.text)

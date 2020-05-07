@@ -3,9 +3,41 @@
 {% load staticfiles %}
 {% load static compress %}
 <head> 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое">
-    <meta name="keywords" content="CRM система, учёт клиентов, расписание, для учебного центра, для образовательного центра, bilimtap">
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="G-3JdvIZH1oSADX0f2I8uRqCFAggIj06lzBKaEeYb3Y" />   
+    <meta name="yandex-verification" content="f222118f15d7576b" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1">
+    <meta name="description" content="Находите любые курсы в городе Алматы на одном сайте. Записывайтесь на пробный урок в 1 клик, сравнивайте цены, отзывы, местоположение и преподавателей">
+    <meta name="keywords" content="английский,английский язык, английский язык алматы,курсы английского алматы,курсы английского языка в алматы,ниш поступление, поступление в ниш, поступление в ну, поступление в 165, математика, математика алматы, IELTS,айлс, TOEFL, продленка, ЕНТ, КТА, Курсы, курсы алматы, IELTS алматы, TOEFL алматы, SAT, SAT алматы, продленка алматы,продленки алматы,international english test,sat, ент алматы, кта алматы, Bilimtap">
+    <title>{% block head_title %}Bilimtap.kz{%if not request.user.is_authenticated %} – английский язык, поступление, курсы, подготовка к экзаменам в г. Алматы{% endif %}{% endblock head_title %}</title>
+    <!-- CSS -->
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(55093303, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/55093303" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146621937-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-146621937-1');
+      gtag('config', 'AW-794791496');
+    </script>
+    <!-- Event snippet for Заявка1 conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. --> <script> function gtag_report_conversion(url) { var callback = function () { if (typeof(url) != 'undefined') { window.location = url; } }; gtag('event', 'conversion', { 'send_to': 'AW-794791496/48kyCKGctc8BEMic_voC', 'event_callback': callback }); return false; } </script>
+    <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     <link rel="canonical" href="https://www.bilimtap.kz/about/" />
     {% compress css %}    
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
@@ -30,46 +62,17 @@
         <div class="container pt-7 pb-0 text-white"> 
             <div class="row align-items-center text-center text-md-left"> 
                 <div class="col-lg-5 top50"> 
-                    <h1>Онлайн-платформа для управления учебным центром</h1> 
-                    <p class="lead">CRM система для учёта клиентов, интерактивное расписание групп, абонементы, скидки, оплата, зарплаты преподавателей, СМС уведомления и многое другое…</p>  
+                    <h1 style="font-size: 37px">CRM-система для управления учебным центром</h1> 
+                    <p class="lead">Не теряйте клиентов, контролируйте работу сотрудников, автоматизируйте бухгалтерию с помощью самой понятной CRM-системой на рынке</p>  
                 </div>
                 <div class="col-lg-6 offset-lg-1"> 
-                    <img src="{% static 'images/landing/f1.jpg' %}" alt="work" class="img-fluid">
-                        <form class="text-center mt-5 in_mobile" method="POST" action="/signup_redirect">
-                            <h5>
-                                Закажите бесплатную презентацию всех возможностей прямо сейчас 
-                            </h5>
-                            <textarea name="email" style="height: 45px;width: 100%; line-height: 30px;border-radius: 5px;padding: 5px;" class="request_name0 mt-2 mb-2" placeholder="Имя"></textarea>
-                            <textarea name="email" style="height: 45px;width: 100%; line-height: 30px;border-radius: 5px;padding: 5px;" class="request_phone0" placeholder="Телефон"></textarea>
-                            <br>
-                            <div class="loading" style="display: none;">
-                                <div class="animation"><div class="circle one"></div></div>
-                                <div class="animation"><div class="circle two"></div></div>
-                                <div class="animation"><div class="circle three"></div></div>
-                                <div class="animation"><div class="circle four"></div></div>
-                                <div class="animation"><div class="circle five"></div></div>
-                                <div class="animation"><div class="circle six"></div></div>
-                            </div>
-                            <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="0" value="Заказать" type="submit" onclick="return false">
-                            <div class="success_query highlight mt-2" style="display: none;">
-                                Спасибо! Мы скоро с Вами свяжемся
-                            </div>
-                            <div class="land_fill_error0 highlight_red mt-2" style="display: none;">
-                                Пожалуйста, заполните все поля
-                            </div>
-                            <div class="mt15 mb15">
-                            или свяжитесь с нами по телефону <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
-                            </div>
-                        </form>  
-
-                </div>  
-                <div class="col-lg-8 offset-lg-2 not_in_mobile text-center">
-                    Закажите бесплатную презентацию всех возможностей прямо сейчас 
-                </div>  
-                <div class="col-lg-12 not_in_mobile pb-5"> 
-                    <form class="quick-signup text-center" method="POST" action="/signup_redirect">
-                        <textarea name="email" class="quick-signup-email request_name1" placeholder="Имя"></textarea>
-                        <textarea name="email" class="quick-signup-email request_phone1" placeholder="Телефон"></textarea>
+                    <img src="{% static 'images/landing/f1.jpg' %}" alt="bilimtap.kz" class="img-fluid">
+                    <form class="text-center mt-5 in_mobile" method="POST" action="/signup_redirect">
+                        <h5>
+                            Получите бесплатную версию CRM-системы на неограниченный срок
+                        </h5>
+                        <textarea name="name" style="height: 45px;width: 100%; line-height: 30px;border-radius: 5px;padding: 5px;margin-right: 5px;" class="request_name0 mt-2 mb-2" placeholder="Имя"></textarea>
+                        <textarea name="phone" style="height: 45px;width: 100%; line-height: 30px;border-radius: 5px;padding: 5px;" class="request_phone0" placeholder="Телефон"></textarea>
                         <br>
                         <div class="loading" style="display: none;">
                             <div class="animation"><div class="circle one"></div></div>
@@ -79,11 +82,39 @@
                             <div class="animation"><div class="circle five"></div></div>
                             <div class="animation"><div class="circle six"></div></div>
                         </div>
-                        <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" value="Заказать" type="submit" onclick="return false">
+                        <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="0" value="Заказать" type="submit" onclick="return gtag_report_conversion(false);">
+                        <div class="success_query highlight mt-2" style="display: none;">
+                            Спасибо! Мы скоро с Вами свяжемся
+                        </div>
+                        <div class="land_fill_error0 highlight_red mt-2" style="display: none;">
+                            Пожалуйста, заполните все поля
+                        </div>
+                        <div class="mt15 mb15">
+                        или свяжитесь с нами по телефону <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
+                        </div>
+                    </form> 
+                </div>  
+                <div class="col-lg-8 offset-lg-2 not_in_mobile text-center">
+                    Получите бесплатную версию CRM-системы на неограниченный срок
+                </div>  
+                <div class="col-lg-12 not_in_mobile pb-5"> 
+                    <form class="quick-signup text-center" method="POST" action="/signup_redirect">
+                        <textarea style="margin-right: 3px;" name="name" class="quick-signup-email request_name1" placeholder="Имя"></textarea>
+                        <textarea style="margin-left: 3px;" name="phone" class="quick-signup-email request_phone1" placeholder="Телефон"></textarea>
+                        <br>
+                        <div class="loading" style="display: none;">
+                            <div class="animation"><div class="circle one"></div></div>
+                            <div class="animation"><div class="circle two"></div></div>
+                            <div class="animation"><div class="circle three"></div></div>
+                            <div class="animation"><div class="circle four"></div></div>
+                            <div class="animation"><div class="circle five"></div></div>
+                            <div class="animation"><div class="circle six"></div></div>
+                        </div>
+                        <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" value="Заказать" type="submit" onclick="return gtag_report_conversion(false)">
                         <div class="mt15">
                             или свяжитесь с нами по телефону <a href="tel:+77089708242" style="color: #fff;text-decoration: underline;">+77089708242</a>
                         </div>                        
-                        <div class="success_query highlight mt-2" style="display: none;">
+                        <div class="success_query highlight mt-2" style="display: none;padding: 15px;width: 400px;margin: 0 auto;">
                             Спасибо! Мы скоро с Вами свяжемся
                         </div>
                         <div class="land_fill_error1 highlight_red mt-2" style="display: none;">
@@ -94,17 +125,54 @@
             </div> 
         </div> 
     </section> 
+    <section id="crm-presentation" style="margin-top: 50px;margin-bottom: 70px;"> 
+        <div class="container text-center"> 
+            <div class="row"> 
+                <div class="col-md-10 offset-md-1"> 
+                    <h3>Как CRM-система увеличит Вашу прибыль?</h3> 
+                </div> 
+            </div> 
+            <div id="carousel" data-step="1"> 
+                <a class="arrow arrow-left"> 
+                    <svg height="20" viewBox="0 0 22 40" width="11"> 
+                        <path d="m4.31783602 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" transform="translate(.265262)"/> 
+                    </svg> 
+                </a> 
+                <a class="arrow arrow-right"> 
+                    <svg height="20" viewBox="0 0 22 40" width="11"> 
+                        <path d="m4.31783662 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" fill-rule="evenodd" transform="matrix(-1 0 0 -1 21.734738 40)"/> 
+                    </svg> 
+                </a>
+                <div class="board how-it-works" style="margin-top: 5px;">
+                    <div class="captions"> 
+                        <div class="caption-texts">
+                            <div class="caption caption-1"> Интеграции с социальными сетями, IP-телефонией и Вашим сайтом позволяют системе собрать все заявки в едином месте </div> 
+                            <div class="caption caption-2"> Создавая карточку по каждой заявке, CRM-система напомнит менеджеру ответить на все обращения и перезвонить потенциальным клиентам </div> 
+                            <div class="caption caption-3"> Результаты взаимодействий с клиентом помогут Вам проанализировать работу с входящими заявками
+                            <br>
+                            Также сохранив данные клиентов, Вы сможете одним кликом оповестить их о новой акции или скидке </div> 
+                        </div>
+                    </div> 
+                    <div class="slide_images">
+                        <img src="{% static 'images/landing/crm.jpg' %}" class="full-w full-h land_img land_img1" alt="landing">
+                        <img src="{% static 'images/landing/card.png' %}" class="full-w full-h land_img land_img2" alt="crm" style="display: none;">
+                        <img src="{% static 'images/landing/info.png' %}" class="full-w full-h land_img land_img3" alt="info" style="display: none;">
+                    </div>
+                </div> 
+            </div> 
+        </div> 
+    </section> 
     <section id="marketplace"> 
         <div class="container py-5 pb-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
-                    <div class="board"> 
-                        <img style="height: 100%; width: 100%; object-fit: contain" src="{% static 'images/landing/market.jpg' %}" alt="marketplace">
-                    </div> 
+                    <div class="board" style="margin-right: -18%;"> 
+                        <img src="{% static 'images/landing/buh.png' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Бухгалтерия">
+                    </div>
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
-                    <h3>Marketplace всех учебных центров города</h3> 
-                    <p>Клиенты сами находят Вас и напрямую записываются на понравившийся курс.</p>
+                    <h3 style="font-size: 30px;">Как система сэкономит Вам время и сократит расходы?</h3> 
+                    <p>Так как учёт клиентов, журнал посещаемости, учёт оплаты студентов ведутся в единой базе, система автоматически посчитает зарплаты преподавателям и сформирует нужные отчёты для Вашего бухгалтера </p>
                     <p><a class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
                 </div> 
             </div> 
@@ -114,13 +182,13 @@
         <div class="container py-5 pb-md-6"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
-                    <div class="board"> 
-                        <img src="{% static 'images/landing/crm.jpg' %}" style="height: 100%; width: 100%; object-fit: contain" alt="crm">
-                    </div> 
+                    <div class="board" style="margin-left: -18%;"> 
+                        <img src="{% static 'images/landing/reports.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
+                    </div>
                 </div> 
                 <div class="col-md-5 text-center text-md-left"> 
-                    <h3 class="mt-3 mt-md-0">CRM система с 6 этапами продаж</h3> 
-                    <p class="m-0">Поможет Вам не терять клиентов и лучше обрабатывать входящие заявки.</p> 
+                    <h3 class="mt-3 mt-md-0">Как система повысит эффективность сотрудников?</h3> 
+                    <p class="m-0">Знания о том, что вся работа теперь фиксируется в единой системе, помогают сотрудникам более ответственно относиться к поставленным задачам</p> 
                     <p><a class="btn btn-secondary px-3 get_request_land_top mt-2">Заказать презентацию →</a></p>
                 </div> 
             </div> 
@@ -130,96 +198,43 @@
         <div class="container py-5 pt-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
-                    <div class="board"> 
-                        <img src="{% static 'images/landing/sch.jpg' %}" style="height: 100%; width: 100%; object-fit: contain" alt="schedule">
+                    <div class="board" style="margin-right: -18%;"> 
+                        <img src="{% static 'images/landing/sch.jpg' %}" style="height: 100%; width: 100%;border-radius: 10px; object-fit: contain" alt="">
                     </div> 
                 </div> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
-                    <h3>Интерактивное расписание занятий</h3> 
-                    <p>Группы, классы, индивидуальные занятия, учителя и аудитории - всё в одном месте, просто и наглядно.</p>
+                    <h3 class="mt-3 mt-md-0">Расписание групп, финансы, оплата</h3> 
+                    <p>Отныне всё визуально понятно</p>
                     <p><a class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
                 </div> 
             </div> 
         </div> 
-    </section>     
-    <section> 
-        <div class="container text-center"> 
-            <div class="row"> 
-                <div class="col-md-6 offset-md-3"> 
-                    <h3>Как это работает?</h3> 
-                    <p>Студент находит Ваш учебный центр на маркетплейсе Bilimtap.kz и ему открывается лэндинг страница Вашего центра (которая создается Вам бесплатно).</p> 
-                </div> 
-            </div> 
-            <div id="carousel" data-step="1"> 
-                <a class="arrow arrow-left"> 
-                    <svg height="40" viewBox="0 0 22 40" width="22"> 
-                        <path d="m4.31783602 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" transform="translate(.265262)"/> 
-                    </svg> 
-                </a> 
-                <a class="arrow arrow-right"> 
-                    <svg height="40" viewBox="0 0 22 40" width="22"> 
-                        <path d="m4.31783662 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" fill-rule="evenodd" transform="matrix(-1 0 0 -1 21.734738 40)"/> 
-                    </svg> 
-                </a>
-                <div class="board how-it-works">
-                    <div class="slide_images">
-                        <img src="{% static 'images/landing/1.jpg' %}" class="full-w full-h land_img land_img1" alt="landing">
-                        <img src="{% static 'images/landing/2.jpg' %}" class="full-w full-h land_img land_img2" alt="crm" style="display: none;">
-                        <img src="{% static 'images/landing/3.jpg' %}" class="full-w full-h land_img land_img3" alt="client" style="display: none;">
-                        <img src="{% static 'images/landing/4.jpg' %}" class="full-w full-h land_img land_img4" alt="card" style="display: none;">
-                        <img src="{% static 'images/landing/5.jpg' %}" class="full-w full-h land_img land_img5" alt="schedule" style="display: none;">
-                    </div>
-                    <div class="captions"> 
-                        <div class="caption-texts">
-                            <div class="caption caption-1"> На этой странице клиент знакомится с предлагаемыми курсами, ценами, преподавателями Вашего центра, выбирает подходящий себе курс и оставляет заявку на него. </div> 
-                            <div class="caption caption-2"> Заявка в виде карточки появляется во вкладке CRM в Вашем личном кабинете. </div> 
-                            <div class="caption caption-3"> Нажав на карточку, Вы сможете увидеть подробную информацию о клиенте и его пожеланиях, чтобы обратная связь с ним стала эффективнее. </div> 
-                            <div class="caption caption-4"> Связавшись с клиентом и договорившись о пробном уроке, либо покупке абонемента, Вы передвигаете его на следующую колонку (на следующий этап продаж). </div> 
-                            <div class="caption caption-5"> Переместив карточку клиента в колонку «Записался на пробный урок» или «Купил абонемент», Вам открывается расписание заранее созданных Вами классов/курсов. Нажав на которые, Вы запишите клиента в данный класс. </div>
-                        </div>
-                        <nav> 
-                            <a class="step-1"></a> 
-                            <a class="step-2"></a> 
-                            <a class="step-3"></a> 
-                            <a class="step-4"></a> 
-                            <a class="step-5"></a> 
-                        </nav> 
-                    </div> 
-                </div> 
-            </div> 
-        </div> 
-    </section> 
+    </section>
     <section id="features" class="mt-6"> 
         <div class="container text-center py-0"> 
             <div class="row"> 
-                <div class="col-md-10 offset-md-1"> 
-                    <h3>Bilimtap.kz- поможет Вам найти новых клиентов, лучше давать им обратную связь, эффективнее управлять учебным центром и экономить Ваше драгоценное время</h3> 
-                    <p></p>
-                </div>
-            </div>
-            <div class="row"> 
                 <div class="col-lg-4"> 
-                    <div class="img img-collaborate">
+                    <div style="margin-bottom: 15px;" class="img img-collaborate">
                         <img src="{% static 'images/landing/vrn.jpg' %}" class="three_feat1" alt="voronka"/>
                     </div> 
                     <h5>Воронка продаж</h5> 
-                    <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж.</p> 
+                    <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж</p> 
                     <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p> 
                 </div> 
                 <div class="col-lg-4"> 
-                    <div class="img img-apps">
+                    <div style="margin-bottom: 15px;" class="img img-apps">
                         <img src="{% static 'images/landing/sms.jpg' %}" class="three_feat2" alt="sms">
                     </div>
-                    <h5>СМС уведомления</h5> 
-                    <p class="small">Напоминайте клиентам о предстоящем пробном занятии, информируйте об отмене урока вовремя и расскажите всем своим клиентам о новой акции.</p> 
+                    <h5>Email и СМС уведомления</h5> 
+                    <p class="small">Автоматически напомнят Вашим клиентам о предстоящем пробном занятии или отмене урока</p> 
                     <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p> 
                 </div> 
                 <div class="col-lg-4"> 
-                    <div class="img img-sync">
+                    <div style="margin-bottom: 15px;" class="img img-sync">
                         <img src="{% static 'images/landing/money.jpg' %}" class="three_feat3" alt="money">
                     </div> 
-                    <h5>Оплата, расчет зарплат</h5> 
-                    <p class="small">Оплата по скидке или в рассрочку, скидки по акциям, перерасчет оплаты в случае пропуска занятия, расчёт зарплат преподавателей по проведённым урокам – проводите все расчёты одной кнопкой.</p> 
+                    <h5>Отчеты по задолженностям, продажам, финансам</h5> 
+                    <p class="small">Позволят быстро проанализировать текущую ситуацию в бизнесе</p> 
                     <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p>
                 </div>                 
             </div> 
@@ -231,14 +246,14 @@
             <div class="container text-center py-0"> 
                 <div class="row"> 
                     <div class="col-lg-7"> 
-                        <div class="board"> 
-                            <div id="map""></div>
+                        <div class=""> 
+                            <div id="map"></div>
                         </div>
                     </div>
                     <div class="col-lg-5"> 
                         <form class="quick-signup text-center mt-01" method="POST" action="/signup_redirect">
                             <h5>
-                                Закажите бесплатную презентацию всех возможностей прямо сейчас 
+                                Получите бесплатную версию CRM системы на неограниченный срок
                             </h5>
                             <textarea name="email" class="quick-signup-email request_name2 mt-2 mb-2" placeholder="Имя"></textarea>
                             <textarea name="email" class="quick-signup-email request_phone2" placeholder="Телефон"></textarea>
@@ -251,14 +266,14 @@
                                 <div class="animation"><div class="circle five"></div></div>
                                 <div class="animation"><div class="circle six"></div></div>
                             </div>
-                            <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="2" value="Заказать" type="submit" onclick="return false">
+                            <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="2" value="Заказать" type="submit" onclick="return gtag_report_conversion(false);">
                             <div class="success_query highlight mt-2" style="display: none;">
                                 Спасибо! Мы скоро с Вами свяжемся
                             </div>
                             <div class="land_fill_error2 highlight_red mt-2" style="display: none;">
                                 Пожалуйста, заполните все поля
                             </div>
-                            <div>
+                            <div style="text-align: left;">
                                 <br>
                                 <b>Наши контакты:</b><br>
                                 г. Алматы, ул. Богенбай батыра 156а,<br> этаж 1, офис 9<br>
@@ -269,6 +284,83 @@
                     </div>
                 </div> 
             </div> 
+        </section>
+        <section class="mt50">
+            <div class="container py-0"> 
+                <div class="row"> 
+                    <div class="text-center col-md-10 offset-md-1"> 
+                        <h3>Тарифы</h3> 
+                        <p></p>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-lg-3"> 
+                        <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                            <div class="text-center full-w textblue mb10 textbold text17">
+                                Бесплатный
+                            </div>
+                            <div class="text14" style="line-height: 16px;">
+                                <div class="mb10">Неограниченный CRM</div>
+                                <div class="mb10">Неограниченное кол-во групп</div>
+                                <div class="mb10">Интерактивное расписание занятий</div>
+                                <div class="mb10">Журнал посещаемости</div>
+                                <div class="mb10">Учёт оплат клиентов</div>
+                            </div>
+                            <div class="text-center mt15"><a class="btn shadow_small border1 backwhite get_request_land_top">0тг</a></div>                            
+                        </div>
+                    </div>
+                    <div class="col-lg-3"> 
+                        <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                            <div class="text-center full-w textblue mb10 textbold text17">
+                                Старт
+                            </div>
+                            <div class="text14" style="line-height: 16px;">
+                                <div class="mb10">Возможности тарифа <b>Бесплатный</b></div>
+                                <div class="mb10">Воронка продаж</div>
+                                <div class="mb10">Отчёты для бухгалтерии</div>
+                                <div class="mb10">Финансовые отчёты</div>
+                                <div class="mb10">Анализ лучших курсов</div>
+                                <div class="mb10">Email рассылки</div>
+                                <div class="mb10">Отчёты по работе администратора</div>
+                                <div class="mb10">Онлайн договоры</div>
+                            </div>
+                            <div class="text-center mt15"><a class="btn shadow_small border1 get_request_land_top">2500тг</a></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3"> 
+                        <div class="full-h backrb shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                            <div class="text-center full-w textblue mb10 textbold text17">
+                                Команда
+                            </div>
+                            <div class="text14" style="line-height: 16px;">
+                                <div class="mb10">Возможности тарифа <b>Старт</b></div>
+                                <div class="mb10">SMS рассылки</div>
+                                <div class="mb10">Интеграции с соц. сетями</div>
+                                <div class="mb10">Хранилище онлайн документов до 5 ГБ</div>
+                                <div class="mb10">Расчёт зарплат преподавателей</div>
+                                <div class="mb10">Интеграция с Вашим сайтом</div>
+                                <div class="mb10">Планировщик задач</div>
+                                <div class="mb10">Интеграция с IP-телефонией</div>
+                            </div>
+                            <div class="text-center mt15"><a class="btn shadow_small border1 backwhite get_request_land_top">3000тг</a></div>                            
+                        </div>
+                    </div>
+                    <div class="col-lg-3"> 
+                        <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                            <div class="text-center full-w textblue mb10 textbold text17">
+                                Компания
+                            </div>
+                            <div class="text14" style="line-height: 16px;">
+                                <div class="mb10">Возможности тарифа «Команда»</div>
+                                <div class="mb10">Добавление филиалов</div>
+                                <div class="mb10">Интеграция с сервисами по желанию</div>
+                                <div class="mb10">Возможность доработки по желанию</div>
+                            </div>
+                            <div class="text-center mt15"><a class="btn shadow_small border1 get_request_land_top">3500тг</a></div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
         <footer class="quiet" data-track-group="Footer">  
             <script>

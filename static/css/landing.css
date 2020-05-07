@@ -427,7 +427,7 @@
     border-color:#61BD4F
 }
 .btn-outline-success:hover{
-    color:#fff;
+    color:#fff !important;
     background-color:#61BD4F;
     border-color:#61BD4F
 }
@@ -3082,17 +3082,14 @@
     -ms-overflow-style:-ms-autohiding-scrollbar
 }
 .captions{
-    height: 155px;
-}
-.how-it-works{
-    padding: 0 0 155px 0 !important;
+    height: 55px;
 }
 .caption-texts{
     height: 90px;
 }    
 @media (max-width:1199.98px){
     .captions{
-        height: 155px;
+        height: 55px;
     }
     .how-it-works{
         padding: 0 0 155px 0 !important;
@@ -3218,7 +3215,7 @@
     }h2,.h2{
         font-size:2.5rem
     }h3,.h3{
-        font-size:2.1875rem
+        font-size: 30px;
     }h4,.h4{
         font-size:1.875rem
     }h5,.h5{
@@ -3487,7 +3484,7 @@
         border:0
     }
     .captions{
-        height: 155px;
+        height: 55px;
     }
     .how-it-works{
         padding: 0 0 155px 0 !important;
@@ -3498,7 +3495,7 @@
 }
 @media (max-width:767.98px){
     .captions{
-        height: 155px;
+        height: 55px;
     }
     .how-it-works{
         padding: 0 0 155px 0 !important;
@@ -3529,7 +3526,7 @@
         border:0
     }
     .captions{
-        height: 205px;
+        height: 55px;
     }
     .how-it-works{
         padding: 0 0 205px 0 !important;
@@ -6372,13 +6369,13 @@
     background:linear-gradient(#3EB9DE, #3A80DE);
     background-size:cover;
     background-position:center;
-    border-radius:1rem;
+    border-radius:10px;
     box-shadow:0 10px 20px rgba(74,115,159,0.29);
     cursor:default;
     font-size:1rem;
     margin-bottom:30px;
     overflow:hidden;
-    padding:18px;
+    padding:10px;
     position:relative;
     text-align:left;
     -webkit-user-select:none;
@@ -6882,7 +6879,7 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     -ms-flex-align:center;
     align-items:center;
 
-    background-color:white;
+    background-color:#0079bf;
 
     border-radius:50%;
 
@@ -6890,7 +6887,7 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
 
     display:none;
 
-    height:80px;
+    height:40px;
 
     -webkit-box-pack:center;
 
@@ -6903,7 +6900,7 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     margin-top:-40px;
     position:absolute;
     top:50%;
-    width:80px;
+    width:40px;
     z-index:1
     
 }
@@ -6932,9 +6929,11 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
 #carousel .board .to-do{
     display:none
 }
+.slide_images{
+    margin-top: 90px;
+    height: 320px;
+}
 #carousel .board .captions{
-    background-color:rgba(48,54,76,0.8);
-    bottom:0;
     color:white;
     font-weight:bold;
     left:0;
