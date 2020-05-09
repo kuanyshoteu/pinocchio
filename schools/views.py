@@ -2387,7 +2387,9 @@ def get_payment_list(request):
         else:
             if profile.skill.crm_office2:
                 squads = school.groups.filter(shown=True,office=profile.skill.crm_office2).prefetch_related('students')
-                students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).distinct()
+                for sq in squads:
+                    print(sq.title)
+                students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
             else:
                 students = school.people.filter(is_student=True).exclude(squads=None).exclude(card=None)
                 squads = school.groups.filter(shown=True).prefetch_related('students')
@@ -2402,8 +2404,9 @@ def get_payment_list(request):
             card = cards.filter(card_user=student)[0]
             sq_res = []
             if squad == None:
-                squads = squads.filter(students=student)
-            for sq in squads:
+                squads2 = squads.filter(students=student)
+            for sq in squads2:
+                print(sq.title)
                 nm = sq.need_money.filter(card=card)
                 pay_date = '-'
                 pay_date_input = '-'

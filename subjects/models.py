@@ -51,7 +51,6 @@ class Cell(models.Model):
     class Meta:
         ordering = ['day','time_period']
 
-
 class Subject(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subjects') 
     author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='author_subjects') 
