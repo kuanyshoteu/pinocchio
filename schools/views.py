@@ -2401,7 +2401,9 @@ def get_payment_list(request):
         for student in page1.object_list:
             card = cards.filter(card_user=student)[0]
             sq_res = []
-            for sq in squads.filter(students=student):
+            if squad == None:
+                squads = squads.filter(students=student)
+            for sq in squads:
                 nm = sq.need_money.filter(card=card)
                 pay_date = '-'
                 pay_date_input = '-'
