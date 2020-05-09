@@ -13,21 +13,19 @@
 {% load staticfiles %}
 
 {% block content %}
-<div id="group-details" style="padding-bottom: 200px;">
-    <div class='ui container'>
-        <div class="ui grid">
-            {% include 'left_menu.html' %}
-            <div class="wide column" style="width: 80%;">
-                <div class="ui segment mb0 text15">
-                    <b>Оплата студентов</b>
-                </div>
-                <div class="ui segment no_margin no_padding">
-                    <form class="ui form">  
+<div class='ui container pt15' style="height: calc(100% - 20px);overflow-y: hidden;">
+    <div class="ui grid stackable" style="height: 100%;">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column" style="height: 100%;">
+            <div class="scrollable ui shadow_small segment mb0 text15 no_padding" style="overflow-y: scroll;height: 100%;" scroll="no" onscroll="catch_scroll()">
+                <div class="pl15 pt15 pr15">
+                    <b class="textdg text17">Оплата студентов</b>
+                    <form class="ui form mb0">  
                         <div class="ui grid stackable no_margin">
-                            <div class="four wide column pb15">
-                                Выберите <b>предмет</b>:
+                            <div class="four wide column pl0 pb0 text13">
+                                Выберите <b class="textdg ">предмет</b>:
                                 <div class="controls"> 
-                                    <select class="crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
+                                    <select class="text15 crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
                                         {% if profile.skill.crm_subject %}
                                             <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
                                         {% endif %}
@@ -41,10 +39,10 @@
                                 </div>
                             </div>
                             {%if is_director %}
-                            <div class="four wide column pb15">
-                                Выберите <b>офис</b>:
+                            <div class="four wide column pb15 text13">
+                                Выберите <b class="textdg ">офис</b>:
                                 <div class="controls"> 
-                                    <select class="crm_option" id="crm_office_mobile" url="{{ instance.crm_option_url }}" option="office"> 
+                                    <select class="text15 crm_option" id="crm_office_mobile" url="{{ instance.crm_option_url }}" option="office"> 
                                         {% if profile.skill.crm_office2 %}
                                             <option value="{{ profile.skill.crm_office2.id }}">{{ profile.skill.crm_office2.title }}</option>
                                         {% endif %}
@@ -58,10 +56,10 @@
                                 </div>                            
                             </div>
                             {%endif%}
-                            <div class="four wide column ">
-                                Выберите <b>группу</b>:
+                            <div class="four wide column  text13">
+                                Выберите <b class="textdg ">группу</b>:
                                 <div class="controls"> 
-                                    <select class="crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
+                                    <select class="text15 crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
                                         {% if profile.rating_squad_choice.first %}
                                             <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
                                         {% endif %}
@@ -76,81 +74,177 @@
                             </div>
                         </div>
                     </form>
+                </div>                       
+                <div class="full-w no_margin payments_box" >
                 </div>
-                <div class="ui segment no_margin no_padding" id="calendar">
-                    <div class="loading" style="display: none;">
-                      <div class="animation"><div class="circle one"></div></div>
-                      <div class="animation"><div class="circle two"></div></div>
-                      <div class="animation"><div class="circle three"></div></div>
-                      <div class="animation"><div class="circle four"></div></div>
-                      <div class="animation"><div class="circle five"></div></div>
-                      <div class="animation"><div class="circle six"></div></div>
-                    </div>                            
-                    <div class="full-w no_margin backdark">
-                    {% for student in profile|rating_filter %}
-                        <div class="{% if forloop.counter|is_odd %}backdarklow{% endif %} pt5 pb5 pl15 pr15" style="display: flex;">
-                            <div class="pt10" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 200px;">
-                                <span>{{ forloop.counter }}.</span>
-                                <a href="{{ student.0.get_absolute_url }}" class="textw">
-                                    <b>{{ student.0.first_name }}</b>
-                                </a>
-                            </div>
-                            {%include 'school/payment_student_form.html' %}
-                        </div>
-                    {% endfor %}
-                    </div>
-                </div>
-                <div class="ui modal payment_history" style="height: 100%;">
-                    <i class="close icon"></i>
-                    <div class="content">
-                        <div class="text-center mb15">
-                            <div style="font-size: 17px;">
-                                <b>История оплаты</b> <span class="payment_student_name textb"></span>
-                            </div>
-                            <i style="font-size: 13px;">
-                                Можете отменить оплату в течении 3 суток
-                            </i>
-                        </div>
-                        <table style="font-size: 13px;margin: 0 auto">
-                            <thead>
-                                <tr>
-                                    <th class="border">Время</th>
-                                    <th class="border">Сумма</th>
-                                    <th class="border">Группа</th>
-                                    <th class="border">Менеджер</th>
-                                    <th class="border"></th>
-                                </tr>
-                            </thead>
-                            <tbody class="fill_payment_history">
-                            </tbody>
-                        </table>
+                <div class="text-center full-w">
+                    <div class="ui active inline large loader get_payment_load"></div>
+                    <div class="text-center textdg ended pt50 pb50" style="display: none;">
+                        Это весь список
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="ui modal payment_history" style="height: 100%;">
+    <i class="close icon"></i>
+    <div class="content">
+        <div class="text-center mb15">
+            <div style="font-size: 17px;">
+                <b>История оплаты</b> <span class="payment_student_name textb"></span>
+            </div>
+            <i style="font-size: 13px;">
+                Можете отменить оплату в течении 3 суток
+            </i>
+        </div>
+        <table style="font-size: 13px;margin: 0 auto">
+            <thead>
+                <tr>
+                    <th class="border">Время</th>
+                    <th class="border">Сумма</th>
+                    <th class="border">Группа</th>
+                    <th class="border">Менеджер</th>
+                    <th class="border"></th>
+                </tr>
+            </thead>
+            <tbody class="fill_payment_history">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div style="display: none;">
+    {%include 'school/payment_student_form.html' %}
+</div>
 <span style="display: none;" class="instance_data" delete_payment="{% url 'squads:delete_payment' %}"></span>
 
-<span class="data" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
+<span class="data" last_one="1" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
 <script type="text/javascript">
     {% include 'modals/show_payment_history.html' %}
-    function make_payment(url, id, group_id) {
-        amount = $('.payment_amounts'+id+'g'+group_id).val()
-        $('.success_payment').hide()
+    get_payment_list(1)
+    function catch_scroll(){
+        this_ = $('.payments_box')
+        page = this_.attr('page')
+        var div = this_.get(0);
+        console.log($('.scrollable').attr('scroll'))
+        if ($('.scrollable').attr('scroll') =='yes' && (div.scrollTop + div.offsetHeight) >= div.scrollHeight) {
+            get_payment_list(page)
+        }
+    }
+    function get_payment_list(page){   
+        console.log('f')     
+        $('.get_payment_load').show()
+        $('.scrollable').attr('scroll', 'no')
         $.ajax({
-            url: url,
+            url: "{%url 'schools:get_payment_list'%}",
             data: {
-                'amount':amount,
-                'id':id,
-                'group_id':group_id                
+                'page':page,
             },
             dataType: 'json',
             success: function (data) {
-                $('.payment_amounts'+id+'g'+group_id).val('')
-                $('.success_payments'+id+'g'+group_id).show()
+                $('.get_payment_load').hide()
+                if (data.ended) {
+                    $('.scrollable').attr('scroll', 'no')
+                    if (parseInt(page) > 0) {
+                        $('.ended').show()
+                    }
+                }
+                else{
+                    last_one = parseInt($('.data').attr('last_one'))
+                    $('.data').attr('last_one', last_one + data.res.length)
+                    for (var i = 0; i < data.res.length; i++) {
+                        student = data.res[i]
+                        student_id = student[0]
+                        name = student[1]
+                        student_url = student[2]
+                        payment_div = $('.payment_orig').clone()
+                        payment_div.removeClass('payment_orig')
+                        if (i % 2 == 0) {payment_div.addClass('backwhitelow border1')}
+                        payment_div.find('.student_counter').text((last_one+i) + '.')
+                        payment_div.find('.student_name').text(name)
+                        payment_div.find('.student_name').attr('href', student_url)
+                        payment_div.find('.show_payment_history').attr('onclick', 'show_payment_history('+student_id+')')
+                        groups = student[3]
+                        for (var j = 0; j < groups.length; j++) {
+                            group = groups[j]
+                            group_id = group[0]
+                            group_title = group[1]
+                            color_back = group[2]
+                            date_str = group[3]
+                            date = group[4]
+                            if (color_back == '') {color_back='rgb(49, 58, 87)'}
+                            pay_date = group[3]
+                            group_div = $('.group_box').clone()
+                            group_div.removeClass('group_box')
+                            group_div.find('.group_name').text(group_title)
+                            group_div.find('.group_name').attr('style', 'background-color:'+color_back)
+                            group_div.find('.payment_amounts').addClass('payment_amounts'+student_id+'g'+group_id)
+                            group_div.find('.make_payment').addClass('make_payment'+student_id+'g'+group_id)
+                            group_div.find('.make_payment').attr('onclick', 'make_payment('+student_id+','+group_id+')')
+                            group_div.find('.success_payment').addClass('success_payment'+student_id+'g'+group_id)
+                            group_div.find('.payment_load').addClass('payment_load'+student_id+'g'+group_id)
+                            group_div.find('.payday_text').addClass('payday_text'+student_id+'g'+group_id)
+                            group_div.find('.payday_text').text(date_str)
+                            group_div.find('.show_change_date').attr('onclick', '$(".block_change_pay_date").hide();$("#change_date'+student_id+'g'+group_id+'").show();')
+                            group_div.find('.block_change_pay_date').attr('id', 'change_date'+student_id+'g'+group_id)
+                            group_div.find('.payday_input').attr('id', 'payday_input'+student_id+'g'+group_id)
+                            group_div.find('.payday_input').attr('value', date)
+                            group_div.find('.change_pay_date').attr('onclick', 'change_pay_date('+student_id+','+group_id+')')
+                            group_div.find('.payday_load').addClass('payday_load'+student_id+'g'+group_id)
+                            group_div.find('.paydate_check').attr('id', 'paydate_check'+student_id+'g'+group_id)
+
+                            group_div.appendTo(payment_div.find('.student_groups'))
+                            }
+                        payment_div.appendTo('.payments_box')
+                    }
+                    $('.scrollable').attr('scroll', 'yes')
+                    $('.payments_box').attr('page', parseInt(page)+1)
+                }
             }
         })        
+    }
+    $('.crm_option').on('change', function(e) {
+        id = $(this).attr('id')
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value;
+        url = $(this).attr('url')
+        option = $(this).attr('option')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+                'option':option,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.payments_box').empty()
+                $('.data').attr('last_one', 1)
+                get_payment_list(1)
+            }
+        });
+    })    
+    function make_payment(id, group_id) {
+        amount = $('.payment_amounts'+id+'g'+group_id).val()
+        if (amount) {
+            $('.success_payment').hide()
+            $('.payment_load'+id+'g'+group_id).show()
+            $('.make_payment'+id+'g'+group_id).addClass('disabled')
+            $.ajax({
+                url: '{%url "accounts:make_payment"%}',
+                data: {
+                    'amount':amount,
+                    'id':id,
+                    'group_id':group_id                
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.payment_amounts'+id+'g'+group_id).val('')
+                    $('.success_payments'+id+'g'+group_id).show()
+                    $('.payment_load'+id+'g'+group_id).hide()
+                    $('.make_payment'+id+'g'+group_id).removeClass('disabled')
+                }
+            })        
+        }
     };
     function delete_payment(id){
         url = $('.instance_data').attr('delete_payment')        
@@ -171,6 +265,28 @@
             }
         })
     }
-
+    function change_pay_date(student, squad){
+        load = $('.payday_load'+student+'g'+squad)
+        load.show()
+        check = $('#paydate_check'+student+'g'+squad)
+        paydate = $('#payday_input'+student+'g'+squad).val()
+        url = $('.data').attr('payday_change_url')
+        $.ajax({
+            url: url,
+            data: {
+                'student':student,
+                'squad':squad,
+                'paydate':paydate,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.pay_date) {
+                    load.hide()
+                    check.show()  
+                    $('#payday_text'+student+'g'+squad).text(data.pay_date)                  
+                }
+            }
+        })
+    }
 </script>
 {% endblock content %}

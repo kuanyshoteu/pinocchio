@@ -86,6 +86,10 @@
   background:  rgba(33,186,69,0.3);
   background: linear-gradient(180deg, rgba(81,129,184,0) 50%, rgba(33,186,69,0.2) 100%);
 }
+.backrbb{
+  background: rgb(81,129,184) !important;
+  background: linear-gradient(180deg, rgba(81,129,184,0.6) 0%, rgba(33,186,69,0.5) 50%, rgba(33,186,69,0.6) 100%) !important;
+}
 .textblue{
   color: #285473 !important;
 }
@@ -103,6 +107,9 @@
 }
 .topbr5{
   border-radius: 5px 5px 0 0 !important;
+}
+.leftbr5{
+  border-radius: 5px 0 0 5px;
 }
 .bottombr5{
   border-radius: 0 0 5px 5px !important;

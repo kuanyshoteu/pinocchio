@@ -232,31 +232,6 @@
             $('#hint_f2').hide()
         }        
     })
-    $('.change_pay_date').click(function(e) {
-        student = $(this).attr('student')
-        squad = $(this).attr('group')
-        load = $('.payday_load'+student+'g'+squad)
-        load.show()
-        check = $('#paydate_check'+student+'g'+squad)
-        paydate = $('#payday_input'+student+'g'+squad).val()
-        url = $('.data').attr('payday_change_url')
-        $.ajax({
-            url: url,
-            data: {
-                'student':student,
-                'squad':squad,
-                'paydate':paydate,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.pay_date) {
-                    load.hide()
-                    check.show()  
-                    $('#payday_text'+student+'g'+squad).text(data.pay_date)                  
-                }
-            }
-        })
-    })
     $('.open_sq_finance').click(function(e) {
         $('.sq_finance').modal('show')
         id = $(this).attr('id')

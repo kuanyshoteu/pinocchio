@@ -2211,7 +2211,7 @@ def get_extra_cards(request):
         all_squads = school.groups.all()
         all_students = school.people.filter(is_student=True).prefetch_related('squads')
         all_offices = school.school_offices.all()
-        res = filter_crm_cards_work(res, request,all_squads,all_students,all_offices)        
+        res = filter_crm_cards_work(res, request,all_squads,all_students,all_offices)
         if len(res) <= (page-1)*10:
             return JsonResponse({"Ended":True})
         p = Paginator(res, 10)
@@ -2369,5 +2369,56 @@ def update_finance(request):
         "ok":True,
         "author":profile.first_name,
         "date":timezone.now().strftime('%d %B'),
+    }
+    return JsonResponse(data)
+
+def get_payment_list(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    if request.GET.get('page'):
+        page = int(request.GET.get('page'))
+        school = is_moderator_school(request, profile)
+        cards = school.crm_cards.select_related('card_user')
+        squad = profile.rating_squad_choice.first()
+        if squad != None:
+            students = squad.students.filter(is_student=True).exclude(card=None)
+            squads = [squad]
+        else:
+            if profile.skill.crm_office2:
+                squads = school.groups.filter(shown=True,office=profile.skill.crm_office2).prefetch_related('students')
+                students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).distinct()
+            else:
+                students = school.people.filter(is_student=True).exclude(squads=None).exclude(card=None)
+                squads = school.groups.filter(shown=True).prefetch_related('students')
+        if profile.skill.crm_subject:
+            students = students.filter(crm_subject_connect=profile.skill.crm_subject).exclude(card=None)
+        if len(students) <= (page-1)*16:
+            return JsonResponse({"ended":True})
+        p = Paginator(students, 16)
+        page1 = p.page(page)
+        res = []
+        for student in page1.object_list:
+            card = cards.filter(card_user=student)[0]
+            sq_res = []
+            for sq in squads.filter(students=student):
+                nm = sq.need_money.filter(card=card)
+                pay_date = '-'
+                pay_date_input = '-'
+                pd = ''
+                if len(nm) > 0:
+                    nm = nm.last()
+                    pd = get_pay_date(nm)
+                    pay_date = pd.strftime('%d %B')
+                sq_res.append([sq.id, sq.title, sq.color_back, pay_date, pd.strftime('%Y-%m-%d')])
+            res.append([
+                student.id,
+                student.first_name,
+                student.get_absolute_url(),
+                sq_res,
+                ])
+
+    data = {
+        "res":res,
     }
     return JsonResponse(data)

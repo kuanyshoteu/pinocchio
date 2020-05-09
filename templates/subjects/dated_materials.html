@@ -5,8 +5,7 @@
     <a class="ml15" href="{{ instance.get_update_url }}"><span style="font-size: 13px;">Изменить количество</span></a>
     {% endif %}    
 </div>
-<div class="ui segment no_margin " style="background: rgb(81,129,184);
-background: linear-gradient(180deg, rgba(81,129,184,0.6) 0%, rgba(33,186,69,0.5) 50%, rgba(33,186,69,0.6) 100%);">
+<div class="ui segment no_margin backrbb">
     {% if materials|length == 0 %}
     <div style="color: #fff;">
     Пока у курса {{instance.title}} нет уроков, изменить количество уроков можете в <a class="ui button mini green" href="{{instance.get_update_url}}">Настроках курса</a>        

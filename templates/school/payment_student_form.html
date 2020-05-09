@@ -1,40 +1,42 @@
-<form class="ui form mb0 mt5" style="display: flex;">
-    <div style="width: 570px;">
-    {%for squad in student.1%}
-        <div class="mb5" style="display: flex;width: 570px;">
-            <div style="width: 200px;">
-                <div class="ui segment pt5 pb5 pl5 pr5" style="border-radius: 3px; background-color: {%if squad.0.color_back == ""%}rgb(49, 58, 87);{%else%}{{squad.0.color_back}}{%endif%}"><b>{{squad.0.title}}</b></div>
-            </div>
-            <input style="width: 100px;" class="payment_amounts{{ student.0.id }}g{{squad.0.id}} ml5 pl10 pr5 pb5 pt5" placeholder="Сумма" type="number">
-            <a style="height: 29px;" class="ui button mini blue make_payment ml5" onclick="make_payment('{{ profile.make_payment }}', '{{ student.0.id }}', '{{squad.0.id}}')">Оплатить</a>
-            <div style="width: 14px;">
-                <i class="check icon green success_payment success_payments{{ student.0.id }}g{{squad.0.id}}" style="display: none;"></i>                
-            </div>
-            <div class="ml10 text13" style="width: 140px;">
-                Дата оплаты:<br>
-                <span id="payday_text{{ student.0.id }}g{{squad.0.id}}">{{squad.1}}</span> 
-                <a onclick="$('.block_change_pay_date').hide();$('#change_date{{ student.0.id }}g{{squad.0.id}}').show();"><i class="icon pen square textw"></i></a>
-                <br>
-                <div id="change_date{{ student.0.id }}g{{squad.0.id}}" class="block_change_pay_date" style="display: none;">
-                    <input style="width: 145px;" value="{{squad.3}}" id="payday_input{{ student.0.id }}g{{squad.0.id}}" class="pl5 pr0 pb5 pt0" type="date" name="">
-                    <a class="ui button mini blue pt5 pb5 mt5 change_pay_date" student="{{ student.0.id }}" group="{{squad.0.id}}" style="width: 135px;">
-                        Сохранить 
-                        <div class="loading_small payday_load{{ student.0.id }}g{{squad.0.id}}" style="display: none;">
-                          <div class="animation"><div class="backwhite circle one"></div></div>
-                          <div class="animation"><div class="backwhite circle two"></div></div>
-                          <div class="animation"><div class="backwhite circle three"></div></div>
-                          <div class="animation"><div class="backwhite circle four"></div></div>
-                          <div class="animation"><div class="backwhite circle five"></div></div>
-                          <div class="animation"><div class="backwhite circle six"></div></div>
-                        </div>
-                        <i style="display: none;" class="icon check textw ml5" id="paydate_check{{ student.0.id }}g{{squad.0.id}}"></i>
-                    </a>
-                </div>
-            </div>
+<div class="payment_orig dflex pt5 pb5 pl15 pr15">
+    <div class="pt10" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;width: 200px;">
+        <span class="text14 textdg student_counter"></span>
+        <a class="student_name textbold textblue">
+        </a>
+    </div>
+    <form class="ui form mb0 mt5" style="display: flex;">
+        <div class="student_groups" style="width: 570px;">
         </div>
-    {%endfor%}
+        <div class="ml10">
+            <a style="right: 0" class="ui button mini full-w pl5 pr5 show_payment_history">История оплаты</a>
+        </div>
+    </form>
+</div>
+<div class="mb5 group_box dflex" style="width: 570px;">
+    <div style="width: 200px;">
+        <div class="group_name shadow_small textbold textw ui segment br5 pt5 pb5 pl5 pr5">
+        </div>
     </div>
-    <div class="ml10">
-        <a style="right: 0" class="ui button mini full-w pl5 pr5 show_payment_history" onclick="show_payment_history('{{ student.0.id }}')">История оплаты</a>
+    <input style="width: 100px;" class="payment_amounts ml5 pl10 pr5 pb5 pt5" placeholder="Сумма" type="number">
+    <a style="height: 29px;" class="ui button mini white border1 shadow_small make_payment ml5">Оплатить</a>
+    <div style="width: 14px;">
+        <i class="check icon green success_payment" style="display: none;"></i>
+        <div class="ui active inline mini loader payment_load " style="display: none;"></div>
     </div>
-</form>
+    <div class="ml10 text13" style="width: 140px;">
+        Дата оплаты:<br>
+        <span class="payday_text"></span> 
+        <a class="show_change_date">
+            <i class="icon pen square blue"></i>
+        </a>
+        <br>
+        <div class="block_change_pay_date" style="display: none;">
+            <input style="width: 145px;" class="pl5 pr0 pb5 pt0 payday_input" type="date" name="">
+            <a class="ui button mini white shadow_small border1 pt5 pb5 mt5 change_pay_date" style="width: 135px;height: 23px;">
+                Сохранить
+                <div class="payday_load ui active inline mini loader" style="display: none;"></div>
+                <i style="display: none;" class="paydate_check icon check blue ml5" id=""></i>
+            </a>
+        </div>
+    </div>
+</div>

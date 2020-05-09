@@ -1,13 +1,13 @@
 {% load staticfiles %}
 <div class="eight wide column pt0 pr0 officefilter office{{sq.office.id}}" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}">
-    <a style="text-align: left;" class="pt10 pb10 ui button mini shadow_small white full-w full-h" href="{{ sq.get_update_url }}">
+    <a style="text-align: left;" class="no_padding ui button mini shadow_small white full-w full-h" href="{{ sq.get_update_url }}">
         <div class="ui grid group-block no_margin">
-            <div class="wide column left-side" style="width: 80px;">
-                <div class="textg text17 textbold">
+            <div class="leftbr5 pt20 pb15 wide column left-side" style="width: 62px;background-color:{%if sq.color_back%}{{sq.color_back}}{%else%}rgb(49, 58, 87){%endif%}">
+                <div class="text-center full-w textw text21 textbold">
                     {{sq.students.all|length}}
                 </div>
             </div>
-            <div class="wide column right-side no_padding" style="width: calc(100% - 80px);">
+            <div class="wide column right-side pt10 pb10" style="width: calc(100% - 62px);">
                 <h5 style="font-size: 13px;margin-bottom: 5px;">
                     <span class="textblue">{{ sq.title }}</span>
                     {% if trash %}
