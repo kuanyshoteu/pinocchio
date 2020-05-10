@@ -77,7 +77,7 @@
                     <h1 style="font-size: 37px">CRM-система для управления учебным центром</h1> 
                     <p class="lead">Не теряйте клиентов, контролируйте работу сотрудников, автоматизируйте бухгалтерию с помощью самой понятной CRM-системой на рынке</p>  
                 </div>
-                <div class="col-lg-6 offset-lg-1"> 
+                <div class="col-lg-6 offset-lg-1 pt20"> 
                     <img src="{% static 'images/landing/f1.jpg' %}" alt="bilimtap.kz" class="img-fluid">
                     <form class="text-center mt-5 in_mobile" method="POST" action="/signup_redirect">
                         <h5>
@@ -369,7 +369,7 @@
         <section id="get-started" class="d-flex align-items-center my-4 sellform"> 
             <div class="container text-center py-0"> 
                 <div class="row"> 
-                    <div class="col-lg-5"> 
+                    <div class="offset-lg-3 col-lg-6"> 
                         <form class="quick-signup text-center mt-01" method="POST" action="/signup_redirect">
                             <h5 class="text24">
                                 Получите бесплатную версию CRM системы на неограниченный срок
@@ -406,12 +406,10 @@
               window.locale = 'ru';
             </script> 
             <ul> 
-                <li><a href="{% url 'main:about' %}">О нас</a></li> 
+                <li><a href="{% url 'main:team' %}">О нас</a></li> 
                 <li><a href="{% url 'main:pricing' %}" class="land_costs_link">Цены</a></li> 
             </ul> 
             <p> 
-                <img src="{% static 'images/landing/logo.jpg' %}" class="triplea" alt="triplea">
-                <br>
                 &nbsp;© 2020. Все права защищены. 
             </p> 
         </footer>   
