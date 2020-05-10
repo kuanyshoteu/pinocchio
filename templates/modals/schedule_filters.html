@@ -19,24 +19,6 @@
             </select>
         </div>
         <div class="twenty wide column pr0">
-            Возраст:
-            <select onchange="crm_option_change('crm_age')" class="crm_option" option="age" id="crm_age" url="{{ instance.crm_option_url }}">
-                {% if profile.skill.crm_age %}
-                    <option value="{{ profile.skill.crm_age.id }}">{{ profile.skill.crm_age.title }}</option>
-                {% else %}
-                    <option value="-1">Все возрасты</option>
-                {% endif %}
-                {% for age in ages %}
-                    {% if age != profile.skill.crm_age %}
-                    <option value="{{ age.id }}">{{ age.title }}</option>
-                    {% endif %}
-                {% endfor %}
-                {% if profile.skill.crm_age %}
-                    <option value="-1">Все возрасты</option>
-                {% endif %}
-            </select>
-        </div>
-        <div class="twenty wide column pr0">
             Курс:
             <select onchange="crm_option_change('crm_course')" class="crm_option" option="course" id="crm_course" url="{{ instance.crm_option_url }}">
                 {% if profile.skill.filter_course_connect.all|length > 0 %}

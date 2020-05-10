@@ -1,14 +1,14 @@
 {% load ttags %}
+{% if is_manager %}
+<div class="ui segment shadow_small">
+{%endif%}
 {% if is_manager and hisprofile.is_student %}
-<div class="ui segment mb0" style="font-size: 15px;">
-    Оплата
-</div>
+    <div class="text15 textdg textbold">Оплата</div>
 {%endif%}
 {% if is_manager %}
-<div class="ui segment mt0 backdark textw pb10">
-    <div class="ui grid stackable">
+    <div class="ui grid stackable no_margin">
         {% if hisprofile.is_student %}
-        <div class="eight wide column pr5">
+        <div class="ten wide column pl0 pt15 pr30 pb15">
             Пожалуйста, укажите за какую группу вносится оплата:
             <form class="ui form mb10 mt10" style="display: flex;">
                 <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
@@ -34,13 +34,15 @@
             </div>
         </div>
         {%endif%}
-        <div class="eight wide column pr5">
+        <div class="six wide column pl0 pt15 pr15 pb15">
             <div class="pb5">
                 {% if hisprofile.is_student %}
-                <a class="ui button mini mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
-                <a class="ui button mini mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}">История оплаты</a>
+                <a class="full-w border1 ui button small textblue white shadow_small mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
+                <br>
+                <a class="full-w border1 ui button small textblue white shadow_small mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}">История оплаты</a>
+                <br>
                 {%endif%}
-                <a class="ui button mini get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
+                <a class="full-w border1 ui button small textblue white shadow_small get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
             </div>
             {% if hisprofile.is_student %}
             <div class="ui modal payment_history full-h">
@@ -132,122 +134,108 @@
         </div>
     </div>
 </div>
-{% if hisprofile.is_student %}
-<div class="ui segment mb0 text15">
-    Клиент записан в данные группы:
-</div>
-<div class="ui segment mt0 no_padding">
-    <div class="ui grid no_margin backdark">
-    {% for nm in profile|get_bills:hisprofile %}
-    <div class="wide column pr0 squad_bill_block_cont{{nm.squad.id}}" style="width: 33%;">
-        <div class="squad_bill_block{{nm.squad.id}}">
-            <div class="ui segment mb0 text-center" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
-                <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
-            </div>    
-            <div class="ui segment mt0 backgrey text13">
-                <div class="mb5"><b>Дата записи в группу</b> {{nm|get_start_date}}</div>
-                <span>Группа проходит курсы:</span>
-                <div class="nm_subjects text14">
-                    {% for subject in nm|get_subject_finances %}
-                    <div class="full-w mb10" style="padding: 10px;line-height: 20px;color: #222;background-color: #e0e1e2;">
-                        <div class="text-center">
-                            <b>{{subject.0}}</b>
+{%endif%}
+{% if is_manager and hisprofile.is_student %}
+<div class="ui segment shadow_small">
+    <div class="text15 textdg textbold">Клиент записан в данные группы:</div>
+    <div class="ui grid stackable no_margin">
+        {% for nm in profile|get_bills:hisprofile %}
+        <div class="eight wide column pl10 pr10 squad_bill_block_cont{{nm.squad.id}}">
+            <div class="no_padding border1 ui segment shadow squad_bill_block{{nm.squad.id}}">
+                <div class="pt15 pl15 pb15 pr15 text-center topbr5" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
+                    <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
+                </div>    
+                <div class="bottombr5 text13 pt15 pl15 pb15 pr15">
+                    <div class="mb5 textdg"><b>Дата записи в группу:</b> {{nm|get_start_date}}</div>
+                    <span class="textdg textbold text13">Группа проходит курсы:</span>
+                    <div class="nm_subjects text14">
+                        {% for subject in nm|get_subject_finances %}
+                        <div class="full-w mb10 pt10 pl10 pr10 pb10 br5 backwhitelow">
+                            <div class="text-center textblue mb5">
+                                <b>{{subject.0}}</b>
+                            </div>
+                            <div class="dflex mb5">
+                                <div class="half-w textdg pr10" style="text-align: right;">Стоимость:</div>
+                                <div class="half-w ">{{subject.1}}</div>
+                            </div>
+                            {%if subject.3%}
+                            <div class="dflex mb5">
+                                <div class="half-w textdg pr10" style="text-align: right;">Первое занятие: </div>
+                                <div class="half-w">{{subject.3}}</div>
+                            </div>
+                            {% endif %}
+                            {% if subject.2 >= 0 %}
+                            <div class="dflex mb5">
+                                <div class="half-w textdg pr10" style="text-align: right;">Оплачено: </div>
+                                <div class="half-w">за {{subject.2}} месяцев</div>
+                            </div>
+                            <div class="dflex mb5">
+                                <div class="half-w textdg pr10" style="text-align: right;">Остаток: </div>
+                                <div class="half-w">{{subject.4}}тг</div>
+                            </div>
+                            {%elif subject.2 == -2 %}
+                            <div class="text-center textdg text13">
+                                Еще не было оплаты                        
+                            </div>
+                            {% endif %}
                         </div>
-                        <div style="display: flex;">
-                            <div class="half-w">Стоимость:</div>
-                            <div class="half-w">{{subject.1}}</div>
-                        </div>
-                        {%if subject.3%}
-                        <div style="display: flex;">
-                            <div class="half-w">Первое занятие: </div>
-                            <div class="half-w">{{subject.3}}</div>
-                        </div>
-                        {% endif %}
-                        {% if subject.2 >= 0 %}
-                        <div style="display: flex;">
-                            <div class="half-w">Оплачено: </div>
-                            <div class="half-w">за {{subject.2}} месяцев</div>
-                        </div>
-                        <div style="display: flex;">
-                            <div class="half-w">Остаток: </div>
-                            <div class="half-w">{{subject.4}}тг</div>
-                        </div>
-                        {%elif subject.2 == -2 %}
-                            Еще не было оплаты
-                        {% endif %}
+                        {% endfor %}
                     </div>
-                    {% endfor %}
-                </div>
-                <div class="text14 mt15">
-                    <span style="display: none;">{{ nm.money }}</span>
-                    <b>Итоговая стоимость посещения данной группы:</b>
-                    {% if nm.squad.lesson_bill > 0 %}
-                        <span class="underline">{{ nm.squad.lesson_bill }}тг за урок</span>
-                        <br>
-                    {% endif %}
-                    {% if nm.squad.bill > 0 %}
-                        <span class="underline">{{ nm.squad.bill }}тг в месяц</span>
-                        <br>
-                    {% endif %}
-                    <div class="mt5"></div>
-                    Оплачено за {{nm|get_closed_months}} месяцев
-                    <div class="mt5"></div>
-                    <span>{{ nm.squad|last_payment:hisprofile }}</span>
-                    <br>
-                    <i>(*подробнее в "Истории оплаты" сверху)</i>
-                    <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
-                    <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
-                        <i class="close icon"></i>
-                        <div class="content">
-                            <b class="text-center">
-                                Скидки <span class="discount_student_name" id=""></span> в группе {{nm.squad.title}}
-                            </b>
+                    <div class="text14 mt15">
+                        <span style="display: none;">{{ nm.money }}</span>
+                        <b class="textdg">Итоговая стоимость посещения данной группы:</b>
+                        {% if nm.squad.lesson_bill > 0 %}
+                            <span class="textblue textbold">{{ nm.squad.lesson_bill }}тг за урок</span>
                             <br>
-                            Нажмите на те скидки, которые нужно дать студенту
+                        {% endif %}
+                        {% if nm.squad.bill > 0 %}
+                            <span class="textblue textbold">{{ nm.squad.bill }}тг в месяц</span>
                             <br>
-                            Зелеными отмечены те скидки, которые есть у студента
-                            <div class="mt15 student_discounts_list">
-                                {% for dis in nm.squad.school.discounts.all %}
-                                <a class="dis{{dis.id}} dis ui button mini show_hint_schedule" sq_id="{{nm.squad.id}}" id="{{dis.id}}">
-                                    <b>{{dis.title}}</b>
-                                    <br>
-                                    {{dis.amount}} 
-                                    {%if dis.discount_type == 'percent' %}
-                                        процентов
-                                    {%else%}
-                                        тенге
-                                    {%endif%}
-                                </a> 
-                                {% endfor %}
+                        {% endif %}
+                        <div class="mt5"></div>
+                        Оплачено за {{nm|get_closed_months}} месяцев
+                        <div class="mt5"></div>
+                        <span>{{ nm.squad|last_payment:hisprofile }}</span>
+                        <br>
+                        <i>(*подробнее в "Истории оплаты" сверху)</i>
+                        <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
+                        <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
+                            <i class="close icon"></i>
+                            <div class="content">
+                                <b class="text-center">
+                                    Скидки <span class="discount_student_name" id=""></span> в группе {{nm.squad.title}}
+                                </b>
+                                <br>
+                                Нажмите на те скидки, которые нужно дать студенту
+                                <br>
+                                Зелеными отмечены те скидки, которые есть у студента
+                                <div class="mt15 student_discounts_list">
+                                    {% for dis in nm.squad.school.discounts.all %}
+                                    <a class="dis{{dis.id}} mb5 dis ui button mini show_hint_schedule" sq_id="{{nm.squad.id}}" id="{{dis.id}}">
+                                        <b>{{dis.title}}</b>
+                                        <br>
+                                        {{dis.amount}} 
+                                        {%if dis.discount_type == 'percent' %}
+                                            процентов
+                                        {%else%}
+                                            тенге
+                                        {%endif%}
+                                    </a> 
+                                    {% endfor %}
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                </div>
-            </div>    
+                </div>    
+            </div>
         </div>
-    </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 </div>
-{%endif%}
 {%endif%}
 <span class="data" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
 <script type="text/javascript">
-    nm_heights()
-    function nm_heights(){
-        var max = 0
-        $('.nm_subjects').each(function() {
-            height = parseInt($(this).css('height'))
-            if (max < height) {
-                max = height
-            }
-        })
-        $('.nm_subjects').each(function() {
-            height = $(this).css('height', max)
-        })
-    }
     function make_payment(url, id) {
         this_ = document.getElementById('pay_for_group');
         group_id = this_.options[this_.selectedIndex].value;        

@@ -586,8 +586,6 @@ def constant_school_lectures(profile, school):
     lectures = Lecture.objects.filter(squad__in=squads)
     if profile.skill.crm_subject:
         lectures = lectures.filter(category=profile.skill.crm_subject)
-    if profile.skill.crm_cabinet:
-        lectures = lectures.filter(cabinet=profile.skill.crm_cabinet)
     if profile.skill.crm_office2:
         lectures = lectures.filter(office=profile.skill.crm_office2)
     if len(profile.skill.filter_teacher.all()) > 0:

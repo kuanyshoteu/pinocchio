@@ -36,7 +36,19 @@
       gtag('config', 'UA-146621937-1');
       gtag('config', 'AW-794791496');
     </script>
-    <!-- Event snippet for Заявка1 conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. --> <script> function gtag_report_conversion(url) { var callback = function () { if (typeof(url) != 'undefined') { window.location = url; } }; gtag('event', 'conversion', { 'send_to': 'AW-794791496/48kyCKGctc8BEMic_voC', 'event_callback': callback }); return false; } </script>
+    <!-- Event snippet for Заявка1 conversion page In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. --> 
+    <script> 
+        function gtag_report_conversion(url) { 
+            var callback = function () { 
+                if (typeof(url) != 'undefined') { } 
+            }; 
+            gtag('event', 'conversion', { 
+                'send_to': 'AW-794791496/48kyCKGctc8BEMic_voC', 
+                'event_callback': callback 
+            }); 
+            return false; 
+        } 
+    </script>
     <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     <link rel="canonical" href="https://www.bilimtap.kz/about/" />
     {% compress css %}    
@@ -82,7 +94,7 @@
                             <div class="animation"><div class="circle five"></div></div>
                             <div class="animation"><div class="circle six"></div></div>
                         </div>
-                        <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="0" value="Заказать" type="submit" onclick="return gtag_report_conversion(false);">
+                        <input class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="0" value="Заказать" type="submit" onclick="return gtag_report_conversion('');">
                         <div class="success_query highlight mt-2" style="display: none;">
                             Спасибо! Мы скоро с Вами свяжемся
                         </div>
@@ -102,7 +114,7 @@
                         <textarea style="margin-right: 3px;" name="name" class="quick-signup-email request_name1" placeholder="Имя"></textarea>
                         <textarea style="margin-left: 3px;" name="phone" class="quick-signup-email request_phone1" placeholder="Телефон"></textarea>
                         <br>
-                        <a class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" type="submit" onclick="return gtag_report_conversion(false)">
+                        <a class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" type="submit" onclick="return gtag_report_conversion('')">
                             Заказать
                             <div class="loading_small ml10" style="display: none;">
                                 <div class="animation"><div class="backwhite circle one"></div></div>
@@ -173,7 +185,7 @@
                         <img src="{% static 'images/landing/buh.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
                     </div>                    
                     <p>Так как учёт клиентов, журнал посещаемости, учёт оплаты студентов ведутся в единой базе, система автоматически посчитает зарплаты преподавателям и сформирует нужные отчёты для Вашего бухгалтера </p>
-                    <p><a class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
+                    <p><a class="btn btn-secondary px-3 get_request_land_top">Получить бесплатно →</a></p>
                 </div> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board deskmenu" style="margin-right: -10%"> 
@@ -197,7 +209,7 @@
                         <img src="{% static 'images/landing/reports.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
                     </div>
                     <p class="m-0">Знания о том, что вся работа теперь фиксируется в единой системе, помогают сотрудникам более ответственно относиться к поставленным задачам</p> 
-                    <p><a class="btn btn-secondary px-3 get_request_land_top mt-2">Заказать презентацию →</a></p>
+                    <p><a class="btn btn-secondary px-3 get_request_land_top mt-2">Получить бесплатно →</a></p>
                 </div> 
             </div> 
         </div> 
@@ -216,7 +228,7 @@
                         <img src="{% static 'images/landing/sch.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
                     </div>
                     <p>Отныне всё визуально понятно</p>
-                    <p><a class="btn btn-secondary px-3 get_request_land_top">Заказать презентацию →</a></p>
+                    <p><a class="btn btn-secondary px-3 get_request_land_top">Получить бесплатно →</a></p>
                 </div> 
             </div> 
         </div> 
@@ -230,7 +242,6 @@
                     </div> 
                     <h5>Воронка продаж</h5> 
                     <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж</p> 
-                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p> 
                 </div> 
                 <div class="col-lg-4"> 
                     <div style="margin-bottom: 15px;" class="img img-apps">
@@ -238,7 +249,6 @@
                     </div>
                     <h5>Email и СМС уведомления</h5> 
                     <p class="small">Автоматически напомнят Вашим клиентам о предстоящем пробном занятии или отмене урока</p> 
-                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p> 
                 </div> 
                 <div class="col-lg-4"> 
                     <div style="margin-bottom: 15px;" class="img img-sync">
@@ -246,7 +256,6 @@
                     </div> 
                     <h5>Отчеты по задолженностям, продажам, финансам</h5> 
                     <p class="small">Позволят быстро проанализировать текущую ситуацию в бизнесе</p> 
-                    <p><a class="btn btn-secondary btn-wrap px-3 get_request_land_top">Заказать презентацию</a></p>
                 </div>                 
             </div> 
         </div> 
@@ -360,11 +369,6 @@
         <section id="get-started" class="d-flex align-items-center my-4 sellform"> 
             <div class="container text-center py-0"> 
                 <div class="row"> 
-                    <div class="col-lg-7"> 
-                        <div class=""> 
-                            <div id="map"></div>
-                        </div>
-                    </div>
                     <div class="col-lg-5"> 
                         <form class="quick-signup text-center mt-01" method="POST" action="/signup_redirect">
                             <h5 class="text24">
@@ -373,7 +377,7 @@
                             <textarea name="email" class="quick-signup-email request_name2 mt-2 mb-2" placeholder="Имя"></textarea>
                             <textarea name="email" class="quick-signup-email request_phone2" placeholder="Телефон"></textarea>
                             <br>
-                            <a class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="2" type="submit" onclick="return gtag_report_conversion(false);">
+                            <a class="btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="2" type="submit" onclick="return gtag_report_conversion('#');">
                                 Заказать
                                 <div class="loading_small ml10" style="display: none;">
                                     <div class="animation"><div class="backwhite circle one"></div></div>
@@ -389,13 +393,6 @@
                             </div>
                             <div class="land_fill_error2 highlight_red mt-2" style="display: none;">
                                 Пожалуйста, заполните все поля
-                            </div>
-                            <div class="text17" style="text-align: left;">
-                                <br>
-                                <b>Наши контакты:</b><br>
-                                г. Алматы, ул. Богенбай батыра 156а,<br> этаж 1, офис 9<br>
-                                Телефон: <b>+7 708 970 82 42</b><br>
-                                Email: <b>aaa.academy.kz@gmail.com</b>
                             </div>
                         </form>  
                     </div>
@@ -428,32 +425,6 @@
     {% endcompress %}
     <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
     type="text/javascript"></script>
-
-    <script type="text/javascript">
-        ymaps.ready(init);
-        function init(){ 
-            var myMap = new ymaps.Map("map", {
-                center: [43.25114500794218, 76.93245686909563],
-                zoom: 15
-            },{
-                restrictMapArea: [
-                    [42.8, 76.02848],
-                    [44.25654, 77.92848]
-                ]
-            })
-            firstCollection = new ymaps.GeoObjectCollection(null)
-            firstCollection.add(new ymaps.Placemark([43.25114500794218, 76.93245686909563], 
-                {
-                    iconLayout: 'default#imageWithContent',
-                    iconImageHref: "{% static 'images/pointer.png' %}",
-                    iconImageSize: [20, 30],
-                    iconImageOffset: [-10, -15],
-                    iconContentOffset: [15, 15],
-                }
-            ));
-            myMap.geoObjects.add(firstCollection);
-        }
-    </script>
 {% compress js %}       
 <script src="{% static 'js/landing/func2.js' %}"></script>   
 {% endcompress %}

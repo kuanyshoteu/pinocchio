@@ -18,7 +18,7 @@
         {% include 'left_menu.html' %}
         <div class="w85 wide column" style="height: 100%;">
             <div class="scrollable ui shadow_small segment mb0 text15 no_padding" style="overflow-y: scroll;height: 100%;" scroll="no" onscroll="catch_scroll()">
-                <div class="pl15 pt15 pr15">
+                <div class="pl15 pt15 pr15 mb15">
                     <b class="textdg text17">Оплата студентов</b>
                     <form class="ui form mb0">  
                         <div class="ui grid stackable no_margin">
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             {%if is_director %}
-                            <div class="four wide column pb15 text13">
+                            <div class="four wide column pl0 pb0 text13">
                                 Выберите <b class="textdg ">офис</b>:
                                 <div class="controls"> 
                                     <select class="text15 crm_option" id="crm_office_mobile" url="{{ instance.crm_option_url }}" option="office"> 
@@ -56,7 +56,7 @@
                                 </div>                            
                             </div>
                             {%endif%}
-                            <div class="four wide column  text13">
+                            <div class="four wide column pl0 pb0 text13">
                                 Выберите <b class="textdg ">группу</b>:
                                 <div class="controls"> 
                                     <select class="text15 crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
@@ -72,10 +72,17 @@
                                     </select>
                                 </div>                            
                             </div>
+                            <div class="four wide column pl0 pb0 text13">
+                                Оплатили в этом месяце
+                                <div class="controls"> 
+                                    <select class="text15 crm_option" id="filter_payment" url="{{ instance.crm_option_url }}" option="payment" now={{profile.skill.payment_filter}}> 
+                                    </select>
+                                </div>                            
+                            </div>
                         </div>
                     </form>
                 </div>                       
-                <div class="full-w no_margin payments_box" >
+                <div class="full-w no_margin payments_box">
                 </div>
                 <div class="text-center full-w">
                     <div class="ui active inline large loader get_payment_load"></div>
@@ -121,6 +128,27 @@
 <span class="data" last_one="1" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
 <script type="text/javascript">
     {% include 'modals/show_payment_history.html' %}
+    fill_filters()
+    function fill_filters(){
+        filter_payment_select = $('#filter_payment')
+        filter_payment_val = filter_payment_select.attr('now')
+        console.log(filter_payment_val)
+        if (filter_payment_val == 'all') {
+            $('<option value="all">Показать всех</option>').appendTo(filter_payment_select)            
+            $('<option value="paid">Уже оплатили</option>').appendTo(filter_payment_select)            
+            $('<option value="not_paid">Ещё не оплатили</option>').appendTo(filter_payment_select)            
+        }
+        else if (filter_payment_val == 'paid') {
+            $('<option value="paid">Уже оплатили</option>').appendTo(filter_payment_select)            
+            $('<option value="all">Показать всех</option>').appendTo(filter_payment_select)            
+            $('<option value="not_paid">Ещё не оплатили</option>').appendTo(filter_payment_select)            
+        }
+        else if (filter_payment_val == 'not_paid') {
+            $('<option value="not_paid">Ещё не оплатили</option>').appendTo(filter_payment_select)            
+            $('<option value="all">Показать всех</option>').appendTo(filter_payment_select)            
+            $('<option value="paid">Уже оплатили</option>').appendTo(filter_payment_select)            
+        }
+    }
     get_payment_list(1)
     function catch_scroll(){
         this_ = $('.payments_box')
@@ -204,6 +232,8 @@
         })        
     }
     $('.crm_option').on('change', function(e) {
+        $('.get_payment_load').show()
+        $('.payments_box').empty()
         id = $(this).attr('id')
         this_ = document.getElementById(id);
         object_id = this_.options[this_.selectedIndex].value;
@@ -217,7 +247,6 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.payments_box').empty()
                 $('.data').attr('last_one', 1)
                 get_payment_list(1)
             }
@@ -239,7 +268,7 @@
                 dataType: 'json',
                 success: function (data) {
                     $('.payment_amounts'+id+'g'+group_id).val('')
-                    $('.success_payments'+id+'g'+group_id).show()
+                    $('.success_payment'+id+'g'+group_id).show()
                     $('.payment_load'+id+'g'+group_id).hide()
                     $('.make_payment'+id+'g'+group_id).removeClass('disabled')
                 }

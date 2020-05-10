@@ -1007,33 +1007,20 @@ def crm_option(request):
             else:
                 subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
                 skill.crm_subject = subject
-        if request.GET.get('option') == 'crm_cabinet':
-            if int(request.GET.get('object_id')) == -1:
-                skill.crm_cabinet = None
-            else:
-                crm_cabinet = Cabinet.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_cabinet = crm_cabinet
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
                 skill.crm_office2 = None
             else:
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
                 skill.crm_office2 = office
-        if request.GET.get('option') == 'course':
-            skill.filter_course_connect.clear()
-            if int(request.GET.get('object_id')) != -1:
-                course = Subject.objects.get(id = int(request.GET.get('object_id')))
-                skill.filter_course_connect.add(course)
-        if request.GET.get('option') == 'teacher':
-            skill.filter_teacher.clear()
-            if int(request.GET.get('object_id')) != -1:
-                teacher = Profile.objects.get(id = int(request.GET.get('object_id')))
-                skill.filter_teacher.add(teacher)
         if request.GET.get('option') == 'group':
             profile.rating_squad_choice.clear()
             if int(request.GET.get('object_id')) != -1:
                 squad = Squad.objects.get(id = int(request.GET.get('object_id')))
                 profile.rating_squad_choice.add(squad)
+        if request.GET.get('option') == 'payment':
+            skill.payment_filter = request.GET.get('object_id')
+            print(skill.payment_filter)
         skill.save()
     data = {
     }
@@ -2387,14 +2374,22 @@ def get_payment_list(request):
         else:
             if profile.skill.crm_office2:
                 squads = school.groups.filter(shown=True,office=profile.skill.crm_office2).prefetch_related('students')
-                for sq in squads:
-                    print(sq.title)
                 students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
             else:
                 students = school.people.filter(is_student=True).exclude(squads=None).exclude(card=None)
                 squads = school.groups.filter(shown=True).prefetch_related('students')
         if profile.skill.crm_subject:
-            students = students.filter(crm_subject_connect=profile.skill.crm_subject).exclude(card=None)
+            students = students.filter(crm_subject_connect=profile.skill.crm_subject)
+        print(profile.skill.payment_filter)
+        if profile.skill.payment_filter != 'all':
+            firstofmonth = first_day_of_month()
+            lastofmonth = last_day_of_month(firstofmonth)
+            payments = school.payment_history.filter(squad__in=squads,timestamp__gte=firstofmonth, timestamp__lte=lastofmonth)
+            print(payments)
+            if profile.skill.payment_filter == 'paid':
+                students = students.filter(payment_history__in=payments).distinct()
+            if profile.skill.payment_filter == 'not_paid':
+                students = students.exclude(payment_history__in=payments).distinct()
         if len(students) <= (page-1)*16:
             return JsonResponse({"ended":True})
         p = Paginator(students, 16)
@@ -2406,7 +2401,6 @@ def get_payment_list(request):
             if squad == None:
                 squads2 = squads.filter(students=student)
             for sq in squads2:
-                print(sq.title)
                 nm = sq.need_money.filter(card=card)
                 pay_date = '-'
                 pay_date_input = '-'
@@ -2427,3 +2421,13 @@ def get_payment_list(request):
         "res":res,
     }
     return JsonResponse(data)
+
+def last_day_of_month(any_day):
+    next_month = any_day.replace(day=28) + timedelta(days=4)
+    return next_month - timedelta(days=next_month.day)
+def first_day_of_month():
+    today = timezone.now().date()
+    crnt_mnth = today.strftime('%m')
+    crnt_year = today.strftime('%Y')
+    firstofmonth = datetime.datetime.strptime('01-'+crnt_mnth+'-'+crnt_year,'%d-%m-%Y').date()
+    return firstofmonth

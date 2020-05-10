@@ -1021,7 +1021,6 @@ a{
 .student_name{
   font-size: 13px;
   font-weight: 600;
-  padding: 20px 10px 10px 10px;
   text-align: left;
   color: white;
   height: 65px;
@@ -2449,6 +2448,9 @@ a{
   .deskpl30{
     padding-left: 30px !important
   }
+  .deskmb5{
+    margin-bottom: 5px !important
+  }
   .deskpr30{
     padding-right: 30px !important
   }
@@ -2694,6 +2696,9 @@ a{
   }
   .mobmb5{
     margin-bottom: 5px !important;
+  }
+  .mobmb15{
+    margin-bottom: 15px !important;
   }
   .mobpl0{
     padding-left: 0 !important;
