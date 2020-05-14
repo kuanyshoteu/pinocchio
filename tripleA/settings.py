@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
-toserver = True
+toserver = False
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
     DEBUG = False
@@ -251,7 +251,7 @@ STATICFILES_FINDERS = [
 # EMAIL
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
-EMAIL_HOST_PASSWORD = 'WR48erwf6145r8wT'
+EMAIL_HOST_PASSWORD = 'lohi304hui230sosi54303'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
