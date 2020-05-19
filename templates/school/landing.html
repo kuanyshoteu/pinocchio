@@ -44,7 +44,7 @@
           {% for banner in school.banners.all %}
               {% if banner.image_banner and forloop.counter < 4 %}
               <div style=" width: 33%;" class="oof schoolLanding__header-img text-center">
-                <img src="{{banner.image_banner.url}}" style="height: 250px;">
+                <img src="{{banner.image_banner.url}}" style="width: 100%">
               </div>
               {% endif %}
           {% endfor %}
