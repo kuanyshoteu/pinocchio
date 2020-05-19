@@ -797,7 +797,7 @@ def const_create_lectures(request, id=None):
     only_managers(profile)
     squad = Squad.objects.get(id = id)
     school = squad.school
-    start = request.GET.get('start'),
+    start = request.GET.get('start')
     end = request.GET.get('end')
     is_in_school(profile, school)
     if start and end and request.GET.get('subject_id'):

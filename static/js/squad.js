@@ -52,7 +52,7 @@ $(document).ready(function () {
 
         start = $('.conststart').val()
         end = $('.constend').val()
-
+        console.log(start, end)
         day1='false';day2='false';day3='false';day4='false';day5='false';day6='false';day7='false';
         $(".constday_choose.green").each(function() {
             if ($(this).attr('id') == 1){day1='true'}

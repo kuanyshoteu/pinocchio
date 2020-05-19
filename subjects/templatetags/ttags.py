@@ -551,6 +551,7 @@ def constant_schedule_lectures(squad):
     interval = squad.school.schedule_interval
     res = []
     for lecture in squad.squad_lectures.all():
+        print('******',lecture.id, lecture.cell.time_period.start)
         hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
         minute = int(lecture.cell.time_period.start.split(':')[1])
         end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8
