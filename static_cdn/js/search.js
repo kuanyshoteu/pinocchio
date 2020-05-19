@@ -30,7 +30,7 @@ $(document).ready(function () {
                         url = data.res_profiles[i][1]
                         image_url = data.res_profiles[i][2]
                         if (image_url == ''){
-                            image_url = "/static/images/nophoto.png"
+                            image_url = "/static/images/nophoto.svg"
                         }
                         var element = $('<a class="search-item" href="'+url+'"><img class="search-item-img" src='+image_url+' alt="photo"><span class="search-item-name">'+name+'</span></a>').appendTo('.search-list-people');
                     }
@@ -47,7 +47,7 @@ $(document).ready(function () {
                         url = data.res_subjects[i][1]
                         image_url = data.res_subjects[i][2]
                         if (image_url == ''){
-                            image_url = "/static/images/nophoto.png"
+                            image_url = "/static/images/nophoto.svg"
                         }
                         var element = $('<a class="search-item" href="'+url+'"><img class="search-item-img" src='+image_url+' alt="photo"><span class="search-item-name">'+name+'</span></a>').appendTo('.search-list-subjects');
                     }
@@ -64,7 +64,7 @@ $(document).ready(function () {
                         url = data.res_squads[i][1]
                         image_url = data.res_squads[i][2]
                         if (image_url == ''){
-                            image_url = "/static/images/nophoto.png"
+                            image_url = "/static/images/nophoto.svg"
                         }
                         var element = $('<a class="search-item" href="'+url+'"><img class="search-item-img" src='+image_url+' alt="photo"><span class="search-item-name">'+name+'</span></a>').appendTo('.search-list-classes');
                     }
@@ -81,7 +81,7 @@ $(document).ready(function () {
                         url = data.res_courses[i][1]
                         image_url = data.res_courses[i][2]
                         if (image_url == ''){
-                            image_url = "/static/images/nophoto.png"
+                            image_url = "/static/images/nophoto.svg"
                         }
                         var element = $('<a class="search-item" href="'+url+'"><img class="search-item-img" src='+image_url+' alt="photo"><span class="search-item-name">'+name+'</span></a>').appendTo('.search-list-courses');
                     }

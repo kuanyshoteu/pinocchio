@@ -20,12 +20,12 @@
     <div class="ui container" >
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}            
-            <div class="w85 wide column">
+            <div class="w85 wide column pl10">
                 <div class="ui stackable grid info no_margin">
-                        <div class="twenty pr0">
+                        <div class="twenty pr5 pl5">
                             <div>
                                 {% include 'profile/avatar.html' %}
-                                <div class="ui segment not_in_mobile">
+                                <div class="ui shadow_small segment not_in_mobile">
                                     <p class="text13">Школа:
                                         {%for school in hisprofile.schools.all %}
                                         <a href="{{ school.landing }}" class="mr10"><b>{{ school.title }}</b></a>
@@ -51,7 +51,7 @@
                             </div>
                             <div style="color: #f4f4f4">_</div>
                         </div>
-                        <div class="eighty pl10">
+                        <div class="eighty pl10 pr10">
                             {% include 'profile/main_info.html' %}
                             {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 or is_manager %}
                                 {% include 'profile/payment.html' %}

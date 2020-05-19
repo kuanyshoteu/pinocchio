@@ -1,0 +1,61 @@
+{% load static %}
+<div class="ui modal hint_box1 br15 mobmt50">
+    <i class="close icon"></i>
+    <div class="content no_padding br15 backwhite">
+        <div class="ui grid stackable no_margin br15 backrbblue">
+            <div class="eight wide column mobtopbr5 deskleftbr15 pt50 pb10">
+                <div class="backblue br5 pl15 pt0 pr15 pb0" style="width: 50%; margin: 0 auto;">
+                    <img class="full-w"  src="{% static 'images/logo_clean.jpeg' %}">
+                </div>
+                <img class="full-w deskleftbr15" src="{% static 'images/hello2.svg' %}">
+            </div>
+            <div class="eight wide column pt50 mobbottombr5 deskrightbr15">
+                <div class="text21 text-center textbold mb15 textblue">
+                    Добро пожаловать в нашу систему bilimtap.kz!
+                </div>
+                <div class="text17 mb15">
+                    Вы уже сделали первый шаг на пути повышения эффективности Вашей организации!
+                </div>
+                <div class="text17 mb15">
+                    Следуя подсказкам, Вы легко научитесь работать в нашей системе!
+                </div>
+                <div class="text-center">
+                    <a class="ui button green shadow_green pl30 pr30 next_hint" onclick="$('.hint_box1').modal('hide')">Начать работу</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display: none;">
+    <span class="hint_text1">
+        Мы уже заполнили профиль Вашей организации предоставленной информацией
+        <br><br>
+        Здесь вы можете отредактировать эти данные   
+    </span>
+    <span class="hint_text2">
+        Нажмите на надпись, чтобы перейти на <b style="color: yellow;">лэндинг</b> страницу Вашей организации и посмотреть как видит её посетители нашего сайта
+    </span>
+    <span class="hint_text3">
+        Нажмите на любой <b style="color: yellow;">Предмет</b>, чтобы изменить название или удалить предмет
+    </span>
+    <span class="hint_text4">
+        Нажмите на свой <b style="color: yellow;">офис</b>, чтобы добавить кабинет или удалить его
+    </span>
+    <span class="hint_text5">
+        Давайте создадим первого студента и запишем его в группу
+    </span>
+    <div class="hint_box backwhite">
+        <div class="backblue shadow_blue br5 pd15">
+            <div style="position: absolute;right: 3px;top: 3px;">
+                <a class="close_hint"><i class="icon x textw mr0 text11"></i></a>
+            </div>
+            <div class="textw mb15 hint_text_place">
+            </div>
+            <div class="pt10" style="height: 40px;">
+                <a class="ui button mini prev_hint text11">Назад</a>
+                <a class="ui button mini white textdg textbold next_hint" style="float: right;">Далее <i class="icon arrow right textblue"></i></a>
+                <a class="text11 textw ui button mini green textbold done_hint close_hint" style="float: right;display: none;">Готово</a>
+            </div>
+        </div>
+    </div>
+</div>

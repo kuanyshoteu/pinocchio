@@ -24,13 +24,14 @@
             </div>
         </form>
     </div>
-    <div class="ui grid stackable mr0 mt15 mb15">
-        <div class="ui segment shadow_small full-w">
+    <div class="deskdflex mt15 mb5">
+        <div class="ui segment shadow_small" style="margin: 0 auto;">
+            <div class="textdg text-center textbold textblue mb10">Добавление урока в расписание</div>
             <div>
                 <form class="ui form grid no_margin">
                     <div class="dinline pl0 pb5">
-                        Выберите курс
-                        <select style="max-width: 300px;height: 28px;" class="mr15 full-w" id="constselect">
+                        <div class="textdg">Выберите курс</div>
+                        <select style="width: 280px;height: 28px;" class="mr15" id="constselect">
                             <option value="-1">Курсы</option>            
                             {% for subject in other_subjects %}
                             <option value="{{subject.id}}">{{subject.title}}</option>
@@ -38,8 +39,10 @@
                         </select>
                     </div>
                     <div class="dinline pl0 pb15">
-                        <div>Время начала и время окончания урока:</div> 
-                        <input type="time" class="conststart dinline mb0" style="width: 100px;padding:5px;"> - <input class="constend dinline mb0" style="width: 100px;padding:5px;" type="time" name="">
+                        <div class="textdg">Время начала и время окончания урока:</div> 
+                        <input type="time" class="conststart dinline mb0 mr5" style="width: 100px;padding:5px;">
+                         <div class="pt5 dinline">—</div> 
+                        <input class="ml5 constend dinline mb0" style="width: 100px;padding:5px;" type="time" name="">
                     </div>
                 </form>  
             </div>  
@@ -49,7 +52,9 @@
                 <a class="ui button mini constday_choose mb5" id="{{forloop.counter}}">{{day}}</a>
                 {% endfor %}
             </div>
-            <a class="ui button mini blue no_margin const_create_lectures" url="{{instance.const_create_lectures}}">Добавить</a>            
+            <div class="text-center">
+                <a class="pl30 pr30 ui button mini white border1 shadow_small textblue textbold no_margin const_create_lectures" url="{{instance.const_create_lectures}}">Добавить</a>
+            </div>
         </div>
     </div>
 </div>
@@ -65,7 +70,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="schedule_body oveflowx_h" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
+    <div class="schedule_body pb50 oveflowx_h" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
         <div style="z-index: 100;white-space: nowrap;">
             <div style="color: #fff;">
                 <div class="thconst" style="width: 53px;z-index: 100"></div>

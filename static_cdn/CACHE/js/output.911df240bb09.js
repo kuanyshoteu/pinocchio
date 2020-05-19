@@ -5,7 +5,7 @@ url=$(this).attr('url')
 $.ajax({url:url,data:{},dataType:'json',success:function(data){$('.notice-list').empty()
 for(var i=0;i<data.res.length;i++){author=data.res[i][0]
 avatar=data.res[i][1]
-if(avatar=='None'){avatar='/static/images/nophoto.png'}
+if(avatar=='None'){avatar='/static/images/nophoto.svg'}
 type=data.res[i][2]
 url=data.res[i][3]
 text=data.res[i][4]

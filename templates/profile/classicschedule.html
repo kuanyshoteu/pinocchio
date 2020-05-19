@@ -1,22 +1,19 @@
 {% load ttags %}
 {% load staticfiles %}
 
-<div class="mt0 mb0 ui segment">
+<div class="mt0 mb0 ui segment topbr5 shadow_small">
     <div class="ui grid">
-        <div class="responsive-fix pl0">
-            <img src="{% static 'images/calendar.png' %}" style="width: 28px;border-radius: 3px;position: relative;top: 50%;transform: translateY(-50%);">  
-        </div>
-        <div class="seven wide column pl0 text15" style="line-height: 28px;">
-            Расписание
+        <div class="nine wide column pl0 text15 textdg textbold" style="line-height: 28px;">
+            Личное расписание
         </div>
         <div class="seven wide column pl0 text15" style="line-height: 28px;">
             {% include 'profile/miss_lecture.html' %}
         </div>
     </div>
 </div>
-<form class="ui grid full-w mt0 change_mode" style="color: #fff;">
-    <div style="width: 53px;position: absolute;z-index: 1000;background-color: #4a4a4a">
-        <div style="height: 29px;"></div>
+<form class="ui grid full-w mt0 change_mode textw shadow_dark bottombr5">
+    <div class="bottombr5 pl10 pb15 backdark shadow_black" style="width: 58px;position: absolute;z-index: 1000;">
+        <div style="height: 27px;"></div>
         {% for time in constant_times %}
         <div>
             <div class="full-w tdconst" style="width: 53px;text-align: left;padding: 8px 0;">
@@ -26,7 +23,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="schedule_body oveflowx_h" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
+    <div class="schedule_body oveflowx_h bottombr5 pb15" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
         <div style="z-index: 100;white-space: nowrap;">
             <div>
                 <div class="thconst" style="width: 53px;z-index: 100"></div>

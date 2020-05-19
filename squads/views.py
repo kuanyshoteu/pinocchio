@@ -760,49 +760,54 @@ def get_page_students(request, id=None):
             if student.image:
                 image = student.image.url
             else:
-                image = '/static/images/nophoto.png'
+                image = '/static/images/nophoto.svg'
             free_students.append([student.id, student.first_name, image])
     data = {
         "all_students":free_students
     }
     return JsonResponse(data)
 
+def add_lecture_work(start, end, squad, subject, days):
+    teacher = squad.teacher
+    school = squad.school
+    category = subject.category.all()
+    tp = school.time_periods.get_or_create(
+        start = start,
+        end = end
+        )[0]
+    students = squad.students.all()
+    for i in days:
+        day = Day.objects.get(id=int(i))
+        cell = day.day_cell.filter(time_period=tp)
+        if len(cell) > 0:
+            cell = cell[0]
+        else:
+            cell = day.day_cell.create(time_period=tp,school=school)
+        lecture = squad.squad_lectures.create(
+            cell=cell,
+            day=day,
+            subject=subject,
+            office = squad.office,
+            )
+        lecture.save()
+        lecture.category.add(*category)
+
 def const_create_lectures(request, id=None):
     profile = get_profile(request)
     only_managers(profile)
     squad = Squad.objects.get(id = id)
     school = squad.school
+    start = request.GET.get('start'),
+    end = request.GET.get('end')
     is_in_school(profile, school)
-    if request.GET.get('start') and request.GET.get('end') and request.GET.get('subject_id'):
+    if start and end and request.GET.get('subject_id'):
         subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
-        teacher = squad.teacher
-        category = subject.category.all()
-        age = subject.age.all()
-        level = subject.level.all()        
-        tp = school.time_periods.get_or_create(
-            start = request.GET.get('start'),
-            end = request.GET.get('end')
-            )[0]
-        students = squad.students.all()
+        days = []
         for i in range(1, 8):
             if request.GET.get('day'+str(i)) == 'true':
-                day = Day.objects.get(id=int(i))
-                cell = day.day_cell.filter(time_period=tp)
-                if len(cell) > 0:
-                    cell = cell[0]
-                else:
-                    cell = day.day_cell.create(time_period=tp,school=school)
-                lecture = squad.squad_lectures.create(
-                    cell=cell,
-                    day=day,
-                    subject=subject,
-                    office = squad.office,
-                    )
-                lecture.save()
-                lecture.category.add(*category)
-                lecture.age.add(*age)
-                lecture.level.add(*level)
-        add_subject_work(school, squad, subject)        
+                days.append(i)
+        add_lecture_work(start, end, squad, subject, days)
+        add_subject_work(school, squad, subject)    
     data = {
     }
     return JsonResponse(data)
@@ -830,7 +835,7 @@ def hint_students_group(request, id=None):
                 if student.image:
                     image = student.image.url
                 else:
-                    image = '/static/images/nophoto.png'
+                    image = '/static/images/nophoto.svg'
                 if student in squad.students.all():
                     is_in = True
                 else:

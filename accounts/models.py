@@ -47,6 +47,7 @@ class Skill(models.Model):
     middle_skills = ArrayField(models.IntegerField(), default = list)
     hard_skills = ArrayField(models.IntegerField(), default = list)
     pro_skills = ArrayField(models.IntegerField(), default = list)
+    hint_numbers = ArrayField(models.IntegerField(), default = [0, 1, 1, 1, 1 ,1])
     crm_show_free_cards = models.BooleanField(default=True)
     need_actions = models.IntegerField(default=0)
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 

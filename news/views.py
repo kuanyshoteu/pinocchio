@@ -295,7 +295,7 @@ def post_new_comment(request):
     if profile.image:
         avatar = profile.image.url
     else:
-        avatar = 'images/nophoto.png'
+        avatar = 'images/nophoto.svg'
     time = '' 
     cid = -1
     comment_id = int(request.GET.get('comment_id'))
@@ -398,7 +398,7 @@ def get_comments(request):
             if author.image:
                 img = author.image.url
             else:
-                img = "images/nophoto.png"
+                img = "images/nophoto.svg"
             if author in comment.likes.all():
                 like_status = 'like'
             elif author in comment.dislikes.all():

@@ -1,6 +1,14 @@
 .icon.triangle{
   width: 13.13px !important;
 }
+.hint_box{
+  border-radius: 5px;
+  line-height: 20px;
+  font-size: 14px;
+  position: absolute;
+  z-index: 100;
+  text-align: left !important;
+}
 .post_add_part{
   height: 24px !important;
 }
@@ -83,8 +91,16 @@
   color: #000 !important;
 }
 .backrb{
-  background:  rgba(33,186,69,0.3);
-  background: linear-gradient(180deg, rgba(81,129,184,0) 50%, rgba(33,186,69,0.2) 100%);
+  background:  rgba(33,186,69,0.3) !important;
+  background: linear-gradient(180deg, rgba(81,129,184,0) 50%, rgba(33,186,69,0.2) 100%) !important;
+}
+.backrbbluefull{
+  background-color: #506ca9;
+  opacity: 0.8;
+}
+.backrbblue{
+  background: rgb(80,108,169) !important;
+  background: linear-gradient(0deg, rgba(80,108,169,0.5) 0%, rgba(80,108,169,0.1) 50%) !important;
 }
 .backrbb{
   background: rgb(81,129,184) !important;
@@ -120,6 +136,12 @@
 .br15{
   border-radius: 15px !important;
 }
+.leftbr15{
+  border-radius: 15px 0 0 15px;
+}
+.rightbr15{
+  border-radius: 0 15px 15px 0;
+}
 .shadow{
   box-shadow: 0 0 15px 0 #d7d7d7 !important;
 }
@@ -138,6 +160,14 @@
 .shadow_dark{
   box-shadow: 0 0 5px 0 #4a4a4a !important;
 }
+.shadow_neo{
+  background: linear-gradient(145deg, #e8f8ec, #ffffff) !important;
+  box-shadow:  1px 1px 2px #323232, 
+               -1px -1px 2px #d9d9d9 !important;
+}
+.shadow_black{
+  box-shadow: 0 0 5px 0 #0c0c0c !important;
+}
 .bt1{
   border-top: 1px solid #e5e5e5 !important;
 }
@@ -148,7 +178,7 @@
   border: 1px solid #e5e5e5 !important;
 }
 .textbold{
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 .texti{
   font-style: italic;
@@ -161,6 +191,7 @@
 }
 .text21{
   font-size:21px !important; 
+  line-height: 25px;
 }
 .text10{
   font-size:10px !important; 
@@ -250,7 +281,7 @@
   color: #fff;
   padding: 5px;
   border-radius: 3px;
-  border: 1px solid #fff;
+  border: 1px solid #696969;
   text-align: center;
   cursor: pointer;
   line-height: 12px;
@@ -365,6 +396,9 @@ body{
 }
 .pb15{
   padding-bottom: 15px !important;
+}
+.pd15{
+  padding: 15 !important;
 }
 .pt15{
   padding-top: 15px !important;
@@ -804,7 +838,7 @@ a{
     display: block;
     border-width: 7px 0 7px 7px;
     border-style: solid;
-    border-color: transparent transparent transparent #5a9eff;
+    border-color: transparent transparent transparent #506ca9;
     margin-top: -7px;
     position: absolute;
     right: -7px;
@@ -813,12 +847,12 @@ a{
 .help_left:after {
     content: "";
     display: block;
-    border-width: 7px 7px 7px 0;
+    border-width: 10px 10px 10px 0;
     border-style: solid;
-    border-color: transparent #5a9eff transparent transparent;
-    margin-top: -7px;
+    border-color: transparent #506ca9 transparent transparent;
+    margin-top: -10px;
     position: absolute;
-    left: -7px;
+    left: -10px;
     top: 50%;
 }
 .help_down:after {
@@ -826,7 +860,7 @@ a{
     display: block;
     border-width: 7px 7px 0 7px;
     border-style: solid;
-    border-color: #5a9eff transparent transparent transparent;
+    border-color: #506c109 transparent transparent transparent;
     margin-top: -7px;
     position: absolute;
     left: 50%;
@@ -862,7 +896,7 @@ a{
     display: block;
     border-width: 7px 7px 7px 0;
     border-style: solid;
-    border-color: transparent #5a9eff transparent transparent;
+    border-color: transparent #506ca9 transparent transparent;
     margin-top: -17px;
     position: absolute;
     left: -7px;
@@ -871,14 +905,35 @@ a{
 .help_top:after {
     content: "";
     display: block;
-    border-width: 0 7px 7px 7px;
+    border-width: 0 10px 10px 10px;
     border-style: solid;
-    border-color: transparent transparent #5a9eff transparent;
-    margin-left: -7px;
+    border-color: transparent transparent #506ca9 transparent;
+    margin-left: -10px;
     position: absolute;
-    top: -7px;
-    left: 50%;
-  }
+    top: -10px;
+    left: 30px;
+}
+.help_top_long:after {
+    content: "";
+    display: block;
+    border-width: 0 10px 50px 10px;
+    border-style: solid;
+    border-color: transparent transparent #506ca9 transparent;
+    position: absolute;
+    top: -40px;
+    left: 90px;
+}
+.help_bottom:after {
+    content: "";
+    display: block;
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: #506ca9 transparent transparent transparent;
+    margin-left: -10px;
+    position: absolute;
+    bottom: -10px;
+    left: 30px;
+}
 .highliter {
     z-index: 1000;
 }
@@ -899,10 +954,9 @@ a{
 }
 .card_segment{
   padding: 5px 5px 4px 5px !important;
-  box-shadow: 0px 0px 3px 0px #fff !important;
   cursor: pointer;
   margin: 0 0 10px 0 !important;
-  border-radius: 2px !important;
+  border-radius: 4px !important;
 }
 .red_card{
   border: 5px solid #ff5828;
@@ -966,9 +1020,10 @@ a{
 .btn-prev, .btn-next {
   width: 20px;
   height: 20px;
-  background: rgba(255, 255, 255, 0.7);
+  background: #5181b8;
+  box-shadow: 0 0 5px 0 #506ca9 !important;
   position: absolute;
-  top: 35px;
+  top: 50px;
   line-height: 20px;
   font-size: 11px;
   font-weight: bold;
@@ -979,29 +1034,29 @@ a{
 }
 .btn-prev {
   left: 22%;
-  background-color: #313a57;
+  background-color: #5181b8;
   color:#fff;
 }
 
 .btn-next {
   right: 20px;
-  background-color: #313a57;
+  background-color: #5181b8;
   color:#fff;
 }
 .help_button{
   color: white !important;
-  background-color: #5a9eff !important;
+  background-color: #506ca9 !important;
 }
 .help_big_button{
   color: white !important;
-  background-color: #5a9eff !important;
+  background-color: #506ca9 !important;
   padding: 5px 5px 10px 5px !important;
   margin-top: -10px;
   border-radius: 5px;
 }
 .help{
   width: 200px;
-  background: #5a9eff !important;
+  background: #506ca9 !important;
   color: #fff;
   box-shadow: none !important;
   border-radius: 10px !important;
@@ -1422,20 +1477,13 @@ a{
 }
 .switch_btn{
   border: 1px solid #e7e7e7;text-align: center; border-radius: 3px;color: #222; 
-  height: 30px;
+  height: 35px;
   padding-top: 4px;
   padding-left: 0; padding-right: 0; text-align: center;display: block;
 }
-.switch_btn:hover{
-  border-bottom: 3px solid #313a57;
-}
-.switch_btn_active{
-  background-color: #313a57;
-  color: #fff;
-}
 .switch_att_btn{
   border: 1px solid #e7e7e7;text-align: center; border-radius: 3px;color: #222; 
-  height: 30px;
+  height: 35px;
   padding-top: 4px;
   padding-left: 0; padding-right: 0; text-align: center;display: block;
 }
@@ -2385,8 +2433,6 @@ a{
     position: absolute;
     z-index: 3000;
     margin-top: -50px !important;
-    background-color: #4a4a4a !important;
-    color: #fff;
     line-height: 15px;
     margin-left: 101% !important;  
     width: 80%;
@@ -2411,7 +2457,7 @@ a{
     display: block;
   }
   .schoolLanding__header-wrapper{
-    height: 150px;
+    height: 230px;
   }
   .map_search_input{
     width: calc(100% - 220px) !important;
@@ -2445,6 +2491,18 @@ a{
     z-index: 500;
     color: #5181b8;
   }
+  .hint_box{
+    width: 380px;
+  }
+  .deskbr15{
+    border-radius: 15px !important;
+  }
+  .deskleftbr15{
+    border-radius: 15px 0 0 15px;
+  }
+  .deskrightbr15{
+    border-radius: 0 15px 15px 0;
+  }
   .deskpl30{
     padding-left: 30px !important
   }
@@ -2459,6 +2517,15 @@ a{
   }
   .deskpt50{
     padding-top: 50px !important
+  }
+  .deskpt0{
+    padding-top: 0px !important
+  }
+  .deskdflex{
+    display: flex !important; 
+  }
+  .desktext_right{
+    text-align: right !important;
   }
   .mobmenu{
     display: none !important;
@@ -2666,8 +2733,20 @@ a{
   .schoolLanding__header-wrapper{
     height: 100px;
   }
+  .mobtopbr5{
+    border-radius: 5px 5px 0 0 !important;
+  }
+  .mobbottombr5{
+    border-radius: 0 0 5px 5px !important;
+  }
+  .hint_box{
+    width: 320px;
+  }
   .mobpt0{
     padding-top: 0px !important
+  }
+  .mobmt50{
+    margin-top: 50px !important
   }
   .mobpr0{
     padding-right: 0px !important
@@ -2705,6 +2784,9 @@ a{
   }
   .mobpb30{
     padding-bottom: 30 !important;
+  }
+  .mobpb100{
+    padding-bottom: 100 !important;
   }
     .big_pad{
       padding-left: 10px;

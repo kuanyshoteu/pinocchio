@@ -21,8 +21,7 @@
               </div>
           </form>
       </div>
-  </div>            
-
+  </div>
   <div style="display: none;" class="schoolLanding__header-gallery">
       <div class="schoolLanding__header-gallery__nav"><i id="landing__gallery-download" class="icon download"></i><i id="landing__gallery-close" class="icon close"></i></div>
       <div id="schoolLanding__header-gallery__sliderone" class="owl-carousel owl-theme">
@@ -36,41 +35,58 @@
         {% endfor %}
       </div>
   </div>
-  <div class="schoolLanding__header-wrapper {{school.banners.all|length}}">
+  {% if school.banners.all|length > 0 %}  
+  <div class="schoolLanding__header-wrapper {{school.banners.all|length}}" style="background-image: url('{% static 'images/fon3.png' %}');background-size: 250px;">
+          {% if school.banners.all|length == 1 %}
+          <div style=" width: 33%;" class="oof schoolLanding__header-img text-center">
+          </div>
+          {% endif %}
           {% for banner in school.banners.all %}
               {% if banner.image_banner and forloop.counter < 4 %}
-                  <div style="background-image: url({{banner.image_banner.url}});background-size: 100%;" class="oof schoolLanding__header-img"></div>
+              <div style=" width: 33%;" class="oof schoolLanding__header-img text-center">
+                <img src="{{banner.image_banner.url}}" style="height: 250px;">
+              </div>
               {% endif %}
           {% endfor %}
           {% if school.banners.all|length < 3 %}
-          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="oof schoolLanding__header-img"></div>
-          {% endif %}
-          {% if school.banners.all|length < 2 %}
-          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="oof schoolLanding__header-img"></div>
-          {% endif %}
-          {% if school.banners.all|length < 1 %}
-          <div style="background-size: 100%; width: 33%; background: url({% static 'images/fon3.jpeg' %});" class="oof schoolLanding__header-img"></div>
+          <div style=" width: 33%;" class="oof schoolLanding__header-img text-center">
+          </div>
           {% endif %}
   </div>
+  {% else %}
+  <div class="mt50"></div>
+  {% endif %}
   <div class="schoolLanding__container">
-    <div class="schoolLanding__content-header">
+    <div class="schoolLanding__content-header shadow_small br15">
       <div class="schoolLanding__content-headerLeft">
         <div class="organization__info-top-part">
-          <div class="ui grid stackable mb0">
+          <div class="ui grid stackable mb0 full-w">
             <div class="sixteen wide column">
                 <div class="organization__info-left-part ui grid stackable">
-                  <div class="sixteen wide column no_padding_side">
-                      {% if school.image_icon %}
-                      <div class="organization__info-photo"><img src="{{ school.image_icon.url }}" class="full-w full-h"></div>
-                      {% endif %}
-                  </div>
-                  <div class="six wide column no_padding">
+                  <div class="ten wide column no_padding">
                       <div class="organization__info-main">
                           <h2 class="organization__info-title">{{ school.title }}</h2>
                           <p class="organization__info-subtitle">{{ school.slogan }}</p>
                       </div>
+                      <div class="mt30 mb10">
+                        <i class="textblue icon clock outline"></i>
+                        {{school.worktime}}
+                      </div>
+                      <div class="mb15">
+                        <i class="textblue icon phone "></i>
+                        {% for phone in school.phones %}
+                            <a class="mr10" href="tel:{{ phone }}">
+                                {{ phone }}
+                            </a> 
+                        {% endfor %}
+                      </div>
+                      <div class="">
+                        {% for social in social_networks %}
+                            <a class="ui button mini white border1 shadow_small" href="https://{{ social.0 }}"><i class="textblue icon {{ social.1 }}"></i>{{ social.1 }}</a>
+                        {% endfor %}
+                      </div>
                   </div>
-                  <div class="four wide column no_padding not_in_mobile">  
+                  <div class="six wide column no_padding not_in_mobile">  
                       <div class="organization__info-middle-part">
                         <div class="organization__info-middle-part__wrap">
                           <span class="organization__info-rating">
@@ -89,74 +105,32 @@
                                 </span>
                           </span>
                           <br>
-                          <p class="organization__info-rating-desc">
+                          <span class="textdg text13">
                             {{ school.reviews.all|length }} отзывов
-                          </p>
+                          </span>
                         </div>
                       </div>
-                  </div>
-                  <div class="six wide column no_padding_side">
-                      <div class="organization__info-right-part ui grid">
-                          <div class="twelve wide column no_padding_side">
-                              {% for office in school.school_offices.all %}
-                              <span class="organization__info-address no_margin">
-                                  {{ office.address }}
-                              </span>
-                              {% endfor %}
-                          </div>
-                          <div class="four wide column no_padding_side in_mobile">
-                              <a style="float: right;text-align: center;margin-top: -45px;">
-                                  <i class="icon map marker alternate" style="font-size: 21px;"></i>
-                                  <br>
-                                  Показать <br>
-                                  на карте
-                              </a>
-                          </div>
+                      <div class="mt15" style="text-align: right;">
+                          {% for office in school.school_offices.all %}
+                          <span class="organization__info-address no_margin">
+                              {{ office.address }}
+                          </span>
+                          {% endfor %}
                       </div>                    
-                  </div>
-                  <div class="ui divider in_mobile full-w no_margin"></div>
-                  <div class="sixteen wide column no_padding_side">
-                      <p class="organization__info-buttons">
-                        <span class="organization__info-buttons-call">
-                          <i class="icon phone"></i>
-                        </span>
-                        {% for phone in school.phones %}<a href="tel:{{ phone }}">{{ phone }}</a> {% if forloop.counter < school.phones|length %},{% endif %}{% endfor %}
-                      </p>
-                      <div class="ui divider full-w no_margin"></div>
+                      <div class="mt30" style="text-align: right;">
+                          <a class="ui button green make_zaiavka make_zaiavka-1" course="-1" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}">Оставить заявку</a>
+                          <div class="ui label ok_zaiavka-1" style="display: none;">
+                              <i class="check icon green"></i> Заявка оставлена
+                          </div>                        
+                      </div>
                   </div>
                 </div>
-            </div>    
-            <div class="ui divider in_mobile full-w no_margin"></div>
-            <div class="organization__info-bottom-part ui grid stackable no_padding">
-              <div class="organization__info-list twelve wide column no_padding_side">
-                <div class="ui grid stackable">
-                  <div class="six wide column no_padding_side">
-                      <span class="organization__info-item">
-                        <i class="icon clock outline"></i>
-                        {{school.worktime}}
-                      </span>
-                  </div>
-                  <div class="ten wide column no_padding_side">
-                      <span class="organization__info-item">
-                        {% for social in social_networks %}
-                            <a href="https://{{ social.0 }}"><i class="icon {{ social.1 }}"></i>{{ social.1 }}</a>
-                        {% endfor %}
-                      </span>
-                  </div>
-                </div>
-              </div>
-              <div class="four wide column">
-                    <a class="ui button green make_zaiavka make_zaiavka-1" course="-1" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}">Оставить заявку</a>
-                    <div class="ui label ok_zaiavka-1" style="display: none;">
-                        <i class="check icon green"></i> Заявка оставлена
-                    </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
-        <div class="schoolLanding__content-headerMap not_in_mobile">
-            <div id="map1" style="width: 100%; height: 232px;"></div>        
+        <div class="schoolLanding__content-headerMap not_in_mobile rightbr15">
+            <div id="map1" class="rightbr15" style="width: 100%; height: 232px;"></div>        
         </div>
     </div>
     <div class="full-w ui grid stackable mt15 mb15">
@@ -176,20 +150,20 @@
         </div>
       {%endif%}
     </div>
-    <div class="schoolLanding__content-services">
+    <div class="schoolLanding__content-services shadow_small br15">
       <div class="head_round backdarkgrey mb15">
         <b class="text17">Курсы</b>
       </div>
       <div style="overflow: hidden;" class="full-w get_width_div">
-          <div class="schoolLanding__content-category__list no_margin pt5 pb10" number="{{school.school_subject_categories.all|length}}">
-            <div class="schoolLanding__content-category__item active" id="all">
+          <div class="schoolLanding__content-category__list no_margin pl5 pt5 pb10" number="{{school.school_subject_categories.all|length}}">
+            <div class="schoolLanding__content-category__item active shadow_small" id="all">
               <i class="icon list ul"></i>
               <p class="schoolLanding__content-category__item__title">Все</p>
             </div>
             {% for subject in school.school_subject_categories.all %}
-            <div class="schoolLanding__content-category__item border_service" id="{{ subject.id }}">
-              <i class="icon book"></i>
-              <p class="schoolLanding__content-category__item__title">{{ subject.title }}</p>
+            <div class="schoolLanding__content-category__item shadow_small" id="{{ subject.id }}">
+              <i class="textblue icon book"></i>
+              <p class="text-center schoolLanding__content-category__item__title">{{ subject.title }}</p>
             </div>
             {% endfor %}
           </div>
@@ -199,13 +173,13 @@
       {% if course.public %}
           <section style="{% if forloop.counter > 4 %}display: none;{%endif%}" class="schoolLanding__content-services__item {%for cat in course.category.all%}category{{ cat.id }} {%endfor%} categoryall ui grid">
             <div class="no_padding_side schoolLanding__content-services__item-left">
-                  <h2 class="schoolLanding__content-services__item-title no_padding no_margin">{{ course.title }}</h2>
+                  <div class="textbold schoolLanding__content-services__item-title no_padding no_margin">{{ course.title }}</div>
                   <div class="not_in_mobile schoolLanding__content-services__item-time">{{ course.content }}</div>
                   {% if course.public_cost %}
                   <div class="schoolLanding__content-services__item-price no_padding">{% if course.cost > 0 %}{{ course.cost }} тенге{% endif %}</div>
                   {% endif %}
             </div>
-            <div class="schoolLanding__content-services__item-right no_padding_side">
+            <div class="schoolLanding__content-services__item-right no_padding_side pt15">
               <a style="padding: 5px 7px 7px 0;" class="in_mobile ui button green make_zaiavka make_zaiavka{{course.id}}" id="{{school.id}}" status="{% if request.user.is_authenticated %}auth{%else%}nonauth{%endif%}" course="{{course.id}}">
                   <i class="right arrow icon" style="color: #fff;"></i>
               </a>
@@ -221,26 +195,31 @@
           </section>
       {% endif %}
       {% endfor %}
+      {% if school.school_subjects.all|length > 4 %}
       <div class="text-center">
         <a class="ui button mini" onclick="$('.schoolLanding__content-services__item').show();$(this).hide()">Показать все курсы</a>
       </div>
+      {% endif %}
     </div>
-    <div class="ui segment">
-      <div class="head_round backdarkgrey">
-        <b class="text17">Команда</b>
-      </div>
+    <div class="ui segment shadow_small br15 pt15">
+        <div class="head_round backdarkgrey">
+            <b class="text17">Команда</b>
+        </div>
+        <div class="ui grid stackable no_margin">
         {% for teacher in all_teachers %}
-          <div class="dinline ui segment no_padding mr10 backblue" style="width: 200px;">
-            <a href="{{ teacher.speaker_landing }}">
-              <div style="width: 200px; height: 200px;background-image: url({% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.png' %}{% endif %});background-size: 100%;background-repeat: no-repeat;">
-              </div>
-              <div class="text-center pt15 pl10 pb15 pr10">
-                  <div class="text17 organisationLanding__content-teacher__name textw">{{teacher.first_name}}</div>
-                  <div class="organisationLanding__content-teacher__desc"></div>
-              </div>
-            </a>
-          </div>
-      {% endfor %}
+        <div class="twenty wide column pt15 pl0 pr10">
+            <div class="ui segment no_padding backblue full-h">
+                <a href="{{ teacher.speaker_landing }}">
+                  <img class="full-w" src="{% if teacher.image %}{{teacher.image.url}}{% else %}{% static 'images/nophoto.svg' %}{% endif %}">
+                  <div class="text-center pt15 pl10 pb15 pr10">
+                      <div class="text17 organisationLanding__content-teacher__name textw">{{teacher.first_name}}</div>
+                      <div class="organisationLanding__content-teacher__desc"></div>
+                  </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
     </div>
 
     <div class="schoolLanding__content-review">

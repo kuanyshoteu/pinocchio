@@ -41,33 +41,40 @@
             {% include 'left_menu.html' %}
             <div class="w85 wide column mlback deskpr30">
             	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
-                    <div class="ui shadow_small segment mt0">
-                        <a href="{{ instance.get_absolute_url }}" class="mr30">
-                            <b class="text15">{{ instance.title }}</b>
-                        </a>
-                        <div class="in_mobile mb15"></div>
-                        <a href="{{ instance.get_delete_url }}" class="ui button red mini">
-                            <i class="icon trash" style="color: #fff;"></i> Удалить
-                        </a>
-                    </div>
-	            	<div class="ui grid stackable">
+	            	<div class="ui grid stackable no_margin">
+                        <div class="{% if instance %}sixteen{% else %}nine{% endif %} wide column deskpt0 {% if instance %}pr0{%endif%} pl0 pb0">
+                            <div class="ui shadow_small segment mt0">
+                                {% if instance %}
+                                <a href="{{ instance.get_absolute_url }}" class="mr50">
+                                    <b class="text15">{{ instance.title }}</b>
+                                </a>
+                                <div class="in_mobile mb15"></div>
+                                <a href="{{ instance.get_delete_url }}" class="ui button white border1 shadow_small mini">
+                                    <i class="icon trash red mr0"></i> Удалить
+                                </a>
+                                {% else %}
+                                <div class="textdg textbold">Новый курс</div>
+                                {% endif %}
+                            </div>
+                        </div>
 			            <div class="nine wide column pl0 pb0 mobpr0">
 				        	<div class="ui shadow_small segment" style="min-height: 251px;">
 			        			<div class="ui grid no_margin" style="line-height: 40px;">
-			        				<div class="sixteen wide column no_padding" style="font-weight: 600;">
+			        				<div class="sixteen wide column no_padding textbold textdg">
 			        					{{ form|crispy }}
                                         <input class="get_subject_period" name="get_subject_period" style="display: none;" value="month">
-                                        <div class="pl10" style="width: 70%;display: inline-block;">
+                                        <div class="pl15 dinline" style="width: 70%;">
+                                            <div class="mt5"></div>
                                             За
                                             <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'lesson'%}green{%endif%} subject_period" status="lesson">Урок</a>
                                             <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'month' or not instance%}green{%endif%} subject_period" status="month">Месяц</a>
                                             <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'course'%}green{%endif%} subject_period" status="course">Курс</a>
                                         </div>
-                                        <div style="position: absolute;width: 100%;">
+                                        <div style="position: absolute;width: 100%;margin-top: -42px">
                                             {% if instance %}
-                                            <a class="show_hint_schedule" style="float: right;"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
+                                            <a class="show_hint_schedule" style="float: right;"><i class="text17 mr0 icon info circle blue"></i><span style="font-size: 13px;"></span></a>
                                             <div class="hint_schedule" style="display: none;">
-                                                <div class="ui segment cost_hint">
+                                                <div class="ui segment shadow_blue backblue textw cost_hint">
                                                     <b>Внимание!</b> 
                                                     <br><br>
                                                     Укажите стоимость за 1 урок, за 1 месяц или за весь курс. 
@@ -81,16 +88,22 @@
                                         </div>
 			        				</div>
 			        			</div>
-                                <div class="text-center mt15">
+                                {% if instance %}
+                                <div class="text-center mt30">
                                     <input type='submit' class='ui button blue tiny' value='Сохранить' />
                                 </div>
+                                {% else %}
+                                <div class="text-center mt30">
+                                    <input type='submit' class='ui button green' value='Создать курс'/>
+                                </div>                                
+                                {% endif %}
 							</div>
 						</div>
 						{% if instance %}
 						<div class="seven wide column pl0 pr0">
-							<div class="ui shadow_small segment mt0" style="line-height: 40px;min-height: 251px;">
+							<div class="ui shadow_small segment mt0 textdg" style="line-height: 40px;min-height: 264px;">
 								<div class="ui grid">
-									<div class="sixteen wide column">
+									<div class="sixteen wide column pl0">
 										<input type="file" name="subject_banner" id="subject_banner" class="postfile">
 				                        <label class="file_post" for="subject_banner">
 				                        	<a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
@@ -120,7 +133,7 @@
 						</div>
                         {% else %}
                         <div class="six wide column">
-                            <div class="ui segment help_left full-w" style="position: absolute;margin-top: 120px;">
+                            <div class="ui shadow_blue textw segment backblue help_left full-w mt50" style="position: absolute;">
                                 <b>Внимание!</b> 
                                 <br><br>
                                 Укажите стоимость за 1 урок, за 1 месяц или за весь курс. 
@@ -135,8 +148,8 @@
                         {% if is_director %}
                         <div class="sixteen wide column pl0 pr0">
                             <div class="ui segment shadow_small">
-                                <div><b class="ml15 text15 textdg">Фильтры</b></div>
-                                <div class="ui grid stackable mt15 ml15 mr15 mb0">
+                                <div><b class="text15 textdg">Фильтры</b></div>
+                                <div class="ui grid stackable mt15 ml0 mr15 mb0">
                                     {% for subject_category in subject_categories %}
                                     <a style="height: 32px" class="mr10 mb10 ui button mini white shadow_small border1 filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
                                         {{subject_category.title}}
@@ -155,7 +168,7 @@
                                 <div class="subject_filters">
                                     <div class="ui grid stackable no_margin"> 
                                         {% for filter in instance|get_filters %}
-                                        <div class="four wide column pt5 pr0 full-h">
+                                        <div class="four wide column pl0 pt5 pr15 full-h">
                                             <div class="mt10 filter-element  filter-element-level" url="{{ instance.change_filter_option }}">
                                                 <div style="border: none;" class="topbr5 shadow_blue backblue filter-title-s" id="filter{{filter.id}}" status="closed">
                                                     <b class="textw">{{ filter.title }}</b>
@@ -184,23 +197,22 @@
                             </div>
                         </div>
                         {% endif %}
-						{% else %}
-							<div class="{% if instance %}sixteen{%else%}eight{% endif %} wide column pr0 pt0">
-		        				<div class="ui segment text-center">
-									<input type='submit' class='ui button blue tiny' value='Создать курс'/>
-								</div>
-							</div>
 						{% endif %}
+                        {% if instance %}
                         <div class="sixteen wide column pl0 pr0 pb50">
                             <div class="ui shadow_small segment mt0">
-                                <div class="text15 textdg mb15">
+                                <div class="text15 textdg textbold mb15">
                                     Группы проходящие курс <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
                                 </div>
                                 {% for squad in instance.squads.all %}
-                                    <a href="{{squad.get_absolute_url}}" class="ui button mini dark">{{squad.title}}</a>
+                                    <a href="{{squad.get_absolute_url}}" class="ui button mini white border1 shadow_small">{{squad.title}}</a>
                                 {% endfor %}
+                                {% if instance.squads.all|length == 0 %}
+                                    <i class="textdg">Этот курс еще не использовали в группах</i>
+                                {% endif %}
                             </div>
-                        </div>                        
+                        </div>  
+                        {% endif %}                                              
 					</div>
 				</form>
 			</div>

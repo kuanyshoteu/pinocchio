@@ -142,12 +142,6 @@ def school_landing(request, school_id=None):
             school_money = profile.schools.first().money
     count = 0
     posts = []
-    for post in school.school_posts.all():
-        if post.image:
-            posts.append(post)
-            count += 1
-        if count == 4:
-            break
     context = {
         "profile":profile,
         "school": school,
@@ -188,14 +182,17 @@ def school_info(request):
     voronka2 = []
     number = 0
     all_cards = school.crm_cards.filter(timestamp__gt=weekago)
-    number_of_all = len(all_cards)
-    if number_of_all > 0:
-        for column in school.crm_columns.all().order_by('-id'):
-            if column.id != 6:
-                x = len(all_cards.filter(column=column))
-                number += x
-                voronka.append([column.title, number, round((number/number_of_all)*100,2)])
-                voronka2.append([column.title, number, round((number/number_of_all)*100,2)])
+    number_of_all = len(all_cards)    
+    for column in school.crm_columns.all().order_by('-id'):
+        if column.id != 6:
+            x = len(all_cards.filter(column=column))
+            number += x
+            if number_of_all > 0:
+                percent = round((number/number_of_all)*100,2)
+            else:
+                percent = 0
+            voronka.append([column.title, number, percent])
+            voronka2.append([column.title, number, percent])
     voronka = reversed(voronka)
     voronka2 = reversed(voronka2)
     worktime1 = ''
@@ -203,6 +200,7 @@ def school_info(request):
     if '-' in school.worktime:
         worktime1 = school.worktime.split('-')[0]
         worktime2 = school.worktime.split('-')[1]
+    print(voronka)
     context = {
         "profile":profile,
         "instance": school,
@@ -223,8 +221,10 @@ def school_info(request):
         "voronka2":voronka2,
         "worktime1":worktime1,
         "worktime2":worktime2,
+        "number_of_all":number_of_all,
         "social_networks":get_social_networks(school),
-        "page":"info",        
+        "page":"info",
+        "hint":profile.skill.hint_numbers[0],
     }
     return render(request, "school/info.html", context)
 def get_social_networks(school):
@@ -540,9 +540,22 @@ def school_crm(request):
         'crmdays':Day.objects.all(),
         "subject_categories":school.school_subject_categories.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
-        "page":"crm",        
+        "hint":profile.skill.hint_numbers[1],
+        "page":"crm",
     }
     return render(request, "school/crm.html", context)
+
+def add_subject_category_work(school, title):
+    qs = SubjectCategory.objects.filter(title=title)
+    if len(qs) > 0:
+        subject = qs[0]
+        school.school_subject_categories.add(subject)
+        school_cats = subject.school_categories.all()
+        school.categories.add(*school_cats)
+    else:
+        subject = school.school_subject_categories.create(title=title)
+    school.hashtags.get_or_create(title = title.replace(' ', '_'))
+    return subject
 
 def subject_create(request): ### Если нет предмета, то отправить письмо Адилю
     manager_profile = Profile.objects.get(user = request.user.id)
@@ -555,15 +568,7 @@ def subject_create(request): ### Если нет предмета, то отпр
         if school.school_subject_categories.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            qs = SubjectCategory.objects.filter(title=title)
-            if len(qs) > 0:
-                subject = qs[0]
-                school.school_subject_categories.add(subject)
-                school_cats = subject.school_categories.all()
-                school.categories.add(*school_cats)
-            else:
-                subject = school.school_subject_categories.create(title=title)
-            school.hashtags.get_or_create(title = title.replace(' ', '_'))
+            subject = add_subject_work(school, title)
         else:
             subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
@@ -1268,7 +1273,8 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
     if found == False:
         new_id = User.objects.order_by("id").last().id + 1
         user = User.objects.create(username='user' + str(new_id))
-        user.set_password(password)
+        if password:
+            user.set_password(password)
         user.save()
         profile = Profile.objects.get(user = user)
         profile.first_name = card.name
@@ -1331,7 +1337,7 @@ def add_card(request):
                 student = Profile.objects.filter(mail=request.GET.get('mail'))[0]
         elif len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
             found = True
-            student = Profile.objects.filter(phone=request.GET.get('phone'))[0]            
+            student = Profile.objects.filter(phone=request.GET.get('phone'))[0]
         if len(school.crm_cards.filter(phone=request.GET.get('phone'))) > 0:
             found = True
             student = False
@@ -1356,7 +1362,6 @@ def add_card(request):
             mail = request.GET.get('mail'),
             comments = request.GET.get('comment'),
             column = column,
-            school = school,
             saved = saved,
             card_user = student,
         )
@@ -1858,7 +1863,11 @@ def update_voronka(request):
             if column.id != 6:
                 x = len(all_cards.filter(column=column))
                 number += x
-                res.append([column.title, number, round((number/number_of_all)*100, 2)])            
+                if number_of_all == 0:
+                    percent = 0
+                else:
+                    percent = round((number/number_of_all)*100, 2)
+                res.append([column.title, number, percent])
     data = {
         "res":res,
         "timeago":timeago.strftime('%Y-%m-%d'),
@@ -2014,15 +2023,7 @@ def get_all_cards_first(request):
     page = 1
     all_res = []
     for column in school.crm_columns.all():
-        res = []
-        if profile.skill and request.GET.get('all') == 'no':
-            if profile.skill.crm_show_free_cards:
-                res = column.cards.filter(author_profile=None, school=school)
-        if res == []:
-            if request.GET.get('all') == 'yes':
-                res = column.cards.filter(school=school)
-            else:
-                res = column.cards.filter(author_profile=profile, school=school)
+        res = column.cards.filter(author_profile=profile).select_related('card_user')
         if len(res) <= 0:
             continue
         p = Paginator(res, 4)
@@ -2053,15 +2054,7 @@ def get_all_cards_second(request):
     school = is_moderator_school(request, profile)
     all_res = []
     for column in school.crm_columns.all():
-        query = []
-        if profile.skill and request.GET.get('all') == 'no':
-            if profile.skill.crm_show_free_cards:
-                query = column.cards.filter(author_profile=None, school=school)
-        if query == []:
-            if request.GET.get('all') == 'yes':
-                query = column.cards.filter(school=school)
-            else:
-                query = column.cards.filter(author_profile=profile, school=school)
+        query = column.cards.filter(author_profile=profile).select_related('card_user')
         res = []
         colid = column.id
         i = 0
@@ -2187,14 +2180,12 @@ def get_extra_cards(request):
     if request.GET.get('column') and request.GET.get('page'):
         page = int(request.GET.get('page'))+1
         column = CRMColumn.objects.get(id=int(request.GET.get('column')))
-        if profile.skill and request.GET.get('all') == 'no':
-            if profile.skill.crm_show_free_cards:
-                res = column.cards.filter(author_profile=None, school=school)
-        if res == []:
-            if request.GET.get('all') == 'yes':
-                res = column.cards.filter(school=school)
-            else:
-                res = column.cards.filter(author_profile=profile, school=school)
+        if request.GET.get('kind') == 'allcards':
+            res = column.cards.all().select_related('card_user')
+        elif request.GET.get('kind') == 'freecards':
+            res = column.cards.filter(author_profile=None).select_related('card_user')
+        else:
+            res = column.cards.filter(author_profile=profile).select_related('card_user')
         all_squads = school.groups.all()
         all_students = school.people.filter(is_student=True).prefetch_related('squads')
         all_offices = school.school_offices.all()
@@ -2405,11 +2396,13 @@ def get_payment_list(request):
                 pay_date = '-'
                 pay_date_input = '-'
                 pd = ''
+                pay_date_full = ''
                 if len(nm) > 0:
                     nm = nm.last()
                     pd = get_pay_date(nm)
                     pay_date = pd.strftime('%d %B')
-                sq_res.append([sq.id, sq.title, sq.color_back, pay_date, pd.strftime('%Y-%m-%d')])
+                    pay_date_full = pd.strftime('%Y-%m-%d')
+                sq_res.append([sq.id, sq.title, sq.color_back, pay_date, pay_date_full])
             res.append([
                 student.id,
                 student.first_name,

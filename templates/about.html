@@ -7,9 +7,9 @@
     <meta name="google-site-verification" content="G-3JdvIZH1oSADX0f2I8uRqCFAggIj06lzBKaEeYb3Y" />   
     <meta name="yandex-verification" content="f222118f15d7576b" />
     <meta name="viewport" content="width=device-width, initial-scale = 1">
-    <meta name="description" content="Находите любые курсы в городе Алматы на одном сайте. Записывайтесь на пробный урок в 1 клик, сравнивайте цены, отзывы, местоположение и преподавателей">
-    <meta name="keywords" content="английский,английский язык, английский язык алматы,курсы английского алматы,курсы английского языка в алматы,ниш поступление, поступление в ниш, поступление в ну, поступление в 165, математика, математика алматы, IELTS,айлс, TOEFL, продленка, ЕНТ, КТА, Курсы, курсы алматы, IELTS алматы, TOEFL алматы, SAT, SAT алматы, продленка алматы,продленки алматы,international english test,sat, ент алматы, кта алматы, Bilimtap">
-    <title>{% block head_title %}Bilimtap.kz{%if not request.user.is_authenticated %} – английский язык, поступление, курсы, подготовка к экзаменам в г. Алматы{% endif %}{% endblock head_title %}</title>
+    <meta name="description" content="Автоматизация продаж и бухгалтерии, контроль администраторов, интерактивное расписание, журнал посещаемости, SMS рассылки, интеграция с IP-телефонией, Instagram, Facebook">
+    <meta name="keywords" content="бесплатная CRM система для учебного центра, программа учета клиентов, языковой школы, образовательного, билимтап, bilimtap, автоматизация учебного заведения, управление, расписание">
+    <title>Bilimtap.kz – бесплатная CRM для учебного центра</title>
     <!-- CSS -->
     <!-- Yandex.Metrika counter -->
     <script type="text/javascript" >
@@ -65,9 +65,22 @@
             </a> 
             <div class="d-none d-md-block recommend"></div> 
             <div class="float-right buttons">
+            {% if not request.user.is_authenticated %}
                 <a href="{% url 'main:login_page' %}" class="btn btn-sm btn-link text-white">Войти</a> 
                 <a href="{% url 'main:sign_up' %}" class="btn btn-sm font-weight-bold">Зарегистрироваться</a>  
             </div> 
+            {% else %}
+            <div class="item float_right">
+                <a class="profile_name textw" status='0'>
+                    {{ profile.first_name }}
+                    {% if profile.image %}
+                        <img class="ui avatar image br5" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
+                    {% else %}
+                        <img class="ui avatar image br5" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.svg' %}">
+                    {% endif %}
+                </a>
+            </div>
+            {% endif %}
         </nav>
     </header>   
     <section id="hero"> 

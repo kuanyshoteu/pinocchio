@@ -43,14 +43,16 @@
                                 {% for sq in squads %}
                                     {% include 'squads/squad_list_info.html' %}
                                 {% endfor %}
-                                {% if not trash %}
-                                {% if is_director or is_manager%}
+                            </div>
+                            {% if not trash %}
+                            {% if is_director or is_manager%}
+                            <div class="ui grid stackable mt20">
                                 <div class="eight wide column pt0 pr0 mb50">
                                     <a class="ui button full-w green shadow_green" style="height: 40px;line-height: 17px" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
                                 </div>
-                                {% endif %}                            
-                                {% endif %}                            
                             </div>
+                            {% endif %}                            
+                            {% endif %}                            
                         </div>                        
                     </div>
                     {%if is_director %}

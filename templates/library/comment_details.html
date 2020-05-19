@@ -2,7 +2,7 @@
 {% load staticfiles %}
 <div class="mt30 dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
 	<a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
-		<img src="{% static 'images/nophoto.png' %}" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
+		<img src="{% static 'images/nophoto.svg' %}" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
 	</a>
 	<div class="dinline full-w">
 		<div class="full-w dinline">

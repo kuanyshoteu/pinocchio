@@ -18,191 +18,246 @@
         {% include 'left_menu.html' %}
         <div class="w85 wide column">
             {% include 'school/head.html' %}
-            <div class="ui segment mt0 mb15 text15">
+            <div class="ui segment mt0 mb15 text15 hint_place1" side="bottom">
                 <div class="text15 mb15 textdg">
                     <b>Основная информация</b>
                 </div>
                 <div class="ui grid stackable no_margin">
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="dinline text14 textg">Полное описание: </span> 
-                    </div>
-                    <div class="twelve wide column mb15 no_padding">
-                        <span class="school_content">{{ instance.content }}</span> 
-                        {% if is_director %}
-                        <div class="mb10">
-                            <a onclick="$('.school_content_form').show()"><i class="icon pen square blue text15"></i></a>
+                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="dinline text13 textbold textdg">Полное описание: </span> 
+                            </div>
+                            <div class="mb15 no_padding" style="width: calc(100% - 130px)">
+                                <span class="school_content mr5">
+                                {% if instance.content|length == 0 %}
+                                    <i class="textg">—</i>
+                                {%else%}
+                                    {{ instance.content }}
+                                {%endif%}
+                                </span> 
+                                {% if is_director %}
+                                <div class="mb0 dinline">
+                                    <a class="text13" onclick="$('.school_content_form').show()">Изменить</a>
+                                </div>
+                                <form class="ui form school_content_form" style="width: 800px; display: none;">
+                                    <div class="ui grid no_margin stackable">
+                                        <div class="twelve wide column no_padding">
+                                            <textarea placeholder="Введите описание центра" class="school_content_edit no_margin" style="height: 70px;">{{ instance.content }}</textarea>
+                                        </div>
+                                        <div class="four wide column pl5 pr0 pt0">
+                                            <a status="content" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}
+                            </div>
                         </div>
-                        <form class="ui form school_content_form" style="width: 800px; display: none;">
-                            <div class="ui grid no_margin stackable">
-                                <div class="twelve wide column no_padding">
-                                    <textarea class="school_content_edit no_margin" style="margin-bottom: 0;height: 70px;">{{ instance.content }}</textarea>
-                                </div>
-                                <div class="four wide column pl5 pr0 pt0">
-                                    <a status="content" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
-                                </div>
+                    </div>
+                    <div class="eight wide column pl0 pt0 pb0">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="dinline text13 textdg textbold">Короткое описание: </span> 
                             </div>
-                        </form>
-                        {% endif %}
-                    </div>
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="dinline text14 textg">Короткое описание: </span> 
-                    </div>
-                    <div class="twelve wide column mb15 no_padding">
-                        <span class="school_slogan">{{ instance.slogan }}</span>
-                        {% if is_director %}
-                        <a onclick="$('.school_slogan_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
-                        <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
-                            <div class="ui grid">
-                                <div class="twelve wide column no_padding_side">
-                                    <textarea class="school_slogan_edit no_margin" style="margin-bottom: 0;">{{ instance.slogan }}</textarea>
-                                </div>
-                                <div class="four wide column">
-                                    <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
-                                </div>
+                            <div class="mb15 no_padding" style="width: calc(100% - 130px)">
+                                <span class="school_slogan mr5">
+                                    {% if instance.slogan|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {{ instance.slogan }}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_slogan_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
+                                    <div class="ui grid">
+                                        <div class="twelve wide column no_padding_side">
+                                            <textarea class="school_slogan_edit no_margin" style="margin-bottom: 0;">{{ instance.slogan }}</textarea>
+                                        </div>
+                                        <div class="four wide column">
+                                            <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %} 
                             </div>
-                        </form>
-                        {% endif %} 
+                        </div>
                     </div>
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="dinline text14 textg">Номер телефона: </span> 
+                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="dinline text13 textdg textbold">Номер телефона: </span>
+                            </div> 
+                            <div class="mb15" style="width: calc(100% - 130px)">
+                                <span style="display: inline-block;" class="school_phones mr5">
+                                    {% if instance.phones|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {%for phone in instance.phones%}
+                                            {{ phone }}
+                                            {%if instance.phones|length > forloop.counter%},{%endif%} 
+                                        {%endfor%}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_phones_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
+                                    <div class="ui grid">
+                                        <div class="sixteen wide column pl0 pb0">
+                                            <i>Вводите номера через запятую</i>
+                                        </div>
+                                        <div class="twelve wide column no_padding_side">
+                                            <textarea class="school_phones_edit no_margin" style="margin-bottom: 0;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
+                                        </div>
+                                        <div class="four wide column">
+                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}  
+                            </div>  
+                        </div>
                     </div>
-                    <div class="twelve wide column mb15 no_padding">
-                        <span style="display: inline-block;" class="school_phones">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%} {%endfor%}</span>
-                        {% if is_director %}
-                        <a onclick="$('.school_phones_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
-                        <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
-                            <div class="ui grid">
-                                <div class="sixteen wide column pl0 pb0">
-                                    <i>Вводите номера через запятую</i>
-                                </div>
-                                <div class="twelve wide column no_padding_side">
-                                    <textarea class="school_phones_edit no_margin" style="margin-bottom: 0;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
-                                </div>
-                                <div class="four wide column">
-                                    <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
-                                </div>
-                            </div>
-                        </form>
-                        {% endif %}  
-                    </div>                   
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="dinline text14 textg">Сайт: </span> 
+                    <div class="eight wide column pl0 pt0 pb0">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="dinline text13 textdg textbold">Сайт: </span> 
+                            </div> 
+                            <div class="mb15" style="width: calc(100% - 130px)">
+                                <span class="school_site mr5">
+                                    {% if instance.site|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {{ instance.site }}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_site_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
+                                    <div class="ui grid">
+                                        <div class="twelve wide column no_padding_side">
+                                            <textarea class="school_site_edit no_margin" style="margin-bottom: 0;">{{ instance.site }}</textarea>
+                                        </div>
+                                        <div class="four wide column">
+                                            <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %} 
+                            </div>  
+                        </div>
                     </div>
-                    <div class="twelve wide column mb15 no_padding">                    
-                        <span class="school_site">{{ instance.site }}</span>
-                        {% if is_director %}
-                        <a onclick="$('.school_site_form').show()"><i class="icon pen square blue" style="font-size: 15px;margin-left: 15px;"></i></a>
-                        <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
-                            <div class="ui grid">
-                                <div class="twelve wide column no_padding_side">
-                                    <textarea class="school_site_edit no_margin" style="margin-bottom: 0;">{{ instance.site }}</textarea>
-                                </div>
-                                <div class="four wide column">
-                                    <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
-                                </div>
-                            </div>
-                        </form>
-                        {% endif %} 
+                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="text13 textdg textbold">Время работы: </span> 
+                            </div> 
+                            <div class="mb15" style="width: calc(100% - 130px)">
+                                <span style="display: inline-block;" class="school_worktime mr5">
+                                    {% if worktime1 == '' or worktime2 == '' %}
+                                        По предварительной записи
+                                    {% else %}
+                                        {{ worktime1 }}-{{ worktime2 }}
+                                    {% endif %}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_worktime_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_worktime_form" style="display: none;">
+                                    <div class="ui grid">
+                                        <div class="sixteen wide column pb0">
+                                            <i>*Если оставите поля пустыми, то будет сохранена, как "По предварительной записи"</i>
+                                        </div>
+                                        <div class="two wide column no_padding_side">
+                                            <textarea class="school_worktime_edit1 no_margin">{{ worktime1 }}</textarea>
+                                        </div>
+                                        <div class="one wide column no_padding_side text-center">
+                                            -
+                                        </div>
+                                        <div class="two wide column no_padding_side">
+                                            <textarea class="school_worktime_edit2 no_margin">{{ worktime2 }}</textarea>
+                                        </div>
+                                        <div class="four wide column">
+                                            <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}
+                            </div>  
+                        </div>
                     </div>
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="text14 textg">Время работы: </span> 
-                    </div>
-                    <div class="twelve wide column mb15 no_padding">                    
-                        <span style="display: inline-block;" class="school_worktime">
-                            {% if worktime1 == '' or worktime2 == '' %}
-                                По предварительной записи
-                            {% else %}
-                                {{ worktime1 }}-{{ worktime2 }}
-                            {% endif %}
-                        </span>
-                        {% if is_director %}
-                        <a onclick="$('.school_worktime_form').show()"><i class="icon pen square blue text15 ml15"></i></a>
-                        <form class="ui form no_margin school_worktime_form" style="display: none;">
-                            <div class="ui grid">
-                                <div class="sixteen wide column pb0">
-                                    <i>*Если оставите поля пустыми, то будет сохранена, как "По предварительной записи"</i>
+                    <div class="eight wide column pl0 pt0 pb0">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="text13 textdg textbold">Социальные сети: </span> 
+                            </div> 
+                            <div class="mb15" style="width: calc(100% - 130px)">
+                                <div style="display: inline-block;" class="school_social_list">
+                                    {% for social in social_networks %}
+                                        <a class="ui button small white shadow_small mb10 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">
+                                            <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
+                                            {{ social.1 }}
+                                        </a>
+                                        <div class="ui modal mini social_form{{ forloop.counter }}">
+                                            <i class="close icon"></i>
+                                            <div class="content">
+                                                <form class="ui form">
+                                                    <textarea id="social_link{{forloop.counter}}" placeholder="Введите ссылку">{{social.0}}</textarea>
+                                                    <a class="ui button mini blue" onclick="create_social('{{instance.create_social_url}}', '{{forloop.counter}}')">Сохранить</a>
+                                                    <a class="ui button mini red" onclick="delete_social('{{instance.delete_social_url}}', '{{forloop.counter}}')" style="float: right;">Удалить</a>
+                                                </form>
+                                                <div class="errorsocial{{forloop.counter}} highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
+                                            </div>
+                                        </div>                        
+                                    {% endfor %}
                                 </div>
-                                <div class="two wide column no_padding_side">
-                                    <textarea class="school_worktime_edit1 no_margin">{{ worktime1 }}</textarea>
-                                </div>
-                                <div class="one wide column no_padding_side text-center">
-                                    -
-                                </div>
-                                <div class="two wide column no_padding_side">
-                                    <textarea class="school_worktime_edit2 no_margin">{{ worktime2 }}</textarea>
-                                </div>
-                                <div class="four wide column">
-                                    <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
-                                </div>
-                            </div>
-                        </form>
-                        {% endif %} 
-                    </div>
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="text14 textg">Социальные сети: </span> 
-                    </div>
-                    <div class="twelve wide column mb15 no_padding">                    
-                        <div style="display: inline-block;" class="school_social_list">
-                            {% for social in social_networks %}
-                                <a class="ui button small white shadow_small mr15 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">
-                                    <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
-                                    {{ social.1 }}
-                                </a>
-                                <div class="ui modal mini social_form{{ forloop.counter }}">
+                                <a class="ui button mini white border1 shadow_small textblue" onclick="$('.social_form_new').modal('show')" style="padding: 7px 10px;">Добавить социальную сеть</a>
+                                <div class="ui modal mini social_form_new">
                                     <i class="close icon"></i>
                                     <div class="content">
                                         <form class="ui form">
-                                            <textarea id="social_link{{forloop.counter}}" placeholder="Введите ссылку">{{social.0}}</textarea>
-                                            <a class="ui button mini blue" onclick="create_social('{{instance.create_social_url}}', '{{forloop.counter}}')">Сохранить</a>
-                                            <a class="ui button mini red" onclick="delete_social('{{instance.delete_social_url}}', '{{forloop.counter}}')" style="float: right;">Удалить</a>
+                                            <textarea id="social_link_new" placeholder="Введите ссылку">{{social.0}}</textarea>
+                                            <a class="ui button mini white border1 shadow_small textblue textbold" onclick="create_social('{{instance.create_social_url}}', '_new')">Сохранить</a>
+                                            <a class="ui button mini white border1 shadow_small" onclick="delete_social('{{instance.delete_social_url}}', '_new')" style="float: right;"><i class="icon trash red"></i> Удалить</a>
                                         </form>
-                                        <div class="errorsocial{{forloop.counter}} highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
+                                        <div class="errorsocial_new highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
                                     </div>
-                                </div>                        
-                            {% endfor %}
+                                </div>
+                            </div>  
                         </div>
-                        <a class="ui button mini" onclick="$('.social_form_new').modal('show')" style="padding: 7px 10px;">Добавить социальную сеть</a>
-                        <div class="ui modal mini social_form_new">
-                            <i class="close icon"></i>
-                            <div class="content">
-                                <form class="ui form">
-                                    <textarea id="social_link_new" placeholder="Введите ссылку">{{social.0}}</textarea>
-                                    <a class="ui button mini blue" onclick="create_social('{{instance.create_social_url}}', '_new')">Сохранить</a>
-                                    <a class="ui button mini red" onclick="delete_social('{{instance.delete_social_url}}', '_new')" style="float: right;">Удалить</a>
-                                </form>
-                                <div class="errorsocial_new highlight_red" style="display: none;">Эта социальная сеть уже записана</div>
+                    </div>
+                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="text13 textdg textbold">Фотографии: </span> 
                             </div>
+                            <div class="mb15" style="width: calc(100% - 130px)">
+                                <div class="dinline">
+                                    <div class="dflex">
+                                        {% for banner in instance.banners.all %}
+                                            {% if banner.image_banner %}
+                                            <div class="mr15 dflex" id="banner{{banner.id}}">
+                                                <img class="mr15" src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;border-radius: 5px;">
+                                                <a class="delete_school_banner" id="{{ banner.id }}" url="{{ banner.delete_school_banner }}"><b style="color: red;">×</b></a>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>                            
+                                </div>
+                                <div class="dinline">
+                                    <form method='POST' class="mb0" action='' enctype='multipart/form-data'>{% csrf_token %}
+                                        <input type="file" name="school_banner" id="school_banner" class="postfile">
+                                        <label class="file_post" for="school_banner">
+                                            <a class="ui button mini white border1 shadow_small mr5 "><i class="icon image blue"></i>Выбрать картинку</a>
+                                        </label>
+                                        <input type="submit" class="ui button mini white border1 shadow_small save_banner textblue " name="" value="Добавить">
+                                    </form>
+                                </div>
+                            </div>  
                         </div>
                     </div>
-                    <div class="three wide column pt0 pb0 pl0">
-                        <span class="text14 textg">Фотографии: </span> 
-                    </div>
-                    <div class="twelve wide column no_padding">
-                        <div class="dinline">
-                            <div class="dflex">
-                                {% for banner in instance.banners.all %}
-                                    {% if banner.image_banner %}
-                                    <div class="mr15 dflex" id="banner{{banner.id}}">
-                                        <img class="mr15" src="{{ banner.image_banner.url }}" style="width: 50px;height: 50px;border-radius: 5px;">
-                                        <a class="delete_school_banner" id="{{ banner.id }}" url="{{ banner.delete_school_banner }}"><b style="color: red;">×</b></a>
-                                    </div>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>                            
-                        </div>
-                        <div class="dinline">
-                            <form method='POST' class="mb0" action='' enctype='multipart/form-data'>{% csrf_token %}
-                                <input type="file" name="school_banner" id="school_banner" class="postfile">
-                                <label class="file_post" for="school_banner">
-                                    <a class="ui button mini"><i class="icon image blue"></i>Выбрать картинку</a>
-                                </label>
-                                <input type="submit" class="ui button mini  save_banner" name="" value="Добавить">
-                            </form>
-                        </div>
-                    </div>
-                </div>                
+                </div>
             </div>
-            <div class="ui segment">
+            <div class="ui segment hint_place3" side="top">
                 <div class="text15 mb15 textdg">
                     <b>Предметы школы</b>
                 </div>
@@ -210,7 +265,7 @@
                     <div class="ui grid stackable no_margin">
                         {% for subject in instance.school_subject_categories.all %}
                         <div class="twenty wide column pl0 pt0 pb10">
-                            <a class="full-w full-h ui button small white shadow_small subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
+                            <a class="full-w full-h ui button border1 small white shadow_small textblue subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
                             <div class="ui modal mini" id="subject_form{{ subject.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
@@ -219,8 +274,10 @@
                                             <div class="hint_subject_title{{subject.id}}" style="display: none;"></div>
                                         </div>
                                         <textarea id="subject_title{{subject.id}}" class="object_textarea" status='subject'>{{subject.title}}</textarea>
-                                        <a class="ui button mini blue" onclick="create_subject('{{subject.create_url}}', '{{subject.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_subject('{{subject.delete_url}}', '{{subject.id}}')" style="float: right;">Удалить</a>
+                                        <a class="ui button mini white shadow_small border1 textblue textbold" onclick="create_subject('{{subject.create_url}}', '{{subject.id}}')">Сохранить</a>
+                                        <a class="ui button mini white shadow_small border1" onclick="delete_subject('{{subject.delete_url}}', '{{subject.id}}')" style="float: right;">
+                                            <i class="icon trash red"></i> Удалить
+                                        </a>
                                     </form>
                                     <div class="errorsubject{{subject.id}} highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
                                 </div>
@@ -229,7 +286,7 @@
                         {% endfor %}
                     </div>                    
                 </div>
-                <a class="ui button mini mt5" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
+                <a class="ui button mini white shadow_small border1 mt5" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
                 <div class="ui modal mini" id="subject_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -238,19 +295,21 @@
                                 <div class="hint_subject_title_new" style="display: none;"></div>
                             </div>
                             <textarea class="object_textarea need_clear" id="subject_title_new" status='subject' placeholder="Название"></textarea>
-                            <a class="ui button mini blue" onclick="create_subject('/schools/api/subject_create_url/', '_new');clear_textareas()">Создать</a>
+                            <div class="text-center">
+                                <a class="ui button mini white border1 shadow_small textblue textbold" onclick="create_subject('/schools/api/subject_create_url/', '_new');clear_textareas()">Создать</a>
+                            </div>
                         </form>
                         <div class="errorsubject_new highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div>
                     </div>
                 </div>
             </div>
             <div class="ui segment">
-                <div class="text14 textdg"><b>Скидки школы</b></div>
+                <div class="text14 textdg mb5"><b>Скидки школы</b></div>
                 <div class="">
                     <div class="ui grid stackable no_margin school_discounts_list">
                         {% for discount in instance.discounts.all %}
-                        <div class="twenty wide column pl0 pt0 pb10">
-                            <a class="full-w full-h ui button small white shadow_small discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;">{{ discount.title }}</a>
+                        <div class="twenty wide column pt0 pl0 pb10">
+                            <a class="full-w full-h ui button small white border1 shadow_small textblue discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;">{{ discount.title }}</a>
                             <div class="ui modal mini" id="discount_form{{ discount.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
@@ -260,11 +319,11 @@
                                         </div>
                                         <textarea id="discount_title{{discount.id}}" class="object_textarea" status='discount'>{{discount.title}}</textarea>
                                         <div class="ui grid no_margin stackable">
-                                            <div class="eight wide column no_padding">
+                                            <div class="eight wide column pl0 pt0 pb0 pr5">
                                                 <input placeholder="{{discount.amount}}" type="number" class="discount_amount{{discount.id}}" value="{{discount.amount}}">
                                             </div>
                                             <div class="eight wide column no_padding">
-                                                <select class="discount_type{{discount.id}}" style="height: 35px;">
+                                                <select class="discount_type{{discount.id}}" style="height: 29px;">
                                                     {% if discount.discount_type == 'percent'%}
                                                     <option value="percent">Проценты</option>
                                                     <option value="tenge">Тенге</option>
@@ -275,8 +334,12 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <a class="ui button mini blue" onclick="create_discount('{{discount.create_url}}', '{{discount.id}}')">Сохранить</a>
-                                        <a class="ui button mini red" onclick="delete_discount('{{discount.delete_url}}', '{{discount.id}}')" style="float: right;">Удалить</a>
+                                        <div class="mt10">
+                                            <a class="ui button mini white border1 shadow_small textblue textbold" onclick="create_discount('{{discount.create_url}}', '{{discount.id}}')">Сохранить</a>
+                                            <a class="ui button mini white border1 shadow_small" onclick="delete_discount('{{discount.delete_url}}', '{{discount.id}}')" style="float: right;">
+                                                <i class="icon trash red"></i> Удалить
+                                            </a>
+                                        </div>
                                     </form>
                                     <div class="errordiscount{{discount.id}} highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
                                 </div>
@@ -285,7 +348,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini mt5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
+                <a class="ui button mini white shadow_small border1 mb5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
                 <div class="ui modal mini" id="discount_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -293,69 +356,33 @@
                             <b>Добавить cкидку</b>
                             <textarea class="object_textarea need_clear mt10 mb10" id="discount_title_new" status='discounts' placeholder="Название"></textarea>
                             <div class="ui grid no_margin stackable">
-                                <div class="eight wide column no_padding">
+                                <div class="eight wide column pl0 pt0 pr5 pb0">
                                     <input placeholder="Сумма" type="number" class="discount_amount_new">
                                 </div>
                                 <div class="eight wide column no_padding">
-                                    <select class="discount_type_new" id="_new" style="height: 35px;">
+                                    <select class="discount_type_new" id="_new" style="height: 29px;">
                                         <option value="percent">Проценты</option>
                                         <option value="tenge">Тенге</option>
                                     </select>
                                 </div>
                             </div>
-                            <a class="ui button mini blue mt10" onclick="create_discount('/schools/api/discounts_create_url/', '_new');clear_textareas()">
-                                Создать
-                            </a>
+                            <div class="text-center">
+                                <a class="ui button mini white shadow_small border1 textblue textbold mt10" onclick="create_discount('/schools/api/discounts_create_url/', '_new');clear_textareas()">
+                                    Создать
+                                </a>                                
+                            </div>
                         </form>
                         <div class="errordiscounts_new highlight_red" style="display: none;">Скидка с таким названием уже сущетсвует</div>
                     </div>
                 </div>
-                <div class="text14 textdg mt15"><b>Уровни курсов</b></div>
-                <div class="school_level_list">
-                    <div class="ui grid stackable no_margin">
-                        {% for level in instance.school_subject_levels.all %}
-                        <div class="twenty wide column pl0 pt0 pb10">
-                            <a class="full-w full-h ui button small white shadow_small level_object{{level.id}}" onclick="$('#level_form{{level.id}}').modal('show')" id="{{level.id}}" style="padding: 7px 10px;">{{ level.title }} ({{ level|get_level_courses_len:instance}} курсов)</a>
-                            <div class="ui modal mini" id="level_form{{ level.id }}">
-                        <i class="close icon"></i>
-                        <div class="content">
-                            <form class="ui form">
-                                <div style="height: 20px;">
-                                    <div class="hint_level_title{{level.id}}" style="display: none;"></div>
-                                </div>                                    
-                                <textarea class="object_textarea" status='level' id="level_title{{level.id}}">{{level.title}}</textarea>
-                                <a class="ui button mini blue" onclick="create_level('{{level.create_url}}', '{{level.id}}')">Сохранить</a>
-                                <a class="ui button mini red" onclick="delete_level('{{level.delete_url}}', '{{level.id}}')" style="float: right;">Удалить</a>
-                            </form>
-                            <div class="errorlevel{{level.id}} highlight_red" style="display: none;">Такой уровень уже есть</div>
-                        </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <a class="ui button mini mt5" onclick="$('#level_form_new').modal('show')">Добавить уровень</a>
-                <div class="ui modal mini" id="level_form_new">
-                    <i class="close icon"></i>
-                    <div class="content">
-                        <form class="ui form">
-                            <div style="height: 20px;">
-                                <div class="hint_level_title_new" style="display: none;"></div>
-                            </div>
-                            <textarea class="object_textarea need_clear" status='level' id="level_title_new" placeholder="Название"></textarea>
-                            <a class="ui button mini blue" onclick="create_level('/schools/api/level_create_url/', '_new');clear_textareas();">Создать</a>
-                        </form>
-                        <div class="errorlevel_new highlight_red" style="display: none;">Такой уровень уже есть</div>
-                    </div>
-                </div>
             </div>
-            <div class="ui segment no_margin pl15">
+            <div class="ui segment no_margin pl15 hint_place4" side="top">
                 <div class="text14 textdg pb10"><b>Офисы:</b></div>
                 <div class="school_office_list">
                     <div class="ui grid stackable no_margin">
                         {% for office in instance.school_offices.all %}
                         <div class="twenty wide column pl0 pt0 pb10">
-                            <a class="full-w full-h ui button small white shadow_small office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.office_subjects.all|length}} курсов)</a>
+                            <a class="full-w full-h ui button small white shadow_small textblue office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.office_subjects.all|length}} курсов)</a>
                         </div>
                         <div class="ui modal small" id="office_form{{ office.id }}">
                             <i class="close icon"></i>
@@ -409,7 +436,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini mt5" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
+                <a class="ui button mini white shadow_small border1" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
                 <div class="ui modal mini" id="office_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -423,11 +450,9 @@
             </div>
             {% include 'school/voronka_chart.html' %}
             <div class="ui segment mb0">
-                Отчеты по менеджерам
-            </div>
-            <div class="ui segment mt0">
+                <div class="textdg textbold text15 mb10">Отчеты по менеджерам</div>
                 {% for manager in managers %}
-                <a class="ui button small blue get_manager_actions" 
+                <a class="ui button small white shadow_small border1 mr10 get_manager_actions" 
                 url="{% url 'schools:get_manager_actions' %}" id="{{manager.id}}">
                     {{manager.first_name}}
                 </a>
@@ -435,18 +460,20 @@
                     <i class="close icon"></i>
                     <div class="content">
                         <div class="set_manager_actions{{manager.id}}">
-                            
                         </div>
                     </div>
                 </div>
                 {% endfor %}
+                {% if managers|length == 0 %}
+                <div class="mt10">
+                    <i class="textdg">Пока нет менеджеров</i>
+                </div>
+                {% endif %}
             </div>
             <div class="ui segment mb0">
-                Отчеты по учителям
-            </div>
-            <div class="ui segment mt0">
+                <div class="textdg textbold text15 mb10">Отчеты по учителям</div>
                 {% for teacher in teachers %}
-                <a class="ui button small blue get_teacher_actions" 
+                <a class="ui button small white shadow_small border1 mr10 get_teacher_actions" 
                 url="{% url 'schools:get_teacher_actions' %}" id="{{teacher.id}}">
                     {{teacher.first_name}}
                 </a>
@@ -454,18 +481,24 @@
                     <i class="close icon"></i>
                     <div class="content">
                         <div class="set_teacher_actions{{teacher.id}}">
-                            
                         </div>
                     </div>
                 </div>
                 {% endfor %}
+                {% if teachers|length == 0 %}
+                <div class="mt10">
+                    <i class="textdg">Пока нет учителей</i>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 <span class="day_id" group_id='{{ instance.id }}'></span>
 <span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
-<span class="data" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
+<span class="data" last_hint="5" hint="{{hint}}" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
+{% include 'modals/info_hints.html' %}
+{% include 'modals/get_hint_script.html' %}
 <script type="text/javascript">
     function clear_textareas(){
         $('.need_clear').val('')

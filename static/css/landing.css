@@ -2746,14 +2746,16 @@
 }*,*::before,*::after{
     -moz-box-sizing:border-box;
     box-sizing:border-box
-}html{
-        font-family:sans-serif;
+}
+html{
+    font-family:sans-serif;
     line-height:1.15;
     -webkit-text-size-adjust:100%;
     -ms-text-size-adjust:100%;
     -ms-overflow-style:scrollbar;
     -webkit-tap-highlight-color:transparent
-}@-ms-viewport{
+}
+@-ms-viewport{
     width:device-width
 }article,aside,figcaption,figure,footer,header,hgroup,main,nav,section{
     display:block
@@ -6247,13 +6249,16 @@
 }
 .invisible{
     visibility:hidden !important
-}header nav.navbar{
-    -webkit-transition:background 1s ease 0s;
-    transition:background 1s ease 0s;
+}
+header nav.navbar{
+    -webkit-transition:background 0.1s ease 0s;
+    transition:background 0.1s ease 0s;
     background-color:rgba(0,121,191,0)
-}header nav.navbar a.btn.bg-white{
+}
+header nav.navbar a.btn.bg-white{
     color:#0079BF
-}header nav.navbar a.btn.bg-white:hover{
+}
+header nav.navbar a.btn.bg-white:hover{
     color:#0079BF
 }html.scroll header nav.navbar{
     background-color:#0079bf;
@@ -7304,7 +7309,6 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
   color: #172B4D;font-size: 21px;
 }
 .land_logo{
-    width: 180px;
     height: 70px;
 }
 .three_feat1{

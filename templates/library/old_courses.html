@@ -77,7 +77,7 @@
                           {% if course.author_profile.image %}
                           <img src="{{ course.author_profile.image.url }}" style="width: 30px;">
                           {% else %}
-                          <img src="{% static 'images/nophoto.png' %}" style="width: 30px;">
+                          <img src="{% static 'images/nophoto.svg' %}" style="width: 30px;">
                           {% endif %}
                       </div>
                       <div class="four wide column" style="padding: 7px 10px 10px 0;">
@@ -115,7 +115,7 @@
               <a class="delete_course_folder" id="{{ course_folder.id }}" data-href='{{ course_folder.delete_course_folder_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i> Удалить</a>
           </div>
           <a href="{{ course_folder.get_absolute_url }}">
-              <img src="{% static 'images/nophoto.png' %}" id="course_folder_image{{ course_folder.id }}" style="height: 50px;">
+              <img src="{% static 'images/nophoto.svg' %}" id="course_folder_image{{ course_folder.id }}" style="height: 50px;">
               <br>
               <span id="course_folder_title{{ course_folder.id }}">{{ course_folder.title }}</span>
           </a>

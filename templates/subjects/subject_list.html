@@ -28,6 +28,8 @@
                                 {% for sq in subjects %}
                                     {% include 'subjects/subject_list_info.html' %}
                                 {% endfor %}
+                            </div>
+                            <div class="ui grid stackable mt20">
                                 {% if is_director or is_manager%}
                                 <div class="eight wide column pt0 pr0 mb50">
                                     <a class="ui button full-w green shadow_green" style="height: 40px;line-height: 17px" href='{% url "subjects:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>Создать новый курс</a>

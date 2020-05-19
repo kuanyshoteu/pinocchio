@@ -2,41 +2,190 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% block head_title %}
-Зарегестрироваться | {{ block.super }}
+Создать аккаунт | {{ block.super }}
 {% endblock head_title %}{% block content %}
-<div class="ui container" style="overflow-y: hidden;">
-    <div class="ui grid stackable mt0 mb30">
-        <div class="five wide column">
-        </div>
-        <div class="six wide column">
-                <div class="text-center mt15 mb30" style="font-size: 30px;">
-                    Создайте Ваш аккаунт
-                </div>
-            <div class="ui segment">
-                <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
-                <div style="display: none;" class="highlight_red reg_fill_all">Заполните все</div>
-                <form method='POST' style="margin-bottom: 0" enctype='multipart/form-data' CLASS="ui form">{% csrf_token %}
-                    Имя Фамилия
-                    <input class="new_name2 mb10">
-                    Номер телефона
-                    <input class="new_username2 mb10">
-                    Email
-                    <input class="new_mail2 mb10">
-                    <div style="display: none;" class="highlight_red reg_wrong_pass">Пароли не совпадают</div>
-                    Пароль
-                    <input class="new_password22 mb10" type="password">
-                    Повторите пароль
-                    <input class="new_password222 mb10" type="password">
-                    <div class="text-center">
-                        <input class="ui button green register-btn2 mr15 full-w mt15" value="Зарегистрироваться" type="submit" onclick="return false">
+<div class="ui container pl15 pr15 pb10 mobpb100">
+    <div class="sign_first_step full-w">
+        <div class="ui grid stackable mt30">
+            <div class="eight wide column deskpt50">
+                <div class="text-center">
+                    <div class="textblue text21 textbold">Сделайте первый шаг на пути построения <br>эффективной организации
                     </div>
-                </form>   
-            </div>                 
+                    <div class="mt20 textdg text17 ">С нами управление станет приятным</div>
+                </div>
+                <div class="ui grid  mt50 ml0 mr0 mb0">
+                    <div class="four wide column no_padding"></div>
+                    <div class="eight wide column no_padding">
+                        <img class="full-w" src="{% static 'images/welcome2.svg' %}">
+                    </div>
+                    <div class="four wide column no_padding"></div>
+                </div>
+            </div>
+            <div class="eight wide column">
+                <div class="ui grid stackable no_margin"> 
+                    <div class="twelve wide column no_padding">
+                        <div class="ui segment shadow_small">
+                            <div class="textg text-center text17">1 / 2</div>
+                            <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
+                            <div style="display: none;" class="highlight_red reg_fill_all1">Заполните все</div>
+                            <form method='POST' enctype='multipart/form-data' class="ui form mb0">{% csrf_token %}
+                                <span class="textdg textbold text13">Как Вас зовут?</span> 
+                                <input placeholder="Имя Фамилия" class="sign_dir_name mb10">
+                                <span class="textdg textbold text13">Название Вашего учебного центра:</span> 
+                                <input placeholder="Название центра" class="sign_school_name mb10">
+                                <span class="textdg textbold text13">Ваш номер телефона для связи (мобильный):</span> 
+                                <input placeholder="Номер телефона" class="sign_phone mb10">
+                                <span class="textdg textbold text13">Ваша рабочая почта: (для связи и восстановления пароля)</span> 
+                                <input placeholder="Email" class="sign_mail mb10">
+                                <div style="display: none;" class="highlight_red reg_wrong_pass">Пароли не совпадают</div>
+                                <span class="textdg textbold text13">Введите свой пароль:</span> 
+                                <input placeholder="Пароль" class="sign_password mb10" type="password">
+                                <span class="textdg textbold text13">Повторите пароль:</span> 
+                                <input placeholder="Повторите пароль" class="sign_password2 mb10" type="password">
+                                <div class="text-center">
+                                    <a onclick="return false" class="ui button green shadow_green textbold dalee mt15 pl30 pr30">
+                                        <b>Далее</b>
+                                        <i class="icon right arrow textw mr0"></i>
+                                    </a>
+                                    <div class="next_step_load ui loader active inline small" style="display: none;"></div>
+                                </div>
+                            </form>   
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="five wide column">
-        </div>            
+    </div>
+    <div class="sign_second_step full-w" style=" display: none;margin-left: 100%;">
+        <div class="ui grid stackable mt15">
+            <div class="six wide column deskpt50">
+                <div class="text-center">
+                    <div class="textblue text21 textbold">Осталось совсем немного
+                    </div>
+                </div>
+                <div class="ui grid  mt50 ml0 mr0 mb0">
+                    <div class="two wide column no_padding"></div>
+                    <div class="twelve wide column no_padding">
+                        <img class="full-w" src="{% static 'images/welcome.svg' %}">
+                    </div>
+                    <div class="two wide column no_padding"></div>
+                </div>
+            </div>
+            <div class="ten wide column pt0">
+                <div class="ui grid stackable no_margin">
+                    <div class="fourteen wide column no_padding"> 
+                        <div class="ui segment shadow_small no_padding">
+                            <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
+                            <div style="display: none;" class="highlight_red reg_fill_all2">Заполните все</div>
+                            <form method='POST' enctype='multipart/form-data' class="ui form mb0">
+                                <div class="textg text-center text17 pt15">2 / 2</div>
+                                <div class="pl15 pt10 pr15 pb10">
+                                    <span class="textdg textbold text13">Как можно назвать Вашу организацию?</span> 
+                                    <div class="ui grid stackable mt5 mb0 ml0 mr0">
+                                        <div class="third wide column pl0 pr10 pb5 pt5">
+                                            <a id="1" class="full-w ui button shadow_small white border1 mini sign_slogan">
+                                                Учебный центр
+                                                <i style="display: none;" class="slogan_check icon check green text15 ml5 mr0"></i>
+                                            </a>
+                                        </div>
+                                        <div class="third wide column pl0 pr10 pb5 pt5">
+                                            <a class="full-w ui button white shadow_small mini border1 sign_slogan" id="2">Языковая школа<i style="display: none;" class="slogan_check icon check green text15 ml5 mr0"></i></a>
+                                        </div>
+                                        <div class="third wide column pl0 pr10 pb5 pt5">
+                                            <a id="3" class="full-w ui button white shadow_small mini border1 sign_slogan">Школа искусств<i style="display: none;" class="slogan_check icon check green text15 ml5 mr0"></i></a>
+                                        </div>
+                                        <div class="third wide column pl0 pr10 pb5 pt5">
+                                            <a class="full-w ui button white shadow_small mini border1 sign_slogan" id="4">Образовательный центр<i style="display: none;" class="slogan_check icon check green text15 ml5 mr0"></i></a>
+                                        </div>
+                                        <div class="third wide column pl0 pr10 pb5 pt5">
+                                            <a class="full-w ui button white shadow_small mini border1 sign_slogan" id="5">Тренинговый центр<i style="display: none;" class="slogan_check icon check green text15 ml5 mr0"></i></a>
+                                        </div>
+                                        <div class="third wide column pl0 pr10 pb5 pt5">
+                                            <input placeholder="Другое" class="text-center mb0 sign_slogan_input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pl15 pt10 pr15 pb10">
+                                    <div class="textdg text13 mb45">
+                                        <span class="textbold">Какие предметы преподаёте?</span>
+                                    </div> 
+                                    <input placeholder="Например: английский, математика, подготовка к школе, продленка, йога" class="sign_subjects">
+                                </div>
+                                <div class="pl15 pt10 pr15 pb5">
+                                    <span class="textdg textbold text13 mb5">Укажите название и цену любого курса, за который Вы непосредственно берёте оплату</span>
+                                    <div class="ui grid stackable no_margin">
+                                        <div class="five wide column pt0 pl0 pb5 pr30">
+                                            <i class="textdg text13">Название</i>
+                                            <input placeholder="Название курса" class="sign_course_name" name="get_subject_period">
+                                        </div>
+                                        <div class="three wide column pl0 pb5 pr15 pt0">
+                                            <i class="textdg text13">Цена</i>
+                                            <input type="number" value="0" class="sign_course_cost" name="get_subject_period">
+                                        </div>
+                                        <div class="eight wide column pt0 pl0 pb0 pr0">
+                                            <div class="">
+                                                <i class="textdg text13 ">За</i>
+                                            </div>
+                                            <a class="pl10 pr10 shadow_small white border1 ui button mini subject_period" status="lesson">Урок<i style="display: none;" class="sign_payment_check icon check green text15 ml5 mr0"></i> </a>
+                                            <a class="pl10 pr10 white shadow_small white border1 ui button mini subject_period" status="month">Месяц<i style="display: none;" class="sign_payment_check chosen icon check green text15 ml5 mr0"></i></a>
+                                            <a class="pl10 pr10 shadow_small white border1 ui button mini subject_period" status="course">Курс<i style="display: none;" class="sign_payment_check icon check green text15 ml5 mr0"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pl15 pt10 pr15 pb10">
+                                    <span class="textdg textbold text13 mb5">Укажите имена Ваших преподавателей</span>
+                                    <input placeholder="Через запятую" class="sign_teachers">
+                                </div>       
+                                <div class="pl15 pt10 pr15 pb10">
+                                    <span class="textdg textbold text13 mr10">Преподаёте ли Вы в своём учебном центре?</span>
+                                    <a status="yes" class="dir_teach_chose chosen ui button mini mr10 white border1 shadow_small">Да<i style="display: none;" class="dir_teach_check icon check green text15 ml5 mr0"></i></a>
+                                    <a status="no" class="dir_teach_chose ui button mini white border1 shadow_small">Нет<i style="display: none;" class="dir_teach_check icon check green text15 ml5 mr0"></i></a>
+                                </div>       
+                                <div class="text-center">
+                                    <a onclick="return false" class="ui button green shadow_green textbold register-btn2 mt15 mb15 pl50 pr50">
+                                        <b>Готово</b>
+                                    </a>
+                                    <div class="next_step_load ui loader active inline small" style="display: none;"></div>
+                                </div>
+                            </form>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-{% include 'footer.html' %}
-
+<div class="full-w data"></div>
+<script type="text/javascript">
+    $('.dalee').click(function(e) {
+        name = $('.sign_dir_name').val()
+        school_name = $('.sign_school_name').val()
+        phone = $('.sign_phone').val()
+        mail = $('.sign_mail').val()
+        new_password = $('.sign_password').val()
+        new_password2 = $('.sign_password2').val()
+        if (name.length > 0 && school_name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0) {
+            if (new_password != new_password2) {
+                $('.reg_wrong_pass').show()
+                return 0;
+            }
+            $('.reg_wrong_phone').hide()
+            $('.reg_fill_all').hide()            
+            $('.reg_wrong_pass').hide()
+            width = parseInt($('.data').width())
+            $('.sign_second_step').show()
+            $('.sign_first_step').animate({
+                marginLeft:(-width) + 'px'
+            } ,300);
+            $('.sign_second_step').animate({
+                marginLeft:(0) + 'px',
+            } ,300);
+            $('.sign_first_step').hide()
+            $("html, body").animate({ scrollTop: 0 },0);
+        }
+        else{
+            $('.reg_fill_all1').show()            
+        }
+    })
+</script>
 {% endblock content %}

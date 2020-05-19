@@ -3,20 +3,25 @@
 <script src="{% static 'js/voronka.js' %}"></script>
 <script src="{% static 'js/voronka2.js' %}"></script>
 <script src="{% static 'js/voronka3.js' %}"></script>
+{% if number_of_all == 0 %}
+<style>
+  text{
+    visibility: hidden;
+  }
+</style>
+{% endif %}
 <div class="ui segment mb0">
-    Воронка продаж
-</div>
-<div class="ui segment no_padding no_margin">
+    <div class="textdg textbold text15">Воронка продаж</div>
     <div style="display: flex;">
-        <span style="padding: 15px 0px 15px 15px;">Показать за последнюю</span>
-        <div style="padding: 10px 0 0 10px;">
-            <a class="ui button mini green update_voronka week_vrnk" status="get_here" value="week" style="height: 29px;">Неделю</a>
-            <a class="ui button mini update_voronka month_vrnk" status="get_here" value="month" style="height: 29px;">Месяц</a>
-            <a class="ui button mini update_voronka year_vrnk" status="get_here" value="year" style="height: 29px;">Год</a>
+        <span class="mr5" style="padding: 15px 0px;">Показать за последнюю</span>
+        <div style="padding: 10px 0 0 0;">
+            <a class="ui button mini green update_voronka week_vrnk mb5" status="get_here" value="week" style="height: 29px;">Неделю</a>
+            <a class="ui button mini update_voronka month_vrnk mb5" status="get_here" value="month" style="height: 29px;">Месяц</a>
+            <a class="ui button mini update_voronka year_vrnk mb5" status="get_here" value="year" style="height: 29px;">Год</a>
         </div>
     </div>
     <div style="display: flex;">
-        <form class="ui form no_margin" style="padding: 10px 0 0 15px;">
+        <form class="ui form no_margin" style="padding: 10px 0 0 0;">
             <input type="date" class="first_vrnk" style="width: 175px;height: 30px;" value="{{ weekago }}">
         </form>
         <span style="padding: 15px 5px;">—</span>
@@ -28,7 +33,7 @@
         </div>
     </div>
     <div style="display: flex;">
-        <div style="padding: 10px 0 0 10px;display: flex;">
+        <div style="padding: 10px 0 0 0px;display: flex;">
             <form class="ui form">
                 <select id="change_manager_vrnk">
                     <option value="-1">Менеджера</option>
@@ -40,11 +45,9 @@
             <a class="ui button mini blue update_voronka" status="get_input" style="height: 29px;margin-left: 15px;">Показать</a>
         </div>
     </div>
-</div>
-<div class="ui segment voronkachart mt0">
-    <div class="ui grid stackable">
+    <div class="ui grid stackable mt0">
         <div class="nine wide column no_padding">
-            <div class="ui pointing below label no_margin red nocards" style="display: none;">
+            <div class="ui pointing below label no_margin nocards" style="display: none;">
                 Нет работы с карточками в этот период
             </div>
             <div id="chartdiv"></div>
@@ -54,7 +57,7 @@
             </div>          
         </div>
         <div class="seven wide column no_padding_side">
-            <table class="ui celled striped table">
+            <table class="ui celled striped table br5 shadow_small">
                 <thead>
                     <tr style="color: #222;">
                         <th>Название</th>
@@ -75,7 +78,7 @@
         </div>
     </div>
 </div>
-<span style="display: none;" class="voronka_url" url="{{ instance.update_voronka }}"></span>
+<span style="display: none;" class="voronka_url" number_of_all="{{number_of_all}}" url="{{ instance.update_voronka }}"></span>
 <script type="text/javascript">
     $('.update_voronka').click(function(e) {
         url = $('.voronka_url').attr('url');
@@ -104,8 +107,7 @@
                   $('#chartdiv').hide()
                 }
                 arr = []
-                for (var i = data.res.length-1; i >=0 ; i--) {
-                    console.log(i)
+                for (var i = data.res.length-1; i >= 0 ; i--) {
                     arr.push({"title": data.res[i][0], "value":data.res[i][1]})
                     $("#tablecolumn"+(5-i)+"number").text(data.res[i][1])
                     $("#tablecolumn"+(5-i)+"percent").text(data.res[i][2]+'%')
@@ -128,7 +130,7 @@
                   "outlineColor": "#FFFFFF",
                   "outlineThickness": 2,
                   "labelPosition": "right",
-                  "balloonText": "[[title]]: [[value]]n[[description]]",
+                  "balloonText": "[[title]]: {%if number_of_all == 0 %}0{%else%}[[value]]{%endif%}",
                   "export": {
                     "enabled": true
                   }
@@ -167,7 +169,7 @@ var chart = AmCharts.makeChart( "chartdiv", {
   {% for item in voronka_array %}
   {
     "title": "{{ item.0 }}",
-    "value": "{{ item.1 }}"
+    "value": "{% if item.1 == 0 %}1{%else%}{{ item.1 }}{%endif%}"
   },
   {% endfor %}
   ],
@@ -185,7 +187,7 @@ var chart = AmCharts.makeChart( "chartdiv", {
   "outlineColor": "#FFFFFF",
   "outlineThickness": 2,
   "labelPosition": "right",
-  "balloonText": "[[title]]: [[value]]n[[description]]",
+  "balloonText": "[[title]]: {%if number_of_all == 0 %}0{%else%}[[value]]{%endif%}",
   "export": {
     "enabled": true
   }

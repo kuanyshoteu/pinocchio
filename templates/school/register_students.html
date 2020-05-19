@@ -4,7 +4,7 @@
 <div class="ui modal large mt50" id="register_students_calendar">
     <i class="close icon"></i>
     <div class="content no_padding backdark">
-        <div class="ui segment margin0 pb0">
+        <div class="ui segment topbr5 margin0 pb0">
             <div class="text15 textdg ml15 mb15">Регистрация <b id="current_user_name"></b></div>
             <form class="ui form predoplata_form" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма оплаты" type="number">
@@ -16,7 +16,7 @@
             <div class="highlight_red isalready pt15 pb15" style="display: none;"> <b class="isalready_subject"></b> уже учит курс группы в другой группе, студента лучше записывать на курс только из одной группы</div>
             {% include 'modals/schedule_filters.html' %}
         </div>
-        <div id="calendar" length='7'>
+        <div id="calendar" class="shadow_dark bottombr5 pb15" length='7'>
             <div class="loading" style="display: none;">
               <div class="animation"><div class="circle one"></div></div>
               <div class="animation"><div class="circle two"></div></div>

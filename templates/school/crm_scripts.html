@@ -176,6 +176,7 @@
             nc = $('.source_card').clone()
             nc.attr('id', 'card_container'+id)
             nc.addClass('crm_card'+id)
+            if (i == 0) {nc.addClass('hint_place2');nc.attr('side', 'right')}
             nc.removeClass('source_card')
             nc.find('#cardnameshow').text(name)
             nc.find('#cardphoneshow').text(phone)
@@ -208,20 +209,19 @@
         column = this_.attr('id')
         page = this_.attr('page')
         var licenseElement = this_.get(0);
-        all = 'no'
         if ($('.current_card').attr('all') == 'yes') {all = 'yes'}
         if ((licenseElement.scrollTop + licenseElement.offsetHeight) >= licenseElement.scrollHeight) {
             filter_data = get_filter_data()
             squads = filter_data[0]
             offices = filter_data[1]
             days = filter_data[2]
-            console.log('yoyoy', offices)
+            kind = filter_data[3]
             $.ajax({
                 url: url,
                 data: {
                     'column':column,
                     'page':page,
-                    'all':all,
+                    'kind':kind,
                     'squads':squads,
                     'offices':offices,
                     'days':days,
@@ -927,7 +927,6 @@
         offices = filter_data[1]
         days = filter_data[2]
         kind = filter_data[3]
-        console.log('update_crm', kind)
         $.ajax({
             url: url,
             data: {

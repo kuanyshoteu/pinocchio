@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <div style="width: 180px;">
 </div>
-<div class="deskmenu fixed_menu ui segment pl5 pr0 shadow_small" style="background-color: #fafafa;position: fixed;width: 165px;border-right: none;margin-top: 14px;margin-left: 14px;">
+<div class="deskmenu fixed_menu ui segment pl5 pr5 shadow_small" style="background-color: #fafafa;position: fixed;width: 165px;border-right: none;margin-top: 14px;margin-left: 14px;">
     <div id="left-main-menu">
         {% if user.is_authenticated %}
         <div class="ui vertical menu" style="background-color: #fafafa; border:none; box-shadow: none;">
@@ -17,13 +17,15 @@
             </a>
             {% endif %}
             {% if is_manager or is_director %}
-            <a class="item lftitem {%if page == 'crm' %}lftitem_crnt{%endif%}" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="list alternate icon mr15" style="font-size: 15px;margin-top: -1px;"></i>
-                CRM
-                {% if profile.skill.need_actions > 0 %}
-                <span class="left_menu_number">{{profile.skill.need_actions}}</span>
-                {% endif %}                    
-            </a>
+            <div side="right" class="hint_place5">
+                <a class="item lftitem {%if page == 'crm' %}lftitem_crnt{%endif%}" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                    <i class="list alternate icon mr15" style="font-size: 15px;margin-top: -1px;"></i>
+                    CRM
+                    {% if profile.skill.need_actions > 0 %}
+                    <span class="left_menu_number">{{profile.skill.need_actions}}</span>
+                    {% endif %}                    
+                </a>                
+            </div>
             {% endif %}
             {% if is_manager or is_director %}
             <a class="item lftitem {%if page == 'payments' %}lftitem_crnt{%endif%}" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
@@ -61,12 +63,16 @@
             {% endif %}
         </div>
         {% endif %}
-        <a class="lftitemsmall update_hints small_text ml10" href="{% url 'main:home' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
+        <a class="lftitemsmall small_text ml10" href="{% url 'main:home' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
             Поиск курсов
         </a>
         <br>
         <a class="lftitemsmall small_text ml10" href='/help/'>
             Помощь
+        </a>
+        <br>
+        <a class="lftitemsmall small_text ml10 update_hints" url='{% url "main:update_hint" %}'>
+            Подсказки
         </a>
         <br>
         <a class="lftitemsmall small_text ml10" href='/team/'>

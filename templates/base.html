@@ -66,7 +66,7 @@
             </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-            <a href="{% url 'main:about' %}" class="ui button mini white pl5 pt10 pr5 pb10" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 2px;">Стать партнером</a>
+            <a href="{% url 'main:about' %}" class="ui button mini green shadow_small pl5 pt10 pr5 pb10" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 2px;">Стать партнером</a>
             <a href="{% url 'main:login_page' %}" class="ui button mini green pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
             {% endif %}
         </div>
@@ -138,10 +138,10 @@
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left:-50px;margin-top: 0px;">
             <h1 style="font-size: 15px;" class="no_margin">Поиск учебных центров</h1>
-            <a href="{% url 'main:about' %}" class="ui button mini white shadow_small mini pb5 pt5 textblue ml15">Стать партнером</a>
+            <a href="{% url 'main:about' %}" class="ui button mini green mini pb5 pt5 ml15"><b>Стать партнером</b></a>
             {% if landing == True %}
             <div class="item not_in_mobile" >
-                <a class="ui button mini green" href="/" style="padding:8px 14px;margin-right: 25px;">Вернуться к поиску</a>
+                <a class="ui button mini white border1 pt5 pb5" href="/" style="padding:8px 14px;margin-right: 25px;">Вернуться к поиску</a>
             </div>
             {% endif %}            
         </div>
@@ -152,9 +152,9 @@
                 <a class="profile_name" status='0'>
                     {{ profile.first_name }}
                     {% if profile.image %}
-                        <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
+                        <img class="ui avatar image backwhite" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
                     {% else %}
-                        <img class="ui avatar image" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.png' %}">
+                        <img class="ui avatar image backwhite" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.svg' %}">
                     {% endif %}
                 </a>
             </div>
@@ -196,7 +196,6 @@
     </div>
 </div>
 <br><br>
-
 <div class='content-container'>
     <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
         <div class="eleven wide column no_padding">
@@ -266,11 +265,10 @@
         <div class="five wide column menu_back no_padding">
         </div>
     </div>
-    <div style="padding-top: 10px;min-height: calc(100% - 40px);">
+    <div class="block_content" style="padding-top: 10px;min-height: calc(100% - 40px);">
         {% block content %}{% endblock content %}
     </div>
 </div>
-
 <audio id="notification_audio" style="display: none;" controls>
     <source src='{% static "notification.mp3" %}' type="audio/mpeg">
 </audio>

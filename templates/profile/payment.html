@@ -8,7 +8,7 @@
 {% if is_manager %}
     <div class="ui grid stackable no_margin">
         {% if hisprofile.is_student %}
-        <div class="ten wide column pl0 pt15 pr30 pb15">
+        <div class="ten wide column pl0 pt15 pr30 pb10">
             Пожалуйста, укажите за какую группу вносится оплата:
             <form class="ui form mb10 mt10" style="display: flex;">
                 <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
@@ -34,15 +34,15 @@
             </div>
         </div>
         {%endif%}
-        <div class="six wide column pl0 pt15 pr15 pb15">
-            <div class="pb5">
+        <div class="six wide column pl0 pt0 pr15 pb0">
+            <div class="pb0">
                 {% if hisprofile.is_student %}
-                <a class="full-w border1 ui button small textblue white shadow_small mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
+                <a class="full-w border1 ui button pt10 pb10 small textblue white shadow_small mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
                 <br>
-                <a class="full-w border1 ui button small textblue white shadow_small mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}">История оплаты</a>
+                <a class="full-w border1 ui button pt10 pb10 small textblue white shadow_small mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}">История оплаты</a>
                 <br>
                 {%endif%}
-                <a class="full-w border1 ui button small textblue white shadow_small get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
+                <a class="full-w border1 ui button pt10 pb10 small textblue white shadow_small get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
             </div>
             {% if hisprofile.is_student %}
             <div class="ui modal payment_history full-h">

@@ -21,8 +21,13 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from constants import *
 from schools.models import School
-from schools.views import get_social_networks
+from schools.views import get_social_networks, add_subject_category_work, register_new_student
+from squads.views import add_subject_work, add_lecture_work
 from squads.models import NeedMoney
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from django.http import JsonResponse
 
 def loaderio(request):
     context = {
@@ -216,25 +221,17 @@ def moderator(request):
     }
     return render(request, "moderator.html", context)
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.http import JsonResponse
-
 def create_school(request):
     ok = False
     password = False
     profile = get_profile(request)
-    if is_profi(profile, 'Moderator') and request.GET.get('title') and request.GET.get('slogan') and request.GET.get('name') and request.GET.get('phone'):
-        school = School.objects.create(
-            title=request.GET.get('title'),
-            slogan=request.GET.get('slogan'),
-            version=request.GET.get('version'),
-            worktime='По предварительной записи',
-            )
-        school.save()
-        for column in CRMColumn.objects.filter(id__lt = 7): 
-            school.crm_columns.add(column)
+    title = request.GET.get('title')
+    slogan = request.GET.get('slogan')
+    name = request.GET.get('name')
+    phone = request.GET.get('phone')
+    version = request.GET.get('version')
+    if is_profi(profile, 'Moderator') and title and slogan and name and phone:
+        school = create_school_work(title, slogan, version)
         new_id = str(User.objects.order_by("id").last().id + 1)
         new_name = request.GET.get('name').replace(' ', '')+new_id
         password = random_password()
@@ -328,42 +325,129 @@ def login_view(request):
     }
     return JsonResponse(data)
 
+def search_free_name(name):
+    if len(User.objects.filter(username=name)) > 0:
+        name += '1'
+        return search_free_name(name)        
+    else:
+        return name
+
+def register_user_work(name, phone, mail, password, request):
+    if len(Profile.objects.filter(mail=mail)) == 0 and len(Profile.objects.filter(phone=phone)) == 0 or password == False:
+        new_name = search_free_name(name.replace(' ', ''))
+        user = User.objects.create(username=new_name, password=password)
+        if password:
+            user.set_password(password)
+        user.save()
+        if password:
+            user2 = authenticate(username = str(user.username), password=str(password))
+            try:
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            except Exception as e:
+                res = 'er'
+                data = {
+                    'res':res,
+                }
+                return JsonResponse(data)
+        profile = Profile.objects.get(user = user)
+        profile.first_name = name
+        profile.phone = phone
+        profile.mail = mail
+        skill = Skill.objects.create()
+        profile.skill = skill
+        profile.save()
+        skill.confirmation_time = timezone.now()
+        skill.confirmed = False
+        skill.save()
+    else:
+        profile = False
+    return profile
+
+def create_school_work(title, slogan, version):
+    school = School.objects.create(
+        title=title,
+        slogan=slogan,
+        version=version,
+        worktime='По предварительной записи',
+        )
+    school.save()
+    for column in CRMColumn.objects.filter(id__lt = 7): 
+        school.crm_columns.add(column)
+    return school
+
 def register_view(request):
-    res = 'ok'
-    if request.GET.get('name') and request.GET.get('phone') and request.GET.get('password1') and request.GET.get('password2'):
-        if request.GET.get('password1') == request.GET.get('password2'):
-            if len(Profile.objects.filter(mail=request.GET.get('phone'))) == 0 and len(Profile.objects.filter(phone=request.GET.get('phone'))) == 0:
-                new_id = str(User.objects.order_by("id").last().id + 1)
-                new_name = request.GET.get('name').replace(' ', '')+new_id
-                user = User.objects.create(username=new_name, password=request.GET.get('password1'))
-                user.set_password(request.GET.get('password1'))
-                user.save()
-                user2 = authenticate(username = str(user.username), password=str(request.GET.get('password1')))
-                try:
-                    login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-                except Exception as e:
-                    res = 'er'
-                    data = {
-                        'res':res,
-                    }
-                    return JsonResponse(data)
-                profile = Profile.objects.get(user = user)
-                profile.first_name = request.GET.get('name')
-                profile.phone = request.GET.get('phone')
-                profile.mail = request.GET.get('mail')
-                skill = Skill.objects.create()
-                profile.skill = skill
-                profile.save()
-                skill.confirmation_time = timezone.now()
-                skill.confirmed = False
-                skill.save()
-            else:
-                res = 'second_user'
+    res = 'no_data'
+    name = request.GET.get('name')
+    school_name = request.GET.get('school_name')
+    mail = request.GET.get('mail')
+    phone = request.GET.get('phone')
+    password1 = request.GET.get('password1')
+    password2 = request.GET.get('password2')
+    slogan = request.GET.get('slogan')
+    subjects = request.GET.get('subjects')
+    course = request.GET.get('course')
+    cost = int(request.GET.get('cost'))
+    cost_period = request.GET.get('cost_period')
+    teachers = request.GET.get('teachers')
+    dir_teach = request.GET.get('dir_teach')
+    url = ''
+    if name and mail and phone and password1 and password2:
+        if password1 == password2:
+            res = 'ok'
+            profile = register_user_work(name, phone, mail, password1, request)
+            if profile == False:
+                return JsonResponse({'res':'second_user'})
+            director = Profession.objects.get(title = 'Director')
+            profile.profession.add(director)
+            teacher_profession = Profession.objects.get(title = 'Teacher')
+            if dir_teach == 'yes':
+                profile.profession.add(teacher_profession)
+            profile.is_student = False
+            profile.save()
+            school = create_school_work(school_name, slogan, 'free')
+            url = school.get_absolute_url()
+            school.content = slogan
+            school.phones.append(phone)
+            school.save()
+            for subject_title in subjects.split(','):
+                add_subject_category_work(school, subject_title)
+            first_teacher = False
+            for teacher_name in teachers.split(','):
+                teacher = register_user_work(teacher_name, '', '', False, False)
+                teacher.profession.add(teacher_profession)
+                teacher.schools.add(school)
+                if not first_teacher:
+                    first_teacher = teacher
+            lastid = str(len(Profile.objects.all()) + 1)
+            card = school.crm_cards.create(
+                author_profile=profile,
+                column=CRMColumn.objects.get(id=1),
+                name='Тестовый ученик',
+                phone='+7777' + lastid,
+                mail='test@mail.com'+lastid,
+                )
+            test_squad = school.groups.create(
+                teacher = profile,
+                title = 'Тестовая_группа',
+                start_date = timezone.now().date() - timedelta(7),
+                )
+            test_squad.start_date = timezone.now().date() - timedelta(7)
+            test_student = register_new_student(False, card, False, profile, False, test_squad.id,school)
+            test_squad.students.add(test_student)
+            subject = school.school_subjects.create(
+                author = profile,
+                title = course,
+                cost = cost,
+                cost_period = cost_period,
+                )
+            add_lecture_work('10:00', '12:00', test_squad, subject, [1,3,5])
+            add_subject_work(school, test_squad, subject)
+            profile.schools.add(school)
         else:
             res = 'not_equal_password'
-
     data = {
         'res':res,
+        'url':url
     }
     return JsonResponse(data)
 
@@ -1497,3 +1581,27 @@ def delete_all_fcs():
 
 def create_nms_fcs():
     pass
+
+def another_hint(request):
+    profile = Profile.objects.get(user = request.user)
+    hint_type = int(request.GET.get('hint_type'))
+    skill = profile.skill
+    if request.GET.get('dir') == 'next':
+        skill.hint_numbers[hint_type] += 1
+    elif request.GET.get('dir') == 'prev':
+        skill.hint_numbers[hint_type] -= 1
+    else:
+        skill.hint_numbers[hint_type] = 100
+    skill.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def update_hint(request):
+    profile = Profile.objects.get(user = request.user)
+    skill = profile.skill
+    skill.hint_numbers = [0, 1, 1, 1, 1, 1]
+    skill.save()
+    data = {
+    }
+    return JsonResponse(data)

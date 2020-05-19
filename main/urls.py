@@ -5,7 +5,7 @@ from .views import *
 from news.views import blog
 app_name = 'Enigmath'
 urlpatterns = [
-    url(r'^about/$', about, name='about'),
+    url(r'^crm/$', about, name='about'),
     url(r'^team/$', team, name='team'),
     url(r'^help/$', help_page, name='help_page'),
     url(r'^pricing/$', pricing, name='pricing'),
@@ -35,6 +35,8 @@ urlpatterns = [
     url(r'^api/create_worker/$', create_worker, name='create_worker'),
     url(r'^api/make_zaiavka/$', make_zaiavka, name='make_zaiavka'),
     url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
+    url(r'^api/another_hint/$', another_hint, name='another_hint'),
+    url(r'^api/update_hint/$', update_hint, name='update_hint'),
     url(r'^robots.txt', robots, name="robots"),
     url(r'^sitemap', sitemap, name="sitemap"),
     url(r'^$', newland, name='home'),

@@ -95,8 +95,6 @@ def account_view(request, user = None):
     user = User.objects.get(username = user)
     hisprofile = Profile.objects.get(user = user)
     skill = hisprofile.skill
-    if profile.skill.confirmed == False:
-        return redirect(profile.check_confirmation())
     miss_lesson_form = False
     mypage = ''
     if profile == hisprofile:
@@ -142,7 +140,6 @@ def account_view(request, user = None):
                 hissubjects = att_squad.subjects.all()
     else:
         hissubjects = set(Subject.objects.filter(squads__in=hissquads))
-
     school_money = 0
     if len(profile.schools.all()) > 0:
         school = profile.schools.first()
@@ -551,20 +548,6 @@ def tell_about_corruption(request):
         ok = True
     data = {
         'ok':ok
-    }
-    return JsonResponse(data)
-
-def another_hint(request):
-    profile = Profile.objects.get(user = request.user)
-    hint_type = int(request.GET.get('hint_type'))
-    if request.GET.get('dir') == 'next':
-        profile.skill.hint_numbers[hint_type] += 1
-    elif request.GET.get('dir') == 'prev':
-        profile.skill.hint_numbers[hint_type] -= 1
-    else:
-        profile.skill.hint_numbers[hint_type] = 100
-    profile.skill.save()
-    data = {
     }
     return JsonResponse(data)
 

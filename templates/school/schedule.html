@@ -10,11 +10,11 @@
         <div class="ui grid pb50">
             {% include 'left_menu.html' %}
             <div class="wide column pr0" style="width: 85%;">
-                <div class="ui segment margin0" style="font-size: 15px;">
+                <div class="ui segment margin0 shadow_small topbr5" style="font-size: 15px;">
                     <b class="text15 textdg">Расписание школы</b>
                     {% include 'modals/schedule_filters.html' %}
                 </div>
-                <div id="calendar" length='7'>
+                <div id="calendar" class="shadow_dark bottombr5 pb15" length='7'>
                     <div class="loading" style="display: none;">
                       <div class="animation"><div class="circle one"></div></div>
                       <div class="animation"><div class="circle two"></div></div>

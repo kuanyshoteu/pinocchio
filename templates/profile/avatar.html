@@ -1,18 +1,18 @@
 {% load crispy_forms_tags %}  
 {% load staticfiles %} 
-<div id="responsive-avatar" class="full-w ui raised card no_padding no_margin" style="height: 250px;">
+<div id="responsive-avatar" class="full-w shadow_small br5 ui segment no_padding no_margin" style="height: 249px;">
     <div class="image">
         <div style="height: 200px;">
             {% if hisprofile.image %}
-            <div class="img full-w" style="background-image: url({{ hisprofile.image.url }});"></div>
+            <div class="img full-w topbr5" style="background-image: url({{ hisprofile.image.url }});"></div>
             {% else %}
-            <div class="img full-w" style="background-image: url({% static 'images/nophoto.png' %});"></div>
+            <div class="img full-w topbr5" style="background-image: url({% static 'images/nophoto.svg' %});"></div>
             {% endif %}
         </div>
         <div style="padding: 0 14px;">
             <div class="highliter" style="position: absolute;margin:-40px 0 0 -210px;"></div>
             {% if profile == hisprofile %}
-            <a href="{{ profile.change_url }}" class="ui button mini full-w" style="margin-top: 10px;">Редактировать</a>
+            <a href="{{ profile.change_url }}" class="ui button mini white shadow_small border1t textblue full-w" style="margin-top: 10px;">Редактировать</a>
             {% endif %}
         </div>
     </div>

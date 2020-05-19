@@ -157,6 +157,7 @@ def get_pay_date(nm):
     crnt_year = today.strftime('%Y') 
     pay_day = nm.pay_day
     nm_date = datetime.datetime.strptime(str(pay_day)+'-'+crnt_mnth+'-'+crnt_year,"%d-%m-%Y").date()
+    print('yo', nm_date)
     if nm_date < today:
         pay_date = nm_date + relativedelta(months=1)
     else:

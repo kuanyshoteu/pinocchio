@@ -27427,7 +27427,7 @@ select.ui.dropdown {
   }
   .ui.modal > .content {
     display: block;
-    padding: 1rem !important;
+    padding: 1rem;
   }
   .ui.modal > .close {
     top: 0.5rem !important;
@@ -29822,9 +29822,6 @@ a:hover {
   font-size: 23px;
   letter-spacing: 1px;
 }
-#left-main-menu {
-  padding: 0rem 1rem 0 0;
-}
 #left-main-menu a {
   font-size: 14px;
   color: #285473;
@@ -31021,7 +31018,7 @@ i.map_worktime-icon {
   color: #4e4e4e;
   line-height: 100%;
   margin: 0 0 1rem 0;
-  font-size: 3rem;
+  font-size: 25px;
 }
 .schoolLanding__content-category__item.active i {
   color: #fff;

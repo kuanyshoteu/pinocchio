@@ -19,7 +19,7 @@
         {% if student.image %}
         <image xlink:href="{{ student.image.url }}" clip-path="url(#clip)" x="0" y="0" height="100%" width="100%"/>
         {% else %}
-        <image xlink:href="{% static 'images/nophoto.png' %}" clip-path="url(#clip)" x="0" y="0" r="15.91549431" r="15" height="100%" width="100%"/>
+        <image xlink:href="{% static 'images/nophoto.svg' %}" clip-path="url(#clip)" x="0" y="0" r="15.91549431" r="15" height="100%" width="100%"/>
         {% endif %}
 
       <text class="circle-chart__percent" stroke="#fff" stroke-width="0.2" fill="#fff" x="16.91549431" y="38" alignment-baseline="central" text-anchor="middle" font-size="6">{{ student.coins }}</text>

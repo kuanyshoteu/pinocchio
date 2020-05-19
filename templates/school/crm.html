@@ -40,7 +40,7 @@
                             </div>
                             <div class="filter wide column">
                                 <div class="filter-element">
-                                    <div class="filter-title filter-title-group" status="0" onclick="filter_title('group')">
+                                    <div class="border1 filter-title filter-title-group" status="0" onclick="filter_title('group')">
                                         Группы 
                                         <i class="icon caret down" style="float: right;"></i>
                                     </div>
@@ -71,7 +71,7 @@
                             {% endif %}
                             <div class="wide column pl0 pr0 pb0 ml10" style="width: 60px;">
                                 <div class="filter-element">
-                                    <div class="filter-title filter-title-days" status="0" onclick="filter_title('days')">Дни<i class="icon caret down" style="float: right;"></i></div>
+                                    <div class="border1 filter-title filter-title-days" status="0" onclick="filter_title('days')">Дни<i class="icon caret down" style="float: right;"></i></div>
                                     <ul class="filter-list filter-list-days" style="display: none;">
                                         {% for day in crmdays %}
                                         <li class="filter-item-s cfday" status="day" id="{{ day.title }}">
@@ -91,8 +91,8 @@
                         <div class="wide column center aligned pr5 pl0 pt5 pb0" style="width: 16.65%;">
                             <div class="margin0 backdark pt10 pb10 textw topbr5">
                                 <div class="crm_title mb10">{{ column.title }}</div>
-                                <div class="text-center pl5 pr5">
-                                    <a class="ui button mini pt5 pb5 full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>
+                                <div class="text-center pl5 pr5 {%if forloop.counter == 1%}hint_place1" side="right2{%endif%}">
+                                    <a class="ui button mini white textblue pt5 pb5 full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>
                                 </div>
                             </div>
                             <div onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
@@ -133,14 +133,16 @@
         <a class="ui button mini red" onclick="$('#delete_card_modal').modal('hide')">Нет</a>
     </div>
 </div>
-<span style="display: none;" id="0" all='{%if crm_all%}yes{%else%}no{%endif%}' class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
+<span style="display: none;" id="0" class="current_card" name="-1" url="{{ instance.open_card_url }}"></span>
 <span style="display: none;" class="edit_card_url" url="{{ instance.edit_card_url }}"></span>
 <span style="display: none;" class="add_card_url" url="{{ instance.add_card_url }}"></span>
 <span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}" get_card_info="{% url 'schools:get_card_info' %}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
-<span class="data" is_crm="yes" is_dir="{{is_director}}" hisid="{{profile.id}}" filter_crm_cards="{%url 'schools:filter_crm_cards'%}" get_card_dialog="{%url 'schools:get_card_dialog'%}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
+<span class="data" last_hint="2" hint="{{hint}}" is_crm="yes" is_dir="{{is_director}}" hisid="{{profile.id}}" filter_crm_cards="{%url 'schools:filter_crm_cards'%}" get_card_dialog="{%url 'schools:get_card_dialog'%}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
 {% include 'school/crm_scripts.html' %}
+{% include 'modals/crm_hints.html' %}
+{% include 'modals/get_hint_script.html' %}
 <style type="text/css">
 .ui-draggable-dragging{
     opacity: 1;

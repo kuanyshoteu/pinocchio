@@ -1,12 +1,12 @@
 {% load ttttags %}
 {% load ttags %}
-<div style="background-color: #4A4A4A;">
+<div class="backdark shadow_dark bottombr5">
 	<div class="ui grid no_margin" style="padding: 0 25px 0 0;">
 		<div class="no_padding" style="width: 25%;">
 			<div class="textw" style="height: 30px;line-height: 30px;">
 		    </div>
 			{% for student in att_squad.students.all %}
-				<div class="student_name" style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
+				<div class="student_name pl10 pt15" style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
 			        <a href="{{student.get_absolute_url}}" class="textw">{{ student.first_name }}</a>
 			        {% if not student.is_student %}
 			        <br>
@@ -44,7 +44,7 @@
 							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 3 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="3">3</a>
 							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 2 %}blue{% endif %}" url={{attendance.change_url}} id="{{attendance.id}}" grade="2">2</a>
 							        {%else%}
-							        <div class="ui segment attendace_grade" style="background-color: #21BA45;">
+							        <div class="pl15 pt15 pr15 pb15 attendace_grade" style="background-color: #21BA45;">
 							        	<i class="icon check text10 textw mr0"></i>
 							        </div>
 							        {%endif%}
@@ -57,7 +57,7 @@
 								    </div>
 							    </div>
 							    {%endif%}
-								<div class="ui segment attendace_grade attresult{{ attendance.id }}" style="{%if date.2 == 'now' and attendance.present == 'present' or date.2 == 'now' and attendance.present == '' %}display: none;{%endif%}
+								<div class="pl15 pt15 pr15 pb15 attendace_grade attresult{{ attendance.id }}" style="{%if date.2 == 'now' and attendance.present == 'present' or date.2 == 'now' and attendance.present == '' %}display: none;{%endif%}
 						        background-color: 
 						        {%if attendance.present == 'present'%}
 						        #21BA45

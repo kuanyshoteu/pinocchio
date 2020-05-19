@@ -8,7 +8,6 @@
         url = $(this).attr('url')
         id = $(this).attr('id')
         name = $(this).attr('name')
-        console.log('save_vk_group aoaoaoa')
         $.ajax({
             url: url,
             data: {
@@ -18,6 +17,18 @@
             dataType: 'json',
             success: function (data) {
                 window.location.replace(data.url);
+            }
+        })
+    })
+    $('.update_hints').click(function(e) {
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                location.reload();
             }
         })
     })
@@ -946,44 +957,86 @@
             }
         })        
     });
+    $('.dir_teach_chose').click(function(e) {
+        $('.dir_teach_chose.chosen').removeClass('chosen')
+        $(this).addClass('chosen')
+        $('.dir_teach_check').hide()
+        $(this).find('.check').show()
+    })
+    $('.sign_slogan').click(function(e) {
+        $('.sign_slogan.chosen').removeClass('chosen')
+        $(this).addClass('chosen')
+        $('.slogan_check').hide()
+        $(this).find('.check').show()
+    })
     $('.register-btn2').click(function(e) {
+        $(this).addClass('disabled')
+        $('.reg_wrong_phone').hide()
+        $('.reg_fill_all').hide()
+        $('.reg_wrong_pass').hide()
+        $('.next_step_load').show()
         url = '/api/register/'
-        name = $('.new_name2').val()
-        phone = $('.new_username2').val()
-        mail = $('.new_mail2').val()
-        new_password = $('.new_password22').val()
-        new_password2 = $('.new_password222').val()
-        console.log(name, phone, mail, new_password, new_password2)
-        if (name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2) {        
+        name = $('.sign_dir_name').val()
+        school_name = $('.sign_school_name').val()
+        phone = $('.sign_phone').val()
+        mail = $('.sign_mail').val()
+        new_password = $('.sign_password').val()
+        new_password2 = $('.sign_password2').val()
+        if ($('.sign_slogan.chosen').length > 0) {
+            slogan = $('.sign_slogan.chosen').text()           
+        }
+        else if ($('.sign_slogan_input').val().length > 0){
+            slogan = $('.sign_slogan_input').val()
+        }
+        subjects = $('.sign_subjects').val()
+        course = $('.sign_course_name').val()
+        cost = $('.sign_course_cost').val()
+        cost_period = $('.sign_payment_check.chosen').parent().attr('status')
+        teachers = $('.sign_teachers').val()
+        dir_teach = $('.dir_teach_chose.chosen').attr('status')
+        if (name.length > 0 && school_name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password==new_password2 && slogan.length > 0 && subjects.length > 0 && course.length > 0 && cost_period.length > 0 && teachers.length > 0 && dir_teach.length > 0) {
             $.ajax({
                 url: url,
                 data: {
                     'name':name,
                     'phone':phone,
                     'mail':mail,
+                    'school_name':school_name,
                     'password1':new_password,
                     'password2':new_password2,
+                    'slogan':slogan,
+                    'subjects':subjects,
+                    'course':course,
+                    'cost':cost,
+                    'cost_period':cost_period,
+                    'teachers':teachers,
+                    'dir_teach':dir_teach,
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data.res)
                     if (data.res == 'ok') {
-                        $('.reg_wrong_phone').hide()
-                        $('.reg_fill_all').hide()
-                        $('.reg_wrong_pass').hide()
-                        location.reload()
+                        window.location.replace(data.url);
                     }
-                    else if (data.res == 'second_user'){
+                    else if (data.res == 'second_user') {
+                        $(this).removeClass('disabled')
+                        $('.next_step_load').hide()
                         $('.reg_wrong_phone').show()
-                    }
-                    else if (data.res == 'not_equal_password'){
-                        $('.reg_wrong_pass').show()
+                        width = parseInt($('.data').width())
+                        $('.sign_first_step').show()
+                        $('.sign_second_step').animate({
+                            marginLeft:(width) + 'px'
+                        } ,300);
+                        $('.sign_first_step').animate({
+                            marginLeft:(0) + 'px',
+                        } ,300);
+                        $('.sign_second_step').hide()
+                        $("html, body").animate({ scrollTop: 0 },0);
                     }
                 }
             })
         }
         else{
-            $('.reg_fill_all').show()
+            $('.reg_fill_all2').show()
         }
     });
     $('.update_pswd-btn').click(function(e) {

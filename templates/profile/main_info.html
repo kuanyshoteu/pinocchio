@@ -7,7 +7,7 @@
                 {% if hisprofile.image %}
                 <div class="img-responsive" style="background-image: url({{ hisprofile.image.url }});"></div>
                 {% else %}
-                <div class="img-responsive" style="background-image: url({% static 'images/nophoto.png' %});"></div>
+                <div class="img-responsive" style="background-image: url({% static 'images/nophoto.svg' %});"></div>
                 {% endif %}
                 {% if profile == hisprofile %}
                 <a href="{{ profile.change_url }}" class="mt5 pb5 in_mobile text10">Редактировать</a>

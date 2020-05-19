@@ -16,7 +16,6 @@ urlpatterns = [
     url(r'^api/subject_attendance/$', subject_attendance, name='subject_attendance'),
     url(r'^api/more_attendance/$', more_attendance, name='more_attendance'),
     url(r'^api/more_attendance_student/$', more_attendance_student, name='more_attendance_student'),
-    url(r'^api/hint_url/$', another_hint, name='hint_url'),
     url(r'^api/make_payment/$', make_payment, name='make_payment'),
     url(r'^api/make_payment_card/$', make_payment_card, name='make_payment_card'),
     url(r'^check_confirmation/$', check_confirmation, name='check_confirmation'),

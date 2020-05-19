@@ -15,54 +15,52 @@
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column eighty" style="margin-left: 30px;">
-                <div class="ui grid stackable no_margin">
+                <div class="ui grid stackable no_margin textdg">
                     <div class="eight wide column pr0 pt0">
                         <div class="ui segment mb0">
                             <b>Основная информация</b>
-                        </div>
-                        <div class="ui segment mt0 mb0" style="height: 260px;">
-                            <form class="ui form" class="ui form">
-                                Имя
-                                <textarea style="height: 29px;overflow: hidden;" class="mb15 profile_name_edit" placeholder="Введите имя">{{profile.first_name}}</textarea>
-                                Телефон
-                                <textarea style="height: 29px;overflow: hidden;" class="mb15 profile_phone" placeholder="Напишите номер телефона">{{profile.phone}}</textarea>
-                                Почта
-                                <textarea style="height: 29px;overflow: hidden;" class="mb10 profile_mail" placeholder="Напишите почту">{{profile.mail}}</textarea>
-                                Ава
-                                <div class="mb10" style="height: 29px;">
-                                    <input type="file" name="profile_banner" id="profile_banner" class="postfile pt0">
-                                    <label class="file_post" for="profile_banner">
-                                        <a class="ui button mini mr15"><i class="icon image blue"></i>Выберите картинку</a>
-                                    </label>
-                                </div>                                
-                            </form>
-                        </div>
-                        <div class="ui segment mt0 text-center">
-                            <a url="{%url 'accounts:save_profile'%}" class="ui button green mini save_profile">Сохранить</a>
-                            <div class="loading_small" style="display: none;" id="profile_save_load">
-                              <div class="animation"><div class="circle one"></div></div>
-                              <div class="animation"><div class="circle two"></div></div>
-                              <div class="animation"><div class="circle three"></div></div>
-                              <div class="animation"><div class="circle four"></div></div>
-                              <div class="animation"><div class="circle five"></div></div>
-                              <div class="animation"><div class="circle six"></div></div>
-                            </div>  
-                            <i class="icon check green profile_saved" style="display: none;"></i>                            
-                        </div>                        
+                            <div class="mt15 mb0" style="height: 260px;">
+                                <form class="ui form" class="ui form">
+                                    Имя
+                                    <textarea style="height: 29px;overflow: hidden;" class="mb15 profile_name_edit" placeholder="Введите имя">{{profile.first_name}}</textarea>
+                                    Телефон
+                                    <textarea style="height: 29px;overflow: hidden;" class="mb15 profile_phone" placeholder="Напишите номер телефона">{{profile.phone}}</textarea>
+                                    Почта
+                                    <textarea style="height: 29px;overflow: hidden;" class="mb10 profile_mail" placeholder="Напишите почту">{{profile.mail}}</textarea>
+                                    Ава
+                                    <div class="mb10" style="height: 29px;">
+                                        <input type="file" name="profile_banner" id="profile_banner" class="postfile pt0">
+                                        <label class="file_post" for="profile_banner">
+                                            <a class="ui button mini mr15"><i class="icon image blue"></i>Выберите картинку</a>
+                                        </label>
+                                    </div>                                
+                                </form>
+                            </div>
+                            <div class="mt0 text-center">
+                                <a url="{%url 'accounts:save_profile'%}" class="ui button green mini save_profile">Сохранить</a>
+                                <div class="loading_small" style="display: none;" id="profile_save_load">
+                                  <div class="animation"><div class="circle one"></div></div>
+                                  <div class="animation"><div class="circle two"></div></div>
+                                  <div class="animation"><div class="circle three"></div></div>
+                                  <div class="animation"><div class="circle four"></div></div>
+                                  <div class="animation"><div class="circle five"></div></div>
+                                  <div class="animation"><div class="circle six"></div></div>
+                                </div>  
+                                <i class="icon check green profile_saved" style="display: none;"></i>                            
+                            </div> 
+                        </div>                       
                     </div>
                     <div class="eight wide column pr0 pt0">
                         <div class="ui segment mb0">
                             <b>Изменить пароль</b>
-                        </div>
-                        <div class="ui segment mt0 mb0"  style="height: 260px;">
-                            <form class="ui form">
-                                <div>Новый пароль</div>
-                                <input placeholder="Введите новый пароль" class="reset_password1" type="password" name="password">
-                                <div class="mt15">Повторите новый пароль</div>
-                                <input placeholder="Повторите новый пароль" class="reset_password2" type="password" name="password">
-                            </form>
-                        </div>
-                        <div class="ui segment mt0">
+                            <div class="mt15 mb0"  style="height: 260px;">
+                                <form class="ui form">
+                                    <div>Новый пароль</div>
+                                    <input placeholder="Введите новый пароль" class="reset_password1" type="password" name="password">
+                                    <div class="mt15">Повторите новый пароль</div>
+                                    <input placeholder="Повторите новый пароль" class="reset_password2" type="password" name="password">
+                                </form>
+                            </div>
                             <div class="text-center">
                                 <input class="ui button green reset_pswd mini" id="{{ profile.id }}" value="Сохранить" type="submit" onclick="return false">
                                 <div class="success_change_pswrd mt5" style="display: none;">
