@@ -2,7 +2,6 @@
 {% load ttags %}
 <span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
 <span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
-<br>
 <div class="ui segment shadow_small shapka topbr5 pb0" style="box-shadow: none;">
     <div class="ui grid stackable mb5">
         <div class="five wide column textdg textbold text15">
@@ -44,7 +43,7 @@
         {%endif%}
         </div>
     {% if is_this_trener or is_manager %}
-        <div id="subject_attendance">
+        <div id="subject_attendance" class="hint_place2" side="top">
             <div class="loading" style="display: none;">
               <div class="animation"><div class="circle one"></div></div>
               <div class="animation"><div class="circle two"></div></div>
@@ -56,7 +55,7 @@
             {% include "profile/attendance_squad.html" %}
         </div>
     {% else %}
-        <div id="subject_attendance">
+        <div id="subject_attendance hint_place2" side="top">
             {% include "profile/attendance_student.html" %}
         </div>
     {% endif %} 

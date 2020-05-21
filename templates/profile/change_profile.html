@@ -17,8 +17,8 @@
             <div class="wide column eighty" style="margin-left: 30px;">
                 <div class="ui grid stackable no_margin textdg">
                     <div class="eight wide column pr0 pt0">
-                        <div class="ui segment mb0">
-                            <b>Основная информация</b>
+                        <div class="ui segment shadow_small mb0">
+                            <b class="text15">Основная информация</b>
                             <div class="mt15 mb0" style="height: 260px;">
                                 <form class="ui form" class="ui form">
                                     Имя
@@ -31,13 +31,13 @@
                                     <div class="mb10" style="height: 29px;">
                                         <input type="file" name="profile_banner" id="profile_banner" class="postfile pt0">
                                         <label class="file_post" for="profile_banner">
-                                            <a class="ui button mini mr15"><i class="icon image blue"></i>Выберите картинку</a>
+                                            <a class="ui button mini white shadow_small border1 mr15"><i class="icon image blue"></i>Выберите картинку</a>
                                         </label>
                                     </div>                                
                                 </form>
                             </div>
                             <div class="mt0 text-center">
-                                <a url="{%url 'accounts:save_profile'%}" class="ui button green mini save_profile">Сохранить</a>
+                                <a url="{%url 'accounts:save_profile'%}" class="ui button green small pl30 pr30 border1 save_profile">Сохранить</a>
                                 <div class="loading_small" style="display: none;" id="profile_save_load">
                                   <div class="animation"><div class="circle one"></div></div>
                                   <div class="animation"><div class="circle two"></div></div>
@@ -51,8 +51,8 @@
                         </div>                       
                     </div>
                     <div class="eight wide column pr0 pt0">
-                        <div class="ui segment mb0">
-                            <b>Изменить пароль</b>
+                        <div class="ui segment shadow_small mb0">
+                            <b class="text15">Изменить пароль</b>
                             <div class="mt15 mb0"  style="height: 260px;">
                                 <form class="ui form">
                                     <div>Новый пароль</div>
@@ -62,7 +62,7 @@
                                 </form>
                             </div>
                             <div class="text-center">
-                                <input class="ui button green reset_pswd mini" id="{{ profile.id }}" value="Сохранить" type="submit" onclick="return false">
+                                <input class="ui button green reset_pswd small pl30 pr30" id="{{ profile.id }}" value="Сохранить" type="submit" onclick="return false">
                                 <div class="success_change_pswrd mt5" style="display: none;">
                                     <i class="icon check green"></i> 
                                     Пароль сохранен

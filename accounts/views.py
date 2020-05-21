@@ -169,7 +169,8 @@ def account_view(request, user = None):
         'constant_times':get_times(60),
         "interval":60,
         'height':28*15+25, 
-        "page":mypage,       
+        "page":mypage,
+        "hint":profile.skill.hint_numbers[2],
     }
     return render(request, "profile.html", context)
 

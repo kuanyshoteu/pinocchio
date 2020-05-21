@@ -25,7 +25,7 @@
         </form>
     </div>
     <div class="deskdflex mt15 mb5">
-        <div class="ui segment shadow_small" style="margin: 0 auto;">
+        <div class="ui segment shadow_small hint_place1" side="bottom" style="margin: 0 auto;">
             <div class="textdg text-center textbold textblue mb10">Добавление урока в расписание</div>
             <div>
                 <form class="ui form grid no_margin">
@@ -56,6 +56,7 @@
                 <a class="pl30 pr30 ui button mini white border1 shadow_small textblue textbold no_margin const_create_lectures" url="{{instance.const_create_lectures}}">Добавить</a>
             </div>
         </div>
+        <div class="hint_place2" side="bottom2"></div>
     </div>
 </div>
 <form class="ui grid full-w mt0 change_mode">
@@ -89,66 +90,65 @@
                 <div class="dark_grey constback3 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback5 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback7 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
-            {% for lecture in instance|constant_schedule_lectures %}
-                <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}} squad_lesson{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.subject.color_back == ''%}#313a57{%else%}{{ lecture.7.subject.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
-                    {{lecture.1}} 
-                        <span class="redx">✖</span>                    
-                </div>
-                <div id="{{lecture.6}}" class="hint_schedule lecture_const hint_schedule{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
-                    <div class="ui segment" style="color: #222;width: 300px;">
-                        <div class="text-center">
-                            <b>{{lecture.7.squad.title}}</b>
-                        </div>
-                        <div class="mt10">
-                            <span style="color: grey;">Время</span>
-                            {{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
-                        </div>
-                        <div class="mt10">
-                            <span style="color: grey;">Курс</span>
-                            {{lecture.7.subject.title}}
-                        </div>
-                        <div class="mt10">
-                            <span style="color: grey;">Учитель</span>
-                            {{lecture.7.squad.teacher.first_name}}
-                        </div>
-                        <div class="mt10">
-                            <span style="color: grey;">Цена</span>
-                            {{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
-                        </div>
+                {% for lecture in instance|constant_schedule_lectures %}
+                    <div onclick="$('.constlect_modal{{lecture.6}}').modal('show')" id="{{lecture.6}}" class="show_hint_schedule lecture_const wait{{lecture.4}} squad_lesson{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" height="{{lecture.0}}" style="position: absolute;background-color: {%if lecture.7.subject.color_back == ''%}#313a57{%else%}{{ lecture.7.subject.color_back }}{%endif%};color: #fff;padding: 5px;width: 98px;font-size: 13px;border-radius: 3px;border: 1px solid #fff;text-align: center;cursor: pointer;">
+                        {{lecture.1}} 
+                            <span class="redx">✖</span>                    
                     </div>
-                </div>                
-                <div class="ui modal small constlect_modal{{lecture.6}}">
-                    <i class="close icon"></i>
-                    <div class="content">
-                        <div class="text-center">
-                            <b>Редактирование {{lecture.1}}</b>
-                        </div>
-                        <div class="mt15 mb15">
-                            Выберите кабинет:
-                            <select onchange="change_cabinet('change_lecture_cabinet{{lecture.6}}', '{{ instance.change_lecture_cabinet }}')" class="change_lecture_cabinet pt5 pb5 pl10 pr10" lecture_id="{{lecture.6}}" id="change_lecture_cabinet{{lecture.6}}">
-                                {% if lecture.7.cabinet %}
-                                <option value="{{lecture.7.cabinet.id}}">{{lecture.7.cabinet.title}}</option>
-                                {% else %}
-                                <option value="-1">Без кабинета</option>
-                                {% endif %}
-                                {% for cabinet in instance.office.cabinets.all %}
-                                {% if cabinet != lecture.7.cabinet %}
-                                <option value="{{cabinet.id}}">{{cabinet.title}}</option>
-                                {% endif %}
-                                {%endfor%}
-                            </select>
-                            <div class="ok_change_cabinet" style="display: none;"> 
-                                Сохранено
-                                <i class="icon check green"></i>
+                    <div id="{{lecture.6}}" class="hint_schedule lecture_const hint_schedule{{lecture.6}}" time="{{lecture.5}}" hour="{{lecture.2}}" minute="{{lecture.3}}" day="{{lecture.4}}" style="position: absolute;z-index: 3000;margin-left: 100px;display: none;margin-top: -50px;">
+                        <div class="ui segment" style="color: #222;width: 300px;">
+                            <div class="text-center">
+                                <b>{{lecture.7.squad.title}}</b>
+                            </div>
+                            <div class="mt10">
+                                <span style="color: grey;">Время</span>
+                                {{lecture.7.cell.time_period.start}}:{{lecture.7.cell.time_period.end}}
+                            </div>
+                            <div class="mt10">
+                                <span style="color: grey;">Курс</span>
+                                {{lecture.7.subject.title}}
+                            </div>
+                            <div class="mt10">
+                                <span style="color: grey;">Учитель</span>
+                                {{lecture.7.squad.teacher.first_name}}
+                            </div>
+                            <div class="mt10">
+                                <span style="color: grey;">Цена</span>
+                                {{lecture.7.subject.cost}} тг за {% if lecture.7.subject.cost_period == 'lesson'%}урок{%elif lecture.7.subject.cost_period == 'month'%}месяц{%elif lecture.7.subject.cost_period == 'course'%}весь курс{%endif%}
                             </div>
                         </div>
-                        <div class="text-center">
-                            <a class="ui button mini red delete_squad_lesson" onclick="delete_squad_lesson('{{lecture.7.id}}')" id="{{lecture.7.id}}">Удалить урок из расписания</a>
+                    </div>                
+                    <div class="ui modal small constlect_modal{{lecture.6}}">
+                        <i class="close icon"></i>
+                        <div class="content">
+                            <div class="text-center">
+                                <b>Редактирование {{lecture.1}}</b>
+                            </div>
+                            <div class="mt15 mb15">
+                                Выберите кабинет:
+                                <select onchange="change_cabinet('change_lecture_cabinet{{lecture.6}}', '{{ instance.change_lecture_cabinet }}')" class="change_lecture_cabinet pt5 pb5 pl10 pr10" lecture_id="{{lecture.6}}" id="change_lecture_cabinet{{lecture.6}}">
+                                    {% if lecture.7.cabinet %}
+                                    <option value="{{lecture.7.cabinet.id}}">{{lecture.7.cabinet.title}}</option>
+                                    {% else %}
+                                    <option value="-1">Без кабинета</option>
+                                    {% endif %}
+                                    {% for cabinet in instance.office.cabinets.all %}
+                                    {% if cabinet != lecture.7.cabinet %}
+                                    <option value="{{cabinet.id}}">{{cabinet.title}}</option>
+                                    {% endif %}
+                                    {%endfor%}
+                                </select>
+                                <div class="ok_change_cabinet" style="display: none;"> 
+                                    Сохранено
+                                    <i class="icon check green"></i>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <a class="ui button mini red delete_squad_lesson" onclick="delete_squad_lesson('{{lecture.7.id}}')" id="{{lecture.7.id}}">Удалить урок из расписания</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-            {% endfor %}
+                {% endfor %}
             </div>
         </div>
         <div class="schedule_lines" style="min-width: 100%;white-space: nowrap;">

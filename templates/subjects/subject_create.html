@@ -148,7 +148,7 @@
                         {% if is_director %}
                         <div class="sixteen wide column pl0 pr0">
                             <div class="ui segment shadow_small">
-                                <div><b class="text15 textdg">Фильтры</b></div>
+                                <div class="hint_place1" side="top2"><b class="text15 textdg">Фильтры</b></div>
                                 <div class="ui grid stackable mt15 ml0 mr15 mb0">
                                     {% for subject_category in subject_categories %}
                                     <a style="height: 32px" class="mr10 mb10 ui button mini white shadow_small border1 filter-item-s" name="filter-item-s" object="category" status="0" id="{{ subject_category.id }}">
@@ -218,7 +218,9 @@
 			</div>
 		</div>
 	</div>	
-	<span id='{{ instance.id }}' change_category_url='{% url "subjects:change_category" %}' data-href='{{ instance.calendar_url }}' style="display: none;" name='data' class="data" days='' >
+	<span class="data" id='{{ instance.id }}' change_category_url='{% url "subjects:change_category" %}' data-href='{{ instance.calendar_url }}' style="display: none;" name='data' days='' hint_type="5" last_hint="1" hint="{{hint}}">
+    {% include 'hints/subject_hints.html' %}
+    {% include 'hints/get_hint_script.html' %}
 	<span style="display: none;" class="change_urls">
 	</span>
 </div>

@@ -55,23 +55,23 @@
                             {% include 'profile/main_info.html' %}
                             {% if hisprofile.squads.all|length > 0 or hisprofile.hissquads.all|length > 0 or is_manager %}
                                 {% include 'profile/payment.html' %}
-                            {% if is_manager and hisprofile.is_student or is_director %}
-                                {% include 'profile/history.html' %}
-                            {% endif %}                            
-                            {% if hisprofile == profile or is_manager %}
-                                {% if is_this_trener or hisprofile.is_student %}
-                                    {% include 'profile/classicschedule.html' %}
+                                {% if is_manager and hisprofile.is_student or is_director %}
+                                    {% include 'profile/history.html' %}
+                                {% endif %}                            
+                                {% if hisprofile == profile %}
+                                    {% if is_this_trener or hisprofile.is_student or is_manager %}
+                                        {% include 'profile/attendance.html' %}
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
-                            {% if hisprofile == profile %}
-                                {% if is_this_trener or hisprofile.is_student or is_manager %}
-                                    {% include 'profile/attendance.html' %}
+                                {% if hisprofile == profile or is_manager %}
+                                    {% if is_this_trener or hisprofile.is_student %}
+                                        {% include 'profile/classicschedule.html' %}
+                                    {% endif %}
                                 {% endif %}
-                            {% endif %}
                             {%else%}
-                            <div class="ui segment mb0 text15">
-                                Еще нет ни одной группы
-                            </div>
+                                <div class="ui segment mb0 text15">
+                                    Еще нет ни одной группы
+                                </div>
                             {%endif%}
                         </div>
                 </div>
@@ -79,7 +79,9 @@
         </div>
     </div>
 </div>
-<span class="data" payment_history="{% url 'schools:payment_history' %}"></span>
+<span class="data" hint_type="2" last_hint="2" hint="{{hint}}" payment_history="{% url 'schools:payment_history' %}"></span>
+{% include 'hints/profile_hints.html' %}
+{% include 'hints/get_hint_script.html' %}
 <script type="text/javascript">
     {% include 'modals/show_payment_history.html' %}
 </script>

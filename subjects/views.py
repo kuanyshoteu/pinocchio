@@ -63,9 +63,6 @@ def subject_list(request):
     only_staff(profile)
     school = is_moderator_school(request, profile)
     subjects = school.school_subjects.all()
-    if profile.skill.crm_subject2:
-        subjects = subjects.filter(category=profile.skill.crm_subject2)
-        
     context = {
         "profile": profile,
         "subjects":subjects,
@@ -226,6 +223,7 @@ def subject_update(request, slug=None):
         "school_money":school.money,
         "school_crnt":school,
         "page":"subjects",
+        "hint":profile.skill.hint_numbers[5],
     }
     return render(request, "subjects/subject_create.html", context)
 

@@ -6,7 +6,7 @@
   line-height: 20px;
   font-size: 14px;
   position: absolute;
-  z-index: 100;
+  z-index: 105;
   text-align: left !important;
 }
 .post_add_part{
@@ -554,8 +554,6 @@ body{
 }
 .predoplata_form{
   width: 300px !important;
-  margin-top: -5px !important;
-  margin-left: 25px !important;
 }
 .predoplata_number{
   margin-bottom: 0 !important;

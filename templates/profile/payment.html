@@ -233,7 +233,6 @@
     </div>
 </div>
 {%endif%}
-<span class="data" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
 <span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
 <script type="text/javascript">
     function make_payment(url, id) {

@@ -4,9 +4,23 @@
 <div class="ui modal large mt50" id="register_students_calendar">
     <i class="close icon"></i>
     <div class="content no_padding backdark">
-        <div class="ui segment topbr5 margin0 pb0">
-            <div class="text15 textdg ml15 mb15">Регистрация <b id="current_user_name"></b></div>
-            <form class="ui form predoplata_form" style="display: none;">
+        <div class="ui segment topbr5 no_margin pb0">
+            {% if hint <= 5 %}
+            <div class="extra_hint1" style="width: 400px;position: absolute;z-index: 300;left: calc(50% - 200px);">
+                <div class="backblue shadow_blue br5 pt15 pr15 pb15 pl15">
+                    <div style="position: absolute;right: 3px;top: 3px;">
+                        <a onclick="$('.extra_hint1').hide();"><i class="icon x textw mr0 text11"></i></a>
+                    </div>
+                    <div class="textw">
+                        Нажмите на любой <b style="color: yellow;">квадрат группы</b>, в которую хотите запись студента
+                        <br>
+                        Галочка на квадрате обозначает, что студент уже записан в эту группу
+                    </div>
+                </div>
+            </div>            
+            {% endif %}
+            <div class="text15 textdg">Регистрация <b id="current_user_name"></b></div>
+            <form class="ui form predoplata_form mt5 mr0 mb0" style="display: none;">
                 <input status="hide" class="predoplata_number" placeholder="Сумма оплаты" type="number">
             </form>
             <div class="ok_predoplata highlight" style="height: 35px;"><b>Оплата принята</b></div>

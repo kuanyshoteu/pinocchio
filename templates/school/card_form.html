@@ -25,6 +25,18 @@
                             <textarea class="card_phone_extraedit mb0 pt5 pb0" style="height: 45px;" placeholder="Дополнительный телефон"></textarea>
                         </div>
                         <div class="eight wide column text-center no_padding">
+                            {% if hint <= 5 and instance.version != 'free' %}
+                            <div class="extra_hint2" style="width: 380px;position: absolute;z-index: 300;top: -110px;text-align: left;">
+                                <div class="backblue help_bottom shadow_blue br5 pt15 pr15 pb15 pl15">
+                                    <div style="position: absolute;right: 3px;top: 3px;">
+                                        <a onclick="$('.extra_hint2').hide();"><i class="icon x textw mr0 text11"></i></a>
+                                    </div>
+                                    <div class="textw">
+                                        После записи студента в группу можно вписать данные об <b style="color: yellow;">оплате студента</b>, выбрав в группу, которую студент посещает и вносимую сумму оплаты
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div style="height: 10px;"></div>
                             <b class="textdg">Оплата:</b>
                             <select class="pay_for_groupedit mb5" id="pay_for_groupedit">
@@ -57,6 +69,18 @@
                             </div>
                         </div>
                         <div class="eight wide column pt0 pb0 pl15 pr0">
+                            {% if hint < 5 and instance.version != 'free' %}
+                            <div class="extra_hint3" style="width: 380px;position: absolute;z-index: 300;top: 10px;left: 250px; text-align: left;">
+                                <div class="backblue help_left shadow_blue br5 pt15 pr15 pb15 pl15">
+                                    <div style="position: absolute;right: 3px;top: 3px;">
+                                        <a onclick="$('.extra_hint3').hide();"><i class="icon x textw mr0 text11"></i></a>
+                                    </div>
+                                    <div class="textw">
+                                        Укажите дни недели, в которые студент хочет посещать курсы
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
                             <div class="mt10">
                                 <div class="text-center"><b class="textdg">Дни недели:</b></div>
                                 <a onclick="card_form_days('cd0')" class="ui button mini mr0 mb5 card_form-dayscd0" style="padding: 7px 14px !important;" card="" id="0">Пн</a>

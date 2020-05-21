@@ -126,7 +126,7 @@ def squad_create(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
-        'page':'squads',
+        "page":"squads",
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -141,7 +141,6 @@ def squad_update(request, slug=None):
     change_img = False
     change_title = False
     change_content = False
-    print(form)
     if form.is_valid():
         old_start_date = instance.start_date
         old_title = instance.title
@@ -232,6 +231,7 @@ def squad_update(request, slug=None):
         'other_subjects':school.school_subjects.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
         'page':'squads',
+        "hint":profile.skill.hint_numbers[4],
     }
     return render(request, "squads/squad_create.html", context)
 

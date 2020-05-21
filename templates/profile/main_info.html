@@ -10,7 +10,9 @@
                 <div class="img-responsive" style="background-image: url({% static 'images/nophoto.svg' %});"></div>
                 {% endif %}
                 {% if profile == hisprofile %}
-                <a href="{{ profile.change_url }}" class="mt5 pb5 in_mobile text10">Редактировать</a>
+                <div>
+                    <a href="{{ profile.change_url }}" class="mt5 pb5 in_mobile text10">Редактировать</a>
+                </div>
                 {% endif %}
                 <div class="text17 not_in_mobile">{{ hisprofile.first_name }}</div>
             </div>

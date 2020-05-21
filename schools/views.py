@@ -94,6 +94,7 @@ def school_payments(request):
         "school_money":school.money,
         "school_crnt":school,
         "page":"payments",
+        "hint":profile.skill.hint_numbers[3],
     }
     return render(request, "school/school_payments.html", context)
 
@@ -200,7 +201,6 @@ def school_info(request):
     if '-' in school.worktime:
         worktime1 = school.worktime.split('-')[0]
         worktime2 = school.worktime.split('-')[1]
-    print(voronka)
     context = {
         "profile":profile,
         "instance": school,

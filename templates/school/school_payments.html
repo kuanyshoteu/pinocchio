@@ -22,7 +22,7 @@
                     <b class="textdg text17">Оплата студентов</b>
                     <form class="ui form mb0">  
                         <div class="ui grid stackable no_margin">
-                            <div class="four wide column pl0 pb0 text13">
+                            <div class="four wide column pl0 pb0 text13 hint_place1" side="bottom">
                                 Выберите <b class="textdg ">предмет</b>:
                                 <div class="controls"> 
                                     <select class="text15 crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
@@ -82,7 +82,7 @@
                         </div>
                     </form>
                 </div>                       
-                <div class="full-w no_margin payments_box">
+                <div class="full-w no_margin payments_box hint_place2" side="right3">
                 </div>
                 <div class="text-center full-w">
                     <div class="ui active inline large loader get_payment_load"></div>
@@ -125,7 +125,9 @@
 </div>
 <span style="display: none;" class="instance_data" delete_payment="{% url 'squads:delete_payment' %}"></span>
 
-<span class="data" last_one="1" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}"></span>
+<span class="data" last_one="2" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}" hint_type="3" last_hint="5" hint="{{hint}}"></span>
+{% include 'hints/payment_hints.html' %}
+{% include 'hints/get_hint_script.html' %}
 <script type="text/javascript">
     {% include 'modals/show_payment_history.html' %}
     fill_filters()

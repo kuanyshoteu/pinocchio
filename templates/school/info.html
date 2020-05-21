@@ -496,9 +496,10 @@
 </div>
 <span class="day_id" group_id='{{ instance.id }}'></span>
 <span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
-<span class="data" last_hint="5" hint="{{hint}}" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
-{% include 'modals/info_hints.html' %}
-{% include 'modals/get_hint_script.html' %}
+<span class="data" hint_type="0" last_hint="5" hint="{{hint}}" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
+<span style="display: none;" class="hint_place0" side="modal"></span>
+{% include 'hints/info_hints.html' %}
+{% include 'hints/get_hint_script.html' %}
 <script type="text/javascript">
     function clear_textareas(){
         $('.need_clear').val('')

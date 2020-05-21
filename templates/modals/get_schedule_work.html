@@ -40,7 +40,7 @@ function fill_lecture(ld){
     hint.find('.hint_schedule_teacher').text(teacher)
     hint.find('.hint_schedule_cost').text(cost)
     hint.appendTo('.lectures_cont')
-    $('<i class="icon check circle white insquadicon insquadicon'+sq_id+' textw text12" status="hide" style="position:absolute;right:0;display:none;"></i>').appendTo(l)
+    $('<i class="icon check circle white insquadicon insquadicon'+sq_id+' textw text12" status="hide" style="position:absolute;right:0;bottom:0;display:none;"></i>').appendTo(l)
 }
 function get_schedule_work(){
     url = "{%url 'schools:get_schedule'%}"
