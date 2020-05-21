@@ -1318,10 +1318,14 @@ def moderator_run_code(request):
     # synchrone_material_with_atts()
     # card_tags()
     # columns()
-    categories_update()
+    # categories_update()
+    hint_update()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
+def hint_update():
+    for skill in Skill.objects.all():
+        skill.hint_numbers = [0, 1, 1, 1, 1 ,1]
 def categories_update():
     for sc in SubjectCategory.objects.all():
         schools = sc.schools.all()
