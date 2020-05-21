@@ -2371,7 +2371,6 @@ def get_payment_list(request):
                 squads = school.groups.filter(shown=True).prefetch_related('students')
         if profile.skill.crm_subject:
             students = students.filter(crm_subject_connect=profile.skill.crm_subject)
-        print(profile.skill.payment_filter)
         if profile.skill.payment_filter != 'all':
             firstofmonth = first_day_of_month()
             lastofmonth = last_day_of_month(firstofmonth)
