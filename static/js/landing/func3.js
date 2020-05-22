@@ -30,37 +30,4 @@ $(function(){
 		$('.land_img'+a).show()
 		b.stopPropagation()
 	})
-	$('.get_request_land_top').on("click",function(){
-		document.getElementById('start_request').scrollIntoView();
-	})
-	$('.get_request_land').on("click",function(){
-		console.log('iiii')
-		id = $(this).attr('id')
-		var name = $('.request_name' + id).val()
-		var phone = $('.request_phone' + id).val()
-    	$('.success_query').hide();
-		$('.land_fill_error'+id).hide()
-		if (name == '' || phone == '') {
-			$('.land_fill_error'+id).show()
-		}
-		else {
-        	$('.loading_small').show()
-			$('.land_fill_error'+id).hide()
-			url = $('.request_url').attr('url')
-	        $.ajax({
-	            url: url,
-	            data: {
-	            	'name':name,
-	            	'phone':phone,
-	            	'code':'nfrejkNWcsdkls588w5sdkewdhs',
-	            },
-	            dataType: 'json',
-	            success: function (data) {
-	            	$('.get_request_land').hide()
-	            	$('.loading').hide()
-	            	$('.success_query').show()
-	            }
-	        })
-		}
-	})
 })

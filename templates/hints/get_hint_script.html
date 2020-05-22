@@ -37,10 +37,13 @@
         url = '/api/another_hint';
         current_hint = parseInt($('.data').attr('hint'));
         if (direction == 'next') {
-            another_hint = current_hint + 1
+            another_hint = current_hint + 1;
+        }
+        else if (direction == 'prev'){
+            another_hint = current_hint - 1;
         }
         else{
-            another_hint = current_hint - 1
+            another_hint = 100;
         }
         $('.data').attr('hint', another_hint)
         if (another_hint <= parseInt($('.data').attr('last_hint'))) {

@@ -90,6 +90,24 @@
 .textb{
   color: #000 !important;
 }
+.padcenter{
+  padding: 0 calc(50% - 30px);
+}
+.sign_change_page{
+  display: block;
+  background-color: #d7d7d7;
+  color: #7e7e7e;
+  font-size: 13px;
+  font-weight: 600;
+  width: 25px;
+  height: 25px;
+  border-radius: 100%;
+  line-height: 26px;
+  margin: 0 auto;
+}
+.sign_change_page:hover{
+  box-shadow: 0 0 5px 0 #d3d3d3 !important;
+}
 .backrb{
   background:  rgba(33,186,69,0.3) !important;
   background: linear-gradient(180deg, rgba(81,129,184,0) 50%, rgba(33,186,69,0.2) 100%) !important;
@@ -432,6 +450,9 @@ body{
 }
 .mr15{
   margin-right: 15px !important;
+}
+.pt100{
+  padding-top: 100px !important;
 }
 .pb150{
   padding-bottom: 150px !important;
