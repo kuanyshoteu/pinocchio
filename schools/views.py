@@ -1777,6 +1777,17 @@ def change_title(request):
                 school.phones = phones
         if request.GET.get('status') == 'social_networks':
             school.social_networks = request.GET.get('text') 
+        if request.GET.get('status') == 'cities':
+            cities = request.GET.get('text').split(',')
+            old_cities = school.cities.all()
+            school.cities.remove(*old_cities)
+            for city_title in cities:
+                city = City.objects.filter(title=city_title)
+                if len(city) > 0:
+                    city = city[0]
+                else:
+                    city = City.objects.create(title=city_title)
+                school.cities.add(city)
         school.save()
     data = {
     }
@@ -2423,3 +2434,24 @@ def first_day_of_month():
     crnt_year = today.strftime('%Y')
     firstofmonth = datetime.datetime.strptime('01-'+crnt_mnth+'-'+crnt_year,'%d-%m-%Y').date()
     return firstofmonth
+
+def search_city(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    res = []
+    if request.GET.get('text'):
+        similarity=TrigramSimilarity('title', request.GET.get('text'))
+        kef = 1
+        if len(request.GET.get('text')) > 4:
+            kef = 4
+        objects = City.objects.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for obj in objects:
+            res.append(obj.title)
+            i+=1
+            if i == 5:
+                break
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)

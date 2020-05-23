@@ -267,6 +267,12 @@ class FilterControl(models.Model):
     levels = models.ManyToManyField(SubjectLevel, related_name='filter_control')
     categories = models.ManyToManyField(SubjectCategory, related_name='filter_control')
 
+class City(models.Model):
+    title = models.CharField(max_length=250)
+    schools = models.ManyToManyField(School, related_name='cities')
+    class Meta:
+        ordering = ['title']
+
 class Office(models.Model):
     title = models.CharField(max_length=250)
     latitude = models.CharField(max_length=250, default='0.0')

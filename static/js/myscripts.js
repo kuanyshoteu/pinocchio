@@ -4,6 +4,23 @@
         val = $(this).val()
         $('.pred_title').text(val)
     })
+    $('.school_cities_edit').on('keyup', function (e) {
+        text = $(this).text()
+        url = $(this).attr('suggest_url')
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.suggest_city').empty()
+                for (var i = 0; i < data.res.length; i++) {
+                    $('<a onclick="add_suggested_city('+"'"+data.res[i]+"'"+')" class="ui button mini white shadow_small pt5 pl5 pr5 pb5 border1 mr5">'+data.res[i]+'</a>').appendTo('.suggest_city')
+                }
+            }
+        })
+    })
     $('.save_vk_group').click(function(e) {
         url = $(this).attr('url')
         id = $(this).attr('id')
@@ -837,23 +854,26 @@
     });
     $('.save_school_title').click(function(e) {
         url = $(this).attr('url')
-        if ($('.check_moderator').attr('status')=='True') {
-            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        if ($('.check_moderator').attr('status') == 'True') {
+            url = url + '?type=moderator&mod_school_id=' + $('.day_id').attr('group_id')
         }
         id = $(this).attr('id')
         status = $(this).attr('status')
         if (status == 'worktime') {
-            part1 = $('.school_'+status+'_edit1').val()
-            part2 =  $('.school_'+status+'_edit2').val()
+            part1 = $('.school_' + status + '_edit1').val()
+            part2 = $('.school_' + status + '_edit2').val()
             if (part1 == '' || part2 == '') {
                 text = 'По предварительной записи'
             }
             else{
-                text = part1+'-'+part2
+                text = part1 + '-' + part2
             }
         }
+        else if (status == 'cities') {
+            text = $('.school_' + status + '_edit').text()            
+        }
         else{
-            text = $('.school_'+status+'_edit').val()
+            text = $('.school_' + status + '_edit').val()
         }
         $.ajax({
             url: url,
@@ -864,8 +884,8 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.school_'+status+'_form').hide();
-                $('.school_'+status).text(text);
+                $('.school_' + status + '_form').hide();
+                $('.school_' + status).text(text);
                 if (status == 'site') {
                     $('.school_site').attr('href', text)
                 }

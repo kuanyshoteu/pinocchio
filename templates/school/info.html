@@ -23,6 +23,42 @@
                     <b>Основная информация</b>
                 </div>
                 <div class="ui grid stackable no_margin">
+                    <div class="sixteen wide column no_padding">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="dinline text13 textbold textdg">Город: </span>
+                            </div>
+                            <div class="mb15 no_padding" style="width: calc(100% - 130px)">
+                                <span style="display: inline-block;" class="school_cities mr5">
+                                    {% if instance.cities.all|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {%for city in instance.cities.all%}
+                                            {{ city.title }}{%if instance.cities.all|length > forloop.counter%}, {%endif%} 
+                                        {%endfor%}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_cities_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_cities_form" style="width: 400px;display: none;">
+                                    <div class="ui grid stackable mb0">
+                                        <div class="sixteen wide column pl0 pb0">
+                                            <div style="height: 30px;" class="textdg text13 suggest_city">Вводите города через запятую</div>
+                                        </div>
+                                        <div class="twelve wide column no_padding">
+                                            <div contenteditable="true" suggest_url="{% url 'schools:search_city' %}" class="border1 pt5 school_cities_edit no_margin br5 pl10 pr10" style="height: 29px;" position="0">
+                                                {%for city in instance.cities.all%}{{ city.title }}{%if instance.cities.all|length > forloop.counter%}, {%endif%}{%endfor%}
+                                            </div>
+                                        </div>
+                                        <div class="four wide column pt0 pl5 pr5">
+                                            <a status="cities" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}  
+                            </div>
+                        </div>
+                    </div>
                     <div class="eight wide column pl0 pt0 pb0 deskpr50">
                         <div class="dflex">
                             <div style="width: 140px;">
@@ -75,7 +111,7 @@
                                             <textarea class="school_slogan_edit no_margin" style="margin-bottom: 0;">{{ instance.slogan }}</textarea>
                                         </div>
                                         <div class="four wide column">
-                                            <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                            <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
                                         </div>
                                     </div>
                                 </form>
@@ -102,15 +138,15 @@
                                 {% if is_director %}
                                 <a class="text13" onclick="$('.school_phones_form').show()">Изменить</a>
                                 <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
-                                    <div class="ui grid">
+                                    <div class="ui grid stackable mb0">
                                         <div class="sixteen wide column pl0 pb0">
-                                            <i>Вводите номера через запятую</i>
+                                            <span class="textdg text13">Вводите номера через запятую</span>
                                         </div>
-                                        <div class="twelve wide column no_padding_side">
-                                            <textarea class="school_phones_edit no_margin" style="margin-bottom: 0;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
+                                        <div class="twelve wide column no_padding">
+                                            <textarea class="pt5 school_phones_edit no_margin" style="height: 29px; overflow: hidden;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
                                         </div>
-                                        <div class="four wide column">
-                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                        <div class="four wide column pt0 pl5 pr0">
+                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
                                         </div>
                                     </div>
                                 </form>
@@ -139,7 +175,7 @@
                                             <textarea class="school_site_edit no_margin" style="margin-bottom: 0;">{{ instance.site }}</textarea>
                                         </div>
                                         <div class="four wide column">
-                                            <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                                            <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
                                         </div>
                                     </div>
                                 </form>
@@ -247,9 +283,9 @@
                                     <form method='POST' class="mb0" action='' enctype='multipart/form-data'>{% csrf_token %}
                                         <input type="file" name="school_banner" id="school_banner" class="postfile">
                                         <label class="file_post" for="school_banner">
-                                            <a class="ui button mini white border1 shadow_small mr5 "><i class="icon image blue"></i>Выбрать картинку</a>
+                                            <a class="ui button mini white border1 shadow_small mr5 mt10"><i class="icon image blue"></i>Выбрать картинку</a>
                                         </label>
-                                        <input type="submit" class="ui button mini white border1 shadow_small save_banner textblue " name="" value="Добавить">
+                                        <input type="submit" class="mt10 ui button mini white border1 shadow_small save_banner textblue " name="" value="Добавить">
                                     </form>
                                 </div>
                             </div>  
@@ -501,6 +537,23 @@
 {% include 'hints/info_hints.html' %}
 {% include 'hints/get_hint_script.html' %}
 <script type="text/javascript">
+    function add_suggested_city(title){
+        text = $('.school_cities_edit').text()
+        position = window.getSelection().anchorOffset
+        indexstart = position
+        for (var i = position-1; i >= 0; i--) {
+            if (text[i] === ',') {
+                indexstart = i;
+                break;
+            }
+            else if (text[i] === ' ') {
+                indexstart = i;
+                break;
+            }
+        }
+        newtext = text.slice(0, indexstart) + ' ' + title + text.slice(position)
+        $('.school_cities_edit').text(newtext)
+    }
     function clear_textareas(){
         $('.need_clear').val('')
     }
