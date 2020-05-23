@@ -7,10 +7,24 @@
     $('.school_cities_edit').on('keyup', function (e) {
         text = $(this).text()
         url = $(this).attr('suggest_url')
+
+        position = window.getSelection().anchorOffset
+        indexstart = position
+        for (var i = position-1; i >= 0; i--) {
+            indexstart = i;
+            if (text[i] === ',') {
+                break;
+            }
+            else if (text[i] === ' ') {
+                break;
+            }
+        }
+        newtext = text.slice(indexstart, position)
+
         $.ajax({
             url: url,
             data: {
-                'text':text,
+                'text':newtext,
             },
             dataType: 'json',
             success: function (data) {
