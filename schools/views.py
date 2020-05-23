@@ -1783,6 +1783,11 @@ def change_title(request):
             school.cities.remove(*old_cities)
             for city_title in cities:
                 city = City.objects.filter(title=city_title)
+
+                similarity=TrigramSimilarity('title', city_title)
+                city = City.objects.annotate(similarity=similarity,).filter(similarity__gt=0.9).order_by('-similarity')
+                print(city)
+
                 if len(city) > 0:
                     city = city[0]
                 else:

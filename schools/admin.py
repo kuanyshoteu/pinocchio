@@ -157,3 +157,9 @@ class SocialMediaAdmin(admin.ModelAdmin):
     class Meta:
         model = SocialMedia
 admin.site.register(SocialMedia, SocialMediaAdmin)
+
+class CityModelAdmin(admin.ModelAdmin):
+    list_display = ["title"]
+    class Meta:
+        model = City
+admin.site.register(City, CityModelAdmin)
