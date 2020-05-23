@@ -542,12 +542,11 @@
         position = window.getSelection().anchorOffset
         indexstart = position
         for (var i = position-1; i >= 0; i--) {
+            indexstart = i;
             if (text[i] === ',') {
-                indexstart = i;
                 break;
             }
             else if (text[i] === ' ') {
-                indexstart = i;
                 break;
             }
         }
