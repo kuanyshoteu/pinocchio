@@ -22,7 +22,7 @@ from django.contrib.auth.models import User
 from constants import *
 from schools.models import School
 from schools.views import get_social_networks, add_subject_category_work, register_new_student
-from squads.views import add_subject_work, add_lecture_work
+from squads.views import add_subject_work, add_lecture_work, remove_student_from_squad, add_student_to_squad
 from squads.models import NeedMoney
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -433,7 +433,7 @@ def register_view(request):
                 )
             test_squad.start_date = timezone.now().date() - timedelta(7)
             test_student = register_new_student(False, card, False, profile, False, test_squad.id,school)
-            test_squad.students.add(test_student)
+            add_student_to_squad(test_student, test_squad, profile)
             subject = school.school_subjects.create(
                 author = profile,
                 title = course,
@@ -1325,8 +1325,22 @@ def moderator_run_code(request):
 
 def hint_update():
     for skill in Skill.objects.all():
-        skill.hint_numbers = [0, 1, 1, 1, 1 ,1]
-        skill.save()
+        if skill.payment_filter == '':
+            skill.payment_filter = 'all'
+            skill.save()
+    for sq in Squad.objects.all():
+        if len(sq.need_money.all()) < len(sq.students.all()):
+            school = sq.school
+            for st in sq.students.all():
+                print(st.first_name, school.title)
+                card = st.card.filter(school = school)
+                if len(card) > 0:
+                    card = card[0]
+                    print(card)
+                    if len(card.need_money.filter(squad=sq)) == 0:
+                        add_student_to_squad(st, sq, None)
+
+
 def categories_update():
     for sc in SubjectCategory.objects.all():
         schools = sc.schools.all()
@@ -1457,7 +1471,6 @@ def searching_subjects(request):
     }
     return JsonResponse(data)
 
-from squads.views import remove_student_from_squad, add_student_to_squad
 def update_student_start_dates():
     for card in CRMCard.objects.all():
         for nm in card.need_money.all():

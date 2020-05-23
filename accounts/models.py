@@ -53,7 +53,7 @@ class Skill(models.Model):
     crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     crm_subject2 = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
     crm_office2 = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
-    payment_filter = models.TextField(blank = True,default = '',null = True)
+    payment_filter = models.TextField(blank = True, default = 'all', null = True)
     notifications_number = models.IntegerField(default=0)
     birthdate = models.DateField(null = True, blank = True)
     interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')

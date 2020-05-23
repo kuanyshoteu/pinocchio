@@ -49,7 +49,7 @@
         } 
         async function register_page(url){
             await gtag_report_conversion(url)
-            window.location.replace('/sign_up/')
+            window.location = '/sign_up/'
         }
     </script>
     <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
@@ -99,7 +99,7 @@
                         <h5 class="mt30">
                             Получите бесплатную версию CRM-системы на неограниченный срок
                         </h5>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land mb50" id="1" onclick="return register_page('')">
+                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
                             Получить бесплатно →
                         </a>
                     </div>
@@ -107,8 +107,8 @@
                 <div class="mt30 col-lg-10 offset-lg-1 deskmenu text-center">
                     Получите бесплатную версию CRM-системы на неограниченный срок
                 </div>  
-                <div class="col-lg-12 deskmenu pt0 pb50 text-center"> 
-                    <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" onclick="return register_page('')">
+                <div class="col-lg-12 deskmenu pt15 pb50 text-center"> 
+                    <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" onclick="return register_page('')">
                         Получить бесплатно →
                     </a>
                 </div>  
@@ -162,7 +162,7 @@
                     </div>                    
                     <p>Так как учёт клиентов, журнал посещаемости, учёт оплаты студентов ведутся в единой базе, система автоматически посчитает зарплаты преподавателям и сформирует нужные отчёты для Вашего бухгалтера </p>
                     <p>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land mb50" id="1" onclick="return register_page('')">
+                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
                             Получить бесплатно →
                         </a>
                     </p>
@@ -190,7 +190,7 @@
                     </div>
                     <p class="m-0">Знания о том, что вся работа теперь фиксируется в единой системе, помогают сотрудникам более ответственно относиться к поставленным задачам</p> 
                     <p>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land mb50" id="1" onclick="return register_page('')">
+                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
                             Получить бесплатно →
                         </a>
                     </p>
@@ -213,7 +213,7 @@
                     </div>
                     <p>Отныне всё визуально понятно</p>
                     <p>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land mb50" id="1" onclick="return register_page('')">
+                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
                             Получить бесплатно →
                         </a>
                     </p>
@@ -362,7 +362,7 @@
                             <h5 class="text24">
                                 Получите бесплатную версию CRM системы на неограниченный срок
                             </h5>
-                            <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 get_request_land" id="1" onclick="return register_page('')">
+                            <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" onclick="return register_page('')">
                                 Получить бесплатно →
                             </a>
                         </form>  
@@ -385,7 +385,6 @@
             </p> 
         </footer>   
     </div>
-    <span class="request_url" url='{% url "main:get_request_land" %}'></span>
 </body> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     {% compress js %}   
