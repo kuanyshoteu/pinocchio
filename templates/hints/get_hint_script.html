@@ -28,9 +28,14 @@
     function get_hints(){
         hint = parseInt($('.data').attr('hint'));
         console.log('f', hint, $('.data'))
-        show_hint(hint)
-        if (hint == 0) {
-            $('.container').attr('catch_hint', 'yes')
+        if (hint < 100) {
+            show_hint(hint)
+            if (hint == 0) {
+                $('.container').attr('catch_hint', 'yes')
+            }            
+        }
+        else{
+            $('.hint_box').hide()
         }
     }
     function change_hint(direction){

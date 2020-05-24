@@ -20,39 +20,41 @@
 <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
     <div class="three wide column pt0 pb0 pr0 not_in_mobile">
         <div class="ui segment pl0 pr0 pt5">
-            <div class="pl5 pr5 pt5 pb5">                
-                <div style="font-size: 14px;">
-                    Выберите курсы для изучения
+            <div class="all_filters">
+                <div class="pl5 pr5 pt5 pb5">
+                    <div style="font-size: 14px;">
+                        Выберите курсы для изучения
+                    </div>
+                    <div class="">
+                    {% for mf in category.main_filters.filter_options.all %}
+                        <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5" status="" id="{{mf.id}}">
+                            {{mf.title}}
+                        </a>
+                    {% endfor %}
+                    </div>
                 </div>
-                <div class="">
-                {% for mf in category.main_filters.filter_options.all %}
-                    <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5" status="" id="{{mf.id}}">
-                        {{mf.title}}
-                    </a>
-                {% endfor %}
+                <div class="ui divider mt0 mb0"></div>
+                {% for second_filter in category.second_filters.all %}
+                <div class="pl5 pr5 pt5 pb5">
+                    <div style="font-size: 14px;">
+                        {{second_filter.title}}
+                    </div>                
+                    {% for sf in second_filter.filter_options.all %}
+                        <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
+                            {{sf.title}}
+                        </a>
+                    {% endfor %}
                 </div>
-            </div>
-            <div class="ui divider mt0 mb0"></div>
-            {% for second_filter in category.second_filters.all %}
-            <div class="pl5 pr5 pt5 pb5">
-                <div style="font-size: 14px;">
-                    {{second_filter.title}}
-                </div>                
-                {% for sf in second_filter.filter_options.all %}
-                    <a class="pt5 pb5 pl5 pr5 ui button mini choose_cat mb5 mr0 pl10 pr10" status="" id="{{sf.id}}">
-                        {{sf.title}}
-                    </a>
+                <div class="ui divider mt0 mb0"></div>
                 {% endfor %}
             </div>
-            <div class="ui divider mt0 mb0"></div>
-            {% endfor %}
         </div>
      </div>
     <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
         <div class="pl15">
             <div class="ui segment pl0 pr0 mb0">
                 <div class="in_mobile mb15 text-center">
-                    <a class="ui button blue" onclick="$('.catfilters').show('fast');"><i class="icon th" style="color: #fff;"></i> Фильтры</a>
+                    <a class="ui button white shadow_small border1 textblue" onclick="$('.catfilters').modal('show');"><i class="icon th textblue"></i> Фильтры</a>
                 </div>
                 <div class="loading" style="display: none;">
                   <div class="animation"><div class="circle one"></div></div>
@@ -79,26 +81,21 @@
         </div>
     </div>
 </div>
+<div class="ui modal catfilters">
+    <i class="close icon" style="margin-right: -15px;margin-top: -15px;"></i>
+    <div class="content">
+        <div style="height: 20px;"></div>
+        <div class="mobile_filters"></div>
+    </div>
+</div>
 <div style="display: none;">
 {% include 'modals/school_example_land.html' %}
 </div>
 {% include 'footer.html' %}
 <span style="display: none;" class="show_url" url="{{url}}" slider_status="0" uplist="yes"></span>
+<span class="catchmob"></span>
 <span style="display: none;" class="data" id="{{category.id}}" url="{% url 'main:cat_filter' %}"></span>
 <style type="text/css">
-    .ymaps-2-1-74-controls__control {
-        right: 10px !important;
-        left: auto !important;
-    }
-    .ymaps-2-1-74-search {
-        display: none;
-    }
-    .ymaps-2-1-74-traffic {
-        display: none;
-    }
-    .ymaps-2-1-74-listbox__button {
-        display: none;
-    }
     .filter {
         padding-right: 0 !important;
         width: 180px !important;
@@ -110,90 +107,17 @@
 </style>
 
 <script type="text/javascript">
-//    ymaps.ready(init);
-    function init(){ 
-        var myMap = new ymaps.Map("map", {
-            center: [43.230, 76.92848],
-            zoom: 12.5
-        },{
-            restrictMapArea: [
-                [42.8, 76.02848],
-                [44.25654, 77.92848]
-            ]
-        })
-        firstCollection = new ymaps.GeoObjectCollection(null)
-        {% for school in category.schools.all %}
-            {% for office in school.school_offices.all %}
-                x = parseFloat('{{office.latitude}}')
-                y = parseFloat('{{office.longtude}}')
-                firstCollection.add(new ymaps.Placemark([x, y], {id:'{{school.id}}'}, 
-                    {
-                        iconLayout: 'default#imageWithContent',
-                        iconImageHref: '{% if school in schools %}{%static "images/pointer.png" %}{% else %}{%static "images/pointer.png" %}{% endif %}',
-                        iconImageSize: [20, 30],
-                        iconImageOffset: [-10, -30],
-                        iconContentOffset: [15, 15],
-                    }
-                ));
-            {% endfor %}
-        {% endfor %}
-        var animatedLayout = ymaps.templateLayoutFactory.createClass(
-            '<div class="placemark"></div>',
-            {
-                build: function () {
-                    animatedLayout.superclass.build.call(this);
-                    var element = this.getParentElement().getElementsByClassName('placemark')[0];
-                    // Если метка выбрана, то увеличим её размер.
-                    var size = this.isActive ? 60 : 34;
-                    // При задании для метки своего HTML макета, фигуру активной области
-                    // необходимо задать самостоятельно - иначе метка будет неинтерактивной.
-                    // Создадим фигуру активной области "Круг".
-                    var smallShape = {type: 'Circle', coordinates: [0, 0], radius: size / 2};
-                    var bigShape = {type: 'Circle', coordinates: [0, -30], radius: size / 2};
-                    // Зададим фигуру активной области.
-                    this.getData().options.set('shape', this.isActive ? bigShape : smallShape);
-                    // Если метка выбрана, то зададим класс и запустим анимацию.
-                    if (this.isActive) {
-                        element.classList.add("active");
-                        element.style.animation = ".35s show-big-placemark";
-                    } else if (this.inited) {
-                        element.classList.remove("active");
-                        element.style.animation = ".35s show-small-placemark";
-                    }
-                    if (!this.inited) {
-                        this.inited = true;
-                        this.isActive = false;
-                        // При клике по метке будем перестраивать макет.
-                        this.getData().geoObject.events.add('click', function () {
-                            this.isActive = !this.isActive;
-                            this.rebuild();
-                        }, this);
-                    }
-                }
-            }
-        );        
-        firstCollection.events
-        .add('click', function (e) {
-            show_school(e.get('target').properties._data.id)
-            e.stopPropagation();
-        })
-        .add('mouseenter', function (e) {
-            e.get('target').options.set('preset', 'islands#greenIcon');
-        })
-        .add('mouseleave', function (e) {
-            e.get('target').options.unset('preset');
-        });
-        myMap.geoObjects.add(firstCollection);
-        $( function() {
-        });
+    fill_mob_filters()
+    function fill_mob_filters(){
+        if ($('.catchmob').width() == 1) {
+            $('.all_filters').appendTo('.mobile_filters')
+        }
     }
-
     function show_list(){
         $('.school_landing').hide();
         $('.school_landing').attr('status', 'hidden')
         $('.school_list').show()
     }
-
     function down_schools(){
         if( $('.show_url').css('color')=='rgb(0, 0, 255)') {
             $('.map_school_list').attr('style', 'display:inline-block !important;');

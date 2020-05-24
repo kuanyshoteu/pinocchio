@@ -1,15 +1,20 @@
 {% load staticfiles %}
 {% load ttags %}
 <div class="four wide column pt0 pr0 pb15">
-    <div class="topbr5 ui segment full-w btn_select no_padding">
-        <a href="{{school.landing}}" class="backwhite full-w landbox topbr5">
-            <div class="land_box1 topbr5 text-center" style="{%if school.banners.all|length > 0%}background-image: url({{school.banners.first.image_banner.url}}){%else%} background-image: url({% static 'images/fon4.jpg' %}){%endif%};">
+    <div class="br5 ui segment shadow_grey full-w no_padding">
+        <a href="{{school.landing}}" class="backwhite full-w landbox br5">
+            <div class="land_box1 topbr5 text-center" style="
+                {%if school.banners.all|length > 0%}
+                    background-image: url({{school.banners.first.image_banner.url}})
+                {%else%} 
+                    background-image: url({% static 'images/fon4.jpg' %})
+                {%endif%};">
                 {%if school.banners.all|length == 0%}
                     <span class="not_in_mobile">{{school.title}}</span>
                 {%endif%}
             </div>
             <div class="land_box2 pl15 pr15 pb15 pt15">
-                <div style="  height: 98px;">
+                <div style="height: 98px;">
                     <div class="text17"><b>{{school.title}}</b></div>
                     <div class="mt5" style="line-height: 15px;">
                         <span style="color: #646464;">{{school.school_offices.first.address}}</span>

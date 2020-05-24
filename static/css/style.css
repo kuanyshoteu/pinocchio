@@ -145,6 +145,9 @@
 .leftbr5{
   border-radius: 5px 0 0 5px;
 }
+.rightbr5{
+  border-radius: 0 5px 5px 0 !important;
+}
 .bottombr5{
   border-radius: 0 0 5px 5px !important;
 }
@@ -166,6 +169,9 @@
 .shadow_small{
   box-shadow: 0 0 5px 0 #d3d3d3 !important;
 }
+.shadow_grey{
+  box-shadow: 0 0 5px 0 #bfbfbf !important;
+}
 .shadow_mini{
   box-shadow: 0 0 3px 0 #d3d3d3 !important;
 }
@@ -177,6 +183,9 @@
 }
 .shadow_dark{
   box-shadow: 0 0 5px 0 #4a4a4a !important;
+}
+.shadow_dark_low{
+  box-shadow: 0 0 3px 0 #5c5c5c !important;
 }
 .shadow_neo{
   background: linear-gradient(145deg, #e8f8ec, #ffffff) !important;
@@ -2292,10 +2301,6 @@ a{
   perspective: 1000;
   opacity: 0;
 }
-  .map_search_hint{
-    position: absolute !important;
-    z-index: 3000;
-  }
 .loading .animation:nth-child(2) {
   -webkit-animation-delay: 250ms;
   -moz-animation-delay: 250ms;
@@ -2420,7 +2425,9 @@ a{
 .backdarkgrey{
   background-color: #ececec !important;
 }
-
+.search_form{
+  margin: 0 auto
+}
 .map_filter{
     padding: 7px 0 7px 7px !important;
 }
@@ -2437,25 +2444,38 @@ a{
   border: 1px solid #fff !important;
   border-radius: 5px 0 0 5px !important;
   border-right: 0;
-  height: 50px !important;
-  line-height: 35px !important;
   overflow:hidden;  
 }
+.map_search_hint{
+  z-index: 3000;
+  position: absolute !important;
+}
 .land_box1{
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   color: #2a5885;
   font-weight:600;
+  width: 100%;
+  height: 157px;
+  display: block;
+  padding-top: 30%;
 }
-@media screen and (min-width: 992px){
-   .cost_hint{
+  .land_box2{
+    display: block;
+    width: 100%;
+  }
+@media screen and (min-width: 768px){
+  .land_box1{
+      border-radius: 5px 5px 0 0 !important;
+  }
+  .cost_hint{
     position: absolute;
     z-index: 3000;
     margin-top: -50px !important;
     line-height: 15px;
     margin-left: 101% !important;  
     width: 80%;
-   }  
+  }  
   .mlback{
     padding-left: 60px !important;
   }
@@ -2466,20 +2486,21 @@ a{
     height: 300px;
     display: block;
   }
-  .land_box1{
-    width: 100%;
-    height: 150px;
-    display: block;
-    padding-top: 30%;
-  }
-  .land_box2{
-    display: block;
-  }
   .schoolLanding__header-wrapper{
     height: 230px;
   }
+  .map_search_btn{
+    height: 50px;
+    padding: 18px 20px !important;
+    border: 1px solid #e5e5e5;
+  }
   .map_search_input{
-    width: calc(100% - 220px) !important;
+    width: 405px !important;
+    height: 50px !important;
+    line-height: 35px !important;
+  }
+  .search_form{
+    width: 460px !important;
   }
   #go-back-btn-before-land {
     position: absolute;
@@ -2512,6 +2533,19 @@ a{
   }
   .hint_box{
     width: 380px;
+  }
+  .land_amount{
+      font-size: 18px;
+      line-height: 24px;
+      color: #fff;
+      text-align: center;
+  }
+  .land_head{
+    font-weight: 600;
+    font-size: 23px;
+    line-height: 25px; 
+    text-align: center;
+    color: #fff;   
   }
   .deskbr15{
     border-radius: 15px !important;
@@ -2687,7 +2721,12 @@ a{
     .filter_title{
       width: 190px;
     }
-    .newlandhead{padding: 20px 50px 10px 50px;}
+    .newlandhead{
+      padding: 20px 50px 30px 50px;
+      background-color: #283654;
+      background-image: url(/static/images/icons/backicons.png);
+      background-size: 150px;
+    }
     .half-w{
       width: 50%;
     }
@@ -2712,7 +2751,6 @@ a{
     .oveflowy_a{
       overflow-y: auto;
     }
-    
 }
 .back-w{
   background-color: #fff;
@@ -2723,8 +2761,21 @@ a{
 .schoolLanding__header-wrapper{
   margin-top: -5px;display: flex;
 }
-@media only screen and (max-width: 991px) {  
-   .cost_hint{
+@media only screen and (max-width: 767px) {  
+  .land_box1{
+      border-radius: 5px 0 0 5px !important;
+      width: 75% !important;
+  }
+  .land_box2{
+    white-space: nowrap;
+    max-width: 60%;
+    text-overflow: ellipsis;
+    overflow: hidden;    
+  }
+  .landbox{
+    display: flex;
+  }
+  .cost_hint{
     position: absolute;
     z-index: 3000;
     margin-top: 10px !important;
@@ -2733,21 +2784,9 @@ a{
     line-height: 15px;
     margin-left: 30px !important;  
     width: 80%;
-   }  
+  }  
   .mlback{
     padding-left: 25px !important;
-  }  
-  .land_box1{
-    height: 140px;
-    display: inline-block;
-    width: 30% !important;
-  }
-  .land_box2{
-    display: inline-block;
-    width: 70% !important;
-  }
-  .landbox{
-    display: flex;
   }  
   .schoolLanding__header-wrapper{
     height: 100px;
@@ -2755,6 +2794,18 @@ a{
   .mobtopbr5{
     border-radius: 5px 5px 0 0 !important;
   }
+  .land_amount{
+    display: none;
+    font-size: 15px;
+    color: #545454;      
+    text-align: left;
+  }  
+  .land_head{
+    font-size: 17px;
+    line-height: 20px;    
+    text-align: center;
+    color: #545454;
+  }  
   .mobbottombr5{
     border-radius: 0 0 5px 5px !important;
   }
@@ -2826,7 +2877,7 @@ a{
     .half-w{
       width: 100%;
     }
-    .newlandhead{padding: 20px 10px 20px 10px;}
+    .newlandhead{padding: 20px 10px 15px 10px;}
     .catland{
       padding: 30px 0px 200px 0px;
     }
@@ -2935,8 +2986,19 @@ a{
   .back-g{
     background: #f5f5f5;
   }
+  .map_search_btn{
+    height: 40px;
+    padding: 12px 20px !important;
+    box-shadow: 0 2px 2px 0 #d3d3d3 !important;
+  }
   .map_search_input{
+    box-shadow: 0 2px 2px 0 #d3d3d3 !important;
     width: calc(100% - 58.69px) !important;
+    height: 40px !important;
+    line-height: 25px !important;
+  }
+  .search_form{
+    width: 100% !important;
   }
   .map_filter{
     border: 1px solid #fff !important;

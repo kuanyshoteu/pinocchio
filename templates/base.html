@@ -61,13 +61,13 @@
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
             </a>
             {% if is_manager %}
-            <a class="ui button mini red mr10 open_new_card_form1" id="request-responsive" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 2px;">
+            <a class="ui button mini white textblue mr10 open_new_card_form1" id="request-responsive" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 5px;">
                 Заявка
             </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-            <a href="{% url 'main:about' %}" class="ui button mini green shadow_small pl5 pt10 pr5 pb10" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 2px;">Стать партнером</a>
-            <a href="{% url 'main:login_page' %}" class="ui button mini green pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
+            <a href="{% url 'main:about' %}" class="ui button mini blue shadow_dark_low pb5 pl5 pr5 textbold" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 10px;padding-top: 4px;">Стать партнером</a>
+            <a href="{% url 'main:login_page' %}" class="textw pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
             {% endif %}
         </div>
         {% if request.user.is_authenticated %}
@@ -248,8 +248,10 @@
                     <div class="text-center mt15">
                         <a class="lftitemsmall ui button mini black" href='/moderator/'>
                             Модераторская
-                        </a>               <a class="ui button small full-w white" href='/blog/'>
-            <i class="newspaper icon"></i>Блог</a>         
+                        </a>               
+                        <a class="ui button small full-w white" href='/blog/'>
+                            <i class="newspaper icon"></i>Блог
+                        </a>         
                     </div>
                     {% endif %}                    
                 {% else %}

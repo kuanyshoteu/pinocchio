@@ -5,34 +5,27 @@
 {% load ttttags %}
 {% block content %}
 <div  style="margin-top: -5px;color: #fff;">
-    <div class="text-center newlandhead pb30" style="background-color: #283654;background-image: url({% static 'images/icons/backicons.png' %});background-size: 150px;">
+    <div class="text-center newlandhead" style="">
         <div id="cloud-intro"></div>
-        <div class="textw text-center mb10" style="font-size: 23px;line-height: 25px;font-weight: 600;position: relative;color: #232f3e">
+        <div class="mb10 land_head">
             Введите название интересующего курса
         </div>
                 <!-- <a class="ui button mini blue gojson">Go json</a> -->
-        <div class="ui grid stackable no_margin full-w">
-            <div class="four wide column no_padding"></div>
-            <div class="eight wide column no_padding">
-                <form class="ui form mb0">
-                    <textarea class="map_search_input mb0" url="/api/map_search/" style="" placeholder="Учебные центры и курсы"></textarea>
-                    <div class="dinline backwhite" url="/api/map_search_show/" style="height: 50px;line-height: 20px;border-radius: 0 5px 5px 0;font-size: 15px;padding: 14px 20px;border: 1px solid rgba(34, 36, 38, 0.15);border-left: 0">
-                        <i class="icon search mr0" style="color: #232f3e;"></i>
-                        <b class="not_in_mobile textw"></b>
-                    </div>
-                    <div class="map_search_hint ui segment no_padding mt0" style="text-align: left;width: calc(100% - 164px);display: none;margin-left: 82px;">
-                    </div>
-                </form>                  
+        <form class="ui form mb0 search_form">
+            <textarea class="map_search_input mb0" url="/api/map_search/" style="" placeholder="Учебные центры и курсы"></textarea>
+            <a class="dinline ui button white mr0 map_search_btn rightbr5" url="/api/map_search_show/">
+                <i class="icon search mr0" style="color: #232f3e;"></i>
+            </a>
+            <div class="full-w map_search_hint ui segment no_padding mt0" style="text-align: left;display: none;">
             </div>
-            <div class="four wide column no_padding"></div>
-        </div>
-        <div class="textw text-center mb0 mt5" style="font-size: 18px;line-height: 35px;color: #232f3e">
+        </form>
+        <div class="mb0 mt10 land_amount">
             Более <b>{{len}}</b> учебных центров Алматы
         </div>
     </div>
-    <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #ECECEC">
-        <div class="three wide column pb0 pr0 deskmenu">
-            <div class="ui segment shadow no_padding">
+    <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #f5f5f5;">
+        <div class="three wide column pb0 pr0 not_in_mobile">
+            <div class="ui segment shadow no_padding all_caregories">
                 <div class="ui segment mb0 textw backlightblue" style="line-height: 25px;border-radius:7px 7px 0px 0px;color: #232f3e;text-align: left;padding: 5px 15px;"><b>Категории:</b></div>
                 {% for cat in categories %}
                 <a href="{{cat.get_absolute_url}}" class="ui button full-w {%if forloop.counter|is_odd %}white{%else%}lightgrey{%endif%}" style="line-height: 25px;border-radius:{%if forloop.counter > 1%}0{%else%}7px 7px 0px 0{%endif%}px;color: #232f3e;text-align: left;padding: 5px 15px;border-bottom: 1px solid #e5e5e5">
@@ -44,8 +37,8 @@
         <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
             <div class="ui grid stackable no_margin">
                 <div class="sixteen wide column pl15 pb0 mobpt0 pr0" style="display: inline-block;">
-                    <a class="ui button small blue pt10 pb10 mb10 in_mobile" onclick="$('.categories_modal').modal('show')">
-                        <i class="icon list textw"></i>
+                    <a class="full-w ui button small white shadow_small border1 pt10 pb10 mb15 in_mobile" onclick="$('.categories_modal').modal('show')">
+                        <i class="icon list textblue"></i>
                         Категории
                     </a>
                 </div>
@@ -59,16 +52,19 @@
         <i class="close icon" style="margin-right: -15px;margin-top: -15px;"></i>
         <div class="content">
             <div style="height: 20px;"></div>
-            {% for cat in categories %}
-            <a href="{{cat.get_absolute_url}}" class="ui button mini white shadow mb5 full-w" style="line-height: 25px;">
-                <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
-            </a>
-            {% endfor %}
+            <div class="mobile_categories"></div>
         </div>
     </div>
     {% include 'footer.html' %}
 </div>
+<span class="catchmob"></span>
 <script type="text/javascript">
+    fill_mob_cats()
+    function fill_mob_cats(){
+        if ($('.catchmob').width() == 1) {
+            $('.all_caregories').appendTo('.mobile_categories')
+        }
+    }
     $('.gojson').on('click',function(e) {
         $.ajax({
             url: '/',
@@ -92,7 +88,6 @@
             success: function (data) {
                 if(data.res.length == 0){
                     $('.map_search_hint').hide();
-                    map_search_by_tags(text);
                 }
                 else{
                     $('.map_search_hint').empty();
@@ -112,7 +107,6 @@
     })
     $('.map_search_by_tags').on('click',function(e) {
         text = $('.map_search_input').val()
-        map_search_by_tags(text)
     })
     
 </script>
