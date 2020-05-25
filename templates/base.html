@@ -56,7 +56,9 @@
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
         <div class="menu-title" style="width: calc(25% + 140px);">
+            {% if user.is_authenticated %}
             <i class="icon bars pl15 mr0 pr15 mt3 pb10" style="height: 30px;" id="toggle"></i>
+            {% endif %}
             <a href='{% if request.user.is_authenticated %}{{profile.get_absolute_url}}{%else%}{% url "main:home" %}{%endif%}' class="header main">
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
             </a>
@@ -253,14 +255,7 @@
                             <i class="newspaper icon"></i>Блог
                         </a>         
                     </div>
-                    {% endif %}                    
-                {% else %}
-                    <a class="ui button white full-w bt1" href='{% url "main:about" %}' style="background-color: #fff">
-                        Стать партнером
-                    </a>
-                    <a class="ui button white full-w bt1" href='{% url "main:team" %}' style="background-color: #fff">
-                        О нас
-                    </a>
+                    {% endif %}
                 {% endif %}           
             </div>
         </div>

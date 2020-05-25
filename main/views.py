@@ -414,6 +414,8 @@ def register_view(request):
             first_teacher = False
             for teacher_name in teachers.split(','):
                 teacher = register_user_work(teacher_name, '', '', False, False)
+                teacher.is_student = False
+                teacher.save()
                 teacher.profession.add(teacher_profession)
                 teacher.schools.add(school)
                 if not first_teacher:
@@ -443,6 +445,13 @@ def register_view(request):
             add_lecture_work('10:00', '12:00', test_squad, subject, [1,3,5])
             add_subject_work(school, test_squad, subject)
             profile.schools.add(school)
+
+            html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Школа: <a href='https://www.bilimtap.kz/schools/info/?type=moderator&mod_school_id="+str(school.id)+"'>"+school_name+"</a><br>Телефон: "+phone+"<br>Телефон: "+phone
+            try:
+                send_email("Клиент новый", html_content, ['kuanyshoteu@gmail.com'])
+            except Exception as e:
+                print('send error')
+                pass                            
         else:
             res = 'not_equal_password'
     data = {
@@ -1324,22 +1333,18 @@ def moderator_run_code(request):
     return render(request, "moder_code.html", {})
 
 def hint_update():
-    for skill in Skill.objects.all():
-        if skill.payment_filter == '':
-            skill.payment_filter = 'all'
-            skill.save()
-    for sq in Squad.objects.all():
-        if len(sq.need_money.all()) < len(sq.students.all()):
-            school = sq.school
-            for st in sq.students.all():
-                print(st.first_name, school.title)
-                card = st.card.filter(school = school)
-                if len(card) > 0:
-                    card = card[0]
-                    print(card)
-                    if len(card.need_money.filter(squad=sq)) == 0:
-                        add_student_to_squad(st, sq, None)
-
+    profession = Profession.objects.get(title = 'Teacher')
+    teachers = profession.workers.all()
+    for t in teachers:
+        if t.is_student:
+            t.is_student = False
+            t.save()
+    month = timezone.now().strftime('%m')
+    year = timezone.now().strftime('%Y')
+    for nm in NeedMoney.objects.all():
+        start = year + '-' + month + '-' + str(nm.pay_day)
+        nm.pay_date = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+        nm.save()
 
 def categories_update():
     for sc in SubjectCategory.objects.all():

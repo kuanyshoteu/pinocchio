@@ -199,10 +199,9 @@
                             group_id = group[0]
                             group_title = group[1]
                             color_back = group[2]
-                            date_str = group[3]
-                            date = group[4]
+                            date = group[3]
+                            date_str = group[4]
                             if (color_back == '') {color_back='rgb(49, 58, 87)'}
-                            pay_date = group[3]
                             group_div = $('.group_box').clone()
                             group_div.removeClass('group_box')
                             group_div.find('.group_name').text(group_title)
@@ -312,8 +311,9 @@
             success: function (data) {
                 if (data.pay_date) {
                     load.hide()
-                    check.show()  
-                    $('#payday_text'+student+'g'+squad).text(data.pay_date)                  
+                    check.show()
+                    $('.payday_text'+student+'g'+squad).text(data.pay_date)
+                    $(".block_change_pay_date").hide();                  
                 }
             }
         })

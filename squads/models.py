@@ -178,6 +178,7 @@ class NeedMoney(models.Model): # Rename to SquadBill
     money = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
     start_date = models.DateField(auto_now_add=False)
+    pay_date = models.DateField(auto_now_add=False)
     pay_day = models.IntegerField(default=1) # day of month, from 1 to 30
     class Meta:
         ordering = ['-id']

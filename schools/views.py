@@ -2332,9 +2332,9 @@ def payday_change(request):
         squad = school.groups.get(id = int(request.GET.get('squad')))
         card = student.card.get(school=school)
         nm = card.need_money.get(squad=squad)
-        nm.pay_day = int(request.GET.get('paydate').split('-')[-1])
+        nm.pay_date = datetime.datetime.strptime(request.GET.get('paydate'), "%Y-%m-%d").date()
         nm.save()
-        pay_date = get_pay_date(nm).strftime('%d %B')
+        pay_date = nm.pay_date.strftime('%d %B %Y')
     data = {
         "pay_date":pay_date
     }
@@ -2411,13 +2411,11 @@ def get_payment_list(request):
                 pay_date = '-'
                 pay_date_input = '-'
                 pd = ''
-                pay_date_full = ''
                 if len(nm) > 0:
                     nm = nm.last()
-                    pd = get_pay_date(nm)
-                    pay_date = pd.strftime('%d %B')
-                    pay_date_full = pd.strftime('%Y-%m-%d')
-                sq_res.append([sq.id, sq.title, sq.color_back, pay_date, pay_date_full])
+                    pay_date_input = nm.pay_date.strftime("%Y-%m-%d")
+                    pay_date = nm.pay_date.strftime("%d %B %Y")
+                sq_res.append([sq.id, sq.title, sq.color_back, pay_date_input,pay_date])
             res.append([
                 student.id,
                 student.first_name,
