@@ -448,7 +448,7 @@ def register_view(request):
 
             html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Школа: <a href='https://www.bilimtap.kz/schools/info/?type=moderator&mod_school_id="+str(school.id)+"'>"+school_name+"</a><br>Телефон: "+phone+"<br>Телефон: "+phone
             try:
-                send_email("Клиент новый", html_content, ['kuanyshoteu@gmail.com'])
+                send_email("Клиент новый", html_content, ['aaa.academy.kz@gmail.com'])
             except Exception as e:
                 print('send error')
                 pass                            
