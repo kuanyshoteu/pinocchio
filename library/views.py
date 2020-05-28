@@ -39,6 +39,7 @@ def school_library(request, school_id):
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "page":'library',
         "school_crnt":school,

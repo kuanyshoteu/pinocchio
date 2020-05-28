@@ -16,12 +16,12 @@
                             Выберите <b>предмет</b>:
                             <div class="controls" style="margin-top: 10px"> 
                                 <select class="crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
-                                    {% if profile.skill.crm_subject %}
-                                        <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                                    {% if profile.filter_data.subject %}
+                                        <option value="{{ profile.filter_data.subject.id }}">{{ profile.filter_data.subject.title }}</option>
                                     {% endif %}
                                     <option value="-1">Все предметы</option>
                                     {% for subject_category in subject_categories %}
-                                        {% if subject_category != profile.skill.crm_subject %}
+                                        {% if subject_category != profile.filter_data.subject %}
                                         <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
                                         {% endif %}
                                     {% endfor %}
@@ -48,12 +48,12 @@
                             Выберите <b>класс</b>:
                             <div class="controls" style="margin-top: 10px"> 
                                 <select class="crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
-                                    {% if profile.rating_squad_choice.first %}
-                                        <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                    {% if filter_data.squad.first %}
+                                        <option value="{{ filter_data.squad.first.id }}">{{ filter_data.squad.first.title }}</option>
                                     {% endif %}
                                     <option value="-1">Все классы</option>
                                     {% for squad in squads %}
-                                        {% if squad != profile.rating_squad_choice.first %}
+                                        {% if squad != filter_data.squad.first %}
                                         <option value="{{ squad.id }}">{{ squad.title }}</option>
                                         {% endif %}
                                     {% endfor %}
@@ -117,12 +117,12 @@
                             Выберите <b>предмет</b>:
                             <div class="controls" style="margin-top: 10px"> 
                                 <select class="crm_option" id="crm_subject" url="{{ instance.crm_option_url }}" option="subject"> 
-                                    {% if profile.skill.crm_subject %}
-                                        <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                                    {% if profile.filter_data.subject %}
+                                        <option value="{{ profile.filter_data.subject.id }}">{{ profile.filter_data.subject.title }}</option>
                                     {% endif %}
                                     <option value="-1">Все предметы</option>
                                     {% for subject_category in subject_categories %}
-                                        {% if subject_category != profile.skill.crm_subject %}
+                                        {% if subject_category != profile.filter_data.subject %}
                                         <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
                                         {% endif %}
                                     {% endfor %}
@@ -149,12 +149,12 @@
                             Выберите <b>класс</b>:
                             <div class="controls" style="margin-top: 10px"> 
                                 <select class="crm_option" id="crm_squad" url="{{ instance.crm_option_url }}" option="group"> 
-                                    {% if profile.rating_squad_choice.first %}
-                                        <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                    {% if filter_data.squad.first %}
+                                        <option value="{{ filter_data.squad.first.id }}">{{ filter_data.squad.first.title }}</option>
                                     {% endif %}
                                     <option value="-1">Все классы</option>
                                     {% for squad in squads %}
-                                        {% if squad != profile.rating_squad_choice.first %}
+                                        {% if squad != filter_data.squad.first %}
                                         <option value="{{ squad.id }}">{{ squad.title }}</option>
                                         {% endif %}
                                     {% endfor %}

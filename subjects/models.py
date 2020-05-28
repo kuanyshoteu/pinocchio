@@ -13,8 +13,8 @@ from django.utils.safestring import mark_safe
 from transliterate import translit, get_available_language_codes
 from django.contrib.postgres.fields import ArrayField, HStoreField
 
-from accounts.models import Profile, Skill
-from squads.models import Squad, NeedMoney
+from accounts.models import Profile
+from squads.models import Squad, BillData
 from papers.models import Lesson
 from schools.models import *
 
@@ -65,8 +65,6 @@ class Subject(models.Model):
             blank=True, 
             )
     category = models.ManyToManyField(SubjectCategory, related_name='category_subjects')
-    age = models.ManyToManyField(SubjectAge, related_name='age_subjects')
-    level = models.ManyToManyField(SubjectLevel, related_name='level_subjects')
     filter_options = models.ManyToManyField(SchoolFilterOption, related_name='subjects')
     start_dates = ArrayField(models.DateField(null=True), default=list)
     squad_ids = ArrayField(models.IntegerField(null=True), default=list)
@@ -85,7 +83,6 @@ class Subject(models.Model):
     content = models.TextField()
     slogan = models.CharField(max_length=250, default='')
     number_of_materials = models.IntegerField(default=0, null=True)
-    filter_course_connect = models.ManyToManyField(Skill, related_name='filter_course_connect') 
     public = models.BooleanField(default=True)
     public_cost = models.BooleanField(default=True)
 
@@ -144,6 +141,18 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
 
 pre_save.connect(pre_save_course_receiver, sender=Subject)
 
+class FilterData(models.Model):
+    author = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='filter_data') 
+    tag_ids = ArrayField(models.IntegerField(), default = list)
+    crm_notices = models.IntegerField(default=0)
+    payment_notices = models.IntegerField(default=0)
+    subject_category = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by')
+    office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+    payment = models.TextField(blank = True, default = 'all', null = True)
+    squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='choosed_by')
+    subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='choosed_by')
+    teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+
 class SubjectMaterials(models.Model):
     #Убрать school
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_materials')     
@@ -163,11 +172,8 @@ class Lecture(models.Model):
     cabinet = models.ForeignKey(Cabinet,null=True, on_delete = models.CASCADE, related_name='cabinet_lecture')
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='squad_lectures')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='subject_lectures')
-
     office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='office_lectures')
     category = models.ManyToManyField(SubjectCategory, related_name='category_lectures')
-    age = models.ManyToManyField(SubjectAge, related_name='age_lectures')
-    level = models.ManyToManyField(SubjectLevel, related_name='level_lectures')
     class Meta:
         ordering = ['cell']
 
@@ -202,8 +208,8 @@ class SubjectHistory(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-class FinanceClosed(models.Model): ### Rename to SubjectBill
-    need_money = models.ForeignKey(NeedMoney, null=True, on_delete = models.CASCADE, related_name='finance_closed')
+class SubjectBill(models.Model):
+    bill_data = models.ForeignKey(BillData, null=True, on_delete = models.CASCADE, related_name='finance_closed')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='finance_closed')
     start = models.DateField(auto_now_add=False)
     pay_date = models.DateField(auto_now_add=False)

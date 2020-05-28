@@ -29,9 +29,6 @@ class Squad(models.Model):
     students = models.ManyToManyField(Profile, default=1, related_name='squads')
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='groups')
     office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='groups')
-    age = models.ManyToManyField(SubjectAge, related_name='groups')
-    level = models.ManyToManyField(SubjectLevel, related_name='groups')
-    rating_choices = models.ManyToManyField(Profile, related_name='rating_squad_choice')
 
     title = models.CharField(max_length=250)
     slug = models.SlugField(unique=True)
@@ -137,10 +134,6 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
 
 pre_save.connect(pre_save_course_receiver, sender=Squad)
 
-class Bug(models.Model):
-    text = models.TextField(default='')
-    timestamp = models.DateTimeField(auto_now_add=True)
-
 class SquadHistory(models.Model):
     squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='squad_histories')
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='squad_histories')
@@ -172,9 +165,9 @@ class DiscountSchool(models.Model):
     def delete_url(self):
         return reverse("schools:discount_delete_url")
 
-class NeedMoney(models.Model): # Rename to SquadBill
-    squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='need_money')
-    card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='need_money')
+class BillData(models.Model):
+    squad = models.ForeignKey(Squad,null=True,on_delete = models.CASCADE,related_name='bill_data')
+    card = models.ForeignKey(CRMCard,null=True,on_delete = models.CASCADE,related_name='bill_data')
     money = models.IntegerField(default=0)
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
     start_date = models.DateField(auto_now_add=False)

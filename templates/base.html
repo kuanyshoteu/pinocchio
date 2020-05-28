@@ -68,7 +68,7 @@
             </a>
             {% endif %}
             {% if not request.user.is_authenticated %}
-            <a href="{% url 'main:about' %}" class="ui button mini blue shadow_dark_low pb5 pl5 pr5 textbold" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 10px;padding-top: 4px;">Стать партнером</a>
+            <a href="{% url 'main:sign_up' %}" class="ui button mini blue shadow_dark_low pb5 pl5 pr5 textbold" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 10px;padding-top: 4px;">Стать партнером</a>
             <a href="{% url 'main:login_page' %}" class="textw pt10 pr10 pb10 pl10" id="request-responsive" style="position: absolute;right: 10px;font-size: 14px;top: 2px;">Войти</a>
             {% endif %}
         </div>
@@ -140,7 +140,7 @@
         {% else %}
         <div class="item not_in_mobile" style="color: #f0f0f0;font-weight: 600;margin-left:-50px;margin-top: 0px;">
             <h1 style="font-size: 15px;" class="no_margin">Поиск учебных центров</h1>
-            <a href="{% url 'main:about' %}" class="ui button mini green mini pb5 pt5 ml15"><b>Стать партнером</b></a>
+            <a href="{% url 'main:sign_up' %}" class="ui button mini green mini pb5 pt5 ml15"><b>Стать партнером</b></a>
             {% if landing == True %}
             <div class="item not_in_mobile" >
                 <a class="ui button mini white border1 pt5 pb5" href="/" style="padding:8px 14px;margin-right: 25px;">Вернуться к поиску</a>

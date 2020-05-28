@@ -39,12 +39,12 @@
                             </div>
                         </div>
                         <div class="ui segment shadow_small mt5">
-                            <div style="display: none;" class="highlight_red reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
                             <div style="display: none;float: right;" class="textred textbold reg_fill_all1">Заполните все</div>
                             <form method='POST' enctype='multipart/form-data' class="ui form mb0">{% csrf_token %}
                                 <span class="textdg textbold text13">Как Вас зовут?</span> 
                                 <input class="sign_dir_name mb10">
                                 <span class="textdg textbold text13">Название Вашего учебного центра:</span> 
+                                <div style="display: none;" class="textred textbold reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
                                 <input class="sign_school_name mb10">
                                 <span class="textdg textbold text13">Ваш номер телефона для связи (мобильный):</span> 
                                 <input class="sign_phone mb10">

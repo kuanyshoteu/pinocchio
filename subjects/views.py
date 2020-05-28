@@ -223,7 +223,7 @@ def subject_update(request, slug=None):
         "school_money":school.money,
         "school_crnt":school,
         "page":"subjects",
-        "hint":profile.skill.hint_numbers[5],
+        "hint":profile.hint_numbers[5],
     }
     return render(request, "subjects/subject_create.html", context)
 

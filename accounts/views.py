@@ -50,8 +50,8 @@ def test_account(request):
             miss_lesson = miss_lesson_form.save()
     hissubjects = []
     if is_profi(hisprofile, 'Manager'):
-        if profile.skill.crm_office2:
-            hissquads = profile.skill.crm_office2.groups.filter(shown=True)
+        if profile.filter_data.office:
+            hissquads = profile.filter_data.office.groups.filter(shown=True)
         else:
             hissquads =  profile.schools.first().groups.filter(shown=True)
     elif is_profi(hisprofile, 'Teacher'):
@@ -94,29 +94,18 @@ def account_view(request, user = None):
     user = user.replace('_', ' ')
     user = User.objects.get(username = user)
     hisprofile = Profile.objects.get(user = user)
-    skill = hisprofile.skill
     miss_lesson_form = False
     mypage = ''
     if profile == hisprofile:
         mypage = 'mypage'
-        # Нужна отдельная функция при вызове
-        miss_lesson = MissLesson.objects.filter(profile = profile)
-        if len(miss_lesson) > 0:
-            miss_lesson = miss_lesson[0]
-            miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None, instance=miss_lesson)
-        else:
-            miss_lesson_form = MissLessonForm(request.POST or None, request.FILES or None)
-        if miss_lesson_form.is_valid():
-            miss_lesson = miss_lesson_form.save()
-            return check_confirmation(hisprofile, skill)
     hissubjects = []
     hissquads = []
     hiscacheatt = CacheAttendance.objects.get_or_create(profile = hisprofile)[0]
     if is_profi(hisprofile, 'Director'):
         hissquads = profile.schools.first().groups.filter(shown=True)
     elif is_profi(hisprofile, 'Manager'):
-        if profile.skill.crm_office2:
-            hissquads = profile.skill.crm_office2.groups.filter(shown=True)
+        if profile.filter_data.office:
+            hissquads = profile.filter_data.office.groups.filter(shown=True)
     elif is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.filter(shown=True)
     else:
@@ -132,7 +121,7 @@ def account_view(request, user = None):
     hiscacheatt.save()
     att_squad = hiscacheatt.squad
     if is_profi(hisprofile, 'Manager'):
-        if profile.skill.crm_office2:
+        if profile.filter_data.office:
             if att_squad in hissquads:
                 hissubjects = att_squad.subjects.all()
         else:
@@ -156,7 +145,6 @@ def account_view(request, user = None):
         'today':int(timezone.now().date().strftime('%w')),
         'hissquads':hissquads,
         'hissubjects':hissubjects,
-        'miss_lesson_form':miss_lesson_form,
         'is_this_trener':is_profi(hisprofile, 'Teacher'),
         "is_this_manager":is_profi(hisprofile, 'Manager'),
         "is_this_director":is_profi(hisprofile, 'Director'),
@@ -170,7 +158,7 @@ def account_view(request, user = None):
         "interval":60,
         'height':28*15+25, 
         "page":mypage,
-        "hint":profile.skill.hint_numbers[2],
+        "hint":profile.hint_numbers[2],
     }
     return render(request, "profile.html", context)
 
@@ -458,7 +446,7 @@ def att_present(request):
             #### Update first presence in squad and subject
             if subject.cost_period == 'month' and subject.cost > 0:
                 date1 = get_date(attendance.subject_materials, squad)[0]
-                nm = card.need_money.filter(squad=squad)
+                nm = card.bill_data.filter(squad=squad)
                 need_fc = False
                 if len(nm) > 0:
                     nm = nm[0]
@@ -468,7 +456,7 @@ def att_present(request):
                     else:
                         fc = fc[0]
                 else:
-                    nm = card.need_money.create(squad=squad,start_date=date1)
+                    nm = card.bill_data.create(squad=squad,start_date=date1)
                     need_fc = True
                     nm.save()
                 if need_fc:
@@ -503,7 +491,7 @@ def att_present(request):
     return JsonResponse(data)
 
 def pay_for_lesson(card, cost, squad):
-    nm = squad.need_money.filter(card=card)
+    nm = squad.bill_data.filter(card=card)
     if len(nm) > 0:
         nm = nm[0]
         nm.money -= int(cost)
@@ -559,7 +547,7 @@ def logout_view(request):
 def add_money(profile, school, squad, card, amount, manager):
     if amount > squad.bill*10:
         return 'too much'
-    nm = card.need_money.get(squad=squad)
+    nm = card.bill_data.get(squad=squad)
     nm.money += amount
     nm.save()
     crnt = amount
@@ -642,7 +630,7 @@ def make_payment_card(request):
         school = manager.schools.first()
         squad = school.groups.get(id=int(request.GET.get('group_id')))
         add_money(profile, school, squad, card, amount, manager)
-        nms = card.need_money.select_related('squad')
+        nms = card.bill_data.select_related('squad')
         for squad in profile.squads.all():
             crnt = nms.filter(squad=squad)
             if len(crnt) > 0:

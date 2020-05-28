@@ -88,29 +88,6 @@ class SubjectCategoryAdmin(admin.ModelAdmin):
         model = SubjectCategory
 admin.site.register(SubjectCategory, SubjectCategoryAdmin)
 
-class SubjectAgeAdmin(admin.ModelAdmin):
-    list_display = ["title", "id"]
-    list_display_links = ["title"]
-    list_filter = ["title"]
-    class Meta:
-        model = SubjectAge
-admin.site.register(SubjectAge, SubjectAgeAdmin)
-
-class SubjectLevelAdmin(admin.ModelAdmin):
-    list_display = ["title", "id"]
-    list_display_links = ["title"]
-    list_filter = ["title"]
-    class Meta:
-        model = SubjectLevel
-admin.site.register(SubjectLevel, SubjectLevelAdmin)
-
-class FilterControlAdmin(admin.ModelAdmin):
-    list_display = ["id"]
-    list_display_links = ["id"]
-    class Meta:
-        model = FilterControl
-admin.site.register(FilterControl, FilterControlAdmin)
-
 class CabinetAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
     list_display_links = ["title"]

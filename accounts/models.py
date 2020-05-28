@@ -38,36 +38,16 @@ class JobCategory(models.Model):
     schools = models.ManyToManyField(School, related_name='job_categories')
     class Meta:
         ordering = ['title']
-class Skill(models.Model):
-    confirmed = models.BooleanField(default=False)    
-    confirmation_code = models.CharField(default='', max_length=250)
-    confirmation_time = models.DateTimeField(auto_now_add=False, default=datetime.datetime.strptime('2000-01-01', "%Y-%m-%d"))
-    tag_ids = ArrayField(models.IntegerField(), default = list)
-    easy_skills = ArrayField(models.IntegerField(), default = list)
-    middle_skills = ArrayField(models.IntegerField(), default = list)
-    hard_skills = ArrayField(models.IntegerField(), default = list)
-    pro_skills = ArrayField(models.IntegerField(), default = list)
-    hint_numbers = ArrayField(models.IntegerField(), default = [0, 1, 1, 1, 1 ,1])
-    crm_show_free_cards = models.BooleanField(default=True)
-    need_actions = models.IntegerField(default=0)
-    crm_subject = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
-    crm_subject2 = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
-    crm_office2 = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by2') 
-    payment_filter = models.TextField(blank = True, default = 'all', null = True)
-    notifications_number = models.IntegerField(default=0)
-    interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE,related_name='profile')
     first_name = models.TextField(blank = True,null = True,default='name')
-
     schools = models.ManyToManyField(School, related_name='people')
     profession = models.ManyToManyField(Profession, related_name='workers')
     job_categories = models.ManyToManyField(JobCategory, related_name='job_workers')
     money = models.IntegerField(default=0)
     salary = models.IntegerField(default=0)
     is_student = models.BooleanField(default=True)
-
     coins = models.IntegerField(default=0)
     mail = models.TextField(blank = True,default = '',null = True)
     phone = models.TextField(blank = True,null = True, default = '')
@@ -76,12 +56,11 @@ class Profile(models.Model):
             null=True,
             blank=True, 
             )
-
-    crm_subject_connect = models.ManyToManyField(SubjectCategory, default=1, related_name='students')
-    crm_age_connect = models.ManyToManyField(SubjectAge, default=1, related_name='students')
-    crm_level_connect = models.ManyToManyField(SubjectLevel, default=2, related_name='students')
-    filter_teacher_connect = models.ManyToManyField(Skill, related_name='filter_teacher') 
-    skill = models.ForeignKey(Skill, null=True, on_delete = models.CASCADE, related_name='profile')
+    confirmed = models.BooleanField(default=True)
+    confirmation_code = models.CharField(default='', max_length=250)
+    confirmation_time = models.DateTimeField(auto_now_add=False, default=datetime.datetime.strptime('2000-01-01', "%Y-%m-%d"))
+    hint_numbers = ArrayField(models.IntegerField(), default = list)
+    notifications_number = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['is_student', 'first_name']
@@ -92,81 +71,13 @@ class Profile(models.Model):
         self.user.username = self.user.username.replace('қ', 'к')
         return reverse("accounts:profile", kwargs={"user": self.user})
 
-    def check_confirmation(self):
-        return reverse("accounts:check_confirmation")
-    # APIs
-    def subject_attendance(self):
-        return reverse("accounts:subject_attendance")
-    def squad_attendance(self):
-        return reverse("accounts:squad_attendance")
-    def more_attendance(self):
-        return reverse("accounts:more_attendance")
-    def more_attendance_student(self):
-        return reverse("accounts:more_attendance_student")    
-    def hislessons(self):
-        return reverse("main:hislessons")        
-    def get_api_change_url(self):
-        return reverse("accounts:change-api-toggle")
-    def city_api_url(self):
-        return reverse("main:city_api_url")
-    def filial_api_url(self):
-        return reverse("main:filial_api_url")
-    def subject_api_url(self):
-        return reverse("main:subject_api_url")
-    def tell_about_corruption(self):
-        return reverse("accounts:tell_about_corruption")
-    def change_url(self):
-        return reverse("accounts:change_url")
-    def update_schedule_url(self):
-        return reverse("accounts:update_schedule_url")
-    def miss_lecture_url(self):
-        return reverse("accounts:miss_lecture_url")
-    def attendance_change_url(self):
-        return reverse("accounts:change_att_url")
-    def attendance_present_url(self):
-        return reverse("accounts:present_url")    
-    def hint_url(self):
-        return reverse("accounts:hint_url")    
-    def update_hints(self):
-        return reverse("accounts:update_hints")
-    def get_notifications(self):
-        return reverse('main:get_notifications')
-    def make_payment(self):
-        return reverse('accounts:make_payment')
-    # Actions with lessons
-    def create_folder_url(self):
-        return reverse("library:create_folder_url")
-    def create_lesson_url(self):
-        return reverse("papers:create_lesson_url")
-    def create_course_url(self):
-        return reverse("papers:create_course_url")
-    def file_action_url(self):
-        return reverse("library:file_action_url")
-    def paste_object_url(self):
-        return reverse("library:paste_object_url")
-    #Actions with documents
-    def create_docfolder_url(self):
-        return reverse("documents:create_docfolder_url")
-    def docfile_action_url(self):
-        return reverse("documents:docfile_action_url")
-    def paste_docobject_url(self):
-        return reverse("documents:paste_docobject_url")
-    # Actions with news
-    def create_post_url(self):
-        return reverse("news:create_post_url")
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
-
-def pre_save_course_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = create_slug(instance)
+class Skill(models.Model):
+    author = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='skill') 
+    easy_skills = ArrayField(models.IntegerField(), default = list)
+    middle_skills = ArrayField(models.IntegerField(), default = list)
+    hard_skills = ArrayField(models.IntegerField(), default = list)
+    pro_skills = ArrayField(models.IntegerField(), default = list)
+    interested_subjects = models.ManyToManyField(SubjectCategory, default=1, related_name='interested_students')
 
 class MissLesson(models.Model):
     profile = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE) 
@@ -212,15 +123,8 @@ class CRMCard(models.Model):
     premoney = models.IntegerField(default=0)
     color = models.CharField(max_length=250, default='white')
     social_media_id = models.CharField(max_length=50, default='')
-
     class Meta:
         ordering = ['-timestamp']
-    def call_helper(self):
-        return reverse("schools:call_helper")
-    def change_day_of_week(self):
-        return reverse("schools:change_day_of_week")
-    def take_url(self):
-        return reverse("schools:take_url")
 
 class CardMail(models.Model):
     action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='dialogs')

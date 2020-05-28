@@ -44,13 +44,6 @@ class NotificationAdmin(admin.ModelAdmin):
         model = Notification
 admin.site.register(Notification, NotificationAdmin)
 
-class SkillAdmin(admin.ModelAdmin):
-    list_display = ["id", "need_actions"]
-    list_display_links = ["id"]
-    class Meta:
-        model = Skill
-admin.site.register(Skill, SkillAdmin)
-
 class HashtagAdmin(admin.ModelAdmin):
     list_display = ["id", "title"]
     list_display_links = ["id"]

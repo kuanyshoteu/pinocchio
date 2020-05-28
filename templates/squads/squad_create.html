@@ -294,14 +294,14 @@
 		</div>
 	</div>	
 </div>
-<span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" id="{{instance.id}}"></span>
+<span style="display: none;"  class="instance_data" add_student_url="{%url 'squads:add_student_url'%}" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" id="{{instance.id}}"></span>
 <span class="data" hint_type="4" last_hint="2" hint="{{hint}}"></span>
 {% include 'hints/squad_hints.html' %}
 {% include 'hints/get_hint_script.html' %}
 <script type="text/javascript">
     function add_student(student_id) {
-        url = $('.add_student_url').attr('url')
-        squad_id = $('.add_student_url').attr('id')
+        url = $('.instance_data').attr('add_student_url')
+        squad_id = $('.instance_data').attr('id')
         $('.isalready').hide()
         $.ajax({
             url: url,

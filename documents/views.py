@@ -92,6 +92,7 @@ def folder_details(request, folder_id=None):
         "profile": profile,
         'this_folder':folder,
         'docs_from_schools':[folder.title],
+        'docs':folder.files.all(),
         'cache':DocumentCache.objects.get_or_create(author_profile = profile)[0],
         'folders':DocumentFolder.objects.filter(parent=folder),
         'file_form':file_form,

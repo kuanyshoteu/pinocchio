@@ -75,7 +75,7 @@ def squad_list(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
-        "filter_office":profile.skill.crm_office2,
+        "filter_office":profile.filter_data.office,
         'page':'squads',    
     }
     return render(request, "squads/squad_list.html", context)
@@ -109,10 +109,11 @@ def squad_create(request):
     school = is_moderator_school(request, profile)
     if form.is_valid():
         instance = form.save(commit=False)
-        instance.start_date = timezone.now().date()
         instance.school = school
         if len(school.school_offices.all()) > 0:
             instance.office = school.school_offices.first()
+        start = request.POST.get('start')
+        instance.start_date = start
         instance.save()
         instance.squad_histories.create(action_author=profile,edit='Создал группу '+instance.title)
         return HttpResponseRedirect(instance.get_update_url())
@@ -147,11 +148,8 @@ def squad_update(request, slug=None):
         old_content = instance.content
         instance = form.save(commit=False)
         start = request.POST.get('start')
-        end = request.POST.get('end')
         if start == '':
             start = timezone.now().strftime("%Y-%m-%d")
-        if end == '':
-            end = timezone.now().strftime("%Y-%m-%d")
         start_date = datetime.datetime.strptime(start, "%Y-%m-%d").date()
         if old_title != instance.title:
             change_title = True
@@ -231,7 +229,7 @@ def squad_update(request, slug=None):
         'other_subjects':school.school_subjects.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
         'page':'squads',
-        "hint":profile.skill.hint_numbers[4],
+        "hint":profile.hint_numbers[4],
     }
     return render(request, "squads/squad_create.html", context)
 
@@ -388,18 +386,7 @@ def remove_student_from_squad(student, squad, manager_profile):
     other_squads = student.squads.all().exclude(id=squad.id)
     other_subjects = Subject.objects.filter(squads__in=other_squads)
     card = student.card.get_or_create(school=school)[0]
-    for subject in squad.subjects.all():
-        cats = subject.category.all()
-        cats = cats.exclude(category_subjects__in=other_subjects)
-
-        # Subject filter and subject hashtag in crm removing
-        student.crm_subject_connect.remove(*cats)
-        for cat in cats:
-            hs = school.hashtags.filter(title = cat.title.replace(' ', '_'))
-            if len(hs) > 0:
-                card.hashtags.remove(hs[0])
     student.save()
-#    squad.squad_attendances.filter(student=student).delete()
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
         card = card,
@@ -410,19 +397,18 @@ def add_student_to_squad(student, squad, manager_profile):
     subjects = squad.subjects.all()
     other_sqs = Squad.objects.filter(subjects__in=subjects).exclude(id=squad.id)
     other_sts = Profile.objects.filter(squads__in=other_sqs)
+    print(subjects)
+    print('*********')
+    print(other_sqs)
+    print('*********')
+    print(other_sts)
     school = squad.school
     card = student.card.get_or_create(school=school)[0]
     squad.students.add(student)
-    for subject in subjects:
-        categories = subject.category.all()
-        student.crm_subject_connect.add(*categories)
-        for cat in categories:
-            hs = school.hashtags.get_or_create(title = cat.title.replace(' ', '_'))
-            card.hashtags.add(hs[0])
-    nm = squad.need_money.filter(card=card)
+    nm = squad.bill_data.filter(card=card)
     today = timezone.now().date()
     if len(nm) == 0:
-        nm = squad.need_money.create(card=card,start_date = today)
+        nm = squad.bill_data.create(card=card,start_date = today)
     else:
         nm = nm[0]
     nm.start_date = timezone.now().date()
@@ -660,7 +646,7 @@ def add_subject_work(school, squad, subject):
         squad.lesson_bill += cost
     today = timezone.now().date()
     if subject.cost_period == 'month' and cost > 0:
-        for nm in squad.need_money.all():
+        for nm in squad.bill_data.all():
             if len(nm.finance_closed.filter(subject=subject)) == 0:
                 nm.finance_closed.create(
                     subject=subject,
@@ -723,7 +709,7 @@ def remove_subject_from_squad(squad, subject):
     elif subject.cost_period == 'course':
         squad.course_bill -= cost
     squad.save()
-    nms = squad.need_money.all()
+    nms = squad.bill_data.all()
     subject.finance_closed.filter(need_money__in=nms).delete()
 
 def change_lecture_cabinet(request):
@@ -855,7 +841,7 @@ def update_cards_money(request):
             forward = today + school.pay_day_diff
             for squad in school.groups.filter(start_day=forward):
                 stard_day = squad.start_date.strftime('%d')
-                for nm in squad.need_money.all():
+                for nm in squad.bill_data.all():
                     nm.money -= nm.bill
                     nm.save()
                     card = nm.card
@@ -878,7 +864,7 @@ def get_student_discounts(request):
         student = Profile.objects.get(id = int(request.GET.get('student_id')))
         name = student.first_name
         card = student.card.get_or_create(school=school)[0]
-        hisnm = card.need_money.get(squad=squad)
+        hisnm = card.bill_data.get(squad=squad)
         discs = school.discounts.filter(nms=hisnm)
         for dis in discs:
             res.append(dis.id)
@@ -894,7 +880,7 @@ def set_student_discounts(request):
         is_in_school(profile, school)
         student = Profile.objects.get(id = int(request.GET.get('student_id')))
         card = student.card.get_or_create(school=school)[0]
-        hisnm = card.need_money.get(squad=squad)
+        hisnm = card.bill_data.get(squad=squad)
         
         this_disc = school.discounts.get(id=int(request.GET.get('id')))
         if this_disc in hisnm.discount_school.all():
@@ -912,8 +898,8 @@ def move_money(request):
     if request.GET.get('id') and request.GET.get('from') and request.GET.get('to') and request.GET.get('amount'):
         student = Profile.objects.get(id = int(request.GET.get('id')))
         card = student.card.get_or_create(school=school)[0]
-        need_money_from = card.need_money.get(id=int(request.GET.get('from')))
-        need_money_to = card.need_money.get(id=int(request.GET.get('to')))
+        need_money_from = card.bill_data.get(id=int(request.GET.get('from')))
+        need_money_to = card.bill_data.get(id=int(request.GET.get('to')))
         squad1 = need_money_from.squad
         squad2 = need_money_to.squad
         school1 = squad1.school

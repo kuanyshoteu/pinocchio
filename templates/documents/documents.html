@@ -22,9 +22,9 @@
     <div class="ui container">      
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column" style="margin-left: 50px;">
-                <div class="ui segment" style="margin-bottom: 0;background-color: #fafbfc;">
-                    <span style="font-size: 15px;">
+            <div class="w85 wide column mlback">
+                <div class="ui segment" style="min-height: 200px;">
+                    <span class="text15 textdg textbold mr50">
                         {% if this_folder %}
                             Папка <b>{{ this_folder.title }}</b>
                         {% else %}
@@ -32,7 +32,7 @@
                         {% endif %}
                     </span>
                     {% if is_trener or is_manager or is_director %}
-                    <div style="display: inline-block;margin-left: 15px;">
+                    <div style="display: inline-block;">
                         {% if cache.full %}
                             <a class="ui button mini blue pastee" data-href='{{ profile.paste_docobject_url }}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}root{% endif %}' school="{{current_school_id}}">Вставить</a>
                         {% else %}
@@ -46,36 +46,16 @@
                         </a>
                         {% include 'documents/upload.html' %}
                     </div> 
-                  {% endif %}    
-                </div>
-                {% if hisschools|length >= 1 %}
-                <div class="ui segment" style="margin-top: 0;margin-bottom: 0;padding: 18px;">
-                    {% for school in hisschools %}
-                        <a href="{{ school.get_school_documents }}" class="{% if school.id == current_school_id %}current_option{% else %}other_option{% endif %}">{{ school.title }}</a>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                <div class="hint20 hint40 hint60 highliter" style="position: absolute;margin-left: 0px;margin-top: -110px;"></div>
-                {% if this_folder %}
-                    <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
-                        <div id="docs" class="ui grid stackable" style="margin: 0">
-                            {% for doc in this_folder.files.all %}
-                                {% include 'documents/doc_file.html' %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="ui segment" style="margin-top: 0">
-                        <div id="folders" class="ui grid stackable" style="margin: 0">
-                        {% for folder in this_folder.children.all %}
-                            {% if this_folder.parent != folder %}
-                                {% include 'documents/doc_folder.html' %}
-                            {% endif %}
+                    {% endif %}    
+                    {% if hisschools|length > 1 %}
+                    <div class="mt15">
+                        {% for school in hisschools %}
+                            <a href="{{ school.get_school_documents }}" class="{% if school.id == current_school_id %}current_option{% else %}other_option{% endif %}">{{ school.title }}</a>
                         {% endfor %}
-                        </div>
                     </div>
-                {% else %}
-                    <div class="ui segment" style="margin-top: 0;margin-bottom: 0">
-                        <div id="docs" class="ui grid stackable" style="margin: 0">
+                    {% endif %}
+                    <div class="mt15">
+                        <div id="docs" class="ui grid stackable no_margin">
                         {% for doc in docs %}
                             {% if not root or doc.docfolder.all|length == 0 %}
                                 {% include 'documents/doc_file.html' %}
@@ -83,8 +63,8 @@
                         {% endfor %}
                         </div>
                     </div>
-                    <div class="ui segment" style="margin-top: 0">
-                        <div id="folders" class="ui grid stackable" style="margin: 0">
+                    <div class="mt15">
+                        <div id="folders" class="ui grid stackable no_margin">
                         {% for folder in docfolders %}
                             {% if folder.parent == None %}
                                 {% include 'documents/doc_folder.html' %}
@@ -92,7 +72,7 @@
                         {% endfor %}
                         </div>
                     </div>
-                {% endif %}     
+                </div>
             </div>
         </div>
     </div>

@@ -71,13 +71,13 @@ def last_payment(squad, profile):
 def office_other_managers(office):
     school = office.school
     profession = Profession.objects.get(title = 'Manager')
-    skills = office.choosed_by2.all()
-    return school.people.filter(profession=profession).exclude(skill__in=skills)
+    filter_data = office.choosed_by.all()
+    return school.people.filter(profession=profession).exclude(filter_data__in=filter_data)
 
 @register.filter
 def squad_nms_sum(squad):
     res = 0
-    for nm in squad.need_money.all():
+    for nm in squad.bill_data.all():
         res += nm.money
     return res
 
@@ -110,46 +110,6 @@ def cell_squad_lectures(cell, squad):
 def cell_profile_lectures(cell, profile):
     return profile.hislectures.filter(cell = cell).select_related('squad').select_related('subject')
 
-@register.filter
-def rating_filter(profile):
-    school = profile.schools.first()
-    cards = school.crm_cards.select_related('card_user')
-    squad = profile.rating_squad_choice.first()
-    squads = school.groups.filter(shown=True).prefetch_related('students')
-    if profile.skill.crm_office2:
-        squads = squads.filter(office=profile.skill.crm_office2)
-    if squad != None:
-        students = squad.students.filter(is_student=True)
-    else:
-        students = school.people.filter(is_student=True, squads__in=squads)
-    if profile.skill.crm_subject:
-        students = students.filter(crm_subject_connect=profile.skill.crm_subject)
-    res = []
-    for student in set(students):
-        if len(student.squads.all()) == 0:
-            continue
-        card = cards.filter(card_user=student)
-        if len(card) > 0:
-            card = card[0]
-        else:
-            continue
-        sq_res = []
-        for sq in squads.filter(students=student):
-            nm = sq.need_money.filter(card=card)
-            pay_date = '-'
-            pay_date_input = '-'
-            pd = ''
-            if len(nm) > 0:
-                nm = nm.last()
-                pd = get_pay_date(nm)
-                pay_date = pd.strftime('%d %B')
-            sq_res.append([sq, pay_date, str(pay_date), pd.strftime('%Y-%m-%d')])
-        res.append([
-            student,
-            sq_res
-            ])
-    return res
-
 def get_pay_date(nm):
     today = timezone.now().date()    
     cnrt_day = today.strftime('%d')
@@ -166,15 +126,15 @@ def get_pay_date(nm):
 
 @register.filter
 def cell_school_lectures(cell, profile):
-    # if profile.skill.crm_subject==None and profile.skill.crm_age==None and profile.skill.crm_office2==None:
+    # if profile.filter_data.subject_category==None and profile.skill.crm_age==None and profile.filter_data.office==None:
     #     return []
     lectures = cell.lectures.all()
-    if profile.skill.crm_subject:
-        lectures = lectures.filter(category=profile.skill.crm_subject)
+    if profile.filter_data.subject_category:
+        lectures = lectures.filter(category=profile.filter_data.subject_category)
     if profile.skill.crm_age:
         lectures = lectures.filter(age=profile.skill.crm_age)
-    if profile.skill.crm_office2:
-        lectures = lectures.filter(office=profile.skill.crm_office2)
+    if profile.filter_data.office:
+        lectures = lectures.filter(office=profile.filter_data.office)
     return lectures
 
 @register.filter
@@ -528,7 +488,7 @@ def get_bills(profile, hisprofile):
     card = hisprofile.card.filter(school=school)
     if len(card) > 0:
         card = card[0]
-        return card.need_money.filter(squad__in=squads).select_related('squad')
+        return card.bill_data.filter(squad__in=squads).select_related('squad')
     else:
         return []
 
@@ -537,7 +497,7 @@ def get_bills_len(profile, hisprofile):
     school = profile.schools.first()
     squads = hisprofile.squads.filter(school=school)
     card = hisprofile.card.get(school=school)
-    return len(card.need_money.filter(squad__in=squads).select_related('squad'))
+    return len(card.bill_data.filter(squad__in=squads).select_related('squad'))
 
 @register.filter
 def money_percent(first, second):
@@ -586,16 +546,16 @@ def constant_profile_lectures(profile):
 def constant_school_lectures(profile, school):
     squads = school.groups.filter(shown=True)
     lectures = Lecture.objects.filter(squad__in=squads)
-    if profile.skill.crm_subject:
-        lectures = lectures.filter(category=profile.skill.crm_subject)
-    if profile.skill.crm_office2:
-        lectures = lectures.filter(office=profile.skill.crm_office2)
-    if len(profile.skill.filter_teacher.all()) > 0:
-        teacher = profile.skill.filter_teacher.first()
+    if profile.filter_data.subject_category:
+        lectures = lectures.filter(category=profile.filter_data.subject_category)
+    if profile.filter_data.office:
+        lectures = lectures.filter(office=profile.filter_data.office)
+    if profile.filter_data.teacher:
+        teacher = profile.filter_data.teacher
         squads = teacher.hissquads.all()
         lectures = lectures.filter(squad__in=squads)
-    if len(profile.skill.filter_course_connect.all()) > 0:
-        lectures = lectures.filter(subject=profile.skill.filter_course_connect.first())
+    if profile.filter_data.subject:
+        lectures = lectures.filter(subject=profile.filter_data.subject)
     res = []
     interval = school.schedule_interval
     for lecture in lectures.order_by('cell'):

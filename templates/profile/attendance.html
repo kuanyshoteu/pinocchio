@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load ttags %}
-<span style="display: none;" id="load_attendance_squad" url="{{ hisprofile.squad_attendance }}"></span>
-<span style="display: none;" id="load_attendance_subject" url="{{ hisprofile.subject_attendance }}"></span>
+<span style="display: none;" id="load_attendance_squad"></span>
+<span style="display: none;" id="load_attendance_subject"></span>
 <div class="ui segment shadow_small shapka topbr5 pb0" style="box-shadow: none;">
     <div class="ui grid stackable mb5">
         <div class="five wide column textdg textbold text15">
@@ -62,9 +62,59 @@
     </div>   
 </div>
 <span class="wait" status="no" style="display: none;"></span>
-<span class="attendance_present_url" url="{{ hisprofile.attendance_present_url }}" style="display: none;"></span>
-<span class="attendance_change_url" url="{{ hisprofile.attendance_change_url }}" style="display: none;"></span>
+<span class="more_attendance_url" url="{% url 'accounts:more_attendance' %}" subject_id="{{att_subject.id}}" squad_id="{{att_squad.id}}" ></span>
+<span class="att_urls" 
+    squad_attendance="{% url 'accounts:squad_attendance' %}" 
+    subject_attendance="{% url 'accounts:subject_attendance' %}" 
+    present_url="{% url 'accounts:present_url' %}" 
+style="display: none;"></span>
+<span class="attendance_change_url" url="{% url 'accounts:change_att_url' %}" style="display: none;"></span>
 <script type="text/javascript">
+    $(document).on("click", '.att_present', function () {    
+        var id = $(this).attr('id')
+        var status = $(this).attr('status')
+        $.ajax({
+            url: $('.att_urls').attr('present_url'),
+            data: {
+                'id':id,
+                'status':status,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (status == 'cancel') {
+                    $('#attendance'+id).show()
+                    $('.attresult'+id).hide()
+                    $('#grades' + id).hide()
+                    $('.attcancel'+id).hide()
+                }
+                else{
+                    $('.attcancel'+id).show()
+                    $('#attendance'+id).hide()
+                    if (status == 'present') {
+                        $('#grades' + id).show()
+                        if (data.ok) {
+                            $('#grades' + data.teacher_id).show()
+                            $('.attcancel'+data.teacher_id).show()
+                            $('#attendance'+data.teacher_id).hide()
+                        }
+                    }
+                    else {
+                        if (status == 'absent' || status == '') {
+                            $('.attresult'+id).css('background-color', '#DB2828')
+                            $('#clock'+id).hide()
+                            $('#close'+id).show()
+                        }
+                        else if (status == 'warned' || status == 'noteacher') {
+                            $('.attresult'+id).css('background-color', '#f2711c')                        
+                            $('#clock'+id).show()
+                            $('#close'+id).hide()
+                        }
+                        $('.attresult'+id).show()
+                    }
+                }
+            }
+        });
+    })    
     function loading(){
         $('.loading').show();
     }
@@ -72,7 +122,7 @@
         $('.loading').hide();
     }
     function load_attendance_subject(subject_id){
-        var url = $('#load_attendance_subject').attr('url');
+        var url = $('.att_urls').attr('subject_attendance');
         loading()
         $.ajax({
             url: url,
@@ -92,7 +142,7 @@
         })
     };
     function load_attendance_squad(squad_id){
-        var url = $('#load_attendance_squad').attr('url');
+        var url = $('.att_urls').attr('squad_attendance');
         loading()
         $.ajax({
             url: url,
@@ -111,9 +161,7 @@
             }
         })
     };
-</script>
-<script type="text/javascript">
-    //$('#slider .slider__section:last').insertBefore('#slider .slider__section:first');
+
     function createColumnRight(nextNumber, index){
         $('.wait').attr('status', 'yes')
         loading()

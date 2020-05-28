@@ -34,7 +34,6 @@ class School(models.Model):
     phones = ArrayField(models.TextField(), default = list)
     social_networks = ArrayField(models.TextField(), default = list)
     social_network_links = ArrayField(models.TextField(), default = list)
-    offices = models.IntegerField(default=0)
     average_cost = models.IntegerField(default=0)
     rating = models.FloatField(default=0)
     money = models.IntegerField(default=0)
@@ -228,30 +227,6 @@ class SubjectCategory(models.Model):
     class Meta:
         ordering = ['title']
 
-class SubjectAge(models.Model):
-    schools = models.ManyToManyField(School, related_name='school_subject_ages')
-    title = models.CharField(max_length=250)
-    def delete_url(self):
-        return reverse("schools:age_delete_url")
-    def create_url(self):
-        return reverse("schools:age_create_url")
-    def search_url(self):
-        return reverse("schools:search_url")
-    class Meta:
-        ordering = ['id']
-
-class SubjectLevel(models.Model):
-    schools = models.ManyToManyField(School, related_name='school_subject_levels')
-    title = models.CharField(max_length=250)
-    def delete_url(self):
-        return reverse("schools:level_delete_url")
-    def create_url(self):
-        return reverse("schools:level_create_url")
-    def search_url(self):
-        return reverse("schools:search_url")
-    class Meta:
-        ordering = ['id']
-
 class ElliteSchools(models.Model):
     schools = models.ManyToManyField(School, related_name='elite_list')
 
@@ -262,10 +237,6 @@ class HelpVideos(models.Model):
     number = models.IntegerField(default = 0)
     class Meta:
         ordering = ['number']
-
-class FilterControl(models.Model):
-    levels = models.ManyToManyField(SubjectLevel, related_name='filter_control')
-    categories = models.ManyToManyField(SubjectCategory, related_name='filter_control')
 
 class City(models.Model):
     title = models.CharField(max_length=250)

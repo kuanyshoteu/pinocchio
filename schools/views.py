@@ -86,7 +86,6 @@ def school_payments(request):
         "squads":school.groups.filter(shown=True),
         "payments":True,
         "subject_categories":school.school_subject_categories.all(),
-        "subject_ages":school.school_subject_ages.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -94,7 +93,7 @@ def school_payments(request):
         "school_money":school.money,
         "school_crnt":school,
         "page":"payments",
-        "hint":profile.skill.hint_numbers[3],
+        "hint":profile.hint_numbers[3],
     }
     return render(request, "school/school_payments.html", context)
 
@@ -224,7 +223,7 @@ def school_info(request):
         "number_of_all":number_of_all,
         "social_networks":get_social_networks(school),
         "page":"info",
-        "hint":profile.skill.hint_numbers[0],
+        "hint":profile.hint_numbers[0],
     }
     return render(request, "school/info.html", context)
 def get_social_networks(school):
@@ -520,7 +519,6 @@ def school_crm(request):
         "profile":profile,
         "instance": school,
         "columns":school.crm_columns.all(),
-        "ages":SubjectAge.objects.all(),
         "offices":school.school_offices.all(),
         "courses":school.school_subjects.all(),
         "teachers":all_teachers(school),
@@ -540,7 +538,7 @@ def school_crm(request):
         'crmdays':Day.objects.all(),
         "subject_categories":school.school_subject_categories.all(),
         'height':28*15*int(60/school.schedule_interval)+25,
-        "hint":profile.skill.hint_numbers[1],
+        "hint":profile.hint_numbers[1],
         "page":"crm",
     }
     return render(request, "school/crm.html", context)
@@ -568,7 +566,7 @@ def subject_create(request): ### Если нет предмета, то отпр
         if school.school_subject_categories.filter(title = title):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
-            subject = add_subject_work(school, title)
+            subject = add_subject_category_work(school, title)
         else:
             subject = school.school_subject_categories.get(id=int(request.GET.get('id')))
             hashtag = school.hashtags.filter(title = subject.title.replace(' ', '_'))
@@ -767,8 +765,6 @@ def office_create(request):
             return JsonResponse({'taken_name':True})
         if request.GET.get('id') == '_new':
             office = school.school_offices.create(title=title)
-            school.offices += 1
-            school.save()
             school.hashtags.create(title = title.replace(' ', '_'))
         else:
             office = school.school_offices.get(id=int(request.GET.get('id')))
@@ -1005,28 +1001,31 @@ def predoplata(request):
 def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('object_id') and request.GET.get('option'):
-        skill = profile.skill
-        if request.GET.get('option') == 'subject':
+        filter_data = profile.filter_data
+        if request.GET.get('option') == 'filter_subject_category':
             if int(request.GET.get('object_id')) == -1:
-                skill.crm_subject = None
+                filter_data.subject_category = None
             else:
-                subject = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_subject = subject
+                category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+                filter_data.subject_category = category
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
-                skill.crm_office2 = None
+                filter_data.office = None
             else:
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
-                skill.crm_office2 = office
+                filter_data.office = office
         if request.GET.get('option') == 'group':
-            profile.rating_squad_choice.clear()
+            filter_data.squad = None
             if int(request.GET.get('object_id')) != -1:
                 squad = Squad.objects.get(id = int(request.GET.get('object_id')))
-                profile.rating_squad_choice.add(squad)
+                filter_data.squad = squad
+        if request.GET.get('option') == 'filter_subject':
+            if int(request.GET.get('object_id')) != -1:
+                subject = Subject.objects.get(id = int(request.GET.get('object_id')))
+                filter_data.subject = subject            
         if request.GET.get('option') == 'payment':
-            skill.payment_filter = request.GET.get('object_id')
-            print(skill.payment_filter)
-        skill.save()
+            filter_data.payment = request.GET.get('object_id')
+        filter_data.save()
     data = {
     }
     return JsonResponse(data)
@@ -1037,15 +1036,15 @@ def crm_option2(request):
     school = is_moderator_school(request, profile)
     if request.GET.get('id') and request.GET.get('office'):
         manager = school.people.get(id=int(request.GET.get('id')))
-        skill = manager.skill
+        filter_data = manager.filter_data
         office = Office.objects.get(id = int(request.GET.get('office')))
-        hisoffice = skill.crm_office2 
+        hisoffice = filter_data.office 
         if office == hisoffice:
-            skill.crm_office2 = None            
+            filter_data.office = None            
         else:
             added = True
-            skill.crm_office2 = office
-        skill.save()
+            filter_data.office = office
+        filter_data.save()
     data = {
         "added":added,
     }
@@ -1594,7 +1593,7 @@ def get_card_info(request):
         school = card.school
         is_in_school(profile, school)
         profile = card.card_user
-        nms = card.need_money.select_related('squad')
+        nms = card.bill_data.select_related('squad')
         if profile:
             for squad in profile.squads.filter(shown=True):
                 crnt = nms.filter(squad=squad)
@@ -2301,7 +2300,7 @@ def group_finance(request):
             if color_back == '':
                 color_back = 'rgb(49, 58, 87)'
             res_subjects.append([subject.title, cost, color_back])
-        for nm in squad.need_money.all():
+        for nm in squad.bill_data.all():
             name = nm.card.name
             url = nm.card.card_user.get_absolute_url()
             fcs = nm.finance_closed.all()
@@ -2331,7 +2330,7 @@ def payday_change(request):
         student = school.people.get(id=int(request.GET.get('student')))
         squad = school.groups.get(id = int(request.GET.get('squad')))
         card = student.card.get(school=school)
-        nm = card.need_money.get(squad=squad)
+        nm = card.bill_data.get(squad=squad)
         nm.pay_date = datetime.datetime.strptime(request.GET.get('paydate'), "%Y-%m-%d").date()
         nm.save()
         pay_date = nm.pay_date.strftime('%d %B %Y')
@@ -2374,27 +2373,26 @@ def get_payment_list(request):
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
         cards = school.crm_cards.select_related('card_user')
-        squad = profile.rating_squad_choice.first()
+        squad = profile.filter_data.squad
         if squad != None:
-            students = squad.students.filter(is_student=True).exclude(card=None)
             squads = [squad]
         else:
-            if profile.skill.crm_office2:
-                squads = school.groups.filter(shown=True,office=profile.skill.crm_office2).prefetch_related('students')
-                students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
+            if profile.filter_data.office:
+                squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
             else:
-                students = school.people.filter(is_student=True).exclude(squads=None).exclude(card=None)
                 squads = school.groups.filter(shown=True).prefetch_related('students')
-        if profile.skill.crm_subject:
-            students = students.filter(crm_subject_connect=profile.skill.crm_subject)
-        if profile.skill.payment_filter != 'all':
+                print('squads', squads)
+        if profile.filter_data.subject_category:
+            subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
+            squads = squads.filter(subjects__in=subjects)
+        students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
+        if profile.filter_data.payment != 'all':
             firstofmonth = first_day_of_month()
             lastofmonth = last_day_of_month(firstofmonth)
             payments = school.payment_history.filter(squad__in=squads,timestamp__gte=firstofmonth, timestamp__lte=lastofmonth)
-            print(payments)
-            if profile.skill.payment_filter == 'paid':
+            if profile.filter_data.payment == 'paid':
                 students = students.filter(payment_history__in=payments).distinct()
-            if profile.skill.payment_filter == 'not_paid':
+            if profile.filter_data.payment == 'not_paid':
                 students = students.exclude(payment_history__in=payments).distinct()
         if len(students) <= (page-1)*16:
             return JsonResponse({"ended":True})
@@ -2406,8 +2404,10 @@ def get_payment_list(request):
             sq_res = []
             if squad == None:
                 squads2 = squads.filter(students=student)
+            else:
+                squads2 = squads
             for sq in squads2:
-                nm = sq.need_money.filter(card=card)
+                nm = sq.bill_data.filter(card=card)
                 pay_date = '-'
                 pay_date_input = '-'
                 pd = ''

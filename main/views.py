@@ -23,7 +23,7 @@ from constants import *
 from schools.models import School
 from schools.views import get_social_networks, add_subject_category_work, register_new_student
 from squads.views import add_subject_work, add_lecture_work, remove_student_from_squad, add_student_to_squad
-from squads.models import NeedMoney
+from squads.models import BillData
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -58,8 +58,6 @@ def newland(request):
         "is_manager":is_manager,
         "is_director":is_director,
         "is_moderator":is_moderator,
-        "subjects":FilterControl.objects.first().categories.all(),
-        "ages":SubjectAge.objects.all(),
         "school_money":money,
         "newland":True,
         "five":[1,2,3,4,5],
@@ -1029,7 +1027,7 @@ def get_school_report(request):
                     card = card[0]
                 else:
                     continue
-                nm = squad.need_money.filter(card=card)
+                nm = squad.bill_data.filter(card=card)
                 if len(nm)>0:
                     nm = nm[0]
                 else:
@@ -1333,18 +1331,20 @@ def moderator_run_code(request):
     return render(request, "moder_code.html", {})
 
 def hint_update():
-    profession = Profession.objects.get(title = 'Teacher')
-    teachers = profession.workers.all()
-    for t in teachers:
-        if t.is_student:
-            t.is_student = False
-            t.save()
-    month = timezone.now().strftime('%m')
-    year = timezone.now().strftime('%Y')
-    for nm in NeedMoney.objects.all():
-        start = year + '-' + month + '-' + str(nm.pay_day)
-        nm.pay_date = datetime.datetime.strptime(start, "%Y-%m-%d").date()
-        nm.save()
+    # today = timezone.now().date()
+    # for sq in Squad.objects.all():
+    #     for s in sq.students.all():
+    #         card = s.card.filter(school=sq.school)
+    #         if len(card) > 0:
+    #             card = card[0]
+    #             card.bill_data.create(
+    #                 squad = sq,
+    #                 start_date = today,
+    #                 )
+    for p in Profile.objects.all():
+        p.hint_numbers = [0, 1, 1, 1, 1, 1]
+        p.save()
+        FilterData.objects.get_or_create(author=p)
 
 def categories_update():
     for sc in SubjectCategory.objects.all():
@@ -1441,7 +1441,7 @@ def aktobe_money():
 
 
 def add_paydays():
-    for nm in NeedMoney.objects.all():
+    for nm in BillData.objects.all():
         fc = nm.finance_closed.first()
         if fc:
             nm.pay_day = int(fc.first_present.strftime('%d'))
@@ -1478,7 +1478,7 @@ def searching_subjects(request):
 
 def update_student_start_dates():
     for card in CRMCard.objects.all():
-        for nm in card.need_money.all():
+        for nm in card.bill_data.all():
             title = nm.squad.title
             if title == 'Английский, группа, 18:30':
                 title = 'engl group'
@@ -1494,7 +1494,7 @@ def update_student_start_dates():
 from subjects.templatetags.ttags import get_date
 def update_finance_start_dates():
     for fc in FinanceClosed.objects.all():
-        nm = fc.need_money
+        nm = fc.bill_data
         fc.start = nm.start_date
         student = nm.card.card_user
         att = fc.subject.subject_attendances.filter(
@@ -1509,7 +1509,7 @@ def update_finance_start_dates():
         fc.save()
 
 def create_fcs():
-    for nm in NeedMoney.objects.all():
+    for nm in BillData.objects.all():
         user = nm.card.card_user
         if user.first_name == 'Ягуз Саид':
             print(user.first_name)
@@ -1559,7 +1559,7 @@ def check_student_nms():
         cards = s.card.all()
         if len(cards)>0:
             card = cards[0]
-            if len(s.squads.all()) > len(NeedMoney.objects.filter(card__in=cards)):
+            if len(s.squads.all()) > len(BillData.objects.filter(card__in=cards)):
                 for sq in s.squads.all():
                     remove_student_from_squad(s, sq, card.author_profile)
                     add_student_to_squad(s, sq, card.author_profile)
@@ -1608,23 +1608,21 @@ def create_nms_fcs():
 def another_hint(request):
     profile = Profile.objects.get(user = request.user)
     hint_type = int(request.GET.get('hint_type'))
-    skill = profile.skill
     if request.GET.get('dir') == 'next':
-        skill.hint_numbers[hint_type] += 1
+        profile.hint_numbers[hint_type] += 1
     elif request.GET.get('dir') == 'prev':
-        skill.hint_numbers[hint_type] -= 1
+        profile.hint_numbers[hint_type] -= 1
     else:
-        skill.hint_numbers[hint_type] = 100
-    skill.save()
+        profile.hint_numbers[hint_type] = 100
+    profile.save()
     data = {
     }
     return JsonResponse(data)
 
 def update_hint(request):
     profile = Profile.objects.get(user = request.user)
-    skill = profile.skill
-    skill.hint_numbers = [0, 1, 1, 1, 1, 1]
-    skill.save()
+    profile.hint_numbers = [0, 1, 1, 1, 1, 1]
+    profile.save()
     data = {
     }
     return JsonResponse(data)

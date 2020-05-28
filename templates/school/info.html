@@ -457,7 +457,7 @@
                                     <a class="ui button mini blue mt10 save_office_cabinet" url="{{office.create_cabinet_url}}" status="{%if is_moderator%}{{instance.id}}{%endif%}" id="{{office.id}}" >Создать</a>
                                 </form>
                                 <div class="ui divider"></div>      
-                                {% for manager in office.choosed_by2.all %}
+                                {% for manager in office.choosed_by.all %}
                                     <a class="ui button mini green mb10 manager_office" office="{{office.id}}" id="{{manager.profile.first.id}}">
                                         {{manager.profile.first.first_name}}
                                     </a>

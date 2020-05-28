@@ -25,13 +25,13 @@
                             <div class="four wide column pl0 pb0 text13 hint_place1" side="bottom">
                                 Выберите <b class="textdg ">предмет</b>:
                                 <div class="controls"> 
-                                    <select class="text15 crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="subject"> 
-                                        {% if profile.skill.crm_subject %}
-                                            <option value="{{ profile.skill.crm_subject.id }}">{{ profile.skill.crm_subject.title }}</option>
+                                    <select class="text15 crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="filter_subject_category"> 
+                                        {% if profile.filter_data.subject_category %}
+                                            <option value="{{ profile.filter_data.subject_category.id }}">{{ profile.filter_data.subject_category.title }}</option>
                                         {% endif %}
                                         <option value="-1">Все предметы</option>
                                         {% for subject_category in subject_categories %}
-                                            {% if subject_category != profile.skill.crm_subject %}
+                                            {% if subject_category != profile.filter_data.subject_category %}
                                             <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
                                             {% endif %}
                                         {% endfor %}
@@ -43,12 +43,12 @@
                                 Выберите <b class="textdg ">офис</b>:
                                 <div class="controls"> 
                                     <select class="text15 crm_option" id="crm_office_mobile" url="{{ instance.crm_option_url }}" option="office"> 
-                                        {% if profile.skill.crm_office2 %}
-                                            <option value="{{ profile.skill.crm_office2.id }}">{{ profile.skill.crm_office2.title }}</option>
+                                        {% if profile.filter_data.office %}
+                                            <option value="{{ profile.filter_data.office.id }}">{{ profile.filter_data.office.title }}</option>
                                         {% endif %}
                                         <option value="-1">Все офисы</option>
                                         {% for office in instance.school_offices.all %}
-                                            {% if office != profile.skill.crm_office2 %}
+                                            {% if office != profile.filter_data.office %}
                                             <option value="{{ office.id }}">{{ office.title }}</option>
                                             {% endif %}
                                         {% endfor %}
@@ -60,12 +60,12 @@
                                 Выберите <b class="textdg ">группу</b>:
                                 <div class="controls"> 
                                     <select class="text15 crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
-                                        {% if profile.rating_squad_choice.first %}
-                                            <option value="{{ profile.rating_squad_choice.first.id }}">{{ profile.rating_squad_choice.first.title }}</option>
+                                        {% if profile.filter_data.squad %}
+                                            <option value="{{ filter_data.squad.id }}">{{ profile.filter_data.squad.title }}</option>
                                         {% endif %}
                                         <option value="-1">Все группы</option>
                                         {% for squad in squads %}
-                                            {% if squad != profile.rating_squad_choice.first %}
+                                            {% if squad != profile.filter_data.squad %}
                                             <option value="{{ squad.id }}">{{ squad.title }}</option>
                                             {% endif %}
                                         {% endfor %}
@@ -75,7 +75,7 @@
                             <div class="four wide column pl0 pb0 text13">
                                 Оплатили в этом месяце
                                 <div class="controls"> 
-                                    <select class="text15 crm_option" id="filter_payment" url="{{ instance.crm_option_url }}" option="payment" now={{profile.skill.payment_filter}}> 
+                                    <select class="text15 crm_option" id="filter_payment" url="{{ instance.crm_option_url }}" option="payment" now={{profile.filter_data.payment}}> 
                                     </select>
                                 </div>                            
                             </div>

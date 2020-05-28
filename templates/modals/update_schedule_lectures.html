@@ -5,7 +5,6 @@ function crm_option_change(id){
     url = this_.attr('url')
     option = this_.attr('option')
     $('.loading').show()
-    console.log('crm_option_change 0')
     $.ajax({
         url: url,
         data: {

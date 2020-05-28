@@ -1053,7 +1053,7 @@
                         window.location.replace(data.url);
                     }
                     else if (data.res == 'second_user') {
-                        $(this).removeClass('disabled')
+                        $('.register-btn2').removeClass('disabled')
                         $('.next_step_load').hide()
                         $('.reg_wrong_phone').show()
                         width = parseInt($('.data').width())
@@ -1071,7 +1071,7 @@
             })
         }
         else{
-            console.log('reg_fill_all2')
+            $(this).removeClass('disabled')
             $('.reg_fill_all2').show()
         }
     });
@@ -1402,52 +1402,6 @@
     $('.open_point').click(function (event){
         
     })
-
-    $(document).on("click", '.att_present', function () {    
-        var id = $(this).attr('id')
-        var status = $(this).attr('status')
-        $.ajax({
-            url: $('.attendance_present_url').attr('url'),
-            data: {
-                'id':id,
-                'status':status,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (status == 'cancel') {
-                    $('#attendance'+id).show()
-                    $('.attresult'+id).hide()
-                    $('#grades' + id).hide()
-                    $('.attcancel'+id).hide()
-                }
-                else{
-                    $('.attcancel'+id).show()
-                    $('#attendance'+id).hide()
-                    if (status == 'present') {
-                        $('#grades' + id).show()
-                        if (data.ok) {
-                            $('#grades' + data.teacher_id).show()
-                            $('.attcancel'+data.teacher_id).show()
-                            $('#attendance'+data.teacher_id).hide()
-                        }
-                    }
-                    else {
-                        if (status == 'absent' || status == '') {
-                            $('.attresult'+id).css('background-color', '#DB2828')
-                            $('#clock'+id).hide()
-                            $('#close'+id).show()
-                        }
-                        else if (status == 'warned' || status == 'noteacher') {
-                            $('.attresult'+id).css('background-color', '#f2711c')                        
-                            $('#clock'+id).show()
-                            $('#close'+id).hide()
-                        }
-                        $('.attresult'+id).show()
-                    }
-                }
-            }
-        });
-    })
     $(".switch_att_btn").click(function (event) {
         event.preventDefault();
         var this_ = $(this)
@@ -1547,7 +1501,6 @@
     })
     $(".content-markdown").each(function () {
         var content = $(this).text()
-        console.log('f',content, $(this).attr('id'))
         var markedContent = marked(content)
         $(this).html(markedContent)
     });

@@ -14,7 +14,7 @@
             {% if profile == hisprofile %}
             <div class="pt10">
                 <div class="hint_place1" side="right">
-                    <a href="{{ profile.change_url }}" class="ui button mini white shadow_small border1t textblue full-w">Редактировать</a>
+                    <a href="{% url 'accounts:change_url' %}" class="ui button mini white shadow_small border1t textblue full-w">Редактировать</a>
                 </div>
             </div>
             {% endif %}

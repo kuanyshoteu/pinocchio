@@ -18,47 +18,21 @@
         <div class="ui grid">
             {% include 'left_menu.html' %}
             <div class="wide column" style="width: 80%;">
-                <div class="ui segment mb0 text14" style="display: flex;">
-                    <img src="{% static 'images/excel.png' %}" style="width: 30px;"> 
-                    <div class="pt5">Отчет по бухгалтерии</div>
-                    <div class="ml50">
-                        <a url="{{instance.show_money_history}}" class="ui button mini show_money_history">Быстрая история</a>
+                <div class="ui segment">
+                    <div class="dflex text14 mb15">
+                        <div class="pt5 textdg text15 textbold">Отчет по бухгалтерии</div>
+                        <div class="ml50">
+                            <a url="{{instance.show_money_history}}" class="ui button mini white shadow_small border1 show_money_history">Быстрая история</a>
+                        </div>                        
                     </div>
-
-                    <div class="ui modal small money_history" style="margin-top: 10%;min-height: 100%;">
-                        <i class="close icon"></i>
-                        <div class="content">
-                            <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
-                                <thead>
-                                    <tr style="color: #222;">
-                                        <th>Название</th>
-                                        <th>Сумма</th>
-                                        <th>Время</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="history_cont">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui segment no_margin backdark textw">
                     Выберите период времени, за который нужен отчет:
-                    <div style="display: flex;">
-                    <!--    <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
-                        <div style="padding: 10px 0 0 10px;">
-                            <a class="ui button mini green report_period" value="week" style="height: 29px;">Неделю</a>
-                            <a class="ui button mini report_period" value="month" style="height: 29px;">Месяц</a>
-                            <a class="ui button mini report_period" value="year" style="height: 29px;">Год</a>
-                        </div>-->    
-                    </div>
-                    <div style="display: flex;">
+                    <div class="dflex">
                         <form class="ui form pt5 mb0" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
                             <input type="date" name="first_report" style="width: 175px;height: 30px;" value="{{ weekago }}">
-                            <span class="ml15 mr15">—</span>
+                            <div class="ml15 mr15 dinline mt5">—</div>
                             <input type="date" name="second_report" style="width: 175px;height: 30px;" value="{{ today }}">
-                            <div class="mt15" style="display: flex;">
-                                <button type="submit" name="" class="ui button mini blue" style="height: 29px;">
+                            <div class="mt15 text-center">
+                                <button type="submit" name="" class="ui button mini blue shadow_blue" style="height: 29px;">
                                     <i class="download icon" style="color: #fff"></i>
                                     Скачать отчет
                                 </button>
@@ -67,46 +41,42 @@
                     </div>
                 </div>
                 {% if instance.version == 'standart' or instance.version == 'business' %}
-                    <div class="ui segment mb0" style="display: flex;">
-                        <img src="{% static 'images/settings.png' %}" style="width: 30px;height: 30px;border-radius: 3px;"> 
-                        <div class="pt5 pl5" style="font-size: 13px;">Расходы</div>
-                        <div class="ui pointing below label no_margin green success_new_money" style="display: none;margin-left: 100px !important;">
-                            Расходы записаны, можете посмотреть в истории
+                    <div class="ui segment">
+                        <div class="dflex">
+                            <div class="text15 textdg textbold mb15">Расходы</div>
+                            <div class="textbold textgreen success_new_money" style="display: none;margin-left: 100px !important;">
+                                Расходы записаны, можете посмотреть в истории
+                            </div>                            
+                        </div>
+                        <div class="dflex">
+                            <form class="ui form mb0 dflex">
+                                <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
+                                <input type="number" class="new_money_amount" name="" placeholder="Сумма">
+                            </form>
+                            <a class="ui button blue mini no_margin new_money_object" url="{{instance.new_money_object}}">Добавить</a>
                         </div>
                     </div>
-                    <div class="ui segment mt0 backdark textw" style="display: flex;">
-                        <form class="ui form mb0" style="display: flex;">
-                            <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
-                            <input type="number" class="new_money_amount" name="" placeholder="Сумма">
-                        </form>
-                        <a style="height: 33px;" class="ui button blue mini no_margin new_money_object" url="{{instance.new_money_object}}">Добавить</a>
-                    </div>
                 {%endif%}
-                <div class="ui segment mb0" style="display: flex;">
-                    <img src="{% static 'images/chartcircle.png'%}" style="width: 32px;height: 30px;border-radius: 3px;">
-                    <div class="pl5 pt5">
-                        На счету <b style="font-size: 14px;">{{ school_money }}тг</b> 
-<!--                         <span style="padding: 15px 0px 15px 15px;">Отчет за последнюю</span>
-                            <a class="ui button mini green report_period" value="week" style="height: 29px;">Неделю</a>
-                            <a class="ui button mini report_period" value="month" style="height: 29px;">Месяц</a>
-                            <a class="ui button mini report_period" value="year" style="height: 29px;">Год</a>
- -->                    </div>
-                </div>
-                <div class="ui segment no_margin backdark textw">
-                    <div class="ui grid">                        
-                        <div class="sixteen wide column pl5 pr5 ">
+                <div class="ui segment">
+                    <div class="text15 textdg textbold">
+                        На счету <span class="textblue">{{ school_money }}тг</span> 
+                    </div>
+                    <div class="ui grid stackable no_margin">                        
+                        <div class="sixteen wide column textdg pl0">
                             <b>По группам:</b>
                         </div>
                         {% for sq in instance.groups.all %}
-                        <div class="four wide column pl5 pr5 pt0">
-                            <div class="ui segment" style="color: #222">
+                        <div class="four wide column pl0 pr15 pt0">
+                            <div class="ui segment shadow_small border1 textw" style=";background-color: {%if sq.color_back == ''%}#313a57{%else%}{{ sq.color_back }}{%endif%};">
                                 <b>{{sq.title}}</b>
                                 <br>
                                 Учитель: <span>{{sq.teacher.first_name}}</span>
                                 <br>
                                 {{sq|squad_nms_sum}}тг
                                 <br>
-                                <a class="ui button mini full-w open_sq_finance" id="{{sq.id}}">Подробнее</a>
+                                <div class="text-center">                                
+                                    <a class="mt5 ui button mini white pt5 pb5 textblue open_sq_finance" id="{{sq.id}}">Подробнее</a>
+                                </div>
                             </div>
                         </div>
                         {% endfor %}
@@ -141,6 +111,22 @@
                 {% include 'school/bad_results_chart.html' %}
             </div>
         </div>
+    </div>
+</div>
+<div class="ui modal small money_history" style="margin-top: 10%;min-height: 100%;">
+    <i class="close icon"></i>
+    <div class="content">
+        <table id="keywords" cellspacing="0" cellpadding="0" style="color: #222;">
+            <thead>
+                <tr style="color: #222;">
+                    <th>Название</th>
+                    <th>Сумма</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody class="history_cont">
+            </tbody>
+        </table>
     </div>
 </div>
 <span class="day_id" id="" group_id = '{{ instance.id }}'></span>

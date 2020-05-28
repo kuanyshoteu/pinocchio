@@ -6,20 +6,20 @@
 {% endblock head_title %}{% block content %}
 <div class="ui container" style="overflow-y: hidden;">
         <form method='POST' action='' enctype='multipart/form-data' class="ui form pl15 pr15 mt50">{% csrf_token %}
-            <div class="text-center" style="font-size: 25px;">
+            <div class="text-center textdg" style="font-size: 25px;">
                 Вход в Bilimtap
             </div>
-            <div class="ui segment login_form">
+            <div class="ui segment shadow_small login_form">
                 <div class="wrong_login highlight_red" style="display: none;">Неверный логин или пароль</div>
-                <b>Номер телефона или Email</b>
-                <input class="username2" name="username" style="margin-bottom: 15px;margin-top: 10px;">
-                <b>Пароль</b> <a onclick="$('#forget_password-modal').modal('show');$('.wrong_mail_update_pswd').hide();$('.ok_update_pswd').hide();" style="font-size: 12px;float: right;font-weight: 600;">Забыли пароль?</a>
-                <input class="password2" type="password" name="password" style="margin-bottom: 20px;margin-top: 10px;">
-                <div style="text-align: center;">
-                    <input class="ui button green login-btn2 full-w" value="Войти" type="submit" onclick="return false">
+                <b class="textdg">Номер телефона или Email</b>
+                <input class="username2 mt5 mb15" name="username">
+                <b class="textdg">Пароль</b> <a onclick="$('#forget_password-modal').modal('show');$('.wrong_mail_update_pswd').hide();$('.ok_update_pswd').hide();" style="font-size: 12px;float: right;font-weight: 600;">Забыли пароль?</a>
+                <input class="password2 mt5 mb15" type="password" name="password">
+                <div class="text-center">
+                    <input class="ui button small pl30 pr30 green login-btn2" value="Войти" type="submit" onclick="return false">
                 </div>
             </div>
-            <div class="ui segment login_form mt15">
+            <div class="ui segment login_form mt15 shadow_small">
                 <div class="text-center text15">
                     Еще нет аккаунта? <a href="{% url 'main:sign_up' %}">Создать аккаунт</a>
                 </div>
