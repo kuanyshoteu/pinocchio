@@ -109,8 +109,7 @@
   box-shadow: 0 0 5px 0 #d3d3d3 !important;
 }
 .backrb{
-  background:  rgba(33,186,69,0.3) !important;
-  background: linear-gradient(180deg, rgba(81,129,184,0) 50%, rgba(33,186,69,0.2) 100%) !important;
+  background: rgba(33,186,69,0.15) !important;
 }
 .backrbbluefull{
   background-color: #506ca9;

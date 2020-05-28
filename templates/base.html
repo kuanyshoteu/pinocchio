@@ -214,7 +214,7 @@
                     {% if is_manager or is_director %}
                     <a class="ui button white full-w bt1 not_in_mobile" href='{% url "schools:crm" %}'>
                         <i class="list alternate icon"></i>
-                        CRM
+                        Клиенты
                         {% if profile.skill.need_actions > 0 %}
                         <span class="left_menu_number">{{profile.skill.need_actions}}</span>
                         {% endif %}
