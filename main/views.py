@@ -332,31 +332,37 @@ def search_free_name(name):
 
 def register_user_work(name, phone, mail, password, request):
     if len(Profile.objects.filter(mail=mail)) == 0 and len(Profile.objects.filter(phone=phone)) == 0 or password == False:
+        print('000')
         new_name = search_free_name(name.replace(' ', ''))
         user = User.objects.create(username=new_name, password=password)
         if password:
             user.set_password(password)
         user.save()
+        print('111', user)
         if password:
             user2 = authenticate(username = str(user.username), password=str(password))
             try:
+                print('333')
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             except Exception as e:
+                print('444')
                 res = 'er'
                 data = {
                     'res':res,
                 }
                 return JsonResponse(data)
-        profile = Profile.objects.get(user = user)
+        profile = Profile.objects.create(user = user)
         profile.first_name = name
         profile.phone = phone
         profile.mail = mail
-        skill = Skill.objects.create()
-        profile.skill = skill
+        filter_data = FilterData.objects.get_or_create(author=profile)[0]
+        filter_data.crm_notices = 1
+        filter_data.save()
+        profile.hint_numbers = [0, 1, 1, 1, 1, 1]
+        profile.confirmation_time = timezone.now()
+        profile.confirmed = False
+        print(profile.filter_data)
         profile.save()
-        skill.confirmation_time = timezone.now()
-        skill.confirmed = False
-        skill.save()
     else:
         profile = False
     return profile
@@ -428,7 +434,7 @@ def register_view(request):
                 )
             test_squad = school.groups.create(
                 teacher = profile,
-                title = 'Тестовая_группа',
+                title = 'Тестовая группа' + str(profile.id),
                 start_date = timezone.now().date() - timedelta(7),
                 )
             test_squad.start_date = timezone.now().date() - timedelta(7)
@@ -444,12 +450,12 @@ def register_view(request):
             add_subject_work(school, test_squad, subject)
             profile.schools.add(school)
 
-            html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Школа: <a href='https://www.bilimtap.kz/schools/info/?type=moderator&mod_school_id="+str(school.id)+"'>"+school_name+"</a><br>Телефон: "+phone+"<br>Телефон: "+phone
-            try:
-                send_email("Клиент новый", html_content, ['aaa.academy.kz@gmail.com'])
-            except Exception as e:
-                print('send error')
-                pass                            
+            # html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Школа: <a href='https://www.bilimtap.kz/schools/info/?type=moderator&mod_school_id="+str(school.id)+"'>"+school_name+"</a><br>Телефон: "+phone+"<br>Телефон: "+phone
+            # try:
+            #     send_email("Клиент новый", html_content, ['aaa.academy.kz@gmail.com'])
+            # except Exception as e:
+            #     print('send error')
+            #     pass                            
         else:
             res = 'not_equal_password'
     data = {

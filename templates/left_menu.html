@@ -21,8 +21,8 @@
                 <a class="item lftitem {%if page == 'crm' %}lftitem_crnt{%endif%}" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="list alternate icon mr15" style="font-size: 15px;margin-top: -1px;"></i>
                     Клиенты
-                    {% if profile.skill.need_actions > 0 %}
-                    <span class="left_menu_number">{{profile.skill.need_actions}}</span>
+                    {% if profile.filter_data.crm_notices > 0 %}
+                    <span class="left_menu_number">{{profile.filter_data.crm_notices}}</span>
                     {% endif %}                    
                 </a>                
             </div>

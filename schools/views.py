@@ -1275,11 +1275,10 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
         if password:
             user.set_password(password)
         user.save()
-        profile = Profile.objects.get(user = user)
+        profile = Profile.objects.create(user = user)
         profile.first_name = card.name
         profile.phone = card.phone
         profile.mail = card.mail
-        profile.save()
     if profile:
         card.card_user = profile
     card.author_profile = manager_profile
@@ -1291,10 +1290,10 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
     profile.schools.add(school)
     skill = Skill.objects.create()
     profile.skill = skill
+    profile.confirmation_time = timezone.now()
+    profile.confirmed = False
+    profile.hint_numbers = [0, 100, 100, 100, 100, 100]
     profile.save()
-    skill.confirmation_time = timezone.now()
-    skill.confirmed = True
-    skill.save()
     return profile
 
 def card_called(request):
