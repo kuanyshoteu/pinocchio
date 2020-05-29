@@ -273,7 +273,6 @@ def instagram_connecting(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    print('yo1', instagram_id)
     sm = SocialMedia.objects.get(title='Instagram')
     insta = school.socialmedias.filter(socialmedia=sm)
     had_insta = False
@@ -282,7 +281,6 @@ def instagram_connecting(request):
         insta = insta[0]
     if request.GET.get('code'):
         code = request.GET.get('code')
-        print('yo2', code, '<-code')
         url = 'https://api.instagram.com/oauth/access_token'
         data = {
             'client_id':instagram_id, 
@@ -301,8 +299,6 @@ def instagram_connecting(request):
         r2 = urllib.request.urlopen(url2).read()
         a2 = json.loads(r2)
         access_token = str(a2['access_token'])
-        print('longtoken',a2['expires_in'], a2['token_type'])
-
         url3 = 'https://graph.instagram.com/'+user_id+'?fields=username&access_token='+access_token
         r3 = urllib.request.urlopen(url3).read()
         a3 = json.loads(r3)
@@ -316,7 +312,6 @@ def connect_sm(request):
     ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
-    print('yo6')
     if request.GET.get('status') == 'Instagram':
         url = 'https://api.instagram.com/oauth/authorize/?client_id='+instagram_id+'&redirect_uri='+insta_server+'&scope=user_profile,user_media&response_type=code'
     elif request.GET.get('status') == 'Вконтакте':
@@ -1296,31 +1291,6 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
     profile.save()
     return profile
 
-def card_called(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_managers(profile)
-    if request.GET.get('id'):
-        school = is_moderator_school(request, profile)
-        card = school.crm_cards.get(id = int(request.GET.get('id')))
-        skill = profile.skill
-        if request.GET.get('action') == 'done':
-            if not card.was_called:
-                skill.need_actions -= 1
-            card.was_called = True
-        else:
-            card.action = request.GET.get('action')
-            if card.was_called:
-                card.was_called = False
-                skill.need_actions += 1
-        skill.save()
-        card.timestamp = timezone.now()
-        card.save()
-    data = {
-        'is_called':card.was_called,
-        'time':timezone.now().strftime('%d.%m.%Y %H:%M')
-    }
-    return JsonResponse(data)
-
 def add_card(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
@@ -1370,9 +1340,6 @@ def add_card(request):
             edit = '***Создание карточки***',
             )
         hist.save()
-        skill = profile.skill
-        skill.need_actions += 1
-        skill.save()
         res += get_card_data_by_column(card, column.id)        
     data = {
         "res":res,
@@ -1537,33 +1504,8 @@ def delete_card(request):
     school = is_moderator_school(request, profile)
     if request.GET.get('id'):
         card = school.crm_cards.get(id=int(request.GET.get('id')))
-        if not card.was_called:
-            if card.author_profile:
-                skill = card.author_profile.skill
-                skill.need_actions -= 1
-                skill.save()
         card.delete()
     data = {
-    }
-    return JsonResponse(data)
-
-def show_free_cards(request, school_id):
-    school = School.objects.get(id=school_id)
-    profile = Profile.objects.get(user = request.user.id)
-    only_managers(profile)
-    if profile.skill == None:
-        skill = Skill.objects.create()
-        profile.skill = skill
-        profile.save()
-    if request.GET.get('check'):
-        skill = profile.skill
-        if request.GET.get('check') == 'true':
-            skill.crm_show_free_cards = True
-        else:
-            skill.crm_show_free_cards = False  
-        skill.save()
-    data = {
-        'check':request.GET.get('check')
     }
     return JsonResponse(data)
 
@@ -1784,8 +1726,6 @@ def change_title(request):
 
                 similarity=TrigramSimilarity('title', city_title)
                 city = City.objects.annotate(similarity=similarity,).filter(similarity__gt=0.9).order_by('-similarity')
-                print(city)
-
                 if len(city) > 0:
                     city = city[0]
                 else:
@@ -1823,12 +1763,9 @@ def save_review(request, school_id=None):
 def delete_school_banner(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('id'):
-        print('0', request.GET.get('type'))
         school = is_moderator_school(request, profile)
-        print('1', school.title)
         banner = school.banners.filter(id=int(request.GET.get('id')))
         if len(banner) > 0:
-            print('2')
             banner[0].delete()
     data = {
     }
@@ -2380,7 +2317,6 @@ def get_payment_list(request):
                 squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
             else:
                 squads = school.groups.filter(shown=True).prefetch_related('students')
-                print('squads', squads)
         if profile.filter_data.subject_category:
             subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
             squads = squads.filter(subjects__in=subjects)

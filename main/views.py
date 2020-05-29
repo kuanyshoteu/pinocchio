@@ -196,8 +196,7 @@ def reset_pswrd_view(request):
     pid = False
     if request.GET.get('id') and request.GET.get('conf'):
         profile = Profile.objects.get(id=int(request.GET.get('id')))
-        skill = profile.skill
-        if request.GET.get('conf') == skill.confirmation_code and timezone.now()-skill.confirmation_time < timedelta(1):
+        if request.GET.get('conf') == profile.confirmation_code and timezone.now() - profile.confirmation_time < timedelta(1):
             pid = profile.id
         else:
             return render(request, "er404.html", {})
@@ -243,12 +242,8 @@ def create_school(request):
         director = Profession.objects.get(title = 'Director')
         profile.profession.add(director)
         profile.is_student = False
-        skill = Skill.objects.create(
-            confirmed=True,
-            confirmation_time=timezone.now(),
-            )
-        skill.save()
-        profile.skill = skill
+        profile.confirmed = True
+        profile.confirmation_time = timezone.now()
         profile.save()
         profile.schools.add(school)
         ok = True
@@ -281,12 +276,8 @@ def create_worker(request):
         profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
         profile.profession.add(profession)
         profile.is_student = False
-        skill = Skill.objects.create(
-            confirmed=True,
-            confirmation_time=timezone.now(),
-            )
-        skill.save()
-        profile.skill = skill
+        profile.confirmed = True
+        profile.confirmation_time = timezone.now()
         profile.save()
         profile.schools.add(school)
         ok = True
@@ -470,10 +461,9 @@ def update_pswd(request):
             found = True
         if found:
             confirmation_code = random_secrete_confirm()
-            skill = profile.skill
-            skill.confirmation_code = confirmation_code
-            skill.confirmation_time = timezone.now()
-            skill.save()
+            profile.confirmed = True
+            profile.confirmation_time = timezone.now()
+            profile.save()
             url = request.build_absolute_uri().replace(request.get_full_path(), '') + '/reset_pswrd_view/?id='+str(profile.id)+'&conf='+confirmation_code
             text = "Здравствуйте "+profile.first_name+ "!<br><br>Чтобы поменять пароль пройдите по ссылке: <a href='"+url+"'>восстановить пароль</a>"
             html_content = text
@@ -691,9 +681,7 @@ def get_notifications(request):
     timezone.now()
     res = []
     i = 0
-    skill = profile.skill
-    skill.notifications_number = 0
-    skill.save()
+    profile.notifications_number = 0
     for school in profile.schools.all():
         for notif in school.notifications.filter():
             i += 1

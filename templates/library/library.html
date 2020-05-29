@@ -20,13 +20,13 @@
         </a>    
         {% endif %}
     {% endif %}
-    <div class="ui container">      
+    <div class="ui container">
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
             <div class="w85 wide column mlback"> 
                 <div class="ui tab active" id="detailed_info">
                     <div class="ui segment shadow_small">
-                        <span style="font-size: 15px;">
+                        <span class="text17 textdg textbold mr50">
                             {% if folder %}
                                 Папка <b>{{ folder.title }}</b>
                             {% else %}
@@ -34,9 +34,9 @@
                             {% endif %}
                         </span>
                         {% if is_trener or is_director %}
-                        <div style="display: inline-block;margin-left: 15px;">
+                        <div class="dinline">
                           {% if cache.full %}
-                              <a class="ui button mini blue pastee" data-href='{{ profile.paste_object_url }}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}' school="{{current_school_id}}">Вставить</a>
+                              <a class="ui button mini blue pastee" data-href='{% url "library:paste_object_url" %}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}' school="{{current_school_id}}">Вставить</a>
                           {% else %}
                               <a class="ui button mini disabled">Вставить</a>
                           {% endif %}                      

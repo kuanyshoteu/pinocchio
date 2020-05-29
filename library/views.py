@@ -103,17 +103,14 @@ def paste(request):
         copy_folder = Folder.objects.create(author_profile = profile, title=folder.title, school=folder.school)
         for ppr in folder.lesson_list.all():
             copy_folder.lesson_list.add(ppr)
-
         if request.GET.get('new_parent') != 'library':
             copy_folder.parent = new_parent
             new_parent.children.add(copy_folder)
         elif request.GET.get('school_id'):
             copy_folder.school = school
         copy_folder.save()
-
         if cache.action == 'cut' and cache.previous_parent > 0:
             folder.delete()
-
     if cache.object_type == 'lesson':
         lesson = Lesson.objects.get(id = cache.object_id)
         new_lesson = Lesson.objects.create(author_profile = profile, title = lesson.title, school=lesson.school)
@@ -121,16 +118,17 @@ def paste(request):
         title = new_lesson.title
         link = new_lesson.get_absolute_url()
         for paper in lesson.papers.all():
-            new_paper = Paper.objects.create(title=paper.title,
-                author_profile=paper.author_profile,typee=paper.typee)
+            new_paper = new_lesson.papers.create(title=paper.title,
+                author_profile=paper.author_profile, typee=paper.typee)
             for subtheme in paper.subthemes.all():
                 new_subtheme = Subtheme.objects.create(content=subtheme.content,video=subtheme.video,
                     youtube_video_link=subtheme.youtube_video_link)
                 new_paper.subthemes.add(new_subtheme)
                 for task in subtheme.task_list.all():
                     new_task = Task.objects.create(
-                        author_profile = profile, text = task.text, answer = task.answer, 
-                        height_field = task.height_field, width_field = task.width_field)
+                        author_profile = profile, 
+                        text = task.text, 
+                        answer = task.answer)
                     if task.image:
                         new_task.image = task.image
                     new_task.save()

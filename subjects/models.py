@@ -142,7 +142,7 @@ def pre_save_course_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(pre_save_course_receiver, sender=Subject)
 
 class FilterData(models.Model):
-    author = models.OneToOneField(Profile, on_delete = models.CASCADE, related_name='filter_data') 
+    author = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='filter_data') 
     tag_ids = ArrayField(models.IntegerField(), default = list)
     crm_notices = models.IntegerField(default=0)
     payment_notices = models.IntegerField(default=0)

@@ -43,7 +43,7 @@ class Subtheme(models.Model):
         return reverse("papers:delete_subtheme_url")
         
 class Paper(models.Model):
-    school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_papers') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_papers') 
     title = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='paper_author')

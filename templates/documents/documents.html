@@ -24,7 +24,7 @@
             {% include 'left_menu.html' %}
             <div class="w85 wide column mlback">
                 <div class="ui segment" style="min-height: 200px;">
-                    <span class="text15 textdg textbold mr50">
+                    <span class="text17 textdg textbold mr50">
                         {% if this_folder %}
                             Папка <b>{{ this_folder.title }}</b>
                         {% else %}
@@ -34,7 +34,7 @@
                     {% if is_trener or is_manager or is_director %}
                     <div style="display: inline-block;">
                         {% if cache.full %}
-                            <a class="ui button mini blue pastee" data-href='{{ profile.paste_docobject_url }}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}root{% endif %}' school="{{current_school_id}}">Вставить</a>
+                            <a class="ui button mini blue pastee" data-href='{% url "documents:paste_docobject_url" %}' new_parent='{% if this_folder %}{{ this_folder.id }}{% else %}root{% endif %}' school="{{current_school_id}}">Вставить</a>
                         {% else %}
                             <a class="ui button mini disabled">Вставить</a>
                         {% endif %}                      

@@ -232,12 +232,10 @@ $(document).ready(function(){
             }
         });
     })
-
     $(document).on("click", '.pastee', function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")
         var new_parent = this_.attr("new_parent")
-        console.log(new_parent, 'de', pageUrl)
         $.ajax({
             url: pageUrl,
             data: {

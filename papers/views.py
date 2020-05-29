@@ -78,9 +78,6 @@ def paper_details(request, paper_id = None):
         paper = Paper.objects.get(id = int(paper_id))
         paper.subthemes.add(subtheme)
         return redirect(paper.get_absolute_url())
-    is_director = False
-    if is_profi(profile, 'Director'):
-        is_director = True
     context = {
         "profile": profile,
         'lesson':lesson,
@@ -91,8 +88,11 @@ def paper_details(request, paper_id = None):
         'tasks':Task.objects.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
-        "is_director":is_director,
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":profile.schools.first().money,
+        "page":'library',
+        "school_crnt":lesson.school,
     }
     return render(request, "library/lesson_details.html", context)
 

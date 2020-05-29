@@ -21,7 +21,7 @@ class DocumentFolder(models.Model):
     school = models.ForeignKey(School, null = True, on_delete = models.CASCADE, related_name='school_docfolders') 
     author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='docfolders')
     title = models.TextField()
-    parent = models.ForeignKey("self",  null = True, on_delete = models.CASCADE, related_name = 'docchilds')
+    parent = models.ForeignKey("self", null = True, on_delete = models.CASCADE, related_name = 'docchilds')
     children = models.ManyToManyField("self")
     files = models.ManyToManyField(Document, related_name='docfolder')
     

@@ -149,9 +149,14 @@ def paste(request):
             folder.delete()
     else:
         doc = Document.objects.get(id = cache.object_id)
-        new_doc = Document.objects.create(file = doc.file, object_type = doc.object_type, school=doc.school)
+        new_doc = Document.objects.create(
+            file = doc.file, 
+            object_type = doc.object_type, 
+            school=doc.school)
+        new_doc.save()
         link = new_doc.file.url
         if request.GET.get('new_parent') != 'root':
+            print('dcdcdcdc',new_parent, new_doc)
             new_parent.files.add(new_doc)
         elif request.GET.get('school_id'):
             new_doc.school = school
