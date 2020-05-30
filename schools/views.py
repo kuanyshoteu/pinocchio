@@ -1290,7 +1290,6 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
     profile.skill = skill
     profile.confirmation_time = timezone.now()
     profile.confirmed = False
-    profile.hint_numbers = [0, 100, 100, 100, 100, 100]
     profile.save()
     return profile
 

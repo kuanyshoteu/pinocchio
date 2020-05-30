@@ -776,11 +776,12 @@
     text.on('input', function () {
         closeHelper();
     })
-    function send_login_cl(id){
+    function send_login_cl(){
+        id = 'edit'
         var name = $('.card_name' + id).val()
         var phone = $('.card_phone' + id).val()
         var extra_phone = $('.card_phone_extra' + id).val()
-        var mail = $('.card_mail' + id).val()
+        var mail = $('.card_mail_' + id).val()
         var parents = $('.card_parents' + id).val()
         var comment = $('.card_comment' + id).text()
         this_ = $(this)
@@ -795,10 +796,11 @@
         }
         else{ok = true}
         if (ok) {
-            $('.send_login_loading'+id).show()
-            $('.sended_login'+id).hide()
+            $('.send_login_loading').show()
+            $('.sended_login').hide()
             this_.addClass('disabled')
             url = $('.data').attr('send_login_url')
+            id = $('.save_card_form').attr('id')
             $.ajax({
                 url: url,
                 data: {
@@ -813,10 +815,8 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.ok) {
-                        $('.send_login_loading'+id).hide()
-                        $('.sended_login'+id).show()
-                        $('.icontable'+id).removeClass('green')
-                        $('.icontable'+id).addClass('blue')   
+                        $('.send_login_loading').hide()
+                        $('.sended_login').show()
                         this_.addClass('disabled')
                     }
                 }
