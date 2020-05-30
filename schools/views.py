@@ -1010,14 +1010,17 @@ def crm_option(request):
                 office = Office.objects.get(id = int(request.GET.get('object_id')))
                 filter_data.office = office
         if request.GET.get('option') == 'group':
-            filter_data.squad = None
             if int(request.GET.get('object_id')) != -1:
                 squad = Squad.objects.get(id = int(request.GET.get('object_id')))
                 filter_data.squad = squad
+            else:
+                filter_data.squad = None                
         if request.GET.get('option') == 'filter_subject':
             if int(request.GET.get('object_id')) != -1:
                 subject = Subject.objects.get(id = int(request.GET.get('object_id')))
-                filter_data.subject = subject            
+                filter_data.subject = subject
+            else:
+                filter_data.subject = None                
         if request.GET.get('option') == 'payment':
             filter_data.payment = request.GET.get('object_id')
         filter_data.save()
@@ -1546,12 +1549,10 @@ def get_card_info(request):
                         squad.bill,
                         squad.id])
         colid = card.column.id
-        res = get_card_data_by_column(card, colid)
         form_res = get_card_form_by_column(card, colid)
         dialog = get_card_dialog(card)
     data = {
         'bills':bills,
-        'res':res,
         'form_res':form_res,
         'dialog':dialog,
         'colid':colid,

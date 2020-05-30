@@ -19,18 +19,18 @@
                 </select>
             </form>
             <div class="text-center">
-                <a class="ui button mini blue make_payment" onclick="make_payment('{{ profile.make_payment }}', '{{ hisprofile.id }}')">
+                <a class="ui button mini blue make_payment" onclick="make_payment('{{ hisprofile.id }}')">
                     Оплатить
                 </a>
                 <div class="loading_small payment_loading{{ hisprofile.id }}" style="display: none;">
-                  <div class="animation"><div class="backwhite circle one"></div></div>
-                  <div class="animation"><div class="backwhite circle two"></div></div>
-                  <div class="animation"><div class="backwhite circle three"></div></div>
-                  <div class="animation"><div class="backwhite circle four"></div></div>
-                  <div class="animation"><div class="backwhite circle five"></div></div>
-                  <div class="animation"><div class="backwhite circle six"></div></div>
+                  <div class="animation"><div class="circle one"></div></div>
+                  <div class="animation"><div class="circle two"></div></div>
+                  <div class="animation"><div class="circle three"></div></div>
+                  <div class="animation"><div class="circle four"></div></div>
+                  <div class="animation"><div class="circle five"></div></div>
+                  <div class="animation"><div class="circle six"></div></div>
                 </div>
-                <i style="display: none;" class="icon check textw ml5" id="payment_success{{ hisprofile.id }}"></i>                
+                <i style="display: none;" class="icon check textgreen text15 ml5" id="payment_success{{ hisprofile.id }}"></i>                
             </div>
         </div>
         {%endif%}
@@ -233,9 +233,9 @@
     </div>
 </div>
 {%endif%}
-<span style="display: none;" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
+<span style="display: none;" pay_url="{% url 'accounts:make_payment' %}" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
 <script type="text/javascript">
-    function make_payment(url, id) {
+    function make_payment(id) {
         this_ = document.getElementById('pay_for_group');
         group_id = this_.options[this_.selectedIndex].value;        
         amount = $('.payment_amount'+id).val()
@@ -244,7 +244,7 @@
             $('.payment_loading'+id).show()
             $('.make_payment').addClass('disabled')
             $.ajax({
-                url: url,
+                url: $('.instance_data').attr('pay_url'),
                 data: {
                     'amount':amount,
                     'id':id,

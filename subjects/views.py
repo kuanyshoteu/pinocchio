@@ -89,7 +89,11 @@ def subject_create(request):
         instance.cost_period = request.POST.get('get_subject_period')
         if not instance.cost:
             instance.cost = 0
+        instance.number_of_materials = 1
         instance.save()
+        instance.materials.create(
+            school=instance.school
+        )
         instance.subject_histories.create(action_author=profile,edit='Создал курс '+instance.title)        
         return HttpResponseRedirect(instance.get_update_url())
     context = {
@@ -157,7 +161,6 @@ def subject_update(request, slug=None):
             squad.lesson_bill = squad.lesson_bill - old_lesson_bill + new_lesson_bill
             squad.bill = squad.bill - old_month_bill + new_month_bill
             squad.save()
-
         cost = 0
         for subject in school.school_subjects.all():
             subject_cost = 0
@@ -170,11 +173,7 @@ def subject_update(request, slug=None):
         if len(request.FILES) > 0:
             if 'subject_banner' in request.FILES:
                 file = request.FILES['subject_banner']
-                instance.image_banner = file
-            if 'subject_icon' in request.FILES:
-                file = request.FILES['subject_icon']
-                instance.image_icon = file
-        
+                instance.image_banner = file        
         if request.POST.get('number_of_materials') == "":
             get_number_of_materials = 0
         else:
@@ -208,10 +207,6 @@ def subject_update(request, slug=None):
         'squads':Squad.objects.filter(shown=True),
         "subject_categories":school.school_subject_categories.all(),        
         "subject_categories_this":instance.category.all(),        
-        "subject_ages":SubjectAge.objects.all(),
-        "subject_ages_this":instance.age.all(),        
-        "subject_levels":school.school_subject_levels.all(),
-        "subject_levels_this":instance.level.all(),        
         "subject_filter_options":instance.filter_options.all(),        
         'time_periods':time_periods,
         'days':days,

@@ -113,6 +113,8 @@ def squad_create(request):
         if len(school.school_offices.all()) > 0:
             instance.office = school.school_offices.first()
         start = request.POST.get('start')
+        if not start:
+            start = timezone.now().date() - timedelta(7)
         instance.start_date = start
         instance.save()
         instance.squad_histories.create(action_author=profile,edit='Создал группу '+instance.title)

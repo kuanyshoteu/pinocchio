@@ -73,13 +73,7 @@ class Subject(models.Model):
             null=True,
             blank=True, 
             )
-
-    image_back = models.ImageField(upload_to=upload_location, 
-            null=True,
-            blank=True, 
-            )
     color_back = models.TextField(default='')
-
     content = models.TextField()
     slogan = models.CharField(max_length=250, default='')
     number_of_materials = models.IntegerField(default=0, null=True)

@@ -53,29 +53,21 @@
         comments = res[3]
         author_id = res[4]
         social_media_id = res[5]
-        change_day_of_week = res[6]
-        days_of_weeks = res[7]
+        days_of_weeks = res[6]
         take_url = "{% url 'schools:take_url' %}"
         if ($('.data').attr('is_dir') == 'True') {
             $('.change_manager').attr('onchange','change_manager("'+id+'")')
-            clones = []
-            card_mgr = undefined
             $('.cfmanager').each(function () {
                 option_orig = $(this)
                 option_copy = option_orig.clone()
                 option_orig.remove()
                 if (parseInt(option_copy.attr('value')) == author_id) {
-                    card_mgr = option_copy
+                    option_copy.prependTo('.change_manager')
                 }
                 else{
-                    clones.push(option_copy)
+                    option_copy.appendTo('.change_manager')
                 }
             })
-            card_mgr.appendTo('.change_manager')
-            for (var i = 0; i < clones.length; i++) {
-                option_copy = clones[i]
-                option_copy.appendTo('.change_manager')
-            }
         }
         else{
             if (author_id == parseInt($('.data').attr('hisid'))) {
@@ -118,6 +110,7 @@
             daybutton.removeClass('green')                
             daybutton.attr('card', id)
         }
+        console.log('days_of_weeks', days_of_weeks)
         for (var i = 0; i < days_of_weeks.length; i++) {
             if (days_of_weeks[i]){
                 daybutton = $('.card_form-dayscd'+i)
@@ -134,7 +127,6 @@
             card.attr('comments', comments)
             card.attr('author_id', author_id)
             card.attr('take_url', take_url)
-            card.attr('change_day_of_week', change_day_of_week)
             card.attr('days_of_weeks', days_of_weeks_str)
         }
     }    
@@ -167,6 +159,7 @@
     function fill_card_data(column,res,position){
         for (var i = 0; i < res.length; i++) {
             id = res[i][0]
+            console.log('fill', id)
             name = res[i][1]
             phone = res[i][2]
             author_name = res[i][5]
@@ -416,6 +409,7 @@
     })
     function open_crmcard(id){
         $('#card_formedit').modal('show');
+        $('.card_saved').hide()
         height = parseInt($(document).height())-230;
         $('.card_dialog').css('height', height);
         $('.card_money_schedit').empty();
@@ -432,7 +426,6 @@
             comments = card.attr('comments')
             author_id = card.attr('author_id')
             take_url = card.attr('take_url')
-            change_day_of_week = card.attr('change_day_of_week')
             days_of_weeks = card.attr('days_of_weeks')
             days_of_weeks_ar = [false,false,false,false,false,false,false,]
             for (var i = 0; i <  days_of_weeks.length; i++) {
@@ -444,7 +437,6 @@
                     comments,
                     author_id,
                     take_url,
-                    change_day_of_week,
                     days_of_weeks_ar,
                     ]
             fill_card_form(id, res, 'yes')
@@ -580,6 +572,7 @@
         var extra_phone = $('.card_phone_extraedit').val()
         var parents = $('.card_parentsedit').val()
         var comment = $('.card_commentedit').text()
+        $('.card_saved').hide()
         $.ajax({
             url: $('.edit_card_url').attr('url'),
             data: {
@@ -595,8 +588,7 @@
                 card = $('.crm_card'+id)
                 card.find('#cardnameshow'+id).text(name)
                 card.find('#cardphoneshow'+id).text(phone)
-                $('#card_formedit').modal('hide')
-                console.log(card, card.find('#cardnameshow'))
+                $('.card_saved').show()
             }
         })
     }
@@ -984,6 +976,7 @@
                 },
                 dataType: 'json',
                 success: function (data) {
+                    $('.crm_card'+id).attr('fillform', 'no')
                     $('.loading').hide();
                     $('.ok_predoplata').hide()
                     if (data.problems != 'ok') {
