@@ -18,7 +18,7 @@
                     <div class="twelve wide column pr0">
                         <div class="ui segment ml15 mb0 pt15 pr15">
                             <div class="ui grid stackable no_margin">
-                                <div style="height: 32px">
+                                <div class="pl0" style="height: 32px">
                                     <div class="mt5 mr15 text17 ui grid textdg">
                                         {%if trash and is_manager %}
                                             <b style="color: darkred;width: 160px;">Удаленные группы</b>
@@ -39,19 +39,15 @@
                             </div>
                             <div class="ui segment show_search_groups mt5 no_padding" style="display: none;position: absolute;z-index: 1000;width: calc(100% - 300px);margin-left: 125px;">
                             </div>
-                            <div class="ui grid stackable allsquads mt20">
-                                {% for sq in squads %}
-                                    {% include 'squads/squad_list_info.html' %}
-                                {% endfor %}
+                            <div class="mt20" style="min-height: 100px;">
+                            {% for sq in squads %}
+                                {% include 'squads/squad_list_info.html' %}
+                            {% endfor %}
                             </div>
                             {% if not trash %}
                             {% if is_director or is_manager%}
-                            <div class="ui grid stackable mt20">
-                                <div class="eight wide column pt0 pr0 mb50">
-                                    <a class="ui button full-w green shadow_green" style="height: 40px;line-height: 17px" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
-                                </div>
-                            </div>
-                            {% endif %}                            
+                                <a class="mt50 ui button small green shadow_green" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
+                            {% endif %}
                             {% endif %}                            
                         </div>                        
                     </div>

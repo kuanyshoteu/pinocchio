@@ -205,7 +205,7 @@
                                     Группы проходящие курс <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
                                 </div>
                                 {% for squad in instance.squads.all %}
-                                    <a href="{{squad.get_absolute_url}}" class="ui button mini white border1 shadow_small">{{squad.title}}</a>
+                                    <a href="{{squad.get_update_url}}" class="ui button mini dark">{{squad.title}}</a>
                                 {% endfor %}
                                 {% if instance.squads.all|length == 0 %}
                                     <i class="textdg">Этот курс еще не использовали в группах</i>

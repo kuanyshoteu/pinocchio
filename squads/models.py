@@ -53,7 +53,7 @@ class Squad(models.Model):
     course_bill = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['-color_back']
     def __unicode__(self):
         return self.title
     def ___str__(self):

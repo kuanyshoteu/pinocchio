@@ -7,17 +7,20 @@
 <div class="ui container">
     <div class="ui grid stackable mt15" style="margin-bottom: 200px;">
         <div class="third wide column">
-            <div class="ui segment" style="height: 380px;">
-                <form class="ui form text-center">
-                    <b>Добавить новую школу</b>
-                    <br><br>
-                    <textarea class="new_school_title" placeholder="Название школы"></textarea>
-                    <textarea class="new_school_slogan" placeholder="Описание школы"></textarea>
-                    <textarea class="new_school_name" placeholder="Имя директора"></textarea>
-                    <textarea class="new_school_phone" placeholder="Номер директора"></textarea>
-                    <textarea class="new_school_version" placeholder="Версия"></textarea>
-                    <br><br>
-                    <a class="ui button green create_school" url="{% url 'main:create_school' %}">Добавить школу</a>
+            <div class="ui segment" style="height: 420px;">
+                <form class="ui form textdg textbold text13">
+                    <div class="text-center text15 mb10">Добавить новую школу</div>
+                    Название школы
+                    <textarea class="new_school_title mb5"></textarea>
+                    Описание школы
+                    <textarea class="new_school_slogan mb5"></textarea>
+                    Имя директора
+                    <textarea class="new_school_name mb5"></textarea>
+                    Номер директора
+                    <textarea class="new_school_phone mb5"></textarea>
+                    Версия
+                    <textarea class="new_school_version mb5"></textarea>
+                    <a class="ui button green create_school mt15" url="{% url 'main:create_school' %}">Добавить школу</a>
                 </form>
             </div>
             <div class="highlight success_created" style="width: 50%;margin: 15px auto;display: none;">
@@ -28,20 +31,23 @@
             </div>
         </div>
         <div class="third wide column">
-            <div class="ui segment" style="height: 380px;">
-                <form class="ui form text-center">
-                    <b>Добавить нового сотрудника</b>
-                    <br><br>
-                    <select class="mb15" id="new_worker_prof">
-                        <option>Профессия</option>                        
+            <div class="ui segment" style="height: 420px;">
+                <form class="ui form textbold textdg text13">
+                    <div class="mb15 text15 text-center">Добавить нового сотрудника</div>
+                    Профессия
+                    <select class="mb10" id="new_worker_prof">
                         {% for prof in professions %}<option value="{{prof.id}}">{{prof.title}}</option>{%endfor%}
                     </select>
-                    <div class="schools_for_worker" style="height: 30px;"></div>
-                    <textarea class="new_worker_school" placeholder="Школа"></textarea>
-                    <textarea class="new_worker_name" placeholder="Имя"></textarea>
-                    <textarea class="new_worker_phone" placeholder="Номер"></textarea>
-                    <textarea class="new_worker_mail" placeholder="Почта"></textarea>
-                    <a class="ui button green create_worker" url="{% url 'main:create_worker' %}">Добавить сотрудника</a>
+                    <div class="schools_for_worker"></div>
+                    Школа
+                    <textarea class="new_worker_school mb5"></textarea>
+                    Имя
+                    <textarea class="new_worker_name mb5"></textarea>
+                    Номер
+                    <textarea class="new_worker_phone mb5"></textarea>
+                    Почта
+                    <textarea class="new_worker_mail mb5"></textarea>
+                    <a class="ui button green create_worker mt15" url="{% url 'main:create_worker' %}">Добавить сотрудника</a>
                 </form>
             </div>
             <div class="highlight success_created_worker" style="width: 50%;margin: 15px auto;display: none;">
@@ -53,7 +59,7 @@
             </div>            
         </div>
         <div class="third wide column">
-            <div class="ui segment" style="height: 380px;">
+            <div class="ui segment" style="height: 420px;">
                 <form class="ui form text-center">
                     <b>Переместить сотрудника</b>
                     <br><br>

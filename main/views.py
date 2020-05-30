@@ -222,31 +222,76 @@ def create_school(request):
     ok = False
     password = False
     profile = get_profile(request)
-    title = request.GET.get('title')
-    slogan = request.GET.get('slogan')
+    school_name = request.GET.get('title')
+    slogan = "Учебный центр"
+    subjects = "Английский"
+    course = "Курс английского для начинающих"
+    cost = 10000
+    cost_period = "month"
+    teachers = "Учитель1"
     name = request.GET.get('name')
     phone = request.GET.get('phone')
+    mail = phone
     version = request.GET.get('version')
-    if is_profi(profile, 'Moderator') and title and slogan and name and phone:
-        school = create_school_work(title, slogan, version)
-        new_id = str(User.objects.order_by("id").last().id + 1)
-        new_name = request.GET.get('name').replace(' ', '')+new_id
+    print('00000s')
+    if is_profi(profile, 'Moderator') and school_name and name and phone:
+        print('00000222')
+        res = 'ok'
+        ok = True
         password = random_password()
-        user = User.objects.create(username=new_name, password=password)
-        user.set_password(password)
-        user.save()
-        user2 = authenticate(username = str(user.username), password=password)
-        profile = Profile.objects.get(user = user)
-        profile.first_name = request.GET.get('name')
-        profile.phone = request.GET.get('phone')
+        profile = register_user_work(name, phone, mail, password, False)
+        if profile == False:
+            return JsonResponse({'res':'second_user'})
         director = Profession.objects.get(title = 'Director')
         profile.profession.add(director)
+        teacher_profession = Profession.objects.get(title = 'Teacher')
+        profile.profession.add(teacher_profession)
         profile.is_student = False
-        profile.confirmed = True
-        profile.confirmation_time = timezone.now()
         profile.save()
+        school = create_school_work(school_name, slogan, 'free')
+        url = school.get_absolute_url()
+        school.content = slogan
+        school.phones.append(phone)
+        school.version = version
+        school.save()
+        for subject_title in subjects.split(','):
+            add_subject_category_work(school, subject_title)
+        first_teacher = False
+        for teacher_name in teachers.split(','):
+            teacher = register_user_work(teacher_name, '', '', False, False)
+            teacher.is_student = False
+            teacher.save()
+            teacher.profession.add(teacher_profession)
+            teacher.schools.add(school)
+            if not first_teacher:
+                first_teacher = teacher
+        lastid = str(len(Profile.objects.all()) + 1)
+        card = school.crm_cards.create(
+            author_profile=profile,
+            column=CRMColumn.objects.get(id=1),
+            name='Тестовый ученик',
+            phone='+7777' + lastid,
+            mail='test@mail.com'+lastid,
+            )
+        test_squad = school.groups.create(
+            teacher = profile,
+            title = 'Тестовая группа' + str(profile.id),
+            start_date = timezone.now().date() - timedelta(7),
+            )
+        test_squad.start_date = timezone.now().date() - timedelta(7)
+        test_student = register_new_student(False, card, False, profile, False, test_squad.id,school)
+        add_student_to_squad(test_student, test_squad, profile)
+        subject = school.school_subjects.create(
+            author = profile,
+            title = course,
+            cost = cost,
+            cost_period = cost_period,
+            )
+        add_lecture_work('10:00', '12:00', test_squad, subject, [1,3,5])
+        add_subject_work(school, test_squad, subject)
         profile.schools.add(school)
-        ok = True
+        print('555')
+    print(ok)
     data = {
         "ok":ok,
         "password":password,
@@ -257,28 +302,24 @@ def create_worker(request):
     ok = False
     password = False
     profile = get_profile(request)
+    print('s9s9s99s9s9')
     if is_profi(profile, 'Moderator') and request.GET.get('prof_id') and request.GET.get('school') and request.GET.get('name') and request.GET.get('phone'):
         school = School.objects.filter(title = request.GET.get('school'))
         if len(school) == 0:
             return JsonResponse({'ok':False})
         school = school[0]
-        new_id = str(User.objects.order_by("id").last().id + 1)
-        new_name = request.GET.get('name').replace(' ', '')+new_id
+        print(school.title)
+        name = request.GET.get('name')
+        phone = request.GET.get('phone')
+        mail = request.GET.get('mail')
         password = random_password()
-        user = User.objects.create(username=new_name, password=password)
-        user.set_password(password)
-        user.save()
-        user2 = authenticate(username = str(user.username), password=password)
-        profile = Profile.objects.get(user = user)
-        profile.first_name = request.GET.get('name')
-        profile.phone = request.GET.get('phone')
-        profile.mail = request.GET.get('mail')
-        profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
-        profile.profession.add(profession)
+        profile = register_user_work(name, phone, mail, password, False)
         profile.is_student = False
-        profile.confirmed = True
-        profile.confirmation_time = timezone.now()
         profile.save()
+        profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
+        print('000', profession)
+        profile.profession.add(profession)
+        print(profile.profession.all())
         profile.schools.add(school)
         ok = True
     data = {
@@ -331,15 +372,9 @@ def register_user_work(name, phone, mail, password, request):
         if password:
             user2 = authenticate(username = str(user.username), password=str(password))
             try:
-                print('333')
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             except Exception as e:
-                print('444')
                 res = 'er'
-                data = {
-                    'res':res,
-                }
-                return JsonResponse(data)
         profile = Profile.objects.create(user = user)
         profile.first_name = name
         profile.phone = phone
@@ -347,7 +382,7 @@ def register_user_work(name, phone, mail, password, request):
         filter_data = FilterData.objects.get_or_create(author=profile)[0]
         filter_data.crm_notices = 1
         filter_data.save()
-        profile.hint_numbers = [0, 1, 1, 1, 1, 1]
+        profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
         profile.confirmation_time = timezone.now()
         profile.confirmed = False
         profile.save()
@@ -375,13 +410,12 @@ def register_view(request):
     phone = request.GET.get('phone')
     password1 = request.GET.get('password1')
     password2 = request.GET.get('password2')
-    slogan = request.GET.get('slogan')
-    subjects = request.GET.get('subjects')
-    course = request.GET.get('course')
-    cost = int(request.GET.get('cost'))
-    cost_period = request.GET.get('cost_period')
-    teachers = request.GET.get('teachers')
-    dir_teach = request.GET.get('dir_teach')
+    slogan = "Учебный центр"
+    subjects = "Английский"
+    course = "Курс английского для начинающих"
+    cost = 10000
+    cost_period = "month"
+    teachers = "Учитель1"
     url = ''
     if name and mail and phone and password1 and password2:
         if password1 == password2:
@@ -392,8 +426,7 @@ def register_view(request):
             director = Profession.objects.get(title = 'Director')
             profile.profession.add(director)
             teacher_profession = Profession.objects.get(title = 'Teacher')
-            if dir_teach == 'yes':
-                profile.profession.add(teacher_profession)
+            profile.profession.add(teacher_profession)
             profile.is_student = False
             profile.save()
             school = create_school_work(school_name, slogan, 'free')
@@ -1333,9 +1366,8 @@ def hint_update():
     #                 start_date = today,
     #                 )
     for p in Profile.objects.all():
-        p.hint_numbers = [0, 1, 1, 1, 1, 1]
+        p.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
         p.save()
-        FilterData.objects.get_or_create(author=p)
 
 def categories_update():
     for sc in SubjectCategory.objects.all():
@@ -1612,7 +1644,7 @@ def another_hint(request):
 
 def update_hint(request):
     profile = Profile.objects.get(user = request.user)
-    profile.hint_numbers = [0, 1, 1, 1, 1, 1]
+    profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
     profile.save()
     data = {
     }

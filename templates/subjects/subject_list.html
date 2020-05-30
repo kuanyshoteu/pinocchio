@@ -13,7 +13,7 @@
                     <div class="twelve wide column pr0">
                         <div class="ui segment ml15 mb0 pt15 pr15">
                             <div class="ui grid stackable no_margin">
-                                <div class="mt5 text17" style="display: flex;">
+                                <div class="pl5 mt5 text17" style="display: flex;">
                                     Курсы 
                                     <div class="ml5" style="color: #939393;">{{ subjects|length }}</div>
                                 </div>
@@ -24,18 +24,14 @@
                             <div class="ui segment show_search_subjects mt5 no_padding" style="display: none;position: absolute;z-index: 1000;width: 250px;margin-left: 80px;">
                             </div>
                             <div id="list"></div>
-                            <div class="ui grid stackable mt20" id="allsubjects">
+                            <div class="mt20 hint_place1" side="bottom" style="min-height: 100px;" id="allsubjects">
                                 {% for sq in subjects %}
                                     {% include 'subjects/subject_list_info.html' %}
                                 {% endfor %}
                             </div>
-                            <div class="ui grid stackable mt20">
-                                {% if is_director or is_manager%}
-                                <div class="eight wide column pt0 pr0 mb50">
-                                    <a class="ui button full-w green shadow_green" style="height: 40px;line-height: 17px" href='{% url "subjects:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>Создать новый курс</a>
-                                </div>
-                                {% endif %}
-                            </div>
+                            {% if is_director or is_manager%}
+                                <a class="mt50 ui button small green shadow_green" href='{% url "subjects:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>Создать новый курс</a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="four wide column">
@@ -52,7 +48,10 @@
         </div>
     </div>
 </div>
+<span class="data" style="display: none;" hint_type="6" last_hint="1" hint="{{hint}}">
 <span style="display: none;" class="get_subject_category_url" url="{{ school.crm_option_url }}"></span>
+{% include 'hints/subject_list_hints.html' %}
+{% include 'hints/get_hint_script.html' %}
 <script>
     function choose_subject_category(id, option){
         $('.choose_subject_category').removeClass('shadow_small')

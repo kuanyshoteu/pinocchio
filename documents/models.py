@@ -23,7 +23,7 @@ class DocumentFolder(models.Model):
     title = models.TextField()
     parent = models.ForeignKey("self", null = True, on_delete = models.CASCADE, related_name = 'docchilds')
     children = models.ManyToManyField("self")
-    files = models.ManyToManyField(Document, related_name='docfolder')
+    docfiles = models.ManyToManyField(Document, related_name='docfolder')
     
     class Meta:
         ordering = ['id']

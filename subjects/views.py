@@ -74,7 +74,8 @@ def subject_list(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
-        "page":"subjects",        
+        "page":"subjects",
+        "hint":profile.hint_numbers[6],
     }
     return render(request, "subjects/subject_list.html", context)
 
@@ -315,7 +316,6 @@ def change_category(request):
         category = school.school_subject_categories.get(id=int(request.GET.get('object_id')))
         students = get_subject_students(subject.squads.prefetch_related('students'))
         if subject in category.category_subjects.all():
-            category.students.remove(*students)
             category.category_subjects.remove(subject)
             text = 'В курсе '+subject.title + ' убран предмет '+category.title
             subject.subject_histories.create(action_author=profile,edit=text)
@@ -335,7 +335,6 @@ def change_category(request):
             text = 'В курсе '+subject.title + ' добавлен предмет '+category.title
             subject.subject_histories.create(action_author=profile,edit=text)
 
-            category.students.add(*students)
             change_lecture_options(students, subject, 'subject', category, True)
             if category in hidden_filter_ids():
                 options = SchoolFilterOption.objects.filter(title=category.title)
@@ -481,12 +480,6 @@ def change_lecture_options(students, subject, option, objectt, is_add):
         if option == 'subject':
             lectures = subject.subject_lectures.all()
             objectt.category_lectures.add(*lectures)
-        elif option == 'age':
-            lectures = subject.subject_lectures.all()
-            objectt.age_lectures.add(*lectures)
-        elif option == 'level':
-            lectures = subject.subject_lectures.all()
-            objectt.level_lectures.add(*lectures)
 
 def get_hashtag(school, title):
     obj_title = title.replace(' ', '')

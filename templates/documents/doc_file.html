@@ -8,6 +8,7 @@
       <div class="ui divider"></div>
       <a class="delete_doc" id="{{ doc.id }}" data-href='{{ doc.delete_doc_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
   </div>
+      {% if doc.file %}
   <a href="{{ doc.file.url }}" >
       {% if doc.object_type == 'img' %}
       <img src="{% static 'images/docs/doc_img.png' %}" id="doc_image{{ doc.id }}" style="height: 50px;width: 50px;">
@@ -31,6 +32,7 @@
       <br>
       <span id="doc_title{{ doc.id }}" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{ doc.file }}</span>
   </a>
+      {% endif %}
 </div>
 <div class="ui modal" id="doc_details{{ doc.id }}" style="padding: 14px;">
     <i class="close icon"></i>

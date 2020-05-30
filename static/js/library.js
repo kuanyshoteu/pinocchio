@@ -393,10 +393,10 @@ $(document).ready(function(){
                 dataType: 'json',
                 success: function (data) {
                     if(data.deleted){
-                        $('#all_folder' + this_.attr('id')).hide();                        
+                        $('#all_folder' + this_.attr('id')).hide('fast');                        
                     }
                     else{
-                        $('.folder_features' + this_.attr('id')).hide()
+                        $('.folder_features' + this_.attr('id')).hide('fast')
                     }
                 }
             });  
@@ -600,7 +600,7 @@ $(document).ready(function(){
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $('#all_lesson' + this_.attr('id')).hide();
+                    $('#all_lesson' + this_.attr('id')).hide('fast');
                 }
             });  
         }
@@ -617,7 +617,7 @@ $(document).ready(function(){
                 },
                 dataType: 'json',
                 success: function (data) {
-                    $('#all_doc' + this_.attr('id')).hide();
+                    $('#all_doc' + this_.attr('id')).hide('fast');
                 }
             });  
         }

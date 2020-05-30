@@ -85,14 +85,14 @@ def folder_details(request, folder_id=None):
     if file_form.is_valid():
         doc = Document.objects.create(file = file_form.cleaned_data.get("file"))
         doc.save()
-        folder.files.add(doc)
+        folder.docfiles.add(doc)
         return redirect(folder.get_absolute_url())
 
     context = {
         "profile": profile,
         'this_folder':folder,
         'docs_from_schools':[folder.title],
-        'docs':folder.files.all(),
+        'docs':folder.docfiles.all(),
         'cache':DocumentCache.objects.get_or_create(author_profile = profile)[0],
         'folders':DocumentFolder.objects.filter(parent=folder),
         'file_form':file_form,
@@ -136,7 +136,10 @@ def paste(request):
         folder = DocumentFolder.objects.get(id = cache.object_id)
         title = folder.title
         link = folder.get_absolute_url()
-        copy_folder = DocumentFolder.objects.create(author_profile = profile, title=folder.title, school=folder.school)
+        copy_folder = DocumentFolder.objects.create(
+            author_profile = profile, 
+            title=folder.title, 
+            school=folder.school)
         for doc in folder.files.all():
             copy_folder.files.add(doc)
         if request.GET.get('new_parent') != 'root':
@@ -155,9 +158,9 @@ def paste(request):
             school=doc.school)
         new_doc.save()
         link = new_doc.file.url
+        new_doc.docfolder.add(new_parent)
         if request.GET.get('new_parent') != 'root':
-            print('dcdcdcdc',new_parent, new_doc)
-            new_parent.files.add(new_doc)
+            new_parent.docfiles.add(new_doc)
         elif request.GET.get('school_id'):
             new_doc.school = school
         new_doc.save()
