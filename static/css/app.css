@@ -866,7 +866,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /*-------------------
       Disabled
 --------------------*/
-
 .ui.buttons .disabled.button,
 .ui.disabled.button,
 .ui.button:disabled,
@@ -15209,7 +15208,7 @@ ol.ui.horizontal.list li:before,
 .ui.form .fields:last-child .field {
   margin-bottom: 0em;
 }
-.ui.form .fields .field {
+.ui.form .fui.formields .field {
   clear: both;
   margin: 0em;
 }
@@ -15279,34 +15278,6 @@ ol.ui.horizontal.list li:before,
   box-shadow: 0em 0em 0em 0em transparent inset;
   -webkit-transition: color 0.1s ease, border-color 0.1s ease;
   transition: color 0.1s ease, border-color 0.1s ease;
-}
-/* Text Area */
-
-.ui.form textarea {
-  margin-bottom: 15px;
-  -webkit-appearance: none;
-  tap-highlight-color: rgba(255, 255, 255, 0);
-  padding: 6px 12px 8px;
-  background: #FFFFFF;
-  border: 1px solid rgba(34, 36, 38, 0.15);
-  outline: none;
-  color: rgba(0, 0, 0, 0.87);
-  border-radius: 0.28571429rem;
-  -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
-  box-shadow: 0em 0em 0em 0em transparent inset;
-  -webkit-transition: color 0.1s ease, border-color 0.1s ease;
-  transition: color 0.1s ease, border-color 0.1s ease;
-  font-size: 14px;
-  line-height: 1.2857;
-  resize: none;
-}
-.ui.form textarea:not([rows]) {
-  height: 35px;
-  width: 100%;  
-}
-.ui.form textarea,
-.ui.form input[type="checkbox"] {
-  vertical-align: top;
 }
 /*--------------------------
   Input w/ attached Button

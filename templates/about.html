@@ -1,5 +1,5 @@
 <!DOCTYPE html> 
-<html lang="ru"> 
+<html class="all" lang="ru"> 
 {% load staticfiles %}
 {% load static compress %}
 <head> 
@@ -54,7 +54,7 @@
     </script>
     <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     <link rel="canonical" href="https://www.bilimtap.kz/crm/" />
-    {% compress css %}    
+    {% compress css %}
     <link rel="stylesheet" href='{% static "css/style.css" %}'/>
     <link rel="stylesheet" href='{% static "css/landing.css" %}'/>
     {% endcompress %}
@@ -62,38 +62,54 @@
 </head> 
 <body data-track-group="Landing-Marquee">  
     <header class="fixed-top "> 
-        <nav class="navbar py-3" data-track-group="Global Header"> 
+        <nav class="navbar py-3 dflex pl0 pr0" data-track-group="Global Header"> 
             <a class="float-left" href="/">
                 <img src="{% static 'images/logo_clean.jpeg' %}" alt="logo" class="land_logo">
             </a> 
-            <div class="d-none d-md-block recommend"></div> 
-            <div class="float-right buttons">
-            {% if not request.user.is_authenticated %}
-                <a href="{% url 'main:login_page' %}" class="btn btn-sm btn-link text-white">Войти</a> 
-                <a href="{% url 'main:sign_up' %}" class="btn btn-sm font-weight-bold">Зарегистрироваться</a>  
-            </div> 
-            {% else %}
-            <div class="item float_right">
-                <a class="profile_name textw" status='0'>
-                    {{ profile.first_name }}
-                    {% if profile.image %}
-                        <img class="ui avatar image br5" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{{ profile.image.url }}">
-                    {% else %}
-                        <img class="ui avatar image br5" style="margin-right: 0px; margin-left: 10px; width: 30px;" src="{% static 'images/nophoto.svg' %}">
-                    {% endif %}
-                </a>
+            <div class="float-right buttons dflex deskpr50">
+                <a style="text-decoration: underline;" class="textw text15 textbold deskpr50 pt5 mobpr5" href="https://wa.me/+77089708242/?text=" data-action="share/whatsapp/share">+77089708242</a>
+                <a class="show_request_form btn btn-wrap backwhite pl5 pr5 pt5 pb5 text14">Обратный звонок</a>
             </div>
-            {% endif %}
         </nav>
     </header>   
-    <section id="hero" style="height: 100%"> 
-        <div class="container pt100 pb0 text-white "> 
+    <div class="request_callback full-w mt150" style="display: none;position: fixed;z-index: 3000;">
+        <i class="close icon"></i>
+        <div class="content">
+            <div class="modal_segment ui segment shadow backwhite br5 pt15 pl15 pr15 pb30" style="margin: 0 auto;">
+                <div class="text-center mb15 text17 textblue textbold">
+                    Оставьте номер и мы Вам перезвоним
+                </div>
+                <form class="ui form textdg text14 textbold">
+                    Имя:
+                    <textarea class="mb query_name"></textarea>
+                    Телефон:
+                    <textarea class="mb0 query_phone"></textarea>
+                </form>
+                <div class="text-center mt15">
+                    <a url="{% url 'main:get_request_land' %}" class="send_queryl btn btn-wrap btn-success text14">
+                        Отправить
+                    </a>
+                    <div class="loading_small query_load ml10" style="display: none;">
+                        <div class="animation"><div class="circle one"></div></div>
+                        <div class="animation"><div class="circle two"></div></div>
+                        <div class="animation"><div class="circle three"></div></div>
+                        <div class="animation"><div class="circle four"></div></div>
+                        <div class="animation"><div class="circle five"></div></div>
+                        <div class="animation"><div class="circle six"></div></div>
+                    </div>
+                    <div style="display: none;" class="success_load textbold textgreen text15 mt10">Мы Вам позвоним, спасибо!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="sectionl" id="hero" style="height: 100%"> 
+        <div class="container pt50 pb0 text-white "> 
             <div class="row align-items-center text-center text-md-left"> 
-                <div class="col-lg-5 top50"> 
+                <div class="col-lg-6 pt50"> 
                     <h1 style="font-size: 37px">CRM-система для управления учебным центром</h1> 
                     <p class="lead mt15" style="text-align: left;">Не теряйте клиентов, контролируйте работу сотрудников, автоматизируйте бухгалтерию с помощью самой понятной CRM-системой на рынке</p>  
                 </div>
-                <div class="col-lg-5 offset-lg-2 pt0 "> 
+                <div class="col-lg-5 offset-lg-1 pt30 "> 
                     <img src="{% static 'images/landing/f1.jpg' %}" alt="bilimtap.kz" class="img-fluid">
                     <div class="in_mobile">
                         <h5 class="mt30">
@@ -115,7 +131,7 @@
             </div> 
         </div> 
     </section> 
-    <section id="crm-presentation" style="margin-top: 50px;margin-bottom: 70px;"> 
+    <section class="sectionl" id="crm-presentation" style="margin-top: 50px;margin-bottom: 70px;"> 
         <div class="container text-center"> 
             <div class="row"> 
                 <div class="col-md-10 offset-md-1"> 
@@ -152,13 +168,13 @@
             </div> 
         </div> 
     </section> 
-    <section id="marketplace"> 
+    <section class="sectionl" id="marketplace"> 
         <div class="container py-5 pb-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
                     <h3 style="font-size: 30px;">Как система сэкономит Вам время и сократит расходы?</h3> 
                     <div class="board in_mobile"> 
-                        <img src="{% static 'images/landing/buh.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
+                        <img src="{% static 'images/landing/buh3.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
                     </div>                    
                     <p>Так как учёт клиентов, журнал посещаемости, учёт оплаты студентов ведутся в единой базе, система автоматически посчитает зарплаты преподавателям и сформирует нужные отчёты для Вашего бухгалтера </p>
                     <p>
@@ -169,13 +185,13 @@
                 </div> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board deskmenu" style="margin-right: -10%"> 
-                        <img src="{% static 'images/landing/buh.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
+                        <img src="{% static 'images/landing/buh3.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
                     </div>
                 </div> 
             </div> 
         </div> 
     </section> 
-    <section id="teams"> 
+    <section class="sectionl" id="teams"> 
         <div class="container py-5 pb-md-6"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
@@ -198,7 +214,7 @@
             </div> 
         </div> 
     </section> 
-    <section id="schedule"> 
+    <section class="sectionl" id="schedule"> 
         <div class="container py-5 pt-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
@@ -221,7 +237,7 @@
             </div> 
         </div> 
     </section>
-    <section id="features"> 
+    <section class="sectionl" id="features"> 
         <div class="container text-center py-0"> 
             <div class="row"> 
                 <div class="col-lg-4"> 
@@ -248,113 +264,113 @@
             </div> 
         </div> 
     </section>
-        <section class="mt50">
-            <div class="container py-0"> 
-                <div class="row"> 
-                    <div class="text-center col-md-10 offset-md-1"> 
-                        <h3>Тарифы</h3> 
+    <section class="sectionl" class="mt50">
+        <div class="container py-0"> 
+            <div class="row"> 
+                <div class="text-center col-md-10 offset-md-1"> 
+                    <h3>Тарифы</h3> 
+                </div>
+            </div>
+            <div class="row mt10"> 
+                <div class="col-lg-3 mb15"> 
+                    <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                        <div class="text-center full-w textblue mb10 textbold text17">
+                            Бесплатный
+                        </div>
+                        <div class="text14" style="line-height: 16px;">
+                            <div class="mb10">Неограниченный CRM</div>
+                            <div class="mb10">Неограниченное кол-во групп</div>
+                            <div class="mb10">Интерактивное расписание занятий</div>
+                            <div class="mb10">Журнал посещаемости</div>
+                            <div class="mb10">Учёт оплат клиентов</div>
+                        </div>
+                        <div class="text-center mt20"><a class="btn shadow_small border1" onclick="return register_page('')">0тг</a></div>
                     </div>
                 </div>
-                <div class="row mt10"> 
-                    <div class="col-lg-3 mb15"> 
-                        <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
-                            <div class="text-center full-w textblue mb10 textbold text17">
-                                Бесплатный
-                            </div>
-                            <div class="text14" style="line-height: 16px;">
-                                <div class="mb10">Неограниченный CRM</div>
-                                <div class="mb10">Неограниченное кол-во групп</div>
-                                <div class="mb10">Интерактивное расписание занятий</div>
-                                <div class="mb10">Журнал посещаемости</div>
-                                <div class="mb10">Учёт оплат клиентов</div>
-                            </div>
-                            <div class="text-center mt20"><a class="btn shadow_small border1" onclick="return register_page('')">0тг</a></div>
+                <div class="col-lg-3 mb15"> 
+                    <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                        <div class="text-center full-w textblue mb10 textbold text17">
+                            Старт
+                        </div>
+                        <div class="text14" style="line-height: 16px;">
+                            <div class="mb10">Возможности тарифа <b>Бесплатный</b></div>
+                            <div class="mb10">Воронка продаж</div>
+                            <div class="mb10">Отчёты для бухгалтерии</div>
+                            <div class="mb10">Финансовые отчёты</div>
+                            <div class="mb10">Анализ лучших курсов</div>
+                            <div class="mb10">Email рассылки</div>
+                            <div class="mb10">Отчёты по работе администратора</div>
+                            <div class="mb10">Онлайн договоры</div>
+                        </div>
+                        <div class="text-center mt20">
+                            <a class=" btn shadow_small border1 text17" onclick="return register_page('')">
+                                2000тг за менеджера
+                                <br>
+                                0тг за учителя
+                            </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 mb15"> 
-                        <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
-                            <div class="text-center full-w textblue mb10 textbold text17">
-                                Старт
-                            </div>
-                            <div class="text14" style="line-height: 16px;">
-                                <div class="mb10">Возможности тарифа <b>Бесплатный</b></div>
-                                <div class="mb10">Воронка продаж</div>
-                                <div class="mb10">Отчёты для бухгалтерии</div>
-                                <div class="mb10">Финансовые отчёты</div>
-                                <div class="mb10">Анализ лучших курсов</div>
-                                <div class="mb10">Email рассылки</div>
-                                <div class="mb10">Отчёты по работе администратора</div>
-                                <div class="mb10">Онлайн договоры</div>
-                            </div>
-                            <div class="text-center mt20">
-                                <a class=" btn shadow_small border1 text17" onclick="return register_page('')">
-                                    2000тг за менеджера
-                                    <br>
-                                    0тг за учителя
-                                </a>
-                            </div>
+                </div>
+                <div class="col-lg-3 mb15"> 
+                    <div class="backrb full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                        <div class="text-center full-w textblue mb10 textbold text17">
+                            Команда
+                        </div>
+                        <div class="text14" style="line-height: 16px;">
+                            <div class="mb10">Возможности тарифа <b>Старт</b></div>
+                            <div class="mb10">SMS рассылки</div>
+                            <div class="mb10">Интеграции с соц. сетями</div>
+                            <div class="mb10">Хранилище онлайн документов до 5 ГБ</div>
+                            <div class="mb10">Расчёт зарплат преподавателей</div>
+                            <div class="mb10">Интеграция с Вашим сайтом</div>
+                            <div class="mb10">Планировщик задач</div>
+                            <div class="mb10">Интеграция с IP-телефонией</div>
+                        </div>
+                        <div class="text-center mt20">
+                            <a class="backwhite btn shadow_small border1 text17" onclick="return register_page('')">
+                                2500тг за менеджера
+                                <br>
+                                0тг за учителя
+                            </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 mb15"> 
-                        <div class="backrb full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
-                            <div class="text-center full-w textblue mb10 textbold text17">
-                                Команда
-                            </div>
-                            <div class="text14" style="line-height: 16px;">
-                                <div class="mb10">Возможности тарифа <b>Старт</b></div>
-                                <div class="mb10">SMS рассылки</div>
-                                <div class="mb10">Интеграции с соц. сетями</div>
-                                <div class="mb10">Хранилище онлайн документов до 5 ГБ</div>
-                                <div class="mb10">Расчёт зарплат преподавателей</div>
-                                <div class="mb10">Интеграция с Вашим сайтом</div>
-                                <div class="mb10">Планировщик задач</div>
-                                <div class="mb10">Интеграция с IP-телефонией</div>
-                            </div>
-                            <div class="text-center mt20">
-                                <a class="backwhite btn shadow_small border1 text17" onclick="return register_page('')">
-                                    2500тг за менеджера
-                                    <br>
-                                    0тг за учителя
-                                </a>
-                            </div>
+                </div>
+                <div class="col-lg-3 mb15"> 
+                    <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                        <div class="text-center full-w textblue mb10 textbold text17">
+                            Компания
+                        </div>
+                        <div class="text14" style="line-height: 16px;">
+                            <div class="mb10">Возможности тарифа <b>Команда</b></div>
+                            <div class="mb10">Добавление филиалов</div>
+                            <div class="mb10">Интеграция с сервисами по желанию</div>
+                            <div class="mb10">Возможность доработки по желанию</div>
+                        </div>
+                        <div class="text-center mt20">
+                            <a class="btn shadow_small border1 text17" onclick="return register_page('')">
+                                3000тг за менеджера
+                                <br>
+                                0тг за учителя
+                            </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 mb15"> 
-                        <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
-                            <div class="text-center full-w textblue mb10 textbold text17">
-                                Компания
-                            </div>
-                            <div class="text14" style="line-height: 16px;">
-                                <div class="mb10">Возможности тарифа <b>Команда</b></div>
-                                <div class="mb10">Добавление филиалов</div>
-                                <div class="mb10">Интеграция с сервисами по желанию</div>
-                                <div class="mb10">Возможность доработки по желанию</div>
-                            </div>
-                            <div class="text-center mt20">
-                                <a class="btn shadow_small border1 text17" onclick="return register_page('')">
-                                    3000тг за менеджера
-                                    <br>
-                                    0тг за учителя
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 offset-lg-3 text17">
-                        <div class="border1 shadow_small text-center br5 mt15 pt15 pl15 pr15 pb15">
-                            <b>Дистанционное и онлайн обучение</b> <br>
-                            До 50 студентов – 2000 тг<br>
-                            До 100 студентов – 7000 тг<br>
-                            До 200 студентов – 15000 тг<br>
-                            До 300 студентов – 30000 тг<br>
-                            До 500 студентов – 50000 тг <br>
-                        </div>
+                </div>
+                <div class="col-lg-6 offset-lg-3 text17">
+                    <div class="border1 shadow_small text-center br5 mt15 pt15 pl15 pr15 pb15">
+                        <b>Дистанционное и онлайн обучение</b> <br>
+                        До 50 студентов – 2000 тг<br>
+                        До 100 студентов – 7000 тг<br>
+                        До 200 студентов – 15000 тг<br>
+                        До 300 студентов – 30000 тг<br>
+                        До 500 студентов – 50000 тг <br>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
     <div id="start_request"></div>
     <div id="bottom-gradient"> 
-        <section id="get-started" class="d-flex align-items-center my-4 sellform"> 
+        <section class="sectionl" id="get-started" class="d-flex align-items-center my-4 sellform"> 
             <div class="container text-center py-0"> 
                 <div class="row"> 
                     <div class="offset-lg-3 col-lg-6"> 
@@ -387,6 +403,8 @@
     </div>
 </body> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    </script>
     {% compress js %}   
     <script src="{% static 'js/landing/func3.js' %}"></script> 
     <script src="{% static 'js/landing/func.js' %}"></script>

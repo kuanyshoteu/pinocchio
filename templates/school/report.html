@@ -18,7 +18,7 @@
         <div class="ui grid">
             {% include 'left_menu.html' %}
             <div class="wide column" style="width: 80%;">
-                <div class="ui segment">
+                <div class="ui segment shadow_small border1">
                     <div class="dflex text14 mb15">
                         <div class="pt5 textdg text15 textbold">Отчет по бухгалтерии</div>
                         <div class="ml50">
@@ -41,23 +41,23 @@
                     </div>
                 </div>
                 {% if instance.version == 'standart' or instance.version == 'business' %}
-                    <div class="ui segment">
-                        <div class="dflex">
-                            <div class="text15 textdg textbold mb15">Расходы</div>
-                            <div class="textbold textgreen success_new_money" style="display: none;margin-left: 100px !important;">
-                                Расходы записаны, можете посмотреть в истории
-                            </div>                            
-                        </div>
-                        <div class="dflex">
-                            <form class="ui form mb0 dflex">
-                                <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
-                                <input type="number" class="new_money_amount" name="" placeholder="Сумма">
-                            </form>
-                            <a class="ui button blue mini no_margin new_money_object" url="{{instance.new_money_object}}">Добавить</a>
-                        </div>
+                <div class="ui segment shadow_small border1">
+                    <div class="dflex">
+                        <div class="text15 textdg textbold mb15">Расходы</div>
+                        <div class="textbold textgreen success_new_money" style="display: none;margin-left: 100px !important;">
+                            Расходы записаны, можете посмотреть в истории
+                        </div>                            
                     </div>
+                    <div class="dflex">
+                        <form class="ui form mb0 dflex">
+                            <textarea class="no_margin new_money_title" placeholder="Название расхода"></textarea>
+                            <input type="number" class="new_money_amount" name="" placeholder="Сумма">
+                        </form>
+                        <a class="ui button blue mini no_margin new_money_object" url="{{instance.new_money_object}}">Добавить</a>
+                    </div>
+                </div>
                 {%endif%}
-                <div class="ui segment">
+                <div class="ui segment shadow_small border1">
                     <div class="text15 textdg textbold">
                         На счету <span class="textblue">{{ school_money }}тг</span> 
                     </div>
@@ -67,7 +67,7 @@
                         </div>
                         {% for sq in instance.groups.all %}
                         <div class="four wide column pl0 pr15 pt0">
-                            <div class="ui segment shadow_small border1 textw" style=";background-color: {%if sq.color_back == ''%}#313a57{%else%}{{ sq.color_back }}{%endif%};">
+                            <div class="ui segment border1 textw" style=";background-color: {%if sq.color_back == ''%}#313a57{%else%}{{ sq.color_back }}{%endif%};">
                                 <b>{{sq.title}}</b>
                                 <br>
                                 Учитель: <span>{{sq.teacher.first_name}}</span>

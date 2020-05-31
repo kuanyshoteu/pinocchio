@@ -268,8 +268,38 @@
   width: 33% !important;
 }
 .darker{
-  position: fixed;
-  background-color: #000;opacity: 0.7;z-index: 3000;
+  filter: brightness(30%);
+}
+/* Text Area */
+
+.ui.form textarea {
+  margin-bottom: 15px;
+  -webkit-appearance: none;
+  tap-highlight-color: rgba(255, 255, 255, 0);
+  padding: 6px 12px 8px;
+  background: #FFFFFF;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  outline: none;
+  color: rgba(0, 0, 0, 0.87);
+  border-radius: 0.28571429rem;
+  -webkit-box-shadow: 0em 0em 0em 0em transparent inset;
+  box-shadow: 0em 0em 0em 0em transparent inset;
+  -webkit-transition: color 0.1s ease, border-color 0.1s ease;
+  transition: color 0.1s ease, border-color 0.1s ease;
+  font-size: 14px;
+  line-height: 1.2857;
+  resize: none;
+}
+.ui.form textarea:not([rows]) {
+  height: 35px;
+  width: 100%;  
+}
+.ui.form textarea,
+.ui.form input[type="checkbox"] {
+  vertical-align: top;
+}
+.show_modal{
+  overflow: hidden;
 }
 .close_modal2{
   margin-left: 630px;
@@ -2819,6 +2849,9 @@ a{
   }
   .mobpr0{
     padding-right: 0px !important
+  }
+  .mobpr5{
+    padding-right: 5px !important
   }
   .catchmob{
     width: 1px;

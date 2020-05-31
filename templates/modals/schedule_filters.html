@@ -39,17 +39,17 @@
         <div class="twenty wide column pr0">
             Учитель:
             <select onchange="crm_option_change('crm_teacher')"  class="crm_option" option="teacher" id="crm_teacher" url="{{ instance.crm_option_url }}">
-                {% if profile.filter_data.teacher.all|length > 0 %}
-                    <option value="{{ profile.filter_data.teacher.id }}">{{ profile.filter_data.teacher.first.first_name }}</option>
+                {% if profile.filter_data.teacher %}
+                    <option value="{{ profile.filter_data.teacher.id }}">{{ profile.filter_data.teacher.first_name }}</option>
                 {% else %}
                     <option value="-1">Все учителя</option>
                 {% endif %}
                 {% for teacher in teachers %}
-                    {% if teacher != profile.filter_data.teacher.first %}
+                    {% if teacher != profile.filter_data.teacher %}
                     <option value="{{ teacher.id }}">{{ teacher.first_name }}</option>
                     {% endif %}
                 {% endfor %}
-                {% if profile.filter_data.teacher.all|length > 0 %}
+                {% if profile.filter_data.teacher %}
                     <option value="-1">Все учителя</option>
                 {% endif %}
             </select>

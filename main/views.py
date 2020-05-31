@@ -1248,7 +1248,7 @@ def adilmed(request):
     return JsonResponse(data)
 
 def get_request_land(request):
-    if request.GET.get('code') == 'nfrejkNWcsdkls588w5sdkewdhs':
+    if request.GET.get('name') and request.GET.get('phone'):
         send_email('Bilimtap Заявка', "Имя: " + request.GET.get('name')+" Номер: "+request.GET.get('phone'), ['aaa.academy.kz@gmail.com'])
     data={}
     return JsonResponse(data)

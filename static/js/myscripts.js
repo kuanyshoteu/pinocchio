@@ -7,7 +7,6 @@
     $('.school_cities_edit').on('keyup', function (e) {
         text = $(this).text()
         url = $(this).attr('suggest_url')
-
         position = window.getSelection().anchorOffset
         indexstart = position
         for (var i = position-1; i >= 0; i--) {

@@ -1021,6 +1021,12 @@ def crm_option(request):
                 filter_data.subject = subject
             else:
                 filter_data.subject = None                
+        if request.GET.get('option') == 'teacher':
+            if int(request.GET.get('object_id')) != -1:
+                teacher = profile.schools.first().people.get(id = int(request.GET.get('object_id')))
+                filter_data.teacher = teacher
+            else:
+                filter_data.teacher = None                
         if request.GET.get('option') == 'payment':
             filter_data.payment = request.GET.get('object_id')
         filter_data.save()
@@ -1277,12 +1283,11 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
         profile.first_name = card.name
         profile.phone = card.phone
         profile.mail = card.mail
-    if profile:
-        card.card_user = profile
     card.author_profile = manager_profile
     card.timestamp = timezone.now()
     if squad_id > 0:
         card.last_groups = squad_id
+    card.card_user = profile
     card.saved = True
     card.save()
     profile.schools.add(school)
@@ -2308,6 +2313,7 @@ def get_payment_list(request):
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
+        print(school.people.filter(is_student=True))
         cards = school.crm_cards.select_related('card_user')
         squad = profile.filter_data.squad
         if squad != None:
@@ -2329,6 +2335,7 @@ def get_payment_list(request):
                 students = students.filter(payment_history__in=payments).distinct()
             if profile.filter_data.payment == 'not_paid':
                 students = students.exclude(payment_history__in=payments).distinct()
+        print(students, '88888')
         if len(students) <= (page-1)*16:
             return JsonResponse({"ended":True})
         p = Paginator(students, 16)

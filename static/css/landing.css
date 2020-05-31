@@ -18,6 +18,12 @@
         display: none;
     }
     @media only screen and (max-width: 767px) {
+    .modal_segment{
+        width: 350px;
+    }
+        .land_logo{
+            height: 40px;
+        }
       .not_in_mobile{
         display: none !important;
       }
@@ -218,8 +224,8 @@
     border-color:#61BD4F
 }
 .btn-success:hover{
-    color:#fff;
-    background-color:#50a73f;
+    color:#fff !important;
+    background-color:#50a73f !important;
     border-color:#4b9e3b
 }
 .btn-success:focus,.btn-success.focus{
@@ -619,7 +625,7 @@
     width:100%
 }
 .img-fluid{
-    width: 90%;
+    width: 100%;
     height:auto
 }
 .img-thumbnail{
@@ -1057,6 +1063,9 @@
     max-width:540px
 }
 }@media (min-width:768px){
+.land_logo{
+    height: 70px;
+}    
 .container{
     max-width:720px
 }
@@ -6359,11 +6368,10 @@ header nav.navbar a.btn.bg-white:hover{
     border-bottom-right-radius:6px
 }
 .text-underline{
-    text-decoration:underline
+    text-decoration:underlineboard
 }
 .board{
-    background:-webkit-gradient(linear, left top, left bottom, from(#3EB9DE), to(#3A80DE));
-    background:linear-gradient(#3EB9DE, #3A80DE);
+    background:#3A80DE;
     background-size:cover;
     background-position:center;
     border-radius:10px;
@@ -6932,7 +6940,6 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     left:0;
     padding:15px;
     position:absolute;
-    text-align:center;
     width:100%
 }
 #carousel .board .captions .caption{
@@ -7171,6 +7178,9 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     }
 }
 @media (min-width:768px){
+    .modal_segment{
+        width: 400px;
+    }
     .slide_images{
         margin-top: 90px;
         height: 320px;
@@ -7307,9 +7317,6 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
 }
 .land_costs_link{
   color: #172B4D;font-size: 21px;
-}
-.land_logo{
-    height: 70px;
 }
 .three_feat1{
     width: 320px;height: 200px;
