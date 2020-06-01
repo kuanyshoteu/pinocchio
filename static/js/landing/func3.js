@@ -5,24 +5,26 @@ $(function(){
         $('.sectionl').addClass('darker')
     })
     $('.send_queryl').click(function(e) {
-    	$('.query_load').show()
-    	$('.success_load').hide()
-    	$(this).hide()
         url = $(this).attr('url')
         name = $('.query_name').val()
         phone = $('.query_phone').val()
-        $.ajax({
-            url: url,
-            data: {
-                'name':name,
-                'phone':phone,
-            },
-            dataType: 'json',
-            success: function (data) {
-		    	$('.query_load').hide()
-		    	$('.success_load').show()
-            }
-        })
+        if (name.length > 0 && phone.length > 0) {
+	    	$('.query_load').show()
+	    	$('.success_load').hide()
+	    	$(this).hide()
+	        $.ajax({
+	            url: url,
+	            data: {
+	                'name':name,
+	                'phone':phone,
+	            },
+	            dataType: 'json',
+	            success: function (data) {
+			    	$('.query_load').hide()
+			    	$('.success_load').show()
+	            }
+	        })        	
+        }
     })
 	$('.show_request_form').click(function(e){
 	    e.stopPropagation();

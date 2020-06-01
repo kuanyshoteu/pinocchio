@@ -395,8 +395,12 @@
 </body> 
     <script type="text/javascript">
         function tag_counters_form(){
-            gtag('event', 'send', {'event_category': 'form'}); 
-            ym(55093303,'reachGoal','send-form');
+            name = $('.query_name').val()
+            phone = $('.query_phone').val()
+            if (name.length > 0 && phone.length > 0) {
+                gtag('event', 'send', {'event_category': 'form'}); 
+                ym(55093303,'reachGoal','send-form');
+            }
             return true;          
         }
     </script>

@@ -42,10 +42,8 @@
                     <div class="animation"><div class="circle five"></div></div>
                     <div class="animation"><div class="circle six"></div></div>
                 </div>
-                <a url="{% url 'main:get_request_land' %}" class="mt15 send_queryl btn btn-wrap btn-success text14 textw" onclick="
-                    gtag('event', 'send', {'event_category': 'form'}); 
-                    yaCounter55093303.reachGoal('send-form'); return true;">
-                        Отправить
+                <a url="{% url 'main:get_request_land' %}" class="mt15 send_queryl btn btn-wrap btn-success text14 textw" onclick="tag_counters_form();">
+                    Отправить
                 </a>
                 <div class="success_load highlight pt10 pb10" style="display: none;margin-top: 15px;">
                     Спасибо! Мы скоро с Вами свяжемся
@@ -789,6 +787,16 @@
 
       gtag('config', 'UA-146621937-1');
       gtag('config', 'AW-794791496');
+
+    function tag_counters_form(){
+        name = $('.query_name').val()
+        phone = $('.query_phone').val()
+        if (name.length > 0 && phone.length > 0) {
+            gtag('event', 'send', {'event_category': 'form'}); 
+            ym(55093303,'reachGoal','send-form');
+        }
+        return true;          
+    }
     </script>
     <script src='{% static "js/scripts.js" %}'></script>
     <span class="request_url" url='{% url "main:get_request_land" %}'></span>
