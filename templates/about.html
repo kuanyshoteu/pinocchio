@@ -47,10 +47,6 @@
             }); 
             return false; 
         } 
-        async function register_page(url){
-            await gtag_report_conversion(url)
-            window.location = '/sign_up/'
-        }
     </script>
     <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     <link rel="canonical" href="https://www.bilimtap.kz/crm/" />
@@ -86,7 +82,7 @@
                     <textarea class="mb0 query_phone"></textarea>
                 </form>
                 <div class="text-center mt15">
-                    <a url="{% url 'main:get_request_land' %}" class="send_queryl btn btn-wrap btn-success text14">
+                    <a url="{% url 'main:get_request_land' %}" class="send_queryl btn btn-wrap btn-success text14" onclick="gtag('event', 'send', {'event_category': 'form'}); yaCounter55093303.reachGoal('send-form'); return true;">
                         Отправить
                     </a>
                     <div class="loading_small query_load ml10" style="display: none;">
@@ -102,36 +98,37 @@
             </div>
         </div>
     </div>
-    <section class="sectionl" id="hero" style="height: 100%"> 
+    <div class="sectionl">
+    <section id="hero" style="height: 100%"> 
         <div class="container pt50 pb0 text-white "> 
             <div class="row align-items-center text-center text-md-left"> 
                 <div class="col-lg-6 pt50"> 
-                    <h1 style="font-size: 37px">CRM-система для управления учебным центром</h1> 
+                    <h1 class="mland_head">CRM-система для управления учебным центром</h1> 
                     <p class="lead mt15" style="text-align: left;">Не теряйте клиентов, контролируйте работу сотрудников, автоматизируйте бухгалтерию с помощью самой понятной CRM-системой на рынке</p>  
                 </div>
                 <div class="col-lg-5 offset-lg-1 pt30 "> 
                     <img src="{% static 'images/landing/f1.jpg' %}" alt="bilimtap.kz" class="img-fluid">
                     <div class="in_mobile">
                         <h5 class="mt30">
-                            Получите бесплатную версию CRM-системы на неограниченный срок
+                            Неограниченная бесплатная версия
                         </h5>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
-                            Получить бесплатно →
+                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" href="/sign_up/">
+                            Подключить сейчас →
                         </a>
                     </div>
                 </div>  
                 <div class="mt30 col-lg-10 offset-lg-1 deskmenu text-center">
-                    Получите бесплатную версию CRM-системы на неограниченный срок
+                    Неограниченная бесплатная версия
                 </div>  
-                <div class="col-lg-12 deskmenu pt15 pb50 text-center"> 
-                    <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" onclick="return register_page('')">
-                        Получить бесплатно →
+                <div class="col-lg-12 deskmenu pt0 pb50 text-center"> 
+                    <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" href="/sign_up/">
+                        Подключить сейчас →
                     </a>
                 </div>  
             </div> 
         </div> 
     </section> 
-    <section class="sectionl" id="crm-presentation" style="margin-top: 50px;margin-bottom: 70px;"> 
+    <section id="crm-presentation" style="margin-top: 50px;margin-bottom: 70px;"> 
         <div class="container text-center"> 
             <div class="row"> 
                 <div class="col-md-10 offset-md-1"> 
@@ -168,8 +165,8 @@
             </div> 
         </div> 
     </section> 
-    <section class="sectionl" id="marketplace"> 
-        <div class="container py-5 pb-md-0"> 
+    <section id="marketplace"> 
+        <div class="container mb50 pb-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-5 order-md-1 text-center text-md-left"> 
                     <h3 style="font-size: 30px;">Как система сэкономит Вам время и сократит расходы?</h3> 
@@ -177,11 +174,9 @@
                         <img src="{% static 'images/landing/buh3.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
                     </div>                    
                     <p>Так как учёт клиентов, журнал посещаемости, учёт оплаты студентов ведутся в единой базе, система автоматически посчитает зарплаты преподавателям и сформирует нужные отчёты для Вашего бухгалтера </p>
-                    <p>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
-                            Получить бесплатно →
+                        <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2 " id="1">
+                            Узнать больше
                         </a>
-                    </p>
                 </div> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board deskmenu" style="margin-right: -10%"> 
@@ -191,8 +186,8 @@
             </div> 
         </div> 
     </section> 
-    <section class="sectionl" id="teams"> 
-        <div class="container py-5 pb-md-6"> 
+    <section id="teams"> 
+        <div class="container mb50"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7"> 
                     <div class="board deskmenu" style="margin-left: -10%;"> 
@@ -204,18 +199,16 @@
                     <div class="board in_mobile"> 
                         <img src="{% static 'images/landing/reports.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
                     </div>
-                    <p class="m-0">Знания о том, что вся работа теперь фиксируется в единой системе, помогают сотрудникам более ответственно относиться к поставленным задачам</p> 
-                    <p>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
-                            Получить бесплатно →
-                        </a>
-                    </p>
+                    <p class="m-0">Каждое действие администраторов фиксируется в системе, что повышает ответственность к поставленным задачам</p> 
+                    <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2" id="1">
+                        Узнать больше
+                    </a>
                 </div> 
             </div> 
         </div> 
     </section> 
-    <section class="sectionl" id="schedule"> 
-        <div class="container py-5 pt-md-0"> 
+    <section id="schedule"> 
+        <div class="container mb50 pt-md-0"> 
             <div class="row align-items-center"> 
                 <div class="col-md-7 order-md-12"> 
                     <div class="board deskmenu" style="margin-right: -10%;"> 
@@ -228,16 +221,14 @@
                         <img src="{% static 'images/landing/sch.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
                     </div>
                     <p>Отныне всё визуально понятно</p>
-                    <p>
-                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2  mb50" id="1" onclick="return register_page('')">
-                            Получить бесплатно →
-                        </a>
-                    </p>
+                    <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2" id="1">
+                        Узнать больше
+                    </a>
                 </div> 
             </div> 
         </div> 
     </section>
-    <section class="sectionl" id="features"> 
+    <section id="features"> 
         <div class="container text-center py-0"> 
             <div class="row"> 
                 <div class="col-lg-4"> 
@@ -264,7 +255,7 @@
             </div> 
         </div> 
     </section>
-    <section class="sectionl" class="mt50">
+    <section class="mt50">
         <div class="container py-0"> 
             <div class="row"> 
                 <div class="text-center col-md-10 offset-md-1"> 
@@ -273,7 +264,7 @@
             </div>
             <div class="row mt10"> 
                 <div class="col-lg-3 mb15"> 
-                    <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                    <div class="full-h shadow_dark border1 pt15 pb15 pl15 pr15 br15">
                         <div class="text-center full-w textblue mb10 textbold text17">
                             Бесплатный
                         </div>
@@ -284,11 +275,11 @@
                             <div class="mb10">Журнал посещаемости</div>
                             <div class="mb10">Учёт оплат клиентов</div>
                         </div>
-                        <div class="text-center mt20"><a class="btn shadow_small border1" onclick="return register_page('')">0тг</a></div>
+                        <div class="text-center mt20"><a class="btn shadow_small border1" href="/sign_up/">0тг</a></div>
                     </div>
                 </div>
                 <div class="col-lg-3 mb15"> 
-                    <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                    <div class="full-h shadow_dark border1 pt15 pb15 pl15 pr15 br15">
                         <div class="text-center full-w textblue mb10 textbold text17">
                             Старт
                         </div>
@@ -303,7 +294,7 @@
                             <div class="mb10">Онлайн договоры</div>
                         </div>
                         <div class="text-center mt20">
-                            <a class=" btn shadow_small border1 text17" onclick="return register_page('')">
+                            <a class=" btn shadow_small border1 text17" href="/sign_up/">
                                 2000тг за менеджера
                                 <br>
                                 0тг за учителя
@@ -312,7 +303,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 mb15"> 
-                    <div class="backrb full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                    <div class="backrb full-h shadow_dark border1 pt15 pb15 pl15 pr15 br15">
                         <div class="text-center full-w textblue mb10 textbold text17">
                             Команда
                         </div>
@@ -327,7 +318,7 @@
                             <div class="mb10">Интеграция с IP-телефонией</div>
                         </div>
                         <div class="text-center mt20">
-                            <a class="backwhite btn shadow_small border1 text17" onclick="return register_page('')">
+                            <a class="backwhite btn shadow_small border1 text17" href="/sign_up/">
                                 2500тг за менеджера
                                 <br>
                                 0тг за учителя
@@ -336,7 +327,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 mb15"> 
-                    <div class="full-h shadow_small border1 pt15 pb15 pl15 pr15 br15">
+                    <div class="full-h shadow_dark border1 pt15 pb15 pl15 pr15 br15">
                         <div class="text-center full-w textblue mb10 textbold text17">
                             Компания
                         </div>
@@ -347,7 +338,7 @@
                             <div class="mb10">Возможность доработки по желанию</div>
                         </div>
                         <div class="text-center mt20">
-                            <a class="btn shadow_small border1 text17" onclick="return register_page('')">
+                            <a class="btn shadow_small border1 text17" href="/sign_up/">
                                 3000тг за менеджера
                                 <br>
                                 0тг за учителя
@@ -369,17 +360,16 @@
         </div>
     </section>
     <div id="start_request"></div>
-    <div id="bottom-gradient"> 
-        <section class="sectionl" id="get-started" class="d-flex align-items-center my-4 sellform"> 
+    <div id="bottom-gradient" class="sectionl" id="get-started" class="d-flex align-items-center my-4 sellform"> 
             <div class="container text-center py-0"> 
                 <div class="row"> 
                     <div class="offset-lg-3 col-lg-6"> 
                         <form class="quick-signup text-center mt-01" method="POST" action="/signup_redirect">
                             <h5 class="text24">
-                                Получите бесплатную версию CRM системы на неограниченный срок
+                                Неограниченная бесплатная версия
                             </h5>
-                            <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" onclick="return register_page('')">
-                                Получить бесплатно →
+                            <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" href="/sign_up/">
+                                Подключить сейчас
                             </a>
                         </form>  
                     </div>
@@ -400,6 +390,7 @@
                 &nbsp;© 2020. Все права защищены. 
             </p> 
         </footer>   
+    </div>
     </div>
 </body> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

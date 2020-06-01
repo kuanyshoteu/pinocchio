@@ -269,6 +269,8 @@
 }
 .darker{
   filter: brightness(30%);
+  background-color: #4a4a4a;
+  opacity: 1;
 }
 /* Text Area */
 

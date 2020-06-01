@@ -13,7 +13,7 @@
         height: 25px !important;
     }
 </style>
-<div class="ui segment shadow_small segment_head no_margin textb">
+<div class="ui segment border1 no_margin textb">
     <div>
         <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}    
             <b class="text15 textdg">Расписание</b> 
@@ -59,9 +59,9 @@
         <div class="hint_place2" side="bottom2"></div>
     </div>
 </div>
-<form class="ui grid full-w mt0 change_mode">
-    <div style="width: 53px;position: absolute;z-index: 1000;background-color: #4a4a4a">
-        <div style="height: 29px;"></div>
+<form class="ui grid full-w mt0 change_mode shadow_dark">
+    <div class="bottombr5 pl10 pb15 backdark shadow_black" style="width: 58px;position: absolute;z-index: 3005;">
+        <div style="height: 27px;"></div>
         {% for time in constant_times %}
         <div>
             <div class="full-w tdconst" style="width: 53px;text-align: left;padding: 8px 0;color: #fff;font-size: 14px;;">
@@ -71,7 +71,7 @@
         </div>
         {% endfor %}
     </div>
-    <div class="schedule_body pb50 oveflowx_h" style="overflow-y:hidden; width: 100%;background: #4A4A4A;">
+    <div class="schedule_body oveflowx_h backdark pb15 bottombr5" style="overflow-y:hidden; width: 100%;">
         <div style="z-index: 100;white-space: nowrap;">
             <div style="color: #fff;">
                 <div class="thconst" style="width: 53px;z-index: 100"></div>
@@ -84,7 +84,7 @@
                 <div class="thconst dark_grey" style="width: 100px;" id="constday6">Вс</div>
             </div>
         </div>
-        <div class="no_margin" style="background: #4A4A4A;white-space: nowrap;">
+        <div class="no_margin backdark" style="white-space: nowrap;">
             <div style="position: relative;margin-top: -29px;">
                 <div class="dark_grey constback1 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>
                 <div class="dark_grey constback3 mt30" style="opacity: 0.4;height: {{height}};position: absolute;"></div>

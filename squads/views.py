@@ -816,9 +816,7 @@ def hint_students_group(request, id=None):
             if len(text) > 4:
                 kef = 4            
             similarity=TrigramSimilarity('first_name', text)
-            teacher_prof = Profession.objects.get(title = 'Teacher')
-            print(school.people.filter(profession=teacher_prof))
-            students = school.people.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef, is_student=False, profession=teacher_prof).order_by('-similarity')
+            students = school.people.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef, is_student=True).order_by('-similarity')
             for student in students:
                 if i >= 4:
                     break

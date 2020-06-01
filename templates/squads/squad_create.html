@@ -40,11 +40,11 @@
                 <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
                 	<div class="ui grid stackable no_margin">
                         <div class="{% if instance %}sixteen{% else %}eight{% endif %} wide column pt0 pl0 pb0 mobpr0 {% if instance %}pr0{%endif%}">
-                            <div class="text15 ui segment shadow_small mb15">
+                            <div class="text17 ui segment backblue textw shadow_blue mb15">
                                 {% if instance %}
-                                    <a class="mr50" href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+                                    <a class="mr50 textw" href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
                                     {% if instance.shown %}
-                                    <a href="{{ instance.get_delete_url }}" class="ui button white border1 shadow_small mini">
+                                    <a href="{{ instance.get_delete_url }}" class="ui button white border1 mini">
                                         <i class="icon trash red mr0"></i> Удалить
                                     </a>
                                     {% else %}
@@ -53,7 +53,7 @@
                                     <div class="highlight pt0 success_alive{{instance.id}}" style="display: none;width: 200px;">Группа восстановлена</div>
                                     {% endif %}
                                 {% else %}
-                                    <b class="textdg">Новая группа</b>
+                                    <b class="textw">Новая группа</b>
                                 {% endif %}
                             </div>
                         </div>
@@ -168,7 +168,7 @@
                     <div class="text15 textdg mb15 textbold">
 		        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>:
                         <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
-                        <div class="ui pointing below label dark hint_schedule" style="display: none;">
+                        <div class="ui pointing below label dark hint_schedule" style="display: none;position: absolute;">
                             Нажимая на кнопки "+" или "-" можете управлять списком
                         </div>
                     </div>

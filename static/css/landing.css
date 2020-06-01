@@ -172,9 +172,9 @@
     border-color:#0079BF
 }
 .btn-primary:hover{
-    color:#fff;
-    background-color:#006199;
-    border-color:#00598c
+    color:#fff !important;
+    background-color:#006199 !important;
+    border-color:#00598c !important;
 }
 .btn-primary:focus,.btn-primary.focus{
     box-shadow:0 0 0 .2rem rgba(0,121,191,0.5)
@@ -1062,13 +1062,17 @@
 .container{
     max-width:540px
 }
-}@media (min-width:768px){
-.land_logo{
-    height: 70px;
-}    
-.container{
-    max-width:720px
 }
+@media (min-width:768px){
+    .land_logo{
+        height: 70px;
+    }    
+    .mland_head{
+        font-size: 37px !important;
+    }
+    .container{
+        max-width:720px
+    }
 }@media (min-width:992px){
 .container{
     max-width:960px
@@ -2506,10 +2510,13 @@
     display:none
 }
 }@media (max-width:767.98px){
-.navbar-expand-md>.container,.navbar-expand-md>.container-fluid{
-    padding-right:0;
-    padding-left:0
-}
+    .navbar-expand-md>.container,.navbar-expand-md>.container-fluid{
+        padding-right:0;
+        padding-left:0
+    }
+    .mland_head{
+        font-size: 30px !important;
+    }
 }@media (min-width:768px){
 .navbar-expand-md{
         -webkit-box-orient:horizontal;
