@@ -548,6 +548,7 @@ def add_money(profile, school, squad, card, amount, manager):
     if amount > squad.bill*10:
         return 'too much'
     nm = card.bill_data.get(squad=squad)
+    print('nm', nm.id, nm.money)
     nm.money += amount
     nm.save()
     crnt = amount
@@ -559,6 +560,7 @@ def add_money(profile, school, squad, card, amount, manager):
             if crnt <= 0:
                 break
             fc = nm.finance_closed.filter(subject=subject)
+            print('fc', fc.id, subject.title)
             if len(fc) > 0:
                 fc = fc[0]
             elif len(fc) == 0:
@@ -585,13 +587,14 @@ def add_money(profile, school, squad, card, amount, manager):
     canceled = False
     if amount < 0:
         canceled = True
-    profile.payment_history.create(
+    ph = profile.payment_history.create(
         action_author = manager,
         amount = amount,
         school = school,
         squad = squad,
         canceled = canceled,
     )
+    print('payment_history', ph.id)
     change_school_money(school, amount, 'student_payment', profile.first_name)
     school.save()
 
@@ -612,6 +615,7 @@ def make_payment(request):
         school = manager.schools.first()
         squad = school.groups.get(id=int(request.GET.get('group_id')))
         card = profile.card.get(school=school)
+        print(card.name, card.id, '***', school.title, profile.first_name, amount)
         add_money(profile, school, squad, card, amount, manager)
     data = {
     }

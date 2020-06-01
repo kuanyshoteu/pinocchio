@@ -399,11 +399,6 @@ def add_student_to_squad(student, squad, manager_profile):
     subjects = squad.subjects.all()
     other_sqs = Squad.objects.filter(subjects__in=subjects).exclude(id=squad.id)
     other_sts = Profile.objects.filter(squads__in=other_sqs)
-    print(subjects)
-    print('*********')
-    print(other_sqs)
-    print('*********')
-    print(other_sts)
     school = squad.school
     card = student.card.get_or_create(school=school)[0]
     squad.students.add(student)

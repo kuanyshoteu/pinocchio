@@ -1292,6 +1292,7 @@ def register_new_student(found,card,password,manager_profile,profile,squad_id,sc
     card.save()
     profile.schools.add(school)
     skill = Skill.objects.create()
+    profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
     profile.skill = skill
     profile.confirmation_time = timezone.now()
     profile.confirmed = False
