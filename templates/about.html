@@ -82,7 +82,7 @@
                     <textarea class="mb0 query_phone"></textarea>
                 </form>
                 <div class="text-center mt15">
-                    <a url="{% url 'main:get_request_land' %}" class="send_queryl btn btn-wrap btn-success text14" onclick="gtag('event', 'send', {'event_category': 'form'}); yaCounter55093303.reachGoal('send-form'); return true;">
+                    <a url="{% url 'main:get_request_land' %}" class="send_queryl btn btn-wrap btn-success text14" onclick="tag_counters_form()">
                         Отправить
                     </a>
                     <div class="loading_small query_load ml10" style="display: none;">
@@ -393,6 +393,13 @@
     </div>
     </div>
 </body> 
+    <script type="text/javascript">
+        function tag_counters_form(){
+            gtag('event', 'send', {'event_category': 'form'}); 
+            ym(55093303,'reachGoal','send-form');
+            return true;          
+        }
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
     </script>
