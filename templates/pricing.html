@@ -27,12 +27,14 @@
     <div class="ui modal small" id="request_price_modal">
         <i class="close icon"></i>
         <div class="content">
-            <form class="ui form center aligned container" style="width: 60%;">
-                <h4>Закажите бесплатную презентацию всех возможностей прямо сейчас</h4>
-                <textarea name="email" class="quick-signup-email request_name1" type="" placeholder="Имя"></textarea>
-                <textarea name="email" class="quick-signup-email request_phone1" type="phone" placeholder="Телефон"></textarea>
+            <form class="ui form center aligned container textdg textbold" style="width: 60%;">
+                <h4 class="textblue">Оставьте номер и мы Вам перезвоним</h4>
+                    Имя:
+                    <textarea class="mb query_name"></textarea>
+                    Телефон:
+                    <textarea class="mb0 query_phone"></textarea>
                 <br>
-                <div class="loading" style="display: none;">
+                <div class="loading query_load" style="display: none;">
                     <div class="animation"><div class="circle one"></div></div>
                     <div class="animation"><div class="circle two"></div></div>
                     <div class="animation"><div class="circle three"></div></div>
@@ -40,8 +42,10 @@
                     <div class="animation"><div class="circle five"></div></div>
                     <div class="animation"><div class="circle six"></div></div>
                 </div>
-                <input class="btn btn-wrap btn-success btn-md px-4 get_request_land" id="1" style="margin-top: 10px;" value="Заказать" type="submit" onclick="return false">
-                <div class="success_query highlight" style="display: none;margin-top: 15px;">
+                <a url="{% url 'main:get_request_land' %}" class="mt15 send_queryl btn btn-wrap btn-success text14 textw" onclick="gtag('event', 'send', {'event_category': 'form'}); yaCounter55093303.reachGoal('send-form'); return true;">
+                        Отправить
+                </a>
+                <div class="success_load highlight pt10 pb10" style="display: none;margin-top: 15px;">
                     Спасибо! Мы скоро с Вами свяжемся
                 </div>
                 <div class="land_fill_error1 highlight_red" style="display: none;margin-top: 15px;">
