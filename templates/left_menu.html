@@ -23,7 +23,7 @@
                     <i class="list alternate icon mr10" style="font-size: 15px;margin-top: -1px;"></i>
                     Клиенты
                     {% if profile.filter_data.crm_notices > 0 %}
-                    <span class="left_menu_number">{{profile.filter_data.crm_notices}}</span>
+                    <span class="left_menu_number mr5">{{profile.filter_data.crm_notices}}</span>
                     {% endif %}                    
                 </a>                
             </div>
@@ -31,7 +31,9 @@
             {% if is_manager or is_director %}
             <a class="item lftitem {%if page == 'payments' %}lftitem_crnt{%endif%}" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="dollar sign icon mr10"></i>Оплата
-                <span class="left_menu_number payment_notices mr10">{{profile|payment_notices}}</span>
+                {% if profile|payment_notices > 0 %}
+                <span class="left_menu_number payment_notices mr5">{{profile|payment_notices}}</span>
+                {% endif %}                    
             </a>
             <a class="item lftitem {%if page == 'schedule' %}lftitem_crnt{%endif%}" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="table icon mr10"></i>Расписание
