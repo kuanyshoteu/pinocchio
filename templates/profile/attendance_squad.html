@@ -16,7 +16,7 @@
 			{% endfor %}
 		</div>
 		<div class="no_padding" style="width: 75%;overflow: hidden">
-			<div id="btn-prev" class="btn-prev" onclick="moverLeft()">&#60;</div>
+			<div id="btn-prev" style="{% if att_squad.students.all|length == 0 %}display: none;{%endif%}" class="btn-prev" onclick="moverLeft()">&#60;</div>
 			{% if att_squad.students.all|length == 0 %}
 				<div class="highlight_black">
 					Еще нет студентов в этой группе,<br> добавить студентов можно в <a class="ui button mini green" href="{{att_squad.get_update_url}}">Настройках группы</a> или в отделе <a class="ui button mini green" href="/schools/crm/">Клиенты</a>
@@ -87,7 +87,7 @@
 				<div id="next_atts" style="width: max-content;display: flex;"></div>
 			</div>
 			{% endif %}
-			<div id="btn-next" class="btn-next" onclick="moverRight()">&#62;</div>
+			<div id="btn-next" style="{% if att_squad.students.all|length == 0 %}display: none;{%endif%}" class="btn-next" onclick="moverRight()">&#62;</div>
 		</div>
 	</div>
 </div>

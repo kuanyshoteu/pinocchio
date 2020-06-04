@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load ttags %}
 <div style="width: 180px;">
 </div>
 <div class="deskmenu fixed_menu ui segment pl5 pr5 shadow_small" style="background-color: #fafafa;position: fixed;width: 165px;border-right: none;margin-top: 14px;margin-left: 14px;">
@@ -9,17 +10,17 @@
                 <a href="/moderator/" class="pt5 pb5 white shadow_small mb5 full-w ui button mini not_in_mobile"><b>{{school_crnt.title}}</b></a>
             {% endif %}
             <a class="item lftitem {%if page == 'mypage' %}lftitem_crnt{%endif%}" href='{{ profile.get_absolute_url }}'>
-                <i class="home icon mr15"></i> Моя страница
+                <i class="home icon mr10"></i> Моя страница
             </a>
             {% if is_director %}
             <a class="item lftitem {%if page == 'info' %}lftitem_crnt{%endif%}" href='{% url "schools:info" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="cog icon mr15"></i>Управление
+                <i class="cog icon mr10"></i>Управление
             </a>
             {% endif %}
             {% if is_manager or is_director %}
             <div side="right" class="hint_place5">
                 <a class="item lftitem {%if page == 'crm' %}lftitem_crnt{%endif%}" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                    <i class="list alternate icon mr15" style="font-size: 15px;margin-top: -1px;"></i>
+                    <i class="list alternate icon mr10" style="font-size: 15px;margin-top: -1px;"></i>
                     Клиенты
                     {% if profile.filter_data.crm_notices > 0 %}
                     <span class="left_menu_number">{{profile.filter_data.crm_notices}}</span>
@@ -29,35 +30,36 @@
             {% endif %}
             {% if is_manager or is_director %}
             <a class="item lftitem {%if page == 'payments' %}lftitem_crnt{%endif%}" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="dollar sign icon mr15"></i>Оплата
+                <i class="dollar sign icon mr10"></i>Оплата
+                <span class="left_menu_number payment_notices mr10">{{profile|payment_notices}}</span>
             </a>
             <a class="item lftitem {%if page == 'schedule' %}lftitem_crnt{%endif%}" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="table icon mr15"></i>Расписание
+                <i class="table icon mr10"></i>Расписание
             </a>
             {% endif %}
             {% if is_manager or is_trener or is_director %}
             <a class="item lftitem {%if page == 'squads' %}lftitem_crnt{%endif%}" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="users icon mr15"></i>Группы
+                <i class="users icon mr10"></i>Группы
             </a>
             <a class="item lftitem {%if page == 'subjects' %}lftitem_crnt{%endif%}" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="book icon mr15"></i>Курсы
+                <i class="book icon mr10"></i>Курсы
             </a>
             {% endif %}
             {% if is_director %}
             <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 17px;margin-top: -8px;">
+                <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">
                 <span>Финансы</span>
             </a>
             {% endif %}
             {% if is_manager or is_trener or is_director %}
             <a class="item lftitem {%if page == 'documents' %}lftitem_crnt{%endif%}" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="folder icon mr15"></i>Документы
+                <i class="folder icon mr10"></i>Документы
             </a>
             {% endif %}
             {%if school_crnt.version == 'business'%}
             {% if is_trener or is_director %}
             <a class="item lftitem {%if page == 'library' %}lftitem_crnt{%endif%}" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="file alternate icon mr15"></i>База уроков
+                <i class="file alternate icon mr10"></i>База уроков
             </a>
             {% endif %}
             {% endif %}

@@ -172,6 +172,8 @@ class BillData(models.Model):
     discount_school = models.ManyToManyField(DiscountSchool, related_name='nms')
     start_date = models.DateField(auto_now_add=False)
     pay_date = models.DateField(auto_now_add=True)
-    pay_day = models.IntegerField(default=1) # day of month, from 1 to 30
+    crm_notices = models.IntegerField(default=0)
+    payment_notices = models.IntegerField(default=0)
+    lesson_pay_notice = models.IntegerField(default=0) #2 = red, 1 = yellow, 0 = nothing
     class Meta:
         ordering = ['-id']

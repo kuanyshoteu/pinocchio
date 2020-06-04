@@ -60,7 +60,6 @@ class Profile(models.Model):
     confirmation_code = models.CharField(default='', max_length=250)
     confirmation_time = models.DateTimeField(auto_now_add=False, default=datetime.datetime.strptime('2000-01-01', "%Y-%m-%d"))
     hint_numbers = ArrayField(models.IntegerField(), default = list)
-    notifications_number = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['is_student', 'first_name']

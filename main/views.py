@@ -1365,9 +1365,10 @@ def hint_update():
     #                 squad = sq,
     #                 start_date = today,
     #                 )
-    for p in Profile.objects.all():
-        p.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
-        p.save()
+    day = timezone.now().date() - timedelta(2)
+    for fd in FilterData.objects.all():
+        fd.timestamp = day
+        fd.save()
 
 def categories_update():
     for sc in SubjectCategory.objects.all():

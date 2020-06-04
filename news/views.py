@@ -34,6 +34,7 @@ def blog(request):
         is_moderator = is_profi(profile, 'Moderator')        
         profile = get_profile(request)
         school = is_moderator_school(request, profile)
+        print(school.title)
         schools.append(school)
     else:
         profile = False    
@@ -46,7 +47,7 @@ def blog(request):
     bilimtap = School.objects.get(title='Штаб квартира ЦРУ')
     schools.append(bilimtap)
     posts = Post.objects.all().select_related('author_profile').select_related('school').prefetch_related('parts')
-    p = Paginator(posts, 20)
+    p = Paginator(posts, 55)
     page1 = p.page(1)
 
     context = {
@@ -176,19 +177,34 @@ def save_post(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     pid = request.GET.get('id')
-    post = save_post_work(pid, profile, school)
-    oldslug = post.slug
+    title = request.GET.get('title')
+    if pid == '-1':
+        oldslug = ''
+        print(title)
+        slug = 'temp_slug' + str(len(Post.objects.all()) + 1)
+        print(slug)
+        post = school.school_posts.create(
+            title = title,
+            author_profile = profile,
+            slug = slug,
+            )
+    else:
+        post = school.school_posts.get(id=int(pid))
+        oldslug = post.slug
+    print('0000')
     if request.GET.get('is_images') == '0':
+        print('111')
         text = request.GET.get('text')
         is_first = request.GET.get('first')
         if is_first == 'yes':
-            title = request.GET.get('title')
             post.title = title
-            post.slug = create_slug(title)
+            if pid != '-1':
+                post.slug = create_slug(title, 0)
             post.text = text
         else:
             post.text += text
     else:
+        print('222')
         post.priority = int(request.GET.get('priority'))
         old_files = request.GET.get('old_files').split(',')
         for part in post.parts.all():
@@ -207,38 +223,32 @@ def save_post(request):
             post.text = post.text.replace('new_file_place'+file, '<img class="post_file" src="'+part.image.url+'">')
             print('after replace', post.text)
     post.save()
+    print('333')
     newslug = post.slug
-    if request.GET.get('last') == 'yes':
+    if request.GET.get('is_images') == '0':
+        print('444')
+        data = {'id':post.id}
+    else:
+        print('555')
         if newslug != oldslug:
             update = True
         else:
             update = False
+        print(newslug, oldslug, '99', update)
         data = {
             "url":post.get_edit_url(),
             'update':update,    
         }
-    elif request.GET.get('is_images') == '1':
-        data = {'id':post.id}
-    else:
-        data = {}
     return JsonResponse(data)
 
-def create_slug(title):
+def create_slug(title, i):
+    print('slug', title)
     slug = slugify(translit(title[:45], 'ru', reversed=True))
+    slug += str(i)
     last = len(Post.objects.filter(slug=slug))
-    if last > 1:
-        slug += str(last+1)
+    if last > 0:
+        slug = create_slug(slug, i+1)
     return slug
-
-def save_post_work(pid, profile, school):
-    if pid == '-1':
-        post = school.school_posts.create(
-            title = title,
-            author_profile = profile,
-            )
-    else:
-        post = school.school_posts.get(id=int(pid))
-    return post
 
 def get_posts(request):
     print('get_posts')
@@ -252,9 +262,10 @@ def get_posts(request):
             schools.append(school)
         bilimtap = School.objects.get(title='Штаб квартира ЦРУ')
         schools.append(bilimtap)
+        print(school.title)
         posts = Post.objects.all().select_related('author_profile').select_related('school').prefetch_related('parts')
         page = int(request.GET.get('page'))
-        p = Paginator(posts, 20)
+        p = Paginator(posts, 55)
         page1 = p.page(page)
         for post in page1.object_list:
             limit = 70*post.priority

@@ -68,7 +68,7 @@
                                             За
                                             <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'lesson'%}green{%endif%} subject_period" status="lesson">Урок</a>
                                             <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'month' or not instance%}green{%endif%} subject_period" status="month">Месяц</a>
-                                            <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'course'%}green{%endif%} subject_period" status="course">Курс</a>
+                                            <!-- <a class="pl10 pr10 ui button mini {%if instance.cost_period == 'course'%}green{%endif%} subject_period" status="course">Курс</a> -->
                                         </div>
                                         <div style="position: absolute;width: 100%;margin-top: -42px">
                                             {% if instance %}
@@ -77,11 +77,11 @@
                                                 <div class="ui segment shadow_blue backblue textw cost_hint">
                                                     <b>Внимание!</b> 
                                                     <br><br>
-                                                    Укажите стоимость за 1 урок, за 1 месяц или за весь курс. 
+                                                    Укажите стоимость за 1 урок или за 1<!--  месяц или за весь курс.  -->
                                                     <br><br>
                                                     Указанная цена будет учитываться в расчетах оплаты клиентов* и показана на странице Вашего образовательного центра .  
                                                     <br><br>
-                                                    *При недостаточном количестве денег на счету у клиента за следующий урок/месяц ему будет прислано уведомление о необходимости оплаты и его карточка в СRM системе будет отмечена красным цветом
+                                                    *При недостаточном количестве денег на счету у клиента за следующий урок/месяц ему будет прислано уведомление о необходимости оплаты и на странице <b style="color: yellow">Оплаты</b> будет отмечен красным цветом
                                                 </div>
                                             </div>
                                             {% endif %}

@@ -49,20 +49,20 @@
                 <i class="close icon"></i>
                 <div class="content">
                     <div class="text-center mb15">
-                        <div style="font-size: 17px;">
+                        <div class="text17 textblue">
                             <b>История оплаты</b>
                         </div>
-                        <i style="">
+                        <span class="textdg text13">
                             Можете отменить оплату в течении 3 суток
-                        </i>
+                        </span>
                     </div>
-                    <table style="margin: 0 auto;">
+                    <table class="text14 br5 shadow_small" style="margin: 0 auto;">
                         <thead>
-                            <tr>
-                                <th class="border">Группа</th>
-                                <th class="border">Сумма</th>
-                                <th class="border">Менеджер</th>
-                                <th class="border">Время</th>
+                            <tr class="textdg">
+                                <th class="pt10 pb10 pl15 pr15 ">Время</th>
+                                <th class="pt10 pb10 pl15 pr15 ">Сумма</th>
+                                <th class="pt10 pb10 pl15 pr15 ">Группа</th>
+                                <th class="pt10 pb10 pl15 pr15 ">Менеджер</th>
                                 <th class=""></th>
                             </tr>
                         </thead>
@@ -146,7 +146,14 @@
                     <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
                 </div>    
                 <div class="bottombr5 text13 pt15 pl15 pb15 pr15">
-                    <div class="mb5 textdg"><b>Дата записи в группу:</b> {{nm|get_start_date}}</div>
+                    <div class="mb5 textdg">
+                        <b>Дата записи в группу:</b> 
+                        {{nm|get_start_date}}
+                    </div>
+                    <div class="mb5 textdg">
+                        <b>Дата следующей оплаты:</b> 
+                        {{nm|get_pay_date}}
+                    </div>
                     <span class="textdg textbold text13">Группа проходит курсы:</span>
                     <div class="nm_subjects text14">
                         {% for subject in nm|get_subject_finances %}
@@ -167,7 +174,7 @@
                             {% if subject.2 >= 0 %}
                             <div class="dflex mb5">
                                 <div class="half-w textdg pr10" style="text-align: right;">Оплачено: </div>
-                                <div class="half-w">за {{subject.2}} месяцев</div>
+                                <div class="half-w">за {{subject.2}} {%if subject.5 == 'month'%}месяцев{%elif subject.5 == 'lesson'%}уроков{%endif%}</div>
                             </div>
                             <div class="dflex mb5">
                                 <div class="half-w textdg pr10" style="text-align: right;">Остаток: </div>

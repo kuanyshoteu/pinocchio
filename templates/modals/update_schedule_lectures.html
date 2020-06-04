@@ -97,8 +97,14 @@ function update_schedule_lectures(){
         });
     }
     if ($('.dataconst').attr('today')) {
+        today = parseInt($('.dataconst').attr('today'))
+        crnt_left = 0
+        for (var i = 0; i < today - 1; i++) {
+            crnt_left += $("#constday" + i).width() + 10
+        }
         $('.schedule_body').animate({
-            scrollLeft: $("#constday" + $('.dataconst').attr('today')).offset().left-80
+            scrollLeft: crnt_left
         }, 'fast');            
+        console.log('cnr', crnt_left)
     }
 }

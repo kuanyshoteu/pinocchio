@@ -426,25 +426,29 @@ def att_present(request):
             salary = 0
             if not profile in material.done_by.all():
                 material.done_by.add(profile)
-                profile.money += profile.salary
-                salary = -1*profile.salary
-                need_change_school_money = True
+                if subject.cost_period == 'lesson':
+                    profile.money += profile.salary
+                    salary = -1*profile.salary
+                    need_change_school_money = True
             cost = subject.cost
         elif request.GET.get('status') == 'cancel':
             att_present_was = attendance.present
             attendance.present = ''
             attendance.save()
+            cost = 0
             if len(material.sm_atts.filter(squad=squad,present='present')) == 0:
                 if profile in material.done_by.all():
                     material.done_by.remove(profile)
-                    profile.money -= profile.salary
-                if att_present_was == 'present':
+                    if subject.cost_period == 'lesson':
+                        profile.money -= profile.salary
+                if att_present_was == 'present' and subject.cost_period == 'lesson':
                     need_change_school_money = True
                     salary = profile.salary
-                    cost = -1*subject.cost
+            if att_present_was == 'present' and subject.cost_period == 'lesson':
+                cost = -1*subject.cost        
         if request.GET.get('status') == 'cancel' or request.GET.get('status') == 'present':
             #### Update first presence in squad and subject
-            if subject.cost_period == 'month' and subject.cost > 0:
+            if subject.cost > 0:
                 date1 = get_date(attendance.subject_materials, squad)[0]
                 nm = card.bill_data.filter(squad=squad)
                 need_fc = False
@@ -473,16 +477,15 @@ def att_present(request):
             if need_change_school_money:
                 change_school_money(school, salary, 'teacher_salary', profile.first_name)
                 school.save()
-                cards = school.crm_cards.all()
-                if subject.cost_period == 'lesson':
-                    for at in material.sm_atts.exclude(present='warned'):
-                        student = at.student
-                        card = cards.filter(card_user=student)
-                        if len(card) > 0:
-                            pay_for_lesson(card[0], cost, squad)
+            # student money change
+            if subject.cost_period == 'lesson':
+                nm.money -= cost
+                nm.save()
+                print('111', nm.money)
         else:            
             attendance.present = request.GET.get('status')
-            attendance.save()        
+            attendance.save()   
+     
         profile.save()
     data = {
         'ok':ok,
@@ -496,25 +499,12 @@ def pay_for_lesson(card, cost, squad):
         nm = nm[0]
         nm.money -= int(cost)
         if nm.money < squad.lesson_bill:
-            card.color = 'red'
-            if card.was_called:
-                skill = card.author_profile.skill
-                skill.need_actions += 1
-                skill.save()
-                card.was_called = False
+            nm.lesson_pay_notice = 2
         elif nm.money < 2 * squad.lesson_bill:
-            card.color = 'orange'
-            if card.was_called:
-                skill = student_card.author_profile.skill
-                skill.need_actions += 1
-                skill.save()
-                card.was_called = False
+            nm.lesson_pay_notice = 1
         elif nm.money >= 2 * squad.lesson_bill:
-            card.color = ''
-        card.save()
+            nm.lesson_pay_notice = 0
         nm.save()
-    else:
-        Bug.objects.create(text='No NeedMoney object of card ' + card.id)
 
 def ChangeAttendance(request):
     profile = Profile.objects.get(user = request.user)
@@ -545,22 +535,21 @@ def logout_view(request):
     return redirect("/")
 
 def add_money(profile, school, squad, card, amount, manager):
+    print('bill', amount ,squad.bill)
     if amount > squad.bill*10:
         return 'too much'
     nm = card.bill_data.get(squad=squad)
-    print('nm', nm.id, nm.money)
     nm.money += amount
     nm.save()
     crnt = amount
     today = timezone.now().date()
     ok = True
-    subjects = squad.subjects.filter(cost_period='month', cost__gt=0)
+    subjects = squad.subjects.filter(cost__gt=0)
     while crnt > 0:
         for subject in subjects:
             if crnt <= 0:
                 break
             fc = nm.finance_closed.filter(subject=subject)
-            print('fc', fc.id, subject.title)
             if len(fc) > 0:
                 fc = fc[0]
             elif len(fc) == 0:
@@ -569,21 +558,16 @@ def add_money(profile, school, squad, card, amount, manager):
                     start=today,
                     first_present=today,
                     moneys=[0],
-                    bills=[subject.cost],
-                    pay_date=today,)
+                    pay_date=today,
+                    bills=[0],
+                    )
+                if subject.cost_period == 'month':
+                    fc.bills = [subject.cost]
             added_money = min(subject.cost - fc.moneys[-1], crnt)
             fc.moneys[-1] += added_money
             crnt -= added_money
-            finance_update_month(fc, subject.cost)
+            finance_update_month(fc, subject.cost, subject.cost_period)
             fc.save()
-    if ok:
-        if card.color == 'red' or card.color == 'orange':
-            if not card.was_called:
-                skill = card.author_profile.skill
-                skill.need_actions -= 1
-                skill.save()
-        card.color = 'white'
-        card.save()
     canceled = False
     if amount < 0:
         canceled = True
@@ -594,17 +578,17 @@ def add_money(profile, school, squad, card, amount, manager):
         squad = squad,
         canceled = canceled,
     )
-    print('payment_history', ph.id)
     change_school_money(school, amount, 'student_payment', profile.first_name)
     school.save()
 
-def finance_update_month(fc, subject_cost):
-    if fc.moneys[-1] >= fc.bills[-1]:
-        fc.moneys.append(0)
-        fc.bills.append(subject_cost)
-        fc.closed_months += 1
-        ok = True
-        fc.save()
+def finance_update_month(fc, subject_cost, cost_period):
+    if cost_period == 'month':
+        if fc.moneys[-1] >= fc.bills[-1]:
+            fc.moneys.append(0)
+            fc.bills.append(subject_cost)
+            fc.closed_months += 1
+            ok = True
+            fc.save()
 
 def make_payment(request):
     manager = Profile.objects.get(user = request.user)
@@ -615,7 +599,6 @@ def make_payment(request):
         school = manager.schools.first()
         squad = school.groups.get(id=int(request.GET.get('group_id')))
         card = profile.card.get(school=school)
-        print(card.name, card.id, '***', school.title, profile.first_name, amount)
         add_money(profile, school, squad, card, amount, manager)
     data = {
     }

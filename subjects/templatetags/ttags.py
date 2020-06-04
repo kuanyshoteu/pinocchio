@@ -7,6 +7,7 @@ from datetime import timedelta
 from dateutil.relativedelta import *
 from itertools import chain
 from subjects.models import Day, Cell,Attendance
+from squads.models import BillData
 from accounts.models import Profession
 from schools.models import *
 
@@ -23,29 +24,47 @@ def get_closed_months(nm):
 @register.filter
 def get_start_date(nm):
     return nm.start_date.strftime('%d.%m.%Y')
+@register.filter
+def get_pay_date(nm):
+    return nm.pay_date.strftime('%d %B %Y')
+
+@register.filter
+def payment_notices(profile):
+    today = timezone.now().date()
+    filter_data = profile.filter_data
+    if filter_data.timestamp.date() < today:
+        school = profile.schools.first()
+        squads = school.groups.filter(shown=True)
+        number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today - timedelta(school.bill_day_diff)))
+        filter_data.payment_notices = number
+        filter_data.timestamp = today
+        filter_data.save()
+    return filter_data.payment_notices
 
 @register.filter
 def get_subject_finances(nm):
     res = []
     finances = nm.finance_closed.all().select_related('subject')
+    money = nm.money
     for subject in nm.squad.subjects.all():
         period = 'за урок'
         finance = finances.filter(subject=subject)
         date1 = False
-        payment = -1
+        payment = 0
         crnt = 0
         if len(finance) > 0:
             finance = finance[0]
             date1 = finance.first_present.strftime('%d.%m.%Y')
-            payment = finance.closed_months
-            crnt = finance.moneys[-1]
-        elif subject.cost_period == 'month':
-            payment = -2
         if subject.cost_period == 'month':
-            period = 'в месяц'
+            if finance:
+                payment = finance.closed_months
+                crnt = finance.moneys[-1]
+                period = 'в месяц'
         elif subject.cost_period == 'course':
             period = 'за весь курс'            
         elif subject.cost_period == 'lesson':
+            if subject.cost > 0:
+                payment = int(money/subject.cost)
             period = 'за урок'
         res.append([
                 subject.title,
@@ -53,6 +72,7 @@ def get_subject_finances(nm):
                 payment,
                 date1,
                 crnt,
+                subject.cost_period,
             ])
     return res
 

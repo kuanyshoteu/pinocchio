@@ -146,7 +146,8 @@ class FilterData(models.Model):
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
-
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
 class SubjectMaterials(models.Model):
     #Убрать school
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_materials')     
@@ -210,6 +211,8 @@ class SubjectBill(models.Model):
     first_present = models.DateField(auto_now_add=False)
     moneys = ArrayField(models.IntegerField(null=True), default=list)
     bills = ArrayField(models.IntegerField(null=True), default=list)
+    lesson_bills = ArrayField(models.IntegerField(null=True), default=list)
+    course_bills = ArrayField(models.IntegerField(null=True), default=list)
     closed_months = models.IntegerField(default=0)
     class Meta:
         ordering = ['id']

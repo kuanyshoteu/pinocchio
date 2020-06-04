@@ -938,7 +938,7 @@ def searching_groups(request):
         squads = school.groups.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         i = 0
         for squad in squads:
-            res.append([squad.title, squad.get_absolute_url()])
+            res.append([squad.title, squad.get_update_url()])
             i+=1
             if i == 4:
                 break

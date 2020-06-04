@@ -98,21 +98,21 @@
     <i class="close icon"></i>
     <div class="content">
         <div class="text-center mb15">
-            <div style="font-size: 17px;">
-                <b>История оплаты</b> <span class="payment_student_name textb"></span>
+            <div class="text17 textblue">
+                <b>История оплаты</b>
             </div>
-            <i style="font-size: 13px;">
+            <span class="textdg text13">
                 Можете отменить оплату в течении 3 суток
-            </i>
+            </span>
         </div>
-        <table style="font-size: 13px;margin: 0 auto">
+        <table class="text14 br5 shadow_small" style="margin: 0 auto;">
             <thead>
-                <tr>
-                    <th class="border">Время</th>
-                    <th class="border">Сумма</th>
-                    <th class="border">Группа</th>
-                    <th class="border">Менеджер</th>
-                    <th class="border"></th>
+                <tr class="textdg">
+                    <th class="pt10 pb10 pl15 pr15 ">Время</th>
+                    <th class="pt10 pb10 pl15 pr15 ">Сумма</th>
+                    <th class="pt10 pb10 pl15 pr15 ">Группа</th>
+                    <th class="pt10 pb10 pl15 pr15 ">Менеджер</th>
+                    <th class=""></th>
                 </tr>
             </thead>
             <tbody class="fill_payment_history">
@@ -186,6 +186,7 @@
                         student_id = student[0]
                         name = student[1]
                         student_url = student[2]
+                        notices = student[4]
                         payment_div = $('.payment_orig').clone()
                         payment_div.removeClass('payment_orig')
                         if (i % 2 == 0) {payment_div.addClass('backwhitelow border1')}
@@ -193,6 +194,10 @@
                         payment_div.find('.student_name').text(name)
                         payment_div.find('.student_name').attr('href', student_url)
                         payment_div.find('.show_payment_history').attr('onclick', 'show_payment_history('+student_id+')')
+                        payment_div.find('.red_notice').text(notices)
+                        if (notices > 0) {
+                            payment_div.find('.red_notice').attr('style', '')
+                        }
                         groups = student[3]
                         for (var j = 0; j < groups.length; j++) {
                             group = groups[j]
@@ -201,9 +206,12 @@
                             color_back = group[2]
                             date = group[3]
                             date_str = group[4]
+                            month_pay_notice = group[5]
+                            lesson_pay_notice = group[6]
                             if (color_back == '') {color_back='rgb(49, 58, 87)'}
                             group_div = $('.group_box').clone()
                             group_div.removeClass('group_box')
+                            group_div.addClass('pmnt_sq'+group_id+'st'+student_id)
                             group_div.find('.group_name').text(group_title)
                             group_div.find('.group_name').attr('style', 'background-color:'+color_back)
                             group_div.find('.payment_amounts').addClass('payment_amounts'+student_id+'g'+group_id)
@@ -220,9 +228,16 @@
                             group_div.find('.change_pay_date').attr('onclick', 'change_pay_date('+student_id+','+group_id+')')
                             group_div.find('.payday_load').addClass('payday_load'+student_id+'g'+group_id)
                             group_div.find('.paydate_check').attr('id', 'paydate_check'+student_id+'g'+group_id)
-
-                            group_div.appendTo(payment_div.find('.student_groups'))
+                            if (month_pay_notice) {
+                                group_div.find('.group_name').removeClass('shadow_small')
+                                group_div.find('.month_pay_notice').show()
+                                group_div.find('.payday_text').addClass('shadow_red')
                             }
+                            group_div.appendTo(payment_div.find('.student_groups'))
+                            if (lesson_pay_notice.length > 0) {
+                                group_div.find('.lesson_pay_notice').attr('style', 'color:'+lesson_pay_notice)
+                            }
+                        }
                         payment_div.appendTo('.payments_box')
                     }
                     $('.scrollable').attr('scroll', 'yes')
@@ -270,6 +285,7 @@
                     $('.payment_amounts'+id+'g'+group_id).val('')
                     $('.success_payment'+id+'g'+group_id).show()
                     $('.payment_load'+id+'g'+group_id).hide()
+                    $('.payday_text'+id+'g'+group_id).parent().addClass('newcardlight')
                     $('.make_payment'+id+'g'+group_id).removeClass('disabled')
                 }
             })        
@@ -309,11 +325,38 @@
             },
             dataType: 'json',
             success: function (data) {
-                if (data.pay_date) {
-                    load.hide()
-                    check.show()
-                    $('.payday_text'+student+'g'+squad).text(data.pay_date)
-                    $(".block_change_pay_date").hide();                  
+                if (data.ok) {
+                    if (data.pay_date) {
+                        load.hide()
+                        check.show()
+                        $('.payday_text'+student+'g'+squad).text(data.pay_date)
+                        $(".block_change_pay_date").hide();                  
+                    }
+                    sq_div = $('.pmnt_sq'+squad+'st'+student)
+                    all_div = sq_div.parent().parent().parent().parent()
+                    old_notices = parseInt(all_div.find('.red_notice').text())
+                    if (data.month_pay_notice == false) {
+                        sq_div.find('.month_pay_notice').hide()
+                        sq_div.find('.shadow_red').removeClass('shadow_red')
+                        if (data.wasred == true) {
+                            all_div.find('.red_notice').text(old_notices - 1)
+                            if (old_notices - 1 == 0) {
+                                all_div.find('.red_notice').hide()
+                            }
+                        }
+                    }
+                    else {
+                        sq_div.find('.month_pay_notice').show()
+                        sq_div.find('.payday_text').addClass('shadow_red')
+                        if (data.wasred == false) {
+                            all_div.find('.red_notice').text(old_notices + 1)
+                            all_div.find('.red_notice').show()
+                        }
+                    }
+                    if (data.lesson_pay_notice.length > 0) {
+                        sq_div.find('.lesson_pay_notice').attr('style', 'background-color:'+data.lesson_pay_notice)
+                    }
+                    $('.payment_notices').text(data.payment_notices)                    
                 }
             }
         })

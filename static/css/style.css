@@ -24,7 +24,6 @@
   overflow-y: scroll;
 }
 .newcardlight{
-  background-color: #fff;
   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
   -webkit-animation-duration: 7s; /* Safari 4.0 - 8.0 */
   animation-name: example;
@@ -32,12 +31,12 @@
 }
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes example {
-  from {background-color: #fbbd08;}
+  from {background-color: yellow;}
   to {background-color: #fff;}
 }
 /* Standard syntax */
 @keyframes example {
-  from {background-color: #fbbd08;}
+  from {background-color: yellow;}
   to {background-color: #fff;}
 }
 .no_radius_tl{
@@ -80,6 +79,9 @@
 }
 .textred{
   color: #DB2828 !important;
+}
+.textyellow{
+  color: yellow !important;
 }
 .textg{
   color: #909090 !important;
@@ -137,6 +139,7 @@
 }
 .text11{
   font-size:11px !important; 
+  letter-spacing: -1px;
 }
 .topbr5{
   border-radius: 5px 5px 0 0 !important;
@@ -167,6 +170,9 @@
 }
 .shadow_small{
   box-shadow: 0 0 5px 0 #d3d3d3 !important;
+}
+.shadow_red{
+  box-shadow: 0 0 5px 0 #DB2828 !important;
 }
 .shadow_grey{
   box-shadow: 0 0 5px 0 #bfbfbf !important;
@@ -219,6 +225,12 @@
   font-size:21px !important; 
   line-height: 25px;
 }
+.text7{
+  font-size:7px !important; 
+}
+.text7:before{
+  font-size:7px !important; 
+}
 .text10{
   font-size:10px !important; 
 }
@@ -254,9 +266,24 @@
   color: #fff;
   border-radius: 3px;  
 }
+table{
+  border-collapse: collapse;
+}
 .border{
     border: 1px solid lightgrey;
-    padding: 14px;
+    padding: 7px 15px;
+}
+.red_notice{
+  width: 12px;
+  height: 12px;
+  text-align: center;
+  line-height: 12px;
+  border-radius: 100%;
+  font-size: 10px;
+  font-weight: 600;
+  background-color: #db2828;
+  color: #fff;
+  margin-top: -3px;
 }
 .card_form{
   height: 70%;
@@ -1172,7 +1199,7 @@ a{
   margin: auto !important;
   color: #fff;
   border-radius: 3px;
-  background-color: #21BA45
+  background-color: #fff;
 }
 .att_present{
   padding: 7px 5px !important;
@@ -1279,7 +1306,7 @@ a{
   background-image: none;
 }
 .lftitem{
-    padding: 8px !important;
+    padding: 8px 0px 8px 8px !important;
     color: #fff;
 }
 .lftitemsmall:hover{

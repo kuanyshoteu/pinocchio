@@ -512,7 +512,8 @@ body {
   min-width: 320px;*/
   width: 100%;
   background: #f4f4f4;
-  font-family: 'helvetica neue', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
+  letter-spacing: -0.5;
   font-size: 14px;
   line-height: 1.4285em;
   color: rgba(0, 0, 0, 0.87);

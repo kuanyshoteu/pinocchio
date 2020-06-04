@@ -2183,19 +2183,22 @@ def payment_history(request):
             student_name = student.first_name
             for payment in student.payment_history.all():
                 squad_title = ''
+                squad_color = ''
                 if payment.squad:
                     squad_title = payment.squad.title
+                    squad_color = payment.squad.color_back
                 cancel_access = False
                 if payment.timestamp > timezone.now() - timedelta(3):
                     cancel_access = True
                 res.append([
-                    payment.timestamp.strftime('%d.%m.%Y %H:%M'), #0
+                    payment.timestamp.strftime('%d %B %Y  %H:%M'), #0
                     payment.amount,                               #1
                     squad_title,                                  #2
                     payment.action_author.get_absolute_url(),     #3
                     payment.action_author.first_name,             #4
                     cancel_access,                                #5
                     payment.id,                                   #6
+                    squad_color,                                  #7
                     ])
     data = {
         "res":res,
@@ -2267,17 +2270,47 @@ def payday_change(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     pay_date = False
+    month_pay_notice = False
+    wasred = False
+    ok = False
     if request.GET.get('student') and request.GET.get('squad') and request.GET.get('paydate'):
         ok = True
         student = school.people.get(id=int(request.GET.get('student')))
         squad = school.groups.get(id = int(request.GET.get('squad')))
         card = student.card.get(school=school)
         nm = card.bill_data.get(squad=squad)
+        today = timezone.now().date()
+        if nm.pay_date > today + timedelta(school.bill_day_diff):
+            wasred = False
+        else:
+            wasred = True
         nm.pay_date = datetime.datetime.strptime(request.GET.get('paydate'), "%Y-%m-%d").date()
         nm.save()
+        if nm.pay_date > today + timedelta(school.bill_day_diff):
+            month_pay_notice = False
+        else:
+            month_pay_notice = True
+        if len(squad.subjects.filter(cost_period='lesson')) > 0:
+            if nm.money < squad.lesson_bill:
+                lesson_pay_notice = '#red'
+            elif nm.money < 2 * squad.lesson_bill:
+                lesson_pay_notice = '#yellow'        
+        squads = school.groups.filter(shown=True)        
+        number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today - timedelta(school.bill_day_diff)))
+        manager_prof = Profession.objects.get(title='Manager')
+        managers = school.people.filter(profession=manager_prof)
+        for manager in managers:
+            fd = manager.filter_data
+            fd.payment_notices = number
+            fd.timestamp = today
+            fd.save()
         pay_date = nm.pay_date.strftime('%d %B %Y')
     data = {
-        "pay_date":pay_date
+        "pay_date":pay_date,
+        "payment_notices":profile.filter_data.payment_notices,
+        "month_pay_notice":month_pay_notice,
+        "wasred":wasred,
+        "ok":ok,
     }
     return JsonResponse(data)
 
@@ -2314,7 +2347,6 @@ def get_payment_list(request):
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
-        print(school.people.filter(is_student=True))
         cards = school.crm_cards.select_related('card_user')
         squad = profile.filter_data.squad
         if squad != None:
@@ -2336,12 +2368,13 @@ def get_payment_list(request):
                 students = students.filter(payment_history__in=payments).distinct()
             if profile.filter_data.payment == 'not_paid':
                 students = students.exclude(payment_history__in=payments).distinct()
-        print(students, '88888')
         if len(students) <= (page-1)*16:
             return JsonResponse({"ended":True})
         p = Paginator(students, 16)
         page1 = p.page(page)
         res = []
+        today = timezone.now().date()
+        bill_day_diff = school.bill_day_diff
         for student in page1.object_list:
             card = cards.filter(card_user=student)[0]
             sq_res = []
@@ -2349,21 +2382,39 @@ def get_payment_list(request):
                 squads2 = squads.filter(students=student)
             else:
                 squads2 = squads
+            notices = 0
             for sq in squads2:
                 nm = sq.bill_data.filter(card=card)
                 pay_date = '-'
                 pay_date_input = '-'
                 pd = ''
+                lesson_pay_notice = ''
+                month_pay_notice = False
                 if len(nm) > 0:
                     nm = nm.last()
                     pay_date_input = nm.pay_date.strftime("%Y-%m-%d")
                     pay_date = nm.pay_date.strftime("%d %B %Y")
-                sq_res.append([sq.id, sq.title, sq.color_back, pay_date_input,pay_date])
+                    if nm.pay_date <= today + timedelta(bill_day_diff):
+                        month_pay_notice = True
+                        notices += 1
+                    if len(sq.subjects.filter(cost_period='lesson')) > 0:
+                        if nm.money < 2 * sq.lesson_bill:
+                            lesson_pay_notice = 'blue'
+                sq_res.append([
+                    sq.id, 
+                    sq.title, 
+                    sq.color_back, 
+                    pay_date_input,
+                    pay_date,
+                    month_pay_notice,
+                    lesson_pay_notice,
+                    ])
             res.append([
                 student.id,
                 student.first_name,
                 student.get_absolute_url(),
                 sq_res,
+                notices,
                 ])
 
     data = {

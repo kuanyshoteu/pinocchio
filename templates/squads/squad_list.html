@@ -21,14 +21,14 @@
                                 <div class="pl0" style="height: 32px">
                                     <div class="mt5 mr15 text17 ui grid textdg">
                                         {%if trash and is_manager %}
-                                            <b style="color: darkred;width: 160px;">Удаленные группы</b>
+                                            <b style="color: darkred;width: 150px;">Удаленные группы</b>
                                         {%else%}
                                             Группы
                                         {%endif%} 
                                         <div class="pl5 pr0" style="color: #939393;">{{ squads|length }}</div>
                                     </div>
                                 </div>
-                                <form class="ui form mb0 no_padding mr15" style="width: calc(100% - 270px);">
+                                <form class="ui form mb0 no_padding mr15" style="width: calc(100% - 280px);">
                                     <textarea class="mb0 start_searching_groups" placeholder="Поиск групп" url="{% url 'squads:searching_groups' %}" style="height: 32px;overflow: hidden;"></textarea>
                                 </form>
                                 {%if trash %}

@@ -37,13 +37,13 @@
         if (texts.length == 0) {texts = ['']}
         sendTexts(0, texts, id, url)
     }
-    function sendImages(id, url){
+    function sendImages(id, url, is_new){
         old_files = []
         $('.file_alr').each(function(){
             old_files.push(parseInt($(this).attr('id')))
         })
         priority = $('.newpost_priority').val()
-        add_data = '?id='+id+'&is_images='+'1&priority='+priority+'&old_files='+old_files
+        add_data = '?id='+id+'&is_images=1&priority='+priority+'&old_files='+old_files
         var formData = new FormData();
         formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
         $('.post_input').each(function() {
@@ -57,7 +57,7 @@
             processData: false,
             contentType: false,
             success: function (data) {
-                if (is_last == 'yes' && data.update) {
+                if (is_new) {
                     window.location.replace(data.url);
                 }
                 saved_true()
@@ -85,7 +85,14 @@
             dataType: 'json',
             success: function (data) {
                 if (is_last == 'yes'){
-                    sendImages(id, url)
+                    console.log(data.update)
+                    if (parseInt(id) != data.id || data.update) {
+                        is_new = true
+                    }
+                    else{
+                        is_new = false
+                    }
+                    sendImages(data.id, url, is_new)
                 }
                 else if (i < texts.length - 1) {
                     i += 1
