@@ -31,9 +31,9 @@
             {% if is_manager or is_director %}
             <a class="item lftitem {%if page == 'payments' %}lftitem_crnt{%endif%}" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="dollar sign icon mr10"></i>Оплата
-                {% if profile|payment_notices > 0 %}
-                <span class="left_menu_number payment_notices mr5">{{profile|payment_notices}}</span>
-                {% endif %}
+            </a>
+            <a class="item lftitem {%if page == 'mails' %}lftitem_crnt{%endif%}" href='{% url "schools:mails" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                <i class="envelope icon mr10"></i>Рассылки
             </a>
             <a class="item lftitem {%if page == 'schedule' %}lftitem_crnt{%endif%}" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="table icon mr10"></i>Расписание
