@@ -1367,7 +1367,7 @@ def hint_update():
     #                 )
     day = timezone.now().date() - timedelta(2)
     for fd in FilterData.objects.all():
-        fd.crm_notices = 0
+        fd.timestamp = day
         fd.save()
 
 def categories_update():

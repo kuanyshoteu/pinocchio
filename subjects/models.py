@@ -146,7 +146,7 @@ class FilterData(models.Model):
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateField(auto_now_add=True)
     
 class SubjectMaterials(models.Model):
     #Убрать school
