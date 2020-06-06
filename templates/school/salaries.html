@@ -21,175 +21,162 @@
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="twelve wide column">
+            <div class="w85 wide column">
                 {% include 'school/head.html' %}
                 <div id="app">
                 {% for prof in instance|get_professions %}
-                    <div class="ui segment mb0">
-                        <div class="ui grid">
-                            <div class="one wide column">
-                                <i class="icon users" style="font-size: 17px;"></i>
-                            </div>
-                            <div class="eleven wide column" style="padding-right: 25px;">
-                                <span style="margin-right:25px;font-size: 15px;">
-                                {% if prof.title == 'Teacher' %}
-                                    Преподаватель
-                                {% elif prof.title == 'Manager' %}
-                                    Менеджер
-                                {% endif %}
-                                </span> 
-                                <div class="ui pointing below label no_margin">
-                                    {% if prof.title == 'Teacher' %}
-                                        Зарплата за <b>1</b> урок   
-                                    {% else %}
-                                        Зарплата за месяц
-                                    {% endif %}
-                                </div>
-                                <a class="ui button mini blue ml15" onclick="$('.show_add_job{{prof.id}}').show()">Добавить должность</a>
-                            </div>
+                    <div class="ui segment mb0 backblue">
+                        <div class="dinline textw text15 mr15">
+                        {% if prof.title == 'Teacher' %}
+                            Преподаватель
+                        {% elif prof.title == 'Manager' %}
+                            Менеджер
+                        {% endif %}
+                        </div> 
+                        <div class="ui pointing below label no_margin backwhite">
+                            {% if prof.title == 'Teacher' %}
+                                Зарплата за <b>1</b> урок   
+                            {% else %}
+                                Зарплата за месяц
+                            {% endif %}
                         </div>
-                    </div>
-                    <div class="move_worker_error highlight_red full-w" style="display: none;">
-                        Можно менять только должность сотрудника
-                        <br>
-                        Для смены профессии свяжитесь с <b>тех. поддержкой</b>
-                    </div>
-                    <div class="delete_job_error highlight_red full-w" style="display: none;">
-                        Нельзя удалить все должности профессии
-                    </div>
-                    <div class="no_margin ui segment show_add_job{{prof.id}}" style="display: none;">
-                        <form class="ui form mb0">
-                            <textarea placeholder="Название должности" class="mb0 mr10 new_job_title{{prof.id}}" style="width: 300px;height: 29px;overflow-y: hidden;"></textarea>
-                            <a class="ui button mini green add_job" url="{%url 'schools:add_job'%}" id="{{prof.id}}">Добавить</a>
-                        </form>
-                    </div>
-                    <div class="ui segment no_padding mt0">
-                        <div class="ui grid stackable no_padding no_margin" style="color: #fff;">
+                        <a class="ui button mini white ml15" onclick="$('.show_add_job{{prof.id}}').show()">Добавить должность</a>
+                        <div class="move_worker_error highlight_red full-w" style="display: none;">
+                            Можно менять только должность сотрудника
+                            <br>
+                            Для смены профессии свяжитесь с <b>тех. поддержкой</b>
+                        </div>
+                        <div class="delete_job_error highlight_red full-w" style="display: none;">
+                            Нельзя удалить все должности профессии
+                        </div>
+                        <div class="no_margin ui segment show_add_job{{prof.id}}" style="display: none;">
+                            <form class="ui form mb0">
+                                <textarea placeholder="Название должности" class="mb0 mr10 new_job_title{{prof.id}}" style="width: 300px;height: 29px;overflow-y: hidden;"></textarea>
+                                <a class="ui button mini green add_job" url="{%url 'schools:add_job'%}" id="{{prof.id}}">Добавить</a>
+                            </form>
+                        </div>
+                        <div class="ui grid stackable no_padding mt15 ml0 mr0 mb0">
                         {% for job in prof|get_job_categories:instance %}
-                            <div class="eight wide column no_padding" style="border: 1px solid rgba(255, 255, 255, 0.1);background: #4A4A4A;">
-                                <div class="ui grid no_margin">
-                                    <div class="eight wide column pb0">
-                                        {{ job.title }}
-                                    </div>
-                                    <div class="eight wide column pt15 pb5">
-                                        <a class="redx" onclick="$('#show_delete_job{{job.id}}').modal('show')" style="margin-top: -15px;">✖</a>
-                                        <div class="ui modal mini" id='show_delete_job{{job.id}}'>
-                                            <i class="close icon"></i>
-                                            <div class="content">
-                                                Вы уверены, что хотите удалить должность?
-                                                <br><br>
-                                                <a class="yes_delete_job ui button mini green" id="{{job.id}}" url="{% url 'schools:delete_job' %}">Да</a>
-                                                <a class="ui button mini red" onclick="$('#show_delete_job').modal('hide')">Нет</a>
-                                            </div>                                            
+                            <div class="third wide column pt0 pl0">
+                                <div class="ui segment mt0 pt0 pb0">
+                                    <div class="ui grid no_margin">
+                                        <div class="eight wide column pl0 pr0 pb0">
+                                            {{ job.title }}
                                         </div>
-                                        <form class="ui form no_margin">
-                                            <div id="input{{worker.id}}" class="ui grid" style="float: right;">
-                                                <div class="twelve wide column pt10 pr0 pl0">
-                                                    <input class="no_margin" style="height: 28px;padding: 6px 5px" type="number" id="job_salary{{job.id}}" value="{{ job.salary }}">
+                                        <div class="eight wide column pl0 pr0 pt15 pb5">
+                                            <a class="redx" onclick="$('#show_delete_job{{job.id}}').modal('show')" style="margin-top: -15px;margin-right: -10px;">✖</a>
+                                            <div class="ui modal mini" id='show_delete_job{{job.id}}'>
+                                                <i class="close icon"></i>
+                                                <div class="content">
+                                                    Вы уверены, что хотите удалить должность?
+                                                    <br><br>
+                                                    <a class="yes_delete_job ui button mini green" id="{{job.id}}" url="{% url 'schools:delete_job' %}">Да</a>
+                                                    <a class="ui button mini red" onclick="$('#show_delete_job').modal('hide')">Нет</a>
+                                                </div>                                      
+                                            </div>
+                                            <form class="ui form no_margin">
+                                                <div id="input{{worker.id}}" class="ui grid" style="float: right;">
+                                                    <div class="twelve wide column pt10 pr0 pl0">
+                                                        <input class="no_margin" style="height: 28px;padding: 6px 5px" type="number" id="job_salary{{job.id}}" value="{{ job.salary }}">
+                                                    </div>
+                                                    <div class="four wide column pt10 pl0">
+                                                        <a class="ui button mini blue save_job_salary" id="{{ job.id }}" style="padding: 9px 2px 9px 10px;"><i class="check textw icon"></i></a>
+                                                    </div>
                                                 </div>
-                                                <div class="four wide column pt10 pl0">
-                                                    <a class="ui button mini blue save_job_salary" id="{{ job.id }}" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="no_margin" style="min-height: 200px;">
+                                        <draggable style="min-height: 200px;"
+                                            class="jobbox{{ job.id }}"
+                                            :options="{group:{ name:'people'}}"
+                                            @add="move_worker({{ job.id }})">
+                                            {% for worker in job|get_school_workers:instance %}
+                                            <div class="border1 shadow_small mb10 mt5" ondragstart="save_worker_id('{{worker.id}}')" draggable='true' id="worker{{worker.id}}" job_id="{{job.id}}">
+                                                <div class="ui grid no_margin">
+                                                    <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
+                                                        <a href="{{ worker.get_absolute_url }}">
+                                                            {{ worker.first_name }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="five wide column" style="padding: 5px 14px">
+                                                        <form class="ui form no_margin">
+                                                            <div id="input{{worker.id}}" class="ui grid" style="float: right;display: none;">
+                                                                <div class="eleven wide column" style="padding: 14px 1px;">
+                                                                    <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="salary{{worker.id}}" value="{{ worker.salary }}">           
+                                                                </div>
+                                                                <div class="five wide column" style="padding: 14px 0">
+                                                                    <a class="ui button mini blue save_salary" id="{{worker.id}}" style="padding: 9px 2px 9px 10px;"><i class="check textw icon"></i></a>
+                                                                </div>
+                                                            </div>
+                                                            <span id="salary_show{{worker.id}}" style="float: right;">
+                                                                <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
+                                                                <span style="font-size: 12px;">тг.</span>
+                                                                <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
+                                                            </span>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                            {% endfor %}
+                                        </draggable> 
                                     </div>
-                                </div>
-                                <div class="ui divider grey_divider"></div>
-                                <div class="no_margin" style="min-height: 200px;">
-                                    <draggable style="min-height: 200px;"
-                                        class="jobbox{{ job.id }}"
-                                        :options="{group:{ name:'people'}}"
-                                        @add="move_worker({{ job.id }})">
-                                        {% for worker in job|get_school_workers:instance %}
-                                        <div ondragstart="save_worker_id('{{worker.id}}')" draggable='true' id="worker{{worker.id}}" job_id="{{job.id}}">
-                                            <div class="ui grid no_margin">
-                                                <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
-                                                    <a href="{{ worker.get_absolute_url }}" style="color: #fff;">
-                                                        {% if worker.image %}
-                                                        <img class="ui image avatar" src="{{ worker.image.url }}">
-                                                        {% else %}
-                                                        <img class="ui image avatar" src="{% static 'images/nophoto.svg' %}">
-                                                        {% endif %}
-                                                        {{ worker.first_name }}
-                                                    </a>
-                                                </div>
-                                                <div class="five wide column" style="padding: 5px 14px">
-                                                    <form class="ui form no_margin">
-                                                        <div id="input{{worker.id}}" class="ui grid" style="float: right;display: none;">
-                                                            <div class="eleven wide column" style="padding: 14px 1px;">
-                                                                <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="salary{{worker.id}}" value="{{ worker.salary }}">           
-                                                            </div>
-                                                            <div class="five wide column" style="padding: 14px 0">
-                                                                <a class="ui button mini blue save_salary" id="{{worker.id}}" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
-                                                            </div>
-                                                        </div>
-                                                        <span id="salary_show{{worker.id}}" style="float: right;">
-                                                            <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
-                                                            <span style="font-size: 12px;">тг.</span>
-                                                            <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
-                                                        </span>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="ui divider full-w no_margin"></div>
-                                    {% endfor %}
-                                    </draggable> 
                                 </div>
                             </div>
                         {% endfor %}  
                         {% if prof|get_jobless_workers_len:instance %}                          
-                            <div class="eight wide column no_padding" style="border: 1px solid rgba(255, 255, 255, 0.1);background: #4A4A4A;">
-                                <div class="ui grid no_margin">
-                                    <div class="eight wide column pb0">
-                                        Без должности
+                            <div class="third wide column pt0 pl0">
+                                <div class="ui segment no_padding mt0">
+                                    <div class="ui grid no_margin">
+                                        <div class="eight wide column pb0">
+                                            Без должности
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="ui divider grey_divider"></div>
-                                <div class="no_margin" style="min-height: 200px;">
-                                    <draggable style="min-height: 200px;"
-                                        class="jobbox-1"
-                                        :options="{group:{ name:'people'}}"
-                                        @add="move_worker(-1)">
-                                        {% for worker in prof|get_jobless_workers:instance %}
-                                        <div ondragstart="save_worker_id('{{worker.id}}')" draggable='true' id="worker{{worker.id}}" job_id="-1">
-                                            <div class="ui grid no_margin">
-                                                <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
-                                                    <a href="{{ worker.get_absolute_url }}" style="color: #fff;">
-                                                        {% if worker.image %}
-                                                        <img class="ui image avatar" src="{{ worker.image.url }}">
-                                                        {% else %}
-                                                        <img class="ui image avatar" src="{% static 'images/nophoto.svg' %}">
-                                                        {% endif %}
-                                                        {{ worker.first_name }}
-                                                    </a>
-                                                </div>
-                                                <div class="five wide column" style="padding: 5px 14px">
-                                                    <form class="ui form no_margin">
-                                                        <div id="input{{worker.id}}" class="ui grid" style="float: right;display: none;">
-                                                            <div class="eleven wide column" style="padding: 14px 1px;">
-                                                                <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="salary{{worker.id}}" value="{{ worker.salary }}">           
+                                    <div class="no_margin" style="min-height: 200px;">
+                                        <draggable style="min-height: 200px;"
+                                            class="jobbox-1"
+                                            :options="{group:{ name:'people'}}"
+                                            @add="move_worker(-1)">
+                                            {% for worker in prof|get_jobless_workers:instance %}
+                                            <div ondragstart="save_worker_id('{{worker.id}}')" draggable='true' id="worker{{worker.id}}" job_id="-1">
+                                                <div class="ui grid no_margin">
+                                                    <div class="eleven wide column" style="padding: 10px 14px 10px 14px">
+                                                        <a href="{{ worker.get_absolute_url }}">
+                                                            {% if worker.image %}
+                                                            <img class="ui image avatar" src="{{ worker.image.url }}">
+                                                            {% else %}
+                                                            <img class="ui image avatar" src="{% static 'images/nophoto.svg' %}">
+                                                            {% endif %}
+                                                            {{ worker.first_name }}
+                                                        </a>
+                                                    </div>
+                                                    <div class="five wide column" style="padding: 5px 14px">
+                                                        <form class="ui form no_margin">
+                                                            <div id="input{{worker.id}}" class="ui grid" style="float: right;display: none;">
+                                                                <div class="eleven wide column" style="padding: 14px 1px;">
+                                                                    <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="salary{{worker.id}}" value="{{ worker.salary }}">           
+                                                                </div>
+                                                                <div class="five wide column" style="padding: 14px 0">
+                                                                    <a class="ui button mini blue save_salary" id="{{worker.id}}" style="padding: 9px 2px 9px 10px;"><i class="check textw icon"></i></a>
+                                                                </div>
                                                             </div>
-                                                            <div class="five wide column" style="padding: 14px 0">
-                                                                <a class="ui button mini blue save_salary" id="{{worker.id}}" style="padding: 9px 2px 9px 10px;"><i class="check icon" style="color: #fff;"></i></a>
-                                                            </div>
-                                                        </div>
-                                                        <span id="salary_show{{worker.id}}" style="float: right;">
-                                                            <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
-                                                            <span style="font-size: 12px;">тг.</span>
-                                                            <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
-                                                        </span>
-                                                    </form>
+                                                            <span id="salary_show{{worker.id}}" style="float: right;">
+                                                                <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
+                                                                <span style="font-size: 12px;">тг.</span>
+                                                                <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
+                                                            </span>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="ui divider full-w no_margin"></div>
-                                    {% endfor %}
-                                    </draggable> 
+                                            <div class="ui divider full-w no_margin"></div>
+                                        {% endfor %}
+                                        </draggable> 
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         {% endif %}
+                        </div>
                     </div>
                 {% endfor %}
                 </div>

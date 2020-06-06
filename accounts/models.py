@@ -133,7 +133,14 @@ class CardMail(models.Model):
     method = models.CharField(max_length=250, default='')
     is_client = models.BooleanField(default=False)
     social_media = models.ForeignKey(SocialMediaAccount, null=True, on_delete = models.CASCADE, related_name='mails')
+    class Meta:
+        ordering = ['id']
 
+class BigMail(models.Model):
+    action_author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='big_mails')
+    text = models.TextField(blank = True,null = True,default='')
+    card = models.ManyToManyField(CRMCard, related_name='big_mails')
+    timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['id']
 

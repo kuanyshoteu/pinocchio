@@ -234,8 +234,8 @@
                                 group_div.find('.payday_text').addClass('shadow_red')
                             }
                             group_div.appendTo(payment_div.find('.student_groups'))
-                            if (lesson_pay_notice.length > 0) {
-                                group_div.find('.lesson_pay_notice').attr('style', 'color:'+lesson_pay_notice)
+                            if (lesson_pay_notice) {
+                                group_div.find('.lesson_pay_notice').attr('style', 'color:blue')
                             }
                         }
                         payment_div.appendTo('.payments_box')
@@ -353,8 +353,8 @@
                             all_div.find('.red_notice').show()
                         }
                     }
-                    if (data.lesson_pay_notice.length > 0) {
-                        sq_div.find('.lesson_pay_notice').attr('style', 'background-color:'+data.lesson_pay_notice)
+                    if (data.lesson_pay_notice) {
+                        sq_div.find('.lesson_pay_notice').attr('style', 'color:blue')
                     }
                     $('.payment_notices').text(data.payment_notices)                    
                 }

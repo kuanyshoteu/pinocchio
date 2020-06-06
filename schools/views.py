@@ -21,6 +21,7 @@ from library.models import Folder
 from accounts.models import Profile,CRMCardHistory
 from accounts.forms import *
 from accounts.views import add_money
+from .send_mails import *
 from django.contrib.auth import (
     authenticate,
     get_user_model,
@@ -39,6 +40,23 @@ import json
 import urllib
 from django.contrib.postgres.search import TrigramSimilarity
 from dateutil.relativedelta import relativedelta
+
+def mails(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    context = {
+        "profile":profile,
+        "instance": school,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "page":"mails",
+    }
+    return render(request, "mails/mails.html", context)
 
 def school_rating(request):
     profile = get_profile(request)
@@ -2290,11 +2308,10 @@ def payday_change(request):
             month_pay_notice = False
         else:
             month_pay_notice = True
+        lesson_pay_notice = False     
         if len(squad.subjects.filter(cost_period='lesson')) > 0:
-            if nm.money < squad.lesson_bill:
-                lesson_pay_notice = '#red'
-            elif nm.money < 2 * squad.lesson_bill:
-                lesson_pay_notice = '#yellow'        
+            if nm.money < 2 * squad.lesson_bill:
+                lesson_pay_notice = True
         squads = school.groups.filter(shown=True)        
         number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today - timedelta(school.bill_day_diff)))
         manager_prof = Profession.objects.get(title='Manager')
@@ -2309,6 +2326,7 @@ def payday_change(request):
         "pay_date":pay_date,
         "payment_notices":profile.filter_data.payment_notices,
         "month_pay_notice":month_pay_notice,
+        "lesson_pay_notice":lesson_pay_notice,
         "wasred":wasred,
         "ok":ok,
     }
@@ -2388,7 +2406,7 @@ def get_payment_list(request):
                 pay_date = '-'
                 pay_date_input = '-'
                 pd = ''
-                lesson_pay_notice = ''
+                lesson_pay_notice = False
                 month_pay_notice = False
                 if len(nm) > 0:
                     nm = nm.last()
@@ -2399,7 +2417,7 @@ def get_payment_list(request):
                         notices += 1
                     if len(sq.subjects.filter(cost_period='lesson')) > 0:
                         if nm.money < 2 * sq.lesson_bill:
-                            lesson_pay_notice = 'blue'
+                            lesson_pay_notice = True
                 sq_res.append([
                     sq.id, 
                     sq.title, 

@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+    Создать новость
+{% endblock head_title %}
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<a id="go-back-btn-before"  href='{%if post%}{{post.get_absolute_url}}{%else%}{%url "main:blog"%}{%endif%}'>
+    <i class="arrow left icon"></i>
+</a>
+<div class='ui container pt15' id="app" style="height: calc(100% - 70px);overflow-y: hidden;">
+    <div class="ui grid stackable" style="height: 100%;">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column mlback pb0 full-h">
+            <div class="ui grid stackable no_margin" style="height: 100%;">
+                <div class="twelve wide column pt0 pl0 pb0" style="height: 100%;">
+                    <div class="pr0" style="display: none;">
+                        <a class="dragarea pt5 pb5 ui button white mini border1">
+                            <i class="icon mr0 hand blue paper text13 outline"></i>
+                        </a>
+                        <div>
+                            <div class="load_move{{part.id}} ui active inline textw mini loader" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="ui mt0 segment shadow_small" style="height: 100%; overflow-y: scroll;">
+                        <form class="ui form text13 content_form">
+                            <div class="textdg">
+                                <span style="display: none;" class="newpost_notitle highlight_red mb5">Введите заголовок</span>
+                            </div>
+                            <textarea style="border: none !important;overflow-y: hidden;" class="pl0 text24 texti textdg textbold mb5 newpost_title" placeholder="Заголовок">{%if post%}{{post.title}}{%endif%}</textarea>
+                            <div class="ui divider mb0"></div>
+                            <div style="border: none;outline: none;min-height: 300px;" contenteditable="true" class="text15 pb150 post_content mt30">
+                                {{post.text|safe}}
+                            </div>
+                        </form>        
+                    </div>
+                </div>
+                <div class="four wide column no_padding">
+                    <div>
+                        <div class="ui segment shadow_small">
+                            <a class="mr5 ui button mini white shadow_small pl10 pr10">
+                                <i class="icon bold textdark text15 mr0"></i>
+                            </a>
+                            <a class="mr5 ui button mini white shadow_small pl10 pr10">
+                                <i class="icon italic textdark text15 mr0"></i>
+                            </a>
+                            <a style="font-size: 12.1px;" class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
+                                Ссылка
+                            </a>
+                        </div>
+                        <div class="ui segment shadow_small pb30 input_box" style="max-height: 230px;height: 230px;">
+                            <div class="textdg text13"><b>Добавление файла</b></div>
+                            <input type="file" name="post_img" id="post_img" class="postfile">
+                            <label class="file_post" for="post_img">
+                                <a class="ui button mini"><i class="icon image blue"></i>Выберите файл</a>
+                            </label>  
+                            <div style="display: none;line-height: 13px;" class="text13 file_hint textdg mt10">Схватите и перетащите в нужное место</div>
+                            <div class="mt5" style="height: 135px;">
+                                <div style="display: none;height: 135px;" class="hoverable dragarea pl10 pt10 pr10 pb10" id="dragarea0" onmouseover="drag_show_box('dragarea0')" draggabe="true" onmouseleave="drag_hide_box('dragarea0')">
+                                    <img src="" style="max-height:100%;max-width: 90%;margin: 0 5%;" class="new_image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb0 ui segment shadow_small">
+                            <div class="dflex mb15">
+                                <div class="textdg text13 mr5">Размер превью:</div>
+                                <form class="ui form mb0">
+                                    <input style="width: 50px;height: 24px" type="number" class="newpost_priority pl5 pr0 mr10 pb0 pt0" value="{%if post%}{{post.priority}}{%else%}1{%endif%}" name="">
+                                </form>
+                            </div>
+                            <div class="text-center">
+                                <a id="{{post.id}}" slug="{{post.slug}}" class="disabled ui button green shadow_green save_post" onclick="save_post()" url="{% url 'news:save_post' %}">
+                                    <b>Сохранить пост</b>
+                                </a>
+                                <div class="dinline" style="width: 20px;">
+                                    <i style="display: none;" class="newpost_saved icon check green text17 mr0"></i>
+                                    <div style="margin-top: -7px;display: none;" class="ml10 tiny ui active loader create_post_loader"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt15 ui segment shadow_small text-center">
+                            <a onclick="$('.sure_delete').modal('show')" class="ui button mini red"><i class="icon trash textw"></i> <b>Удалить пост</b></a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="create_link_box ui modal tiny">
+    <i class="close icon"></i>
+    <div class="content text-center">
+        <div>
+            <span class="text15">Введите адрес ссылка</span>
+        </div>
+        <div>
+            <form class="ui form mb0">
+                <textarea class="link_address"></textarea>
+            </form>
+        </div>
+        <div class="mt15">
+            <a class="ui button mini white border1 shadow_small" onclick="createLink()"><b>Добавить ссылку</b></a>
+        </div>
+    </div>
+</div>
+
+<div class="sure_delete ui modal tiny">
+    <i class="close icon"></i>
+    <div class="content text-center">
+        <div>
+            <b class="text15">Вы точно хотите удалить пост?</b>
+            <br>
+            <span class="text13">Удаленные данные невозможно будет восстановить</span>
+        </div>
+        <div class="mt15">
+            <a class="ui button mini red border1 mr15" href="{{post.get_delete_url}}"><b>Удалить</b></a>
+            <a class="ui button mini white border1 shadow_small"><b>Отмена</b></a>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+    .box__dragndrop,
+    .box__uploading,
+    .box__success,
+    .box__error {
+      display: none;
+    }    
+</style>
+<span style="display: none;" id="{%if post%}{{post.id}}{%else%}-1{%endif%}" class="data" get_post_url="{%url 'news:get_post'%}" crnt_file_number="-1" drag_file_id=""></span>
+{% include 'news/news_scripts.html' %}
+{% endblock content %}

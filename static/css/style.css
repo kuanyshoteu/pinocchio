@@ -141,6 +141,9 @@
   font-size:11px !important; 
   letter-spacing: -1px;
 }
+.h20{
+  height: 20px;
+}
 .topbr5{
   border-radius: 5px 5px 0 0 !important;
 }
@@ -305,7 +308,7 @@ table{
   margin-bottom: 15px;
   -webkit-appearance: none;
   tap-highlight-color: rgba(255, 255, 255, 0);
-  padding: 6px 12px 8px;
+  padding: 6px 12px 5px;
   background: #FFFFFF;
   border: 1px solid rgba(34, 36, 38, 0.15);
   outline: none;
@@ -320,7 +323,7 @@ table{
   resize: none;
 }
 .ui.form textarea:not([rows]) {
-  height: 35px;
+  height: 30px;
   width: 100%;  
 }
 .ui.form textarea,
@@ -1170,6 +1173,17 @@ a{
   white-space: nowrap;
   overflow: hidden;
 }
+.add_mail_point{
+  outline: none !important;
+  height: 30px !important;
+  overflow-y:hidden !important;
+  white-space: nowrap;
+  border: none !important;
+}
+.textdots{
+  white-space: nowrap;
+  text-overflow: ellipsis;  
+}
 .student_name2{
   padding-left: 5px;
   font-size: 11px;
@@ -1628,6 +1642,7 @@ a{
 .follow_btn{
   width: 100%;
 }
+
 .main_text{
   margin-top: 11px;
   display: inline-block;
@@ -2604,6 +2619,9 @@ a{
     line-height: 25px; 
     text-align: center;
     color: #fff;   
+  }
+  .deskpl30{
+    padding-left: 30px !important
   }
   .deskbr15{
     border-radius: 15px !important;

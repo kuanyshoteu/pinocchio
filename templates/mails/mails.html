@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}
+    Рассылки | Bilimtap
+{% endblock head_title %}
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<div class='ui container pt15'>
+    <div class="ui grid stackable pb150">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column pb0 full-h">
+            <div class="ui segment shadow_small">
+                <div class="text15 mb15 textdg">
+                    <b>Рассылки</b>
+                </div>
+                <a class="ui button small white shadow_small textblue">Email</a>
+                <a class="ui button small white">SMS</a>
+            </div>
+            <div class="ui grid stackable no_margin">
+                <div class="ten wide column pl0 pt0 pb0">
+                    <div class="ui segment border1 shadow_small no_padding">
+                        <div class="backwhitelow pt10 pr10 pb10 pl10 topbr5">
+                            <a class="ui button mini blue shadow_blue">Единоразовая</a>
+                            <a class="ui button mini">Авторассылка</a>
+                        </div>
+                        <form class="ui form pt15 pr15 pb15 pl15">
+                            <div class="dflex">
+                                <div class="text13 pt5" style="width: 95px;">Кому:</div>
+                                <div style="height: 32px;width: calc(100% - 95px);flex-wrap: wrap;" class="mail_points_box border1 br5 mb10 dflex">
+                                    <div class="mail_points dflex" style="flex-wrap: wrap;">
+                                        <div class="mail_point_orig textdots h20 br15 border1 pl10 pr5 mt5 text12 textdg dflex" style="display: none;">
+                                            <span class="mail_point_address"></span>
+                                            <a>
+                                                <i class="icon x ml5 mr0 text11"></i>       
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <textarea class="mb0 dinline add_mail_point pt5 pr10 pb5 pl10"></textarea>
+                                </div>
+                            </div>
+                            <div class="dflex">
+                                <div class="text13 pt5" style="width: 110px;">Тема письма:</div>
+                                <textarea class="mb10"></textarea>
+                            </div>
+                            <div class="dflex">
+                                <div class="text13 pt5" style="width: 110px;">Шаблоны:</div>
+                                <select class="text15">
+                                    <option>n</option>
+                                    <option>n</option>
+                                    <option>n</option>
+                                </select>
+                            </div>
+                            <div class="mt20 mb5">
+                                <a class="mr5 ui button mini white shadow_small pl10 pr10">
+                                    <i class="icon bold textdark mr0"></i>
+                                </a>
+                                <a class="mr5 ui button mini white shadow_small pl10 pr10">
+                                    <i class="icon italic textdark mr0"></i>
+                                </a>
+                                <a class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
+                                    Ссылка
+                                </a>
+                            </div>
+                            <div style="outline: none;min-height: 100px;" contenteditable="true" class="mail_content border1 br5 pt5 pr10 pb15 pl10">
+                            </div>
+                            <div class="mt15">
+                                <a class="ui button mini white border1 shadow_small">
+                                    Сохранить как шаблон
+                                </a>
+                                <a class="send_mails ui button small green shadow_green" style="float: right;" url="{% url 'schools:send_mails' %}">
+                                    Отправить
+                                    <i class="icon textw envelope ml5 mr0"></i>
+                                    <div style="margin-top: -7px;display: none;" class="ml5 tiny ui active loader send_mails_load"></div>
+                                    <i class="icon check white send_mails_success" style="display: none;"></i>
+                                </a>
+                            </div>                      
+                        </form>
+                    </div>
+                </div>
+                <div class="six wide column no_padding">
+                    <div class="ui segment shadow_small mb0 no_padding">
+                        <div class="text-center textblue text13 textbold pt10">Студенты</div>
+                        <form class="ui form mt10 mb0 pl10 pr10">
+                            <div class="ui grid stackable no_margin">
+                                <div class="eight wide column pl0 pt0 pr5 pb0">
+                                    <div class="text13 pt5" style="width: 110px;">Филиал:</div>
+                                    <select>
+                                        <option>n</option>
+                                        <option>n</option>
+                                        <option>n</option>
+                                    </select>                                    
+                                </div>
+                                <div class="eight wide column pl5 pt0 pr0 pb0">
+                                    <div class="text13 pt5" style="width: 110px;">Предмет:</div>
+                                    <select>
+                                        <option>n</option>
+                                        <option>n</option>
+                                        <option>n</option>
+                                    </select>                                    
+                                </div>
+                                <div class="eight wide column pl0 pt0 pr5 pb0">
+                                    <div class="text13 pt5" style="width: 110px;">Курс:</div>
+                                    <select>
+                                        <option>n</option>
+                                        <option>n</option>
+                                        <option>n</option>
+                                    </select>                                    
+                                </div>
+                                <div class="eight wide column pl5 pt0 pr0 pb0">
+                                    <div class="text13 pt5" style="width: 110px;">Группа:</div>
+                                    <select>
+                                        <option>n</option>
+                                        <option>n</option>
+                                        <option>n</option>
+                                    </select>                                    
+                                </div>
+                            </div>
+                        </form>
+                        <div class="mail_student_list pb50 mt15">
+                            <div class="mb5 pl10 pt10 pb10 pr10 backwhitelow" style="height: 45px;">
+                                <div class="dinline textbold textblue">Артур</div>
+                                <a class="ui button pt5 pb5 mini white shadow_small border1" style="float: right;">
+                                    Добавить
+                                </a>
+                            </div>
+                            <div class="mb5 pl10 pt10 pb10 pr10" style="height: 45px;">
+                                <div class="dinline textbold textblue">Артур</div>
+                                <a class="ui button pt5 pb5 mini white shadow_small border1" style="float: right;">
+                                    Добавить
+                                </a>
+                            </div>
+                            <div class="mb5 pl10 pt10 pb10 pr10 backwhitelow" style="height: 45px;">
+                                <div class="dinline textbold textblue">Артур</div>
+                                <a class="ui button pt5 pb5 mini white border1" style="float: right;">
+                                    Добавить
+                                </a>
+                            </div>
+                            <div class="mb5 pl10 pt10 pb10 pr10" style="height: 45px;">
+                                <div class="dinline textbold textblue">Артур</div>
+                                <a class="ui button pt5 pb5 mini white border1" style="float: right;">
+                                    Добавить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'mails/mail_scripts.html' %}
+{% endblock content %}

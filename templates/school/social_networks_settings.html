@@ -14,14 +14,14 @@
 
 {% block content %}
 <div class='ui container pt15'>
-    <div class="ui grid">
+    <div class="ui grid stackable">
         {% include 'left_menu.html' %}
-        <div class="eighty wide column">
+        <div class="w85 wide column deskpl30">
             {% include 'school/head.html' %}
             {% for sm in socialmedias %}
             <div class="ui raised segment">
                 <div style="width: 150px;" class="dinline ui {%if sm.title == 'Instagram'%}pink{%else%}blue{%endif%} ribbon label "><i class="icon {{sm.content}} textw"></i>{{sm.title}}</div>
-                <div class="mb10 mt10 dinline" >
+                <div class="mb10 mt10 dinline">
                     {% if sm.accounts.all|length > 0 %}
                     <div class="ui image label shadow_small backwhite mr15">
                         {% if sm.accounts.first.image_icon %}
@@ -34,7 +34,7 @@
                         {% endif %}
                     </div>
                     {% endif %}
-                    <a class="ui button mini {% if sm.accounts.all|length == 0 %}green shadow_green{%endif%} connect_sm" status="{{sm.title}}" url="{%url 'schools:connect_sm'%}">
+                    <a class="ui button mini {% if sm.accounts.all|length == 0 %}green shadow_green{%else%}white shadow_small textblue border1{%endif%} connect_sm" status="{{sm.title}}" url="{%url 'schools:connect_sm'%}">
                         {% if sm.accounts.all|length == 0 %}Подключить{%else%}Переподключить{%endif%}
                         <i class="icon right arrow {% if sm.accounts.all|length == 0 %}textw{%endif%}"></i>
                     </a>

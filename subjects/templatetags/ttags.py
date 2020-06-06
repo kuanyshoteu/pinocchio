@@ -32,7 +32,7 @@ def get_pay_date(nm):
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
-    if filter_data.timestamp.date() < today:
+    if filter_data.timestamp < today:
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)
         number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today - timedelta(school.bill_day_diff)))

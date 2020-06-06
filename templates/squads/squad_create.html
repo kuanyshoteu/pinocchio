@@ -42,7 +42,7 @@
                         <div class="{% if instance %}sixteen{% else %}eight{% endif %} wide column pt0 pl0 pb0 mobpr0 {% if instance %}pr0{%endif%}">
                             <div class="text17 ui segment backblue textw shadow_blue mb15">
                                 {% if instance %}
-                                    <a class="mr50 textw" href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>
+                                    <a class="mr50 textw" href="{{ instance.get_update_url }}">Группа: <b>{{ instance.title }}</b></a>
                                     {% if instance.shown %}
                                     <a href="{{ instance.get_delete_url }}" class="ui button white border1 mini">
                                         <i class="icon trash red mr0"></i> Удалить
@@ -166,7 +166,7 @@
                 </div>
 				<div class="ui segment mt30">
                     <div class="text15 textdg mb15 textbold">
-		        		Студенты <a href="{{ instance.get_absolute_url }}"><b>{{ instance.title }}</b></a>:
+		        		Студенты <a href="{{ instance.get_update_url }}"><b>{{ instance.title }}</b></a>:
                         <a class="show_hint_schedule"><i class="icon info circle blue"></i><span style="font-size: 13px;">Подсказка</span></a>
                         <div class="ui pointing below label dark hint_schedule" style="display: none;position: absolute;">
                             Нажимая на кнопки "+" или "-" можете управлять списком

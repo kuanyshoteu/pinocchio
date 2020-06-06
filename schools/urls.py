@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from .views import *
+from .send_mails import *
 from main.views import get_landing,adilmed, get_school_report
 from django.views.decorators.csrf import csrf_exempt
 
@@ -15,10 +16,7 @@ urlpatterns = [
     url(r'^rating/$', school_rating, name='rating'),
     url(r'^payments/$', school_payments, name='payments'),
     url(r'^reports/$', get_school_report, name='get_school_report'),
-    url(r'^api/edit_card/$', edit_card, name='edit_card_url'),
-    url(r'^api/edit_card_mail/$', edit_card_mail, name='edit_card_mail'),
-    url(r'^api/add_card/$', add_card, name='add_card_url'),
-    url(r'^api/move_card/$', move_card, name='move_card_url'),
+    url(r'^mails/$', mails, name='mails'),
     url(r'^api/move_worker/$', move_worker, name='move_worker_url'),
     url(r'^api/add_job/$', add_job, name='add_job'),
     url(r'^api/delete_job/$', delete_job, name='delete_job'),
@@ -70,6 +68,11 @@ urlpatterns = [
     url(r'^api/get_all_cards_second/', get_all_cards_second, name='get_all_cards_second'),
     url(r'^api/payment_history/', payment_history, name='payment_history'),
     url(r'^api/get_payment_list/', get_payment_list, name='get_payment_list'),
+    # crm
+    url(r'^api/edit_card/$', edit_card, name='edit_card_url'),
+    url(r'^api/edit_card_mail/$', edit_card_mail, name='edit_card_mail'),
+    url(r'^api/add_card/$', add_card, name='add_card_url'),
+    url(r'^api/move_card/$', move_card, name='move_card_url'),
     url(r'^api/search_crm_cards/', search_crm_cards, name='search_crm_cards'),
     url(r'^api/search_city/', search_city, name='search_city'),
     url(r'^api/filter_crm_cards/', filter_crm_cards, name='filter_crm_cards'),
@@ -82,11 +85,13 @@ urlpatterns = [
     url(r'^api/update_finance/', update_finance, name='update_finance'),
     url(r'^api/get_schedule/', get_schedule, name='get_schedule'),
     url(r'^api/card_send_mail/$', card_send_mail, name='card_send_mail'),
-
+    # social media
     url(r'^social_networks_settings/$', social_networks_settings, name='social_networks_settings'),
     url(r'^instagram_connecting/$', instagram_connecting, name='instagram_connecting'),
     url(r'^vk_connecting/$', vk_connecting, name='vk_connecting'),
     url(r'^api/connect_sm/', connect_sm, name='connect_sm'),
     url(r'^api/save_vk_group/', save_vk_group, name='save_vk_group'),
     url(r'^api/vk_get_callback/$', csrf_exempt(vk_get_callback), name='vk_get_callback'),
+    # sending mails
+    url(r'^api/send_mails/', send_mails, name='send_mails'),    
 ]

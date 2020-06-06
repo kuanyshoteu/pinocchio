@@ -1,0 +1,46 @@
+<script type="text/javascript">
+    $('.send_mails').click(function(e){
+        url = $(this).attr('url')
+        add_addresses = []
+        $('.mail_point_address').each(function(){
+            add_addresses.push($(this).text())
+        })
+        text = $('.mail_content').html()
+        $('.send_mails_load').show()
+        $('.envelope').hide()
+        // $(this).addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+                'add_addresses':add_addresses,
+                'text':text,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.send_mails_load').hide()
+                $('.send_mails_success').show()
+                // $(this).removeClass('disabled')
+            }
+        })        
+    })
+    $('.add_mail_point').keyup(function(e) {
+        if (e.keyCode == 32 || e.keyCode == 13) {
+            if ($(this).val() != '') {
+                mail = $(this).val()
+                new_mail_point = $('.mail_point_orig').clone()
+                new_mail_point.removeClass('mail_point_orig')
+                new_mail_point.addClass('mail_point')
+                new_mail_point.appendTo('.mail_points')
+                new_mail_point.find('.mail_point_address').text(mail)
+                new_mail_point.attr('style', '')
+                $(this).val('')
+                newwidth = $('.mail_points_box').width() - $('.mail_points').width() - 1
+                console.log(newwidth)
+                $(this).attr('style', 'width:'+newwidth+'px;')
+            }
+        }
+        if (e.keyCode == 8 && $(this).val().length == 0) {
+            $('.mail_point').last().remove()
+        }
+    });
+</script>
