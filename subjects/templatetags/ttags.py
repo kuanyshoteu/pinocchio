@@ -29,6 +29,10 @@ def get_pay_date(nm):
     return nm.pay_date.strftime('%d %B %Y')
 
 @register.filter
+def students_number(squad):
+    return len(squad.students.filter(is_student=True))
+
+@register.filter
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
