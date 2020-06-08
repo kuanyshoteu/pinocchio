@@ -42,8 +42,10 @@ def payment_notices(profile):
         print('7777777777')
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)
+        print(squads)
         number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today - timedelta(school.bill_day_diff)))
         filter_data.payment_notices = number
+        print(number)
         filter_data.timestamp = today
         filter_data.save()
     return filter_data.payment_notices
