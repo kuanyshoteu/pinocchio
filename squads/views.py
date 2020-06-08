@@ -436,9 +436,9 @@ def add_student_to_squad(student, squad, manager_profile):
 def update_payment_notices(school, today): 
     squads = school.groups.filter(shown=True)
     number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today + timedelta(school.bill_day_diff)))
-    print('updatepan', school.title, number)
     manager_prof = Profession.objects.get(title='Manager')
-    managers = school.people.filter(profession=manager_prof)
+    dir_prof = Profession.objects.get(title='Director')
+    managers = school.people.filter(profession__in=[manager_prof,dir_prof])
     for manager in managers:
         fd = manager.filter_data
         fd.payment_notices = number
