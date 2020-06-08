@@ -2002,7 +2002,7 @@ def get_all_cards_first(request):
     page = 1
     all_res = []
     for column in school.crm_columns.all():
-        res = column.cards.filter(author_profile=profile).select_related('card_user')
+        res = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
         if len(res) <= 0:
             continue
         p = Paginator(res, 4)
@@ -2033,7 +2033,7 @@ def get_all_cards_second(request):
     school = is_moderator_school(request, profile)
     all_res = []
     for column in school.crm_columns.all():
-        query = column.cards.filter(author_profile=profile).select_related('card_user')
+        query = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
         res = []
         colid = column.id
         i = 0
@@ -2125,11 +2125,11 @@ def filter_crm_cards(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     if request.GET.get('kind') == 'allcards':
-        all_cards = school.crm_cards.all().select_related('card_user')
+        all_cards = school.crm_cards.filter(school=school).select_related('card_user')
     elif request.GET.get('kind') == 'freecards':
-        all_cards = school.crm_cards.filter(author_profile=None).select_related('card_user')
+        all_cards = school.crm_cards.filter(author_profile=None,school=school).select_related('card_user')
     else:
-        all_cards = school.crm_cards.filter(author_profile=profile).select_related('card_user')
+        all_cards = school.crm_cards.filter(author_profile=profile,school=school).select_related('card_user')
     all_squads = school.groups.all()
     all_students = school.people.filter(is_student=True).prefetch_related('squads')
     all_offices = school.school_offices.all()
@@ -2160,11 +2160,11 @@ def get_extra_cards(request):
         page = int(request.GET.get('page'))+1
         column = CRMColumn.objects.get(id=int(request.GET.get('column')))
         if request.GET.get('kind') == 'allcards':
-            res = column.cards.all().select_related('card_user')
+            res = column.cards.filter(school=school).select_related('card_user')
         elif request.GET.get('kind') == 'freecards':
-            res = column.cards.filter(author_profile=None).select_related('card_user')
+            res = column.cards.filter(author_profile=None,school=school).select_related('card_user')
         else:
-            res = column.cards.filter(author_profile=profile).select_related('card_user')
+            res = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
         all_squads = school.groups.all()
         all_students = school.people.filter(is_student=True).prefetch_related('squads')
         all_offices = school.school_offices.all()

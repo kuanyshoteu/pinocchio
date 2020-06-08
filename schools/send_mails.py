@@ -62,20 +62,23 @@ def get_mail_students_list(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     res = []
+    squad = request.GET.get('squad')
+    subject = request.GET.get('subject')
+    office = request.GET.get('office')
+    subject_category = request.GET.get('subject_category')
     if request.GET.get('page'):
         print('eee')
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
-        squad = profile.filter_data.squad
-        if squad != None:
+        if squad != False:
             squads = [squad]
         else:
-            if profile.filter_data.office:
-                squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
+            if office:
+                squads = school.groups.filter(shown=True,office=office).prefetch_related('students')
             else:
                 squads = school.groups.filter(shown=True).prefetch_related('students')
-        if profile.filter_data.subject_category:
-            subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
+        if subject_category:
+            subjects = school.school_subjects.filter(category=subject_category)
             squads = squads.filter(subjects__in=subjects)
         students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
         if len(students) <= (page-1)*16:
