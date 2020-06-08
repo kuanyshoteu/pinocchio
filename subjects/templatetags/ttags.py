@@ -36,17 +36,11 @@ def students_number(squad):
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
-    print('8888888888888888')
-    print(filter_data.timestamp, today)
     if filter_data.timestamp < today:
-        print('7777777777')
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)
-        print(squads)
         number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today + timedelta(school.bill_day_diff)))
         filter_data.payment_notices = number
-        print(number)
-        print('55555555555')
         filter_data.timestamp = today
         filter_data.save()
     return filter_data.payment_notices

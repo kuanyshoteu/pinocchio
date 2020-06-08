@@ -15,7 +15,7 @@ from .models import *
 from subjects.models import *
 from squads.models import Squad,PaymentHistory,SquadHistory,DiscountSchool
 from subjects.templatetags.ttags import get_date, get_pay_date,constant_school_lectures
-from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail
+from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail, update_payment_notices
 from papers.models import *
 from library.models import Folder
 from accounts.models import Profile,CRMCardHistory
@@ -2316,15 +2316,7 @@ def payday_change(request):
         if len(squad.subjects.filter(cost_period='lesson')) > 0:
             if nm.money < 2 * squad.lesson_bill:
                 lesson_pay_notice = True
-        squads = school.groups.filter(shown=True)        
-        number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today - timedelta(school.bill_day_diff)))
-        manager_prof = Profession.objects.get(title='Manager')
-        managers = school.people.filter(profession=manager_prof)
-        for manager in managers:
-            fd = manager.filter_data
-            fd.payment_notices = number
-            fd.timestamp = today
-            fd.save()
+        update_payment_notices(school, today)
         pay_date = nm.pay_date.strftime('%d %B %Y')
     data = {
         "pay_date":pay_date,

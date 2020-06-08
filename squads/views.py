@@ -391,6 +391,7 @@ def remove_student_from_squad(student, squad, manager_profile):
     nm = squad.bill_data.filter(card=card)
     print('qqqqqqqq', nm, squad.title, card.name)
     nm.delete()
+    update_payment_notices(school, timezone.now().date())
     student.save()
     hist = CRMCardHistory.objects.create(
         action_author = manager_profile,
@@ -412,6 +413,7 @@ def add_student_to_squad(student, squad, manager_profile):
     else:
         nm = nm[0]
     nm.start_date = timezone.now().date()
+    update_payment_notices(school, today)    
     for subject in subjects.filter(cost_period='month',cost__gt=0):
         if len(nm.finance_closed.filter(subject=subject)) == 0:
             nm.finance_closed.create(
@@ -430,6 +432,17 @@ def add_student_to_squad(student, squad, manager_profile):
     if student in other_sts:
         return student.first_name
     return 'ok'
+
+def update_payment_notices(school, today): 
+    squads = school.groups.filter(shown=True)
+    number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today + timedelta(school.bill_day_diff)))
+    manager_prof = Profession.objects.get(title='Manager')
+    managers = school.people.filter(profession=manager_prof)
+    for manager in managers:
+        fd = manager.filter_data
+        fd.payment_notices = number
+        fd.timestamp = today
+        fd.save()
 
 def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     today = int(timezone.now().strftime('%w'))
