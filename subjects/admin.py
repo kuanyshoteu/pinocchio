@@ -14,6 +14,20 @@ class SubjectModelAdmin(admin.ModelAdmin):
 
 admin.site.register(Subject, SubjectModelAdmin)
 
+class FilterDataModelAdmin(admin.ModelAdmin):
+    list_display = ["get_author","crm_notices","payment_notices"]
+    list_display_links = ["get_author"]
+    list_filter = ["author"]
+    class Meta:
+        model = FilterData
+    def get_author(self, obj):
+        if obj.author:
+            return obj.author.first_name        
+        else:
+            return 'no_author'
+
+admin.site.register(FilterData, FilterDataModelAdmin)
+
 class DayModelAdmin(admin.ModelAdmin):
     list_display = ["title", "id"]
     list_display_links = ["title"]
