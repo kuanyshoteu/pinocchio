@@ -94,4 +94,5 @@ urlpatterns = [
     url(r'^api/vk_get_callback/$', csrf_exempt(vk_get_callback), name='vk_get_callback'),
     # sending mails
     url(r'^api/send_mails/', send_mails, name='send_mails'),    
+    url(r'^api/get_mail_students_list/', get_mail_students_list, name='get_mail_students_list'),    
 ]

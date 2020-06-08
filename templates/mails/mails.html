@@ -6,33 +6,32 @@
 {% load ttags %}
 {% load staticfiles %}
 {% block content %}
-<div class='ui container pt15'>
-    <div class="ui grid stackable pb150">
+<div class='ui container pt15' style="height: calc(100% - 50px);overflow-y: hidden;">
+    <div class="ui grid stackable" style="height: 100%;">
         {% include 'left_menu.html' %}
-        <div class="w85 wide column pb0 full-h">
-            <div class="ui segment shadow_small">
-                <div class="text15 mb15 textdg">
-                    <b>Рассылки</b>
-                </div>
-                <a class="ui button small white shadow_small textblue">Email</a>
-                <a class="ui button small white">SMS</a>
-            </div>
-            <div class="ui grid stackable no_margin">
+        <div class="w85 wide column" style="height: 100%;">
+            <div class="ui grid stackable no_margin" style="height: 100%;">
                 <div class="ten wide column pl0 pt0 pb0">
                     <div class="ui segment border1 shadow_small no_padding">
-                        <div class="backdarklow pt10 pr10 pb10 pl10 topbr5 shadow_dark_low">
-                            <a class="ui button mini blue">Единоразовая</a>
-                            <a class="ui button mini">Авторассылка</a>
+                        <div class="backlightblue pt10 pr10 pb10 pl10 topbr5 shadow_dark_low">
+                            <span class="textw text14 textbold mr15">Новая рассылка</span>
+                            <a class="ui button mini white shadow_blue ">
+                                Email
+                            </a>
+                            <a class="ui button mini">SMS</a>
+                            <div class="mt10"></div>
+                            <a class="ui button mini white  shadow_blue pt5 pb5 ">Единоразовая</a>
+                            <a class="ui button mini  pt5 pb5">Авторассылка</a>
                         </div>
                         <form class="ui form pt15 pr15 pb15 pl15">
                             <div class="dflex">
                                 <div class="text13 pt5" style="width: 95px;">Кому:</div>
-                                <div style="height: 32px;width: calc(100% - 95px);flex-wrap: wrap;" class="mail_points_box border1 br5 mb10 dflex">
+                                <div style="width: calc(100% - 95px);flex-wrap: wrap;" class="mail_points_box border1 br5 mb10 dflex">
                                     <div class="mail_points dflex" style="flex-wrap: wrap;">
-                                        <div class="mail_point_orig textdots h20 br15 border1 pl10 pr5 mt5 text12 textdg dflex" style="display: none;">
+                                        <div class="backlightblue textw mail_point_orig textdots h20 br15 border1 pl10 pr5 mt5 text12 dflex" style="display: none;">
                                             <span class="mail_point_address"></span>
                                             <a>
-                                                <i class="icon x ml5 mr0 text11"></i>       
+                                                <i class="icon x ml5 mr0 text11 textw"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -41,7 +40,7 @@
                             </div>
                             <div class="dflex">
                                 <div class="text13 pt5" style="width: 110px;">Тема письма:</div>
-                                <textarea class="mb10"></textarea>
+                                <textarea class="mb10 mail_head"></textarea>
                             </div>
                             <div class="dflex">
                                 <div class="text13 pt5" style="width: 110px;">Шаблоны:</div>
@@ -61,6 +60,9 @@
                                 <a class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
                                     Ссылка
                                 </a>
+                                <a class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
+                                    Имя студента
+                                </a>
                             </div>
                             <div style="outline: none;min-height: 100px;" contenteditable="true" class="mail_content border1 br5 pt5 pr10 pb15 pl10">
                             </div>
@@ -70,84 +72,80 @@
                                 </a>
                                 <a class="send_mails ui button small green shadow_green" style="float: right;" url="{% url 'schools:send_mails' %}">
                                     Отправить
-                                    <i class="icon textw envelope ml5 mr0"></i>
-                                    <div style="margin-top: -7px;display: none;" class="ml5 tiny ui active loader send_mails_load"></div>
-                                    <i class="icon check white send_mails_success" style="display: none;"></i>
+                                    <i class="icon textw envelope mail ml5 mr0"></i>
+                                    <i class="icon check textw send_mails_success" style="display: none;"></i>
+                                    <div style="margin-top: -7px;right: 15px;display: none;" class="ml5 tiny ui active loader ww send_mails_load"></div>
                                 </a>
                             </div>                      
                         </form>
                     </div>
                 </div>
-                <div class="six wide column no_padding">
-                    <div class="ui segment shadow_small mb0 no_padding">
-                        <div class="text-center textblue text13 textbold pt10">Студенты</div>
-                        <form class="ui form mt10 mb0 pl10 pr10">
-                            <div class="ui grid stackable no_margin">
-                                <div class="eight wide column pl0 pt0 pr5 pb0">
-                                    <div class="text13 pt5" style="width: 110px;">Филиал:</div>
-                                    <select>
-                                        <option>n</option>
-                                        <option>n</option>
-                                        <option>n</option>
-                                    </select>                                    
+                <div class="six wide column no_padding" style="height: 100%;">
+                    <div class="scrollable ui segment shadow_small mb0 no_padding" style="overflow-y: scroll;height: 100%;" scroll="no" onscroll="catch_scroll()">
+                        <div class="backwhitelow topbr5">
+                            <div class="text-center text13 textblue textbold pt10">Добавить студента</div>
+                            <form class="ui form mt5 mb0 pl10 pr10 pb10 ">
+                                <div class="ui grid stackable no_margin">
+                                    <div class="eight wide column pl0 pt0 pr5 pb0">
+                                        <div class="text13 pt5" style="width: 110px;">Филиал:</div>
+                                        <select> 
+                                            <option value="-1">Все филиалы</option>
+                                            {% for office in offices %}
+                                                <option value="{{ office.id }}">{{ office.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="eight wide column pl5 pt0 pr0 pb0">
+                                        <div class="text13 pt5" style="width: 110px;">Предмет:</div>
+                                        <select> 
+                                            <option value="-1">Все предметы</option>
+                                            {% for subject_category in subject_categories %}
+                                                <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="eight wide column pl0 pt0 pr5 pb0">
+                                        <div class="text13 pt5" style="width: 110px;">Курс:</div>
+                                        <select> 
+                                            <option value="-1">Все предметы</option>
+                                            {% for subject in subjects %}
+                                                <option value="{{ subject.id }}">{{ subject.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="eight wide column pl5 pt0 pr0 pb0">
+                                        <div class="text13 pt5" style="width: 110px;">Группа:</div>
+                                        <select> 
+                                            <option value="-1">Все группы</option>
+                                            {% for squad in squads %}
+                                                <option value="{{ squad.id }}">{{ squad.title }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="eight wide column pl5 pt0 pr0 pb0">
-                                    <div class="text13 pt5" style="width: 110px;">Предмет:</div>
-                                    <select>
-                                        <option>n</option>
-                                        <option>n</option>
-                                        <option>n</option>
-                                    </select>                                    
-                                </div>
-                                <div class="eight wide column pl0 pt0 pr5 pb0">
-                                    <div class="text13 pt5" style="width: 110px;">Курс:</div>
-                                    <select>
-                                        <option>n</option>
-                                        <option>n</option>
-                                        <option>n</option>
-                                    </select>                                    
-                                </div>
-                                <div class="eight wide column pl5 pt0 pr0 pb0">
-                                    <div class="text13 pt5" style="width: 110px;">Группа:</div>
-                                    <select>
-                                        <option>n</option>
-                                        <option>n</option>
-                                        <option>n</option>
-                                    </select>                                    
-                                </div>
-                            </div>
-                        </form>
-                        <div class="mail_student_list pb50 mt15">
-                            <div class="mb5 pl10 pt10 pb10 pr10 backwhitelow" style="height: 45px;">
-                                <div class="dinline textbold textblue">Артур</div>
-                                <a class="ui button pt5 pb5 mini white shadow_small border1" style="float: right;">
-                                    Добавить
-                                </a>
-                            </div>
-                            <div class="mb5 pl10 pt10 pb10 pr10" style="height: 45px;">
-                                <div class="dinline textbold textblue">Артур</div>
-                                <a class="ui button pt5 pb5 mini white shadow_small border1" style="float: right;">
-                                    Добавить
-                                </a>
-                            </div>
-                            <div class="mb5 pl10 pt10 pb10 pr10 backwhitelow" style="height: 45px;">
-                                <div class="dinline textbold textblue">Артур</div>
-                                <a class="ui button pt5 pb5 mini white border1" style="float: right;">
-                                    Добавить
-                                </a>
-                            </div>
-                            <div class="mb5 pl10 pt10 pb10 pr10" style="height: 45px;">
-                                <div class="dinline textbold textblue">Артур</div>
-                                <a class="ui button pt5 pb5 mini white border1" style="float: right;">
-                                    Добавить
-                                </a>
-                            </div>
+                            </form>
+                        </div>
+                        <div class="pt5 pb5 text-center">
+                            <a class="add_student_to_point ui button pt5 pb5 pl30 pr30 mini blue shadow_blue">
+                                Добавить всех
+                            </a>                                
+                        </div>
+                        <div class="mail_student_list pb50" >
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div style="display: none;">
+    <div class="mail_student_orig pl10 pt5 pb30 pr10 h35">
+        <div class="dinline textbold textblue student_name">Артур</div>
+        <a class="add_student_to_point ui button pt5 pb5 mini white shadow_small border1" style="float: right;">
+            Добавить
+        </a>
+    </div>    
+    <span class="data" get_mail_students_list="{% url 'schools:get_mail_students_list'%}" ></span>
 </div>
 {% include 'mails/mail_scripts.html' %}
 {% endblock content %}

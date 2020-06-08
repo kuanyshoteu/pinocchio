@@ -48,6 +48,10 @@ def mails(request):
     context = {
         "profile":profile,
         "instance": school,
+        "squads":school.groups.filter(shown=True),
+        "subject_categories":school.school_subject_categories.all(),
+        "subjects":school.school_subjects.all(),
+        "offices":school.school_offices.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),

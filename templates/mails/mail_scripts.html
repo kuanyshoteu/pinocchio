@@ -1,46 +1,112 @@
 <script type="text/javascript">
-    $('.send_mails').click(function(e){
-        url = $(this).attr('url')
-        add_addresses = []
-        $('.mail_point_address').each(function(){
-            add_addresses.push($(this).text())
-        })
-        text = $('.mail_content').html()
-        $('.send_mails_load').show()
-        $('.envelope').hide()
-        // $(this).addClass('disabled')
+    get_mail_students_list(1)
+    function catch_scroll(){
+        this_ = $('.scrollable')
+        page = this_.attr('page')
+        var div = this_.get(0);
+        console.log($('.scrollable').attr('scroll'))
+        if ($('.scrollable').attr('scroll') =='yes' && (div.scrollTop + div.offsetHeight) >= div.scrollHeight) {
+            get_mail_students_list(page)
+        }
+    }
+    function get_mail_students_list(page){
+        url = $('.data').attr('get_mail_students_list')
         $.ajax({
             url: url,
             data: {
-                'add_addresses':add_addresses,
+                'page':page,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ended) {
+                    $('.scrollable').attr('scroll', 'no')
+                    if (parseInt(page) > 0) {
+                        $('.ended').show()
+                    }
+                }
+                else{
+                    for (var i = 0; i < data.res.length; i++) {
+                        name = data.res[i][0]
+                        mail = data.res[i][1]
+                        student = $('.mail_student_orig').clone()
+                        student.removeClass('mail_student_orig')
+                        if (i % 2 == 0) {
+                            student.addClass('backwhitelow')
+                        }
+                        student.find('.student_name').text(name)
+                        student.find('.add_student_to_point').attr('onclick', 'new_point_from_text('+false+', "'+mail+'")')
+                        student.appendTo('.mail_student_list')
+                    }
+                }
+                $('.scrollable').attr('scroll', 'yes')
+                $('.payments_box').attr('page', parseInt(page)+1)
+            }
+        })
+    }
+    $('.send_mails').click(function(e){
+        url = $(this).attr('url')
+        addresses = []
+        $('.mail_point_address').each(function(){
+            addresses += $(this).text() + ','
+        })
+        text = $('.mail_content').html()
+        head = $('.mail_head').val()
+        $('.send_mails_load').show()
+        $('.envelope.mail').hide()
+        $(this).addClass('disabled')
+        console.log(text, addresses)
+        $.ajax({
+            url: url,
+            data: {
+                'addresses':addresses,
+                'head':head,
                 'text':text,
             },
             dataType: 'json',
             success: function (data) {
                 $('.send_mails_load').hide()
                 $('.send_mails_success').show()
-                // $(this).removeClass('disabled')
+                $(this).removeClass('disabled')
             }
         })        
     })
     $('.add_mail_point').keyup(function(e) {
         if (e.keyCode == 32 || e.keyCode == 13) {
-            if ($(this).val() != '') {
-                mail = $(this).val()
-                new_mail_point = $('.mail_point_orig').clone()
-                new_mail_point.removeClass('mail_point_orig')
-                new_mail_point.addClass('mail_point')
-                new_mail_point.appendTo('.mail_points')
-                new_mail_point.find('.mail_point_address').text(mail)
-                new_mail_point.attr('style', '')
-                $(this).val('')
-                newwidth = $('.mail_points_box').width() - $('.mail_points').width() - 1
-                console.log(newwidth)
-                $(this).attr('style', 'width:'+newwidth+'px;')
-            }
+            new_point_from_text(true, $(this).val())
         }
-        if (e.keyCode == 8 && $(this).val().length == 0) {
+        if (e.keyCode == 8 && $(this).attr('len') == '0') {
+            last_point = $('.mail_point').last()
+            last_text = last_point.find('.mail_point_address').text()
+            $(this).val(last_text)
             $('.mail_point').last().remove()
+            $(this).attr('len', $(this).val().length)
         }
+        $(this).attr('len', $(this).val().length)
     });
+    function new_point_from_text(remove_last, mail){
+        textarea = $(".add_mail_point")
+        if (remove_last) {
+            mail = mail.slice(0, -1)            
+        }
+        if (mail == ' ' || mail == '') {
+            console.log('rororororor')
+            textarea.val('')
+            $(this).attr('len', 0)
+        }
+        else {
+            new_mail_point = $('.mail_point_orig').clone()
+            new_mail_point.removeClass('mail_point_orig')
+            new_mail_point.addClass('mail_point')
+            new_mail_point.appendTo('.mail_points')
+            new_mail_point.find('.mail_point_address').text(mail)
+            new_mail_point.attr('style', '')
+            textarea.val('')
+            newwidth = $('.mail_points_box').width() - $('.mail_points').width() - 1
+            textarea.attr('style', 'width:'+newwidth+'px;')        
+            $(this).attr('len', 0)
+        }
+    }
+    $(".add_mail_point").focusout(function(){
+        new_point_from_text(false, $(".add_mail_point").val())
+    });    
 </script>

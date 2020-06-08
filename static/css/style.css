@@ -144,6 +144,9 @@
 .h20{
   height: 20px;
 }
+.h35{
+  height: 35px;
+}
 .topbr5{
   border-radius: 5px 5px 0 0 !important;
 }
@@ -949,11 +952,22 @@ a{
     display: block;
     border-width: 7px 7px 0 7px;
     border-style: solid;
-    border-color: #506c109 transparent transparent transparent;
+    border-color: #506c10 transparent transparent transparent;
     margin-top: -7px;
     position: absolute;
     left: 50%;
     bottom: -7px;
+}
+.left_arrow_segment:after {
+    content: "";
+    display: block;
+    border-width: 10px 15px 10px 0;
+    border-style: solid;
+    border-color: transparent #7289ba transparent transparent;
+    margin-top: -10px;
+    position: absolute;
+    left: -15px;
+    top: 70px;
 }
 .help_left_top:after {
     content: "";

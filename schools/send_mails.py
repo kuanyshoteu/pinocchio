@@ -41,20 +41,54 @@ def send_mails(request):
     school = is_moderator_school(request, profile)
     only_managers(profile)
     text = request.GET.get('text')
-    cards = request.GET.get('cards')
-    add_addresses = request.GET.get('add_addresses')
+    addresses = request.GET.get('addresses')
     ok = False
-    if len(cards) > 0 or len(add_addresses) > 0:
-        if text:
-            head = request.GET.get('head')
-            for card in cards:
-                if '@' in card.mail:
-                    try:
-                        send_email(head, text, [card.mail])
-                    except Exception as e:
-                        raise
-            ok = True
+    print(text, addresses)
+    if text:
+        head = request.GET.get('head')
+        for mail in addresses.split(','):
+            if '@' in mail:
+                try:
+                    send_email(head, text, [mail])
+                except Exception as e:
+                    raise
+        ok = True
     data = {
         "ok": ok,
+    }
+    return JsonResponse(data)
+
+def get_mail_students_list(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    if request.GET.get('page'):
+        print('eee')
+        page = int(request.GET.get('page'))
+        school = is_moderator_school(request, profile)
+        squad = profile.filter_data.squad
+        if squad != None:
+            squads = [squad]
+        else:
+            if profile.filter_data.office:
+                squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
+            else:
+                squads = school.groups.filter(shown=True).prefetch_related('students')
+        if profile.filter_data.subject_category:
+            subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
+            squads = squads.filter(subjects__in=subjects)
+        students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
+        if len(students) <= (page-1)*16:
+            return JsonResponse({"ended":True})
+        p = Paginator(students, 16)
+        page1 = p.page(page)
+        res = []
+        for student in page1.object_list:
+            res.append([
+                student.first_name,
+                student.mail,
+                ])
+    data = {
+        "res":res,
     }
     return JsonResponse(data)

@@ -363,7 +363,12 @@ def search_free_name(name):
         return name
 
 def register_user_work(name, phone, mail, password, request):
-    if len(Profile.objects.filter(mail=mail)) == 0 and len(Profile.objects.filter(phone=phone)) == 0 or password == False:
+    print(mail)
+    if len(mail) > 0:
+        if len(Profile.objects.filter(mail=mail)) > 0:
+            return False
+    if len(Profile.objects.filter(phone=phone)) == 0 or password == False:
+        print('nennnnnn')
         new_name = search_free_name(name.replace(' ', ''))
         user = User.objects.create(username=new_name, password=password)
         if password:
