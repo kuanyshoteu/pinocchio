@@ -385,7 +385,6 @@ def register_user_work(name, phone, mail, password, request):
         profile.phone = phone
         profile.mail = mail
         filter_data = FilterData.objects.get_or_create(author=profile)[0]
-        filter_data.crm_notices = 1
         filter_data.save()
         profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
         profile.confirmation_time = timezone.now()
@@ -1373,6 +1372,7 @@ def hint_update():
     day = timezone.now().date() - timedelta(2)
     for fd in FilterData.objects.all():
         fd.timestamp = day
+        fd.crm_notices = 0
         fd.save()
 
 def categories_update():
