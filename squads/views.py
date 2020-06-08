@@ -389,6 +389,7 @@ def remove_student_from_squad(student, squad, manager_profile):
     other_subjects = Subject.objects.filter(squads__in=other_squads)
     card = student.card.get_or_create(school=school)[0]
     nm = squad.bill_data.filter(card=card)
+    print('qqqqqqqq', nm, squad.title, card.name)
     nm.delete()
     student.save()
     hist = CRMCardHistory.objects.create(
