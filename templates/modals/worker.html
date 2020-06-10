@@ -1,0 +1,28 @@
+
+
+<div class="border1 shadow_small mb10 mt5" ondragstart="save_worker_id('{{worker.id}}')" draggable='true' id="worker{{worker.id}}" job_id="{{job.id}}">
+    <div class="ui grid no_margin">
+        <div class="eight wide column pt10 pr10 pb10 pl10">
+            <a class="sch_worker_name" href="{{ worker.get_absolute_url }}">
+                {{ worker.first_name }}
+            </a>
+        </div>
+<!--         <div class="eight wide column" style="padding: 5px 14px">
+            <form class="ui form no_margin">
+                <div id="input{{worker.id}}" class="ui grid" style="float: right;display: none;">
+                    <div class="eleven wide column" style="padding: 14px 1px;">
+                        <input style="margin: 0;height: 28px;padding: 6px 5px" type="number" id="salary{{worker.id}}" value="{{ worker.salary }}">           
+                    </div>
+                    <div class="five wide column" style="padding: 14px 0">
+                        <a class="ui button mini blue save_salary" id="{{worker.id}}" style="padding: 9px 2px 9px 10px;"><i class="check textw icon"></i></a>
+                    </div>
+                </div>
+                <span id="salary_show{{worker.id}}" style="float: right;">
+                    <span id="salary_show_value{{worker.id}}">{{ worker.salary }}</span>
+                    <span style="font-size: 12px;">тг.</span>
+                    <a onclick="$('#input{{worker.id}}').show();$('#salary_show{{worker.id}}').hide();"><i class="pen square icon"></i></a>
+                </span>
+            </form>
+        </div>
+ -->    </div>
+</div>

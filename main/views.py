@@ -362,6 +362,44 @@ def search_free_name(name):
     else:
         return name
 
+def add_worker_school(request):
+    ok = False
+    password = False
+    profile = get_profile(request)
+    wid = 0
+    url = ''
+    print('add_worker_school')
+    if is_profi(profile, 'Director') and request.GET.get('prof_id') and request.GET.get('name') and request.GET.get('phone'):
+        school = is_moderator_school(request, profile)
+        print(school.title)
+        name = request.GET.get('name')
+        phone = request.GET.get('phone')
+        mail = request.GET.get('mail')
+        password = random_password()
+        profile = register_user_work(name, phone, mail, password, False)
+        profile.is_student = False
+        profile.save()
+        wid = profile.id
+        url = profile.get_absolute_url()
+        profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
+        if profession.title != 'Teacher':
+            return JsonResponse({'ok':False})
+        profile.profession.add(profession)
+        profile.schools.add(school)
+        if request.GET.get('job_id') != '-1':
+            job = profession.job_categories.filter(id=int(request.GET.get('job_id')))
+            if len(job) > 0:
+                job = job[0]
+                profile.job_categories.add(job)
+        ok = True
+    data = {
+        "ok":ok,
+        "password":password,
+        "id":wid,
+        "url":url,
+    }
+    return JsonResponse(data)
+
 def register_user_work(name, phone, mail, password, request):
     print(mail)
     if len(mail) > 0:

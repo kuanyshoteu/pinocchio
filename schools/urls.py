@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from .views import *
 from .send_mails import *
-from main.views import get_landing,adilmed, get_school_report
+from main.views import get_landing,adilmed, get_school_report, add_worker_school
 from django.views.decorators.csrf import csrf_exempt
 
 app_name = 'schools'
@@ -12,7 +12,6 @@ urlpatterns = [
     url(r'^schedule/$', school_schedule, name='schedule'),
     url(r'^info/$', school_info, name='info'),
     url(r'^landing/(?P<school_id>\d+)/$', school_landing, name='landing'),
-    url(r'^salaries/$', school_salaries, name='salaries'),
     url(r'^rating/$', school_rating, name='rating'),
     url(r'^payments/$', school_payments, name='payments'),
     url(r'^reports/$', get_school_report, name='get_school_report'),
@@ -97,4 +96,7 @@ urlpatterns = [
     # sending mails
     url(r'^api/send_mails/', send_mails, name='send_mails'),    
     url(r'^api/get_mail_students_list/', get_mail_students_list, name='get_mail_students_list'),    
+    # school workers
+    url(r'^salaries/$', school_salaries, name='salaries'),
+    url(r'^api/add_worker_school/', add_worker_school, name='add_worker_school'),        
 ]
