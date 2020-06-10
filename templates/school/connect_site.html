@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+{% block head_title %}
+    Подключение сайта | {{ block.super }}
+{% endblock head_title %}
+
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<div id="group-details">
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="w85 wide column">
+                {% include 'school/head.html' %}
+                <div class="ui segment shadow_small mb0 topbr5">
+                    <div class="textblue textbold pt5 text17 mb15 dflex">
+                        Как подключить <img class="br5 ml5 mr5" style="width: 100px;margin-top: -3px" src="{% static 'images/logoblue.png' %}"> к Вашему сайту?
+                    </div>
+                    <div class="ui grid stackable mt15">
+                        <div class="eight wide column pl0">
+                            <div class="text15 mb30" >
+                                <div style="position: relative;" class="help_right_midle shadow_blue backblue br5 pt15 pr15 pb15 pl15 textw" style="">
+                                    После интеграции на Вашем сайте появится такая форма
+                                    <br><br>
+                                    Ваши клиенты смогут оставлять заявки, которуые попадут прямиком во вкладку
+                                    <a href="/schools/crm/" class="ui button mini white pt5 pb5 pl30 pr30 mt10 textblue textbold">Клиенты</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="eight wide column pr0">
+                            <div class="ui segment border1 shadow_small backwhite br5 pt15 pl15 pr15 pb30" style="width: 350px">
+                                <div class="text-center mb15 text17 textblue textbold">
+                                    Оставьте номер и мы Вам перезвоним
+                                </div>
+                                <form class="ui form textdg text14 textbold">
+                                    Имя:
+                                    <textarea></textarea>
+                                    Телефон:
+                                    <textarea class="mb0"></textarea>
+                                </form>
+                                <div class="text-center mt15">
+                                    <a class="ui button small green">
+                                        Отправить
+                                    </a>
+                                    <div class="loading_small query_load ml10" style="display: none;">
+                                        <div class="animation"><div class="circle one"></div></div>
+                                        <div class="animation"><div class="circle two"></div></div>
+                                        <div class="animation"><div class="circle three"></div></div>
+                                        <div class="animation"><div class="circle four"></div></div>
+                                        <div class="animation"><div class="circle five"></div></div>
+                                        <div class="animation"><div class="circle six"></div></div>
+                                    </div>
+                                    <div style="display: none;" class="success_load textbold textgreen text15 mt10">Мы Вам позвоним, спасибо!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text15 textbold mt30">
+                        Просто скопируйте этот код и вставьте в нужное место на Вашем сайте                         
+                    </div>
+                    <div class="textred textbold">*Для правильной работы требуется библиотека jQuery</div>
+                </div>
+                <div class="pt15 pl15 pr15 pb15 backdark shadow_dark textw">
+                    <pre class="mt0">
+&lt;style type="text/css"&gt;
+    .bilimtap_button{
+        position: relative;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 10px 15px;
+        border-radius: 5px;
+        background-color: #21BA45;
+        color: #fff;
+        box-shadow: 0 0 5px 0 rgba(34, 36, 38, 0.15);
+    }
+    .bilimtap_button:hover{
+        cursor: pointer;
+        background-color: #16ab39;
+    }
+    #bilimtap_request_callback{
+        width: calc(100% - 30px);
+        font-family: Arial, Helvetica, sans-serif;
+        z-index: 3000;
+    }
+    .bilimtap_modal_segment{
+        margin: 0 auto;
+        font-family: Arial, Helvetica, sans-serif;
+        padding:15px 15px 30px 15px;
+        background-color: #fff;
+        box-shadow: 0 0 15px 0 #d7d7d7;
+        border-radius: 5px;
+        width: 400px;
+    }
+    .bilimtap_textarea{
+        height: 28px;
+        font-family: Arial, Helvetica, sans-serif;
+        width: calc(100% - 30px);
+        padding: 6px 10px;
+        background: #FFFFFF;
+        border: 1px solid rgba(34, 36, 38, 0.15);
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1.2857;
+        resize: none; 
+        margin-bottom: 10px;   
+    }
+    .bilimtap_h{
+        color: #285473;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 17px;
+        font-weight: 600;
+    }
+    .bilimtap_text{
+        font-family: Arial, Helvetica, sans-serif;
+        color: #545454;
+        font-size: 14px;
+    }
+    .bilimtap_success_load{
+        font-size: 15px;
+        color: #21BA45;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+    .lds-ring {
+      position: relative;
+      margin-top: 15px;
+      left: calc(50% - 7px);
+    }
+    .lds-ring div {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      border: 2px solid blue;
+      border-radius: 50%;
+      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: blue transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+    @keyframes lds-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+&lt;/style&gt;
+&lt;div id="bilimtap_request_callback"&gt;
+    &lt;div class="bilimtap_modal_segment"&gt;
+        &lt;div class="bilimtap_h"&gt;
+            Оставьте номер и мы Вам перезвоним
+        &lt;/div&gt;
+        &lt;b class="bilimtap_text"&gt;Имя:
+        &lt;textarea class="bilimtap_textarea bilimtap_query_name"&gt;&lt;/textarea&gt;
+        Телефон:
+        &lt;textarea class="bilimtap_textarea bilimtap_query_phone"&gt;&lt;/textarea&gt;
+        &lt;div style="margin-top: 15px;text-align: center;"&gt;
+            &lt;a url="" id="bilimtap_send_query" class="bilimtap_button"&gt;
+                Отправить
+            &lt;/a&gt;
+            &lt;div style="display: none;" class="bilimtap_load lds-ring"&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;
+            &lt;div style="display: none;" class="bilimtap_success_load"&gt;Мы Вам позвоним, спасибо!&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;script type="text/javascript"&gt;
+    $('#bilimtap_send_query').click(function(e) {
+        url = '{{instance.connect_site_api}}'
+        name = $('.bilimtap_query_name').val()
+        phone = $('.bilimtap_query_phone').val()
+        if (name.length &gt; 0 && phone.length &gt; 0) {
+            $('.bilimtap_load').show()
+            $('.bilimtap_success_load').hide()
+            $(this).hide()
+            $.ajax({
+                url: url,
+                data: {
+                    'name':name,
+                    'phone':phone,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.bilimtap_load').hide()
+                    $('.bilimtap_success_load').show()
+                }
+            })          
+        }
+    })        
+&lt;/script&gt;
+
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

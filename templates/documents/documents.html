@@ -38,7 +38,7 @@
                         {% else %}
                             <a class="ui button mini disabled">Вставить</a>
                         {% endif %}                      
-                        <a class="ui button mini blue create_docfolder" parent_id="{% if this_folder %}{{ this_folder.id }}{% else %}none{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_docfolder_url }}' >
+                        <a class="ui button mini blue create_docfolder" parent_id="{% if this_folder %}{{ this_folder.id }}{% else %}none{% endif %}" school="{{current_school_id}}" data-href='{% url "documents:create_docfolder_url" %}' >
                             Создать папку
                         </a>
                         <a class="ui button mini blue" onclick="$('#upload_doc_form').modal('show')">

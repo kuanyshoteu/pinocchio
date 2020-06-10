@@ -925,6 +925,17 @@ a{
   cursor: pointer;
   color: #285473;
 }
+.help_right_midle:after {
+    content: "";
+    display: block;
+    border-width: 10px 0 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent transparent #506ca9;
+    margin-top: -10px;
+    position: absolute;
+    right: -10px;
+    top: 50%;
+}
 .help_right:after {
     content: "";
     display: block;

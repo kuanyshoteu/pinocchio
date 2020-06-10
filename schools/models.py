@@ -150,6 +150,9 @@ class School(models.Model):
         return reverse("schools:delete_social_url")
     def predoplata(self):
         return reverse("schools:predoplata")
+    # site_query
+    def connect_site_api(self):
+        return reverse("schools:connect_site_api", kwargs={"school_id": self.id})
 
 class SocialMedia(models.Model):
     title = models.CharField(max_length=250)

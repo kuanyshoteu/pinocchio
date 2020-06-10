@@ -43,6 +43,16 @@
                     column_data = data.all_res[i][1]
                     fill_card_data(colid,column_data,'bottom')
                 }
+                number_of_free = data.number_of_free
+                if (number_of_free > 0) {
+                    $('.number_of_free').show()
+                    $('.number_of_free').text(number_of_free)
+                }
+                number_of_manager = data.number_of_manager
+                if (number_of_manager > 0) {
+                    $('.number_of_manager').show()
+                    $('.number_of_manager').text(number_of_manager)
+                }
             }
         })
     }
@@ -110,7 +120,6 @@
             daybutton.removeClass('green')                
             daybutton.attr('card', id)
         }
-        console.log('days_of_weeks', days_of_weeks)
         for (var i = 0; i < days_of_weeks.length; i++) {
             if (days_of_weeks[i]){
                 daybutton = $('.card_form-dayscd'+i)
@@ -159,9 +168,9 @@
     function fill_card_data(column,res,position){
         for (var i = 0; i < res.length; i++) {
             id = res[i][0]
-            console.log('fill', id)
             name = res[i][1]
             phone = res[i][2]
+            color = res[i][3]
             author_name = res[i][5]
             author_url = res[i][6]
             is_director = ''
@@ -170,6 +179,9 @@
             nc.attr('id', 'card_container'+id)
             nc.addClass('crm_card'+id)
             nc.removeClass('source_card')
+            if (color == 'red') {
+                nc.find('.card_notice').show()    
+            }
             nc.find('#cardnameshow').text(name)
             nc.find('#cardphoneshow').text(phone)
             nc.find('#cardnameshow').attr('id', 'cardnameshow'+id)

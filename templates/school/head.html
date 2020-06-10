@@ -1,7 +1,7 @@
 {% load staticfiles %}
 <div class="ui segment mt0">
     <div class="group-name hint_place2" side="bottom">
-        <span class="ui header ava-title school_title"><a href="{{instance.landing}}">{{ instance.title }}</a></span>
+        <span class="ui header ava-title school_title"><a class="textblue" href="{{instance.landing}}">{{ instance.title }}</a></span>
         {% if is_director %}
         <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
         <form class="ui form no_margin school_title_form" style="width: 400px;display: none;">
@@ -27,6 +27,9 @@
         <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
             Социальные сети
         </a>
-        {% endif %}        
+        {% endif %}
+        <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
+            Подключение сайта
+        </a>
     </div>
 </div>

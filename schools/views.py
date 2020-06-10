@@ -62,6 +62,24 @@ def mails(request):
     }
     return render(request, "mails/mails.html", context)
 
+def connect_site(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    context = {
+        "profile":profile,
+        "instance": school,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "page":"info",
+        "connect_site":True,
+    }
+    return render(request, "school/connect_site.html", context)
+
 def school_rating(request):
     profile = get_profile(request)
     if len(profile.schools.all()) == 0:
@@ -268,7 +286,7 @@ def school_salaries(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
-        "page":"finance",        
+        "page":"info",        
     }
     return render(request, "school/salaries.html", context)
 
@@ -1494,6 +1512,7 @@ def change_manager(request):
                 image_url = 'crm'
             )
         card.save()
+        update_crm_notices(school)
     data = {
         'author_url':author_url,
         'author_name':author_name,
@@ -1558,11 +1577,11 @@ def get_card_squads(request):
 def get_card_info(request):
     bills = []
     if request.GET.get('id'):
-        profile = Profile.objects.get(user = request.user.id)
+        manager = Profile.objects.get(user = request.user.id)
         card = CRMCard.objects.get(id=int(request.GET.get('id')))
-        only_managers(profile)
+        only_managers(manager)
         school = card.school
-        is_in_school(profile, school)
+        is_in_school(manager, school)
         profile = card.card_user
         nms = card.bill_data.select_related('squad')
         if profile:
@@ -1578,6 +1597,15 @@ def get_card_info(request):
         colid = card.column.id
         form_res = get_card_form_by_column(card, colid)
         dialog = get_card_dialog(card)
+        if card.color == 'red':
+            if card.author_profile == manager:
+                card.color = 'white'
+                card.save()
+                number_of_free = len(school.crm_cards.filter(color='red', author_profile=None))
+                fd = manager.filter_data
+                number_of_manager = len(school.crm_cards.filter(color='red', author_profile = manager))
+                fd.crm_notices = number_of_free + number_of_manager
+                fd.save()
     data = {
         'bills':bills,
         'form_res':form_res,
@@ -1610,6 +1638,10 @@ def take_card(request):
     if not card.author_profile:
         card.author_profile = profile
         ok = True
+        if card.color == 'red':
+            card.color = 'white'
+            card.save()
+            update_crm_notices(school)
     else:
         card.author_profile = None
     card.save()
@@ -2051,12 +2083,17 @@ def get_all_cards_second(request):
         managers = school.people.filter(profession=manager_prof)
         for manager in managers:
             managers_res.append([manager.id,manager.first_name])
+    all_cards = school.crm_cards.all()
+    number_of_free = len(all_cards.filter(color='red', author_profile=None))
+    number_of_manager = len(all_cards.filter(color='red', author_profile = profile))
     data = {
         "all_res":all_res,
         "page":2,
         "is_director":is_profi(profile, 'Director'),
         "managers_res":managers_res,
         "Ended":False,
+        "number_of_free":number_of_free,
+        "number_of_manager":number_of_manager,
     }
     return JsonResponse(data)
 
@@ -2466,3 +2503,59 @@ def search_city(request):
         'res':res,
     }
     return JsonResponse(data)
+
+def connect_site_api(request, school_id=None):
+    if school_id:
+        if request.GET.get('name') and request.GET.get('phone'):
+            print('555')
+            school = School.objects.get(id=school_id)
+            found = False
+            student = None
+            if len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
+                found = True
+                student = Profile.objects.filter(phone=request.GET.get('phone'))[0]
+                card = student.card.get(school=school)
+            if len(school.crm_cards.filter(phone=request.GET.get('phone'))) > 0:
+                found = True
+                student = False
+                card = school.crm_cards.filter(phone=request.GET.get('phone'))[0]
+            if found:
+                card.comments += '; Оставлена заявка через сайт'
+                card.color = 'red'
+                card.save()
+                return JsonResponse({})
+            column = school.crm_columns.get(id = 1)
+            saved = False
+            if found:
+                saved = True
+            card = school.crm_cards.create(
+                name = request.GET.get('name'),
+                phone = request.GET.get('phone'),
+                column = column,
+                saved = saved,
+                comments = 'Оставлена заявка через сайт',
+                card_user = student,
+                color = 'red'
+            )
+            card.save()
+            update_crm_notices(school)
+            hist = CRMCardHistory.objects.create(
+                card = card,
+                edit = '***Создание карточки***',
+                )
+            hist.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def update_crm_notices(school):
+    all_cards = school.crm_cards.all() 
+    number_of_free = len(all_cards.filter(color='red', author_profile=None))
+    manager_prof = Profession.objects.get(title='Manager')
+    dir_prof = Profession.objects.get(title='Director')
+    managers = school.people.filter(profession__in=[manager_prof,dir_prof])
+    for manager in managers:
+        fd = manager.filter_data
+        number_of_manager = len(all_cards.filter(color='red', author_profile = manager))
+        fd.crm_notices = number_of_free + number_of_manager
+        fd.save()

@@ -41,11 +41,11 @@
                               <a class="ui button mini disabled">Вставить</a>
                           {% endif %}                      
                           <div class="hint43 hint63 highliter" style="position: absolute;margin-top: 15px;right: 70px;"></div>
-                          <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_folder_url }}' >
+                          <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{% url "library:create_folder_url" %}' >
                             Создать папку
                           </a>
                           <div class="hint40 hint60 highliter" style="position: absolute;margin-top: 15px;right: -30px"></div>
-                          <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{{ profile.create_lesson_url }}'>
+                          <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href="{% url 'papers:create_lesson_url' %}">
                             Создать урок
                           </a>
                         </div> 

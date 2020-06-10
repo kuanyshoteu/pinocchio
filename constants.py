@@ -240,14 +240,11 @@ def get_card_data_by_column(card, column_id):
         author_name = author.first_name
         author_url = author.get_absolute_url()
         author_id = author.id
-    color = ''
-    if column_id > 3:
-        color = card.color
     arr = [
         card.id,                            # 0
         card.name,                          # 1
         card.phone,                         # 2
-        color,                              # 3
+        card.color,                         # 3
         str(card.saved),                    # 4
         author_name,                        # 5
         author_url,                         # 6
