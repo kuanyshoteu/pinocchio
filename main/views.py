@@ -1340,7 +1340,7 @@ import math
 def upload_cards(request):
     if 'file' in request.FILES:
         x=float('nan')
-        school = School.objects.get(id=94)
+        school = School.objects.get(id=140)
         file = request.FILES['file']
         data2 = pd.ExcelFile(file)
         datas = pd.read_excel(data2, None)
@@ -1357,7 +1357,6 @@ def upload_cards(request):
                 comment = ''
                 i = 0
                 for aaa in row:
-                    print('777777', aaa)
                     if i == 0:
                         name = aaa
                     elif i == 1:
@@ -1414,8 +1413,6 @@ def upload_cards(request):
                     i += 1
                 card.comments = comment
                 card.save()
-                print('*****')
-
     context = {   
     }
     return render(request, "upload_cards.html", context)

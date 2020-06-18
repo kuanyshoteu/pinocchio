@@ -5,6 +5,7 @@ $(document).ready(function () {
     filter_squads()
     async function filter_squads(){
         obj = $('.squad_filter.green').attr('option')
+        console.log('obj22', obj)
         if (obj == 'all') {
             $('.sq_office_all').show()
         }
