@@ -1359,25 +1359,25 @@ def upload_cards(request):
                 for aaa in row:
                     if i == 0:
                         name = aaa
+                    elif i == 1:
+                        if str(aaa) != 'nan':
+                            name += ' ' + str(aaa)
+                    i += 1
+                print(name)
                 card = school.crm_cards.filter(name=name)
-                print(name, len(card))
                 if len(card) > 1:
                     card[1].delete()
-                #     elif i == 1:
-                #         if str(aaa) != 'nan':
-                #             name += ' ' + str(aaa)
-                #     elif i == 2:
-                #         parents = aaa
-                #     elif i == 3:
-                #         if str(aaa) != 'nan' and str(aaa) != 'NaT':
-                #             birthday = aaa
-                #     elif i == 5:
-                #         phone = aaa
-                #     elif i == 8:
-                #         if aaa:
-                #             if not '@' in str(aaa) and str(aaa) != 'nan':
-                #                 mail = aaa
-                #     i += 1
+                    # elif i == 2:
+                    #     parents = aaa
+                    # elif i == 3:
+                    #     if str(aaa) != 'nan' and str(aaa) != 'NaT':
+                    #         birthday = aaa
+                    # elif i == 5:
+                    #     phone = aaa
+                    # elif i == 8:
+                    #     if aaa:
+                    #         if not '@' in str(aaa) and str(aaa) != 'nan':
+                    #             mail = aaa
                 # card = xls_create_card(None,name,parents,birthday,phone,mail,column,school)
                 # i = 0
                 # for aaa in row:
@@ -1466,7 +1466,8 @@ def moderator_run_code(request):
     # card_tags()
     # columns()
     # categories_update()
-    hint_update()
+    # hint_update()
+    # update_prime()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
