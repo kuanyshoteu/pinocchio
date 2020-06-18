@@ -1256,7 +1256,7 @@ def edit_card_detailed(card, student, school,request,profile):
         old_birthday = card.birthday
         if not old_birthday:
             old_birthday = 'Пусто'
-        edit = edit + "День рождения: " + old_birthday + " -> " + request.GET.get('birthday') + "; "
+        edit = edit + "День рождения: " + str(old_birthday) + " -> " + request.GET.get('birthday') + "; "
     if student:
         student.save()
     card.name = request.GET.get('name')
