@@ -1264,7 +1264,10 @@ def edit_card_detailed(card, student, school,request,profile):
     card.extra_phone = request.GET.get('extra_phone')
     card.parents = request.GET.get('parents')
     card.comments = request.GET.get('comment')
-    card.birthday = request.GET.get('birthday')
+    if request.GET.get('birthday') == '':
+        card.birthday = None
+    else:
+        card.birthday = request.GET.get('birthday')
     crnt_tag = ''
     wright = False
     hashtags = school.hashtags.all()
