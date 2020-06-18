@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="mb5 catall online_{{sq.is_online}} ind_{{sq.is_individual}} {%for cat in sq.category.all%}cat{{cat.id}}{%endfor%}">
+<div class="mb5 catall online_{{sq.is_online}} ind_{{sq.is_individual}} {%for cat in sq.category.all%}cat{{cat.id}} {%endfor%}">
     <div style="text-align: left;" class="no_padding border1 ui segment shadow_small full-w">
         <div class="ui grid group-block no_margin">
             <div class="leftbr5 wide column left-side pt15 pl15 pb15 backrbb" style="width: 42px;">

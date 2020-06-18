@@ -18,10 +18,8 @@ $(document).ready(function () {
             }
             else if (obj == 'online') {
                 $('.online_True.sq_office_'+squad_office).show()
-                $('.ind_False.sq_office_'+squad_office).show()
             }
             else if (obj == 'individual') {
-                $('.online_False.sq_office_'+squad_office).show()
                 $('.ind_True.sq_office_'+squad_office).show()
             }
             console.log(squad_office)
@@ -56,10 +54,8 @@ $(document).ready(function () {
             }
             else if (obj == 'online') {
                 $('.online_True.cat'+subject_cat).show()
-                $('.ind_False.cat'+subject_cat).show()
             }
             else if (obj == 'individual') {
-                $('.online_False.cat'+subject_cat).show()
                 $('.ind_True.cat'+subject_cat).show()
             }
             console.log(subject_cat)
