@@ -81,18 +81,12 @@
                                 </div>
                             </div>
                             {% endif %}
-                            <div class="mt10" style="height: 80px;">
-                                <div class="text-center"><b class="textdg">Дни недели:</b></div>
-                                <a onclick="card_form_days('cd0')" class="ui button mini mr0 mb5 card_form-dayscd0" style="padding: 7px 7px !important;" card="" id="0">Пн</a>
-                                <a onclick="card_form_days('cd1')" class="ui button mini mr0 mb5 card_form-dayscd1" style="padding: 7px 7px !important;" card="" id="1">Вт</a>
-                                <a onclick="card_form_days('cd2')" class="ui button mini mr0 mb5 card_form-dayscd2" style="padding: 7px 7px !important;" card="" id="2">Ср</a>
-                                <a onclick="card_form_days('cd3')" class="ui button mini mr0 mb5 card_form-dayscd3" style="padding: 7px 7px !important;" card="" id="3">Чт</a>
-                                <a onclick="card_form_days('cd4')" class="ui button mini mr0 mb5 card_form-dayscd4" style="padding: 7px 7px !important;" card="" id="4">Пт</a>
-                                <a onclick="card_form_days('cd5')" class="ui button mini mr0 mb5 card_form-dayscd5" style="padding: 7px 7px !important;" card="" id="5">Сб</a>
-                                <a onclick="card_form_days('cd6')" class="ui button mini mr0 mb5 card_form-dayscd6" style="padding: 7px 7px !important;" card="" id="6">Вс</a>
+                            <div class="mt10">
+                                <div class="text-center"><b class="textdg">День рождения:</b></div>
+                                <input type="date" class="card_birthday">
                             </div>
                             {% if is_director %}
-                            <div class="text-center"><b class="textdg">Менеджер:</b></div>
+                            <div class="text-center mt10"><b class="textdg">Менеджер:</b></div>
                             <select onchange="change_manager('')" class="change_manager" id="{{card.id}}">
                                 <option class="cfmanager cfmanager-1" value="-1">Выберите менеджера</option>
                                 {% for manager in managers %}
@@ -105,6 +99,15 @@
                                 <a class="ui button mini small green full-w takecard" id="{{card.id}}" url="{{card.take_url}}">Взять себе</a>
                             </div>
                             {% endif %}
+                            <div class="mt10">
+                                <a onclick="card_form_days('cd0')" class="ui button mini mr0 mb5 card_form-dayscd0" style="padding: 7px 7px !important;" card="" id="0">Пн</a>
+                                <a onclick="card_form_days('cd1')" class="ui button mini mr0 mb5 card_form-dayscd1" style="padding: 7px 7px !important;" card="" id="1">Вт</a>
+                                <a onclick="card_form_days('cd2')" class="ui button mini mr0 mb5 card_form-dayscd2" style="padding: 7px 7px !important;" card="" id="2">Ср</a>
+                                <a onclick="card_form_days('cd3')" class="ui button mini mr0 mb5 card_form-dayscd3" style="padding: 7px 7px !important;" card="" id="3">Чт</a>
+                                <a onclick="card_form_days('cd4')" class="ui button mini mr0 mb5 card_form-dayscd4" style="padding: 7px 7px !important;" card="" id="4">Пт</a>
+                                <a onclick="card_form_days('cd5')" class="ui button mini mr0 mb5 card_form-dayscd5" style="padding: 7px 7px !important;" card="" id="5">Сб</a>
+                                <a onclick="card_form_days('cd6')" class="ui button mini mr0 mb5 card_form-dayscd6" style="padding: 7px 7px !important;" card="" id="6">Вс</a>
+                            </div>
                         </div>
                         <div class="sixteen wide column no_padding">
                             <div style="height: 10px;"></div>

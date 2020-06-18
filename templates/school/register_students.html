@@ -33,10 +33,10 @@
                     </div>
                 </div>
                 <div class="ten wide column pt0 pb0">
-                    <div class="dflex" style="float: right;"> 
+                    <div class="dflex" style="float: right;display: flex;"> 
                         <div class="textdg mr5 textbold" style="padding-top: 3px;">Индивидуальные занятия</div>  
                         <div class="filter-element">
-                            <div id="-1" class="mr5 filter-title dflex" style="width: 200px;height: 31px;" onclick="$('.individual_subjects').fadeToggle(0.1)">
+                            <div id="-1" class="mr5 filter-title dflex" style="width: 200px;height: 31px;display: flex;" onclick="$('.individual_subjects').fadeToggle(0.1)">
                                 <div style="width: 190px;" class="textdots individual_subject_filter">Выберите курс</div>
                                 <i class="icon caret down" style="float: right;"></i>
                             </div>
@@ -45,7 +45,7 @@
                                 </a>
                             </div>                        
                         </div>
-                        <a style="height: 30px;" url="{%url 'schools:create_individual_group'%}" class="ui button mini blue dflex create_individual_group" onclick="create_individual_group()">
+                        <a style="height: 30px;display: flex;" url="{%url 'schools:create_individual_group'%}" class="ui button mini blue create_individual_group" onclick="create_individual_group()">
                             Добавить
                             <div class="pl5" style="width: 14px;">
                                 <div style="display: none;" class="create_individual_group_load ui loader mini"></div>

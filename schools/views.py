@@ -1252,6 +1252,11 @@ def edit_card_detailed(card, student, school,request,profile):
         edit = edit + "Родители: " + card.parents + " -> " + request.GET.get('parents') + "; "
     if card.comments != request.GET.get('comment'):
         edit = edit + "Коммент: " + card.comments + " -> " + request.GET.get('comment') + "; "
+    if card.comments != request.GET.get('birthday'):
+        old_birthday = card.birthday
+        if not old_birthday:
+            old_birthday = 'Пусто'
+        edit = edit + "День рождения: " + old_birthday + " -> " + request.GET.get('birthday') + "; "
     if student:
         student.save()
     card.name = request.GET.get('name')
@@ -1259,6 +1264,7 @@ def edit_card_detailed(card, student, school,request,profile):
     card.extra_phone = request.GET.get('extra_phone')
     card.parents = request.GET.get('parents')
     card.comments = request.GET.get('comment')
+    card.birthday = request.GET.get('birthday')
     crnt_tag = ''
     wright = False
     hashtags = school.hashtags.all()
@@ -2126,9 +2132,8 @@ def create_individual_group(request):
     if request.GET.get('student_id') and request.GET.get('subject_id'):
         print('yo2')
         card = school.crm_cards.get(id=int(request.GET.get('student_id')))
-        student = card.card_user
         subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
-        title = student.first_name+' - '+subject.title
+        title = card.name+' - '+subject.title
         title = title[:45]
         title = create_squad_title(title, 1)
         print(title)
@@ -2138,6 +2143,28 @@ def create_individual_group(request):
             start_date=timezone.now().date(),
         )
         new_squad.save()
+        student = card.card_user
+        if not student:
+            password = random_password()
+            found = False
+            student = False
+            if card.mail != '' and len(Profile.objects.filter(mail=card.mail)) > 0:
+                student = Profile.objects.filter(mail=card.mail)[0]
+                found = True
+            elif len(Profile.objects.filter(phone=card.phone)) > 0:
+                student = Profile.objects.filter(phone=card.phone)[0]
+                found = True
+            if found:
+                ok_mail = prepare_mail(card.name, card.phone, card.mail, new_squad, None, True)
+            else:
+                ok_mail = prepare_mail(card.name, card.phone, card.mail, new_squad, password, True)
+            hist = CRMCardHistory.objects.create(
+                action_author = profile,
+                card = card,
+                edit = '*** Регистрация в ' + new_squad.title + ' ***',
+                )
+            student = register_new_student(found,card,password,profile,student,new_squad.id,school)
+
         add_student_to_squad(student, new_squad, profile)
         new_squad.prefered_subjects.add(subject)
         new_squad.squad_histories.create(action_author=profile,edit='Создана группа '+new_squad.title)

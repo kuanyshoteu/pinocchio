@@ -105,6 +105,8 @@
         author_id = res[4]
         social_media_id = res[5]
         days_of_weeks = res[6]
+        birthday = res[7]
+        console.log('open1', birthday)
         take_url = "{% url 'schools:take_url' %}"
         if ($('.data').attr('is_dir') == 'True') {
             $('.change_manager').attr('onchange','change_manager("'+id+'")')
@@ -143,6 +145,7 @@
         $('.card_parentsedit').text(parents)
         $('.card_phone_extraedit').text(extra_phone)
         $('.card_commentedit').text(comments)
+        $('.card_birthday').val(birthday)
         $('.save_card_form').attr('onclick', 'edit_card("'+id+'")')
         $('.save_card_form').attr('id', id)
         if (mail.length < 2) {
@@ -178,6 +181,7 @@
             card.attr('author_id', author_id)
             card.attr('take_url', take_url)
             card.attr('days_of_weeks', days_of_weeks_str)
+            card.attr('birthday', birthday)
         }
     }
     function fill_card_dialog(res){
@@ -487,6 +491,9 @@
         $('.crmform_title').text(name);
         $('.card_nameedit').val(name);
         $('.card_phoneedit').val(phone);
+        $('.card_mail').show()
+        $('.card_mail_form').hide()
+
         card = $('.crm_card'+id);
         if (card.attr('fillform') == 'yes') {
             mail = card.attr('mail')
@@ -495,6 +502,8 @@
             comments = card.attr('comments')
             author_id = card.attr('author_id')
             take_url = card.attr('take_url')
+            birthday = card.attr('birthday')
+            console.log('open0', birthday)
             days_of_weeks = card.attr('days_of_weeks')
             days_of_weeks_ar = [false,false,false,false,false,false,false,]
             for (var i = 0; i <  days_of_weeks.length; i++) {
@@ -507,6 +516,7 @@
                     author_id,
                     take_url,
                     days_of_weeks_ar,
+                    birthday,
                     ]
             fill_card_form(id, res, 'yes')
             $.ajax({
@@ -641,6 +651,7 @@
         var extra_phone = $('.card_phone_extraedit').val()
         var parents = $('.card_parentsedit').val()
         var comment = $('.card_commentedit').text()
+        var birthday = $('.card_birthday').val()
         $('.card_saved').hide()
         $.ajax({
             url: $('.edit_card_url').attr('url'),
@@ -650,7 +661,8 @@
                 'extra_phone':extra_phone,
                 'comment':comment,
                 'id':id,
-                'parents':parents
+                'parents':parents,
+                'birthday':birthday,
             },
             dataType: 'json',
             success: function (data) {
@@ -658,6 +670,10 @@
                 card.find('#cardnameshow'+id).text(name)
                 card.find('#cardphoneshow'+id).text(phone)
                 $('.card_saved').show()
+                card.attr('extra_phone', extra_phone)
+                card.attr('parents', parents)
+                card.attr('comments', comment)
+                card.attr('birthday', birthday)
             }
         })
     }

@@ -265,7 +265,8 @@ def get_card_form_by_column(card, column_id):
         card.comments,                      # 3
         author_id,                          # 4
         card.social_media_id,               # 5
-        card.days_of_weeks,                 # 7
+        card.days_of_weeks,                 # 6
+        card.birthday,                      # 7
     ]
     res.append(arr2)
     return res

@@ -1103,6 +1103,9 @@ a{
   height: 33px;line-height: 10px;
 }
 .dflex{
+  display: flex;
+}
+.dflexx{
   display: flex !important;
 }
 .dinline{

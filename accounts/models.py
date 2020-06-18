@@ -122,6 +122,7 @@ class CRMCard(models.Model):
     premoney = models.IntegerField(default=0)
     color = models.CharField(max_length=250, default='white')
     social_media_id = models.CharField(max_length=50, default='')
+    birthday = models.DateField(null = True, blank = True)
     class Meta:
         ordering = ['-timestamp']
 

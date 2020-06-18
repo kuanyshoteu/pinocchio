@@ -1340,34 +1340,107 @@ import math
 def upload_cards(request):
     if 'file' in request.FILES:
         x=float('nan')
-        school = School.objects.get(id=89)
+        school = School.objects.get(id=94)
         file = request.FILES['file']
         data2 = pd.ExcelFile(file)
         datas = pd.read_excel(data2, None)
         res = []
+        column = CRMColumn.objects.get(title='Заявка на сайте')
         for key, value in datas.items():
             data = value
             for index, row in data.iterrows():
+                name = ''
+                parents = ''
+                birthday = None
+                phone = ''
+                mail = ''
                 comment = ''
-                for i in range(3, len(row)):
-                    s = row[i]
-                    if s:
-                        if isinstance(s, float):
-                            if math.isnan(s):
-                                s = '-'
-                        if s != '-':
-                            comment += str(s) + '; '
-                school.crm_cards.create(
-                    name=row[0],
-                    phone=row[1],
-                    parents=row[2],
-                    comments=comment,
-                    column = CRMColumn.objects.get(id=1)
-                    )
+                i = 0
+                for aaa in row:
+                    print('777777', aaa)
+                    if i == 0:
+                        name = aaa
+                    elif i == 1:
+                        if str(aaa) != 'nan':
+                            name += ' ' + str(aaa)
+                    elif i == 2:
+                        parents = aaa
+                    elif i == 3:
+                        if str(aaa) != 'nan' and str(aaa) != 'NaT':
+                            birthday = aaa
+                    elif i == 5:
+                        phone = aaa
+                    elif i == 8:
+                        if aaa:
+                            if not '@' in str(aaa) and str(aaa) != 'nan':
+                                mail = aaa
+                    i += 1
+                card = xls_create_card(None,name,parents,birthday,phone,mail,column,school)
+                i = 0
+                for aaa in row:
+                    if i == 4:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 6:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa).replace(' ', '')
+                    elif i == 7:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 8:
+                        if not '@' in str(aaa):
+                            if str(aaa) != 'nan':    
+                                tag = card.hashtags.get_or_create(title=aaa)
+                                comment += ' !'+str(aaa)
+                    elif i == 9:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 10:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 11:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 12:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    i += 1
+                card.comments = comment
+                card.save()
+                print('*****')
 
     context = {   
     }
     return render(request, "upload_cards.html", context)
+
+def xls_create_card(profile,name,parents,birthday,phone,mail,column,school):
+    card = school.crm_cards.create(
+        author_profile=profile,
+        name = name,
+        parents = parents,
+        birthday = birthday,
+        phone = phone,
+        mail = mail,
+        comments = '',
+        column = column,
+        saved = False,
+        card_user = None,
+    )
+    card.save()
+    hist = CRMCardHistory.objects.create(
+        action_author = profile,
+        card = card,
+        edit = '***Создание карточки***',
+        )
+    hist.save()
+    return card
 
 def moderator_run_code(request):
     profile = get_profile(request)
