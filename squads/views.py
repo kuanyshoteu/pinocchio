@@ -117,7 +117,7 @@ def squad_create(request):
             start = timezone.now().date() - timedelta(7)
         instance.start_date = start
         instance.save()
-        instance.squad_histories.create(action_author=profile,edit='Создал группу '+instance.title)
+        instance.squad_histories.create(action_author=profile,edit='Создана группа '+instance.title)
         return HttpResponseRedirect(instance.get_update_url())
     context = {
         "form": form,
@@ -208,6 +208,17 @@ def squad_update(request, slug=None):
         number_of_pages = int(len(qs)/number_in_page)
     else:
         number_of_pages = int(len(qs)/number_in_page) + 1
+
+    prefered_subject = instance.prefered_subjects.all()
+    if len(prefered_subject) > 0:
+        ind_first = True
+        prefered_subject = prefered_subject.first()
+        ind_subjects = school.school_subjects.filter(is_individual=True).exclude(id=prefered_subject.id)
+        group_subjects = school.school_subjects.filter(is_individual=False)
+    else:
+        ind_first = False
+        ind_subjects = school.school_subjects.filter(is_individual=True)
+        group_subjects = school.school_subjects.filter(is_individual=False)        
     context = {
         "instance": instance,
         "form":form,
@@ -228,7 +239,10 @@ def squad_update(request, slug=None):
         'constant_times':get_times(school.schedule_interval),
         'interval':school.schedule_interval,
         'days':get_days(),
-        'other_subjects':school.school_subjects.all(),
+        'group_subjects':group_subjects,
+        'ind_subjects':ind_subjects,
+        'ind_first':ind_first,
+        'prefered_subject':prefered_subject,
         'height':28*15*int(60/school.schedule_interval)+25,
         'page':'squads',
         "hint":profile.hint_numbers[4],
@@ -773,7 +787,7 @@ def add_lecture_work(start, end, squad, subject, days):
     category = subject.category.all()
     tp = school.time_periods.get_or_create(
         start = start,
-        end = end
+        end = end,
         )[0]
     students = squad.students.all()
     for i in days:

@@ -55,6 +55,7 @@ class Subject(models.Model):
     school = models.ForeignKey(School, default=1, on_delete = models.CASCADE, related_name='school_subjects') 
     author = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='author_subjects') 
     squads = models.ManyToManyField(Squad, related_name='subjects')
+    prefered_squads = models.ManyToManyField(Squad, related_name='prefered_subjects')
     cost = models.IntegerField(default=0, null = True)
     cost_period = models.CharField(max_length=250, default="month") #could be 'lesson', 'course', 'month'
 
@@ -79,6 +80,8 @@ class Subject(models.Model):
     number_of_materials = models.IntegerField(default=0, null=True)
     public = models.BooleanField(default=True)
     public_cost = models.BooleanField(default=True)
+    is_online = models.BooleanField(default=False)
+    is_individual = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['id']
@@ -143,6 +146,7 @@ class FilterData(models.Model):
     subject_category = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     office = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
     payment = models.TextField(blank = True, default = 'all', null = True)
+    subject_type = models.TextField(blank = True, default = 'all', null = True) 
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='choosed_by') 

@@ -25,6 +25,12 @@ from django.contrib.auth import (
     )
 from django.contrib.auth.models import User
 from constants import *
+from django.contrib.postgres.search import TrigramSimilarity
+from datetime import timedelta
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from django.http import JsonResponse
 
 def subject_detail(request, slug=None):
     instance = get_object_or_404(Subject, slug=slug)
@@ -223,7 +229,6 @@ def subject_update(request, slug=None):
     }
     return render(request, "subjects/subject_create.html", context)
 
-from datetime import timedelta
 def update_squad_dates(subject, squad):
     if not squad.id in subject.squad_ids:
         subject.squad_ids.append(squad.id)
@@ -264,11 +269,6 @@ def subject_delete(request, slug=None):
         "page":"subjects",
     }
     return render(request, "confirm_delete.html", context)
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.http import JsonResponse
 
 def add_paper(request):
     profile = get_profile(request)
@@ -512,6 +512,7 @@ def make_public(request):
     data = {
     }
     return JsonResponse(data)
+
 def make_public_cost(request):
     profile = get_profile(request)
     only_managers(profile)
@@ -529,12 +530,41 @@ def make_public_cost(request):
     }
     return JsonResponse(data)
 
-from django.contrib.postgres.search import TrigramSimilarity
+def online_option(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('option'):
+        subject = Subject.objects.get(id=int(request.GET.get('id')) )
+        school = subject.school
+        is_in_school(profile, school)
+        if request.GET.get('option') == 'online':
+            subject.is_online = True
+        else:
+            subject.is_online = False
+        subject.save()
+    data = {
+    }
+    return JsonResponse(data)
+def individual_option(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    if request.GET.get('id') and request.GET.get('option'):
+        subject = Subject.objects.get(id=int(request.GET.get('id')) )
+        school = subject.school
+        is_in_school(profile, school)
+        if request.GET.get('option') == 'individual':
+            subject.is_individual = True
+        else:
+            subject.is_individual = False
+        subject.save()
+    data = {
+    }
+    return JsonResponse(data)
+
 def searching_subjects(request):
     profile = get_profile(request)
     school = profile.schools.first()
     only_managers(profile)
-
     text = request.GET.get('text')
     kef = 1
     res = []

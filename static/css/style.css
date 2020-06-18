@@ -125,6 +125,10 @@
   background: rgb(81,129,184) !important;
   background: linear-gradient(180deg, rgba(81,129,184,0.6) 0%, rgba(33,186,69,0.5) 50%, rgba(33,186,69,0.6) 100%) !important;
 }
+.backrbbhrz{
+  background: rgb(81,129,184) !important;
+  background: linear-gradient(90deg, #5181b8 0%, rgba(33,186,69,0.5) 80%, rgba(33,186,69,0.6) 100%) !important;
+}
 .textblue{
   color: #285473 !important;
 }
@@ -151,7 +155,7 @@
   border-radius: 5px 5px 0 0 !important;
 }
 .leftbr5{
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px 0 0 5px !important;
 }
 .rightbr5{
   border-radius: 0 5px 5px 0 !important;
@@ -290,6 +294,19 @@ table{
   background-color: #db2828;
   color: #fff;
   margin-top: -3px;
+}
+.blue_notice{
+  width: 17px;
+  height: 12px;
+  text-align: center;
+  line-height: 12px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 600;
+  background-color: #5181b8;
+  color: #fff;
+  margin-top: -5px;
+  position: absolute;
 }
 .card_form{
   height: 70%;
@@ -613,22 +630,23 @@ body{
 }
 .search-group-name{
   margin-left: 10px;line-height: 30px;
-  width: 220px;
+  width: 260px;
 }
 .hint_students_group{
   position: absolute !important;
   z-index: 1000;
-  background-color: #f5f5f5 !important;
   margin-top: 3px !important;
-  width: 300px;
+  width: 342px;
   padding: 7px !important;
 }
 .search_group_link{
   display: flex;
+  padding-top: 5px;
+  padding-bottom: 5px;  
 }
 .search_students_group{
   display: inline-block !important;
-  width: 300px !important;margin-top: 14px !important;
+  width: 300px !important;
   height: 30px !important;
 }
 .add_student{
@@ -647,7 +665,7 @@ body{
   width: 155px;
 }
 .predoplata_form{
-  width: 300px !important;
+  width: 150px !important;
 }
 .predoplata_number{
   margin-bottom: 0 !important;
@@ -808,6 +826,7 @@ body{
 }
 #go-back-btn-before:hover {
   background-color: #CCE2FF;
+  border-radius: 5px;
 }
 #go-back-btn-before-land:hover {
   background-color: #CCE2FF;
@@ -1084,7 +1103,7 @@ a{
   height: 33px;line-height: 10px;
 }
 .dflex{
-  display: flex;
+  display: flex !important;
 }
 .dinline{
   display: inline-block;
@@ -1208,6 +1227,9 @@ a{
 .textdots{
   white-space: nowrap;
   text-overflow: ellipsis;  
+  overflow: hidden;
+  position: relative;
+  display: block;
 }
 .student_name2{
   padding-left: 5px;

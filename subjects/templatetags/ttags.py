@@ -16,6 +16,13 @@ def remove_space(title):
     return title.replace(' ', '_')
 
 @register.filter
+def is_online(squad):
+    return len(squad.subjects.filter(is_online=True)) > 0
+@register.filter
+def is_individual(squad):
+    return len(squad.subjects.filter(is_individual=True)) > 0
+
+@register.filter
 def get_closed_months(nm):
     if len(nm.finance_closed.all()) > 0:
         return nm.finance_closed.first().closed_months
@@ -580,6 +587,15 @@ def constant_school_lectures(profile, school):
         lectures = lectures.filter(squad__in=squads)
     if profile.filter_data.subject:
         lectures = lectures.filter(subject=profile.filter_data.subject)
+    if profile.filter_data.subject_type != 'all':
+        if profile.filter_data.subject_type == 'individual':
+            subjects = school.school_subjects.filter(is_individual=True)
+        elif profile.filter_data.subject_type == 'regular':
+            subjects = school.school_subjects.filter(is_individual=False, is_online=False)
+        elif profile.filter_data.subject_type == 'online':
+            subjects = school.school_subjects.filter(is_online=True)
+        lectures = lectures.filter(subject__in=subjects)
+
     res = []
     interval = school.schedule_interval
     for lecture in lectures.order_by('cell'):

@@ -75,6 +75,9 @@ $('.filter-list').click(function(e){
 $('.show_hint_schedule').click(function(e){
     e.stopPropagation();
 });
+$('.show_search_groups').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
     $('.hint_schedule').hide()
     $('.filter-list').hide()
@@ -95,5 +98,11 @@ $("body").click(function(e){
     $('.card_comment-helper').hide()
     $('.search_hint').hide();
     $('#zaiavka_modal').hide('fast')    
-    $('.darker').hide()     
+    $('.darker').hide() 
+    $('.show_search_groups').hide()    
+    $('.show_search_subjects').hide() 
+    $('.bselect').hide()
 });
+$('.reg_segment').click(function(e){
+    $('.bselect').hide()
+})

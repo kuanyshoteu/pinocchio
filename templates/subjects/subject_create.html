@@ -43,17 +43,17 @@
             	<form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
 	            	<div class="ui grid stackable no_margin">
                         <div class="{% if instance %}sixteen{% else %}nine{% endif %} wide column deskpt0 {% if instance %}pr0{%endif%} pl0 pb0">
-                            <div class="ui shadow_small segment mt0">
+                            <div class="ui shadow_small backrbbhrz segment mt0">
                                 {% if instance %}
                                 <a href="{{ instance.get_absolute_url }}" class="mr50">
-                                    <b class="text15">{{ instance.title }}</b>
+                                    <b class="text15 textw">{{ instance.title }}</b>
                                 </a>
                                 <div class="in_mobile mb15"></div>
-                                <a href="{{ instance.get_delete_url }}" class="ui button white border1 shadow_small mini">
+                                <a href="{{ instance.get_delete_url }}" class="ui button white mini">
                                     <i class="icon trash red mr0"></i> Удалить
                                 </a>
                                 {% else %}
-                                <div class="textdg textbold">Новый курс</div>
+                                <div class="textw text15 textbold">Новый курс</div>
                                 {% endif %}
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                                                 <div class="ui segment shadow_blue backblue textw cost_hint">
                                                     <b>Внимание!</b> 
                                                     <br><br>
-                                                    Укажите стоимость за 1 урок или за 1<!--  месяц или за весь курс.  -->
+                                                    Укажите стоимость за 1 урок или за 1 месяц<!--   или за весь курс.  -->
                                                     <br><br>
                                                     Указанная цена будет учитываться в расчетах оплаты клиентов* и показана на странице Вашего образовательного центра .  
                                                     <br><br>
@@ -102,24 +102,42 @@
 						{% if instance %}
 						<div class="seven wide column pl0 pr0">
 							<div class="ui shadow_small segment mt0 textdg" style="line-height: 40px;min-height: 264px;">
-								<div class="ui grid">
-									<div class="sixteen wide column pl0">
+								<div class="ui grid stackable">
+									<div class="sixteen wide column pl0 pb0">
 										<input type="file" name="subject_banner" id="subject_banner" class="postfile">
 				                        <label class="file_post" for="subject_banner">
 				                        	<a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
 				                        </label>
 									</div>
-                                    <div class="eight wide column pl0">
+                                    <div class="eight wide column pl0 pr0 pt15 pb15">
+                                        <div class="dflex">
+                                            <div class="ui segment border1 no_padding mb0" style="line-height: 0px;width: auto;">
+                                                <a option="offline" class="online_option online_option_offline leftbr5 pt5 pb5 pl10 pr10 mr0 ui button small {%if instance.is_online%}white{%else%}green{%endif%}">Офлайн</a>
+                                                <a option="online" class="online_option online_option_online rightbr5 pt5 pb5 pl10 pr10 mr0 ui button small {%if instance.is_online%}green{%else%}white{%endif%}">Онлайн</a>
+                                            </div>
+                                            <div class="online_option_load ui loader mini ml10 mt10" style="position: relative;"></div>    
+                                        </div>
+                                    </div>
+                                    <div class="eight wide column pl0 pr0 pt15 pb20">
+                                        <div class="dflex">
+                                            <div class="ui segment border1 no_padding dflex mb0" style="line-height: 0px;width: auto;">
+                                                <a option="group" class="individual_option individual_option_group leftbr5 pt5 pb5 pl5 pr5 mr0 ui button small {%if instance.is_individual%}white{%else%}green{%endif%}">Обычная</a>
+                                                <a option="individual" class="individual_option individual_option_individual rightbr5 pt5 pb5 pl5 pr5 mr0 ui button small {%if instance.is_individual%}green{%else%}white{%endif%}">Индивидуально</a>
+                                            </div>
+                                            <div class="individual_option_load ui loader mini ml10 mt10" style="position: relative;"></div>    
+                                        </div>
+                                    </div>
+                                    <div class="eight wide column pl0 pt0 pr0 pb10">
                                         <div class="ui toggle checkbox">
                                           <input class="make_public" id="{{instance.id}}" type="checkbox" {% if instance.public %}checked{% endif%} url="{%url 'subjects:make_public'%}" name="public">
                                           <label>Показывать курс в поиске</label>
-                                        </div>                                        
+                                        </div>
                                     </div>
-                                    <div class="eight wide column pr0">
+                                    <div class="eight wide column no_padding">
                                         <div class="ui toggle checkbox">
                                           <input class="make_public_cost" id="{{instance.id}}" type="checkbox" {% if instance.public_cost %}checked{% endif%} url="{%url 'subjects:make_public_cost'%}" name="public">
                                           <label>Показывать стоимость в поиске</label>
-                                        </div>                                        
+                                        </div>                                
                                     </div>
                                     <div class="sixteen wide column no_padding dflex">
                                         <span class="text15">Количество уроков:</span>
@@ -170,8 +188,8 @@
                                         {% for filter in instance|get_filters %}
                                         <div class="four wide column pl0 pt5 pr15 full-h">
                                             <div class="mt10 filter-element  filter-element-level" url="{{ instance.change_filter_option }}">
-                                                <div style="border: none;" class="topbr5 shadow_blue backblue filter-title-s" id="filter{{filter.id}}" status="closed">
-                                                    <b class="textw">{{ filter.title }}</b>
+                                                <div style="border: none;" class="topbr5 shadow_small border1 backwhitelow filter-title-s" id="filter{{filter.id}}" status="closed">
+                                                    <b class="textblue">{{ filter.title }}</b>
                                                 </div>
                                             </div>
                                             <ul style="position: relative;height: calc(100% - 37px);border: none;" class="bottombr5 shadow_small filter-list-n filter-list-hide-filter{{ filter.id }}" pid="filter{{ filter.id }}">
@@ -218,7 +236,7 @@
 			</div>
 		</div>
 	</div>	
-	<span class="data" id='{{ instance.id }}' change_category_url='{% url "subjects:change_category" %}' data-href='{{ instance.calendar_url }}' style="display: none;" name='data' days='' hint_type="5" last_hint="1" hint="{{hint}}">
+	<span class="data" id='{{ instance.id }}' online_option_url="{%url 'subjects:online_option'%}" individual_option_url="{%url 'subjects:individual_option'%}" change_category_url='{% url "subjects:change_category" %}' data-href='{{ instance.calendar_url }}' style="display: none;" name='data' days='' hint_type="5" last_hint="1" hint="{{hint}}">
     {% include 'hints/subject_hints.html' %}
     {% include 'hints/get_hint_script.html' %}
 	<span style="display: none;" class="change_urls">

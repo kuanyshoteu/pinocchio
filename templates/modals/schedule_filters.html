@@ -1,8 +1,8 @@
 <form class="ui form no_margin">
-    <div class="ui grid stackable no_margin">
+    <div class="ui grid stackable no_margin schedule_filters" url="{{ instance.crm_option_url }}">
         <div class="twenty wide column pr0 pl0">
             Предмет:
-            <select onchange="crm_option_change('filter_subject_category')" class="crm_option" option="subject" id="filter_subject_category" url="{{ instance.crm_option_url }}">
+            <select onchange="crm_option_change('filter_subject_category')" class="crm_option" option="subject" id="filter_subject_category">
                 {% if profile.filter_data.subject_category %}
                     <option value="{{ profile.filter_data.subject_category.id }}">{{ profile.filter_data.subject_category.title }}</option>
                 {% else %}
@@ -20,7 +20,7 @@
         </div>
         <div class="twenty wide column pr0">
             Курс:
-            <select onchange="crm_option_change('filter_subject')" class="crm_option" option="filter_subject" id="filter_subject" url="{{ instance.crm_option_url }}">
+            <select onchange="crm_option_change('filter_subject')" class="crm_option" option="filter_subject" id="filter_subject">
                 {% if profile.filter_data.subject %}
                     <option value="{{ profile.filter_data.subject.first.id }}">{{ profile.filter_data.subject.title }}</option>
                 {% else %}
@@ -38,7 +38,7 @@
         </div>
         <div class="twenty wide column pr0">
             Учитель:
-            <select onchange="crm_option_change('crm_teacher')"  class="crm_option" option="teacher" id="crm_teacher" url="{{ instance.crm_option_url }}">
+            <select onchange="crm_option_change('crm_teacher')"  class="crm_option" option="teacher" id="crm_teacher">
                 {% if profile.filter_data.teacher %}
                     <option value="{{ profile.filter_data.teacher.id }}">{{ profile.filter_data.teacher.first_name }}</option>
                 {% else %}
@@ -54,10 +54,10 @@
                 {% endif %}
             </select>
         </div>
-        {%if is_director %}                    
+        {%if is_director %}
         <div class="twenty wide column pr0">
             Офис:
-            <select onchange="crm_option_change('crm_office')" class="crm_option" option="office" id="crm_office" url="{{ instance.crm_option_url }}">
+            <select onchange="crm_option_change('crm_office')" class="crm_option" option="office" id="crm_office">
                 {% if profile.filter_data.office %}
                     <option value="{{ profile.filter_data.office.id }}">{{ profile.filter_data.office.title }}</option>
                 {% else %}
@@ -74,5 +74,56 @@
             </select>
         </div>
         {%endif%}
+        <div class="twenty wide column pr0">
+            Виды курсов:
+            <div id="-1" class="mr5 filter-title dflex full-w" style="height: 31px;" onclick="$('.subject_types').fadeToggle(0.1)">
+                {% if profile.filter_data.subject_type == 'all' %}
+                <div style="" class="textdots crnt_subj_type" value="all">
+                    Все виды
+                </div>
+                {%elif profile.filter_data.subject_type == 'individual' %}
+                <div style="" class="textdots crnt_subj_type" value="all">
+                    Индивидуальные
+                </div>
+                {%elif profile.filter_data.subject_type == 'regular' %}
+                <div style="" class="textdots crnt_subj_type" value="regular">
+                    Обычные
+                </div>
+                {%elif profile.filter_data.subject_type == 'online' %}
+                <div style="" class="textdots crnt_subj_type" value="online">
+                    Онлайн
+                </div>
+                {% endif %}
+                <i class="icon caret down textb" style="position: absolute;right: 0"></i>
+            </div>
+            <div class="bselect subject_types backwhite shadow_dark_low" style="display: none;position: absolute;z-index: 3000;width: calc(100% - 15px);">
+                {% if profile.filter_data.subject_type != 'all' %}                
+                <a onclick="change_bselect($(this), '.crnt_subj_type', '.subject_types');crm_option_change('subject_type');" value="all" class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                    Все виды
+                </a>
+                {%endif%}
+                {% if profile.filter_data.subject_type != 'individual' %}                
+                <a onclick="change_bselect($(this), '.crnt_subj_type', '.subject_types');crm_option_change('subject_type');" value="individual" class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                    Индивидуальные
+                </a>
+                {%endif%}
+                {% if profile.filter_data.subject_type != 'regular' %}                                
+                <a onclick="change_bselect($(this), '.crnt_subj_type', '.subject_types');crm_option_change('subject_type');" value="regular" class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                    Обычные
+                </a>
+                {%endif%}
+                {% if profile.filter_data.subject_type != 'online' %}                                
+                <a onclick="change_bselect($(this), '.crnt_subj_type', '.subject_types');crm_option_change('subject_type');" value="online" class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                    Онлайн
+                </a>
+                {%endif%}
+            </div>                        
+        </div>        
     </div>
 </form>
+<div style="display: none;">
+    <a onclick="change_bselect($(this), '.crnt_subj_type', '.subject_types');crm_option_change('subject_type')" class="bselect_orig filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10"></a>
+</div>
+<script type="text/javascript">
+    {% include 'modals/bselect_fill.html' %}
+</script>

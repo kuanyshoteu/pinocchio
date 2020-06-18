@@ -12951,8 +12951,6 @@ ol.ui.horizontal.list li:before,
   margin: 0px;
   text-align: center;
   z-index: 1000;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-  transform: translateX(-50%) translateY(-50%);
 }
 /* Static Shape */
 
@@ -29745,6 +29743,9 @@ select.ui.dropdown {
 }
 .text-center {
   text-align: center;
+}
+.text-left{
+  text-align: left !important;
 }
 a {
   color: #2a5885;

@@ -1,0 +1,18 @@
+function fill_newlect_button(title, value, place){
+    button = $('.bselect_orig').clone()
+    button.removeClass('bselect_orig')
+    button.html(title)
+    button.attr('value', value)
+    button.prependTo(place)
+}
+function change_bselect(this_, crnt, place){
+    remove_title = $(crnt).html()
+    remove_value = $(crnt).attr('value')
+    fill_newlect_button(remove_title, remove_value, place)
+    chosed_title = this_.html()
+    chosed_value = this_.attr('value')
+    $(crnt).html(chosed_title)
+    $(crnt).attr('value', chosed_value)
+    this_.remove()
+    $('.bselect').hide()
+}

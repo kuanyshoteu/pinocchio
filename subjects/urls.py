@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^api/searching_subjects/$', searching_subjects, name='searching_subjects'),
     url(r'^api/make_public/$', make_public, name='make_public'),
     url(r'^api/make_public_cost/$', make_public_cost, name='make_public_cost'),
+    url(r'^api/online_option/$', online_option, name='online_option'),
+    url(r'^api/individual_option/$', individual_option, name='individual_option'),
 ]

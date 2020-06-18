@@ -53,6 +53,47 @@
                     $('.number_of_manager').show()
                     $('.number_of_manager').text(number_of_manager)
                 }
+                fill_individual_subjects(data.individual_subjects)
+            }
+        })
+    }
+    function fill_individual_subjects(individual_subjects){
+        for (var i = 0; i < individual_subjects.length; i++) {
+            subject_id = individual_subjects[i][0]
+            subject_title = individual_subjects[i][1]
+            individual_subject = $('.individual_subject_orig').clone()
+            individual_subject.removeClass('individual_subject_orig')
+            individual_subject.attr('style', 'display:block;')
+            individual_subject.attr('onclick', 'choose_ind_subj("'+subject_id+'", "'+subject_title+'")')
+            individual_subject.html(subject_title+'<i class="icon check green mr0 ml5 insubjecticon insubjecticon'+subject_id+'" style="display:none;"></i><i class="icon circle green mr0 ml5 text7 prefersubjecticon prefersubjecticon'+subject_id+'" style="display:none;"></i>')
+            individual_subject.appendTo('.individual_subjects')
+        }
+    } 
+    function choose_ind_subj(subject_id, subject_title){
+        $('.individual_subject_filter').text(subject_title)
+        $('.create_individual_group').attr('id', subject_id)
+    }
+    function create_individual_group(){
+        this_ = $('.create_individual_group')
+        student_id = $('.card_for_save').attr('id')
+        subject_id = this_.attr('id')
+        url = this_.attr('url')
+        $('.create_individual_group_load').show()
+        this_.addClass('disabled')
+        $('.create_individual_group_success').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'student_id':student_id,
+                'subject_id':subject_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.create_individual_group_load').hide()
+                    $('.create_individual_group_success').show()
+                }
+                this_.removeClass('disabled')
             }
         })
     }
@@ -138,7 +179,7 @@
             card.attr('take_url', take_url)
             card.attr('days_of_weeks', days_of_weeks_str)
         }
-    }    
+    }
     function fill_card_dialog(res){
         $('.card_dialog').empty()
         for (var i = 0; i < res.length; i++) {
@@ -260,6 +301,7 @@
         var comment = $('.new_card_comment').val()
         $('.alreadyregistered').hide()
         ok = false
+        $(this).addClass('disabled')
         if (mail != '') {
             for (var i = mail.length - 1; i >= 0; i--) {
                 if (mail[i] == '@') {
@@ -337,11 +379,15 @@
         $('.card_for_save').attr('id', id)
         $('.insquadicon').hide()
         $('.insquadicon').attr('status', 'hide')
+        $('.insubjecticon').hide()
+        $('.prefersubjecticon').hide()
         $('.time_stop').hide()
         $('.wrong_mail').hide()
         $('.alreadyregistered').hide()
         $('.wrong_mail_error').hide()
         $('.no_predoplata_number').hide()
+        $('.create_individual_group_load').hide()
+        $('.create_individual_group_success').hide()
         $('.predoplata_form').hide()
         $('.ok_predoplata').hide()
         $('.isalready').hide()
@@ -369,6 +415,17 @@
                     insquadicon.attr('status', 'show')
                 }
                 $('#register_students_calendar').attr('squads',squads)
+                for (var i = 0; i < data.prefered_individual_subjects.length; i++){
+                    subject_id = data.prefered_individual_subjects[i]
+                    prefersubjecticon = $('.prefersubjecticon'+subject_id)
+                    prefersubjecticon.show()
+                }
+                for (var i = 0; i < data.individual_subjects.length; i++){
+                    subject_id = data.individual_subjects[i]
+                    $('.prefersubjecticon'+subject_id).hide()
+                    insubjecticon = $('.insubjecticon'+subject_id)
+                    insubjecticon.show()
+                }
             }
         })
     }
@@ -670,7 +727,6 @@
     text.on('keyup', function (e) {
         var id = $(this).attr('id')
         var text = $(this).text()
-        console.log(e.key)
         if (e.key == 'Enter' || e.key === ' ' || (e.key === 'Backspace' && text[text.length-1] == '!')) {
             closeHelper(id)
         }

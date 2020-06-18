@@ -1069,6 +1069,8 @@ def crm_option(request):
                 filter_data.teacher = None                
         if request.GET.get('option') == 'payment':
             filter_data.payment = request.GET.get('object_id')
+        if request.GET.get('option') == 'subject_type':
+            filter_data.subject_type = request.GET.get('object_id')
         filter_data.save()
     data = {
     }
@@ -1566,11 +1568,21 @@ def get_card_squads(request):
     is_in_school(profile, school)
     profile = card.card_user
     res = []
+    individual_subjects = []
+    prefered_individual_subjects = []
     if profile:
-        for squad in profile.squads.filter(shown=True):
+        sqs = profile.squads.filter(shown=True)
+        for squad in sqs:
             res.append(squad.id)
+        for subject in school.school_subjects.filter(is_individual=True,squads__in=sqs):
+            individual_subjects.append(subject.id)
+        for subject in school.school_subjects.filter(is_individual=True,prefered_squads__in=sqs):
+            print(subject.title)
+            prefered_individual_subjects.append(subject.id)
     data = {
         'res':res,
+        'individual_subjects':individual_subjects,
+        'prefered_individual_subjects':prefered_individual_subjects,
     }
     return JsonResponse(data)
 
@@ -2086,6 +2098,7 @@ def get_all_cards_second(request):
     all_cards = school.crm_cards.all()
     number_of_free = len(all_cards.filter(color='red', author_profile=None))
     number_of_manager = len(all_cards.filter(color='red', author_profile = profile))
+    individual_subjects = get_individual_subjects(school)
     data = {
         "all_res":all_res,
         "page":2,
@@ -2094,8 +2107,52 @@ def get_all_cards_second(request):
         "Ended":False,
         "number_of_free":number_of_free,
         "number_of_manager":number_of_manager,
+        "individual_subjects":individual_subjects,
     }
     return JsonResponse(data)
+
+def get_individual_subjects(school):
+    res = []
+    for s in school.school_subjects.filter(is_individual=True):
+        res.append([s.id, s.title])
+    return res
+
+def create_individual_group(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    ok = False
+    print('yo')
+    if request.GET.get('student_id') and request.GET.get('subject_id'):
+        print('yo2')
+        card = school.crm_cards.get(id=int(request.GET.get('student_id')))
+        student = card.card_user
+        subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
+        title = student.first_name+' - '+subject.title
+        title = title[:45]
+        title = create_squad_title(title, 1)
+        print(title)
+        new_squad = school.groups.create(
+            title=title,
+            content='Записан на прохождение курса '+subject.title,
+            start_date=timezone.now().date(),
+        )
+        new_squad.save()
+        add_student_to_squad(student, new_squad, profile)
+        new_squad.prefered_subjects.add(subject)
+        new_squad.squad_histories.create(action_author=profile,edit='Создана группа '+new_squad.title)
+        ok = True
+    data = {
+        "ok":ok,
+    }
+    return JsonResponse(data)
+
+def create_squad_title(title, i):
+    last = len(Squad.objects.filter(title=title))
+    if last > 0:
+        title += str(i)
+        title = create_squad_title(title, i+1)
+    return title
 
 def search_crm_cards(request):
     profile = Profile.objects.get(user = request.user.id)

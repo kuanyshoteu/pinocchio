@@ -1,4 +1,122 @@
-$(document).ready(function () { 
+$(document).ready(function () {
+    $('.squad_office_filter').on('change', function(e) {
+        filter_squads()
+    })
+    filter_squads()
+    async function filter_squads(){
+        obj = $('.squad_filter.green').attr('option')
+        if (obj == 'all') {
+            $('.sq_office_all').show()
+        }
+        else{
+            $('.sq_office_all').hide()
+            squad_office = $('.squad_office_filter option:selected').val()
+            if (obj == 'regular') {
+                $('.online_False.sq_office_'+squad_office).show()
+                $('.ind_False.sq_office_'+squad_office).show()            
+            }
+            else if (obj == 'online') {
+                $('.online_True.sq_office_'+squad_office).show()
+                $('.ind_False.sq_office_'+squad_office).show()
+            }
+            else if (obj == 'individual') {
+                $('.online_False.sq_office_'+squad_office).show()
+                $('.ind_True.sq_office_'+squad_office).show()
+            }
+            console.log(squad_office)
+        }
+    }
+    async function change_squad_filter(obj){
+        console.log('obj', obj)
+        $('.squad_filter').removeClass('green')
+        $('.squad_filter').addClass('white')
+        $('.'+obj+'_filter').addClass('green')
+        $('.'+obj+'_filter').removeClass('white')        
+    }
+    $('.squad_filter').click(async function(e){
+        await change_squad_filter($(this).attr('option'))
+        filter_squads()
+    })
+    $('.subject_cat_filter').on('change', function(e) {
+        filter_subjects()
+    })
+    filter_subjects()
+    async function filter_subjects(){
+        obj = $('.subject_filter.green').attr('option')
+        if (obj == 'all') {
+            $('.sq_office_all').show()
+        }
+        else{
+            $('.catall').hide()
+            subject_cat = $('.subject_cat_filter option:selected').val()
+            if (obj == 'regular') {
+                $('.online_False.cat'+subject_cat).show()
+                $('.ind_False.cat'+subject_cat).show()            
+            }
+            else if (obj == 'online') {
+                $('.online_True.cat'+subject_cat).show()
+                $('.ind_False.cat'+subject_cat).show()
+            }
+            else if (obj == 'individual') {
+                $('.online_False.cat'+subject_cat).show()
+                $('.ind_True.cat'+subject_cat).show()
+            }
+            console.log(subject_cat)
+        }
+    }
+    async function change_subject_filter(obj){
+        console.log('obj', obj)
+        $('.subject_filter').removeClass('green')
+        $('.subject_filter').addClass('white')
+        $('.'+obj+'_filter').addClass('green')
+        $('.'+obj+'_filter').removeClass('white')        
+    }
+    $('.subject_filter').click(async function(e){
+        await change_subject_filter($(this).attr('option'))
+        filter_subjects()
+    })
+    $('.online_option').click(function(e) {
+        url = $('.data').attr('online_option_url')
+        id = $('.data').attr('id')
+        option = $(this).attr('option')
+        $('.online_option_load').addClass('active')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'option':option,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.online_option_load').removeClass('active')
+                $('.online_option').removeClass('green')
+                $('.online_option').addClass('white')
+                $('.online_option_'+option).addClass('green')
+                $('.online_option_'+option).removeClass('white')
+            }
+        })
+    })
+    $('.individual_option').click(function(e) {
+        url = $('.data').attr('individual_option_url')
+        id = $('.data').attr('id')
+        option = $(this).attr('option')
+        $('.individual_option_load').addClass('active')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'option':option,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.individual_option_load').removeClass('active')
+                $('.individual_option').removeClass('green')
+                $('.individual_option').addClass('white')
+                $('.individual_option_'+option).addClass('green')
+                $('.individual_option_'+option).removeClass('white')
+            }
+        })
+    })
     $('.right_option').click(function(e) {
         id = $(this).attr('id')
         $('.officefilter').hide()
@@ -43,45 +161,6 @@ $(document).ready(function () {
         else{
             $(this).addClass('green')            
         }
-    })
-    $('.const_create_lectures').click(function(e) {
-        url = $(this).attr('url')
-
-        this_ = document.getElementById('constselect');
-        subject_id = this_.options[this_.selectedIndex].value;
-
-        start = $('.conststart').val()
-        end = $('.constend').val()
-        console.log(start, end)
-        day1='false';day2='false';day3='false';day4='false';day5='false';day6='false';day7='false';
-        $(".constday_choose.green").each(function() {
-            if ($(this).attr('id') == 1){day1='true'}
-            else if ($(this).attr('id') == 2){day2='true'}
-            else if ($(this).attr('id') == 3){day3='true'}
-            else if ($(this).attr('id') == 4){day4='true'}
-            else if ($(this).attr('id') == 5){day5='true'}
-            else if ($(this).attr('id') == 6){day6='true'}
-            else if ($(this).attr('id') == 7){day7='true'}
-        })
-        $.ajax({
-            url: url,
-            data: {
-                "start":start,
-                "end":end,
-                "subject_id":subject_id,
-                "day1":day1,
-                "day2":day2,
-                "day3":day3,
-                "day4":day4,
-                "day5":day5,
-                "day6":day6,
-                "day7":day7,
-            },
-            dataType: 'json',
-            success: function (data) {
-                location.reload()
-            }
-        })
     })
     $('.search_group_show').on('click', function(e) {
         $('.hint_students_group').show()
@@ -138,7 +217,7 @@ $(document).ready(function () {
                     for (var i = 0; i < data.res.length; i++) {
                         title = data.res[i][0]
                         url = data.res[i][1]
-                        $('<div class="full-w "><a style="display:flex" href="'+url+'" class="full-w search-item"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_groups')
+                        $('<div class="full-w "><a style="text-align:left;" href="'+url+'" class="no_padding ui button blue full-w search-item"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_groups')
                     }
                 }
             })
@@ -167,7 +246,7 @@ $(document).ready(function () {
                         if (image == '') {
                             image = '/static/images/squad.png'
                         }
-                        $('<div class="full-w "><a style="display:flex" href="'+url+'" class="full-w search-item"> <img class="search-group-img" src="'+image+'" alt="photo"> <span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_subjects')
+                        $('<div class="full-w "><a style="text-align:left;" href="'+url+'" class="full-w search-item textw ui button small blue pt5 pb5 pl10 pr10"><span class="search-group-name">'+title+'</span> </a></div>').appendTo('.show_search_subjects')
                     }
                 }
             })

@@ -1,9 +1,15 @@
 function crm_option_change(id){
-    this_ = document.getElementById(id);
-    object_id = this_.options[this_.selectedIndex].value;
-    this_ = $('#'+id)
-    url = this_.attr('url')
-    option = this_.attr('option')
+    if (id == 'subject_type') {
+        option = 'subject_type'
+        object_id = $('.crnt_subj_type').attr('value')
+    }
+    else{
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value;
+        this_ = $('#'+id)
+        option = this_.attr('option')
+    }
+    url = $('.schedule_filters').attr('url')
     $('.loading').show()
     $.ajax({
         url: url,
@@ -105,6 +111,5 @@ function update_schedule_lectures(){
         $('.schedule_body').animate({
             scrollLeft: crnt_left
         }, 'fast');            
-        console.log('cnr', crnt_left)
     }
 }

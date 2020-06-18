@@ -14,61 +14,66 @@
         <div class="ui grid stackable">
             {% include 'left_menu.html' %}
             <div class="wide column w85">
-                <div class="ui grid stackable">
-                    <div class="twelve wide column pr0">
-                        <div class="ui segment ml15 mb0 pt15 pr15">
-                            <div class="ui grid stackable no_margin">
-                                <div class="pl0" style="height: 32px">
-                                    <div class="mt5 mr15 text17 ui grid textdg">
-                                        {%if trash and is_manager %}
-                                            <b style="color: darkred;width: 150px;">Удаленные группы</b>
-                                        {%else%}
-                                            Группы
-                                        {%endif%} 
-                                        <div class="pl5 pr0" style="color: #939393;">{{ squads|length }}</div>
-                                    </div>
-                                </div>
-                                <form class="ui form mb0 no_padding mr15" style="width: calc(100% - 280px);">
-                                    <textarea class="mb0 start_searching_groups" placeholder="Поиск групп" url="{% url 'squads:searching_groups' %}" style="height: 32px;overflow: hidden;"></textarea>
-                                </form>
-                                {%if trash %}
-                                    <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Рабочие группы</a>
-                                {% else %}
-                                    <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini white shadow_small">Удаленные группы</a>
-                                {% endif %}        
+                <div class="ui segment mb0 pt15 pr15">
+                    <div class="ui grid stackable no_margin">
+                        <div class="pl0" style="height: 32px">
+                            <div class="mt5 mr15 text17 textbold ui grid textdg">
+                                {%if trash and is_manager %}
+                                    <b style="color: darkred;width: 150px;">Удаленные группы</b>
+                                {%else%}
+                                    Группы
+                                {%endif%} 
+                                <div class="pl5 pr0" style="color: #939393;">{{ squads|length }}</div>
                             </div>
-                            <div class="ui segment show_search_groups mt5 no_padding" style="display: none;position: absolute;z-index: 1000;width: calc(100% - 300px);margin-left: 125px;">
+                        </div>
+                        <form class="ui form mb5 no_padding mr5">
+                            <textarea class="mb0 start_searching_groups" placeholder="Поиск групп" url="{% url 'squads:searching_groups' %}" style="height: 30px;overflow: hidden;width: 190px"></textarea>
+                        </form>
+                        <div class="backblue shadow_blue ui segment show_search_groups mt30 no_padding" style="display: none;position: absolute;z-index: 1000;width: 190px;margin-left: 115px;">
+                        </div>
+                        <div class="sq_filters dflex pl0">
+                            <div class="ui segment mb0 no_padding dflex mr15" style="width: auto;height: 31px;">
+                                <a option="all" class="squad_filter all_filter ui button small green leftbr5 mr0 pl5 pr5">Все</a>
+                                <a option="regular" class="squad_filter regular_filter ui button small white mr0 pl5 pr5">Обычные</a>
+                                <a option="individual" class="squad_filter individual_filter ui button small white br5 mr0 pl5 pr5">Индивидуальные</a>
+                                <a option="online" class="squad_filter online_filter ui button small white br5 mr0 pl5 pr5">Онлайн</a>
                             </div>
-                            <div class="mt20" style="min-height: 100px;">
-                            {% for sq in squads %}
-                                {% include 'squads/squad_list_info.html' %}
-                            {% endfor %}
-                            </div>
-                            {% if not trash %}
-                            {% if is_director or is_manager%}
-                                <a class="mt50 ui button small green shadow_green" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
+                            {%if is_director %}
+                            <form class="ui form mb0 dinline">
+                                <select class="textblue squad_office_filter" style="height: 31px;width: 150px;">
+                                    <option value="all">
+                                        Все офисы
+                                    </option>
+                                    {% if school_crnt.school_offices.all|length > 0 %}
+                                        {% for office in school_crnt.school_offices.all %}
+                                        <option value="{{office.id}}">
+                                            {{ office.title }}
+                                        </option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </form>
+                            {%endif%}
+                        </div>
+                        <div style="width: 265px;height: 29px;">
+                            <div class="pl0" style="position: absolute;right:15;">
+                            {%if trash %}
+                                <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Рабочие группы</a>
+                            {% else %}
+                                <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini white border1 pl5 pr5 shadow_small textdg mr5 mb5">Удаленные</a>
+                                {% if is_director or is_manager%}
+                                <a class="ui button mini blue shadow_blue textbold" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
+                                {% endif %}                            
                             {% endif %}
-                            {% endif %}                            
-                        </div>                        
-                    </div>
-                    {%if is_director %}
-                    <div class="four wide column">
-                        <div class="ui segment">
-                            <b class="textdg">Фильтр по офисам</b>
-                            <a style="text-align: left;" class="ui button {%if is_director and not filter_office%}shadow_small{%endif%} white mb5 full-w small right_option mt10" id="filter">
-                                Все группы
-                            </a>
-                            {% if school_crnt.school_offices.all|length > 0 %}
-                                {% for office in school_crnt.school_offices.all %}
-                                <a style="text-align: left;" class="ui button small full-w {%if office == filter_office%}shadow_small{%endif%} white mb5 right_option" id="{{office.id}}">
-                                    {{ office.title }}
-                                </a>
-                                {% endfor %}
-                            {% endif %}
+                            </div>                            
                         </div>
                     </div>
-                    {%endif%}
-                </div>
+                    <div class="mt15" style="min-height: 100px;">
+                    {% for sq in squads %}
+                        {% include 'squads/squad_list_info.html' %}
+                    {% endfor %}
+                    </div>
+                </div>                        
             </div>
         </div>
     </div>
