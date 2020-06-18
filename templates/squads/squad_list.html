@@ -17,9 +17,9 @@
                 <div class="ui segment mb0 pt15 pr15">
                     <div class="ui grid stackable no_margin">
                         <div class="pl0" style="height: 32px">
-                            <div class="mt5 mr15 text17 textbold ui grid textdg">
+                            <div class="mt5 mr5 text17 textbold ui grid textdg">
                                 {%if trash and is_manager %}
-                                    <b style="color: darkred;width: 150px;">Удаленные группы</b>
+                                    <b style="color: darkred;width: 130px;">Удаленные группы</b>
                                 {%else%}
                                     Группы
                                 {%endif%} 
@@ -32,11 +32,12 @@
                         <div class="backblue shadow_blue ui segment show_search_groups mt30 no_padding" style="display: none;position: absolute;z-index: 1000;width: 190px;margin-left: 115px;">
                         </div>
                         <div class="sq_filters dflex pl0">
-                            <div class="ui segment mb0 no_padding dflex mr15" style="width: auto;height: 31px;">
+                            <div class="ui segment mb0 no_padding dflex mr5" style="width: auto;height: 31px;">
                                 <a option="all" class="squad_filter all_filter ui button small green leftbr5 mr0 pl5 pr5">Все</a>
                                 <a option="regular" class="squad_filter regular_filter ui button small white mr0 pl5 pr5">Обычные</a>
                                 <a option="individual" class="squad_filter individual_filter ui button small white br5 mr0 pl5 pr5">Индивидуальные</a>
                                 <a option="online" class="squad_filter online_filter ui button small white br5 mr0 pl5 pr5">Онлайн</a>
+                                <a option="empty" class="squad_filter empty_filter ui button small white br5 mr0 pl5 pr5">Без расписания</a>
                             </div>
                             {%if is_director %}
                             <form class="ui form mb0 dinline">
@@ -55,14 +56,14 @@
                             </form>
                             {%endif%}
                         </div>
-                        <div style="width: 265px;height: 29px;">
+                        <div class="no_padding" style="width: 200px;height: 29px;">
                             <div class="pl0" style="position: absolute;right:15;">
                             {%if trash %}
                                 <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Рабочие группы</a>
                             {% else %}
                                 <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini white border1 pl5 pr5 shadow_small textdg mr5 mb5">Удаленные</a>
                                 {% if is_director or is_manager%}
-                                <a class="ui button mini blue shadow_blue textbold" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
+                                <a class="pl5 pr5 ui button mini blue shadow_blue textbold" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
                                 {% endif %}                            
                             {% endif %}
                             </div>                            

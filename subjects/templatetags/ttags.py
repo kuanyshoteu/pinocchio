@@ -23,6 +23,10 @@ def is_individual(squad):
     return len(squad.subjects.filter(is_individual=True)) > 0
 
 @register.filter
+def is_no_schedule(squad):
+    return len(squad.squad_lectures.all()) == 0
+
+@register.filter
 def get_closed_months(nm):
     if len(nm.finance_closed.all()) > 0:
         return nm.finance_closed.first().closed_months

@@ -22,6 +22,12 @@ $(document).ready(function () {
             else if (obj == 'individual') {
                 $('.ind_True.sq_office_'+squad_office).show()
             }
+            if (obj == 'empty') {
+                $('.empty_True.sq_office_'+squad_office).show()
+            }
+            else{
+                $('.empty_True').hide()                
+            }
             console.log(squad_office)
         }
     }
