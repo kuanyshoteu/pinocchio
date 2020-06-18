@@ -1362,61 +1362,57 @@ def upload_cards(request):
                     elif i == 1:
                         if str(aaa) != 'nan':
                             name += ' ' + str(aaa)
+                    elif i == 2:
+                        parents = aaa
+                    elif i == 3:
+                        if str(aaa) != 'nan' and str(aaa) != 'NaT':
+                            birthday = aaa
+                    elif i == 5:
+                        phone = aaa
+                    elif i == 8:
+                        if aaa:
+                            if not '@' in str(aaa) and str(aaa) != 'nan':
+                                mail = aaa
                     i += 1
-                print(name)
-                card = school.crm_cards.filter(name=name)
-                if len(card) > 1:
-                    card[1].delete()
-                    # elif i == 2:
-                    #     parents = aaa
-                    # elif i == 3:
-                    #     if str(aaa) != 'nan' and str(aaa) != 'NaT':
-                    #         birthday = aaa
-                    # elif i == 5:
-                    #     phone = aaa
-                    # elif i == 8:
-                    #     if aaa:
-                    #         if not '@' in str(aaa) and str(aaa) != 'nan':
-                    #             mail = aaa
-                # card = xls_create_card(None,name,parents,birthday,phone,mail,column,school)
-                # i = 0
-                # for aaa in row:
-                #     if i == 4:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa)
-                #     elif i == 6:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa).replace(' ', '')
-                #     elif i == 7:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa)
-                #     elif i == 8:
-                #         if not '@' in str(aaa):
-                #             if str(aaa) != 'nan':    
-                #                 tag = card.hashtags.get_or_create(title=aaa)
-                #                 comment += ' !'+str(aaa)
-                #     elif i == 9:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa)
-                #     elif i == 10:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa)
-                #     elif i == 11:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa)
-                #     elif i == 12:
-                #         if str(aaa) != 'nan':    
-                #             tag = card.hashtags.get_or_create(title=aaa)
-                #             comment += ' !'+str(aaa)
-                #     i += 1
-                # card.comments = comment
-                # card.save()
+                card = xls_create_card(None,name,parents,birthday,phone,mail,column,school)
+                i = 0
+                for aaa in row:
+                    if i == 4:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 6:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa).replace(' ', '')
+                    elif i == 7:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 8:
+                        if not '@' in str(aaa):
+                            if str(aaa) != 'nan':    
+                                tag = card.hashtags.get_or_create(title=aaa)
+                                comment += ' !'+str(aaa)
+                    elif i == 9:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 10:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 11:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    elif i == 12:
+                        if str(aaa) != 'nan':    
+                            tag = card.hashtags.get_or_create(title=aaa)
+                            comment += ' !'+str(aaa)
+                    i += 1
+                card.comments = comment
+                card.save()
     context = {   
     }
     return render(request, "upload_cards.html", context)
