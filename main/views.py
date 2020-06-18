@@ -1360,6 +1360,7 @@ def upload_cards(request):
                     if i == 0:
                         name = aaa
                 card = school.crm_cards.filter(name=name)
+                print(name, len(card))
                 if len(card) > 1:
                     card[1].delete()
                 #     elif i == 1:
