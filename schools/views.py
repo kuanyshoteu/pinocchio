@@ -2106,13 +2106,14 @@ def get_all_cards_second(request):
         managers = school.people.filter(profession=manager_prof)
         for manager in managers:
             managers_res.append([manager.id,manager.first_name])
-    all_cards = school.crm_cards.all()
+    all_columns = school.crm_columns.all()
+    all_cards = school.crm_cards.filter(column__in=all_columns)
     all_cards_len = len(all_cards)
     number_of_free = len(all_cards.filter(color='red', author_profile=None))
     number_of_manager = len(all_cards.filter(color='red', author_profile = profile))
     individual_subjects = get_individual_subjects(school)
-    my_cards_len = len(school.crm_cards.filter(author_profile=profile))
-    free_cards_len = len(school.crm_cards.filter(author_profile=None))
+    my_cards_len = len(school.crm_cards.filter(author_profile=profile,column__in=all_columns))
+    free_cards_len = len(school.crm_cards.filter(author_profile=None,column__in=all_columns))
     data = {
         "all_res":all_res,
         "page":2,
@@ -2257,7 +2258,8 @@ def filter_crm_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    all_cards = school.crm_cards.all().select_related('card_user')
+    all_columns = school.crm_columns.all()
+    all_cards = school.crm_cards.filter(column__in=all_columns).select_related('card_user')
     all_cards_len = len(all_cards)
     if request.GET.get('kind') == 'freecards':
         all_cards = school.crm_cards.filter(author_profile=None).select_related('card_user')
@@ -2281,9 +2283,8 @@ def filter_crm_cards(request):
                 break
             res += get_card_data_by_column(card, colid)
         all_res.append([colid,res])
-    my_cards_len = len(school.crm_cards.filter(author_profile=profile))
-    free_cards_len = len(school.crm_cards.filter(author_profile=None))
-    print(school.crm_cards.filter(author_profile=None))
+    my_cards_len = len(school.crm_cards.filter(author_profile=profile, column__in=all_columns))
+    free_cards_len = len(school.crm_cards.filter(author_profile=None, column__in=all_columns))
     data = {
         'all_res':all_res,
         'column_cards_lens':column_cards_lens,
