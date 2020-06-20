@@ -1034,6 +1034,7 @@
         $('.column_scrollable').each(function(){
             $(this).attr('Ended', 'false')
             $(this).animate({ scrollTop: 0 });
+            $(this).attr('page', 2)
         })
     }
     function update_crm(){

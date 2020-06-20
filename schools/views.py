@@ -2283,6 +2283,7 @@ def filter_crm_cards(request):
         all_res.append([colid,res])
     my_cards_len = len(school.crm_cards.filter(author_profile=profile))
     free_cards_len = len(school.crm_cards.filter(author_profile=None))
+    print(school.crm_cards.filter(author_profile=None))
     data = {
         'all_res':all_res,
         'column_cards_lens':column_cards_lens,
