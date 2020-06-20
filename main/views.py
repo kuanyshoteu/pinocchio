@@ -1462,7 +1462,7 @@ def moderator_run_code(request):
     # card_tags()
     # columns()
     # categories_update()
-    # hint_update()
+    hint_update()
     # update_prime()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})

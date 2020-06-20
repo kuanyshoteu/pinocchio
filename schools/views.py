@@ -2085,8 +2085,10 @@ def get_all_cards_second(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     all_res = []
+    column_cards_lens = []
     for column in school.crm_columns.all():
         query = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
+        column_cards_lens.append(len(query))
         res = []
         colid = column.id
         i = 0
@@ -2105,9 +2107,12 @@ def get_all_cards_second(request):
         for manager in managers:
             managers_res.append([manager.id,manager.first_name])
     all_cards = school.crm_cards.all()
+    all_cards_len = len(all_cards)
     number_of_free = len(all_cards.filter(color='red', author_profile=None))
     number_of_manager = len(all_cards.filter(color='red', author_profile = profile))
     individual_subjects = get_individual_subjects(school)
+    my_cards_len = len(school.crm_cards.filter(author_profile=profile))
+    free_cards_len = len(school.crm_cards.filter(author_profile=None))
     data = {
         "all_res":all_res,
         "page":2,
@@ -2116,7 +2121,11 @@ def get_all_cards_second(request):
         "Ended":False,
         "number_of_free":number_of_free,
         "number_of_manager":number_of_manager,
+        "all_cards_len":all_cards_len,
+        "my_cards_len":my_cards_len,
+        "free_cards_len":free_cards_len,
         "individual_subjects":individual_subjects,
+        "column_cards_lens":column_cards_lens,
     }
     return JsonResponse(data)
 
@@ -2248,18 +2257,20 @@ def filter_crm_cards(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    if request.GET.get('kind') == 'allcards':
-        all_cards = school.crm_cards.filter(school=school).select_related('card_user')
-    elif request.GET.get('kind') == 'freecards':
-        all_cards = school.crm_cards.filter(author_profile=None,school=school).select_related('card_user')
-    else:
-        all_cards = school.crm_cards.filter(author_profile=profile,school=school).select_related('card_user')
+    all_cards = school.crm_cards.all().select_related('card_user')
+    all_cards_len = len(all_cards)
+    if request.GET.get('kind') == 'freecards':
+        all_cards = school.crm_cards.filter(author_profile=None).select_related('card_user')
+    elif request.GET.get('kind') == 'mycards':
+        all_cards = school.crm_cards.filter(author_profile=profile).select_related('card_user')
     all_squads = school.groups.all()
     all_students = school.people.filter(is_student=True).prefetch_related('squads')
     all_offices = school.school_offices.all()
     all_res = []
+    column_cards_lens = []
     for column in school.crm_columns.all():
         cards = all_cards.filter(column=column)
+        column_cards_lens.append(len(cards))
         cards = filter_crm_cards_work(cards, request,all_squads,all_students,all_offices)
         i = 0
         res = []
@@ -2269,9 +2280,15 @@ def filter_crm_cards(request):
             if i == 10:
                 break
             res += get_card_data_by_column(card, colid)
-        all_res.append([colid,res])            
+        all_res.append([colid,res])
+    my_cards_len = len(school.crm_cards.filter(author_profile=profile))
+    free_cards_len = len(school.crm_cards.filter(author_profile=None))
     data = {
         'all_res':all_res,
+        'column_cards_lens':column_cards_lens,
+        'all_cards_len':all_cards_len,
+        'my_cards_len':my_cards_len,
+        'free_cards_len':free_cards_len,
     }
     return JsonResponse(data)
 
@@ -2280,8 +2297,9 @@ def get_extra_cards(request):
     only_managers(profile)
     res = []
     school = is_moderator_school(request, profile)
+    Ended = False
     if request.GET.get('column') and request.GET.get('page'):
-        page = int(request.GET.get('page'))+1
+        page = int(request.GET.get('page'))
         column = CRMColumn.objects.get(id=int(request.GET.get('column')))
         if request.GET.get('kind') == 'allcards':
             res = column.cards.filter(school=school).select_related('card_user')
@@ -2293,8 +2311,13 @@ def get_extra_cards(request):
         all_students = school.people.filter(is_student=True).prefetch_related('squads')
         all_offices = school.school_offices.all()
         res = filter_crm_cards_work(res, request,all_squads,all_students,all_offices)
-        if len(res) <= (page-1)*10:
-            return JsonResponse({"Ended":True})
+        print(len(res), (page)*10)
+        if len(res) <= (page)*10:
+            Ended = True
+            print('last')
+            if len(res) <= (page-1)*10:
+                print('ended')
+                return JsonResponse({'Ended':True})
         p = Paginator(res, 10)
         page1 = p.page(page)
         res = []
@@ -2309,10 +2332,10 @@ def get_extra_cards(request):
                 managers_res.append([manager.id,manager.first_name])
     data = {
         "res":res,
-        "page":page,
+        "page":page+1,
         "is_director":is_profi(profile, 'Director'),
         "managers_res":managers_res,
-        "Ended":False,
+        "Ended":Ended,
     }
     return JsonResponse(data)
 
@@ -2487,13 +2510,13 @@ def get_payment_list(request):
         school = is_moderator_school(request, profile)
         cards = school.crm_cards.select_related('card_user')
         squad = profile.filter_data.squad
+        squads = school.groups.filter(shown=True).prefetch_related('students')
+        all_students_len = len(school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct())
         if squad != None:
             squads = [squad]
         else:
             if profile.filter_data.office:
                 squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
-            else:
-                squads = school.groups.filter(shown=True).prefetch_related('students')
         if profile.filter_data.subject_category:
             subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
             squads = squads.filter(subjects__in=subjects)
@@ -2506,6 +2529,7 @@ def get_payment_list(request):
                 students = students.filter(payment_history__in=payments).distinct()
             if profile.filter_data.payment == 'not_paid':
                 students = students.exclude(payment_history__in=payments).distinct()
+        crnt_students_len = len(students)
         if len(students) <= (page-1)*16:
             return JsonResponse({"ended":True})
         p = Paginator(students, 16)
@@ -2554,9 +2578,10 @@ def get_payment_list(request):
                 sq_res,
                 notices,
                 ])
-
     data = {
         "res":res,
+        "crnt_students_len":crnt_students_len,
+        "all_students_len":all_students_len,
     }
     return JsonResponse(data)
 

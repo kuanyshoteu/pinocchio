@@ -32,14 +32,19 @@
                             <div class="wide column ml10 pb0 pl0 pr0" style="width: auto;">
                                 <div class="dflex ui segment pt0 pb0 pl0 pr0">
                                     {% if is_director %}
-                                    <a class="ui button small white mr0 cfkind" status="kind" id="allcards" style="padding: 9px 8px;">Все</a>
+                                    <a class="ui button small white mr0 cfkind" status="kind" id="allcards" style="padding: 9px 8px;">
+                                        <b>Все</b>
+                                        <div class="ml5 dinline all_cards_len"></div>
+                                    </a>
                                     {% endif %}
                                     <a class="ui button small green mr0 cfkind chosed" status="kind" id="mycards" style="padding: 9px 8px;">
-                                        Мои карточки
+                                        <b>Мои карточки</b>
+                                        <div class="ml5 dinline my_cards_len"></div>
                                         <span class="number_of_manager red_notice dinline" style="margin-top: -5px;position: absolute;display: none;"></span> 
                                     </a>
                                     <a class="ui button small white mr0 cfkind" status="kind" id="freecards" style="padding: 9px 8px;">
-                                        Свободные
+                                        <b>Свободные</b>
+                                        <div class="ml5 dinline free_cards_len"></div>
                                         <span class="number_of_free red_notice dinline" style="margin-top: -5px;position: absolute;display: none;"></span> 
                                     </a>
                                 </div>
@@ -96,12 +101,15 @@
                         {% for column in columns %}
                         <div class="wide column center aligned pr5 pl0 pt5 pb0" style="width: 16.65%;">
                             <div class="margin0 backdark pt10 pb10 textw topbr5">
-                                <div class="crm_title mb10">{{ column.title }}</div>
+                                <div class="crm_title mb10">
+                                    {{ column.title }}
+                                    <div class="ml5 dinline textlg column_cards_len column_cards_len{{column.id}}"></div>
+                                </div>
                                 <div class="text-center pl5 pr5 {%if forloop.counter == 1%}hint_place1" side="right2{%endif%}">
-                                    <a class="ui button mini white textblue pt5 pb5 full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide()" id="{{column.id}}">Добавить</a>
+                                    <a class="ui button mini white textblue pt5 pb5 full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide();$('.add_card').removeClass('disabled');" id="{{column.id}}">Добавить</a>
                                 </div>
                             </div>
-                            <div onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
+                            <div Ended="false" onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
                                 <div class="loader_center ui active loader column_loader"></div>
                                 <div class="textw" style="padding: 0 4px;">
                                     <div class="column{{ column.id }} crm_column">

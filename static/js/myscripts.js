@@ -1103,21 +1103,6 @@
             }
         })        
     });
-    $('.yes_delete_card').click(function(e) {
-        url = $('.delete_card_data').attr('url')
-        id = $('.delete_card_data').attr('id')
-        $.ajax({
-            url: url,
-            data: {
-                'id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('#delete_card_modal').modal('hide');
-                $('#card_container' + id).hide('fast');
-            }
-        })        
-    });
     $('.save_salary').click(function(e) {
         url = $('.salary_url').attr('url')
         id = $(this).attr('id')

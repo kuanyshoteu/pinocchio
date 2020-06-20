@@ -53,6 +53,7 @@
                     $('.number_of_manager').show()
                     $('.number_of_manager').text(number_of_manager)
                 }
+                update_column_numbers(data)
                 fill_individual_subjects(data.individual_subjects)
             }
         })
@@ -106,7 +107,6 @@
         social_media_id = res[5]
         days_of_weeks = res[6]
         birthday = res[7]
-        console.log('open1', birthday)
         take_url = "{% url 'schools:take_url' %}"
         if ($('.data').attr('is_dir') == 'True') {
             $('.change_manager').attr('onchange','change_manager("'+id+'")')
@@ -235,7 +235,8 @@
             nc.find('.delete_card').attr('id', 'cardphoneshow'+id)
             nc.find('.delete_card').attr('onclick', 'delete_card("'+id+'")')
             nc.find('.show_card_schedule').attr('onclick', 'open_crmhist("'+id+'")')
-            nc.find('.card_segment').attr('id', id)
+            nc.find('.card_segment').attr('id', 'card'+id)
+            nc.find('.card_segment').attr('column_id', column)
             nc.find('.card_segment').attr('ondragstart', 'save_card_id("'+id+'","'+name+'")')
             nc.find('#cardsc').attr('id', 'cardsc'+id)
             nc.find('#cardsc'+id).attr('onclick', 'openNav("'+id+'")')
@@ -252,38 +253,36 @@
             }
         }
     }
-    function column_scroll(id){
-        this_ = $('.column_scrollable'+id)
-        url = $('.data').attr('get_extra_cards')
-        column = this_.attr('id')
-        page = this_.attr('page')
-        var licenseElement = this_.get(0);
-        if ($('.current_card').attr('all') == 'yes') {all = 'yes'}
-        if ((licenseElement.scrollTop + licenseElement.offsetHeight) >= licenseElement.scrollHeight) {
-            filter_data = get_filter_data()
-            squads = filter_data[0]
-            offices = filter_data[1]
-            days = filter_data[2]
-            kind = filter_data[3]
-            $.ajax({
-                url: url,
-                data: {
-                    'column':column,
-                    'page':page,
-                    'kind':kind,
-                    'squads':squads,
-                    'offices':offices,
-                    'days':days,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    this_.attr('page', data.page)
-                    if (data.Ended == false) {
-                        colid,column_data,'bottom'
+    function column_scroll(column){
+        this_ = $('.column_scrollable'+column)
+        if (this_.attr('Ended') == 'false') {
+            url = $('.data').attr('get_extra_cards')
+            page = this_.attr('page')
+            var licenseElement = this_.get(0);
+            if ((licenseElement.scrollTop + licenseElement.offsetHeight) >= licenseElement.scrollHeight) {
+                filter_data = get_filter_data()
+                squads = filter_data[0]
+                offices = filter_data[1]
+                days = filter_data[2]
+                kind = filter_data[3]
+                $.ajax({
+                    url: url,
+                    data: {
+                        'column':column,
+                        'page':page,
+                        'kind':kind,
+                        'squads':squads,
+                        'offices':offices,
+                        'days':days,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        this_.attr('page', data.page)
+                        this_.attr('Ended', data.Ended)
                         fill_card_data(column, data.res,'bottom')
                     }
-                }
-            })
+                })
+            }
         }
     };
     function filter_title(id){
@@ -336,6 +335,12 @@
                         colid,column_data,'bottom'
                         fill_card_data(id,data.res,'top')
                         $('.new_card_form').modal('hide')
+                        column_cards_len = parseInt($('.column_cards_len'+id).text())
+                        $('.column_cards_len'+id).text(column_cards_len+1)
+                        my_cards_len = parseInt($('.my_cards_len').text())
+                        $('.my_cards_len').text(my_cards_len+1)
+                        all_cards_len = parseInt($('.all_cards_len').text())
+                        $('.all_cards_len').text(all_cards_len+1)
                     }
                 }
             })        
@@ -344,6 +349,27 @@
             $('.wrong_mail_error').show()
         }
     });
+    $('.yes_delete_card').click(function(e) {
+        url = $('.delete_card_data').attr('url')
+        id = $('.delete_card_data').attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('#delete_card_modal').modal('hide');
+                $('#card_container' + id).hide('fast');
+                column_cards_len = parseInt($('.column_cards_len'+id).text())
+                $('.column_cards_len'+id).text(column_cards_len-1)
+                my_cards_len = parseInt($('.my_cards_len').text())
+                $('.my_cards_len').text(my_cards_len-1)
+                all_cards_len = parseInt($('.all_cards_len').text())
+                $('.all_cards_len').text(all_cards_len-1)
+            }
+        })        
+    });    
     function make_payment_card(id) {
         amount = $('.payment_amountedit').val()
         this_ = document.getElementById('pay_for_groupedit');
@@ -461,15 +487,15 @@
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 $('#card'+id).attr('column_id', column_id)
                 $('#cardsc'+id).attr('column', column_id)
+                console.log(oldcolumn_id, column_id)
+                newcolumn_cards_len = parseInt($('.column_cards_len'+column_id).text())
+                $('.column_cards_len'+column_id).text(newcolumn_cards_len+1)
+                oldcolumn_cards_len = parseInt($('.column_cards_len'+oldcolumn_id).text())
+                $('.column_cards_len'+oldcolumn_id).text(oldcolumn_cards_len-1)
                 if(oldcolumn_id == '1'){
-                    if (column_id == '5' || column_id == '4') {
-                        openNav(id);
-                    }
-                    else{
-                        openNav(id);
-                    }
+                    openNav(id);
                 }
-                else{
+                else if(column_id > oldcolumn_id){
                     if (column_id == '2') {
                         openNav(id);
                     }
@@ -996,6 +1022,20 @@
         kind = $(".cfkind.green").attr('id')
         return [squads, offices, days, kind]        
     }
+    function update_column_numbers(data){
+        $('.all_cards_len').text(data.all_cards_len)
+        $('.my_cards_len').text(data.my_cards_len)
+        $('.free_cards_len').text(data.free_cards_len)
+        i = 0
+        $('.column_cards_len').each(function(){
+            $(this).text(data.column_cards_lens[i])
+            i += 1
+        })
+        $('.column_scrollable').each(function(){
+            $(this).attr('Ended', 'false')
+            $(this).animate({ scrollTop: 0 });
+        })
+    }
     function update_crm(){
         url = $('.data').attr('filter_crm_cards')
         filter_data = get_filter_data()
@@ -1019,6 +1059,7 @@
                     column_data = data.all_res[i][1]
                     fill_card_data(colid,column_data,'bottom')
                 }
+                update_column_numbers(data)
             }
         })        
     }
