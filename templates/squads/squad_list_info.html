@@ -11,10 +11,6 @@
             <div class="pt10 pb10 wide column" style="width: calc(30% - 50px);">
                 <h5 style="font-size: 13px;margin-bottom: 5px;">
                     <span class="textblue">{{ sq.title }}</span>
-                    {% if trash %}
-                    <a class="ui button mini green make_alive" url="{% url 'squads:make_alive' %}" id="{{ sq.id }}">Восстановить</a>
-                    <div class="highlight success_alive{{sq.id}}" style="display: none;">Группа восстановлена</div>
-                    {% endif %}
                 </h5>
             </div>
             <div class="four wide column">

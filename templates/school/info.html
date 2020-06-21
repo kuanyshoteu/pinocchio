@@ -18,12 +18,12 @@
         {% include 'left_menu.html' %}
         <div class="w85 wide column">
             {% include 'school/head.html' %}
-            <div class="ui segment mt0 mb15 text15 hint_place1" side="bottom">
-                <div class="text15 mb15 textdg">
+            <div class="ui segment mt0 mb15 text15 hint_place1 no_padding" side="bottom">
+                <div class="text15 mb15 textdg pl15 pt15 pr15">
                     <b>Основная информация</b>
                 </div>
                 <div class="ui grid stackable no_margin">
-                    <div class="sixteen wide column no_padding">
+                    <div class="sixteen wide column pt0 pb0">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="dinline text13 textdg">Город: </span>
@@ -59,7 +59,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                    <div class="backwhitelow eight wide column pt15 pb0 deskpr50">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="dinline text13 textdg">Полное описание: </span> 
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0">
+                    <div class="backwhitelow eight wide column pt15 pb0">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="dinline text13 textdg ">Короткое описание: </span> 
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                    <div class="eight wide column pt15 pb0 deskpr50">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="dinline text13 textdg ">Номер телефона: </span>
@@ -154,7 +154,7 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0">
+                    <div class="eight wide column pt15 pb0">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="dinline text13 textdg ">Сайт: </span> 
@@ -183,7 +183,7 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                    <div class="backwhitelow eight wide column pt15 pb0 deskpr50">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="text13 textdg">Время работы: </span> 
@@ -221,7 +221,7 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0">
+                    <div class="backwhitelow eight wide column pt15 pb0">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="text13 textdg">Социальные сети: </span> 
@@ -261,7 +261,7 @@
                             </div>  
                         </div>
                     </div>
-                    <div class="eight wide column pl0 pt0 pb0 deskpr50">
+                    <div class="eight wide column pt15 pb0 deskpr50">
                         <div class="dflex">
                             <div style="width: 160px;">
                                 <span class="text13 textdg">Фотографии: </span> 
@@ -300,8 +300,13 @@
                 <div class="school_subject_list">
                     <div class="ui grid stackable no_margin">
                         {% for subject in instance.school_subject_categories.all %}
-                        <div class="twenty wide column pl0 pt0 pb10">
-                            <a class="full-w full-h ui button border1 small white shadow_small textblue subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="padding: 7px 10px;">{{ subject.title }} ({{ subject|get_subject_courses_len:instance }} курсов)</a>
+                        <div class="four wide column pl0 pt0 pb10">
+                            <a class="full-w full-h ui labeled icon button border1 small white shadow_small textblue subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="text-align: left;">
+                                <i class="icon file alternate backrbb textw"></i>
+                                <b>{{ subject.title }}</b> 
+                                <br>
+                                <span class="textdg text-center">{{ subject|get_subject_courses_len:instance }} курсов</span>
+                            </a>
                             <div class="ui modal mini" id="subject_form{{ subject.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
@@ -322,7 +327,7 @@
                         {% endfor %}
                     </div>                    
                 </div>
-                <a class="ui button mini white shadow_small border1 mt5" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
+                <a class="ui button mini blue shadow_blue mt5" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
                 <div class="ui modal mini" id="subject_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -345,7 +350,10 @@
                     <div class="ui grid stackable no_margin school_discounts_list">
                         {% for discount in instance.discounts.all %}
                         <div class="twenty wide column pt0 pl0 pb10">
-                            <a class="full-w full-h ui button small white border1 shadow_small textblue discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="padding: 7px 10px;">{{ discount.title }}</a>
+                            <a class="full-w full-h ui button labeled icon small white border1 shadow_small textblue discount_object{{discount.id}}" onclick="$('#discount_form{{discount.id}}').modal('show')" id="{{discount.id}}" style="text-align: left;">
+                                <i class="icon percent backyellow textw"></i>
+                                {{ discount.title }}
+                            </a>
                             <div class="ui modal mini" id="discount_form{{ discount.id }}">
                                 <i class="close icon"></i>
                                 <div class="content">
@@ -384,7 +392,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini white shadow_small border1 mb5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
+                <a class="ui button mini blue shadow_blue mb5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
                 <div class="ui modal mini" id="discount_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -418,7 +426,12 @@
                     <div class="ui grid stackable no_margin">
                         {% for office in instance.school_offices.all %}
                         <div class="twenty wide column pl0 pt0 pb10">
-                            <a class="full-w full-h ui button small white shadow_small textblue office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="padding: 7px 10px;">{{ office.title }} ({{ office.office_subjects.all|length}} курсов)</a>
+                            <a class="full-w full-h ui labeled icon button small white shadow_small textblue office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="text-align: left;">
+                                <i class="icon map marker alternate backlightblue textw"></i>
+                                <b>{{ office.title }}</b>
+                                <br> 
+                                <span class="textdg">{{ office.groups.all|length}} групп</span>
+                            </a>
                         </div>
                         <div class="ui modal small" id="office_form{{ office.id }}">
                             <i class="close icon"></i>
@@ -472,7 +485,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini white shadow_small border1" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
+                <a class="ui button mini blue shadow_blue" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
                 <div class="ui modal mini" id="office_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -488,7 +501,7 @@
             <div class="ui segment mb0">
                 <div class="textdg textbold text15 mb10">Отчеты по менеджерам</div>
                 {% for manager in managers %}
-                <a class="ui button small white shadow_small border1 mr10 get_manager_actions" 
+                <a class="ui button small white shadow_small border1 mr10 mb10 get_manager_actions" 
                 url="{% url 'schools:get_manager_actions' %}" id="{{manager.id}}">
                     {{manager.first_name}}
                 </a>
@@ -509,7 +522,7 @@
             <div class="ui segment mb0">
                 <div class="textdg textbold text15 mb10">Отчеты по учителям</div>
                 {% for teacher in teachers %}
-                <a class="ui button small white shadow_small border1 mr10 get_teacher_actions" 
+                <a class="ui button small white shadow_small border1 mr10 mb10 get_teacher_actions" 
                 url="{% url 'schools:get_teacher_actions' %}" id="{{teacher.id}}">
                     {{teacher.first_name}}
                 </a>

@@ -49,6 +49,10 @@
   background-color: #506ca9 !important;
   background: #506ca9 !important;
 }
+.backyellow{
+  background-color: #fbbd08 !important;
+  background: #fbbd08 !important;
+}
 .backlightblue{
   background-color: #7289ba !important;
   background: #7289ba !important;
@@ -390,9 +394,7 @@ table{
 .lecture_const{
   position: absolute;
   color: #fff;
-  padding: 5px;
   border-radius: 3px;
-  border: 1px solid #696969;
   text-align: center;
   cursor: pointer;
   line-height: 12px;
@@ -1038,6 +1040,17 @@ a{
     left: -7px;
     top: 50%;
 }
+.help_top_right:after {
+    content: "";
+    display: block;
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #506ca9 transparent;
+    margin-left: -10px;
+    position: absolute;
+    top: -10px;
+    right: 50px;
+}
 .help_top:after {
     content: "";
     display: block;
@@ -1052,12 +1065,13 @@ a{
 .help_top_long:after {
     content: "";
     display: block;
-    border-width: 0 10px 50px 10px;
+    border-width: 0 10px 55px 10px;
     border-style: solid;
     border-color: transparent transparent #506ca9 transparent;
     position: absolute;
-    top: -40px;
+    top: -55px;
     left: 90px;
+    z-index: 3000;
 }
 .help_bottom:after {
     content: "";
@@ -1597,16 +1611,26 @@ a{
   cursor: pointer;
 }
 .other_option{
-  padding:0 6px 17px 6px;color: #656565;font-size: 14px;
+  padding:0 6px 17px 6px;color: #fff;font-size: 14px;
+  font-weight: 600;
+}
+.other_option:hover{
+  color: lightgrey;
 }
 .current_option{
   padding:10px 6px 10px 6px;
   color: #656565;
+  font-weight: 600;
   font-size: 14px;
-  box-shadow: 0 0 5px 0 #d3d3d3 !important;  
+  background-color: #fff;
+}
+.current_option:hover{
+  color: #656565;
 }
 .other_option2{
-  padding:0 6px 17px 6px;color: #656565;font-size: 14px;
+  padding:0 6px 17px 6px;
+  color: #656565;
+  font-size: 14px;
 }
 .current_option2{
   border-bottom: 2px solid #313a57;padding:0 6px 17px 6px;color: #000;font-size: 14px;

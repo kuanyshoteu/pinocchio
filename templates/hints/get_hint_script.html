@@ -120,12 +120,12 @@
         }
         else if (side == 'right') {
             topp = place.offset().top - (hint_box.height() - 10)
-            left = place.width() + 15
+            left = place.width()
             scroll_topp = place.offset().top - 150 - hint_box.height()/2
             hint_box.addClass('help_left')
         }
         else if (side == 'right2') {
-            topp = place.offset().top - hint_box.height() - 10
+            topp = place.offset().top - hint_box.height() - 15
             left = place.width()
             scroll_topp = place.offset().top - 150 - hint_box.height()/2
             hint_box.addClass('help_left')
@@ -133,9 +133,9 @@
         }
         else if (side == 'right3') {
             topp = place.offset().top
-            left = place.width() - hint_box.width()
+            left = place.width()*0.19+200
             scroll_topp = 0
-            hint_box.addClass('help_top')
+            hint_box.addClass('help_top_right')
         }
         else if (side == 'bottom2') {
             topp = 150

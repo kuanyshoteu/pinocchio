@@ -19,7 +19,7 @@
                         <div class="pl0" style="height: 32px">
                             <div class="mt5 mr5 text17 textbold ui grid textdg">
                                 {%if trash and is_manager %}
-                                    <b style="color: darkred;width: 130px;">Удаленные группы</b>
+                                    <b class="textred no_padding">Удаленные группы</b>
                                 {%else%}
                                     Группы
                                 {%endif%} 
@@ -56,10 +56,10 @@
                             </form>
                             {%endif%}
                         </div>
-                        <div class="no_padding" style="width: 200px;height: 29px;">
+                        <div class="no_padding" style="width: {%if not trash%}200px;{%endif%}height: 29px;">
                             <div class="pl0" style="position: absolute;right:15;">
                             {%if trash %}
-                                <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini blue">Рабочие группы</a>
+                                <a href="{% url 'squads:list' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="pl5 pr5 ui button mini blue shadow_blue">Рабочие группы</a>
                             {% else %}
                                 <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini white border1 pl5 pr5 shadow_small textdg mr5 mb5">Удаленные</a>
                                 {% if is_director or is_manager%}

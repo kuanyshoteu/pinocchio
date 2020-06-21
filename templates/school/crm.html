@@ -106,7 +106,7 @@
                                     <div class="ml5 dinline textlg column_cards_len column_cards_len{{column.id}}"></div>
                                 </div>
                                 <div class="text-center pl5 pr5 {%if forloop.counter == 1%}hint_place1" side="right2{%endif%}">
-                                    <a class="ui button mini white textblue pt5 pb5 full-w" onclick="$('.new_card_form').modal('show');$('.add_card').attr('id', '{{ column.id }}');$('.wrong_mail_error').hide();$('.add_card').removeClass('disabled');" id="{{column.id}}">Добавить</a>
+                                    <a class="ui button mini white textblue pt5 pb5 full-w" onclick="open_new_card_modal('{{ column.id }}')" id="{{column.id}}">Добавить</a>
                                 </div>
                             </div>
                             <div Ended="false" onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">

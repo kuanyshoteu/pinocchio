@@ -2155,6 +2155,8 @@ def create_individual_group(request):
             content='Записан на прохождение курса '+subject.title,
             start_date=timezone.now().date(),
         )
+        if len(school.school_offices.all()) > 0:
+            new_squad.office = new_squad.school.school_offices.first()
         new_squad.save()
         student = card.card_user
         if not student:

@@ -296,6 +296,12 @@
         $('.card_mail_form').show()
         $('.card_mail_edit').focus()
     })
+    function open_new_card_modal(column_id){
+        $('.new_card_form').modal('show');
+        $('.add_card').attr('id', column_id);
+        $('.wrong_mail_error').hide();
+        $('.add_card').removeClass('disabled');
+    }
     $('.add_card').click(function(e) {
         var id = $(this).attr("id")
         var name = $('.new_card_name').val()
@@ -341,6 +347,10 @@
                         $('.my_cards_len').text(my_cards_len+1)
                         all_cards_len = parseInt($('.all_cards_len').text())
                         $('.all_cards_len').text(all_cards_len+1)
+                        $('.new_card_name').val('')
+                        $('.new_card_phone').val('')
+                        $('.new_card_mail').val('')
+                        $('.new_card_comment').val('')
                     }
                 }
             })        
@@ -511,7 +521,7 @@
         $('.card_saved').hide()
         height = parseInt($(document).height())-230;
         $('.card_dialog').css('height', height);
-        $('.card_money_schedit').empty();
+        $('.card_money_sch').empty();
         name = $('#cardnameshow'+id).text();
         phone = $('#cardphoneshow'+id).text();
         $('.crmform_title').text(name);
@@ -565,19 +575,20 @@
                 dataType: 'json',
                 success: function (data) {
                     $('.pay_for_groupedit').empty()
+                    console.log(data.bills)
                     if (data.bills.length > 0) {
                         for (var i = 0; i < data.bills.length; i++) {
                             text =  '<div style="font-weight:600;display:inline-block;" class="mr10">'+ data.bills[i][0] +'</div>' + 
                                     '<div class="mr10" style="display:inline-block;">На счету: '+ data.bills[i][1] +'</div>' + 
                                     '<div class="mr10" style="display:inline-block;">Оплата за уроки: '+ data.bills[i][2] +'</div>' + 
                                     '<div style="display:inline-block;">Оплата за месяц: '+ data.bills[i][3] +'</div>'
-                            $(text).appendTo('.card_money_schedit')
-                            $('<br><br>').appendTo('.card_money_schedit')
+                            $(text).appendTo('.card_money_sch')
+                            $('<br><br>').appendTo('.card_money_sch')
                             $('<option value="'+data.bills[i][4]+'">'+data.bills[i][0]+'</option>').appendTo('.pay_for_groupedit')
                         }
                     }
                     else{
-                        $('.card_money_schedit').text("Пока ничего нет")
+                        $('.card_money_sch').text("Пока ничего нет")
                     }
                     fill_card_form(id, data.form_res[0], 'no')
                     fill_card_dialog(data.dialog)

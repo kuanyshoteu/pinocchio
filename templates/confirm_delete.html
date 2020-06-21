@@ -1,28 +1,25 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
-
 {% block head_title %}
-{{ instance.title }} | {{ block.super }}
+Удаление | {{ block.super }}
 {% endblock head_title %}
-
-
-
 {% block content %}
-
-
-
-<div class="ui container">
-    <div class="ui icon message">
-        <i class="exclamation triangle icon"></i>
-        <div class="content" style="margin-top:0;">
-            <div class="header">
-                Уверены, что хотите удалить: "{{ object.title }}"?
+<div class="ui container" style="height: 100%;">
+    <div class="content" >
+        <div class="ui grid stackable no_margin">
+            <div class="four wide column no_padding"></div>
+            <div class="eight wide column">
+                <div class="ui segment mt50">
+                    <div class="text17 textdg textbold">
+                        Уверены, что хотите удалить: "{{ object.title }}"?
+                    </div>
+                    <form method="POST" action="." style="margin-top:20px"> {% csrf_token %}
+                        <input type='submit' value='Удалить' class='ui button green'>
+                        <a href='{{ object.get_absolute_url }}' class='ui button red'>Отмена</a>
+                    </form>                        
+                </div>
             </div>
-            <form method="POST" action="." style="margin-top:20px"> {% csrf_token %}
-                <input type='submit' value='Удалить' class='ui button green'>
-                <a href='{{ object.get_absolute_url }}' class='ui button red'>Отмена</a>
-            </form>
+            <div class="four wide column no_padding"></div>
         </div>
     </div>
 </div>

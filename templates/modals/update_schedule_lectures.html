@@ -95,7 +95,9 @@ function update_schedule_lectures(){
             oldtop = parseInt($(this).css('margin-top'));
             $(this).css('margin-top', oldtop+topp);
             $(this).css('margin-left', oldleft+left);
-            $('.hint_schedule'+id).css('margin-top', oldtop+topp);
+            hinttop = oldtop+topp
+            if (hinttop > 300) {hinttop = 300}
+            $('.hint_schedule'+id).css('margin-top', hinttop);
             $('.hint_schedule'+id).css('margin-left', oldleft+left+98);
             if ($(this).attr('height')) {
                 $(this).css('height', height);
