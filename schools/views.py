@@ -833,8 +833,6 @@ def office_delete(request):
     for cabinet in office.cabinets.all():
         cabinet.delete()
     office.delete()
-    school.offices -= 1
-    school.save()
     data = {
     }
     return JsonResponse(data)
@@ -2517,7 +2515,7 @@ def get_payment_list(request):
         squads = school.groups.filter(shown=True).prefetch_related('students')
         all_students_len = len(school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct())
         if squad != None:
-            squads = [squad]
+            squads = school.groups.filter(id = squad.id)
         else:
             if profile.filter_data.office:
                 squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')

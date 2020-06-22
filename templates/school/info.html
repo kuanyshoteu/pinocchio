@@ -229,7 +229,7 @@
                             <div class="mb15" style="width: calc(100% - 130px)">
                                 <div style="display: inline-block;" class="school_social_list">
                                     {% for social in social_networks %}
-                                        <a class="ui button small white shadow_small mb10 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}" style="padding: 7px 10px;">
+                                        <a class="ui button small white shadow_small mb10 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}">
                                             <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
                                             {{ social.1 }}
                                         </a>
@@ -297,8 +297,8 @@
                 <div class="text15 mb15 textdg">
                     <b>Предметы школы</b>
                 </div>
-                <div class="school_subject_list">
-                    <div class="ui grid stackable no_margin">
+                <div class="">
+                    <div class="ui grid stackable school_subject_list no_margin">
                         {% for subject in instance.school_subject_categories.all %}
                         <div class="four wide column pl0 pt0 pb10">
                             <a class="full-w full-h ui labeled icon button border1 small white shadow_small textblue subject_object{{subject.id}}" onclick="$('#subject_form{{subject.id}}').modal('show')" id="{{subject.id}}" style="text-align: left;">
@@ -327,7 +327,7 @@
                         {% endfor %}
                     </div>                    
                 </div>
-                <a class="ui button mini blue shadow_blue mt5" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
+                <a class="ui button mini blue shadow_blue mt15" onclick="$('#subject_form_new').modal('show')">Добавить предмет</a>
                 <div class="ui modal mini" id="subject_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -392,7 +392,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini blue shadow_blue mb5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
+                <a class="ui button mini blue shadow_blue mt15 mb5" onclick="$('#discount_form_new').modal('show')">Добавить Скидку</a>
                 <div class="ui modal mini" id="discount_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -422,8 +422,8 @@
             </div>
             <div class="ui segment no_margin pl15 hint_place4" side="top">
                 <div class="text14 textdg pb10"><b>Офисы:</b></div>
-                <div class="school_office_list">
-                    <div class="ui grid stackable no_margin">
+                <div class="">
+                    <div class="ui grid stackable school_office_list no_margin">
                         {% for office in instance.school_offices.all %}
                         <div class="twenty wide column pl0 pt0 pb10">
                             <a class="full-w full-h ui labeled icon button small white shadow_small textblue office_object{{office.id}}" onclick="$('#office_form{{office.id}}').modal('show')" id="{{office.id}}" style="text-align: left;">
@@ -485,7 +485,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <a class="ui button mini blue shadow_blue" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
+                <a class="ui button mini blue shadow_blue mt15" onclick="$('#office_form_new').modal('show')">Добавить офис</a>
                 <div class="ui modal mini" id="office_form_new">
                     <i class="close icon"></i>
                     <div class="content">
@@ -602,7 +602,7 @@
             }
         });
     });
-   function create_subject(url, id) {
+    function create_subject(url, id) {
         title = $('#subject_title'+id).val()
         if (title != '') {
             if ($('.check_moderator').attr('status')=='True') {
@@ -622,7 +622,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini white shadow_small subject_object'+data.idd+'" onclick="$('+"'#subject_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="subject_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="subject_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_subject('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_subject('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsubject'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_subject_list'))
+                            $('<div class="twenty wide column pt0 pl0 pb10"><a class="ui button icon labeled full-w small white shadow_small subject_object'+data.idd+'" onclick="$('+"'#subject_form"+data.idd+"'"+').modal('+"'show'"+')"><i class="icon file alternate backrbb textw"></i>'+title+'</a></div> <div class="ui modal mini" id="subject_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="subject_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_subject('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_subject('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsubject'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_subject_list'))
                         }
                         else{
                             $('.subject_object'+id).text(title);
@@ -649,7 +649,7 @@
             }
         })        
     };
-   function create_discount(url, id) {
+    function create_discount(url, id) {
         title = $('#discount_title'+id).val()
         type_id = '.discount_type'+id
         discount_type = $(type_id+' option:selected').val()
@@ -674,7 +674,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini white shadow_small discount_object'+data.idd+'" onclick="$('+"'#discount_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="discount_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="discount_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_discount('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_discount('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errordiscount'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_discounts_list'))
+                            $('<div class="twenty wide column pt0 pl0 pb10"><a class="ui button labeled icon small white shadow_small discount_object'+data.idd+'" onclick="$('+"'#discount_form"+data.idd+"'"+').modal('+"'show'"+')"><i class="icon percent backyellow textw"></i>'+title+'</a></div> <div class="ui modal mini" id="discount_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="discount_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_discount('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_discount('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errordiscount'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_discounts_list'))
                         }
                         else{
                             $('.discount_object'+id).text(title);
@@ -701,53 +701,6 @@
             }
         })        
     };
-   function create_level(url, id) {
-        title = $('#level_title'+id).val()
-        if (title != '') {
-            if ($('.check_moderator').attr('status')=='True') {
-                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
-            }
-            $.ajax({
-                url: url,
-                data: {
-                    'id':id,
-                    'title':title,                
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('.errorlevel'+id).hide()
-                    if (data.taken_name) {
-                        $('.errorlevel'+id).show()
-                    }
-                    else{
-                        if (id == '_new') {
-                            $('<a class="ui button mini white shadow_small level_object'+data.idd+'" onclick="$('+"'#level_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="level_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="level_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_level('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_level('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errorlevel'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_level_list'))
-                        }
-                        else{
-                            $('.level_object'+id).text(title);
-                        }
-                        $('#level_form'+id).modal('hide')
-                    }
-                }
-            })
-        }
-    };
-    function delete_level(url, id) {
-        if ($('.check_moderator').attr('status')=='True') {
-            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
-        }
-        $.ajax({
-            url: url,
-            data: {
-                'id':id
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.level_object'+id).hide('fast');
-                $('#level_form'+id).modal('hide')
-            }
-        })        
-    };
     function create_office(url, id) {
         title = $('#office_title'+id).val()
         if (title != '') {
@@ -768,7 +721,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini white shadow_small office_object'+data.idd+'" onclick="$('+"'#office_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+title+'</a> <div class="ui modal mini" id="office_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="office_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_office('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_office('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="erroroffice'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_office_list'))
+                            $('<div class="twenty wide column pt0 pl0 pb10"><a class="ui button labeled icon small full-w white shadow_small office_object'+data.idd+'" onclick="$('+"'#office_form"+data.idd+"'"+').modal('+"'show'"+')"><i class="icon map marker alternate backlightblue textw"></i>'+title+'</a></div> <div class="ui modal mini" id="office_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="office_title'+data.idd+'">'+title+'</textarea> <a class="ui button mini blue" onclick="create_office('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_office('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="erroroffice'+data.idd+' highlight_red" style="display: none;">Предмет с таким названием уже сущетсвует</div></div> </div>').appendTo($('.school_office_list'))
                         }
                         else{
                             $('.office_object'+id).text(title);
@@ -795,57 +748,7 @@
             }
         })        
     };
-
-    function create_timep(url, id) {
-        start = $('#timep_start'+id).val()
-        end = $('#timep_end'+id).val()
-        if (start != '' && end != '') {
-            if ($('.check_moderator').attr('status')=='True') {
-                url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
-            }
-            $.ajax({
-                url: url,
-                data: {
-                    'id':id,
-                    'start':start,
-                    'end':end,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('.errortimep'+id).hide()
-                    if (data.taken_name) {
-                        $('.errortimep'+id).show()
-                    }
-                    else{
-                        if (id == '_new') {
-                            $('<a class="ui button mini white shadow_small timep_object'+data.idd+'" onclick="$('+"'#timep_form"+data.idd+"'"+').modal('+"'show'"+')" style="padding: 7px 10px;">'+start+'-'+end+'</a> <div class="ui modal mini" id="timep_form'+data.idd+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="timep_title'+data.idd+'">'+start+'-'+end+'</textarea> <a class="ui button mini blue" onclick="create_timep('+"'"+data.create_url+"'"+','+"'"+data.idd+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_timep('+"'"+data.delete_url+"'"+','+"'"+data.idd+"'"+')" style="float: right;">Удалить</a> </form><div class="errortimep'+data.idd+' highlight_red" style="display: none;">Предмет с таким промежутком уже сущетсвует</div></div> </div>').appendTo($('.school_timep_list'))
-                        }
-                        else{
-                            $('.timep_object'+id).text(start+'-'+end);
-                        }
-                        $('#timep_form'+id).modal('hide')
-                    }
-                }
-            })
-        }
-    };
-    function delete_timep(url, id) {
-        if ($('.check_moderator').attr('status')=='True') {
-            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
-        }
-        $.ajax({
-            url: url,
-            data: {
-                'id':id
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.timep_object'+id).hide('fast');
-                $('#timep_form'+id).modal('hide')
-            }
-        })        
-    };
-   function create_social(url, id) {
+    function create_social(url, id) {
         link = $('#social_link'+id).val()
         if (link != '') {
             if ($('.check_moderator').attr('status')=='True') {
@@ -865,7 +768,7 @@
                     }
                     else{
                         if (id == '_new') {
-                            $('<a class="ui button mini white shadow_small social_object'+id+'" onclick="$('+"'"+'#social_form'+id+"'"+').modal('+"'show'"+')" id="'+id+'" style="padding: 7px 10px;">'+data.social_name+'</a> <div class="ui modal mini" id="social_form'+id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="social_link'+id+'">'+link+'</textarea> <a class="ui button mini blue" onclick="create_social('+"'"+data.create_url+"'"+','+"'"+id+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_social('+"'"+data.delete_url+"'"+','+"'"+id+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsocial'+id+' highlight_red" style="display: none;">Эта социальная сеть уже записана</div></div> </div>').appendTo($('.school_social_list'))
+                            $('<a class="ui button mini white shadow_small social_object'+id+'" onclick="$('+"'"+'#social_form'+id+"'"+').modal('+"'show'"+')" id="'+id+'">'+data.social_name+'</a> <div class="ui modal mini" id="social_form'+id+'"> <i class="close icon"></i> <div class="content"> <form class="ui form"> <textarea id="social_link'+id+'">'+link+'</textarea> <a class="ui button mini blue" onclick="create_social('+"'"+data.create_url+"'"+','+"'"+id+"'"+')">Сохранить</a> <a class="ui button mini red" onclick="delete_social('+"'"+data.delete_url+"'"+','+"'"+id+"'"+')" style="float: right;">Удалить</a> </form><div class="errorsocial'+id+' highlight_red" style="display: none;">Эта социальная сеть уже записана</div></div> </div>').appendTo($('.school_social_list'))
                         }
                         else{
                             $('.social_object'+id).text(data.social_name);
