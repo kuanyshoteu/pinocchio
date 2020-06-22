@@ -535,7 +535,7 @@ def logout_view(request):
     return redirect("/")
 
 def add_money(profile, school, squad, card, amount, manager):
-    if amount > squad.bill*10 and amount > lesson_bill * 100:
+    if amount > squad.bill*10 and amount > squad.lesson_bill * 100:
         return 'too much'
     nm = card.bill_data.get(squad=squad)
     nm.money += amount
