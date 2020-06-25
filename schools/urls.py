@@ -98,8 +98,10 @@ urlpatterns = [
     url(r'^api/save_vk_group/', save_vk_group, name='save_vk_group'),
     url(r'^api/vk_get_callback/$', csrf_exempt(vk_get_callback), name='vk_get_callback'),
     # sending mails
-    url(r'^api/send_mails/', send_mails, name='send_mails'),    
-    url(r'^api/get_mail_students_list/', get_mail_students_list, name='get_mail_students_list'),    
+    url(r'^api/send_mails/', send_mails, name='send_mails'),
+    url(r'^api/get_mail_students_list/', get_mail_students_list, name='get_mail_students_list'),
+    url(r'^api/change_mail_option/', change_mail_option, name='change_mail_option'),
+    url(r'^api/save_mail_template/', save_mail_template, name='save_mail_template'),
     # school workers
     url(r'^salaries/$', school_salaries, name='salaries'),
     url(r'^api/add_worker_school/', add_worker_school, name='add_worker_school'),        

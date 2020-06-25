@@ -4,13 +4,13 @@
         this_ = $('.scrollable')
         page = this_.attr('page')
         var div = this_.get(0);
-        console.log($('.scrollable').attr('scroll'))
         if ($('.scrollable').attr('scroll') =='yes' && (div.scrollTop + div.offsetHeight) >= div.scrollHeight) {
             get_mail_students_list(page)
         }
     }
     function get_mail_students_list(page){
         url = $('.data').attr('get_mail_students_list')
+        $('.get_payment_load').show()
         $.ajax({
             url: url,
             data: {
@@ -18,6 +18,9 @@
             },
             dataType: 'json',
             success: function (data) {
+                $('.get_payment_load').hide()
+                $('.all_students_len').text(data.all_students_len)
+                $('.crnt_students_len').text(data.crnt_students_len)
                 if (data.ended) {
                     $('.scrollable').attr('scroll', 'no')
                     if (parseInt(page) > 0) {
@@ -26,8 +29,9 @@
                 }
                 else{
                     for (var i = 0; i < data.res.length; i++) {
-                        name = data.res[i][0]
-                        mail = data.res[i][1]
+                        sid = data.res[i][0]
+                        name = data.res[i][1]
+                        mail = data.res[i][2]
                         student = $('.mail_student_orig').clone()
                         student.removeClass('mail_student_orig')
                         if (i % 2 == 0) {
@@ -37,24 +41,39 @@
                         student.find('.add_student_to_point').attr('onclick', 'new_point_from_text('+false+', "'+mail+'")')
                         student.appendTo('.mail_student_list')
                     }
+                    $('.scrollable').attr('page', parseInt(page)+1)
                 }
-                $('.scrollable').attr('scroll', 'yes')
-                $('.payments_box').attr('page', parseInt(page)+1)
             }
         })
     }
+    $('.change_mail_option').click(function(e){
+        url = $('.data').attr('change_mail_option')
+        option = $(this).attr('status')
+        object_id = $(this).val()
+        $.ajax({
+            url: url,
+            data: {
+                'option':option,
+                'object_id':object_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.mail_student_list').empty()
+                get_mail_students_list(1)
+            }
+        })
+    })
     $('.send_mails').click(function(e){
         url = $(this).attr('url')
         addresses = []
         $('.mail_point_address').each(function(){
             addresses += $(this).text() + ','
         })
-        text = $('.mail_content').html()
+        text = prepare_tags()
         head = $('.mail_head').val()
         $('.send_mails_load').show()
         $('.envelope.mail').hide()
         $(this).addClass('disabled')
-        console.log(text, addresses)
         $.ajax({
             url: url,
             data: {
@@ -66,10 +85,20 @@
             success: function (data) {
                 $('.send_mails_load').hide()
                 $('.send_mails_success').show()
-                $(this).removeClass('disabled')
+                $('.send_mails').removeClass('disabled')
             }
-        })        
+        })
     })
+    function prepare_tags(){
+        text_copy = $('.mail_content').clone()
+        text_copy.removeClass('mail_content')
+        text_copy.find('.mtag').each(function(){
+            console.log('qoqo')
+            $('<span>8%'+$(this).attr('id')+'%8</span>').insertBefore($(this))
+            $(this).remove()
+        })
+        return text_copy.html()
+    }
     $('.add_mail_point').keyup(function(e) {
         if (e.keyCode == 32 || e.keyCode == 13) {
             new_point_from_text(true, $(this).val())
@@ -79,7 +108,6 @@
             last_text = last_point.find('.mail_point_address').text()
             $(this).val(last_text)
             $('.mail_point').last().remove()
-            $(this).attr('len', $(this).val().length)
         }
         $(this).attr('len', $(this).val().length)
     });
@@ -89,7 +117,6 @@
             mail = mail.slice(0, -1)            
         }
         if (mail == ' ' || mail == '') {
-            console.log('rororororor')
             textarea.val('')
             $(this).attr('len', 0)
         }
@@ -106,7 +133,124 @@
             $(this).attr('len', 0)
         }
     }
+    $('.show_save_template').click(function(){
+        text = $('.mail_content').html()
+        $('.new_template_text').html(text)
+        $('.new_template_title').val('')
+        $('.save_template_modal').modal('show')        
+    })
+    $('.save_mail_template').click(function(){
+        title = $('.new_template_title').val()
+        text = $('.mail_content').html()
+        url = $('.data').attr('save_mail_template')
+        $(this).addClass('disabled')
+        $('.save_mail_template_load').show()
+        $('.save_mail_template_success').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'text':text,
+                'title':title,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $(this).removeClass('disabled')
+                $('.save_mail_template_load').hide()
+                if (data.tid > 0) {
+                    $('.save_mail_template_success').show()
+                    $('.mail_templates_cont').load(document.URL + ' .mail_templates')
+                }
+            }
+        })        
+    })
+    function remove_point(this_){
+        this_.parent().parent().remove() 
+        newwidth = $('.mail_points_box').width() - $('.mail_points').width() - 1
+        $(".add_mail_point").attr('style', 'width:'+newwidth+'px;')                
+    }
     $(".add_mail_point").focusout(function(){
         new_point_from_text(false, $(".add_mail_point").val())
     });    
+    $('.mail_templates').click(function(e){
+        text = $(this).val()
+        if (text != '-1') {
+            if ($('.mail_content').html().length > 0) {
+                $('.sure_to_change_temp').show()
+            }
+            else{
+                $('.mail_content').html(text)
+            }
+        }
+    })
+    $('.replace_by_temp').click(function(e){
+        text = $('.mail_templates').val()
+        if (text != '-1') {
+            $('.mail_content').html(text)
+        }
+        $('.sure_to_change_temp').hide()
+        e.stopPropagation();
+    })
+    $('.add_temp').click(function(e){
+        text = $('.mail_templates').val()
+        if (text != '-1') {
+            crnt_text = $('.mail_content').html()
+            $('.mail_content').html(crnt_text + '<br><br>' + text)
+        }
+        $('.sure_to_change_temp').hide()
+        e.stopPropagation();
+    })
+    var rangeM = 79
+    async function saveSelection() {
+        console.log('frmfkrmf')
+        if (window.getSelection) {
+            console.log('saveSelection')
+            sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                var ranges = [];
+                for (var i = 0; i < sel.rangeCount; ++i) {
+                    ranges.push(sel.getRangeAt(i));
+                    $('.data').attr('sel_start', sel.getRangeAt(i).startOffset)
+                    $('.data').attr('sel_end', sel.getRangeAt(i).endOffset)
+                }
+                rangeM = ranges
+                console.log(rangeM[0])
+                return ranges;
+            }
+        } else if (document.selection && document.selection.createRange) {
+            return document.selection.createRange();
+        }
+        return null;
+    }
+    function add_tag(tag_name){
+        restoreSelection()
+        tag = '&nbsp;' + $('.'+tag_name).html() + '&nbsp;'
+        document.execCommand("insertHTML", false, tag)
+    }
+    $('.mail_content').keyup(function(e) {
+        if (e.keyCode == 8) {
+            console.log(document.activeElement.className)
+        }
+    });    
+    function createBold(){
+        restoreSelection()
+        document.execCommand("bold");
+    }
+    function createItalic(){
+        restoreSelection()
+        document.execCommand("italic");
+    }
+    function restoreSelection() {
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(rangeM[0]);
+    }
+    function createLink() {
+        restoreSelection()
+        var url = $('.link_address').val()
+        if (url != '' && url) {
+            document.execCommand("CreateLink", false, url);
+            $('.link_address').val('')
+            $('.create_link_box').modal('hide')
+        }
+    }
 </script>

@@ -150,6 +150,12 @@ class FilterData(models.Model):
     squad = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     subject = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='choosed_by')
     teacher = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='choosed_by') 
+
+    subject_category_mail = models.ForeignKey(SubjectCategory, null=True, on_delete = models.CASCADE, related_name='mail_choosed_by')
+    office_mail = models.ForeignKey(Office, null=True, on_delete = models.CASCADE, related_name='mail_choosed_by') 
+    squad_mail = models.ForeignKey(Squad, null=True, on_delete = models.CASCADE, related_name='mail_choosed_by')
+    subject_mail = models.ForeignKey(Subject, null=True, on_delete = models.CASCADE, related_name='mail_choosed_by')
+
     timestamp = models.DateField(auto_now_add=True)
     
 class SubjectMaterials(models.Model):

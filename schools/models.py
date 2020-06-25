@@ -291,3 +291,11 @@ class MoneyMonth(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['timestamp']
+
+class MailTemplate(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='mail_templates')
+    title = models.TextField(default='')
+    text = models.TextField(default='')
+    default = models.BooleanField(default=False)
+    class Meta:
+        ordering = ['-id']

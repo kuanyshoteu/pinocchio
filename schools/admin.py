@@ -140,3 +140,10 @@ class CityModelAdmin(admin.ModelAdmin):
     class Meta:
         model = City
 admin.site.register(City, CityModelAdmin)
+
+class MailTemplateModelAdmin(admin.ModelAdmin):
+    list_display = ["id", "title", "text"]
+    list_display_links = ["id", "title", "text"]
+    class Meta:
+        model = MailTemplate
+admin.site.register(MailTemplate, MailTemplateModelAdmin)

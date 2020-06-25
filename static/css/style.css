@@ -186,7 +186,7 @@
   box-shadow: 0 0 15px 0 #d7d7d7 !important;
 }
 .shadow_small{
-  box-shadow: 0 0 5px 0 #d3d3d3 !important;
+  box-shadow: 0 0 5px 0 #bdbdbd !important;
 }
 .shadow_red{
   box-shadow: 0 0 5px 0 #DB2828 !important;
@@ -225,6 +225,31 @@
 }
 .border1{
   border: 1px solid #e5e5e5 !important;
+}
+.borderblue{
+  border: 1px solid #e5e5e5 !important;
+}
+.icon.x:hover{
+  opacity: 0.7;
+}
+.remove_tag{
+  font-size: 11px;
+  color: #285473 !important;
+  margin-right: 0 !important;
+}
+.mtag{
+  border: 1px solid #a7b5d4 !important;
+  font-size: 11px;
+  font-weight: 600;
+  color: #285473 !important;
+  padding:0px !important;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  display: inline-block;
+  background-color: #f5f5f5;
+}
+.border2{
+  border: 2px solid #545454 !important;
 }
 .textbold{
   font-weight: 600 !important;

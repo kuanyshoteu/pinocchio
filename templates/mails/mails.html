@@ -18,20 +18,20 @@
                             <a class="ui button mini white shadow_blue ">
                                 Email
                             </a>
-                            <a class="ui button mini">SMS</a>
-                            <div class="mt10"></div>
+<!--                             <a class="ui button mini">SMS</a>
+ -->                            <div class="mt10"></div>
                             <a class="ui button mini white  shadow_blue pt5 pb5 ">Единоразовая</a>
-                            <a class="ui button mini  pt5 pb5">Авторассылка</a>
-                        </div>
+<!--                             <a class="ui button mini  pt5 pb5">Авторассылка</a>
+ -->                        </div>
                         <form class="ui form pt15 pr15 pb15 pl15">
                             <div class="dflex">
                                 <div class="text13 pt5" style="width: 95px;">Кому:</div>
                                 <div style="width: calc(100% - 95px);flex-wrap: wrap;" class="mail_points_box border1 br5 mb10 dflex">
-                                    <div class="mail_points dflex" style="flex-wrap: wrap;">
+                                    <div class="mail_points dflex" style="flex-wrap: wrap;max-height: 90px;overflow-y: scroll;">
                                         <div class="backlightblue textw mail_point_orig textdots h20 br15 border1 pl10 pr5 mt5 text12 dflex" style="display: none;">
                                             <span class="mail_point_address"></span>
                                             <a>
-                                                <i class="icon x ml5 mr0 text11 textw"></i>
+                                                <i onclick="remove_point($(this));" class="icon x ml5 mr0 text11 textw"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -44,30 +44,64 @@
                             </div>
                             <div class="dflex">
                                 <div class="text13 pt5" style="width: 110px;">Шаблоны:</div>
-                                <select class="text15">
-                                    <option>n</option>
-                                    <option>n</option>
-                                    <option>n</option>
-                                </select>
+                                <div class="no_padding full-w mail_templates_cont">
+                                    <select class="mail_templates full-w text15">
+                                        <option value="-1">Выберите шаблон</option>
+                                        {%for temp in mail_templates%}
+                                        <option id={{temp.id}} value="{{temp.text}}">{{temp.title}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="sure_to_change_temp backlightblue shadow_dark pt15 pr15 pb15 pl15 br5 mt10 textw text-center" style="position: absolute;left: calc(50% - 117px);display: none;z-index: 3005;">
+                                <a class="textbold text17 textw" onclick="$('.sure_to_change_temp').hide()" style="position: absolute;right: 5px;margin-top: -15px;">×</a>
+                                Заменить нынешний текст?
+                                <div class="text-center mt10">
+                                    <a class="replace_by_temp pt5 pb5 ui button mini white textbold textred">Заменить</a>
+                                    <a class="add_temp pt5 pb5 ui button mini white textbold textgreen">Добавить снизу</a>
+                                </div>
                             </div>
                             <div class="mt20 mb5">
-                                <a class="mr5 ui button mini white shadow_small pl10 pr10">
-                                    <i class="icon bold textdark mr0"></i>
-                                </a>
-                                <a class="mr5 ui button mini white shadow_small pl10 pr10">
-                                    <i class="icon italic textdark mr0"></i>
-                                </a>
-                                <a class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
-                                    Ссылка
-                                </a>
-                                <a class="textblue ui button mini white shadow_small pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
-                                    Имя студента
-                                </a>
+                                <div class="dinline">
+                                    <a class="mr5 ui button mini white shadow_small border1 pl10 pr10" onclick="saveSelection();createBold()">
+                                        <i class="icon bold textdark mr0"></i>
+                                    </a>
+                                    <a class="mr5 ui button mini white shadow_small border1 pl10 pr10" onclick="saveSelection();createItalic()">
+                                        <i class="icon italic textdark mr0"></i>
+                                    </a>
+                                    <a class="textblue textbold ui button mini white shadow_small border1 pl10 pr10" onclick='saveSelection();$(".create_link_box").modal("show");'>
+                                        Ссылка
+                                    </a>
+                                    <a class="textdark textbold ui button mini white shadow_small border1 pl10 pr10" onclick='saveSelection();add_tag("name_tag_orig")'>
+                                        Имя студента
+                                    </a>
+                                </div>
+                                <div class="dinline pl10" onmouseleave="$('.dop_tags').hide(0.1);" style="width: calc(100% - 391px);float: right;">
+                                    <div id="-1" class="mr5 filter-title dflexx border2" style="height: 31px;" onmouseover="$('.dop_tags').show(0.1)" >
+                                        <div style="" class="textdots textdg">
+                                            Наведите для тегов
+                                        </div>
+                                    </div>
+                                    <div onmouseover="$('.dop_tags').show(0.1);" class="bselect dop_tags backwhite shadow_dark_low" style="display: none;position: absolute;z-index: 3000;width: calc(100% - 430px);">
+                                        <a onclick='saveSelection();add_tag("next_lesson_date_tag_orig")' class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                                            Дата следующего урока
+                                        </a>
+                                        <a onclick='saveSelection();add_tag("next_lesson_time_tag_orig")' class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                                            Время начала следующего урока
+                                        </a>
+                                        <a onclick='saveSelection();add_tag("next_lesson_timeend_tag_orig")' class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                                            Время окончания следующего урока
+                                        </a>
+                                        <a onclick='saveSelection();add_tag("next_payment_tag_orig")' class="filtsch_subject_type full-w ui button small textblue text-left white pt10 pl5 pr5 pb10">
+                                            Дата окончания оплаты
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                            <div style="outline: none;min-height: 100px;" contenteditable="true" class="mail_content border1 br5 pt5 pr10 pb15 pl10">
+                            <div style="outline: none;min-height: 100px;min-height: 90px;max-height: 150px;overflow-y: scroll;"  contenteditable="true" class="mail_content border1 br5 pt5 pr10 pb15 pl10">
                             </div>
                             <div class="mt15">
-                                <a class="ui button mini white border1 shadow_small">
+                                <a class="show_save_template ui button mini white border1 shadow_small">
                                     Сохранить как шаблон
                                 </a>
                                 <a class="send_mails ui button small green shadow_green" style="float: right;" url="{% url 'schools:send_mails' %}">
@@ -81,56 +115,89 @@
                     </div>
                 </div>
                 <div class="six wide column no_padding" style="height: 100%;">
-                    <div class="scrollable ui segment shadow_small mb0 no_padding" style="overflow-y: scroll;height: 100%;" scroll="no" onscroll="catch_scroll()">
+                    <div class="scrollable ui segment shadow_small mb0 no_padding" style="overflow-y: scroll;height: 100%;" scroll="yes" onscroll="catch_scroll()">
                         <div class="backwhitelow topbr5">
                             <div class="text-center text13 textblue textbold pt10">Добавить студента</div>
                             <form class="ui form mt5 mb0 pl10 pr10 pb10 ">
                                 <div class="ui grid stackable no_margin">
                                     <div class="eight wide column pl0 pt0 pr5 pb0">
                                         <div class="text13 pt5" style="width: 110px;">Филиал:</div>
-                                        <select> 
+                                        <select class="change_mail_option" status="office"> 
+                                            {% if profile.filter_data.office_mail %}
+                                                <option value="{{ profile.filter_data.office_mail.id }}">{{ profile.filter_data.office_mail.title }}</option>
+                                            {% endif %}
                                             <option value="-1">Все филиалы</option>
                                             {% for office in offices %}
-                                                <option value="{{ office.id }}">{{ office.title }}</option>
+                                                {% if office != profile.filter_data.office_mail %}
+                                                    <option value="{{ office.id }}">{{ office.title }}</option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="eight wide column pl5 pt0 pr0 pb0">
                                         <div class="text13 pt5" style="width: 110px;">Предмет:</div>
-                                        <select> 
+                                        <select class="change_mail_option" status="subject_category"> 
+                                            {% if profile.filter_data.subject_category_mail %}
+                                                <option value="{{profile.filter_data.subject_category_mail.id}}">{{profile.filter_data.subject_category_mail.title}}</option>
+                                            {%endif%}
                                             <option value="-1">Все предметы</option>
                                             {% for subject_category in subject_categories %}
+                                                {% if subject_category != profile.filter_data.subject_category_mail %}
                                                 <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
+                                                {%endif%}
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="eight wide column pl0 pt0 pr5 pb0">
                                         <div class="text13 pt5" style="width: 110px;">Курс:</div>
-                                        <select> 
+                                        <select class="change_mail_option" status="subject">
+                                            {% if profile.filter_data.subject_mail %}
+                                                <option value="{{profile.filter_data.subject_mail.id}}">{{profile.filter_data.subject_mail.title}}</option>
+                                            {%endif%}
                                             <option value="-1">Все предметы</option>
                                             {% for subject in subjects %}
+                                                {% if subject != profile.filter_data.subject_mail %}
                                                 <option value="{{ subject.id }}">{{ subject.title }}</option>
+                                                {%endif%}
                                             {% endfor %}
                                         </select>
                                     </div>
                                     <div class="eight wide column pl5 pt0 pr0 pb0">
                                         <div class="text13 pt5" style="width: 110px;">Группа:</div>
-                                        <select> 
+                                        <select class="change_mail_option" status="group">
+                                            {% if profile.filter_data.squad_mail %}
+                                            <option value="{{profile.filter_data.squad_mail.id}}">
+                                                {{profile.filter_data.squad_mail.title}}
+                                            </option>
+                                            {%endif%}
                                             <option value="-1">Все группы</option>
                                             {% for squad in squads %}
-                                                <option value="{{ squad.id }}">{{ squad.title }}</option>
+                                                {% if squad != profile.filter_data.squad_mail %}
+                                                    <option value="{{ squad.id }}">{{ squad.title }}</option>
+                                                {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
                             </form>
                         </div>
-                        <div class="pt5 pb5 text-center">
-                            <a class="add_student_to_point ui button pt5 pb5 pl30 pr30 mini blue shadow_blue">
+                        <div class="pt10 pb10">
+                            <div class="textbold textblue dinline ml15">
+                                Показано:
+                                <span class="crnt_students_len"></span> / 
+                                <span class="all_students_len"></span> 
+                            </div>
+<!--                             <a style="float: right;" class="mr15 add_crnt_students_to_point ui button pt5 pb5 pl30 pr30 mini blue shadow_blue">
                                 Добавить всех
-                            </a>                                
-                        </div>
+                            </a>
+ -->                        </div>
                         <div class="mail_student_list pb50" >
+                        </div>
+                        <div class="text-center full-w">
+                            <div class="ui active inline large loader get_payment_load" style="display: none;"></div>
+                            <div class="text-center textdg ended pt50 pb50" style="display: none;">
+                                Это весь список
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -138,14 +205,66 @@
         </div>
     </div>
 </div>
+<div class="create_link_box ui modal tiny">
+    <i class="close icon"></i>
+    <div class="content text-center">
+        <div>
+            <span class="text15">Введите адрес ссылки</span>
+        </div>
+        <div>
+            <form class="ui form mb0">
+                <textarea class="link_address"></textarea>
+            </form>
+        </div>
+        <div class="mt15">
+            <a class="ui button mini white border1 shadow_small" onclick="createLink()"><b>Добавить ссылку</b></a>
+        </div>
+    </div>
+</div>
+<div class="save_template_modal ui modal tiny">
+    <i class="close icon"></i>
+    <div class="content pb30">
+        <div class="text-center">
+            <span class="text15 textbold textblue">Сохранить шаблон</span>
+        </div>
+        <form class="ui form">
+            <div class="textdg textbold">Название</div>
+            <textarea class="mb0 new_template_title"></textarea>
+        </form>
+        <div class="textdg textbold">Содержание</div>
+        <div style="min-height: 90px;max-height: 150px;overflow-y: scroll;" contenteditable="true" class="new_template_text border1 br5 pt5 pr10 pb15 pl10"></div>
+        <div class="mt15 text-center">
+            <a class="save_mail_template ui button mini blue textbold">
+                Сохранить
+            </a>
+            <div class="ui loader active mini" style="margin: 10px auto;position: relative;display: none;"></div>
+            <div style="display: none;" class="save_mail_template_success">Сохранено <i class="icon check green"></i>
+        </div>
+    </div>
+</div>
 <div style="display: none;">
+    <div class="name_tag_orig">
+        <div id="student_name_tag" class="mtag">Имя студента<a onclick="$(this).parent().remove()"><i class="icon x remove_tag"></i></a></div>
+    </div>
+    <div class="next_lesson_date_tag_orig">
+        <div id="next_lesson_date_tag" class="mtag">Дата следующего урока<a onclick="$(this).parent().remove()"><i class="icon x remove_tag"></i></a></div>
+    </div>
+    <div class="next_lesson_time_tag_orig">
+        <div id="next_lesson_time_tag" class="mtag">Время начала следующего урока<a onclick="$(this).parent().remove()"><i class="icon x remove_tag"></i></a></div>
+    </div>
+    <div class="next_lesson_timeend_tag_orig">
+        <div id="next_lesson_timeend_tag" class="mtag">Время окончания следующего урока<a onclick="$(this).parent().remove()"><i class="icon x remove_tag"></i></a></div>
+    </div>
+    <div class="next_payment_tag_orig">
+        <div id="next_payment_tag" class="mtag">Дата окончания оплаты<a onclick="$(this).parent().remove()"><i class="icon x remove_tag"></i></a></div>
+    </div>
     <div class="mail_student_orig pl10 pt5 pb30 pr10 h35">
-        <div class="dinline textbold textblue student_name">Артур</div>
+        <div class="dinline textbold textblue student_name"></div>
         <a class="add_student_to_point ui button pt5 pb5 mini white shadow_small border1" style="float: right;">
             Добавить
         </a>
-    </div>    
-    <span class="data" get_mail_students_list="{% url 'schools:get_mail_students_list'%}" ></span>
+    </div>
+    <span class="data" save_mail_template="{%url 'schools:save_mail_template'%}" change_mail_option="{%url 'schools:change_mail_option'%}" get_mail_students_list="{% url 'schools:get_mail_students_list'%}" ></span>
 </div>
 {% include 'mails/mail_scripts.html' %}
 {% endblock content %}

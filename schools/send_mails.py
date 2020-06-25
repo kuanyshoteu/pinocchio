@@ -43,13 +43,20 @@ def send_mails(request):
     text = request.GET.get('text')
     addresses = request.GET.get('addresses')
     ok = False
-    print(text, addresses)
     if text:
         head = request.GET.get('head')
+        students = school.crm_cards.all()
         for mail in addresses.split(','):
             if '@' in mail:
+                student = students.filter(mail=mail)
+                if len(student) > 0:
+                    student = student[0]
+                    crnttext = text.replace('8%'+'student_name_tag'+'%8', student.name)
+                else:
+                    crnttext = text.replace('8%'+'student_name_tag'+'%8', 'Студент')
+                print(crnttext)
                 try:
-                    send_email(head, text, [mail])
+                    send_email_client(head, crnttext, [mail])
                 except Exception as e:
                     raise
         ok = True
@@ -62,36 +69,105 @@ def get_mail_students_list(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     res = []
-    squad = request.GET.get('squad')
-    subject = request.GET.get('subject')
-    office = request.GET.get('office')
-    subject_category = request.GET.get('subject_category')
+    all_students_len = 0
+    crnt_students_len = 0
     if request.GET.get('page'):
-        print('eee')
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
-        if squad != False:
-            squads = [squad]
+        squad = profile.filter_data.squad_mail
+        squads = school.groups.filter(shown=True).prefetch_related('students')
+        all_students_len = len(school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct())
+        if squad != None:
+            squads = school.groups.filter(id = squad.id)
         else:
-            if office:
-                squads = school.groups.filter(shown=True,office=office).prefetch_related('students')
+            if profile.filter_data.office_mail:
+                squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
+        if profile.filter_data.subject_category_mail or profile.filter_data.subject_mail:
+            if profile.filter_data.subject_category_mail:
+                subjects = school.school_subjects.filter(category=profile.filter_data.subject_category_mail)
             else:
-                squads = school.groups.filter(shown=True).prefetch_related('students')
-        if subject_category:
-            subjects = school.school_subjects.filter(category=subject_category)
+                subjects = school.school_subjects.all()                
+            if profile.filter_data.subject_mail:
+                subjects = subjects.filter(id=profile.filter_data.subject_mail.id)
             squads = squads.filter(subjects__in=subjects)
         students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
-        if len(students) <= (page-1)*16:
-            return JsonResponse({"ended":True})
+        crnt_students_len = len(students)
+        if crnt_students_len <= (page-1)*16:
+            return JsonResponse({
+                "ended":True,
+                "crnt_students_len":crnt_students_len,
+                "all_students_len":all_students_len,
+                })
         p = Paginator(students, 16)
         page1 = p.page(page)
         res = []
+        today = timezone.now().date()
+        bill_day_diff = school.bill_day_diff
         for student in page1.object_list:
             res.append([
+                student.id,
                 student.first_name,
                 student.mail,
+                student.get_absolute_url(),
                 ])
     data = {
         "res":res,
+        "ended":False,
+        "all_students_len":all_students_len,
+        "crnt_students_len":crnt_students_len,
+    }
+    return JsonResponse(data)
+
+def change_mail_option(request):
+    profile = Profile.objects.get(user = request.user.id)
+    if request.GET.get('object_id') and request.GET.get('option'):
+        filter_data = profile.filter_data
+        if request.GET.get('option') == 'subject_category':
+            if int(request.GET.get('object_id')) == -1:
+                filter_data.subject_category_mail = None
+            else:
+                category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+                filter_data.subject_category_mail = category
+        if request.GET.get('option') == 'office':
+            if int(request.GET.get('object_id')) == -1:
+                filter_data.office_mail = None
+            else:
+                office = Office.objects.get(id = int(request.GET.get('object_id')))
+                filter_data.office_mail = office
+        if request.GET.get('option') == 'group':
+            if int(request.GET.get('object_id')) != -1:
+                school = is_moderator_school(request, profile)
+                squad = school.groups.get(id = int(request.GET.get('object_id')))
+                filter_data.squad_mail = squad
+            else:
+                filter_data.squad_mail = None                
+        if request.GET.get('option') == 'subject':
+            if int(request.GET.get('object_id')) != -1:
+                subject = Subject.objects.get(id = int(request.GET.get('object_id')))
+                filter_data.subject_mail = subject
+            else:
+                filter_data.subject_mail = None                
+        filter_data.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def save_mail_template(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    title = request.GET.get('title')
+    text = request.GET.get('text')
+    tid = -1
+    if title and text:
+        school = is_moderator_school(request, profile)
+        if len(school.mail_templates.filter(title=title)) == 0 and len(school.mail_templates.filter(text=text)) == 0:
+            temp = school.mail_templates.create(
+                title=title,
+                text=text,
+                )
+            temp.save()
+            tid = temp.id
+    data = {
+        "tid":tid,
     }
     return JsonResponse(data)
