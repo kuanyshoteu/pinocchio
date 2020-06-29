@@ -191,6 +191,7 @@ def get_mail_students_list(request):
                 student.mail,
                 student.get_absolute_url(),
                 ])
+        print(len(res))
     data = {
         "res":res,
         "ended":False,
