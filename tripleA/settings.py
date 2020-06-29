@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 toserver = True
 # SECURITY WARNING: don't run with debug turned on in production!
 if toserver:
-    DEBUG = False 
+    DEBUG = True
     ALLOWED_HOSTS = ['www.bilimtap.kz', 'bilimtap.kz', 'testbilimtap.herokuapp.com']
 else:
     DEBUG = True
