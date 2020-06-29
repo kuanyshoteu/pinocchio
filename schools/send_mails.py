@@ -79,7 +79,8 @@ def send_mails(request):
                 return JsonResponse(data)
         for mail in mails:
             if '@' in mail:
-                text = prepare_tags(mail,text,school,today,need_next_lesson,cards)
+                htext = prepare_tags(mail,text,school,today,need_next_lesson,cards)
+                print(mail, htext)
                 if text != False:
                     try:
                         send_email_client(head, text, [mail])
@@ -116,6 +117,7 @@ def prepare_tags(mail, text, school, today, need_next_lesson, cards):
     if len(card) > 0:
         card = card[0]
         name = card.name
+        print('card', name)
         text = text.replace('8%'+'student_name_tag'+'%8', card.name)
         if need_next_lesson:
             student = card.card_user
