@@ -2,63 +2,79 @@
 {% load ttags %}
 <span style="display: none;" id="load_attendance_squad"></span>
 <span style="display: none;" id="load_attendance_subject"></span>
-<div class="ui segment shadow_small shapka topbr5 pb0" style="box-shadow: none;">
-    <div class="ui grid stackable mb5">
-        <div class="five wide column textdg textbold text15">
+<div class="ui segment shadow_small shapka topbr5 pb0 pl5 pr5" style="">
+    <div class="ui grid stackable mb0">
+        <div class="three wide column textdg textbold text15">
             Журнал посещаемости
         </div>
-        <div class="eleven wide column">
-            <a class="ui button mini orange" style="padding: 5px !important;"><i class="icon clock textw no_margin"></i></a> - Предупредил(а), что не придет 
-            <br>
-            <a class="ui button mini red mt5" style="padding: 5px !important;"><i class="icon close textw no_margin"></i></a> - Отсутсвие без предупреждения 
+        <div class="thirteen wide column pl0 pr0">
+            <span class="br5 orange mr0" style="padding: 1px 3px !important;background-color: #F2711C"><i class="icon clock text11 textw no_margin"></i></span> - Предупредил(а), что не придет 
+            <span class="br5 red mr0 mt5" style="padding: 1px 3px !important;background-color: #DB2828"><i class="icon close text11 textw no_margin"></i></span> - Отсутсвие без предупреждения 
         </div>
     </div>
-    {% if is_this_trener or is_manager %}
-    <div class="ui grid stackable no_margin">
-        {% for squad in hissquads %}
-        <div class="four wide column pr5 pl5 pt0 pb10">
-            <a onclick="load_attendance_squad('{{ squad.id }}')" class="full-w full-h ui button small load_attendance_squad {% if squad.id == att_squad.id %}blue shadow_blue{%else%}white shadow_small{% endif %}" id="squad{{ squad.id }}">
-                {{ squad.title }} 
-                {%if is_manager%}
-                    <br>
-                    <div class="text13 mt5">{{squad.teacher.first_name}}</div>
-                {%endif%}
-            </a>
-        </div>
-        {% endfor %} 
-    </div>
-    {% endif %} 
 </div>
-<div class="ui segment mt0 no_padding bottombr5" style="box-shadow: none;">
-    <div id="squad_attendance"> 
-        <div class="ui stackable grid no_margin pt5 pb5 pl15 pr10">
-        {% if is_this_trener or is_manager %}
-        {% for subject in att_squad.subjects.all %}
-            <a onclick="load_attendance_subject('{{ subject.id }}')" class="ui button small switch_btn mr10 {% if subject.id == att_subject.id %}blue shadow_blue{%else%}white shadow_small{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}) - 10px);overflow: hidden; white-space: nowrap;text-overflow: ellipsis;">{{ subject.title }}</a>
-        {% endfor %}
-        {%else%}
-        {% for subject in hissubjects %}
-            <a onclick="load_attendance_subject('{{ subject.id }}')" class="ui button small switch_btn {% if subject.id == att_subject.id %}blue{%else%}white border1{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);">{{ subject.title }}</a>
-        {% endfor %}
-        {%endif%}
-        </div>
-    {% if is_this_trener or is_manager %}
-        <div id="subject_attendance" class="hint_place2" side="top">
-            <div class="loading" style="display: none;">
-              <div class="animation"><div class="circle one"></div></div>
-              <div class="animation"><div class="circle two"></div></div>
-              <div class="animation"><div class="circle three"></div></div>
-              <div class="animation"><div class="circle four"></div></div>
-              <div class="animation"><div class="circle five"></div></div>
-              <div class="animation"><div class="circle six"></div></div>
+<div class="ui segment shadow_small_top mt0 no_padding bottombr5">
+    <div id=""> 
+        <div class="ui stackable grid no_margin pt5 pb5 pl10 pr10">
+            <div class="four wide column pr10 pl0 pt0 pb0">
+                <div class="shadow_small br5">
+                    <div class="backlightblue text14 pt5 pb5 topbr5 text-center textw textbold">
+                        Группы
+                        <i style="display: none;" class="icon search textw"></i>
+                    </div>
+                    <div class="squad_list" style="overflow-y: scroll;overflow-x: hidden;height: 440px;">
+                    {% for squad in hissquads %}
+                        <a onclick="load_attendance_squad('{{ squad.id }}')" class="full-w ui button border1 small no_padding load_attendance_squad dflexx {% if squad.id == att_squad.id %}shadow_small{%else%}white{% endif %}" id="squad{{ squad.id }}" style="text-align: left;">
+                            <div class="pt5 pb5 wide column left-side" style="width: 20px;background-color:{%if squad.color_back%}{{squad.color_back}}{%else%}rgb(49, 58, 87){%endif%}">
+                                <div class="text-center full-w textw text13 textbold pt5">
+                                    {{squad|students_number}}
+                                </div>
+                            </div>
+                            <div class="pt5 pb5 pl5 pr5">
+                                <b class="textblue">{{ squad.title }}</b>
+                                {%if is_manager%}
+                                    <br>
+                                    <div class="text13 mt5">{{squad.teacher.first_name}}</div>
+                                {%endif%}
+                            </div>
+                        </a>
+                    {% endfor %} 
+                    </div>
+                </div>
             </div>
-            {% include "profile/attendance_squad.html" %}
+            <div id="subject_attendance_cont" class="twelve wide column no_padding squad_attendance_b">
+                <div id="subject_attendance">
+                    <div class="ui grid stackable no_margin">
+                        {% if is_this_trener or is_manager %}
+                        {% for subject in att_squad.subjects.all %}
+                            <a onclick="load_attendance_subject('{{ subject.id }}')" class="subjectv ui button small switch_btn mb5 pt5 pb5 {% if subject.id == att_subject.id %}blue shadow_blue{%else%}white shadow_small{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);overflow: hidden; white-space: nowrap;text-overflow: ellipsis;">{{ subject.title }}</a>
+                        {% endfor %}
+                        {%else%}
+                        {% for subject in hissubjects %}
+                            <a onclick="load_attendance_subject('{{ subject.id }}')" class="ui button small switch_btn {% if subject.id == att_subject.id %}blue{%else%}white border1{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);">{{ subject.title }}</a>
+                        {% endfor %}
+                        {%endif%}    
+                    </div>
+                    {% if is_this_trener or is_manager %}
+                    <div id="" class="hint_place2" side="top">
+                        <div class="loading" style="display: none;">
+                          <div class="animation"><div class="circle one"></div></div>
+                          <div class="animation"><div class="circle two"></div></div>
+                          <div class="animation"><div class="circle three"></div></div>
+                          <div class="animation"><div class="circle four"></div></div>
+                          <div class="animation"><div class="circle five"></div></div>
+                          <div class="animation"><div class="circle six"></div></div>
+                        </div>
+                        {% include "profile/attendance_squad.html" %}
+                    </div>
+                    {% else %}
+                    <div id="subject_attendance hint_place2" side="top">
+                        {% include "profile/attendance_student.html" %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-    {% else %}
-        <div id="subject_attendance hint_place2" side="top">
-            {% include "profile/attendance_student.html" %}
-        </div>
-    {% endif %} 
     </div>   
 </div>
 <span class="wait" status="no" style="display: none;"></span>
@@ -131,10 +147,11 @@ style="display: none;"></span>
                 'subject_id':subject_id,
             },
             success: function (data) {
+                console.log('kikiki')
                 $('.switch_btn').removeClass('blue shadow_blue')
                 $('.switch_btn').addClass('white shadow_small')
                 $('#subject' + subject_id).addClass('blue shadow_blue')
-                $( "#subject_attendance" ).load(document.URL +  ' #subject_attendance');
+                $( "#subject_attendance_cont" ).load(document.URL +  ' #subject_attendance');
             }, 
             error: function (error) {
                 console.log('error')
@@ -151,22 +168,24 @@ style="display: none;"></span>
                 'squad_id':squad_id,
             },
             success: function (data) {
-                $('.load_attendance_squad').removeClass('blue shadow_blue')
-                $('.load_attendance_squad').addClass('white shadow_small')
-                $('#squad' + squad_id).addClass('blue shadow_blue')
-                $( "#squad_attendance" ).load(document.URL +  ' #squad_attendance'); 
+                console.log('yoyoyoyo')
+                $('.more_attendance_url').attr('squad_id', squad_id)
+                $('.load_attendance_squad').removeClass('shadow_blue textblue')
+                $('.load_attendance_squad').addClass('white border1')
+                $('#squad' + squad_id).removeClass('white border1')
+                $('#squad' + squad_id).addClass('shadow_blue textblue')
+                $( "#subject_attendance_cont" ).load(document.URL +  ' #subject_attendance');
             }, 
             error: function (error) {
                 console.log('error')
             }
         })
     };
-
     function createColumnRight(nextNumber, index){
         $('.wait').attr('status', 'yes')
         loading()
         var url = $('.more_attendance_url').attr('url')
-        var subject_id = $('.more_attendance_url').attr('subject_id')
+        var subject_id = $('.subjectv.blue').attr('id').replace('subject', '')
         var squad_id = $('.more_attendance_url').attr('squad_id')
         sm = document.getElementsByClassName('attendance_date')
         last_sm = sm[document.getElementsByClassName('attendance_date').length-1].getAttribute('id')
@@ -195,7 +214,6 @@ style="display: none;"></span>
                 };
                 for (var i = 0; i < data.columns.length; i++){
                     var section = createEl('section', 'slider__section');
-                    console.log(nextNumber+i)
                     if (i == 0){
                         var div = createEl('div', 'attendance_date last_att att' + (nextNumber+i))
                     }
@@ -219,7 +237,7 @@ style="display: none;"></span>
         loading()
         $('.wait').attr('status', 'yes')
         var url = $('.more_attendance_url').attr('url')
-        var subject_id = $('.more_attendance_url').attr('subject_id')
+        var subject_id = $('.subjectv.blue').attr('id').replace('subject', '')
         var squad_id = $('.more_attendance_url').attr('squad_id')
         sm = document.getElementsByClassName('attendance_date')
         first_sm = sm[0].getAttribute('id')
@@ -237,7 +255,7 @@ style="display: none;"></span>
                     $('#slider').attr('index', index)
                     $("#section" + (-prevNumber)).attr('style', '')
                     $('.last_att').removeClass('last_att')
-                    $('.att' + (prevNumber+3)).addClass('last_att')                    
+                    $('.att' + (prevNumber+3)).addClass('last_att')
                 }
                 if(data.first_set){
                     $('#slider').attr('first_set', 'yes')
@@ -276,13 +294,13 @@ style="display: none;"></span>
                             }
                             attendance = document.createElement('div')
                             attendance.setAttribute('id', 'attendance' + data.columns[i][j][0])
-                            att_present = createEl('a', 'ui button mini full-w blue att_present att_present'+data.columns[i][j][0])
+                            att_present = createEl('a', 'ui button mini blue att_present att_present'+data.columns[i][j][0])
                             att_present.setAttribute('id', data.columns[i][j][0])
                             att_present.setAttribute('status', 'present')
                             att_present.innerHTML = 'На уроке'
-                            attendance.appendChild(att_present)
                             ///
                             twob = createEl('div')
+                            twob.appendChild(att_present)
                             twob.setAttribute('style', 'display: flex;')
                             firstb = createEl('a','ui button mini orange att_present mt5 mr5')
                             firstb.setAttribute('style', 'padding: 5px !important;')

@@ -3,10 +3,10 @@
 <div class="backdark shadow_dark bottombr5">
 	<div class="ui grid no_margin" style="padding: 0 25px 0 0;">
 		<div class="no_padding" style="width: 25%;">
-			<div class="textw" style="height: 30px;line-height: 30px;">
+			<div class="textw" style="height: 21px;line-height: 30px;">
 		    </div>
 			{% for student in att_squad.students.all %}
-				<div class="student_name pl10 pt15" style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
+				<div class="student_name pl10 pt10" style="{% if forloop.counter|is_odd %}background-color: #545454{% endif %}">
 			        <a href="{{student.get_absolute_url}}" class="textw">{{ student.first_name }}</a>
 			        {% if not student.is_student %}
 			        <br>
@@ -50,10 +50,10 @@
 							        {%endif%}
 							    </div>
 							    <div id="attendance{{ attendance.id }}" style="{% if attendance.present != '' %}display: none;{% endif %}">
-							        <a status="present" class="ui button mini full-w blue att_present" id="{{attendance.id}}">На уроке</a>
-							        <div style="display: flex;">
-								        <a status="warned" class="ui button mini orange att_present mt5 mr5" id="{{attendance.id}}" style="padding: 5px !important;"><i class="icon clock textw mr0"></i></a>
-								        <a status="absent" class="ui button mini red att_present mt5" id="{{attendance.id}}" style="padding: 5px !important;"><i class="icon close textw mr0"></i></a>
+							        <div class="text-center">
+								        <a status="present" class="ui button mini blue att_present" id="{{attendance.id}}">На уроке</a>
+								        <a status="warned" class="ui button mini orange att_present mr0" id="{{attendance.id}}"><i class="icon clock textw mr0"></i></a>
+								        <a status="absent" class="mr0 ui button mini red att_present" id="{{attendance.id}}"><i class="icon close textw mr0"></i></a>
 								    </div>
 							    </div>
 							    {%endif%}
@@ -77,7 +77,7 @@
 							        {%endif%}
 						        </div>
 						        {%if date.2 == 'now'%}
-						        <a status="cancel" class="ui button mini att_present attcancel{{attendance.id}}" id="{{attendance.id}}" style="padding: 3px 10px !important;margin: 5px auto 0 auto;{%if attendance.present == ''%}display: none;{%endif%}">Отмена</a>
+						        <a status="cancel" class="mr0 ui button mini att_present attcancel{{attendance.id}}" id="{{attendance.id}}" style="padding: 3px 10px !important;margin: 3px auto 0 auto;{%if attendance.present == ''%}display: none;{%endif%}">Отмена</a>
 						        {%endif%}
 							</div>
 							{%endif%}

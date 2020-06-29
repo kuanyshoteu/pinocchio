@@ -322,9 +322,7 @@ def get_current_attendance(subject, squad):
         students = squad.students.all()
         subject_materials = subject.materials.all()
         len_squad_students = len(students)
-        print(material_number, len(subject_materials))
         if material_number > len(subject_materials):
-            print('gere')
             for i in range(0, material_number - len(subject_materials)):
                 subject.materials.create(
                     school=subject.school
@@ -342,7 +340,6 @@ def get_current_attendance(subject, squad):
             get_date_results = '_'
             if len(attendances)>0:
                 get_date_results = get_date(attendances[0].subject_materials, squad)
-            print(get_date_results)
             if get_date_results == '_':
                 res = [[attendances, '_','_']] + res
             else:

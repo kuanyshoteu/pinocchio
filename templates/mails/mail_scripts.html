@@ -65,6 +65,7 @@
     })
     $('.send_mails').click(function(e){
         url = $(this).attr('url')
+        order = $(this).attr('order')
         addresses = []
         $('.mail_point_address').each(function(){
             addresses += $(this).text() + ','
@@ -77,6 +78,7 @@
         $.ajax({
             url: url,
             data: {
+                'order':order,
                 'addresses':addresses,
                 'head':head,
                 'text':text,
@@ -84,16 +86,59 @@
             dataType: 'json',
             success: function (data) {
                 $('.send_mails_load').hide()
-                $('.send_mails_success').show()
                 $('.send_mails').removeClass('disabled')
+                if (data.ok == 'yes') {
+                    $('.send_mails_success').show()
+                }
+                else if (data.ok == 'found_error'){
+                    $('.found_error_modal').modal('show')
+                    $('.nocard_list').empty()
+                    $('.nosquad_list').empty()
+                    nocard = data.nocard
+                    nosquad = data.nosquad
+                    noschedule = data.noschedule
+                    console.log(nocard, nosquad)
+                    for (var i = 0; i < nocard.length; i++) {
+                        nocard_span = $('.nocard_span').clone()
+                        nocard_span.removeClass('nocard_span')
+                        if (i % 2 == 0) {
+                            nocard_span.addClass('backwhitelow')
+                        }
+                        nocard_span.find('.mtag2').text(nocard[i])
+                        nocard_span.find('.remove_point').attr('onclick', "remove_point_mail('"+nocard[i]+"', $(this))")
+                        nocard_span.appendTo('.nocard_list')
+                    }
+                    for (var i = 0; i < nosquad.length; i++) {
+                        nosquad_span = $('.nosquad_span').clone()
+                        nosquad_span.removeClass('nosquad_span')
+                        if (i % 2 == 0) {
+                            nosquad_span.addClass('backwhitelow')
+                        }
+                        console.log('xxx', nosquad[i])
+                        nosquad_span.find('.nosquad_student').text(nosquad[i][0])
+                        nosquad_span.find('.remove_point').attr('onclick', "remove_point_mail('"+nosquad[i][1]+"', $(this))")
+                        nosquad_span.appendTo('.nosquad_list')
+                    }
+                    if (nocard.length > 0) {
+                        $('.nocard_box').show()
+                    }
+                    if (nosquad.length > 0) {
+                        $('.nosquad_box').show()
+                    }
+                }
             }
         })
     })
+    function remove_point_mail(mail, this_){
+        this_.parent().parent().hide('fast')
+        $('span:contains("'+mail+'")').each(function(){
+            $(this).parent().remove();
+        })
+    }
     function prepare_tags(){
         text_copy = $('.mail_content').clone()
         text_copy.removeClass('mail_content')
         text_copy.find('.mtag').each(function(){
-            console.log('qoqo')
             $('<span>8%'+$(this).attr('id')+'%8</span>').insertBefore($(this))
             $(this).remove()
         })
@@ -164,7 +209,7 @@
         })        
     })
     function remove_point(this_){
-        this_.parent().parent().remove() 
+        this_.remove() 
         newwidth = $('.mail_points_box').width() - $('.mail_points').width() - 1
         $(".add_mail_point").attr('style', 'width:'+newwidth+'px;')                
     }
@@ -200,10 +245,8 @@
         e.stopPropagation();
     })
     var rangeM = 79
-    async function saveSelection() {
-        console.log('frmfkrmf')
+    function saveSelection() {
         if (window.getSelection) {
-            console.log('saveSelection')
             sel = window.getSelection();
             if (sel.getRangeAt && sel.rangeCount) {
                 var ranges = [];
@@ -213,7 +256,6 @@
                     $('.data').attr('sel_end', sel.getRangeAt(i).endOffset)
                 }
                 rangeM = ranges
-                console.log(rangeM[0])
                 return ranges;
             }
         } else if (document.selection && document.selection.createRange) {
@@ -222,13 +264,37 @@
         return null;
     }
     function add_tag(tag_name){
-        restoreSelection()
-        tag = '&nbsp;' + $('.'+tag_name).html() + '&nbsp;'
+        if (rangeM == 79) {
+            $('.mail_content').focus()
+            saveSelection()
+        }
+        div = rangeM[0].startContainer
+        if (div.classList == undefined) {
+            $('.mail_content').focus()
+            saveSelection()
+            div = rangeM[0].startContainer
+        }
+        else if (div.classList.contains('mail_content') == false) {
+            $('.mail_content').focus()
+            saveSelection()
+        }
+        tag = '&nbsp;' + $('.'+tag_name).html() + '&nbsp;' + '&nbsp;'
         document.execCommand("insertHTML", false, tag)
     }
     $('.mail_content').keyup(function(e) {
         if (e.keyCode == 8) {
-            console.log(document.activeElement.className)
+            saveSelection()
+            div = rangeM[0].startContainer
+            if (div.classList == undefined) {
+                div = rangeM[0].startContainer
+                div = div.parentNode
+                if (div.classList.contains('mtag')) {
+                    div.remove()
+                }
+            }
+            else if (div.classList.contains('remove_tag')) {
+                div.parentNode.parentNode.remove()
+            }
         }
     });    
     function createBold(){

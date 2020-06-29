@@ -23,12 +23,15 @@
                     <b>Основная информация</b>
                 </div>
                 <div class="ui grid stackable no_margin">
-                    <div class="sixteen wide column pt0 pb0">
+                    <div class="sixteen wide column pt0 pb4">
                         <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="dinline text13 textdg">Город: </span>
+                            <div style="width: 130px;">
+                                <span class="textbold dinline text13 textdg">
+                                    <i class="texttile icon map marker alternate"></i>
+                                    Город: 
+                                </span>
                             </div>
-                            <div class="mb15 no_padding" style="width: calc(100% - 130px)">
+                            <div class="no_padding" style="width: calc(100% - 130px)">
                                 <span style="display: inline-block;" class="school_cities mr5">
                                     {% if instance.cities.all|length == 0 %}
                                         <i class="textg">—</i>
@@ -59,12 +62,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="backwhitelow eight wide column pt15 pb0 deskpr50">
+                    <div class="backwhitelow eight wide column pt15 pb0 deskpr55">
                         <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="dinline text13 textdg">Полное описание: </span> 
+                            <div style="width: 140px;">
+                                <span class="textbold dinline text13 textdg"><i class="icon texttile info "></i>Полное описание: </span> 
                             </div>
-                            <div class="mb15 no_padding" style="width: calc(100% - 130px)">
+                            <div class="mb15 no_padding" style="width: calc(100% - 140px)">
                                 <span class="school_content mr5">
                                 {% if instance.content|length == 0 %}
                                     <i class="textg">—</i>
@@ -90,105 +93,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="backwhitelow eight wide column pt15 pb0">
+                    <div class="backwhitelow eight wide column pt15 pb0 deskpr55">
                         <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="dinline text13 textdg ">Короткое описание: </span> 
-                            </div>
-                            <div class="mb15 no_padding" style="width: calc(100% - 130px)">
-                                <span class="school_slogan mr5">
-                                    {% if instance.slogan|length == 0 %}
-                                        <i class="textg">—</i>
-                                    {% else %}
-                                        {{ instance.slogan }}
-                                    {%endif%}
-                                </span>
-                                {% if is_director %}
-                                <a class="text13" onclick="$('.school_slogan_form').show()">Изменить</a>
-                                <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
-                                    <div class="ui grid">
-                                        <div class="twelve wide column no_padding_side">
-                                            <textarea class="school_slogan_edit no_margin" style="margin-bottom: 0;">{{ instance.slogan }}</textarea>
-                                        </div>
-                                        <div class="four wide column">
-                                            <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
-                                        </div>
-                                    </div>
-                                </form>
-                                {% endif %} 
-                            </div>
-                        </div>
-                    </div>
-                    <div class="eight wide column pt15 pb0 deskpr50">
-                        <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="dinline text13 textdg ">Номер телефона: </span>
+                            <div style="width: 140px;">
+                                <span class="textbold text13 textdg"><i class="icon clock texttile"></i>Время работы: </span> 
                             </div> 
-                            <div class="mb15" style="width: calc(100% - 130px)">
-                                <span style="display: inline-block;" class="school_phones mr5">
-                                    {% if instance.phones|length == 0 %}
-                                        <i class="textg">—</i>
-                                    {% else %}
-                                        {%for phone in instance.phones%}
-                                            {{ phone }}
-                                            {%if instance.phones|length > forloop.counter%},{%endif%} 
-                                        {%endfor%}
-                                    {%endif%}
-                                </span>
-                                {% if is_director %}
-                                <a class="text13" onclick="$('.school_phones_form').show()">Изменить</a>
-                                <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
-                                    <div class="ui grid stackable mb0">
-                                        <div class="sixteen wide column pl0 pb0">
-                                            <span class="textdg text13">Вводите номера через запятую</span>
-                                        </div>
-                                        <div class="twelve wide column no_padding">
-                                            <textarea class="pt5 school_phones_edit no_margin" style="height: 29px; overflow: hidden;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
-                                        </div>
-                                        <div class="four wide column pt0 pl5 pr0">
-                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
-                                        </div>
-                                    </div>
-                                </form>
-                                {% endif %}  
-                            </div>  
-                        </div>
-                    </div>
-                    <div class="eight wide column pt15 pb0">
-                        <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="dinline text13 textdg ">Сайт: </span> 
-                            </div> 
-                            <div class="mb15" style="width: calc(100% - 130px)">
-                                <span class="school_site mr5">
-                                    {% if instance.site|length == 0 %}
-                                        <i class="textg">—</i>
-                                    {% else %}
-                                        {{ instance.site }}
-                                    {%endif%}
-                                </span>
-                                {% if is_director %}
-                                <a class="text13" onclick="$('.school_site_form').show()">Изменить</a>
-                                <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
-                                    <div class="ui grid">
-                                        <div class="twelve wide column no_padding_side">
-                                            <textarea class="school_site_edit no_margin" style="margin-bottom: 0;">{{ instance.site }}</textarea>
-                                        </div>
-                                        <div class="four wide column">
-                                            <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
-                                        </div>
-                                    </div>
-                                </form>
-                                {% endif %} 
-                            </div>  
-                        </div>
-                    </div>
-                    <div class="backwhitelow eight wide column pt15 pb0 deskpr50">
-                        <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="text13 textdg">Время работы: </span> 
-                            </div> 
-                            <div class="mb15" style="width: calc(100% - 130px)">
+                            <div class="mb15" style="width: calc(100% - 140px)">
                                 <span style="display: inline-block;" class="school_worktime mr5">
                                     {% if worktime1 == '' or worktime2 == '' %}
                                         По предварительной записи
@@ -221,15 +131,108 @@
                             </div>  
                         </div>
                     </div>
+                    <div class="eight wide column pt15 pb5">
+                        <div class="dflex">
+                            <div style="width: 150px;">
+                                <span class="textbold dinline text13 textdg "><i class="icon info texttile"></i>Короткое описание: </span> 
+                            </div>
+                            <div class="mb15 no_padding" style="width: calc(100% - 150px)">
+                                <span class="school_slogan mr5">
+                                    {% if instance.slogan|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {{ instance.slogan }}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_slogan_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
+                                    <div class="ui grid">
+                                        <div class="twelve wide column no_padding_side">
+                                            <textarea class="school_slogan_edit no_margin" style="margin-bottom: 0;">{{ instance.slogan }}</textarea>
+                                        </div>
+                                        <div class="four wide column">
+                                            <a status="slogan" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="eight wide column pt15 pb5">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="textbold dinline text13 textdg "><i class="icon wifi texttile"></i> Сайт: </span> 
+                            </div> 
+                            <div class="mb15" style="width: calc(100% - 140px)">
+                                <span class="school_site mr5">
+                                    {% if instance.site|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {{ instance.site }}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_site_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
+                                    <div class="ui grid">
+                                        <div class="twelve wide column no_padding_side">
+                                            <textarea class="school_site_edit no_margin" style="margin-bottom: 0;">{{ instance.site }}</textarea>
+                                        </div>
+                                        <div class="four wide column">
+                                            <a status="site" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %} 
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="backwhitelow eight wide column pt15 pb0 deskpr55">
+                        <div class="dflex">
+                            <div style="width: 140px;">
+                                <span class="textbold dinline text13 textdg "><i class="icon phone texttile"></i> Номер телефона: </span>
+                            </div> 
+                            <div class="mb15" style="width: calc(100% - 140px)">
+                                <span style="display: inline-block;" class="school_phones mr5">
+                                    {% if instance.phones|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {%for phone in instance.phones%}
+                                            {{ phone }}
+                                            {%if instance.phones|length > forloop.counter%},{%endif%} 
+                                        {%endfor%}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_phones_form').show()">Изменить</a>
+                                <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
+                                    <div class="ui grid stackable mb0">
+                                        <div class="sixteen wide column pl0 pb0">
+                                            <span class="textdg text13">Вводите номера через запятую</span>
+                                        </div>
+                                        <div class="twelve wide column no_padding">
+                                            <textarea class="pt5 school_phones_edit no_margin" style="height: 29px; overflow: hidden;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
+                                        </div>
+                                        <div class="four wide column pt0 pl5 pr0">
+                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}  
+                            </div>  
+                        </div>
+                    </div>
                     <div class="backwhitelow eight wide column pt15 pb0">
                         <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="text13 textdg">Социальные сети: </span> 
+                            <div style="width: 150px;">
+                                <span class="textbold text13 textdg"><i class="icon users texttile"></i> Социальные сети: </span> 
                             </div> 
-                            <div class="mb15" style="width: calc(100% - 130px)">
+                            <div class="mb15" style="width: calc(100% - 150px)">
                                 <div style="display: inline-block;" class="school_social_list">
                                     {% for social in social_networks %}
-                                        <a class="ui button small white shadow_small mb10 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}">
+                                        <a class="ui button small pt5 pb5 white shadow_small mb10 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}">
                                             <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
                                             {{ social.1 }}
                                         </a>
@@ -263,10 +266,10 @@
                     </div>
                     <div class="eight wide column pt15 pb0 deskpr50">
                         <div class="dflex">
-                            <div style="width: 160px;">
-                                <span class="text13 textdg">Фотографии: </span> 
+                            <div style="width: 150px;">
+                                <span class="textbold text13 textdg"><i class="icon image texttile"></i> Фотографии: </span> 
                             </div>
-                            <div class="mb15" style="width: calc(100% - 130px)">
+                            <div class="mb15" style="width: calc(100% - 150px)">
                                 <div class="dinline">
                                     <div class="dflex">
                                         {% for banner in instance.banners.all %}

@@ -4330,7 +4330,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   max-width: 100% !important;
 }
 .img-responsive {
-  display: none;
+    min-height: 100px;
+    min-width: 100px;  
 }
 .coins-responsive {
   display: none;
@@ -4383,7 +4384,6 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
   }
   .img-responsive {
     display: inline-block;
-    border-radius: 50%;
     min-height: 150px;
     min-width: 150px;
     -webkit-background-size: cover;

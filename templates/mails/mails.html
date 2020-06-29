@@ -31,7 +31,7 @@
                                         <div class="backlightblue textw mail_point_orig textdots h20 br15 border1 pl10 pr5 mt5 text12 dflex" style="display: none;">
                                             <span class="mail_point_address"></span>
                                             <a>
-                                                <i onclick="remove_point($(this));" class="icon x ml5 mr0 text11 textw"></i>
+                                                <i onclick="remove_point($(this).parent().parent());" class="icon x ml5 mr0 text11 textw"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@
                                 <a class="show_save_template ui button mini white border1 shadow_small">
                                     Сохранить как шаблон
                                 </a>
-                                <a class="send_mails ui button small green shadow_green" style="float: right;" url="{% url 'schools:send_mails' %}">
+                                <a order='check' class="send_mails ui button small green shadow_green" style="float: right;" url="{% url 'schools:send_mails' %}">
                                     Отправить
                                     <i class="icon textw envelope mail ml5 mr0"></i>
                                     <i class="icon check textw send_mails_success" style="display: none;"></i>
@@ -221,6 +221,39 @@
         </div>
     </div>
 </div>
+<div class="found_error_modal ui modal large" style="min-height: calc(100% - 200px);">
+    <i class="close icon"></i>
+    <div class="content pb30" style="line-height: 16px;">
+        <div class="ui grid stackable deskpl50 deskpr50 pt20">
+            <div class="eight wide column pb0">
+                <div class="nocard_box full-h shadow_small pl10 pr10 pt10 pb10 topbr5" style="display: none;">
+                    <div class="text15 textbold textblue">Список получателей которых нет в базе:</div>
+                    <div class="textdg text13 mt5">Если оставите без изменения, то теги будут игнорироваться</div>
+                </div>
+            </div>
+            <div class="eight wide column pb0">
+                <div class="nosquad_box full-h topbr5 pl10 pr10 pt10 pb10 shadow_small" style="display: none;">
+                    <div class="text15 textbold textblue">Список получателей не записанных в группы, поэтому им сообщение доставлено не будет:</div>
+                </div>
+            </div>
+            <div class="eight wide column pt0">
+                <div class="nocard_box nocard_list shadow_small" style="display: none;">
+                </div>
+            </div>
+            <div class="eight wide column pt0">
+                <div class="nosquad_box nosquad_list shadow_small" style="display: none;">
+                </div>
+            </div>
+            <div class="sixteen wide column text-center">
+                <div class="text17 textbold textblue">Продолжить отправку рассылки?</div>
+                <div class="mt10">
+                    <a onclick="$('.found_error_modal').modal('hide')" class="ui button small pt7 pb7 white textbold border1 shadow_small mr5">Отменить</a>
+                    <a order="send" class="send_mails ui button small pt7 pb7 white shadow_small border1 textbold textblue ml5" url="{% url 'schools:send_mails' %}">Да</a>
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
 <div class="save_template_modal ui modal tiny">
     <i class="close icon"></i>
     <div class="content pb30">
@@ -243,6 +276,18 @@
     </div>
 </div>
 <div style="display: none;">
+    <div class="nosquad_span pt5 pb5 pl5 pr5">
+        <div class="dinline">
+            <span class="textblue textbold text13 nosquad_student"></span>
+        </div>
+        <a style="float: right;" class="ui button mini white border1 shadow_small textred pt5 pr5 pb5 pl5 remove_point">Убрать из списка</a>
+    </div>
+    <div class="nocard_span pt5 pb5 pl5 pr5">
+        <div class="dinline">
+            <span class="mtag2"></span>
+        </div>
+        <a style="float: right;" class="ui button mini white border1 shadow_small textred pt5 pr5 pb5 pl5 remove_point">Убрать из списка</a>
+    </div>
     <div class="name_tag_orig">
         <div id="student_name_tag" class="mtag">Имя студента<a onclick="$(this).parent().remove()"><i class="icon x remove_tag"></i></a></div>
     </div>

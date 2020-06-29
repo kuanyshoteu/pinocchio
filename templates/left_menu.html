@@ -55,6 +55,7 @@
             {% endif %}
             <a class="item lftitem {%if page == 'mails' %}lftitem_crnt{%endif%}" href='{% url "schools:mails" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="envelope icon mr10"></i>Рассылки
+                <span class="beta_notice pl5 pr5">beta</span>
             </a>
             {% if is_manager or is_trener or is_director %}
             <a class="item lftitem {%if page == 'documents' %}lftitem_crnt{%endif%}" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>

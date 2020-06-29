@@ -3,12 +3,12 @@
 <div class="ui segment shadow_small">
 {%endif%}
 {% if is_manager and hisprofile.is_student %}
-    <div class="text15 textdg textbold">Оплата</div>
+    <div class="text17 textdg textbold">Оплата</div>
 {%endif%}
 {% if is_manager %}
     <div class="ui grid stackable no_margin">
         {% if hisprofile.is_student %}
-        <div class="ten wide column pl0 pt15 pr30 pb10">
+        <div class="ten wide column pl0 pt0 pr30 pb10">
             Пожалуйста, укажите за какую группу вносится оплата:
             <form class="ui form mb10 mt10" style="display: flex;">
                 <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
@@ -37,12 +37,12 @@
         <div class="six wide column pl0 pt0 pr15 pb0">
             <div class="pb0">
                 {% if hisprofile.is_student %}
-                <a class="full-w border1 ui button pt10 pb10 small textblue white shadow_small mb10" onclick="$('.move_money').modal('show')">Перевод денег</a>
+                <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue mb10" onclick="$('.move_money').modal('show')"><i class="icon random backblue textw"></i> Перевод денег</a>
                 <br>
-                <a class="full-w border1 ui button pt10 pb10 small textblue white shadow_small mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}">История оплаты</a>
+                <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}"><i class="icon shopping bag backblue textw"></i> История оплаты</a>
                 <br>
                 {%endif%}
-                <a class="full-w border1 ui button pt10 pb10 small textblue white shadow_small get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}">История всех действий</a>
+                <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}"><i class="icon clock backblue textw"></i> История всех действий</a>
             </div>
             {% if hisprofile.is_student %}
             <div class="ui modal payment_history full-h">
@@ -138,9 +138,9 @@
 {% if is_manager and hisprofile.is_student %}
 <div class="ui segment shadow_small">
     <div class="text15 textdg textbold">Клиент записан в данные группы:</div>
-    <div class="ui grid stackable no_margin">
+    <div class="dflex mt10">
         {% for nm in profile|get_bills:hisprofile %}
-        <div class="eight wide column pl10 pr10 squad_bill_block_cont{{nm.squad.id}}">
+        <div class="third wide column pl0 pr10 squad_bill_block_cont{{nm.squad.id}}">
             <div class="no_padding border1 ui segment shadow squad_bill_block{{nm.squad.id}}">
                 <div class="pt15 pl15 pb15 pr15 text-center topbr5" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
                     <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
@@ -154,7 +154,7 @@
                         <b>Дата следующей оплаты:</b> 
                         {{nm|get_pay_date}}
                     </div>
-                    <span class="textdg textbold text13">Группа проходит курсы:</span>
+                    <div class="textdg textbold text13 text-center">Группа проходит курсы:</div>
                     <div class="nm_subjects text14">
                         {% for subject in nm|get_subject_finances %}
                         <div class="full-w mb10 pt10 pl10 pr10 pb10 br5 backwhitelow">

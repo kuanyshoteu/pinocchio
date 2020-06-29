@@ -1730,10 +1730,26 @@ def call_helper(request):
                 if i == 5:
                     break
         if i < 5:
+            similarity=TrigramSimilarity('mail', text)
+            cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            for card in cards:
+                res.append(card.mail)
+                i+=1
+                if i == 5:
+                    break
+        if i < 5:
             similarity=TrigramSimilarity('parents', text)
             cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
             for card in cards:
                 res.append(card.parents)
+                i+=1
+                if i == 5:
+                    break
+        if i < 5:
+            similarity=TrigramSimilarity('extra_phone', text)
+            cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            for card in cards:
+                res.append(card.extra_phone)
                 i+=1
                 if i == 5:
                     break
@@ -2210,6 +2226,10 @@ def search_crm_cards(request):
         cards = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
         if len(cards) < 5:
             similarity=TrigramSimilarity('phone', text)
+            extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            cards = set(chain(cards, extra))
+        if len(cards) < 5:
+            similarity=TrigramSimilarity('mail', text)
             extra = school.crm_cards.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
             cards = set(chain(cards, extra))
         if len(cards) < 5:

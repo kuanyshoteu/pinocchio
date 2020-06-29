@@ -40,30 +40,111 @@ def send_mails(request):
     profile = Profile.objects.get(user = request.user.id)
     school = is_moderator_school(request, profile)
     only_managers(profile)
+    order = request.GET.get('order')
     text = request.GET.get('text')
     addresses = request.GET.get('addresses')
-    ok = False
+    ok = 'no'
     if text:
         head = request.GET.get('head')
-        students = school.crm_cards.all()
-        for mail in addresses.split(','):
+        cards = school.crm_cards.all()
+        if '8%'+'next_lesson_date_tag'+'%8' in text or '8%'+'next_lesson_time_tag'+'%8' in text or '8%'+'next_lesson_timeend_tag'+'%8' in text:
+            need_next_lesson = True
+        else:
+            need_next_lesson = False
+        today = timezone.now().date()
+        nocard = []
+        nosquad = []
+        noschedule = []
+        found_error = False
+        mails = addresses.split(',')
+        if order == 'check':
+            for mail in mails:
+                if '@' in mail:
+                    check = check_tags(mail,text,school,today,need_next_lesson,cards)
+                    if check[0] != 'ok':
+                        found_error = True
+                        if check[0] == 'nocard':
+                            nocard.append(check[1])
+                        elif check[0] == 'nosquad':
+                            nosquad.append([check[1], mail])
+                        elif check[0] == 'noschedule':
+                            noschedule.append([check[1], check[2]])
+            if found_error:
+                data = {
+                    'ok':'found_error',
+                    'nocard':nocard,
+                    'nosquad':nosquad,
+                    'noschedule':noschedule,
+                }
+                return JsonResponse(data)
+        for mail in mails:
             if '@' in mail:
-                student = students.filter(mail=mail)
-                if len(student) > 0:
-                    student = student[0]
-                    crnttext = text.replace('8%'+'student_name_tag'+'%8', student.name)
-                else:
-                    crnttext = text.replace('8%'+'student_name_tag'+'%8', 'Студент')
-                print(crnttext)
-                try:
-                    send_email_client(head, crnttext, [mail])
-                except Exception as e:
-                    raise
-        ok = True
+                text = prepare_tags(mail,text,school,today,need_next_lesson,cards)
+                if text != False:
+                    try:
+                        send_email_client(head, text, [mail])
+                    except Exception as e:
+                        raise
+        ok = 'yes'
     data = {
         "ok": ok,
     }
     return JsonResponse(data)
+
+def check_tags(mail, text, school, today, need_next_lesson, cards):
+    card = cards.filter(mail=mail)
+    if len(card) > 0:
+        card = card[0]
+    else:
+        return ['nocard', mail]
+    if need_next_lesson:
+        student = card.card_user
+        if len(card.bill_data.all()) == 0:
+            return ['nosquad', card.name]
+        squad = card.bill_data.all().order_by('start_date').first().squad
+        if len(squad.squad_lectures.all()) == 0:
+            return ['noschedule', card.name, squad.title]
+    return ['ok']
+
+def prepare_tags(mail, text, school, today, need_next_lesson, cards):
+    card = cards.filter(mail=mail)
+    name = ''
+    next_lesson_date = ''
+    next_lesson_time = ''
+    next_lesson_timeend = ''
+    next_payment_date = ''
+    if len(card) > 0:
+        card = card[0]
+        name = card.name
+        text = text.replace('8%'+'student_name_tag'+'%8', card.name)
+        if need_next_lesson:
+            student = card.card_user
+            if len(card.bill_data.all()) == 0:
+                return False
+            bill_data = card.bill_data.all().order_by('start_date').first()
+            squad = bill_data.squad
+            if len(squad.squad_lectures.all()) == 0:
+                return False
+            today_num = int(today.strftime('%w'))
+            today_day = Day.objects.get(number=today_num)
+            pn_day = Day.objects.get(number=1)
+            next_lecture = squad.squad_lectures.filter(day__gte=today_day)
+            if len(next_lecture) == 0:
+                next_lecture = squad.squad_lectures.filter(day__gte=pn_day)
+            next_lecture = next_lecture.first()
+            diff = next_lecture.day.number - today_num
+            if diff < 0:
+                diff += 7
+            next_lesson_date = (today + timedelta(diff)).strftime('%d %B')
+            next_lesson_time = next_lecture.cell.time_period.start
+            next_lesson_timeend = next_lecture.cell.time_period.end
+            next_payment_date = bill_data.pay_date.strftime("%d %B %Y")
+    text = text.replace('8%'+'student_name_tag'+'%8', name)
+    text = text.replace('8%'+'next_lesson_date_tag'+'%8', next_lesson_date)
+    text = text.replace('8%'+'next_lesson_time_tag'+'%8', next_lesson_time)
+    text = text.replace('8%'+'next_lesson_timeend_tag'+'%8', next_lesson_timeend)
+    text = text.replace('8%'+'next_payment_tag'+'%8', next_payment_date)
+    return text
 
 def get_mail_students_list(request):
     profile = Profile.objects.get(user = request.user.id)

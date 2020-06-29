@@ -2,59 +2,75 @@
 {% load staticfiles %}
 <div class="ui segment shadow_small no_margin pb15 pt15">
     <div class="content">
-        <div class="header" style="display: flex;">
-            <div class="avatar-phone">
-                {% if hisprofile.image %}
-                <div class="img-responsive" style="background-image: url({{ hisprofile.image.url }});"></div>
-                {% else %}
-                <div class="img-responsive" style="background-image: url({% static 'images/nophoto.svg' %});"></div>
-                {% endif %}
-                {% if profile == hisprofile %}
-                <div>
-                    <a href="{{ profile.change_url }}" class="mt5 pb5 in_mobile text10">Редактировать</a>
+        <div class="header">
+            <div class="ui grid stackable">
+                <div class="two wide column pl0">
+                    <div class="avatar-phone">
+                        {% if hisprofile.image %}
+                        <div class="img-responsive br15">
+                            <img src="{% static 'images/nophoto.svg' %}" class="full-w">                            
+                        </div>
+                        {% else %}
+                        <div class="img-responsive br15" style="background-image: url();">
+                            <img src="{% static 'images/nophoto.svg' %}" class="full-w">
+                        </div>
+                        {% endif %}
+                    </div>                    
                 </div>
-                {% endif %}
-                <div class="text17 not_in_mobile">{{ hisprofile.first_name }}</div>
-            </div>
-            <div class="pl15 in_mobile">
-                <span class="text15">{{ hisprofile.first_name }}</span>
-                <div class="text13 mt5" style="color: grey">
-                    <div class="text13">Школа:
-                        {%for school in hisprofile.schools.all %}
-                        <a href="{{ school.landing }}" class="mr10"><b>{{ school.title }}</b></a>
-                        {%endfor%}
+                <div class="four wide column pr0">
+                    <span class="text21">{{ hisprofile.first_name }}</span>
+                    <div class="meta">
+                        <a class="open_form_status" class="text13">
+                            <span class="hisstatus">
+                                {% if hisprofile.is_student %}
+                                    Студент
+                                {% else %}
+                                    {% for prof in hisprofile.profession.all %}
+                                        {{prof.title}}
+                                    {% endfor %}
+                                {% endif %}
+                            </span>
+                        </a>
                     </div>
-                    {%if not hisprofile.is_student%}
-                    {%if hisprofile.job_categories.all|length > 0%}
-                    <div class="text13">
-                        Должности:
-                        <b> 
-                        {% if hisprofile.job_categories.all|length > 0 %}
-                        {%for job in hisprofile.job_categories.all %}
-                            {{ job.title }}
-                        {%endfor%}
-                        {%endif%}
-                        </b>
+                    {% if profile == hisprofile %}
+                    <div class="mt10">
+                        <a href="{%url 'accounts:change_url'%}" class="ui button mini white shadow_small border1 pt5 pb5 textblue">Редактировать</a>
                     </div>
-                    {% endif %}                    
                     {% endif %}
-                    <div class="text13">Телефон: <b>{{ hisprofile.phone }}</b></div>
-                    <div class="text13">Почта: <b>{{ hisprofile.mail }}</b></div>
+                </div>
+                <div class="ten wide column">
+                    <div class="text14 mt5 textdg">
+                        <div class="mt5">
+                            <div class="dinline" style="width: 80px;">Школа:</div>
+                            {%for school in hisprofile.schools.all %}
+                            <a href="{{ school.landing }}" class="mr10"><b>{{ school.title }}</b></a>
+                            {%endfor%}
+                        </div>
+                        {%if not hisprofile.is_student%}
+                        {%if hisprofile.job_categories.all|length > 0%}
+                        <div class="mt5">
+                            <div class="dinline" style="width: 80px;">Должности:</div>
+                            <b class="textblue"> 
+                            {% if hisprofile.job_categories.all|length > 0 %}
+                            {%for job in hisprofile.job_categories.all %}
+                                {{ job.title }}
+                            {%endfor%}
+                            {%endif%}
+                            </b>
+                        </div>
+                        {% endif %}                    
+                        {% endif %}
+                        <div class="mt5">
+                            <div class="dinline" style="width: 80px;">Телефон:</div>
+                            <b class="textblue">{{ hisprofile.phone }}</b>
+                        </div>
+                        <div class="mt5">
+                            <div class="dinline" style="width: 80px;">Почта:</div>
+                            <b class="textblue">{{ hisprofile.mail }}</b>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="meta not_in_mobile">
-            <a class="open_form_status" class="text13">
-                <span class="hisstatus">
-                    {% if hisprofile.is_student %}
-                        Студент
-                    {% else %}
-                        {% for prof in hisprofile.profession.all %}
-                            {{prof.title}}
-                        {% endfor %}
-                    {% endif %}
-                </span>
-            </a>
         </div>
     </div>
 </div>
