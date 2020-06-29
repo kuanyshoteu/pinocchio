@@ -81,9 +81,9 @@ def send_mails(request):
             if '@' in mail:
                 htext = prepare_tags(mail,text,school,today,need_next_lesson,cards)
                 print(mail, htext)
-                if text != False:
+                if htext != False:
                     try:
-                        send_email_client(head, text, [mail])
+                        send_email_client(head, htext, [mail])
                     except Exception as e:
                         raise
         ok = 'yes'
