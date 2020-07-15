@@ -1,13 +1,13 @@
 {% load staticfiles %}
-<div class="mb5 catall online_{{sq.is_online}} ind_{{sq.is_individual}} {%for cat in sq.category.all%}cat{{cat.id}} {%endfor%}">
+<div class="catall online_{{sq.is_online}} ind_{{sq.is_individual}} {%for cat in sq.category.all%}cat{{cat.id}} {%endfor%}">
     <div style="text-align: left;" class="no_padding border1 ui segment shadow_small full-w">
         <div class="ui grid group-block no_margin">
-            <div class="leftbr5 wide column left-side pt15 pl15 pb15 backrbb" style="width: 42px;">
+            <div class="leftbr5 wide column left-side pt10 pl15 pb10 backrbb" style="width: 42px;">
                 <div class="textw text21 textbold">
                     {{sq.squads.all|length}}
                 </div>
             </div>
-            <div class="wide column right-side pt10 pb10" style="width: calc(100% - 42px);">
+            <div class="wide column right-side pt5 pb5" style="width: calc(100% - 42px);">
                 <h5 class="mb0" style="font-size: 13px;">
                     <a href="{{ sq.get_absolute_url }}" class="textblue">{{ sq.title }}</a>
                 </h5>
@@ -16,4 +16,3 @@
         </div>
     </div>
 </div>
-

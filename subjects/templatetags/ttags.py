@@ -183,15 +183,12 @@ def get_date(material, squad):
     lectures = squad.squad_lectures.filter(subject = subject)
     material_number = list(subject.materials.all()).index(material)+1
     if len(lectures) > 0:
-        print('1')
         number_of_weeks = int(material_number/len(lectures))
         lecture_index = material_number % len(lectures)
         if lecture_index == 0:
-            print('2')
             number_of_weeks -= 1
             lecture_index = len(lectures)
         if squad.id in subject.squad_ids:
-            print('3')
             squad_index = subject.squad_ids.index(squad.id)
         else:
             return '_'
@@ -200,9 +197,7 @@ def get_date(material, squad):
         if start_day == 0:
             start_day = 7
         start_day_object = Day.objects.get(number = start_day)
-        print('d',lectures.filter(day=start_day_object))
         if len(lectures.filter(day=start_day_object)) == 0:
-            print('4')
             return '_'
         start_day_lecture = lectures.filter(day=start_day_object)[0]
         start_day_index = list(lectures).index(start_day_lecture)
@@ -235,37 +230,6 @@ def get_time(material, profile):
         return '_'
 
 @register.filter
-def get_material(subject, profile):
-    lectures = profile.hislectures.filter(subject = subject)
-    num_of_lectures = len(lectures)
-    if profile.is_student:
-        squad = profile.squads.filter(subjects=subject)
-    else:
-        squad = profile.hissquads.filter(subjects=subject)
-    if len(squad) > 0:
-        squad = squad[0]
-    if num_of_lectures > 0 and timezone.now().date() >= squad.start_date:
-        delta = (timezone.now().date() - squad.start_date).days
-        number_of_weeks = int(delta / 7)
-        finish = delta % 7
-        start = int(squad.start_date.strftime('%w'))
-        if start == 0:
-            start = 7
-        if start > finish or finish == 0:
-            finish += 7
-        extra = 0
-        for i in range(start, finish + 1): # Days of week of last not full week
-            i = i % 7
-            if i == 0:
-                i = 7
-            day=Day.objects.get(number=int(i))
-            extra += len(lectures.filter(day=day))
-        material_number = num_of_lectures * number_of_weeks + extra + 1
-        if len(subject.materials.filter(number = material_number)) > 0:
-            return subject.materials.filter(number = material_number)[0].lessons.all()
-    return '_'
-
-@register.filter
 def check_date(material, squad):
     date = get_date(material, squad)
     if date > timezone.now().date():
@@ -285,12 +249,12 @@ def material_number_by_date(date, squad, subject, alldays, profile):
         delta = (date - squad.start_date).days
         number_of_weeks = int(delta / 7)
         start = int(squad.start_date.strftime('%w'))
-        finish = int(timezone.now().date().strftime('%w'))
+        finish = int(date.strftime('%w'))
         search = True
         if start == 0:
             start = 7
         while search:
-            day=alldays.get(number=int(start))
+            day = alldays.get(number=int(start))
             if len(lectures.filter(day=day)) > 0:
                 break
             start += 1
@@ -303,7 +267,7 @@ def material_number_by_date(date, squad, subject, alldays, profile):
             i = i % 7
             if i == 0:
                 i = 7
-            day=alldays.get(number=int(i))
+            day = alldays.get(number=int(i))
             extra += len(lectures.filter(day=day))
         material_number = num_of_lectures * number_of_weeks + extra
         return material_number   

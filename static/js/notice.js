@@ -102,6 +102,7 @@ $("body").click(function(e){
     $('.show_search_groups').hide()    
     $('.show_search_subjects').hide() 
     $('.bselect').hide()
+    $('.show_search_students').hide()
 });
 $('.reg_segment').click(function(e){
     $('.bselect').hide()

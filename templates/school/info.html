@@ -18,20 +18,15 @@
         {% include 'left_menu.html' %}
         <div class="w85 wide column">
             {% include 'school/head.html' %}
-            <div class="ui segment mt0 mb15 text15 hint_place1 no_padding" side="bottom">
-                <div class="text15 mb15 textdg pl15 pt15 pr15">
-                    <b>Основная информация</b>
-                </div>
-                <div class="ui grid stackable no_margin">
-                    <div class="sixteen wide column pt0 pb4">
-                        <div class="dflex">
-                            <div style="width: 130px;">
-                                <span class="textbold dinline text13 textdg">
-                                    <i class="texttile icon map marker alternate"></i>
-                                    Город: 
-                                </span>
-                            </div>
-                            <div class="no_padding" style="width: calc(100% - 130px)">
+            <div class="ui grid stackable no_margin">
+                <div class="eight wide column pt0 pb10 pr5 pl0">
+                    <div class="ui segment shadow_small mt0 mb0 text15 hint_place1 no_padding" side="bottom" style="height: 100%">
+                        <div class="text15 mb5 textdg pt10 pl15 pr10 pb5">
+                            <b class="mr30">Основная информация</b>
+                        </div>              
+                        <div class="backwhitelow pt5 pb10 pl15 pr15">
+                            <div class="no_padding full-w">
+                                <div class="textblue textbold text12">Город:</div>
                                 <span style="display: inline-block;" class="school_cities mr5">
                                     {% if instance.cities.all|length == 0 %}
                                         <i class="textg">—</i>
@@ -42,7 +37,7 @@
                                     {%endif%}
                                 </span>
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_cities_form').show()">Изменить</a>
+                                <a class="text13" onclick="$('.school_cities_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_cities_form" style="width: 400px;display: none;">
                                     <div class="ui grid stackable mb0">
                                         <div class="sixteen wide column pl0 pb0">
@@ -53,7 +48,7 @@
                                                 {%for city in instance.cities.all%}{{ city.title }}{%if instance.cities.all|length > forloop.counter%}, {%endif%}{%endfor%}
                                             </div>
                                         </div>
-                                        <div class="four wide column pt0 pl5 pr5">
+                                        <div class="four wide column pt0 pb0 pl5 pr5">
                                             <a status="cities" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
                                         </div>
                                     </div>
@@ -61,13 +56,40 @@
                                 {% endif %}  
                             </div>
                         </div>
-                    </div>
-                    <div class="backwhitelow eight wide column pt15 pb0 deskpr55">
-                        <div class="dflex">
-                            <div style="width: 140px;">
-                                <span class="textbold dinline text13 textdg"><i class="icon texttile info "></i>Полное описание: </span> 
-                            </div>
-                            <div class="mb15 no_padding" style="width: calc(100% - 140px)">
+                        <div class="pt5 pb10 pl15 pr15">
+                            <div class="full-w">
+                                <div class="textblue textbold text12">Номер телефона:</div>
+                                <span style="display: inline-block;" class="school_phones mr5">
+                                    {% if instance.phones|length == 0 %}
+                                        <i class="textg">—</i>
+                                    {% else %}
+                                        {%for phone in instance.phones%}
+                                            {{ phone }}
+                                            {%if instance.phones|length > forloop.counter%},{%endif%} 
+                                        {%endfor%}
+                                    {%endif%}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_phones_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
+                                    <div class="ui grid stackable mb0">
+                                        <div class="sixteen wide column pl0 pb0">
+                                            <span class="textdg text13">Вводите номера через запятую</span>
+                                        </div>
+                                        <div class="twelve wide column no_padding">
+                                            <textarea class="pt5 school_phones_edit no_margin" style="height: 29px; overflow: hidden;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
+                                        </div>
+                                        <div class="four wide column pt0 pl5 pb0 pr0">
+                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% endif %}  
+                            </div>  
+                        </div>
+                        <div class="backwhitelow pt5 pb10 pl15 pr15">
+                            <div class="no_padding full-w">
+                                <div class="textblue textbold text12">Полное описание:</div>
                                 <span class="school_content mr5">
                                 {% if instance.content|length == 0 %}
                                     <i class="textg">—</i>
@@ -76,15 +98,13 @@
                                 {%endif%}
                                 </span> 
                                 {% if is_director %}
-                                <div class="mb0 dinline">
-                                    <a class="text13" onclick="$('.school_content_form').show()">Изменить</a>
-                                </div>
-                                <form class="ui form school_content_form" style="width: 800px; display: none;">
+                                <a class="text13" onclick="$('.school_content_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <form class="ui form no_margin school_content_form" style="width: 800px; display: none;">
                                     <div class="ui grid no_margin stackable">
                                         <div class="twelve wide column no_padding">
                                             <textarea placeholder="Введите описание центра" class="school_content_edit no_margin" style="height: 70px;">{{ instance.content }}</textarea>
                                         </div>
-                                        <div class="four wide column pl5 pr0 pt0">
+                                        <div class="four wide column pl5 pb0 pr0 pt0">
                                             <a status="content" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
                                         </div>
                                     </div>
@@ -92,51 +112,9 @@
                                 {% endif %}
                             </div>
                         </div>
-                    </div>
-                    <div class="backwhitelow eight wide column pt15 pb0 deskpr55">
-                        <div class="dflex">
-                            <div style="width: 140px;">
-                                <span class="textbold text13 textdg"><i class="icon clock texttile"></i>Время работы: </span> 
-                            </div> 
-                            <div class="mb15" style="width: calc(100% - 140px)">
-                                <span style="display: inline-block;" class="school_worktime mr5">
-                                    {% if worktime1 == '' or worktime2 == '' %}
-                                        По предварительной записи
-                                    {% else %}
-                                        {{ worktime1 }}-{{ worktime2 }}
-                                    {% endif %}
-                                </span>
-                                {% if is_director %}
-                                <a class="text13" onclick="$('.school_worktime_form').show()">Изменить</a>
-                                <form class="ui form no_margin school_worktime_form" style="display: none;">
-                                    <div class="ui grid">
-                                        <div class="sixteen wide column pb0">
-                                            <i>*Если оставите поля пустыми, то будет сохранена, как "По предварительной записи"</i>
-                                        </div>
-                                        <div class="two wide column no_padding_side">
-                                            <textarea class="school_worktime_edit1 no_margin">{{ worktime1 }}</textarea>
-                                        </div>
-                                        <div class="one wide column no_padding_side text-center">
-                                            -
-                                        </div>
-                                        <div class="two wide column no_padding_side">
-                                            <textarea class="school_worktime_edit2 no_margin">{{ worktime2 }}</textarea>
-                                        </div>
-                                        <div class="four wide column">
-                                            <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
-                                        </div>
-                                    </div>
-                                </form>
-                                {% endif %}
-                            </div>  
-                        </div>
-                    </div>
-                    <div class="eight wide column pt15 pb5">
-                        <div class="dflex">
-                            <div style="width: 150px;">
-                                <span class="textbold dinline text13 textdg "><i class="icon info texttile"></i>Короткое описание: </span> 
-                            </div>
-                            <div class="mb15 no_padding" style="width: calc(100% - 150px)">
+                        <div class="pt5 pb5 pl15 pr15">
+                            <div class="no_padding full-w">
+                                <div class="textblue textbold text12">Короткое описание:</div>                                
                                 <span class="school_slogan mr5">
                                     {% if instance.slogan|length == 0 %}
                                         <i class="textg">—</i>
@@ -145,7 +123,7 @@
                                     {%endif%}
                                 </span>
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_slogan_form').show()">Изменить</a>
+                                <a class="text13" onclick="$('.school_slogan_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
                                     <div class="ui grid">
                                         <div class="twelve wide column no_padding_side">
@@ -160,12 +138,41 @@
                             </div>
                         </div>
                     </div>
-                    <div class="eight wide column pt15 pb5">
-                        <div class="dflex">
-                            <div style="width: 140px;">
-                                <span class="textbold dinline text13 textdg "><i class="icon wifi texttile"></i> Сайт: </span> 
+                </div>
+                <div class="eight wide column pt0 pl5 pb10 pr0">
+                    <div class="ui segment shadow_small full-h no_padding">
+                        <div class="text15 mb5 pl15 pr10 pt10 pb5 textdg">
+                            <b>Дополнительная информация</b>
+                        </div>
+                        <div class="backwhitelow pt5 pb10 pl15 pr15">
+                            <div class="full-w">
+                                <div class="textblue textbold text12">Время работы:</div>
+                                <span style="display: inline-block;" class="school_worktime text15 mr5">
+                                    {% if worktime1 == '' or worktime2 == '' %}
+                                        По предварительной записи
+                                    {% else %}
+                                        {{ worktime1 }} - {{ worktime2 }}
+                                    {% endif %}
+                                </span>
+                                {% if is_director %}
+                                <a class="text13" onclick="$('.school_worktime_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <form class="ui form no_margin school_worktime_form" style="display: none;">
+                                    <div class="textdg text13 textbold mb5 mt5">
+                                        *Если оставите поля пустыми, то будет сохраненo, как "<span class="textblue">По предварительной записи</span>"
+                                    </div>
+                                    <textarea style="width: 50px;" class="school_worktime_edit1 no_margin pl5 pr5 dinline">{{ worktime1 }}</textarea>
+                                    <div class="dinline pl5 pr5 pt5">-</div>
+                                    <textarea style="width: 50px;" class="school_worktime_edit2 no_margin pl5 pr5 dinline">{{ worktime2 }}</textarea>
+                                    <div class="mt5">
+                                        <a status="worktime" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
+                                    </div>
+                                </form>
+                                {% endif %}
                             </div> 
-                            <div class="mb15" style="width: calc(100% - 140px)">
+                        </div>
+                        <div class="pt5 pb10 pl15 pr15">
+                            <div class="full-w">
+                                <div class="textblue textbold text12">Сайт:</div>
                                 <span class="school_site mr5">
                                     {% if instance.site|length == 0 %}
                                         <i class="textg">—</i>
@@ -174,7 +181,7 @@
                                     {%endif%}
                                 </span>
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_site_form').show()">Изменить</a>
+                                <a class="text13" onclick="$('.school_site_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_site_form" style="width: 400px;display: none;">
                                     <div class="ui grid">
                                         <div class="twelve wide column no_padding_side">
@@ -188,52 +195,13 @@
                                 {% endif %} 
                             </div>  
                         </div>
-                    </div>
-                    <div class="backwhitelow eight wide column pt15 pb0 deskpr55">
-                        <div class="dflex">
-                            <div style="width: 140px;">
-                                <span class="textbold dinline text13 textdg "><i class="icon phone texttile"></i> Номер телефона: </span>
-                            </div> 
-                            <div class="mb15" style="width: calc(100% - 140px)">
-                                <span style="display: inline-block;" class="school_phones mr5">
-                                    {% if instance.phones|length == 0 %}
-                                        <i class="textg">—</i>
-                                    {% else %}
-                                        {%for phone in instance.phones%}
-                                            {{ phone }}
-                                            {%if instance.phones|length > forloop.counter%},{%endif%} 
-                                        {%endfor%}
-                                    {%endif%}
-                                </span>
-                                {% if is_director %}
-                                <a class="text13" onclick="$('.school_phones_form').show()">Изменить</a>
-                                <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
-                                    <div class="ui grid stackable mb0">
-                                        <div class="sixteen wide column pl0 pb0">
-                                            <span class="textdg text13">Вводите номера через запятую</span>
-                                        </div>
-                                        <div class="twelve wide column no_padding">
-                                            <textarea class="pt5 school_phones_edit no_margin" style="height: 29px; overflow: hidden;">{%for phone in instance.phones%}{{ phone }}{%if instance.phones|length > forloop.counter%},{%endif%}{%endfor%}</textarea>
-                                        </div>
-                                        <div class="four wide column pt0 pl5 pr0">
-                                            <a status="phones" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>
-                                        </div>
-                                    </div>
-                                </form>
-                                {% endif %}  
-                            </div>  
-                        </div>
-                    </div>
-                    <div class="backwhitelow eight wide column pt15 pb0">
-                        <div class="dflex">
-                            <div style="width: 150px;">
-                                <span class="textbold text13 textdg"><i class="icon users texttile"></i> Социальные сети: </span> 
-                            </div> 
-                            <div class="mb15" style="width: calc(100% - 150px)">
-                                <div style="display: inline-block;" class="school_social_list">
+                        <div class="backwhitelow pt5 pb10 pl15 pr15">
+                            <div class="full-w">
+                                <div class="textblue textbold text12">Социальные сети:</div>
+                                <div class="dinline school_social_list">
                                     {% for social in social_networks %}
-                                        <a class="ui button small pt5 pb5 white shadow_small mb10 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}">
-                                            <i class="icon {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
+                                        <a class="textbold textblue ui button small pl5 pr5 pt5 pb5 white shadow_small mb5 mr10 social_object{{forloop.counter}}" onclick="$('.social_form{{forloop.counter}}').modal('show')" id="{{forloop.counter}}">
+                                            <i class="icon mr0 {{ social.1 }}" style="color: blue;font-size: 13px;"></i>
                                             {{ social.1 }}
                                         </a>
                                         <div class="ui modal mini social_form{{ forloop.counter }}">
@@ -248,8 +216,8 @@
                                             </div>
                                         </div>                        
                                     {% endfor %}
+                                    <a class="text13" onclick="$('.social_form_new').modal('show')" style="float: right;"><i class="icon plus square blue mr0"></i> Добавить социальную сеть</a>
                                 </div>
-                                <a class="ui button mini white border1 shadow_small textblue" onclick="$('.social_form_new').modal('show')" style="padding: 7px 10px;">Добавить социальную сеть</a>
                                 <div class="ui modal mini social_form_new">
                                     <i class="close icon"></i>
                                     <div class="content">
@@ -263,13 +231,9 @@
                                 </div>
                             </div>  
                         </div>
-                    </div>
-                    <div class="eight wide column pt15 pb0 deskpr50">
-                        <div class="dflex">
-                            <div style="width: 150px;">
-                                <span class="textbold text13 textdg"><i class="icon image texttile"></i> Фотографии: </span> 
-                            </div>
-                            <div class="mb15" style="width: calc(100% - 150px)">
+                        <div class="pt10 pb15 pl15 pr15">
+                            <div class="full-w">
+                                <div class="textblue textbold text12">Фотографии</div>
                                 <div class="dinline">
                                     <div class="dflex">
                                         {% for banner in instance.banners.all %}
@@ -288,7 +252,7 @@
                                         <label class="file_post" for="school_banner">
                                             <a class="ui button mini white border1 shadow_small mr5 mt10"><i class="icon image blue"></i>Выбрать картинку</a>
                                         </label>
-                                        <input type="submit" class="mt10 ui button mini white border1 shadow_small save_banner textblue " name="" value="Добавить">
+                                        <input type="submit" class="mt10 ui button mini white border1 shadow_small save_banner textblue textbold" name="" value="Добавить">
                                     </form>
                                 </div>
                             </div>  
@@ -298,7 +262,8 @@
             </div>
             <div class="ui segment hint_place3" side="top">
                 <div class="text15 mb15 textdg">
-                    <b>Предметы школы</b>
+                    <b class="mr5">Предметы школы</b>
+                    {{instance.school_subject_categories.all|length}}
                 </div>
                 <div class="">
                     <div class="ui grid stackable school_subject_list no_margin">
@@ -348,7 +313,10 @@
                 </div>
             </div>
             <div class="ui segment">
-                <div class="text14 textdg mb5"><b>Скидки школы</b></div>
+                <div class="text14 textdg mb5">
+                    <b class="mr5">Скидки школы</b>
+                    <span>{{instance.discounts.all|length}}</span>
+                </div>
                 <div class="">
                     <div class="ui grid stackable no_margin school_discounts_list">
                         {% for discount in instance.discounts.all %}
@@ -424,7 +392,10 @@
                 </div>
             </div>
             <div class="ui segment no_margin pl15 hint_place4" side="top">
-                <div class="text14 textdg pb10"><b>Офисы:</b></div>
+                <div class="text14 textdg pb10">
+                    <b>Офисы</b>
+                    <span>{{instance.school_offices.all|length}}</span>
+                </div>
                 <div class="">
                     <div class="ui grid stackable school_office_list no_margin">
                         {% for office in instance.school_offices.all %}

@@ -885,8 +885,10 @@ def get_student_discounts(request):
     only_managers(profile)
     res = []
     name = ''
+    squad_title = ''
     if request.GET.get('squad_id') and request.GET.get('student_id'):
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
+        squad_title = squad.title
         school = squad.school
         is_in_school(profile, school)
         student = Profile.objects.get(id = int(request.GET.get('student_id')))
@@ -896,7 +898,11 @@ def get_student_discounts(request):
         discs = school.discounts.filter(nms=hisnm)
         for dis in discs:
             res.append(dis.id)
-    return JsonResponse({"res":res, "name":name,})
+    return JsonResponse({
+        "res":res, 
+        "name":name,
+        "squad_title":squad_title,
+        })
 
 def set_student_discounts(request):
     profile = get_profile(request)
@@ -909,7 +915,6 @@ def set_student_discounts(request):
         student = Profile.objects.get(id = int(request.GET.get('student_id')))
         card = student.card.get_or_create(school=school)[0]
         hisnm = card.bill_data.get(squad=squad)
-        
         this_disc = school.discounts.get(id=int(request.GET.get('id')))
         if this_disc in hisnm.discount_school.all():
             hisnm.discount_school.remove(this_disc)

@@ -1524,8 +1524,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 .ui.labeled.icon.buttons .button,
 .ui.labeled.icon.button {
   position: relative;
-  padding-left: 4.07142857em !important;
-  padding-right: 1.5em !important;
+  padding-left: 40px;
+  padding-right: 1.5em;
 }
 /* Left Labeled */
 
@@ -5629,7 +5629,6 @@ i.times.circle:before {
 i.plus:before {
   background: none !important;
   color: #5181b8 !important;
-  font-size: 20px;
 }
 i.money.bill.alternate:before{
   font-size: 30px;
@@ -13128,10 +13127,6 @@ ol.ui.horizontal.list li:before,
   -webkit-animation-duration: 1.2s;
   animation-duration: 1.2s;
 }
-.ui.loader.active,
-.ui.loader.visible {
-  display: block;
-}
 .ui.loader.disabled,
 .ui.loader.hidden {
   display: none;
@@ -18664,6 +18659,7 @@ ol.ui.horizontal.list li:before,
 .ui.vertical.menu .lftitem_crnt.item {
   border-radius: 3px;
   font-weight: 600;
+  box-shadow:  0 0 5px 0 #bdbdbd !important;
 }
 /*--------------
      Disabled

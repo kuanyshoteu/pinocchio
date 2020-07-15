@@ -49,7 +49,7 @@ $(document).ready(function () {
     async function filter_subjects(){
         obj = $('.subject_filter.green').attr('option')
         if (obj == 'all') {
-            $('.sq_office_all').show()
+            $('.catall').show()
         }
         else{
             $('.catall').hide()

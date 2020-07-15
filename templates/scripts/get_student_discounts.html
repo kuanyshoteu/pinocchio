@@ -1,0 +1,54 @@
+<div class="ui small modal student_discounts_modal">
+    <i class="close icon"></i>
+    <div class="content">
+        <div class="text-center textbold textdg text17">
+            Скидки <span class="discount_student_name textblue" id=""></span> в группе <span class="discount_group_title textblue"></span>
+        </div>
+        <div class="textbold text13 textdg text-center">
+            Нажмите на те скидки, которые нужно дать студенту
+        </div>
+        <div class="textbold text13 textdg text-center">
+            Зелеными отмечены те скидки, которые есть у студента
+        </div>
+        <div class="student_discounts_list ui grid stackable mt10 ml0 mr0 mb0">
+            {% for dis in school_crnt.discounts.all %}
+            <div class="four wide column pt0 pl0 pr5 pb5">
+                <a class="dis{{dis.id}} dis ui button small pt5 pb5 pl5 pr5 full-w show_hint_schedule" sq_id="{{instance.id}}" id="{{dis.id}}">
+                    <b>{{dis.title}}</b>
+                    <br>
+                    {{dis.amount}} 
+                    {%if dis.discount_type == 'percent' %}
+                        процентов
+                    {%else%}
+                        тенге
+                    {%endif%}
+                </a>                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    function get_student_discounts(student_id, squad_id){
+        url = $('.instance_data').attr('get_student_discounts')
+        $('.student_discounts_modal').modal('show')
+        $.ajax({
+            url: url,
+            data: {
+                'student_id':student_id,
+                'squad_id':squad_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.dis').removeClass('green')
+                for (var i = 0; i < data.res.length; i++) { 
+                    $('.dis'+data.res[i]).addClass('green')
+                }
+                $('.discount_student_name').text(data.name)
+                $('.discount_student_name').attr('id', student_id)
+                $('.discount_group_title').attr('id', squad_id)
+                $('.discount_group_title').text(data.squad_title)
+            }
+        })        
+    }
+</script>

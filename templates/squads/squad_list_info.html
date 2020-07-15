@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load ttags %}
-<div class="officefilter sq_office_all sq_office_{{sq.office.id}} online_{{sq|is_online}} ind_{{sq|is_individual}} empty_{{sq|is_no_schedule}} mb5" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}">
+<div class="officefilter sq_office_all sq_office_{{sq.office.id}} online_{{sq|is_online}} ind_{{sq|is_individual}} empty_{{sq|is_no_schedule}}" style="{%if filter_office%}{%if filter_office != sq.office %}display: none;{%endif%}{%endif%}margin-bottom: 2px">
     <a style="text-align: left;" class="no_padding ui button mini shadow_small white full-w" href="{{ sq.get_update_url }}">
         <div class="ui grid stackable no_margin group-block no_margin">
             <div class="leftbr5 pt10 pb5 wide column left-side" style="width: 50px;background-color:{%if sq.color_back%}{{sq.color_back}}{%else%}rgb(49, 58, 87){%endif%}">

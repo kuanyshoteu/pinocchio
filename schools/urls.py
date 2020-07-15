@@ -61,6 +61,9 @@ urlpatterns = [
     # payments
     url(r'^api/payment_history/', payment_history, name='payment_history'),
     url(r'^api/get_payment_list/', get_payment_list, name='get_payment_list'),
+    url(r'^api/search_for_payment/', search_for_payment, name='search_for_payment'),
+    url(r'^api/get_payment_student/', get_payment_student, name='get_payment_student'),
+    url(r'^api/get_attendance_calendar/', get_attendance_calendar, name='get_attendance_calendar'),
     # crm
     url(r'^api/change_day_of_week/$', change_day_of_week, name='change_day_of_week'),
     url(r'^api/take_url/$', take_card, name='take_url'),

@@ -14,15 +14,22 @@
                 <div class="ten wide column pl0 pt0 pb0">
                     <div class="ui segment border1 shadow_small no_padding">
                         <div class="backlightblue pt10 pr10 pb10 pl10 topbr5 shadow_dark_low">
-                            <span class="textw text14 textbold mr15">Новая рассылка</span>
-                            <a class="ui button mini white shadow_blue ">
-                                Email
-                            </a>
-<!--                             <a class="ui button mini">SMS</a>
- -->                            <div class="mt10"></div>
-                            <a class="ui button mini white  shadow_blue pt5 pb5 ">Единоразовая</a>
-<!--                             <a class="ui button mini  pt5 pb5">Авторассылка</a>
- -->                        </div>
+                            <div class="ui grid stackable no_margin">
+                                <div class="ten wide column no_padding">
+                                    <span class="textw text17 textbold mr15">Новая рассылка</span>
+                                    <a class="ui button mini white shadow_blue ">
+                                        Email
+                                    </a>
+                                    <!-- <a class="ui button mini">SMS</a> -->
+                                    <div class="mt10"></div>
+                                    <a class="ui button mini white  shadow_blue pt5 pb5 ">Единоразовая</a>
+                                    <!-- <a class="ui button mini  pt5 pb5">Авторассылка</a> -->            
+                                </div>
+                                <div class="six wide column no_padding">
+                                    <img src="{%static 'images/mail.svg'%}" style="height: 100%;float: right;">    
+                                </div>
+                            </div>
+                        </div>
                         <form class="ui form pt15 pr15 pb15 pl15">
                             <div class="dflex">
                                 <div class="text13 pt5" style="width: 95px;">Кому:</div>

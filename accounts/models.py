@@ -62,7 +62,7 @@ class Profile(models.Model):
     hint_numbers = ArrayField(models.IntegerField(), default = list)
 
     class Meta:
-        ordering = ['is_student', 'first_name']
+        ordering = ['id', 'is_student']
 
     def get_absolute_url(self):
         self.user.username = self.user.username.replace(' ', '_')

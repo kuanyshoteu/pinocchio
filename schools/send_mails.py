@@ -52,6 +52,19 @@ def send_mails(request):
         else:
             need_next_lesson = False
         today = timezone.now().date()
+        today_num = int(today.strftime('%w'))
+        today_day = Day.objects.get(number=today_num)
+        hour = timezone.now().strftime('%H')
+        minute = timezone.now().strftime('%M')
+        crnt_time = hour * 60 + minute
+        ftp = False
+        today_cells = False
+        up_times = []
+        for tp in school.time_periods.all():
+            tpa = tp.start.split(':')
+            if tpa[0]*60+tpa[1] >= crnt_time:
+                up_times.append(tp)
+        today_cells = school.school_cells.filter(time_period__in=up_times,day=today_day)
         nocard = []
         nosquad = []
         noschedule = []
@@ -79,13 +92,12 @@ def send_mails(request):
                 return JsonResponse(data)
         for mail in mails:
             if '@' in mail:
-                htext = prepare_tags(mail,text,school,today,need_next_lesson,cards)
-                print(mail, htext)
-                if htext != False:
-                    try:
-                        send_email_client(head, htext, [mail])
-                    except Exception as e:
-                        raise
+                htext = prepare_tags(mail,text,school,today,need_next_lesson,cards,today_cells)
+                # if htext != False:
+                #     try:
+                #         send_email_client(head, htext, [mail])
+                #     except Exception as e:
+                #         raise
         ok = 'yes'
     data = {
         "ok": ok,
@@ -107,7 +119,7 @@ def check_tags(mail, text, school, today, need_next_lesson, cards):
             return ['noschedule', card.name, squad.title]
     return ['ok']
 
-def prepare_tags(mail, text, school, today, need_next_lesson, cards):
+def prepare_tags(mail, text, school, today, need_next_lesson, cards, today_cells):
     card = cards.filter(mail=mail)
     name = ''
     next_lesson_date = ''
@@ -130,9 +142,11 @@ def prepare_tags(mail, text, school, today, need_next_lesson, cards):
             today_num = int(today.strftime('%w'))
             today_day = Day.objects.get(number=today_num)
             pn_day = Day.objects.get(number=1)
-            next_lecture = squad.squad_lectures.filter(day__gte=today_day)
+            next_lecture = squad.squad_lectures.filter(cell__in=today_cells)
             if len(next_lecture) == 0:
-                next_lecture = squad.squad_lectures.filter(day__gte=pn_day)
+                next_lecture = squad.squad_lectures.filter(day__gt=today_day)
+                if len(next_lecture) == 0:
+                    next_lecture = squad.squad_lectures.filter(day__gte=pn_day)
             next_lecture = next_lecture.first()
             diff = next_lecture.day.number - today_num
             if diff < 0:

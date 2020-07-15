@@ -17,27 +17,36 @@
     <div class='ui container'>
         <div class="ui grid">
             {% include 'left_menu.html' %}
-            <div class="wide column" style="width: 80%;">
+            <div class="w85 wide column">
                 <div class="ui segment shadow_small border1">
-                    <div class="dflex text14 mb15">
-                        <div class="pt5 textdg text15 textbold">Отчет по бухгалтерии</div>
-                        <div class="ml50">
-                            <a url="{{instance.show_money_history}}" class="ui button mini white shadow_small border1 show_money_history">Быстрая история</a>
-                        </div>                        
-                    </div>
-                    Выберите период времени, за который нужен отчет:
-                    <div class="dflex">
-                        <form class="ui form pt5 mb0" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
-                            <input type="date" name="first_report" style="width: 175px;height: 30px;" value="{{ weekago }}">
-                            <div class="ml15 mr15 dinline mt5">—</div>
-                            <input type="date" name="second_report" style="width: 175px;height: 30px;" value="{{ today }}">
-                            <div class="mt15 text-center">
-                                <button type="submit" name="" class="ui button mini blue shadow_blue" style="height: 29px;">
-                                    <i class="download icon" style="color: #fff"></i>
-                                    Скачать отчет
-                                </button>
+                    <div class="ui grid stackable no_margin">
+                        <div class="eight wide column no_padding">
+                            <div class="dflex text14 mb15">
+                                <div class="pt5 textdg text17 textbold">Отчет по бухгалтерии</div>
+                                <div class="ml50">
+                                    <a url="{{instance.show_money_history}}" class="ui button mini white shadow_small border1 show_money_history">Быстрая история</a>
+                                </div>                        
                             </div>
-                        </form>
+                            <div class="textdg">
+                                Выберите период времени, за который нужен отчет:
+                                <div class="dflex">
+                                    <form class="ui form pt5 mb0" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
+                                        <input type="date" name="first_report" style="width: 175px;height: 30px;" value="{{ weekago }}">
+                                        <div class="ml15 mr15 dinline mt5">—</div>
+                                        <input type="date" name="second_report" style="width: 175px;height: 30px;" value="{{ today }}">
+                                        <div class="mt15 text-center">
+                                            <button type="submit" name="" class="ui button mini blue shadow_blue" style="height: 29px;">
+                                                <i class="download icon" style="color: #fff"></i>
+                                                Скачать отчет
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center eight wide column no_padding">
+                            <img src="{% static 'images/report.svg' %}" style="height: 100%;">
+                        </div>
                     </div>
                 </div>
                 {% if instance.version == 'standart' or instance.version == 'business' %}

@@ -262,7 +262,6 @@ def get_card_form_by_column(card, column_id):
     author_id = -1
     if card.author_profile:
         author_id = card.author_profile.id
-    print(card.days_of_weeks)
     arr2 = [
         card.mail,                          # 0
         card.extra_phone,                   # 1

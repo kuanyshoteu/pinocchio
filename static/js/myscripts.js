@@ -404,8 +404,8 @@
     })
     $('.dis').click(function(e) {
         student_id = $('.discount_student_name').attr('id')
+        squad_id = $('.discount_group_title').attr('id')
         url = $('.instance_data').attr('set_student_discounts')
-        squad_id = $(this).attr('sq_id')
         this_ = $(this)
         id = this_.attr('id')
         $.ajax({
@@ -425,28 +425,6 @@
                     console.log('remove')
                     this_.removeClass('green')                    
                 }
-            }
-        })        
-    })
-    $('.get_student_discounts').click(function(e) {
-        student_id = $(this).attr('id')
-        url = $('.instance_data').attr('get_student_discounts')
-        squad_id = $(this).attr('sq_id')
-        $('.student_discounts_modal'+squad_id).modal('show')
-        $.ajax({
-            url: url,
-            data: {
-                'student_id':student_id,
-                'squad_id':squad_id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.dis').removeClass('green')
-                for (var i = 0; i < data.res.length; i++) { 
-                    $('.dis'+data.res[i]).addClass('green')
-                }
-                $('.discount_student_name').text(data.name)
-                $('.discount_student_name').attr('id', student_id)
             }
         })        
     })

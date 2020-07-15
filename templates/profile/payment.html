@@ -136,108 +136,82 @@
 </div>
 {%endif%}
 {% if is_manager and hisprofile.is_student %}
-<div class="ui segment shadow_small">
+<div class="mt15 mb5">
     <div class="text15 textdg textbold">Клиент записан в данные группы:</div>
-    <div class="dflex mt10">
-        {% for nm in profile|get_bills:hisprofile %}
-        <div class="third wide column pl0 pr10 squad_bill_block_cont{{nm.squad.id}}">
-            <div class="no_padding border1 ui segment shadow squad_bill_block{{nm.squad.id}}">
-                <div class="pt15 pl15 pb15 pr15 text-center topbr5" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
-                    <a href="{{ nm.squad.get_absolute_url }}" style="color: #fff"><b>{{ nm.squad.title }}</b></a>
-                </div>    
-                <div class="bottombr5 text13 pt15 pl15 pb15 pr15">
-                    <div class="mb5 textdg">
-                        <b>Дата записи в группу:</b> 
-                        {{nm|get_start_date}}
-                    </div>
-                    <div class="mb5 textdg">
-                        <b>Дата следующей оплаты:</b> 
-                        {{nm|get_pay_date}}
-                    </div>
-                    <div class="textdg textbold text13 text-center">Группа проходит курсы:</div>
-                    <div class="nm_subjects text14">
-                        {% for subject in nm|get_subject_finances %}
-                        <div class="full-w mb10 pt10 pl10 pr10 pb10 br5 backwhitelow">
-                            <div class="text-center textblue mb5">
-                                <b>{{subject.0}}</b>
-                            </div>
-                            <div class="dflex mb5">
-                                <div class="half-w textdg pr10" style="text-align: right;">Стоимость:</div>
-                                <div class="half-w ">{{subject.1}}</div>
-                            </div>
-                            {%if subject.3%}
-                            <div class="dflex mb5">
-                                <div class="half-w textdg pr10" style="text-align: right;">Первое занятие: </div>
-                                <div class="half-w">{{subject.3}}</div>
-                            </div>
-                            {% endif %}
-                            {% if subject.2 >= 0 %}
-                            <div class="dflex mb5">
-                                <div class="half-w textdg pr10" style="text-align: right;">Оплачено: </div>
-                                <div class="half-w">за {{subject.2}} {%if subject.5 == 'month'%}месяцев{%elif subject.5 == 'lesson'%}уроков{%endif%}</div>
-                            </div>
-                            <div class="dflex mb5">
-                                <div class="half-w textdg pr10" style="text-align: right;">Остаток: </div>
-                                <div class="half-w">{{subject.4}}тг</div>
-                            </div>
-                            {%elif subject.2 == -2 %}
-                            <div class="text-center textdg text13">
-                                Еще не было оплаты                        
-                            </div>
-                            {% endif %}
+</div>
+<div class="dflex mt0">
+    {% for nm in profile|get_bills:hisprofile %}
+    <div class="third wide column pl0 pr10 squad_bill_block_cont{{nm.squad.id}}">
+        <div class="no_padding border1 ui segment shadow_small squad_bill_block{{nm.squad.id}}">
+            <div class="pt15 pl15 pb15 pr15 text-center topbr5" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
+                <a href="{{ nm.squad.get_absolute_url }}" class="textw"><b>{{ nm.squad.title }}</b></a>
+            </div>    
+            <div class="bottombr5 text13 pt15 pl15 pb15 pr15">
+                <div class="mb5 textdg">
+                    <b>Дата записи в группу:</b> 
+                    {{nm|get_start_date}}
+                </div>
+                <div class="mb5 textdg">
+                    <b>Дата следующей оплаты:</b> 
+                    {{nm|get_pay_date}}
+                </div>
+                <div class="textdg textbold text13 text-center">Группа проходит курсы:</div>
+                <div class="nm_subjects text14">
+                    {% for subject in nm|get_subject_finances %}
+                    <div class="full-w mb10 pt10 pl10 pr10 pb10 br5 backwhitelow">
+                        <div class="text-center textblue mb5">
+                            <b>{{subject.0}}</b>
                         </div>
-                        {% endfor %}
+                        <div class="dflex mb5">
+                            <div class="half-w textdg pr10" style="text-align: right;">Стоимость:</div>
+                            <div class="half-w ">{{subject.1}}</div>
+                        </div>
+                        {%if subject.3%}
+                        <div class="dflex mb5">
+                            <div class="half-w textdg pr10" style="text-align: right;">Первое занятие: </div>
+                            <div class="half-w">{{subject.3}}</div>
+                        </div>
+                        {% endif %}
+                        {% if subject.2 >= 0 %}
+                        <div class="dflex mb5">
+                            <div class="half-w textdg pr10" style="text-align: right;">Оплачено: </div>
+                            <div class="half-w">за {{subject.2}} {%if subject.5 == 'month'%}месяцев{%elif subject.5 == 'lesson'%}уроков{%endif%}</div>
+                        </div>
+                        <div class="dflex mb5">
+                            <div class="half-w textdg pr10" style="text-align: right;">Остаток: </div>
+                            <div class="half-w">{{subject.4}}тг</div>
+                        </div>
+                        {%elif subject.2 == -2 %}
+                        <div class="text-center textdg text13">
+                            Еще не было оплаты                        
+                        </div>
+                        {% endif %}
                     </div>
-                    <div class="text14 mt15">
-                        <span style="display: none;">{{ nm.money }}</span>
-                        <b class="textdg">Итоговая стоимость посещения данной группы:</b>
-                        {% if nm.squad.lesson_bill > 0 %}
-                            <span class="textblue textbold">{{ nm.squad.lesson_bill }}тг за урок</span>
-                            <br>
-                        {% endif %}
-                        {% if nm.squad.bill > 0 %}
-                            <span class="textblue textbold">{{ nm.squad.bill }}тг в месяц</span>
-                            <br>
-                        {% endif %}
-                        <div class="mt5"></div>
-                        Оплачено за {{nm|get_closed_months}} месяцев
-                        <div class="mt5"></div>
-                        <span>{{ nm.squad|last_payment:hisprofile }}</span>
+                    {% endfor %}
+                </div>
+                <div class="text14 mt15">
+                    <span style="display: none;">{{ nm.money }}</span>
+                    <b class="textdg">Итоговая стоимость посещения данной группы:</b>
+                    {% if nm.squad.lesson_bill > 0 %}
+                        <span class="textblue textbold">{{ nm.squad.lesson_bill }}тг за урок</span>
                         <br>
-                        <i>(*подробнее в "Истории оплаты" сверху)</i>
-                        <a class="ui button mini full-w mt5 get_student_discounts" sq_id="{{nm.squad.id}}" id="{{hisprofile.id}}">Скидки</a>
-                        <div class="ui mini modal student_discounts_modal{{nm.squad.id}}">
-                            <i class="close icon"></i>
-                            <div class="content">
-                                <b class="text-center">
-                                    Скидки <span class="discount_student_name" id=""></span> в группе {{nm.squad.title}}
-                                </b>
-                                <br>
-                                Нажмите на те скидки, которые нужно дать студенту
-                                <br>
-                                Зелеными отмечены те скидки, которые есть у студента
-                                <div class="mt15 student_discounts_list">
-                                    {% for dis in nm.squad.school.discounts.all %}
-                                    <a class="dis{{dis.id}} mb5 dis ui button mini show_hint_schedule" sq_id="{{nm.squad.id}}" id="{{dis.id}}">
-                                        <b>{{dis.title}}</b>
-                                        <br>
-                                        {{dis.amount}} 
-                                        {%if dis.discount_type == 'percent' %}
-                                            процентов
-                                        {%else%}
-                                            тенге
-                                        {%endif%}
-                                    </a> 
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>    
-            </div>
+                    {% endif %}
+                    {% if nm.squad.bill > 0 %}
+                        <span class="textblue textbold">{{ nm.squad.bill }}тг в месяц</span>
+                        <br>
+                    {% endif %}
+                    <div class="mt5"></div>
+                    Оплачено за {{nm|get_closed_months}} месяцев
+                    <div class="mt5"></div>
+                    <span>{{ nm.squad|last_payment:hisprofile }}</span>
+                    <br>
+                    <i>(*подробнее в "Истории оплаты" сверху)</i>
+                    <a class="ui button mini full-w mt5" onclick="get_student_discounts('{{hisprofile.id}}', '{{nm.squad.id}}')">Скидки</a>
+                </div>
+            </div>    
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 </div>
 {%endif%}
 <span style="display: none;" pay_url="{% url 'accounts:make_payment' %}" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>

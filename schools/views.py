@@ -14,7 +14,7 @@ from .forms import SchoolForm
 from .models import *
 from subjects.models import *
 from squads.models import Squad,PaymentHistory,SquadHistory,DiscountSchool
-from subjects.templatetags.ttags import get_date, get_pay_date,constant_school_lectures
+from subjects.templatetags.ttags import get_date, get_pay_date,constant_school_lectures, material_number_by_date
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail, update_payment_notices
 from papers.models import *
 from library.models import Folder
@@ -258,6 +258,7 @@ def school_info(request):
         "school_crnt":school,
         "today":timezone.now().date().strftime('%Y-%m-%d'),
         "weekago":(timezone.now().date() - timedelta(7)).strftime('%Y-%m-%d'),
+        "all_students_len":len(school.people.filter(is_student=True, squads__in=school.groups.filter(shown=True)).exclude(card=None).exclude(squads=None).distinct()),
         "managers":managers,
         "teachers":teachers,
         "voronka_array":voronka,
@@ -267,6 +268,7 @@ def school_info(request):
         "number_of_all":number_of_all,
         "social_networks":get_social_networks(school),
         "page":"info",
+        "info_data":"info_data",
         "hint":profile.hint_numbers[0],
     }
     return render(request, "school/info.html", context)
@@ -2535,26 +2537,8 @@ def get_payment_list(request):
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
         cards = school.crm_cards.select_related('card_user')
-        squad = profile.filter_data.squad
-        squads = school.groups.filter(shown=True).prefetch_related('students')
+        students, squads = payment_get_students_list(profile, school)
         all_students_len = len(school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct())
-        if squad != None:
-            squads = school.groups.filter(id = squad.id)
-        else:
-            if profile.filter_data.office:
-                squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
-        if profile.filter_data.subject_category:
-            subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
-            squads = squads.filter(subjects__in=subjects)
-        students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
-        if profile.filter_data.payment != 'all':
-            firstofmonth = first_day_of_month()
-            lastofmonth = last_day_of_month(firstofmonth)
-            payments = school.payment_history.filter(squad__in=squads,timestamp__gte=firstofmonth, timestamp__lte=lastofmonth)
-            if profile.filter_data.payment == 'paid':
-                students = students.filter(payment_history__in=payments).distinct()
-            if profile.filter_data.payment == 'not_paid':
-                students = students.exclude(payment_history__in=payments).distinct()
         crnt_students_len = len(students)
         if len(students) <= (page-1)*16:
             return JsonResponse({"ended":True})
@@ -2563,40 +2547,14 @@ def get_payment_list(request):
         res = []
         today = timezone.now().date()
         bill_day_diff = school.bill_day_diff
+        squad = profile.filter_data.squad
         for student in page1.object_list:
             card = cards.filter(card_user=student)[0]
-            sq_res = []
             if squad == None:
                 squads2 = squads.filter(students=student)
             else:
                 squads2 = squads
-            notices = 0
-            for sq in squads2:
-                nm = sq.bill_data.filter(card=card)
-                pay_date = '-'
-                pay_date_input = '-'
-                pd = ''
-                lesson_pay_notice = False
-                month_pay_notice = False
-                if len(nm) > 0:
-                    nm = nm.last()
-                    pay_date_input = nm.pay_date.strftime("%Y-%m-%d")
-                    pay_date = nm.pay_date.strftime("%d %B %Y")
-                    if nm.pay_date <= today + timedelta(bill_day_diff):
-                        month_pay_notice = True
-                        notices += 1
-                    if len(sq.subjects.filter(cost_period='lesson')) > 0:
-                        if nm.money < 2 * sq.lesson_bill:
-                            lesson_pay_notice = True
-                sq_res.append([
-                    sq.id, 
-                    sq.title, 
-                    sq.color_back, 
-                    pay_date_input,
-                    pay_date,
-                    month_pay_notice,
-                    lesson_pay_notice,
-                    ])
+            sq_res, notices = payment_student_collect(squads2, card, today, bill_day_diff)
             res.append([
                 student.id,
                 student.first_name,
@@ -2608,6 +2566,111 @@ def get_payment_list(request):
         "res":res,
         "crnt_students_len":crnt_students_len,
         "all_students_len":all_students_len,
+    }
+    return JsonResponse(data)
+
+def payment_get_students_list(profile, school):
+    squad = profile.filter_data.squad
+    squads = school.groups.filter(shown=True).prefetch_related('students')
+    if squad != None:
+        squads = school.groups.filter(id = squad.id)
+    else:
+        if profile.filter_data.office:
+            squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
+    if profile.filter_data.subject_category:
+        subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
+        squads = squads.filter(subjects__in=subjects).distinct()
+    students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
+    if profile.filter_data.payment != 'all':
+        firstofmonth = first_day_of_month()
+        lastofmonth = last_day_of_month(firstofmonth)
+        payments = school.payment_history.filter(squad__in=squads,timestamp__gte=firstofmonth, timestamp__lte=lastofmonth)
+        if profile.filter_data.payment == 'paid':
+            students = students.filter(payment_history__in=payments).distinct()
+        if profile.filter_data.payment == 'not_paid':
+            students = students.exclude(payment_history__in=payments).distinct()
+    return students, squads
+
+def payment_student_collect(squads2, card, today, bill_day_diff):
+    notices = 0
+    sq_res = []
+    for sq in squads2:
+        nm = sq.bill_data.filter(card=card)
+        pay_date = '-'
+        pay_date_input = '-'
+        pd = ''
+        lesson_pay_notice = False
+        month_pay_notice = False
+        discount_res = ''
+        if len(nm) > 0:
+            nm = nm.last()
+            pay_date_input = nm.pay_date.strftime("%Y-%m-%d")
+            pay_date = nm.pay_date.strftime("%d %B %Y")
+            if nm.pay_date <= today + timedelta(bill_day_diff):
+                month_pay_notice = True
+                notices += 1
+            if len(sq.subjects.filter(cost_period='lesson')) > 0:
+                if nm.money < 2 * sq.lesson_bill:
+                    lesson_pay_notice = True
+            if len(nm.discount_school.all()) > 0:
+                discount = nm.discount_school.first()
+                discount_res = str(discount.amount)
+                if discount.discount_type == 'percent':
+                    discount_res += '%'
+                else:
+                    discount_res += 'тг'
+        lectures = sq.squad_lectures.all()
+        days = Day.objects.filter(lectures__in=lectures).distinct()
+        days_res = ''
+        for day in days:
+            days_res += str(day.number) + ','
+        sq_res.append([
+            sq.id,              #0
+            sq.title,           #1
+            sq.color_back,      #2
+            pay_date_input,     #3
+            pay_date,           #4
+            month_pay_notice,   #5
+            lesson_pay_notice,  #6
+            days_res,           #7
+            discount_res,       #8
+            ])
+    return sq_res, notices
+
+def get_payment_student(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    ok = False
+    if request.GET.get('id'):
+        school = is_moderator_school(request, profile)
+        student = school.people.filter(is_student=True, id=int(request.GET.get('id')))
+        if len(student) == 0:
+            return JsonResponse({'ok':ok})
+        student = student[0]
+        if len(student.squads.all()) == 0:
+            return JsonResponse({'ok':True, 'nosquad':True})
+        card = school.crm_cards.filter(card_user=student)
+        if len(card) == 0:
+            return JsonResponse({'ok':ok})
+        card = card[0]
+        squads2 = school.groups.filter(students=student,shown=True)
+        today = timezone.now().date()
+        sq_res, notices = payment_student_collect(squads2, card, today, school.bill_day_diff)
+        res.append([
+            student.id,
+            student.first_name,
+            student.get_absolute_url(),
+            sq_res,
+            notices,
+            ])
+        ok = True
+        students = payment_get_students_list(profile, school)[0]
+        number = len(students.filter(id__lt=student.id)) + 1
+    data = {
+        "ok":ok,
+        "res":res,
+        "number":number,
     }
     return JsonResponse(data)
 
@@ -2697,3 +2760,125 @@ def update_crm_notices(school):
         number_of_manager = len(all_cards.filter(color='red', author_profile = manager))
         fd.crm_notices = number_of_free + number_of_manager
         fd.save()
+
+def search_for_payment(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    res_squads = []
+    res_subject_categories = []
+    if request.GET.get('text'):
+        school = is_moderator_school(request, profile)
+        similarity=TrigramSimilarity('first_name', request.GET.get('text'))
+        kef = 1
+        if len(request.GET.get('text')) > 4:
+            kef = 4
+        students = school.people.filter(is_student=True).annotate(similarity=similarity).filter(similarity__gt=0.05*kef).order_by('-similarity')
+        i = 0
+        for student in students:
+            res.append([student.id, student.first_name])
+            i+=1
+            if i == 5:
+                break
+        if i < 5:
+            similarity=TrigramSimilarity('phone', request.GET.get('text'))
+            kef = 1
+            if len(request.GET.get('text')) > 4:
+                kef = 4
+            students = school.people.filter(is_student=True).annotate(similarity=similarity).filter(similarity__gt=0.05*kef).order_by('-similarity')
+            i = 0
+            for student in students:
+                res.append([student.id, student.first_name])
+                i+=1
+                if i == 5:
+                    break
+            if i < 5:
+                similarity=TrigramSimilarity('mail', request.GET.get('text'))
+                kef = 1
+                if len(request.GET.get('text')) > 4:
+                    kef = 4
+                students = school.people.filter(is_student=True).annotate(similarity=similarity).filter(similarity__gt=0.05*kef).order_by('-similarity')
+                i = 0
+                for student in students:
+                    res.append([student.id, student.first_name])
+                    i+=1
+                    if i == 5:
+                        break
+                if i < 5:
+                    similarity=TrigramSimilarity('mail', request.GET.get('text'))
+                    kef = 1
+                    if len(request.GET.get('text')) > 4:
+                        kef = 4
+                    students = school.people.filter(is_student=True).annotate(similarity=similarity).filter(similarity__gt=0.05*kef).order_by('-similarity')
+                    i = 0
+                    for student in students:
+                        res.append([student.id, student.first_name])
+                        i+=1
+                        if i == 5:
+                            break
+
+    data = {
+        'res':res,
+    }
+    return JsonResponse(data)
+
+def get_attendance_calendar(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    res = []
+    ok = False
+    if request.GET.get('squad') and request.GET.get('student'):
+        school = is_moderator_school(request, profile)
+        student = school.people.filter(is_student=True, id=int(request.GET.get('student')))
+        if len(student) == 0:
+            return JsonResponse({'ok':ok})
+        student = student[0]
+        squad = school.groups.filter(shown=True,id=int(request.GET.get('squad')))
+        if len(squad) == 0:
+            return JsonResponse({'ok':ok})
+        squad = squad[0]
+        alldays = Day.objects.all()
+        dates = get_crnt_month(squad)
+        # print(dates)
+        for subject in squad.subjects.all():
+            res_subject = []
+            subject_materials = subject.materials.all()
+            subject_materials_len = len(subject_materials)
+            for date in dates:
+                mrl_nmb = material_number_by_date(date, squad, subject, alldays, None)
+                if mrl_nmb > subject_materials_len:
+                    break
+                sm = list(subject_materials)[mrl_nmb-1]
+                att = sm.sm_atts.filter(student=student,squad=squad)
+                if len(att) > 0:
+                    att = att[0]
+                    print(date, att.present, att.id, att.subject_materials.id)
+                    res_subject.append(att.present)
+            res.append([subject.title, res_subject])
+        ok = True
+    data = {
+        "res":res,
+        "ok":ok,
+    }
+    return JsonResponse(data)
+
+def get_crnt_month(sq):
+    lectures = sq.squad_lectures.all()
+    days = Day.objects.filter(lectures__in=lectures).distinct()
+    ds = []
+    for day in days:
+        ds.append(day.number)
+    today = timezone.now().date()    
+    crnt_mnth = today.strftime('%m')
+    crnt_year = today.strftime('%Y') 
+    firstofmonth = first_day_of_month()
+    lastofmonth = last_day_of_month(firstofmonth)
+    dates = []
+    i0 = firstofmonth - timedelta(int(firstofmonth.strftime('%w')) - 1)
+    week_count = 0
+    while i0 < lastofmonth:
+        for d in ds:
+            i1 = i0 + timedelta(d - 1)
+            dates.append(i1)
+        i0 += timedelta(7)
+    return dates

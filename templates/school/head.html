@@ -1,35 +1,62 @@
 {% load staticfiles %}
 <div class="ui segment mt0">
-    <div class="group-name hint_place2" side="bottom">
-        <span class="ui header ava-title school_title"><a class="textblue" href="{{instance.landing}}">{{ instance.title }}</a></span>
-        {% if is_director %}
-        <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
-        <form class="ui form no_margin school_title_form" style="width: 400px;display: none;">
-            <div class="ui grid">
-                <div class="twelve wide column no_padding_side">
-                    <textarea class="school_title_edit no_margin">{{ instance.title }}</textarea>
-                </div>
-                <div class="four wide column">
-                    <a status="title" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
-                </div>
+    <div class="ui grid stackable no_margin">
+        <div class="ten wide column no_padding">
+            <div class="group-name hint_place2" side="bottom">
+                <span class="ui header ava-title school_title"><a class="textblue" href="{{instance.landing}}">{{ instance.title }}</a></span>
+                {% if is_director %}
+                <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
+                <form class="ui form no_margin school_title_form" style="width: 400px;display: none;">
+                    <div class="ui grid">
+                        <div class="twelve wide column no_padding_side">
+                            <textarea class="school_title_edit no_margin">{{ instance.title }}</textarea>
+                        </div>
+                        <div class="four wide column">
+                            <a status="title" class="save_school_title ui button mini blue" id="{{ instance.id }}" url="{{ instance.change_title_url }}">Сохранить</a>      
+                        </div>
+                    </div>
+                </form>
+                {% endif %}
             </div>
-        </form>
+            <div class="mt15 mb10 pt5">
+                <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}">
+                    Общие 
+                </a>
+                <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
+                    Сотрудники
+                </a>
+                {% if is_moderator %}
+                <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
+                    Социальные сети
+                </a>
+                {% endif %}
+                <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
+                    Подключение сайта
+                </a>
+            </div>
+        </div>
+        {% if info_data == 'info_data' %}
+        <div class="six wide column no_padding">
+            <div class="textw br5 pt10">
+                <div class="dflex text-center" style="float: right;">
+                    <div class="pl10 pt10 pr10 pb10 leftbr5" style="background-color: #49a1eb;opacity: 0.9;">
+                        Курсов: <b>{{instance.school_subjects.all|length}}</b>
+                        <br>
+                        Групп: <b>{{instance.groups.all|length}}</b>
+                    </div>
+                    <div class="pl10 pt10 pr10 pb10" style="background-color: #49a1eb;opacity: 0.9;">
+                        Учителей: <b>{{teachers|length}}</b>
+                        <br>
+                        Менеджеров: <b>{{managers|length}}</b>
+                    </div>
+                    <div class="pl10 pt10 pr10 pb10 rightbr5" style="background-color: #49a1eb;opacity: 0.9;">
+                        Карточек: <b>{{instance.crm_cards.all|length}}</b>
+                        <br>
+                        Студентов в группах: <b>{{all_students_len}}</b>
+                    </div>
+                </div>
+            </div>            
+        </div>
         {% endif %}
-    </div>
-    <div class="mt15 mb10 pt5">
-        <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}">
-            Общие 
-        </a>
-        <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
-            Сотрудники
-        </a>
-        {% if is_moderator %}
-        <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
-            Социальные сети
-        </a>
-        {% endif %}
-        <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
-            Подключение сайта
-        </a>
     </div>
 </div>

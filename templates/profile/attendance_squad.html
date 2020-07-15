@@ -34,27 +34,13 @@
                             {{ date.1 }}
 						</div>
 						{% for attendance in date.0 %}
+						
 							{% if date.2 != 'future' %}
 							<div class="attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
 								{% if date.2 == 'now' %}
 							    <div id="grades{{ attendance.id }}" style="{% if attendance.present != 'present' %}display: none;{% endif %};">
-							    	{% if attendance.student.is_student %}
-							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 5 %}blue{% endif %}" id="{{attendance.id}}" grade="5">5</a>
-							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 4 %}blue{% endif %}" id="{{attendance.id}}" grade="4">4</a>
-							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 3 %}blue{% endif %}" id="{{attendance.id}}" grade="3">3</a>
-							        <a class="ui button mini grade{{attendance.id}} save_grade {% if attendance.grade == 2 %}blue{% endif %}" id="{{attendance.id}}" grade="2">2</a>
-							        {%else%}
-							        <div class="pl15 pt15 pr15 pb15 attendace_grade" style="background-color: #21BA45;">
-							        	<i class="icon check text10 textw mr0"></i>
-							        </div>
-							        {%endif%}
 							    </div>
 							    <div id="attendance{{ attendance.id }}" style="{% if attendance.present != '' %}display: none;{% endif %}">
-							        <div class="text-center">
-								        <a status="present" class="ui button mini blue att_present" id="{{attendance.id}}">На уроке</a>
-								        <a status="warned" class="ui button mini orange att_present mr0" id="{{attendance.id}}"><i class="icon clock textw mr0"></i></a>
-								        <a status="absent" class="mr0 ui button mini red att_present" id="{{attendance.id}}"><i class="icon close textw mr0"></i></a>
-								    </div>
 							    </div>
 							    {%endif%}
 								<div class="pl15 pt15 pr15 pb15 attendace_grade attresult{{ attendance.id }}" style="{%if date.2 == 'now' and attendance.present == 'present' or date.2 == 'now' and attendance.present == '' %}display: none;{%endif%}

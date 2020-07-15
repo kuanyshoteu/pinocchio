@@ -193,37 +193,13 @@
                                     <i class="icon check circle green studenticon{{ student.id }}"></i>
                                     <a class="ui button mini blue add_student add_student{{ student.id }}" id="{{ student.id }}" onclick="add_student('{{ student.id }}')" style="float: right;padding: 2px 10px;height: 23px;">-</a>
                                     <br>
-                                    <a class="ui button mini min-width full-w mt5 get_student_discounts" sq_id="{{instance.id}}" id="{{student.id}}" style="padding: 3px;">Скидки</a>
+                                    <a class="ui button mini min-width full-w mt5 get_student_discounts" onclick="get_student_discounts('{{student.id}}', '{{instance.id}}')" style="padding: 3px;">
+                                        Скидки
+                                    </a>
                                 </div>
 							</div>
 	                    </div>
 						{% endfor %}
-                        <div class="ui mini modal student_discounts_modal{{instance.id}}">
-                            <i class="close icon"></i>
-                            <div class="content">
-                                <b class="text-center">
-                                    Скидки <span class="discount_student_name" id=""></span> в группе {{instance.title}}
-                                </b>
-                                <br>
-                                Нажмите на те скидки, которые нужно дать студенту
-                                <br>
-                                Зелеными отмечены те скидки, которые есть у студента
-                                <div class="mt15 student_discounts_list">
-                                    {% for dis in instance.school.discounts.all %}
-                                    <a class="dis{{dis.id}} dis ui button mini show_hint_schedule" sq_id="{{instance.id}}" id="{{dis.id}}">
-                                        <b>{{dis.title}}</b>
-                                        <br>
-                                        {{dis.amount}} 
-                                        {%if dis.discount_type == 'percent' %}
-                                            процентов
-                                        {%else%}
-                                            тенге
-                                        {%endif%}
-                                    </a> 
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="ui segment backblue" style="height: 630px;">
@@ -292,6 +268,7 @@
 <span class="data" hint_type="4" last_hint="2" hint="{{hint}}"></span>
 {% include 'hints/squad_hints.html' %}
 {% include 'hints/get_hint_script.html' %}
+{% include 'scripts/get_student_discounts.html' %}
 <script type="text/javascript">
     function add_student(student_id) {
         url = $('.instance_data').attr('add_student_url')
