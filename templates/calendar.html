@@ -1,49 +1,35 @@
 <script type="text/javascript">
 !function() {
-
   var today = moment();
-
   function Calendar(selector, events) {
     this.el = document.querySelector(selector);
     this.events = events;
     this.current = moment().date(1);
     this.draw();
   }
-
   Calendar.prototype.draw = function() {
-    //Create Header
     this.drawHeader();
-
-    //Draw Month
     this.drawMonth();
-
   }
-
   Calendar.prototype.drawHeader = function() {
     var self = this;
     if(!this.header) {
       //Create the header elements
       this.header = createElement('div', 'headerr');
       this.header.className = 'headerr';
-
       this.title = createElement('h1');
-
       var right = createElement('div', 'rightt');
       right.addEventListener('click', function() { self.nextMonth(); });
-
       var left = createElement('div', 'leftt');
       left.addEventListener('click', function() { self.prevMonth(); });
-
       //Append the Elements
       this.header.appendChild(this.title); 
       this.header.appendChild(right);
       this.header.appendChild(left);
       this.el.appendChild(this.header);
     }
-
     this.title.innerHTML = this.current.format('MMMM YYYY');
   }
-
   Calendar.prototype.drawMonth = function() {
     var self = this;
     this.events.forEach(function(ev) {
@@ -72,7 +58,6 @@
         this.month.className = 'month new';
     }
   }
-
   Calendar.prototype.backFill = function() {
     var clone = this.current.clone();
     var dayOfWeek = clone.day();
@@ -82,7 +67,6 @@
       this.drawDay(clone.add('days', 1));
     }
   }
-
   Calendar.prototype.fowardFill = function() {
     var clone = this.current.clone().add('months', 1);
     var dayOfWeek = clone.day();
@@ -91,7 +75,6 @@
       this.drawDay(clone.add('days', 1));
     }
   }
-
   Calendar.prototype.currentMonth = function() {
     var clone = this.current.clone();
     while(clone.month() === this.current.month()) {
@@ -99,14 +82,12 @@
       this.drawDay(clone);
     }
   }
-
   Calendar.prototype.getWeek = function(day) {
     if(!this.week || day.day() === 1) {
       this.week = createElement('div', 'week');
       this.month.appendChild(this.week);
     }
   }
-
   Calendar.prototype.drawDay = function(day) {
     var self = this;
     this.getWeek(day);
@@ -129,7 +110,6 @@
     number.appendChild(icons);
     this.week.appendChild(outer);
   }
-
   Calendar.prototype.getDayClass = function(day) {
     classes = ['day'];
     if(day.month() !== this.current.month()) {
@@ -139,7 +119,6 @@
     }
     return classes.join(' ');
   }
-
   Calendar.prototype.openDay = function(el) {
     date = el.getAttribute('date');
     url = $('.miss_lecture_url').attr('url')
@@ -163,11 +142,13 @@
     this.current.add('months', 1);
     this.next = true;
     this.draw();
+    move_calendar('next')
   }
   Calendar.prototype.prevMonth = function() {
     this.current.subtract('months', 1);
     this.next = false;
     this.draw();
+    move_calendar('prev')
   }
   window.Calendar = Calendar;
   function createElement(tagName, className, innerText) {
@@ -186,7 +167,7 @@
   ];
   function addDate(ev) { 
   }
-  var calendar = new Calendar('#calendar', data);
+  
 }();
 </script>
 <style type="text/css">
@@ -197,14 +178,13 @@
     -webkit-transform: translate3d(0, 0, 0);
     -moz-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
-    width: 420px;
+    width: 455px;
     margin: 0 auto;
-    height: 300px;
     overflow: hidden;
   }
   .headerr {
     height: 50px;
-    width: 420px;
+    width: 455px;
     background: rgba(66, 66, 66, 1);
     text-align: center;
     position:relative;
@@ -278,16 +258,19 @@
     background: #4A4A4A;
     position: relative;
     z-index: 100;
-    padding: 2px 0;
+    padding: 2px 0 5px 0;
+    margin: 5px 3px 0px 2px;
   }
   .day-icon{
     height: 11px;
     line-height: 7px;
   }
   .cday{
-    border: 2px solid #5181b8;
+    box-shadow: 0 0 5px 0 #252525 !important;
     display: inline-block;
+    background-color: #5c5c5c;
     width: 60px;
+    border-radius: 3px;
     text-align: center;
     vertical-align: top;
     cursor: pointer;

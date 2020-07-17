@@ -2533,6 +2533,7 @@ def get_payment_list(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
     res = []
+    today = timezone.now().date()
     if request.GET.get('page'):
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
@@ -2545,7 +2546,6 @@ def get_payment_list(request):
         p = Paginator(students, 16)
         page1 = p.page(page)
         res = []
-        today = timezone.now().date()
         bill_day_diff = school.bill_day_diff
         squad = profile.filter_data.squad
         for student in page1.object_list:
@@ -2566,6 +2566,7 @@ def get_payment_list(request):
         "res":res,
         "crnt_students_len":crnt_students_len,
         "all_students_len":all_students_len,
+        "today":today,
     }
     return JsonResponse(data)
 
@@ -2582,7 +2583,7 @@ def payment_get_students_list(profile, school):
         squads = squads.filter(subjects__in=subjects).distinct()
     students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
     if profile.filter_data.payment != 'all':
-        firstofmonth = first_day_of_month()
+        firstofmonth = first_day_of_month(timezone.now().date())
         lastofmonth = last_day_of_month(firstofmonth)
         payments = school.payment_history.filter(squad__in=squads,timestamp__gte=firstofmonth, timestamp__lte=lastofmonth)
         if profile.filter_data.payment == 'paid':
@@ -2634,6 +2635,7 @@ def payment_student_collect(squads2, card, today, bill_day_diff):
             lesson_pay_notice,  #6
             days_res,           #7
             discount_res,       #8
+            sq.get_update_url(),
             ])
     return sq_res, notices
 
@@ -2677,10 +2679,9 @@ def get_payment_student(request):
 def last_day_of_month(any_day):
     next_month = any_day.replace(day=28) + timedelta(days=4)
     return next_month - timedelta(days=next_month.day)
-def first_day_of_month():
-    today = timezone.now().date()
-    crnt_mnth = today.strftime('%m')
-    crnt_year = today.strftime('%Y')
+def first_day_of_month(day):
+    crnt_mnth = day.strftime('%m')
+    crnt_year = day.strftime('%Y')
     firstofmonth = datetime.datetime.strptime('01-'+crnt_mnth+'-'+crnt_year,'%d-%m-%Y').date()
     return firstofmonth
 
@@ -2827,7 +2828,8 @@ def get_attendance_calendar(request):
     only_managers(profile)
     res = []
     ok = False
-    if request.GET.get('squad') and request.GET.get('student'):
+    if request.GET.get('squad') and request.GET.get('student') and request.GET.get('getday'):
+        getday = datetime.datetime.strptime(request.GET.get('getday'), "%Yz%mz%d").date()
         school = is_moderator_school(request, profile)
         student = school.people.filter(is_student=True, id=int(request.GET.get('student')))
         if len(student) == 0:
@@ -2838,8 +2840,7 @@ def get_attendance_calendar(request):
             return JsonResponse({'ok':ok})
         squad = squad[0]
         alldays = Day.objects.all()
-        dates = get_crnt_month(squad)
-        # print(dates)
+        dates = get_crnt_month(squad, getday)
         for subject in squad.subjects.all():
             res_subject = []
             subject_materials = subject.materials.all()
@@ -2852,8 +2853,7 @@ def get_attendance_calendar(request):
                 att = sm.sm_atts.filter(student=student,squad=squad)
                 if len(att) > 0:
                     att = att[0]
-                    print(date, att.present, att.id, att.subject_materials.id)
-                    res_subject.append(att.present)
+                    res_subject.append([date, att.present])
             res.append([subject.title, res_subject])
         ok = True
     data = {
@@ -2862,16 +2862,16 @@ def get_attendance_calendar(request):
     }
     return JsonResponse(data)
 
-def get_crnt_month(sq):
+def get_crnt_month(sq, getday):
     lectures = sq.squad_lectures.all()
     days = Day.objects.filter(lectures__in=lectures).distinct()
     ds = []
     for day in days:
         ds.append(day.number)
-    today = timezone.now().date()    
-    crnt_mnth = today.strftime('%m')
-    crnt_year = today.strftime('%Y') 
-    firstofmonth = first_day_of_month()
+    today = timezone.now().date()
+    crnt_mnth = getday.strftime('%m')
+    crnt_year = getday.strftime('%Y') 
+    firstofmonth = first_day_of_month(getday)
     lastofmonth = last_day_of_month(firstofmonth)
     dates = []
     i0 = firstofmonth - timedelta(int(firstofmonth.strftime('%w')) - 1)
@@ -2879,6 +2879,10 @@ def get_crnt_month(sq):
     while i0 < lastofmonth:
         for d in ds:
             i1 = i0 + timedelta(d - 1)
+            if today < i1:
+                break
             dates.append(i1)
+        if today < i1:
+            break
         i0 += timedelta(7)
     return dates
