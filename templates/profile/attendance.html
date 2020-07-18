@@ -18,13 +18,13 @@
         <div class="ui stackable grid no_margin pt5 pb5 pl10 pr10">
             <div class="four wide column pr10 pl0 pt0 pb0">
                 <div class="shadow_small br5">
-                    <div class="backlightblue text14 pt5 pb5 topbr5 text-center textw textbold">
+                    <div class="border1 backwhitelow text14 pt5 pb5 topbr5 text-center textdg textbold">
                         Группы
                         <i style="display: none;" class="icon search textw"></i>
                     </div>
                     <div class="squad_list" style="overflow-y: scroll;overflow-x: hidden;height: 440px;">
                     {% for squad in hissquads %}
-                        <a onclick="load_attendance_squad('{{ squad.id }}')" class="full-w ui button border1 small no_padding load_attendance_squad dflexx {% if squad.id == att_squad.id %}shadow_small{%else%}white{% endif %}" id="squad{{ squad.id }}" style="text-align: left;">
+                        <a onclick="load_attendance_squad('{{ squad.id }}')" class="full-w ui button small no_padding load_attendance_squad dflexx {% if squad.id == att_squad.id %}shadow_small backyellow{%else%}white{% endif %}" id="squad{{ squad.id }}" style="text-align: left;">
                             <div class="pt5 pb5 wide column left-side" style="width: 20px;background-color:{%if squad.color_back%}{{squad.color_back}}{%else%}rgb(49, 58, 87){%endif%}">
                                 <div class="text-center full-w textw text13 textbold pt5">
                                     {{squad|students_number}}
@@ -168,12 +168,11 @@ style="display: none;"></span>
                 'squad_id':squad_id,
             },
             success: function (data) {
-                console.log('yoyoyoyo')
                 $('.more_attendance_url').attr('squad_id', squad_id)
-                $('.load_attendance_squad').removeClass('shadow_blue textblue')
-                $('.load_attendance_squad').addClass('white border1')
-                $('#squad' + squad_id).removeClass('white border1')
-                $('#squad' + squad_id).addClass('shadow_blue textblue')
+                $('.load_attendance_squad').removeClass('shadow_small backyellow')
+                $('.load_attendance_squad').addClass('white')
+                $('#squad' + squad_id).removeClass('white')
+                $('#squad' + squad_id).addClass('shadow_small backyellow')
                 $( "#subject_attendance_cont" ).load(document.URL +  ' #subject_attendance');
             }, 
             error: function (error) {
