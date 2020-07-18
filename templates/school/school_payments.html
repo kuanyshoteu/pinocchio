@@ -32,8 +32,10 @@
                     <div class="pt15 pb30 textw subject_reports">
                         <div class="textbold">По предметам:</div>
                     </div>
-                    <div class="payment_subject_report_orig textw" style="display: none;">
-                        <span class="textyellow payment_subject"></span> 
+                    <div class="dflexx mb5 payment_subject_report_orig textw" style="display: none;">
+                        <div class="textyellow dinline">
+                            <span style="width: 160px;" class="textdots payment_subject"></span>
+                        </div> 
                     </div>
                 </div>
                 <div class="pl15 pt15 pr15 pb15 mb10">
@@ -76,7 +78,7 @@
                                 <div class="controls"> 
                                     <select class="text15 crm_option" id="crm_squad_mobile" url="{{ instance.crm_option_url }}" option="group"> 
                                         {% if profile.filter_data.squad %}
-                                            <option value="{{ filter_data.squad.id }}">{{ profile.filter_data.squad.title }}</option>
+                                            <option value="{{ profile.filter_data.squad.id }}">{{ profile.filter_data.squad.title }}</option>
                                         {% endif %}
                                         <option value="-1">Все группы</option>
                                         {% for squad in squads %}
@@ -445,6 +447,7 @@
     }
     $('.crm_option').on('change', function(e) {
         $('.get_payment_load').show()
+        $('.show_search_students').empty()        
         $('.payments_box').empty()
         id = $(this).attr('id')
         this_ = document.getElementById(id);
@@ -593,6 +596,12 @@
             div.removeClass('pmnt_st'+id)
             div.appendTo('.payment_search_res')
             number = parseInt(div.find('.student_counter').text())
+            if (number % 2 == 1) {
+                $('.payment_search_res').addClass('backwhite')
+            }
+            else{
+                $('.payment_search_res').removeClass('backwhite')
+            }
         }
         else{
             $.ajax({
@@ -614,12 +623,6 @@
                     }
                 }
             })
-        }
-        if (number % 2 == 1) {
-            $('.payment_search_res').addClass('backwhite')
-        }
-        else{
-            $('.payment_search_res').removeClass('backwhite')
         }
     }
 </script>

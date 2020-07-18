@@ -2840,8 +2840,8 @@ def get_attendance_calendar(request):
             return JsonResponse({'ok':ok})
         squad = squad[0]
         alldays = Day.objects.all()
-        dates = get_crnt_month(squad, getday)
         for subject in squad.subjects.all():
+            dates = get_crnt_month(squad,subject, getday)
             res_subject = []
             subject_materials = subject.materials.all()
             subject_materials_len = len(subject_materials)
@@ -2853,7 +2853,10 @@ def get_attendance_calendar(request):
                 att = sm.sm_atts.filter(student=student,squad=squad)
                 if len(att) > 0:
                     att = att[0]
+                    print(date, att.present, att.id, subject.title)
                     res_subject.append([date, att.present])
+                else:
+                    res_subject.append([date, ''])
             res.append([subject.title, res_subject])
         ok = True
     data = {
@@ -2862,8 +2865,8 @@ def get_attendance_calendar(request):
     }
     return JsonResponse(data)
 
-def get_crnt_month(sq, getday):
-    lectures = sq.squad_lectures.all()
+def get_crnt_month(squad, subject, getday):
+    lectures = subject.subject_lectures.filter(squad = squad)  
     days = Day.objects.filter(lectures__in=lectures).distinct()
     ds = []
     for day in days:

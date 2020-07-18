@@ -194,7 +194,7 @@ class Attendance(models.Model):
     squad = models.ForeignKey(Squad,null=True, on_delete = models.CASCADE, related_name='squad_attendances')
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
-        ordering = ['subject_materials', 'squad', 'student']
+        ordering = ['subject_materials', 'student', 'squad']
     def change_url(self):
         return reverse("accounts:change_att_url")
     def present_url(self):

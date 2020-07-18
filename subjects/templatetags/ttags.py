@@ -240,10 +240,7 @@ def check_date(material, squad):
         return 'past'
 
 def material_number_by_date(date, squad, subject, alldays, profile):
-    if profile == None:
-        lectures = squad.squad_lectures.filter(subject = subject)
-    else:
-        lectures = subject.subject_lectures.filter(squad = squad)        
+    lectures = subject.subject_lectures.filter(squad = squad)        
     num_of_lectures = len(lectures)
     if num_of_lectures > 0:
         delta = (date - squad.start_date).days
@@ -270,7 +267,7 @@ def material_number_by_date(date, squad, subject, alldays, profile):
             day = alldays.get(number=int(i))
             extra += len(lectures.filter(day=day))
         material_number = num_of_lectures * number_of_weeks + extra
-        return material_number   
+        return material_number
     return -1 
 
 @register.filter
