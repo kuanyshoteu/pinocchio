@@ -24,16 +24,16 @@
     <div class="ui container">
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="w85 wide column mlback"> 
+            <div class="w85 wide column"> 
                 <div class="ui tab active" id="detailed_info">
-                    <div class="ui segment shadow_small">
-                        <span class="text17 textdg textbold mr50">
+                    <div class="ui segment shadow_small no_padding">
+                        <div class="text21 textdg textbold dinline mr50 pb15 pl15 pt15 pr15">
                             {% if folder %}
                                 Папка <b>{{ folder.title }}</b>
                             {% else %}
-                                Уроки
+                                Ваша база уроков
                             {% endif %}
-                        </span>
+                        </div>
                         {% if is_trener or is_director %}
                         <div class="dinline">
                             {% if cache.full %}
@@ -50,32 +50,28 @@
                             Создать урок
                             </a>
                         </div> 
-                        {% endif %}    
-                        {% if hisschools|length > 1 %}
-                        <div class="mt15">
-                            {% for school in hisschools %}
-                                <a href="{{ school.get_school_library }}" class="{% if school.id == current_school_id %}current_option{% else %}other_option{% endif %}">{{ school.title }}</a>
-                            {% endfor %}
-                        </div>
                         {% endif %}
-                        <div class="mt15">
-                            <div class="highliter" style="position: absolute;margin-left: -25px;margin-top: -120px;"></div>
-                            <div id="papers" class="ui grid stackable" style="margin: 0">
-                            <div class="hint41 hint61 highliter" style="position: absolute;margin-left: -210px;margin-top: -20px;"></div>
-                            {% for lesson in lessons %}
-                                {% if not root or lesson.folder.all|length == 0 %}
-                                    {% include "library/lesson_file.html" %}
-                                {% endif %}
-                            {% endfor %}
+                        <div class="ui grid stackable no_margin">
+                            <div class="backwhitelow br5 mt15 four wide column pl0 pt0 pb0 pr10">
+                                {% for folder in folders %}
+                                    <a style="display: block;" class="full-w pl10 pr10 pt5 pb5 text14 text-left" href="{{ folder.get_absolute_url }}">
+                                        <i class="icon folder"></i>
+                                      <span id="folder_title{{ folder.id }}">{{ folder.title }}</span>
+                                    </a>
+                                {% endfor %}
                             </div>
-                        </div>
-                        <div class="mt15">
-                            <div id="folders" class="ui grid stackable" style="margin: 0">
-                            {% for folder in folders %}
-                                {% if not root or not folder.parent %}
-                                    {% include "library/folder_file.html" %}
-                                {% endif %}
-                            {% endfor %}
+                            <div class="twelve wide column no_padding">
+                                <div class="mt15">
+                                    <div class="highliter" style="position: absolute;margin-left: -25px;margin-top: -120px;"></div>
+                                    <div id="papers" class="ui grid stackable" style="margin: 0">
+                                    <div class="hint41 hint61 highliter" style="position: absolute;margin-left: -210px;margin-top: -20px;"></div>
+                                    {% for lesson in lessons %}
+                                        {% if not root or lesson.folder.all|length == 0 %}
+                                            {% include "library/lesson_file.html" %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

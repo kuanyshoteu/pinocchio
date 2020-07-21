@@ -1,0 +1,23 @@
+<script type="text/javascript">
+    $(".delete_folder").click(function (event) {
+        var this_ = $(this);
+        var pageUrl = this_.attr("data-href")
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if(data.deleted){
+                        $('#all_folder' + this_.attr('id')).hide('fast');
+                    }
+                    else{
+                        $('.folder_features' + this_.attr('id')).hide('fast')
+                    }
+                }
+            });  
+        }
+    })
+</script>

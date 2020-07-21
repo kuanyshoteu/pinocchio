@@ -1,6 +1,6 @@
 {% load ttttags %}
 <div class="attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
-    <div class="pl15 pt15 pr15 pb15 attendace_grade attresult{{ attendance.id }}" style="{%if date.2 == 'now' and attendance.present == 'present' or date.2 == 'now' and attendance.present == '' %}display: none;{%endif%}
+    <div class="pl15 pt15 pr15 pb15 attendace_grade attresult{{ attendance.id }}" style="
     background-color: 
     {%if attendance.present == 'present'%}
     #21BA45

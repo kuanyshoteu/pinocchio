@@ -380,28 +380,6 @@ $(document).ready(function(){
         $('.lesson_features').hide();
         event.stopPropagation();
     })
-    $(".delete_folder").click(function (event) {
-        event.preventDefault();
-        var this_ = $(this);
-        var pageUrl = this_.attr("data-href")
-        if (pageUrl) {
-            $.ajax({
-                url: pageUrl,
-                data: {
-                    'id':this_.attr("id"),
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if(data.deleted){
-                        $('#all_folder' + this_.attr('id')).hide('fast');                        
-                    }
-                    else{
-                        $('.folder_features' + this_.attr('id')).hide('fast')
-                    }
-                }
-            });  
-        }
-    })
 })
 
 
