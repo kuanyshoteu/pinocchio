@@ -1,0 +1,87 @@
+<script type="text/javascript">
+    function get_workers_list(page){
+        $('.get_payment_load').show()
+        $('.scrollable').attr('scroll', 'no')
+        $.ajax({
+            url: "{%url 'schools:get_workers_list'%}",
+            data: {
+                'page':page,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.data').attr('today', data.today)
+                $('.get_payment_load').hide()
+                if (data.ended) {
+                    $('.scrollable').attr('scroll', 'no')
+                    if (parseInt(page) > 0) {
+                        $('.ended').show()
+                    }
+                }
+                else{
+                    last_one = parseInt($('.data').attr('last_one'))
+                    $('.data').attr('last_one', last_one + data.res.length)
+                    fill_payment_student(data, '.payments_box')
+                    $('.scrollable').attr('scroll', 'yes')
+                    $('.payments_box').attr('page', parseInt(page)+1)
+                }
+                $('.all_students_len').text(data.all_students_len)
+                $('.crnt_students_len').text(data.crnt_students_len)                
+            }
+        })        
+    }
+    function sal_add_worker(prof_id, job_id){
+        $('.sal_add_worker_form').modal('show')
+        $('.add_worker_school').attr('prof_id', prof_id)
+        $('.add_worker_school').attr('job_id', job_id)
+        $('.new_passowrd_place').empty()
+        $('.new_sal_worker_name').val('');
+        $('.new_sal_worker_phone').val('');
+        $('.new_sal_worker_mail').val('');        
+    }
+    $('.add_worker_school').click(function(e) {
+        url = $(this).attr('url');
+        $('.success_worker_school').hide()
+        prof_id =  $(this).attr('prof_id')
+        job_id =  $(this).attr('job_id')
+        name = $('.new_sal_worker_name').val();
+        phone = $('.new_sal_worker_phone').val();
+        mail = $('.new_sal_worker_mail').val();
+        if (name == '' || phone == '') {
+            $('.not_success_created_worker').show()
+        }
+        else{
+            $('.add_worker_school').addClass('disabled')
+            $('.add_worker_school_load').show()
+            $.ajax({
+                url: url,
+                data: {
+                    'name':name,
+                    'phone':phone,
+                    'mail':mail,
+                    'prof_id':prof_id,
+                    'job_id':job_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.add_worker_school_load').hide()
+                    $('.add_worker_school').removeClass('disabled')
+                    if (data.ok) {
+                        $('.success_worker_school').show()
+                        $('.new_passowrd_place').html('Пароль аккаунта ' + name + ': ' + data.password + '<div class="textred textbold">Не забудьте записать пароль</div>')
+                        new_worker = $('.worker_orig').clone()
+                        new_worker.removeClass('worker_orig')
+                        new_worker.attr('ondragstart', "save_worker_id('"+data.id+"')")
+                        new_worker.attr('id', 'worker'+data.id)
+                        new_worker.attr('job_id', job_id)
+                        new_worker.find('.sch_worker_name').text(name)
+                        new_worker.find('.sch_worker_name').attr('href', data.url)
+                        new_worker.appendTo('.jobbox'+job_id)
+                    }
+                    else{
+                        $('.not_success_created_worker').show()
+                    }
+                }
+            })
+        }
+    })    
+</script>

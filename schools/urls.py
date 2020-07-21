@@ -57,7 +57,8 @@ urlpatterns = [
     url(r'^api/add_job/$', add_job, name='add_job'),
     url(r'^api/delete_job/$', delete_job, name='delete_job'),
     url(r'^api/salary_url/$', save_salary, name='salary_url'),
-    url(r'^api/save_job_salary/$', save_job_salary, name='save_job_salary'),    
+    url(r'^api/save_job_salary/$', save_job_salary, name='save_job_salary'), 
+    url(r'^api/get_workers_list/$', get_workers_list, name='get_workers_list'),   
     # payments
     url(r'^api/payment_history/', payment_history, name='payment_history'),
     url(r'^api/get_payment_list/', get_payment_list, name='get_payment_list'),

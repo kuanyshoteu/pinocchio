@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load ttags %}
-
+{% block head_title %}
+    Курс | {{ block.super }}
+{% endblock head_title %}
 {% block head_extra %} 
 	{{ form.media }}
 {% endblock head_extra %}

@@ -18660,6 +18660,7 @@ ol.ui.horizontal.list li:before,
   border-radius: 3px;
   font-weight: 600;
   box-shadow:  0 0 5px 0 #bdbdbd !important;
+  background-color: #fff;
 }
 /*--------------
      Disabled

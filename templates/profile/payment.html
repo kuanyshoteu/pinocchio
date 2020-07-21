@@ -1,6 +1,6 @@
 {% load ttags %}
 {% if is_manager %}
-<div class="ui segment shadow_small">
+<div class="ui segment shadow_small mb0">
 {%endif%}
 {% if is_manager and hisprofile.is_student %}
     <div class="text17 textdg textbold">Оплата</div>
@@ -139,21 +139,21 @@
 <div class="mt15 mb5">
     <div class="text15 textdg textbold">Клиент записан в данные группы:</div>
 </div>
-<div class="dflex mt0">
+<div class="ui grid no_margin">
     {% for nm in profile|get_bills:hisprofile %}
-    <div class="third wide column pl0 pr10 squad_bill_block_cont{{nm.squad.id}}">
+    <div class="third wide column pt0 pl0 pr10 squad_bill_block_cont{{nm.squad.id}}">
         <div class="no_padding border1 ui segment shadow_small squad_bill_block{{nm.squad.id}}">
             <div class="pt15 pl15 pb15 pr15 text-center topbr5" style="background-color: {%if nm.squad.color_back == '' %}#313a57{%else%}{{nm.squad.color_back}}{%endif%};">
                 <a href="{{ nm.squad.get_absolute_url }}" class="textw"><b>{{ nm.squad.title }}</b></a>
             </div>    
             <div class="bottombr5 text13 pt15 pl15 pb15 pr15">
                 <div class="mb5 textdg">
-                    <b>Дата записи в группу:</b> 
-                    {{nm|get_start_date}}
+                    <span>Дата записи в группу:</span> 
+                    <span class="textblue textbold">{{nm|get_start_date}}</span>
                 </div>
                 <div class="mb5 textdg">
-                    <b>Дата следующей оплаты:</b> 
-                    {{nm|get_pay_date}}
+                    <span>Дата следующей оплаты:</span> 
+                    <span class="textblue textbold">{{nm|get_pay_date}}</span>
                 </div>
                 <div class="textdg textbold text13 text-center">Группа проходит курсы:</div>
                 <div class="nm_subjects text14">

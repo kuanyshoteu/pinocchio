@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+{% block head_title %}
+    Документы | {{ block.super }}
+{% endblock head_title %}
 {% block content %}
-
-{% block head_extra %}
-{{ form.media }}
-{{ comment_form.media }}
-{% endblock head_extra %}
+    {% block head_extra %}
+        {{ form.media }}
+        {{ comment_form.media }}
+    {% endblock head_extra %}
 <div id="profile" class="">
     {% if this_folder %}
         {% if this_folder.parent %}

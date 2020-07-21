@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-
+{% block head_title %}
+    Группа | {{ block.super }}
+{% endblock head_title %}
 {% block head_extra %} 
 	{{ form.media }}
 {% endblock head_extra %}

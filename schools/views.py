@@ -282,6 +282,10 @@ def school_salaries(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
+    manager_prof = Profession.objects.get(title='Manager')
+    managers = school.people.filter(profession=manager_prof)
+    teacher_prof = Profession.objects.get(title='Teacher')
+    teachers = school.people.filter(profession=teacher_prof)
     context = {
         "profile":profile,
         "instance": school,
@@ -292,6 +296,8 @@ def school_salaries(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
+        "teachers":teachers,
+        "managers":managers,
         "page":"info",        
     }
     return render(request, "school/salaries.html", context)
@@ -2853,7 +2859,6 @@ def get_attendance_calendar(request):
                 att = sm.sm_atts.filter(student=student,squad=squad)
                 if len(att) > 0:
                     att = att[0]
-                    print(date, att.present, att.id, subject.title)
                     res_subject.append([date, att.present])
                 else:
                     res_subject.append([date, ''])
@@ -2889,3 +2894,6 @@ def get_crnt_month(squad, subject, getday):
             break
         i0 += timedelta(7)
     return dates
+
+def get_workers_list(request):
+    pass

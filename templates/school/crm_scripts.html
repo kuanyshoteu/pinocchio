@@ -899,12 +899,12 @@
     })
     function send_login_cl(){
         id = 'edit'
-        var name = $('.card_name' + id).val()
-        var phone = $('.card_phone' + id).val()
-        var extra_phone = $('.card_phone_extra' + id).val()
-        var mail = $('.card_mail_' + id).val()
-        var parents = $('.card_parents' + id).val()
-        var comment = $('.card_comment' + id).text()
+        var name = $('.card_nameedit').val()
+        var phone = $('.card_phoneedit').val()
+        var extra_phone = $('.card_phone_extraedit').val()
+        var parents = $('.card_parentsedit').val()
+        var comment = $('.card_commentedit').text()
+        var birthday = $('.card_birthday').val()
         this_ = $(this)
         ok = false
         if (mail.length > 0) {
@@ -931,7 +931,8 @@
                     'mail':mail,
                     'comment':comment,
                     'id':id,
-                    'parents':parents
+                    'parents':parents,
+                    'birthday':birthday,
                 },
                 dataType: 'json',
                 success: function (data) {
