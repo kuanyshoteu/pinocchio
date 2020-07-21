@@ -19,14 +19,14 @@
                 <a class="ui button small white shadow_small open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
                     <span class="is_homework text14 textblue">{{ forloop.counter }} урок</span>
                 </a>
-                <div class="pl10 pb15 pr10 br5 backdark" style="display: none;margin-top: 2px;height: calc(100% - 34px);" id="time_lessons{{ material.id }}"> 
+                <div class="pl10 pb15 pr10 br5 backwhitelow" style="display: none;margin-top: 2px;height: calc(100% - 34px);" id="time_lessons{{ material.id }}"> 
                     {% if material.lessons.all|length == 0 %}
-                        <div class="pt15 textg" id="pusto{{ material.id }}">Пока нет материалов</div>
+                        <div class="pt15 textdg" id="pusto{{ material.id }}">Пока нет материалов</div>
                     {% endif %}
                     <div id="lesson_list{{ material.id }}">
                         {% for lesson in material.lessons.all %}
                         <div class="pt15" id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
-                            <a href="{{ lesson.get_absolute_url }}" class="textw text14">
+                            <a href="{{ lesson.get_absolute_url }}" class="textblue text14">
                                 <b>{{ lesson.title }}</b>
                             </a>
                             {% if lesson.is_homework %}
@@ -36,20 +36,19 @@
                             <a style="float: right;" class="ui button mini red pt5 pb5 pl5 pr5 remove_lesson_from_subject" url="{{ material.remove_lesson }}" material_id="{{ material.id }}" lesson_id="{{ lesson.id }}">Убрать</a>
                             {% endif %}
                         </div>
-                        <div class="ui divider" style="margin-bottom: 0"></div>
                         {% endfor %}
                     </div>
                     {% if is_trener or is_director %}
-                    <a class="day_window ui button mini white pt5 pb5 mt15 full-w" id="{{ material.id }}" onclick="$('#materials').modal('show')">Добавить урок</a>
+                    <a class="day_window ui button small pt5 pb5 textblue shadow_small border1 white pt5 pb5 mt15 full-w" id="{{ material.id }}" onclick="$('#materials').modal('show')">Добавить урок</a>
                     {% endif %}
                 </div>
                 {% if profile.is_student %}
-                <div style="background-color: #333333;height: 20px;border-radius: 0 0 7px 7px;padding: 0 5px 5px;">
+                <div class="backwhitelow" style="height: 20px;border-radius: 0 0 7px 7px;padding: 0 5px 5px;">
                     {% for lesson in material.lessons.all %}
                         {% if profile in lesson.done_by.all %}
-                            <i class="icon star" style="margin: 0 -3px 0 0;font-size: 11px;color: yellow !important;"></i>
+                            <i class="icon star textgreen" style="margin: 0 -3px 0 0;font-size: 11px;"></i>
                         {% else %}
-                            <i class="icon star outline" style="margin: 0 -3px 0 0;font-size: 11px;color: white"></i>
+                            <i class="icon star outline textdg" style="margin: 0 -3px 0 0;font-size: 11px;"></i>
                         {% endif%}
                     {% endfor %}
                 </div>

@@ -10,7 +10,7 @@
 			        <a href="{{student.get_absolute_url}}" class="textw">{{ student.first_name }}</a>
 			        {% if not student.is_student %}
 			        <br>
-			        <span style="color: yellow;">Учитель</span>
+			        <span class="textyellow">Учитель</span>
 			        {% endif %}
 			    </div>
 			{% endfor %}
@@ -34,7 +34,6 @@
                             {{ date.1 }}
 						</div>
 						{% for attendance in date.0 %}
-						
 							{% if date.2 != 'future' %}
 							<div class="attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
 								{% if date.2 == 'now' %}

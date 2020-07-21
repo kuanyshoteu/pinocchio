@@ -134,7 +134,7 @@
 }
 .sign_change_page{
   display: block;
-  background-color: #d7d7d7;
+  background-color: #c5c5c5;
   color: #7e7e7e;
   font-size: 13px;
   font-weight: 600;
@@ -222,16 +222,16 @@
   border-radius: 0 15px 15px 0;
 }
 .shadow{
-  box-shadow: 0 0 15px 0 #d7d7d7 !important;
+  box-shadow: 0 0 15px 0 #c5c5c5 !important;
 }
 .shadow_small{
-  box-shadow: 0 0 5px 0 #d7d7d7 !important;
+  box-shadow: 0 0 5px 0 #c5c5c5 !important;
 }
 .shadow_inset{
-  box-shadow: inset 0 0 8px 0 #d7d7d7 !important;
+  box-shadow: inset 0 0 8px 0 #c5c5c5 !important;
 }
 .shadow_small_top{
-  box-shadow: 0 5px 5px 0 #d7d7d7 !important;
+  box-shadow: 0 5px 5px 0 #c5c5c5 !important;
 }
 .shadow_red{
   box-shadow: 0 0 5px 0 #6d1414 !important;
@@ -496,12 +496,12 @@ table{
 }
 .btn_select{
   cursor: pointer;
-  box-shadow: 0 2px 2px 0 #d7d7d7;
+  box-shadow: 0 2px 2px 0 #c5c5c5;
   transition: box-shadow 400ms ease;
   -webkit-transition: box-shadow 400ms ease;
 }
 .btn_select:hover{
-  box-shadow: 0 15px 15px 0 #d7d7d7;
+  box-shadow: 0 15px 15px 0 #c5c5c5;
 }
 .show_free_cards{
   margin-top: 5px;

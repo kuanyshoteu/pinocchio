@@ -9,7 +9,7 @@
         </div>
         <div class="thirteen wide column pl0 pr0">
             <span class="br5 orange mr0" style="padding: 1px 3px !important;background-color: #F2711C"><i class="icon clock text11 textw no_margin"></i></span> - Предупредил(а), что не придет 
-            <span class="br5 red mr0 mt5" style="padding: 1px 3px !important;background-color: #DB2828"><i class="icon close text11 textw no_margin"></i></span> - Отсутсвие без предупреждения 
+            <span class="br5 red mr0 mt5" style="padding: 1px 3px !important;background-color: #DB2828"><i class="icon close text11 textw no_margin"></i></span> - Отсутствие без предупреждения 
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
                         Группы
                         <i style="display: none;" class="icon search textw"></i>
                     </div>
-                    <div class="squad_list" style="overflow-y: scroll;overflow-x: hidden;height: 440px;">
+                    <div class="squad_list" style="overflow-y: scroll;overflow-x: hidden;max-height: 440px;">
                     {% for squad in hissquads %}
                         <a onclick="load_attendance_squad('{{ squad.id }}')" class="full-w ui button small no_padding load_attendance_squad dflexx {% if squad.id == att_squad.id %}shadow_small backyellow{%else%}white{% endif %}" id="squad{{ squad.id }}" style="text-align: left;">
                             <div class="pt5 pb5 wide column left-side" style="width: 20px;background-color:{%if squad.color_back%}{{squad.color_back}}{%else%}rgb(49, 58, 87){%endif%}">
@@ -45,15 +45,9 @@
             <div id="subject_attendance_cont" class="twelve wide column no_padding squad_attendance_b">
                 <div id="subject_attendance">
                     <div class="ui grid stackable no_margin">
-                        {% if is_this_trener or is_manager %}
                         {% for subject in att_squad.subjects.all %}
-                            <a onclick="load_attendance_subject('{{ subject.id }}')" class="subjectv ui button small switch_btn mb5 pt5 pb5 {% if subject.id == att_subject.id %}blue shadow_blue{%else%}white shadow_small{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);overflow: hidden; white-space: nowrap;text-overflow: ellipsis;">{{ subject.title }}</a>
+                            <a onclick="load_attendance_subject('{{ subject.id }}')" class="subjectv ui button small switch_btn mr10 mb5 pt5 pb5 border1 textbold {% if subject.id == att_subject.id %}blue shadow_blue{%else%}white shadow_small{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ att_squad.subjects.all|length }}) - 20px);overflow: hidden; white-space: nowrap;text-overflow: ellipsis;">{{ subject.title }}</a>
                         {% endfor %}
-                        {%else%}
-                        {% for subject in hissubjects %}
-                            <a onclick="load_attendance_subject('{{ subject.id }}')" class="ui button small switch_btn {% if subject.id == att_subject.id %}blue{%else%}white border1{% endif %}" id="subject{{ subject.id }}" style="width: calc(100%/({{ hissubjects|length }}) - 3.5px);">{{ subject.title }}</a>
-                        {% endfor %}
-                        {%endif%}    
                     </div>
                     {% if is_this_trener or is_manager %}
                     <div id="" class="hint_place2" side="top">
