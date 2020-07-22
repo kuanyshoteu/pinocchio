@@ -24,53 +24,74 @@
     <div class="ui container">
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="w85 wide column"> 
+            <div class="w85 wide column mlback"> 
                 <div class="ui tab active" id="detailed_info">
                     <div class="ui segment shadow_small no_padding">
-                        <div class="text21 textdg textbold dinline mr50 pb15 pl15 pt15 pr15">
-                            {% if folder %}
-                                Папка <b>{{ folder.title }}</b>
-                            {% else %}
-                                Ваша база уроков
+                        <div class="backwhitelow">
+                            <div class="text21 textdg textbold dinline mr50 pb15 pl15 pt15 pr15">
+                                {% if folder %}
+                                    <b>{{ folder.title }}</b>
+                                {% else %}
+                                    Ваша база уроков
+                                {% endif %}
+                            </div>
+                            {% if is_trener or is_director %}
+                            <div class="dinline ">
+                                {% if cache.full %}
+                                <a class="ui button mini blue pastee" data-href='{% url "library:paste_object_url" %}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}' school="{{current_school_id}}">Вставить</a>
+                                {% else %}
+                                <a class="ui button mini disabled">Вставить</a>
+                                {% endif %}                      
+                                <div class="hint43 hint63 highliter" style="position: absolute;margin-top: 15px;right: 70px;"></div>
+                                <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{% url "library:create_folder_url" %}' >
+                                Создать папку
+                                </a>
+                                <div class="hint40 hint60 highliter" style="position: absolute;margin-top: 15px;right: -30px"></div>
+                                <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href="{% url 'papers:create_lesson_url' %}">
+                                Создать урок
+                                </a>
+                            </div> 
                             {% endif %}
                         </div>
-                        {% if is_trener or is_director %}
-                        <div class="dinline">
-                            {% if cache.full %}
-                            <a class="ui button mini blue pastee" data-href='{% url "library:paste_object_url" %}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}' school="{{current_school_id}}">Вставить</a>
-                            {% else %}
-                            <a class="ui button mini disabled">Вставить</a>
-                            {% endif %}                      
-                            <div class="hint43 hint63 highliter" style="position: absolute;margin-top: 15px;right: 70px;"></div>
-                            <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{% url "library:create_folder_url" %}' >
-                            Создать папку
-                            </a>
-                            <div class="hint40 hint60 highliter" style="position: absolute;margin-top: 15px;right: -30px"></div>
-                            <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href="{% url 'papers:create_lesson_url' %}">
-                            Создать урок
-                            </a>
-                        </div> 
-                        {% endif %}
                         <div class="ui grid stackable no_margin">
-                            <div class="backwhitelow br5 mt15 four wide column pl0 pt0 pb0 pr10">
-                                {% for folder in folders %}
-                                    <a style="display: block;" class="full-w pl10 pr10 pt5 pb5 text14 text-left" href="{{ folder.get_absolute_url }}">
+                            <div class="four wide column pl0 pt15 pb20 pr10" style="border-right: 1.5px solid #e3e3e3">
+                                <a style="display: block;" class="full-w pl10 pr10 pb10 text14 text-left" href="{{folder.school.get_school_library}}">
+                                    <span class="textbold mr5" id="folder_title-1">Главная</span>
+                                    <span class="textg">{{folder.lesson_list.all|length}}</span>
+                                </a>
+                                {% for cfolder in folders %}
+                                <div class="dflex" id="all_folder{{cfolder.id}}">
+                                    {% if cfolder != folder.parent %}
+                                    <a style="display: block;" class="full-w pl10 pr10 pb10 text14 text-left" href="{{ cfolder.get_absolute_url }}">
                                         <i class="icon folder"></i>
-                                      <span id="folder_title{{ folder.id }}">{{ folder.title }}</span>
+                                      <span class="textbold mr5" id="folder_title{{ cfolder.id }}">{{ cfolder.title }}</span>
+                                      <span class="textg">{{cfolder.lesson_list.all|length}}</span>
                                     </a>
+                                    <a id="{{ cfolder.id }}" class="open_folder_features"><i class="ui icon ellipsis horizontal"></i></a>
+                                    <form class="mb0 pl10 pr10 ui form rename_folder_form rename_form{{ cfolder.id }}" style="display: none;position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+                                        <textarea class="mb0" style="height: 60px;" id='change_folder_name{{ cfolder.id }}' type="text">{{ cfolder.title }}</textarea>
+                                        <a class="full-w ui button mini blue change_folder_name" id="{{ cfolder.id }}" data-href='{{ cfolder.change_name_url }}'>Сохранить</a>
+                                    </form>                     
+                                    <div class="backdark ui segment folder_features folder_features{{ cfolder.id }}" style="display: none;">
+                                          <a  class="textw rename_folder" id="{{ cfolder.id }}"><i class="icon pencil alternate textw "></i> Переименовать</a>
+                                          <div class="ui divider"></div>
+                                          <a  class="textw file_action" object_type='folder' action='copy' data-href='{% url "library:file_action_url" %}' id="{{ cfolder.id }}" parent='{% if cfolder.parent %}{{cfolder.parent.id}}{%else%}-1{% endif %}'><i class=" textw icon copy outline"></i> Копировать</a>
+                                          <div class="ui divider"></div>
+                                          <a  class="textw file_action" object_type='folder' action='cut' data-href='{% url "library:file_action_url" %}' id="{{ cfolder.id }}" parent='{% if cfolder.parent %}{{cfolder.parent.id}}{%else%}-1{% endif %}'><i class=" textw icon cut"></i> Вырезать</a>
+                                          <div class="ui divider"></div>
+                                          <a class="textw delete_folder" id="{{ cfolder.id }}" data-href='{{ cfolder.delete_folder_url }}'><i class="trash alternate icon textw"></i> Удалить</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
                                 {% endfor %}
                             </div>
-                            <div class="twelve wide column no_padding">
-                                <div class="mt15">
-                                    <div class="highliter" style="position: absolute;margin-left: -25px;margin-top: -120px;"></div>
-                                    <div id="papers" class="ui grid stackable" style="margin: 0">
-                                    <div class="hint41 hint61 highliter" style="position: absolute;margin-left: -210px;margin-top: -20px;"></div>
-                                    {% for lesson in lessons %}
-                                        {% if not root or lesson.folder.all|length == 0 %}
-                                            {% include "library/lesson_file.html" %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </div>
+                            <div class="twelve wide column pl0 pr0 pb0 pt5">
+                                <div id="papers" class="">
+                                {% for lesson in lessons %}
+                                    {% if not root or lesson.folder.all|length == 0 %}
+                                        {% include "library/lesson_file.html" %}
+                                    {% endif %}
+                                {% endfor %}
                                 </div>
                             </div>
                         </div>

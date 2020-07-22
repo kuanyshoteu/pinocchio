@@ -271,13 +271,9 @@ $(document).ready(function(){
                     img.setAttribute('style', 'height: 50px; -webkit-filter: opacity(.5); filter: opacity(.5);')
                 } 
                 if (action == 'copy'){
-                    img = document.getElementById(this_.attr("object_type") + '_image' + this_.attr('id'));
-                    img.setAttribute('style', 'height: 50px; -webkit-filter: opacity(1); filter: opacity(1);')
                 } 
                 features = document.getElementsByClassName(this_.attr("object_type") + '_features' + this_.attr('id'))[0]
-                
                 features.setAttribute('style', 'position: absolute; z-index: 3000; display: none; margin: 30px 0 0 30px;')
-                console.log('www')
             }
         });  
     });
@@ -286,6 +282,23 @@ $(document).ready(function(){
 
 
 $(document).ready(function(){
+    $(".delete_folder").click(function (event) {
+        var this_ = $(this);
+        var pageUrl = this_.attr("data-href")
+        console.log(pageUrl, this_.attr("id"))
+        if (pageUrl) {
+            $.ajax({
+                url: pageUrl,
+                data: {
+                    'id':this_.attr("id"),
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('#all_folder' + this_.attr('id')).hide('fast');                        
+                }
+            });  
+        }
+    })
     $(".create_folder").click(function () {
         var this_ = $(this)
         var pageUrl = this_.attr("data-href")

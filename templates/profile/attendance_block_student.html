@@ -16,4 +16,12 @@
             <b>{{attendance.grade}}</b>
         {%endif%}
     </div>
+    <div>
+        {{attendance.subject_materials.id}}
+        {% for lesson in attendance.subject_materials.lessons.all %}
+        <div>
+            <a class="full-w textw">{{lesson.title}}</a>
+        </div>
+        {%endfor%}
+    </div>
 </div>
