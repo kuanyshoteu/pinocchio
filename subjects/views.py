@@ -66,9 +66,12 @@ def subject_detail(request, slug=None):
 
 def subject_list(request):
     profile = get_profile(request)
-    only_staff(profile)
     school = is_moderator_school(request, profile)
-    subjects = school.school_subjects.all()
+    if not profile.is_student:
+        subjects = school.school_subjects.all()
+    else:
+        squads = profile.squads.all()
+        subjects = school.school_subjects.filter(squads__in=squads).distinct()
     context = {
         "profile": profile,
         "subjects":subjects,

@@ -1408,6 +1408,12 @@ a{
   padding: 5px 3px 1px 3px;
   text-align: center;
 }
+.student_attendance_block{
+  width: 100%;
+  min-height: 50px;
+  padding: 5px 3px 1px 3px;
+  text-align: center;
+}
 .attendance_date{
   height: 21px;line-height: 21px; padding-left: 2px;
   text-align: center;

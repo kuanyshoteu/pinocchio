@@ -72,7 +72,7 @@
     </div>   
 </div>
 <span class="wait" status="no" style="display: none;"></span>
-<span class="more_attendance_url" url="{% url 'accounts:more_attendance' %}" subject_id="{{att_subject.id}}" squad_id="{{att_squad.id}}" ></span>
+<span class="more_attendance_url" mkm='mm' url="{% url 'accounts:more_attendance' %}" subject_id="{{att_subject.id}}" squad_id="{{att_squad.id}}" ></span>
 <span class="att_urls" 
     squad_attendance="{% url 'accounts:squad_attendance' %}" 
     subject_attendance="{% url 'accounts:subject_attendance' %}" 
@@ -230,6 +230,7 @@ style="display: none;"></span>
         loading()
         $('.wait').attr('status', 'yes')
         var url = $('.more_attendance_url').attr('url')
+        console.log('cncncnc', url)
         var subject_id = $('.subjectv.blue').attr('id').replace('subject', '')
         var squad_id = $('.more_attendance_url').attr('squad_id')
         sm = document.getElementsByClassName('attendance_date')
@@ -244,6 +245,7 @@ style="display: none;"></span>
                 'sm_id':first_sm,
             },
             success: function (data) {
+                console.log('7777', data)
                 if (data.stopleft == false){
                     $('#slider').attr('index', index)
                     $("#section" + (-prevNumber)).attr('style', '')
@@ -431,7 +433,6 @@ style="display: none;"></span>
         var length = document.getElementsByClassName('slider__section').length
         var first_set = $('#slider').attr('first_set')
         prevNumber = parseInt($('.last_att').attr('number')) - 4
-
         action = false;
         console.log('length',$('.att' + prevNumber).length)
         if ($('.wait').attr('status') == 'no') {

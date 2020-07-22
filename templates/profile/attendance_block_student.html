@@ -1,5 +1,5 @@
 {% load ttttags %}
-<div class="attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
+<div class="student_attendance_block" style="{% if forloop.counter|is_odd %}background-color: #545454{%endif%}">
     <div class="pl15 pt15 pr15 pb15 attendace_grade attresult{{ attendance.id }}" style="
     background-color: 
     {%if attendance.present == 'present'%}
@@ -16,11 +16,10 @@
             <b>{{attendance.grade}}</b>
         {%endif%}
     </div>
-    <div>
-        {{attendance.subject_materials.id}}
+    <div class="pt10 pb15">
         {% for lesson in attendance.subject_materials.lessons.all %}
         <div>
-            <a class="full-w textw">{{lesson.title}}</a>
+            <a href="{{lesson.get_absolute_url}}" class="full-w textw">{{lesson.title}}</a>
         </div>
         {%endfor%}
     </div>

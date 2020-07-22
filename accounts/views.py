@@ -279,6 +279,8 @@ def squad_attendance(request):
 
 def more_attendance(request):
     profile = Profile.objects.get(user = request.user)
+    if profile.is_student:
+        return more_attendance_student(request)
     if request.GET.get('subject_id') and request.GET.get('squad_id') and request.GET.get('direction') and request.GET.get('sm_id'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')))
         squad = Squad.objects.get(id = int(request.GET.get('squad_id')))
@@ -349,7 +351,7 @@ def more_attendance_student(request):
                     break
                 if len(sm.sm_atts.filter(student = profile)) < 1:
                     create_atts_student(squad, sm, profile)
-                section = [get_date(sm, squad)[0], sm.id, 'past']
+                section = [get_date(sm, squad)[0].strftime('%d %B %Y'), sm.id, 'past']
                 att = sm.sm_atts.get(student = profile)
                 section.append([att.id, att.present, att.grade])
                 columns.append(section)
@@ -360,7 +362,7 @@ def more_attendance_student(request):
             for sm in queryset:
                 if len(columns) == 4:
                     break
-                section = [get_date(sm, squad)[0], sm.id]
+                section = [get_date(sm, squad)[0].strftime('%d %B %Y'), sm.id]
                 columns.append(section)
         data = {
             'first_set':first_set,

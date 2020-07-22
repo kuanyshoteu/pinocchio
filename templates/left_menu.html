@@ -43,10 +43,10 @@
             <a class="item lftitem {%if page == 'squads' %}lftitem_crnt{%endif%}" href='{% url "squads:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="users icon mr10"></i>Группы
             </a>
+            {% endif %}
             <a class="item lftitem {%if page == 'subjects' %}lftitem_crnt{%endif%}" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="book icon mr10"></i>Курсы
             </a>
-            {% endif %}
             {% if is_director %}
             <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">

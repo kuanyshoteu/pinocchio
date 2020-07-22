@@ -11,7 +11,9 @@
                 <h5 class="mb0" style="font-size: 13px;">
                     <a href="{{ sq.get_absolute_url }}" class="textblue">{{ sq.title }}</a>
                 </h5>
-                <a href="{{sq.get_update_url}}" class="textg" style="text-decoration: underline;">Настройки курса</a>                
+                {% if is_manager or is_trener or is_director %}
+                <a href="{{sq.get_update_url}}" class="textg" style="text-decoration: underline;">Настройки курса</a> 
+                {%endif%}               
             </div>
         </div>
     </div>

@@ -18,7 +18,6 @@
             <div class="four wide column pb0 pl5 pr5 full-h">
                 <a class="ui button small white shadow_small open_time_lessons full-w" style="" status="closed" id="{{ material.id }}">
                     <span class="is_homework text14 textblue">{{ forloop.counter }} урок</span>
-                    {{material.id}}
                 </a>
                 <div class="pl10 pb15 pr10 br5 backwhitelow" style="display: none;margin-top: 2px;height: calc(100% - 34px);" id="time_lessons{{ material.id }}"> 
                     {% if material.lessons.all|length == 0 %}
