@@ -17,7 +17,6 @@ from schools.models import School
 from subjects.models import *
 from subjects.views import update_squad_dates,change_lecture_options,get_subject_students
 from papers.models import *
-from library.models import Folder
 from accounts.models import Profile, CRMCardHistory
 from accounts.forms import *
 from accounts.views import add_money
@@ -739,7 +738,7 @@ def remove_subject_from_squad(squad, subject):
         squad.course_bill -= cost
     squad.save()
     nms = squad.bill_data.all()
-    subject.finance_closed.filter(need_money__in=nms).delete()
+    subject.finance_closed.filter(bill_data__in=nms).delete()
 
 def change_lecture_cabinet(request):
     profile = get_profile(request)
@@ -816,6 +815,10 @@ def const_create_lectures(request, id=None):
     end = request.GET.get('end')
     is_in_school(profile, school)
     if start and end and request.GET.get('subject_id'):
+        if len(start.split(':')) == 1:
+            start = start + ":00"
+        if len(end.split(':')) == 1:
+            end = end + ":00"
         subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
         days = []
         for i in range(1, 8):
