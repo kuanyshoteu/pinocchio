@@ -1,0 +1,8 @@
+<a id="go-back-btn-before" href="{% if is_trener or is_director %}{% url 'library:main' %}{%else%}{{ lesson.subject_materials.first.subject.get_absolute_url }}{% endif %}">
+    <i class="arrow left icon"></i>
+</a>
+<div class="mlback">
+    <div class="ui segment shadow_small">
+        УРОК
+    </div>    
+</div>

@@ -30,14 +30,9 @@ def estimate_lesson_page(request, lesson_id = None):
     profile = get_profile(request)
     lesson = Lesson.objects.get(id=lesson_id)
     is_in_school(profile, lesson.school)           
-    if not profile.id in lesson.estimater_ids:
-        lesson.estimater_ids.append(profile.id)
-        lesson.grades.append(0)
-    index = lesson.estimater_ids.index(profile.id)
     context = {
         "profile": profile,
         'lesson':lesson,
-        'hisestimation':lesson.grades[index],
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
