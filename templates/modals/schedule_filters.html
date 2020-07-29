@@ -1,6 +1,6 @@
 <form class="ui form no_margin">
     <div class="ui grid stackable no_margin schedule_filters" url="{{ instance.crm_option_url }}">
-        <div class="twenty wide column pr0 pl0">
+<!--         <div class="four wide column pr0 pl0">
             Предмет:
             <select onchange="crm_option_change('filter_subject_category')" class="crm_option" option="subject" id="filter_subject_category">
                 {% if profile.filter_data.subject_category %}
@@ -18,7 +18,7 @@
                 {% endif %}
             </select>
         </div>
-        <div class="twenty wide column pr0">
+ -->        <div class="four wide column pl0 pr0">
             Курс:
             <select onchange="crm_option_change('filter_subject')" class="crm_option" option="filter_subject" id="filter_subject">
                 {% if profile.filter_data.subject %}
@@ -36,7 +36,7 @@
                 {% endif %}
             </select>
         </div>
-        <div class="twenty wide column pr0">
+        <div class="four wide column pr0">
             Учитель:
             <select onchange="crm_option_change('crm_teacher')"  class="crm_option" option="teacher" id="crm_teacher">
                 {% if profile.filter_data.teacher %}
@@ -55,7 +55,7 @@
             </select>
         </div>
         {%if is_director %}
-        <div class="twenty wide column pr0">
+        <div class="four wide column pr0">
             Офис:
             <select onchange="crm_option_change('crm_office')" class="crm_option" option="office" id="crm_office">
                 {% if profile.filter_data.office %}
@@ -74,7 +74,7 @@
             </select>
         </div>
         {%endif%}
-        <div class="twenty wide column pr0">
+        <div class="four wide column pr0">
             Виды курсов:
             <div id="-1" class="mr5 filter-title dflexx full-w" style="height: 31px;" onclick="$('.subject_types').fadeToggle(0.1)">
                 {% if profile.filter_data.subject_type == 'all' %}
@@ -94,7 +94,7 @@
                     Онлайн
                 </div>
                 {% endif %}
-                <i class="icon caret down textb" style="position: absolute;right: 0"></i>
+                <i class="icon caret down textb mr5" style="position: absolute;right: 0"></i>
             </div>
             <div class="bselect subject_types backwhite shadow_dark_low" style="display: none;position: absolute;z-index: 3000;width: calc(100% - 15px);">
                 {% if profile.filter_data.subject_type != 'all' %}                

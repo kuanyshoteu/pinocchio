@@ -6,7 +6,7 @@
 {% load staticfiles %}
 
 {% block content %}
-<a id="go-back-btn-before" href="{% if is_trener or is_director %}{% if lesson.folder.all.0 %}{{ lesson.folder.all.0.get_absolute_url }}{% else %}{% url 'library:main' %}{% endif %}{%else%}{{ lesson.subject_materials.first.subject.get_absolute_url }}{% endif %}">
+<a id="go-back-btn-before" href="{% if is_trener or is_director %}{% url 'library:main' %}{%else%}{{ lesson.subject_materials.first.subject.get_absolute_url }}{% endif %}">
     <i class="arrow left icon"></i>
 </a>
 <div id="profile">

@@ -78,6 +78,9 @@ $('.show_hint_schedule').click(function(e){
 $('.show_search_groups').click(function(e){
     e.stopPropagation();
 });
+$('.folder_form').click(function(e){
+    e.stopPropagation();
+});
 $("body").click(function(e){
     $('.hint_schedule').hide()
     $('.filter-list').hide()
@@ -103,6 +106,7 @@ $("body").click(function(e){
     $('.show_search_subjects').hide() 
     $('.bselect').hide()
     $('.show_search_students').hide()
+    $('.folder_form').hide()
 });
 $('.reg_segment').click(function(e){
     $('.bselect').hide()

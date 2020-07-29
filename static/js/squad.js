@@ -53,18 +53,16 @@ $(document).ready(function () {
         }
         else{
             $('.catall').hide()
-            subject_cat = $('.subject_cat_filter option:selected').val()
             if (obj == 'regular') {
-                $('.online_False.cat'+subject_cat).show()
-                $('.ind_False.cat'+subject_cat).show()            
+                $('.online_False').show()
+                $('.ind_False').show()            
             }
             else if (obj == 'online') {
-                $('.online_True.cat'+subject_cat).show()
+                $('.online_True').show()
             }
             else if (obj == 'individual') {
-                $('.ind_True.cat'+subject_cat).show()
+                $('.ind_True').show()
             }
-            console.log(subject_cat)
         }
     }
     async function change_subject_filter(obj){

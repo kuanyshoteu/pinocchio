@@ -5594,8 +5594,6 @@ a.ui.inverted.grey.header:hover {
 i.icon {
   display: inline-block;
   opacity: 1;
-  margin: 0em 0.25rem 0em 0em;
-  width: 1.18em;
   height: 1em;
   font-family: 'Icons';
   font-style: normal;
@@ -5609,34 +5607,6 @@ i.icon {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   color: #99b1c6;
-}
-i.icon:before {
-  background: none !important;
-}
-i.icon.bars:before {
-  background: none !important;
-  color: #fff;
-  font-size: 16px;
-}
-i.trash.alternate:before {
-  background: none !important;
-  color: red !important;
-  font-size: 16px;
-}
-i.times.circle:before {
-  color: red !important;
-}
-i.plus:before {
-  background: none !important;
-  color: #5181b8 !important;
-}
-i.money.bill.alternate:before{
-  font-size: 30px;
-  color: #1a69a4;
-}
-i.graduation:before{
-  font-size: 30px;
-  color: #1a69a4;
 }
 /*******************************
              Types
@@ -16833,12 +16803,6 @@ ol.ui.horizontal.list li:before,
   .ui.grid > [class*="eleven wide tablet"].column,
   .ui.column.grid > [class*="eleven wide tablet"].column {
     width: 68.75% !important;
-  }
-  .ui.grid > .row > [class*="twelve wide column"].column,
-  .ui.grid > .column.row > [class*="twelve wide column"].column,
-  .ui.grid > [class*="twelve wide column"].column,
-  .ui.column.grid > [class*="twelve wide column"].column {
-    width: 100% !important;
   }
   .ui.grid > .row > [class*="thirteen wide tablet"].column,
   .ui.grid > .column.row > [class*="thirteen wide tablet"].column,

@@ -6,7 +6,6 @@ from .views import *
 app_name = 'papers'
 urlpatterns = [
     url(r'^create_course/$', course_create, name='create_course_url'),
-    url(r'^create_lesson/$', create_lesson, name='create_lesson_url'),
     url(r'^api/addgroup/$', AddGroup, name='add-group-toggle'),
     url(r'^api/change_name_url/$', rename_lesson, name = 'change_name_url'),
     url(r'^api/delete_paper_url/$', delete_paper, name = 'delete_paper_url'),

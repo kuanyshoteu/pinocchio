@@ -24,6 +24,7 @@ from schools.models import School
 from schools.views import get_social_networks, add_subject_category_work, register_new_student
 from squads.views import add_subject_work, add_lecture_work, remove_student_from_squad, add_student_to_squad
 from squads.models import BillData
+from papers.models import LessonFolder
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
@@ -254,8 +255,8 @@ def create_school(request):
         school.phones.append(phone)
         school.version = version
         school.save()
-        for subject_title in subjects.split(','):
-            add_subject_category_work(school, subject_title)
+        # for subject_title in subjects.split(','):
+        #     add_subject_category_work(school, subject_title)
         first_teacher = False
         for teacher_name in teachers.split(','):
             teacher = register_user_work(teacher_name, '', '', False, False)
@@ -476,8 +477,8 @@ def register_view(request):
             school.content = slogan
             school.phones.append(phone)
             school.save()
-            for subject_title in subjects.split(','):
-                add_subject_category_work(school, subject_title)
+            # for subject_title in subjects.split(','):
+            #     add_subject_category_work(school, subject_title)
             first_teacher = False
             for teacher_name in teachers.split(','):
                 teacher = register_user_work(teacher_name, '', '', False, False)
@@ -1446,163 +1447,9 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'d8w':'11wd'})
     print('moderator_run_code')
-    # update_subject_costs()
-    # check_student_nms()
-    # moder_update_bills()
-    # delete_all_fcs()
-    # create_fcs()
-    # update_student_start_dates()
-    # update_finance_start_dates()
-    # update_names()
-    # update_teachers_in_squads()
-    # add_paydays()
-    # res = aktobe_money()
-    # move_to_Mariam()
-    # synchrone_material_with_atts()
-    # card_tags()
-    # columns()
-    # categories_update()
-    hint_update()
-    # update_prime()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
 
-def hint_update():
-    # today = timezone.now().date()
-    # for sq in Squad.objects.all():
-    #     for s in sq.students.all():
-    #         card = s.card.filter(school=sq.school)
-    #         if len(card) > 0:
-    #             card = card[0]
-    #             card.bill_data.create(
-    #                 squad = sq,
-    #                 start_date = today,
-    #                 )
-    day = timezone.now().date() - timedelta(2)
-    for fd in FilterData.objects.all():
-        fd.timestamp = day
-        fd.crm_notices = 0
-        fd.save()
-
-def categories_update():
-    for sc in SubjectCategory.objects.all():
-        schools = sc.schools.all()
-        for scc in sc.school_categories.all():
-            scc.schools.add(*schools)
-
-def columns():
-    for school in School.objects.exclude(id=100):
-        columns = school.crm_columns.all()
-        school.crm_columns.remove(*columns)
-        ncs = CRMColumn.objects.filter(id__lt=7)
-        school.crm_columns.add(*ncs)
-
-def card_tags():
-    for card in CRMCard.objects.all():
-        school = card.school
-        alltags = card.hashtags.all()
-        card.hashtags.remove(*alltags)
-        wright = False
-        hashtags = school.hashtags.all()
-        for l in card.comments+' ':
-            if wright:
-                crnt_tag += l
-            if l == '!':
-                wright = True
-            elif l == ' ':
-                if wright:
-                    crnt_tag = crnt_tag.replace(' ','')
-                    founttag = hashtags.filter(title=crnt_tag)
-                    if len(founttag) > 0:
-                        card.hashtags.add(founttag[0])
-                    else:
-                        founttag = school.hashtags.create(title=crnt_tag)
-                        card.hashtags.add(founttag)                        
-                wright = False
-                crnt_tag = ''
-        card.save()
-
-
-def synchrone_material_with_atts():
-    profession = Profession.objects.get(title = 'Teacher')
-    teachers = profession.workers.all()
-    for att in Attendance.objects.filter(student__in=teachers):
-        t = att.teacher
-        if t == None:
-            continue
-        m = att.subject_materials
-        if len(m.sm_atts.filter(present='present')) > 0:
-            att.present = 'present'
-            m.done_by.add(t)
-            att.save()
-        # if att.present == 'present':
-        #     m.done_by.add(t)
-        # else:
-        #     m.done_by.remove(t)
-
-def check_student_logos():
-    school = School.objects.get(id = 86)
-    for card in school.crm_cards.all():
-        print(card.card_user.first_name, card.name)
-
-def move_to_Mariam():
-    school = School.objects.get(id = 86)
-    m = Profile.objects.get(id = 558)
-    for card in school.crm_cards.all():
-        card.author_profile = m
-        p = Profile.objects.filter(first_name=card.name)
-        if len(p) > 0:
-            card.card_user = p[0]
-        card.save()
-
-
-def aktobe_money():
-    school = School.objects.get(id = 89)
-    office = Office.objects.get(id=163)
-    d1 = datetime.datetime.strptime('2019-12-01', "%Y-%m-%d").date()
-    d2 = datetime.datetime.strptime('2019-12-26', "%Y-%m-%d").date()
-    res = []
-    profession = Profession.objects.get(title = 'Teacher')
-    for t in school.people.filter(profession=profession):
-        salary = 0
-        salary2 = 0
-        for squad in t.hissquads.filter():
-            for a in t.madegrades.filter(squad=squad):
-                date = get_date(a.subject_materials, squad)[0]
-                if date != '_':
-                    if date >= d1 and date <= d2:
-                        salary += a.subject.cost
-                        if a.present == 'present':
-                            salary2 += a.subject.cost
-        res.append([t.first_name, salary/2, salary2/2])
-    return res
-
-
-def add_paydays():
-    for nm in BillData.objects.all():
-        fc = nm.finance_closed.first()
-        if fc:
-            nm.pay_day = int(fc.first_present.strftime('%d'))
-            print(nm.card.name, nm.pay_day)
-            nm.save()
-
-def update_teachers_in_squads():
-    for t in Profile.objects.filter(is_student=False):
-        if t.first_name == 'Асхат':
-            print('yoyoyoy')
-        ss = t.squads.exclude(teacher=t)
-        t.squads.remove(*ss)
-
-def update_names():
-    for student in Profile.objects.filter(is_student=True):
-        if len(student.card.all()) == 1:
-            card = student.card.first()
-            student.first_name = card.name
-            student.phone = card.phone
-            student.mail = card.mail
-            student.save()
-        else:
-            print(student.first_name, len(student.card.all()))
 def searching_subjects(request):
     profile = get_profile(request)
     if is_profi(profile, 'Moderator') == False:
@@ -1613,135 +1460,6 @@ def searching_subjects(request):
         "res":res,
     }
     return JsonResponse(data)
-
-def update_student_start_dates():
-    for card in CRMCard.objects.all():
-        for nm in card.bill_data.all():
-            title = nm.squad.title
-            if title == 'Английский, группа, 18:30':
-                title = 'engl group'
-            text = '*** Регистрация в '+title+' ***'
-            similarity=TrigramSimilarity('edit', text)
-            chx = card.history.annotate(similarity=similarity,).filter(similarity__gt=0.3).order_by('-similarity')
-            if len(chx) > 0:
-                ch = chx[0]
-                date1 = ch.timestamp.date()
-                nm.start_date = date1
-                nm.save()
-
-from subjects.templatetags.ttags import get_date
-def update_finance_start_dates():
-    for fc in FinanceClosed.objects.all():
-        nm = fc.bill_data
-        fc.start = nm.start_date
-        student = nm.card.card_user
-        att = fc.subject.subject_attendances.filter(
-            student=student,
-            squad=nm.squad,
-            present='present'
-            )
-        if len(att) > 0:
-            att = att.first()
-            material = att.subject_materials
-            fc.first_present = get_date(material, nm.squad)[0]
-        fc.save()
-
-def create_fcs():
-    for nm in BillData.objects.all():
-        user = nm.card.card_user
-        if user.first_name == 'Ягуз Саид':
-            print(user.first_name)
-            print(nm.squad.title)
-        summ = 0
-        for pm in nm.squad.payment_history.filter(user=user):
-            summ += pm.amount
-        nm.money = summ
-        nm.save()
-        today = nm.start_date
-        crnt = nm.money
-        subjects = nm.squad.subjects.filter(cost_period='month',cost__gt=1)
-        first_round = True
-        if len(subjects) == 0:
-            continue
-        while crnt > 0:
-            for subject in subjects:
-                if crnt <= 0:
-                    break
-                fc = nm.finance_closed.filter(subject=subject)
-                if len(fc) > 0:
-                    fc = fc[0]
-                elif len(fc) == 0:
-                    fc = nm.finance_closed.create(
-                        subject=subject,
-                        start=today,
-                        first_present=today,
-                        moneys=[0],
-                        bills=[subject.cost],
-                        pay_date=today,)
-                added_money = min(subject.cost - fc.moneys[-1], crnt)
-                fc.moneys[-1] += added_money
-                crnt -= added_money
-                finance_update_month(fc, subject.cost)
-                fc.save()
-
-def finance_update_month(fc, subject_cost):
-    if fc.moneys[-1] >= fc.bills[-1]:
-        fc.moneys.append(0)
-        fc.bills.append(subject_cost)
-        fc.closed_months += 1
-        ok = True
-        fc.save()
-
-def check_student_nms():
-    for s in Profile.objects.filter(is_student=True):
-        cards = s.card.all()
-        if len(cards)>0:
-            card = cards[0]
-            if len(s.squads.all()) > len(BillData.objects.filter(card__in=cards)):
-                for sq in s.squads.all():
-                    remove_student_from_squad(s, sq, card.author_profile)
-                    add_student_to_squad(s, sq, card.author_profile)
-def update_subject_costs():
-    for s in Subject.objects.all():
-        if not s.cost:
-            s.cost = 0
-            s.save()
-
-def clear_fc():
-    pass
-
-def moder_update_bills():
-    for squad in Squad.objects.all():
-        cost_month = 0
-        cost_lesson = 0
-        cost_course = 0
-        for subject in squad.subjects.all():
-            if len(squad.squad_lectures.filter(subject=subject)) == 0:
-                squad.subjects.remove(subject)
-            elif subject.cost:
-                if subject.cost_period == 'lesson':
-                    cost_lesson += subject.cost
-                elif subject.cost_period == 'course':
-                    cost_course += subject.cost
-                else:
-                    cost_month += subject.cost
-
-        squad.lesson_bill = cost_lesson
-        squad.bill = cost_month
-        squad.course_bill = cost_course
-        squad.save()
-
-def clear_users():
-    for u in User.objects.all():
-        if len(Profile.objects.filter(user = u)) == 0:
-            u.delete()
-
-def delete_all_fcs():
-    FinanceClosed.objects.all().delete()
-    print('deleted')
-
-def create_nms_fcs():
-    pass
 
 def another_hint(request):
     profile = Profile.objects.get(user = request.user)

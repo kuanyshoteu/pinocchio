@@ -24,81 +24,130 @@
     <div class="ui container">
         <div class="ui stackable grid">
             {% include 'left_menu.html' %}
-            <div class="w85 wide column mlback"> 
-                <div class="ui tab active" id="detailed_info">
-                    <div class="ui segment shadow_small no_padding">
-                        <div class="backwhitelow">
-                            <div class="text21 textdg textbold dinline mr50 pb15 pl15 pt15 pr15">
-                                {% if folder %}
-                                    <b>{{ folder.title }}</b>
-                                {% else %}
-                                    Ваша база уроков
-                                {% endif %}
-                            </div>
-                            {% if is_trener or is_director %}
-                            <div class="dinline ">
-                                {% if cache.full %}
-                                <a class="ui button mini blue pastee" data-href='{% url "library:paste_object_url" %}' new_parent='{% if folder %}{{ folder.id }}{% else %}library{% endif %}' school="{{current_school_id}}">Вставить</a>
-                                {% else %}
-                                <a class="ui button mini disabled">Вставить</a>
-                                {% endif %}                      
-                                <div class="hint43 hint63 highliter" style="position: absolute;margin-top: 15px;right: 70px;"></div>
-                                <a class="ui button mini blue create_folder" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href='{% url "library:create_folder_url" %}' >
-                                Создать папку
-                                </a>
-                                <div class="hint40 hint60 highliter" style="position: absolute;margin-top: 15px;right: -30px"></div>
-                                <a class="ui button mini blue create_lesson" parent_id="{% if folder %}{{ folder.id }}{% else %}denone{% endif %}" school="{{current_school_id}}" data-href="{% url 'papers:create_lesson_url' %}">
-                                Создать урок
-                                </a>
-                            </div> 
-                            {% endif %}
+            <div class="w85 wide column">
+                <div class="library_page ui segment shadow_small no_padding">
+                    <div class="backwhitelow dflex pb15 pl15 pt15 pr15">
+                        <div class="dinline text21 textdg textbold dinline mr50">
+                            Ваша база уроков
                         </div>
-                        <div class="ui grid stackable no_margin">
-                            <div class="four wide column pl0 pt15 pb20 pr10" style="border-right: 1.5px solid #e3e3e3">
-                                <a style="display: block;" class="full-w pl10 pr10 pb10 text14 text-left" href="{{folder.school.get_school_library}}">
-                                    <span class="textbold mr5" id="folder_title-1">Главная</span>
-                                    <span class="textg">{{folder.lesson_list.all|length}}</span>
-                                </a>
-                                {% for cfolder in folders %}
-                                <div class="dflex" id="all_folder{{cfolder.id}}">
-                                    {% if cfolder != folder.parent %}
-                                    <a style="display: block;" class="full-w pl10 pr10 pb10 text14 text-left" href="{{ cfolder.get_absolute_url }}">
-                                        <i class="icon folder"></i>
-                                      <span class="textbold mr5" id="folder_title{{ cfolder.id }}">{{ cfolder.title }}</span>
-                                      <span class="textg">{{cfolder.lesson_list.all|length}}</span>
-                                    </a>
-                                    <a id="{{ cfolder.id }}" class="open_folder_features"><i class="ui icon ellipsis horizontal"></i></a>
-                                    <form class="mb0 pl10 pr10 ui form rename_folder_form rename_form{{ cfolder.id }}" style="display: none;position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
-                                        <textarea class="mb0" style="height: 60px;" id='change_folder_name{{ cfolder.id }}' type="text">{{ cfolder.title }}</textarea>
-                                        <a class="full-w ui button mini blue change_folder_name" id="{{ cfolder.id }}" data-href='{{ cfolder.change_name_url }}'>Сохранить</a>
-                                    </form>                     
-                                    <div class="backdark ui segment folder_features folder_features{{ cfolder.id }}" style="display: none;">
-                                          <a  class="textw rename_folder" id="{{ cfolder.id }}"><i class="icon pencil alternate textw "></i> Переименовать</a>
-                                          <div class="ui divider"></div>
-                                          <a  class="textw file_action" object_type='folder' action='copy' data-href='{% url "library:file_action_url" %}' id="{{ cfolder.id }}" parent='{% if cfolder.parent %}{{cfolder.parent.id}}{%else%}-1{% endif %}'><i class=" textw icon copy outline"></i> Копировать</a>
-                                          <div class="ui divider"></div>
-                                          <a  class="textw file_action" object_type='folder' action='cut' data-href='{% url "library:file_action_url" %}' id="{{ cfolder.id }}" parent='{% if cfolder.parent %}{{cfolder.parent.id}}{%else%}-1{% endif %}'><i class=" textw icon cut"></i> Вырезать</a>
-                                          <div class="ui divider"></div>
-                                          <a class="textw delete_folder" id="{{ cfolder.id }}" data-href='{{ cfolder.delete_folder_url }}'><i class="trash alternate icon textw"></i> Удалить</a>
+                        <form class="ui form mb0 dflex br5 pr5 mr15 backwhite" style="border: 1px solid #d3d3d3;min-width: 25%;">
+                            <textarea style="height: 25px;overflow-y: hidden;padding-top: 3px;border: none;" class="dinline mb0"></textarea>
+                            <span style="padding-top: 3px;"><i class="icon search"></i></span>
+                        </form>
+                    </div>
+                    <div class="ui grid stackable no_margin pt10 pb10">
+                        <div class="four wide column pl0 pt10 pb20 pr5" style="border-right: 1.5px solid #e3e3e3;min-height: 440px;">
+                            <div class="folder-1">
+                                <a onclick="open_folder(-1)" class="folder_button ui button small backlightblue textw full-w pl10 pr10 text-left dflexx" style="padding: 4px">
+                                    <div style="padding: 3px" class="text14 textbold pr5 folder_title">Главная</div>
+                                    <div style="padding: 3px" class="text13 len_lessons_main"></div>
+                                    <div onclick="$('.data').attr('crnt_folder',-1);create_folder_form(event)" class="add_folder_main dinline textbold">
+                                        +
                                     </div>
-                                    {% endif %}
-                                </div>
-                                {% endfor %}
+                                </a>
                             </div>
-                            <div class="twelve wide column pl0 pr0 pb0 pt5">
-                                <div id="papers" class="">
-                                {% for lesson in lessons %}
-                                    {% if not root or lesson.folder.all|length == 0 %}
-                                        {% include "library/lesson_file.html" %}
-                                    {% endif %}
-                                {% endfor %}
-                                </div>
+                            <div style="position: absolute;display: none;" class="shadow_dark backdark ui segment delete_folder_sure folder_form">
+                                <form class="ui form mb10">
+                                    <a onclick="$('.folder_form').hide()" style="position: absolute;right: 0;margin-top: -10px">
+                                        <i class="icon x textw"></i>
+                                    </a>
+                                    <div class="textw mb5 text-center">Уверены, что хотите удалить папку <b class="crnt_folder_title textyellow"></b>?</div>
+                                    <div class="text13 textw">Всё содержимое нельзя будет восстановить</div>
+                                    <div class="mt10 text-center">
+                                        <a class="ui button small mr30 pt5 pb5 pl10 pr10" onclick="$('.folder_form').hide()">Отменить</a>
+                                        <a class="go_delete_folder ui button small white textred textbold shadow_dark pt5 pb5 ">
+                                            Удалить
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                            <div style="position: absolute;display: none;" class="shadow_dark backdark ui segment folder_rename_form folder_form">
+                                <form class="ui form mb10">
+                                    <a onclick="$('.folder_rename_form').hide()" style="position: absolute;right: 0;margin-top: -10px">
+                                        <i class="icon x textw"></i>
+                                    </a>
+                                    <div class="textw mb5 text-center">Переименовать папку <b class="crnt_folder_title textyellow"></b></div>
+                                    <div class="text13 textw">Новое название</div>
+                                    <textarea class="change_folder_title_text mb0" style="width: 250px"></textarea>
+                                    <div class="mt10 text-center">
+                                        <a class="ui button small mr30 pt5 pb5 pl10 pr10" onclick="$('.folder_rename_form').hide()">Отменить</a>
+                                        <a class="rename_folder_save ui button small white textblue textbold shadow_dark pt5 pb5 ">
+                                            Сохранить
+                                        </a>
+                                    </div>
+                                </form>                                
+                            </div>
+                            <div class="no_padding shadow_dark backdark ui segment folder_features folder_form" style="display: none;">
+                                <a onclick="create_folder_form(event)" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left dflexx">
+                                    <div style="margin-top: 1px;margin-right: 8px;" class="textbold textw text17">+</div> 
+                                    Добавить папку
+                                </a>
+                                <a  class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left rename_folder">
+                                    <i class="icon pencil alternate textw text11"></i> Переименовать
+                                </a>
+                                <!-- <a  class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left file_action" object_type='folder' action='copy' data-href='{% url "library:file_action_url" %}'>
+                                    <i class="textw icon copy outline text11"></i> Копировать
+                                </a>
+                                <a  class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left file_action" object_type='folder' action='cut' data-href='{% url "library:file_action_url" %}'><i class="text11 textw icon cut"></i> Вырезать</a> -->
+                                <a class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left delete_folder"><i class="trash alternate icon textw text11"></i> Удалить</a>
+                            </div>    
+                            <div class="folders_box pl15"></div>
+                        </div>
+                        <div class="twelve wide column pl0 pr0 pb0 pt0">
+                            <div style="position: absolute;z-index: 3000;display: none;margin-left: -30px;" class="ui segment backdark shadow_dark folder_form new_folder_title">
+                                <form class="ui form mb10">
+                                    <a onclick="$('.new_folder_title').hide()" style="position: absolute;right: 0;margin-top: -10px">
+                                        <i class="icon x textw"></i>
+                                    </a>
+                                    <div class="textw mb5 text-center">Добавить папку в <b class="create_folder_title textyellow"></b></div>
+                                    <div class="text13 textw">Название</div>
+                                    <textarea class="new_folder_title_text mb0" style="width: 250px"></textarea>
+                                    <div class="mt10 text-center">
+                                        <a class="ui button small mr30 pt5 pb5 pl10 pr10" onclick="$('.new_folder_title').hide()">Отменить</a>
+                                        <a class="create_folder ui button small white textblue textbold shadow_dark pt5 pb5 ">
+                                            Создать
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                            <div style="display: none; position: absolute;z-index: 3000;margin-left: 50px" class="ui segment backdark shadow_dark folder_form new_lesson_title mt30">
+                                <form class="ui form mb10">
+                                    <a onclick="$('.folder_form').hide()" style="position: absolute;right: 0;margin-top: -10px">
+                                        <i class="icon x textw"></i>
+                                    </a>
+                                    <div class="textw mb5 text-center">Создать урок</div>
+                                    <div class="text13 textw">Название</div>
+                                    <textarea class="new_lesson_title_text mb0" style="width: 250px"></textarea>
+                                    <div class="mt10 text-center">
+                                        <a class="ui button small mr30 pt5 pb5 pl10 pr10" onclick="$('.folder_form').hide()">Отменить</a>
+                                        <a class="create_lesson ui button small white textblue textbold shadow_dark pt5 pb5 ">
+                                            Создать
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="pl15 pb5 pr15 dflex">
+                                <div class="mr30 crnt_folder_name textdg textbold text15">Главная</div>
+                                <a onclick="show_new_lesson_form(event)" class="ui button mini white shadow_small border1 textbold textblue pt5 pb5">Создать урок</a>
+                            </div>
+                            <div class="lessons_box pb30">
+                            </div>
+                            <div class="no_lessons text-center pt10" style="display: none;">
+                                <div class="textdg text15 mb10">Пока уроков тут нет</div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="lesson_page" style="display: none;">
+                    <a onclick="close_lesson()" class="ui button mini white shadow_small">
+                        Назад
+                    </a>
+                    УРОК
                 </div>
             </div>
         </div>
     </div>
 </div>
+<span style="display: none;" class="data" crnt_folder="-1"></span>
+{% include 'scripts/library.html' %}
 {% endblock %}

@@ -1,27 +1,329 @@
+{% load staticfiles %}
+<div style="display: none;">
+    <div class="folder_orig">
+        <div class="dflexx">
+            <a class="pt7 pb7 pl0 pr5 folder_button ui button white small" style="width: calc(100% - 25px)">
+                <div class="dflexx">
+                    <div style="display: block;" class="full-w text14 text-left">
+                        <div class="dinline pl10">
+                            <i class="icon folder"></i>
+                        </div>
+                        <span class="pl5 pr5 folder_title textbold mr5"></span>
+                        <span class="text13 len_lessons"></span>
+                    </div>
+                    <div class="pl5 pr5 br5 open_folder_features"><i class="ui icon ellipsis horizontal textllg"></i></div>
+                </div>
+            </a>
+            <a class="hide_children pl5 pr5 dinline br5" style="display: none;">
+                <i class="icon window minimize textg text11"></i>
+            </a>
+        </div>
+        <div class="pl15 folder_children" style="display: none;"></div>
+    </div>
+    <a class="lesson_file pl10 pr10 pt5 pb10 lesson_file_orig full-w ui button small text-left white dflexx">
+        <div class="ui grid stackable no_margin full-w">
+            <div class="six wide column pt5 pb0 pl0 pr15">
+                <div class="dflex full-w">
+                    <span class="lesson_order mr15 textg"></span>
+                    <i class="icon file text15 texttile mr5"></i>
+                    <span class="lesson_title textblue textbold text15"></span>
+                </div>
+            </div>
+            <div class="three wide column pt5 pb0 pl0 pr15">
+                <span>kuanysh</span>
+            </div>
+            <div class="four wide column pt5 pb0 pl0 pr15">
+                <span class="textdg text12 textbold mr5">
+                    11 / 17
+                </span>
+                <span>
+                    <i class="icon star textgold text11"></i>
+                    <i class="icon star textgold text11"></i>
+                    <i class="icon star textgold text11"></i>
+                    <i class="icon star textgold text11"></i>
+                    <i class="icon star text11"></i>
+                </span>
+            </div>
+            <div class="three wide column no_padding">
+                <div class="ui button mini pl5 pt5 pb5 pr5 white shadow_small">Опубликовать</div>
+            </div>
+        </div>
+    </a>
+    <form class="ui form shadow_small rename_lesson_form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
+        <textarea class="mb0" style="height: 60px;" id='change_lesson_name{{ lesson.id }}' type="text">{{ lesson.title }}</textarea>
+        <a class="ui button mini blue change_lesson_name full-w" id="{{ lesson.id }}" data-href='{{ lesson.change_name_url }}'>Сохранить</a>
+    </form>
+    <div class="shadow_small ui segment lesson_features lesson_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 0px 0 0 130px; width: 155px;">
+        <a  class="rename_lesson" id="{{ lesson.id }}"><i class="icon pencil alternate"></i>Переименовать</a>
+        <div class="ui divider"></div>
+        <a  class="file_action" object_type='lesson' action='copy' data-href='{% url "library:file_action_url" %}' id="{{ lesson.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
+        <div class="ui divider"></div>
+        <a  class="file_action" object_type='lesson' action='cut' data-href='{% url "library:file_action_url" %}' id="{{ lesson.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
+        <div class="ui divider"></div>
+        <a class="delete_lesson" id="{{ lesson.id }}" data-href='{{ lesson.delete_lesson_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
+    </div>
+</div>
 <script type="text/javascript">
     fill_library()
     function fill_library(){
-        
+        url = '{% url "library:get_library" %}'
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                folders = data.folders
+                for (var i = 0; i < folders.length; i++) {
+                    folder = folders[i]
+                    // console.log(folder)
+                    fill_folders(folder)
+                }
+                lessons = data.lessons
+                $('.len_lessons_main').text(lessons.length)
+                fill_lectures(lessons)
+            }
+        })
     }
-    $(".delete_folder").click(function (event) {
-        var this_ = $(this);
-        var pageUrl = this_.attr("data-href")
-        if (pageUrl) {
+    function fill_folders(folder){
+        id = folder[0]
+        title = folder[1]
+        parent = folder[2]
+        len_lessons = folder[3]
+        folder = $('.folder_orig').clone()
+        folder.addClass('folder'+id)
+        folder.removeClass('folder_orig')
+        folder.find('.folder_title').text(title)
+        folder.find('.button').attr('onclick', 'open_folder('+id+')')
+        folder.find('.folder_children').addClass('folder_children'+id)
+        folder.addClass('folder'+id)
+        folder.find('.len_lessons').text(len_lessons)
+        folder.find('.open_folder_features').attr('onclick', 'open_folder_features(event, '+id+')')
+        folder.find('.hide_children').attr('onclick', 'hide_children('+id+')')
+        if (parent == -1) {
+            folder.appendTo('.folders_box')
+        }
+        else{
+            folder.appendTo($('.folder'+parent).eq(0).find('.folder_children').eq(0))
+        }
+    }
+    function fill_one_lesson(lesson, i){
+        id = lesson[0]
+        title = lesson[1]
+        author = lesson[2]
+        author_link = lesson[3]
+        rating = lesson[4]
+        try_by = lesson[5]
+        done_by = lesson[6]
+        published = lesson[7]
+        url = lesson[8]
+        lesson = $('.lesson_file_orig').clone()
+        lesson.removeClass('lesson_file_orig')
+        lesson.attr('href', url)
+        lesson.find('.lesson_title').text(title)
+        lesson.find('.lesson_order').text(i+1)
+        // lesson.attr('onclick', 'show_lesson('+id+')')
+        lesson.appendTo('.lessons_box')
+    }
+    function fill_lectures(lessons){
+        for (var i = 0; i < lessons.length; i++) {
+            one_lesson = lessons[i]
+            fill_one_lesson(one_lesson, i)
+        }
+    }
+    function update_lesson_numbers(){
+        i = 1
+        $('.lesson_order').each(function(){
+            $(this).text(i)
+            i += 1
+        })
+    }
+    function hide_children(id){
+        folder = $('.folder'+id)
+        folder_children = folder.find('.folder_children').eq(0)
+        folder_children.hide('fast')
+        folder.find('.hide_children').eq(0).hide()
+    }
+    function open_folder(id){
+        folder = $('.folder'+id)
+        $('.folder_button').removeClass('backlightblue textw')
+        $('.folder_button').addClass('white')
+        folder.find('.folder_button').eq(0).addClass('backlightblue textw')
+        folder.find('.folder_button').eq(0).removeClass('white')
+        folder.find('.icon.caret.right').eq(0).hide()
+        folder.find('.icon.caret.down').eq(0).show()
+        folder.find('.hide_children').eq(0)
+        folder_children = folder.find('.folder_children').eq(0)
+        folder_children.show('fast')
+        if (folder_children.children().length > 0) {
+            folder.find('.hide_children').eq(0).show()
+        }
+        folder_title = folder.find('.folder_title').eq(0).text()
+        $('.crnt_folder_name').text(folder_title)
+        $.ajax({
+            url: "{% url 'library:get_folder_files' %}",
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.lessons_box').empty()
+                lessons = data.lessons
+                if (lessons.length > 0) {
+                    $('.no_lessons').hide()
+                    fill_lectures(lessons)
+                }
+                else{
+                    $('.no_lessons').show()
+                }
+            }
+        })
+    }
+    function open_folder_features(event, id){
+        $('.data').attr('crnt_folder', id)
+        h = $('.folder'+id).position().top
+        $('.folder_features').css('margin-top', h - 37)
+        $('.folder_form').hide()
+        $('.folder_features').show()
+        open_folder(id)
+        event.stopPropagation();
+    }
+    function show_new_lesson_form(event){
+        event.stopPropagation()
+        $('.folder_form').hide()
+        $('.new_lesson_title').show()
+    }
+    function create_folder_form(event){
+        event.stopPropagation()
+        id = $('.data').attr('crnt_folder')
+        folder = $('.folder'+id)
+        h = folder.position().top
+        title = folder.find('.folder_title').eq(0).text()
+        $('.create_folder_title').text(title)
+        $('.new_folder_title').css('margin-top', h)
+        $('.folder_form').hide()
+        $('.new_folder_title').show()
+    }
+    $('.delete_folder').click(function(event){
+        event.stopPropagation()
+        id = $('.data').attr('crnt_folder')
+        folder = $('.folder'+id)
+        h = folder.position().top
+        title = folder.find('.folder_title').eq(0).text()
+        $('.crnt_folder_title').text(title)
+        $('.delete_folder_sure').css('margin-top', h)
+        $('.folder_form').hide()
+        $('.delete_folder_sure').show()
+    })
+    function show_lesson(id){
+        $('.library_page').hide()
+        $('.lesson_page').show('fast')
+    }
+    $('.go_delete_folder').click(function(event){
+        id = $('.data').attr('crnt_folder')
+        folder = $('.folder'+id)
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_folder_load').show()
+        if (title.length > 0) {
             $.ajax({
-                url: pageUrl,
+                url: '{%url "library:delete_folder_url"%}',
                 data: {
-                    'id':this_.attr("id"),
+                    'title':title,
+                    'id':id,
                 },
                 dataType: 'json',
                 success: function (data) {
-                    if(data.deleted){
-                        $('#all_folder' + this_.attr('id')).hide('fast');
-                    }
-                    else{
-                        $('.folder_features' + this_.attr('id')).hide('fast')
+                    btn.removeClass('disabled')
+                    if (data.ok) {
+                        $('.folder_form').hide()
+                        folder.hide('fast')
+                        $('.lessons_box').empty()
+                        $('.no_lessons').show()
                     }
                 }
-            });  
+            })
+        }
+    })
+    $('.rename_folder_save').click(function(event){
+        id = $('.data').attr('crnt_folder')
+        folder = $('.folder'+id)
+        title = $('.change_folder_title_text').val()
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_folder_load').show()
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "library:rename_folder"%}',
+                data: {
+                    'title':title,
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    $('.rename_folder_load').hide()
+                    if (data.ok) {
+                        $('.folder_form').hide()
+                        folder.find('.folder_title').eq(0).text(title)
+                        $('.crnt_folder_name').text(title)
+                        $('.change_folder_title_text').val('')
+                    }
+                }
+            });              
+        }
+    })
+    $('.rename_folder').click(function(event){
+        id = $('.data').attr('crnt_folder')
+        folder = $('.folder'+id)
+        h = folder.position().top
+        title = folder.find('.folder_title').eq(0).text()
+        $('.crnt_folder_title').text(title)
+        $('.folder_rename_form').css('margin-top', h)
+        $('.folder_rename_form').show()
+        event.stopPropagation()
+    })
+    function close_lesson(){
+        $('.lesson_page').hide()
+        $('.library_page').show('fast')
+    }
+    $('.create_folder').click(function (event) {
+        title = $('.new_folder_title_text').val()
+        parent = $('.data').attr('crnt_folder')
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "library:create_folder_url"%}',
+                data: {
+                    'title':title,
+                    'parent_id':parent,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    folder = [data.id, title, parent, 0]
+                    fill_folders(folder)
+                    open_folder(data.id)
+                    $('.new_folder_title').hide()
+                }
+            });              
+        }
+    })
+    $('.create_lesson').click(function (event) {
+        title = $('.new_lesson_title_text').val()
+        parent = $('.data').attr('crnt_folder')
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "library:create_lesson"%}',
+                data: {
+                    'title':title,
+                    'parent':parent,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    lesson = 
+                    fill_one_lesson(lesson, 0)
+                    update_lesson_numbers()
+                }
+            });              
         }
     })
 </script>

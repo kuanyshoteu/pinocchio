@@ -13,7 +13,6 @@ from itertools import chain
 from .forms import SubjectForm,SubjectForm2
 from .models import *
 from papers.models import *
-from library.models import Folder
 from accounts.models import Profile
 from schools.models import School, Cabinet
 from accounts.forms import *
@@ -53,7 +52,7 @@ def subject_detail(request, slug=None):
         'days':days,
         'materials':instance.materials.prefetch_related('lessons'),
         "lessons":school.lessons.all(),
-        "folders":school.school_folders.all(),
+        "folders":school.lesson_folders.all(),
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),

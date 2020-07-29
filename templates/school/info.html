@@ -19,7 +19,7 @@
         <div class="w85 wide column">
             {% include 'school/head.html' %}
             <div class="ui grid stackable no_margin">
-                <div class="eight wide column pt0 pb10 pr5 pl0">
+                <div class="sixteen wide column pt0 pb10 pr5 pl0">
                     <div class="ui segment shadow_small mt0 mb0 text15 hint_place1 no_padding" side="bottom" style="height: 100%">
                         <div class="text15 mb5 textdg pt10 pl15 pr10 pb5">
                             <b class="mr30">Основная информация</b>
@@ -37,7 +37,7 @@
                                     {%endif%}
                                 </span>
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_cities_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <a class="text13" onclick="$('.school_cities_form').show()"><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_cities_form" style="width: 400px;display: none;">
                                     <div class="ui grid stackable mb0">
                                         <div class="sixteen wide column pl0 pb0">
@@ -70,7 +70,7 @@
                                     {%endif%}
                                 </span>
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_phones_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <a class="text13" onclick="$('.school_phones_form').show()" ><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_phones_form" style="width: 400px;display: none;">
                                     <div class="ui grid stackable mb0">
                                         <div class="sixteen wide column pl0 pb0">
@@ -98,7 +98,7 @@
                                 {%endif%}
                                 </span> 
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_content_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <a class="text13" onclick="$('.school_content_form').show()" ><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_content_form" style="width: 800px; display: none;">
                                     <div class="ui grid no_margin stackable">
                                         <div class="twelve wide column no_padding">
@@ -123,7 +123,7 @@
                                     {%endif%}
                                 </span>
                                 {% if is_director %}
-                                <a class="text13" onclick="$('.school_slogan_form').show()" style="float: right;"><i class="icon pen square blue mr0"></i> Изменить</a>
+                                <a class="text13" onclick="$('.school_slogan_form').show()"><i class="icon pen square blue mr0"></i> Изменить</a>
                                 <form class="ui form no_margin school_slogan_form" style="width: 400px;display: none;">
                                     <div class="ui grid">
                                         <div class="twelve wide column no_padding_side">
@@ -139,7 +139,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="eight wide column pt0 pl5 pb10 pr0">
+<!--                 <div class="eight wide column pt0 pl5 pb10 pr0">
                     <div class="ui segment shadow_small full-h no_padding">
                         <div class="text15 mb5 pl15 pr10 pt10 pb5 textdg">
                             <b>Дополнительная информация</b>
@@ -259,8 +259,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="ui segment hint_place3" side="top">
+ -->            </div>
+<!--             <div class="ui segment hint_place3" side="top">
                 <div class="text15 mb15 textdg">
                     <b class="mr5">Предметы школы</b>
                     {{instance.school_subject_categories.all|length}}
@@ -312,7 +312,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment">
+ -->            <div class="ui segment">
                 <div class="text14 textdg mb5">
                     <b class="mr5">Скидки школы</b>
                     <span>{{instance.discounts.all|length}}</span>
@@ -391,7 +391,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui segment no_margin pl15 hint_place4" side="top">
+            <div class="ui segment no_margin pl15 hint_place3" side="top">
                 <div class="text14 textdg pb10">
                     <b>Офисы</b>
                     <span>{{instance.school_offices.all|length}}</span>
@@ -519,7 +519,7 @@
 </div>
 <span class="day_id" group_id='{{ instance.id }}'></span>
 <span class="check_moderator" style="display: none;" status="{%if is_moderator%}True{%else%}False{%endif%}"></span>
-<span class="data" hint_type="0" last_hint="5" hint="{{hint}}" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
+<span class="data" hint_type="0" last_hint="4" hint="{{hint}}" crm_option_url2="{%url 'schools:crm_option_url2'%}"></span>
 <span style="display: none;" class="hint_place0" side="modal"></span>
 {% include 'hints/info_hints.html' %}
 {% include 'hints/get_hint_script.html' %}

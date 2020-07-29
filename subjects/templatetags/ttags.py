@@ -166,10 +166,8 @@ def cell_school_lectures(cell, profile):
     # if profile.filter_data.subject_category==None and profile.skill.crm_age==None and profile.filter_data.office==None:
     #     return []
     lectures = cell.lectures.all()
-    if profile.filter_data.subject_category:
-        lectures = lectures.filter(category=profile.filter_data.subject_category)
-    if profile.skill.crm_age:
-        lectures = lectures.filter(age=profile.skill.crm_age)
+    # if profile.filter_data.subject_category:
+    #     lectures = lectures.filter(category=profile.filter_data.subject_category)
     if profile.filter_data.office:
         lectures = lectures.filter(office=profile.filter_data.office)
     return lectures
@@ -177,7 +175,6 @@ def cell_school_lectures(cell, profile):
 @register.filter
 def get_date(material, squad):
     if type(material) is str:
-        print('0')
         return '_'
     subject = material.subject
     lectures = squad.squad_lectures.filter(subject = subject)
@@ -506,7 +503,6 @@ def constant_schedule_lectures(squad):
     interval = squad.school.schedule_interval
     res = []
     for lecture in squad.squad_lectures.all():
-        print('******',lecture.id, lecture.cell.time_period.start)
         hour = int(lecture.cell.time_period.start.split(':')[0]) - 8
         minute = int(lecture.cell.time_period.start.split(':')[1])
         end_hour = int(lecture.cell.time_period.end.split(':')[0]) - 8

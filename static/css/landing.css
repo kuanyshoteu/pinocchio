@@ -1,19 +1,15 @@
 /**/ 
     .ymaps-2-1-74-controls__control_toolbar {}
-
     .ymaps-2-1-74-controls__control {
         right: 10px !important;
         left: auto !important;
     }
-
     .ymaps-2-1-74-search {
         display: none;
     }
-
     .ymaps-2-1-74-traffic {
         display: none;
     }
-
     .ymaps-2-1-74-listbox__button {
         display: none;
     }
@@ -28,7 +24,6 @@
         display: none !important;
       }
     }
-
 .full_size{
     width: 100%;
     height: 100%;
@@ -2338,7 +2333,6 @@
     display:block
 }
 .navbar{
-
     position:relative;
     display:-webkit-box;
     display:-webkit-flex;
@@ -2355,7 +2349,6 @@
     -webkit-justify-content:space-between;
     -ms-flex-pack:justify;
     justify-content:space-between;
-
     padding:0 1rem
     
 }
@@ -6285,7 +6278,6 @@ header nav.navbar a.btn.bg-white:hover{
 }
     footer{
     font-size:.8em;
-    margin:4em 1em;
     text-align:center
 }
     footer ul{
@@ -6320,13 +6312,10 @@ header nav.navbar a.btn.bg-white:hover{
     position:relative
 }
     footer div#language-picker-container select#language-picker{
-
     -webkit-appearance:none;
     -moz-appearance:none;
-
     appearance:none;
     background-color:rgba(255,255,255,0.5);
-
     border:2px solid #EDEFF0;
     color:#959DA1;
     padding:.5em
@@ -6357,7 +6346,6 @@ header nav.navbar a.btn.bg-white:hover{
     font-family:'Charlie Display';
     font-style:normal;
     font-weight:100;
-
 }
 .opacity-50{
     opacity:.5
@@ -6868,11 +6856,8 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     background-position:center bottom
 }
 .clipping-mask .phone .screen .board .lists .list .card .image.tiki-drinks{
-
     background-image:url(https://d2k1ftgv7pobq7.cloudfront.net/meta/p/res/images/79108507bf0ec067873590ceb530a5aa/card-tiki-drinks.jpg);
-
     background-position:left center;
-
     background-size:contain
     
 }
@@ -6883,31 +6868,19 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     cursor:pointer
 }
 #carousel .arrow{
-
     -webkit-box-align:center;
-
     -webkit-align-items:center;
-
     -ms-flex-align:center;
     align-items:center;
-
     background-color:#0079bf;
-
     border-radius:50%;
-
     box-shadow:0 10px 20px 0 rgba(0,0,0,0.15);
-
     display:none;
-
     height:40px;
-
     -webkit-box-pack:center;
-
     -webkit-justify-content:center;
-
     -ms-flex-pack:center;
     justify-content:center;
-
     line-height:80px;
     margin-top:-40px;
     position:absolute;
@@ -6929,9 +6902,7 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     fill:white
 }
 #carousel .board{
-
     margin:0 auto;
-
     max-width:880px
     
 }
@@ -7115,35 +7086,24 @@ header.recommend nav div.recommend img,html.scroll header.recommend nav div.reco
     margin-left:8px
 }
 .quick-signup .quick-signup-email{
-
     display:-webkit-box;
-
     display:-webkit-inline-block;
     display:-ms-flexbox;
     display:inline-block;
     -webkit-box-flex:5;
-
     -webkit-flex-grow:5;
     -ms-flex-positive:5;
     flex-grow:5;
-
     min-width:0;
     width:376px;
-
     border-radius:.3rem;
-
     line-height:30px;
-
     padding:4px;
     padding-left:16px;
     border-color:white;
-
     border-style:solid;
-
     height: 40px;
-
     border: 1px solid lightgrey;
-
     
 }
 @media (max-width:991px){

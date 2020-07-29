@@ -17,7 +17,6 @@ from squads.models import Squad,PaymentHistory,SquadHistory,DiscountSchool
 from subjects.templatetags.ttags import get_date, get_pay_date,constant_school_lectures, material_number_by_date
 from squads.views import remove_student_from_squad, add_student_to_squad, prepare_mail, update_payment_notices
 from papers.models import *
-from library.models import Folder
 from accounts.models import Profile,CRMCardHistory
 from accounts.forms import *
 from accounts.views import add_money
@@ -1047,12 +1046,12 @@ def crm_option(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('object_id') and request.GET.get('option'):
         filter_data = profile.filter_data
-        if request.GET.get('option') == 'filter_subject_category':
-            if int(request.GET.get('object_id')) == -1:
-                filter_data.subject_category = None
-            else:
-                category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                filter_data.subject_category = category
+        # if request.GET.get('option') == 'filter_subject_category':
+        #     if int(request.GET.get('object_id')) == -1:
+        #         filter_data.subject_category = None
+        #     else:
+        #         category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+        #         filter_data.subject_category = category
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
                 filter_data.office = None
@@ -2584,9 +2583,9 @@ def payment_get_students_list(profile, school):
     else:
         if profile.filter_data.office:
             squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
-    if profile.filter_data.subject_category:
-        subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
-        squads = squads.filter(subjects__in=subjects).distinct()
+    # if profile.filter_data.subject_category:
+    #     subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
+    #     squads = squads.filter(subjects__in=subjects).distinct()
     students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
     if profile.filter_data.payment != 'all':
         firstofmonth = first_day_of_month(timezone.now().date())
@@ -2715,7 +2714,6 @@ def search_city(request):
 def connect_site_api(request, school_id=None):
     if school_id:
         if request.GET.get('name') and request.GET.get('phone'):
-            print('555')
             school = School.objects.get(id=school_id)
             found = False
             student = None

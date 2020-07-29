@@ -179,14 +179,14 @@ def get_mail_students_list(request):
         else:
             if profile.filter_data.office_mail:
                 squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
-        if profile.filter_data.subject_category_mail or profile.filter_data.subject_mail:
-            if profile.filter_data.subject_category_mail:
-                subjects = school.school_subjects.filter(category=profile.filter_data.subject_category_mail)
-            else:
-                subjects = school.school_subjects.all()                
-            if profile.filter_data.subject_mail:
-                subjects = subjects.filter(id=profile.filter_data.subject_mail.id)
-            squads = squads.filter(subjects__in=subjects)
+        # if profile.filter_data.subject_category_mail or profile.filter_data.subject_mail:
+        #     if profile.filter_data.subject_category_mail:
+        #         subjects = school.school_subjects.filter(category=profile.filter_data.subject_category_mail)
+        #     else:
+        #         subjects = school.school_subjects.all()                
+        #     if profile.filter_data.subject_mail:
+        #         subjects = subjects.filter(id=profile.filter_data.subject_mail.id)
+        #     squads = squads.filter(subjects__in=subjects)
         students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
         crnt_students_len = len(students)
         if crnt_students_len <= (page-1)*16:
@@ -220,12 +220,12 @@ def change_mail_option(request):
     profile = Profile.objects.get(user = request.user.id)
     if request.GET.get('object_id') and request.GET.get('option'):
         filter_data = profile.filter_data
-        if request.GET.get('option') == 'subject_category':
-            if int(request.GET.get('object_id')) == -1:
-                filter_data.subject_category_mail = None
-            else:
-                category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
-                filter_data.subject_category_mail = category
+        # if request.GET.get('option') == 'subject_category':
+        #     if int(request.GET.get('object_id')) == -1:
+        #         filter_data.subject_category_mail = None
+        #     else:
+        #         category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
+        #         filter_data.subject_category_mail = category
         if request.GET.get('option') == 'office':
             if int(request.GET.get('object_id')) == -1:
                 filter_data.office_mail = None

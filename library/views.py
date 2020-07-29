@@ -29,13 +29,6 @@ def school_library(request, school_id):
 
     context = {
         "profile": profile,
-        'yourid':profile.id,
-        'root':True,
-        "lessons":school.lessons.all(),
-        "folders":school.school_folders.all(),
-        'hisschools':profile.schools.all(),
-        "current_school_id":school.id,
-        'cache':Cache.objects.get_or_create(author_profile = profile)[0],
         'is_trener':is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
         "is_director":is_profi(profile, 'Director'),
@@ -152,50 +145,126 @@ def paste(request):
 def create_folder(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('school_id'):
-        school = School.objects.get(id=int(request.GET.get('school_id')))
-        is_in_school(profile, school)
-        if len(school.school_folders.all()) > 0:
-            name = 'Папка' + str(school.school_folders.all()[len(school.school_folders.all())-1].id + 1)
-        else:
-            name = 'Папка'
-        folder = Folder.objects.create(title = name)
-        folder.author_profile = profile
-        if request.GET.get('school_id'):
-            folder.school = school
-        if request.GET.get('parent_id') != 'denone':
-            parent = Folder.objects.get(id = int(request.GET.get('parent_id')))
+    if request.GET.get('title') and request.GET.get('parent_id'):
+        school = is_moderator_school(request, profile)
+        folder = school.lesson_folders.create(
+            title = request.GET.get('title'),
+            author_profile = profile,
+            )
+        if request.GET.get('parent_id') != '-1':
+            parent = LessonFolder.objects.get(id = int(request.GET.get('parent_id')))
             folder.parent = parent
-            parent.children.add(folder)
         folder.save()
-        data = {
-            'name':name,
-            'url':folder.get_absolute_url(),
-        }
-        return JsonResponse(data)
+        folder_id = folder.id
+    data = {
+        "id":folder_id
+    }
+    return JsonResponse(data)
 
-def change_name(request):
+def rename_folder(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('id'):
-        if request.GET.get('id') == 'new':
-            folder = Folder.objects.all()[len(Folder.objects.all())-1]
-        else:
-            folder = Folder.objects.get(id = int(request.GET.get('id')))
-        is_in_school(profile, folder.school)
-        if request.GET.get('name'):
-            folder.title = request.GET.get('name')
-            folder.save()
-
-    data = {}
+    ok = False
+    if request.GET.get('id') and request.GET.get('title'):
+        school = is_moderator_school(request, profile)
+        folder = school.lesson_folders.get(id = int(request.GET.get('id')))
+        folder.title = request.GET.get('title')
+        folder.save()
+        ok = True
+    data = {
+        "ok":ok,
+    }
     return JsonResponse(data)
 
 def delete_folder(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
+    ok = False
     if request.GET.get('id'):
-        folder = Folder.objects.get(id = int(request.GET.get('id')))
-        is_in_school(profile, folder.school)
+        school = is_moderator_school(request, profile)
+        folder = school.lesson_folders.get(id = int(request.GET.get('id')))
+        folder.childs.all().delete()
+        folder.lessons.all().delete()
         folder.delete()
-    data = {}
+        ok = True
+    data = {
+        "ok":ok,
+    }
     return JsonResponse(data)
+
+def get_library(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    folders = []
+    lessons = []
+    school = is_moderator_school(request, profile)
+    for folder in school.lesson_folders.all():
+        if not folder.parent:
+            parent = -1
+        else:
+            parent = folder.parent.id
+        folders.append([folder.id, folder.title, parent, len(folder.lessons.all())])
+    lessons_q = school.lessons.filter(folder=None)
+    lessons = fill_lessons(lessons_q)
+    data = {
+        'folders':folders,
+        'lessons':lessons,
+    }
+    return JsonResponse(data)
+
+def get_folder_files(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    lessons = []
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        print(request.GET.get('id') == '-1')
+        if request.GET.get('id') == '-1':
+            lessons_q = school.lessons.filter(folder=None)
+        else:
+            folder = school.lesson_folders.filter(id = int(request.GET.get('id')))
+            if len(folder) == 0:
+                return JsonResponse({})
+            folder = folder[0]
+            lessons_q = folder.lessons.all()
+        lessons = fill_lessons(lessons_q) 
+    data = {
+        'lessons':lessons,
+    }
+    return JsonResponse(data)
+
+def fill_lessons(lessons_q):
+    lessons = []
+    for lesson in lessons_q:
+        lessons.append([
+            lesson.id,                          #0
+            lesson.title,                       #1
+            lesson.author_profile.first_name,   #2
+            lesson.author_profile.get_absolute_url(),   #3
+            lesson.rating,                      #4
+            len(lesson.try_by.all()),           #5
+            len(lesson.done_by.all()),          #6
+            lesson.access_to_everyone,          #7
+            lesson.get_absolute_url(),          #8
+            ])    
+    return lessons
+
+def create_lesson(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    ok = False
+    if request.GET.get('parent') and request.GET.get('title'):
+        lesson = school.lessons.create(
+            title = request.GET.get('title'), 
+            author_profile = profile,
+            )
+        if request.GET.get('parent') != '-1':
+            folder = school.lesson_folders.filter(id = int(request.GET.get('parent')))
+            lesson.folder = folder
+        lesson.save()
+        ok = True
+    data = {
+        "ok":ok,
+    }
+    return JsonResponse(data)        

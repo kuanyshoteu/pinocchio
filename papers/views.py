@@ -13,7 +13,6 @@ from .models import *
 from tasks.models import Task, ProblemTag
 from squads.models import Squad
 from papers.models import Comment
-from library.models import Folder
 from accounts.models import *
 from constants import *
 
@@ -207,25 +206,6 @@ def AddTask(request):
         'action': action
     }
     return JsonResponse(data)
-
-def create_lesson(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_teachers(profile)
-    name = 'Урок'
-    if request.GET.get('school_id'):
-        school = School.objects.get(id=int(request.GET.get('school_id')))
-        is_in_school(profile, school)           
-        if len(school.lessons.all()) > 0:
-            name += str(school.lessons.all()[len(school.lessons.all())-1].id + 1)
-    lesson = Lesson.objects.create(title = name, author_profile = profile)
-    if request.GET.get('school_id'):
-        lesson.school = school
-    lesson.save()
-    if request.GET.get('parent_id') != 'denone':
-        parent = Folder.objects.get(id = int(request.GET.get('parent_id')))
-        parent.lesson_list.add(lesson)
-    data = {}
-    return JsonResponse(data)        
 
 def rename_lesson(request):
     profile = Profile.objects.get(user = request.user.id)

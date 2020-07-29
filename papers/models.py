@@ -23,6 +23,30 @@ def upload_location(instance, filename):
     new_id = PaperModel.objects.order_by("id").last().id + 1
     return "%s" %(filename)
 
+class LessonFolder(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='lesson_folders') 
+    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='lesson_folders')
+    title = models.TextField()
+    parent = models.ForeignKey("self",  null = True, on_delete = models.CASCADE, related_name = 'childs')
+    
+    class Meta:
+        ordering = ['id']
+    def get_absolute_url(self):
+        return reverse("library:get_absolute_url", kwargs={"folder_id": self.id})
+    def delete_folder_url(self):
+        return reverse("library:delete_folder_url")
+    def change_name_url(self):
+        return reverse("library:change_name_url")
+
+class Cache(models.Model):
+    author_profile = models.ForeignKey(Profile, null = True, on_delete = models.CASCADE, related_name='lesson_cache')
+    object_type = models.TextField(default='lesson')
+    object_id = models.IntegerField(null = True)
+    action = models.TextField(default='copy')
+    previous_parent = models.IntegerField(null = True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    full = models.BooleanField(default = False)
+
 class Subtheme(models.Model):
     task_list = models.ManyToManyField(Task, related_name='subthemes')
     content = models.TextField(default='')
@@ -74,17 +98,16 @@ class Paper(models.Model):
         ordering = ['id']
     
 class Lesson(models.Model):
-    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='lessons') 
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='lessons')
     title = models.CharField(max_length=250)
     author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='lesson_author')
-    is_homework = models.BooleanField(default=False)
     papers = models.ManyToManyField(Paper, related_name='lessons')
     timestamp = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default = 0)
-    grades = ArrayField(models.IntegerField(), default = list)
-    estimater_ids = ArrayField(models.IntegerField(), default = list)
     done_by = models.ManyToManyField(Profile, related_name='done_lessons')
+    try_by = models.ManyToManyField(Profile, related_name='try_lessons')
     access_to_everyone = models.BooleanField(default=False)
+    folder = models.ForeignKey(LessonFolder, null=True, on_delete=models.CASCADE, related_name='lessons')
     
     def add_paper_url(self):
         return reverse("papers:add_paper_url")
