@@ -263,8 +263,9 @@ def create_lesson(request):
             folder = school.lesson_folders.filter(id = int(request.GET.get('parent')))
             lesson.folder = folder
         lesson.save()
+        lessons = fill_lessons([lesson]) 
         ok = True
     data = {
-        "ok":ok,
+        'lessons':lessons,
     }
     return JsonResponse(data)        

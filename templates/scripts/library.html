@@ -119,10 +119,10 @@
         url = lesson[8]
         lesson = $('.lesson_file_orig').clone()
         lesson.removeClass('lesson_file_orig')
-        lesson.attr('href', url)
         lesson.find('.lesson_title').text(title)
         lesson.find('.lesson_order').text(i+1)
         // lesson.attr('onclick', 'show_lesson('+id+')')
+        lesson.attr('href', url)
         lesson.appendTo('.lessons_box')
     }
     function fill_lectures(lessons){
@@ -155,6 +155,8 @@
         folder.find('.hide_children').eq(0)
         folder_children = folder.find('.folder_children').eq(0)
         folder_children.show('fast')
+        $('.lessons_box').empty()
+        $('.get_lessons_load').show()
         if (folder_children.children().length > 0) {
             folder.find('.hide_children').eq(0).show()
         }
@@ -167,7 +169,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.lessons_box').empty()
+                $('.get_lessons_load').hide()
                 lessons = data.lessons
                 if (lessons.length > 0) {
                     $('.no_lessons').hide()
@@ -218,6 +220,17 @@
     function show_lesson(id){
         $('.library_page').hide()
         $('.lesson_page').show('fast')
+        $.ajax({
+            url: '{%url "library:delete_folder_url"%}',
+            data: {
+                'title':title,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+
+            }
+        })
     }
     $('.go_delete_folder').click(function(event){
         id = $('.data').attr('crnt_folder')
@@ -310,6 +323,8 @@
     $('.create_lesson').click(function (event) {
         title = $('.new_lesson_title_text').val()
         parent = $('.data').attr('crnt_folder')
+        this_ = $(this)
+        this_.addClass('disabled')
         if (title.length > 0) {
             $.ajax({
                 url: '{%url "library:create_lesson"%}',
@@ -319,9 +334,11 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    lesson = 
+                    this_.removeClass('disabled')
+                    lesson = data.lessons[0]
                     fill_one_lesson(lesson, 0)
                     update_lesson_numbers()
+                    $('.folder_form').hide()
                 }
             });              
         }

@@ -135,14 +135,22 @@
                             <div class="no_lessons text-center pt10" style="display: none;">
                                 <div class="textdg text15 mb10">Пока уроков тут нет</div>
                             </div>
+                            <div style="display: none;" class="get_lessons_load text-center pt10">
+                                <div class="ui active inline small loader"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="lesson_page" style="display: none;">
-                    <a onclick="close_lesson()" class="ui button mini white shadow_small">
-                        Назад
-                    </a>
-                    УРОК
+                    <div style="display: none;" class="get_lessons_load text-center pt10">
+                        <div class="ui active inline small loader"></div>
+                    </div>
+                    <div class="lesson">
+                        <a onclick="close_lesson()" class="ui button mini white shadow_small">
+                            Назад
+                        </a>
+                                                
+                    </div>
                 </div>
             </div>
         </div>

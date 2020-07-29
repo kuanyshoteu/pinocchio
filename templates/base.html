@@ -11,6 +11,7 @@
     <title>{% block head_title %}Bilimtap.kz{%if not request.user.is_authenticated %} – английский язык, поступление, курсы, подготовка к экзаменам в г. Алматы{% endif %}{% endblock head_title %}</title>
     <!-- CSS -->
     <!-- Yandex.Metrika counter -->
+    <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     {% if page != 'library' %}
     <script type="text/javascript" >
        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -37,7 +38,6 @@
       gtag('config', 'AW-794791496');
     </script>
     {%endif%}
-    <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
     {% compress css %}
     <link rel='stylesheet' href='{% static "css/app.css" %}'/>
     <link rel="stylesheet" href='{% static "css/slider.css" %}'>
