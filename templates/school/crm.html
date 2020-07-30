@@ -109,7 +109,7 @@
                                     <a class="ui button mini white textblue pt5 pb5 full-w" onclick="open_new_card_modal('{{ column.id }}')" id="{{column.id}}">Добавить</a>
                                 </div>
                             </div>
-                            <div Ended="false" onscroll="column_scroll('{{column.id}}')" class="column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
+                            <div Ended="false" onscroll="column_scroll('{{column.id}}')" class="mobpr30 column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
                                 <div class="loader_center ui active loader column_loader"></div>
                                 <div class="textw" style="padding: 0 4px;">
                                     <div class="column{{ column.id }} crm_column">
@@ -136,6 +136,7 @@
     {% include 'school/schedule_lecture.html' %}
     {% include 'school/new_card_form.html' %}
     {% include 'modals/card_dialog.html' %}
+    <span class="catchmob"></span>
 </div>
 {% include 'school/card_form.html' %}
 <div class="ui mini modal" id="delete_card_modal">

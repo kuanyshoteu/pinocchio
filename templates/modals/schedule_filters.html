@@ -18,7 +18,7 @@
                 {% endif %}
             </select>
         </div>
- -->        <div class="four wide column pl0 pr0">
+ -->        <div class="four wide column pl0 pr10">
             Курс:
             <select onchange="crm_option_change('filter_subject')" class="crm_option" option="filter_subject" id="filter_subject">
                 {% if profile.filter_data.subject %}
@@ -36,7 +36,7 @@
                 {% endif %}
             </select>
         </div>
-        <div class="four wide column pr0">
+        <div class="four wide column pl0 pr10">
             Учитель:
             <select onchange="crm_option_change('crm_teacher')"  class="crm_option" option="teacher" id="crm_teacher">
                 {% if profile.filter_data.teacher %}
@@ -55,7 +55,7 @@
             </select>
         </div>
         {%if is_director %}
-        <div class="four wide column pr0">
+        <div class="four wide column pl0 pr10">
             Офис:
             <select onchange="crm_option_change('crm_office')" class="crm_option" option="office" id="crm_office">
                 {% if profile.filter_data.office %}
@@ -74,7 +74,7 @@
             </select>
         </div>
         {%endif%}
-        <div class="four wide column pr0">
+        <div class="four wide column pl0 pr0">
             Виды курсов:
             <div id="-1" class="mr5 filter-title dflexx full-w" style="height: 31px;" onclick="$('.subject_types').fadeToggle(0.1)">
                 {% if profile.filter_data.subject_type == 'all' %}

@@ -259,11 +259,6 @@
         name = $(this).attr('cname')
         save_card_id(id, name)
     })
-    $('.card_segment').on('taphold', function(){
-        id = $(this).attr('cid')
-        name = $(this).attr('cname')
-        save_card_id(id, name)
-    })
     function column_scroll(column){
         this_ = $('.column_scrollable'+column)
         if (this_.attr('Ended') == 'false') {

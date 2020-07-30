@@ -223,11 +223,6 @@
                         {% endif %}                    
                     </a>
                     {% endif %}
-                    {% if is_manager or is_trener or is_director %}
-                    <a class="ui button white full-w bt1" href='{% url "documents:main" %}'>
-                        <i class="folder icon"></i>Документы
-                    </a>
-                    {% endif %}
                     {% if is_manager or is_director %}
                     <a class="ui button white full-w bt1" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                         <i class="dollar sign icon"></i>Оплата
@@ -252,10 +247,21 @@
                         <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">Финансы
                     </a>                        
                     {% endif %}
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:mails" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <i class="envelope icon mr10"></i>Рассылки
+                        <span class="grey_notice">beta</span>
+                    </a>
+                    <a class="ui button white full-w bt1" href='{% url "documents:main" %}'>
+                        <i class="folder icon"></i>Документы
+                    </a>
+                    {% endif %}
+                    {%if school_crnt.version == 'business'%}
                     {% if is_trener or is_director %}
                     <a class="ui button white full-w bt1" href='{% url "library:main" %}'>
                         <i class="file alternate icon"></i>База уроков
                     </a>
+                    {% endif %}
                     {% endif %}
                 {% endif %}           
             </div>
