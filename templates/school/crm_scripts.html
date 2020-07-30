@@ -220,7 +220,7 @@
             author_url = res[i][6]
             is_director = ''
             highlight = ''
-            nc = $('.source_card').clone()
+            nc = $('.source_card').clone(true)
             nc.attr('id', 'card_container'+id)
             nc.addClass('crm_card'+id)
             nc.removeClass('source_card')
@@ -236,8 +236,9 @@
             nc.find('.delete_card').attr('onclick', 'delete_card("'+id+'")')
             nc.find('.show_card_schedule').attr('onclick', 'open_crmhist("'+id+'")')
             nc.find('.card_segment').attr('id', 'card'+id)
+            nc.find('.card_segment').attr('cid', id)
+            nc.find('.card_segment').attr('cname', name)
             nc.find('.card_segment').attr('column_id', column)
-            nc.find('.card_segment').attr('ondragstart', 'save_card_id("'+id+'","'+name+'")')
             nc.find('#cardsc').attr('id', 'cardsc'+id)
             nc.find('#cardsc'+id).attr('onclick', 'openNav("'+id+'")')
             nc.find('.show_card_hist'+id).attr('onclick','open_crmhist("'+id+'")')
@@ -253,6 +254,16 @@
             }
         }
     }
+    $('.card_segment').on('dragstart', function(){
+        id = $(this).attr('cid')
+        name = $(this).attr('cname')
+        save_card_id(id, name)
+    })
+    $('.card_segment').on('taphold', function(){
+        id = $(this).attr('cid')
+        name = $(this).attr('cname')
+        save_card_id(id, name)
+    })
     function column_scroll(column){
         this_ = $('.column_scrollable'+column)
         if (this_.attr('Ended') == 'false') {
@@ -470,6 +481,7 @@
         })
     }
     function save_card_id(id, name){
+        console.log('save_card_id')
         $('.current_card').attr('id', id)
         $('.current_card').attr('name', name)
     }

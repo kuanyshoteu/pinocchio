@@ -1084,6 +1084,12 @@ body{
 .full-h{
   min-height: 100% !important;
 }
+.twenty_strong{
+  width: 20%;
+}
+.eighty_strong{
+  width: 80% !important;
+} 
 .delete_card{
   position: absolute;
   right: 0;
@@ -3088,7 +3094,10 @@ a{
 .schoolLanding__header-wrapper{
   margin-top: -5px;display: flex;
 }
-@media only screen and (max-width: 767px) {  
+@media only screen and (max-width: 767px) {
+  .main_crm{
+    width: 300% !important;
+  }
   .land_box1{
       border-radius: 5px 0 0 5px !important;
       width: 75% !important;

@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load static compress %}
+{% load ttags %}
 <html>
 <head>
     <meta charset="utf-8">
@@ -59,7 +60,7 @@
     <div class="ui container">
         <div class="menu-title" style="width: calc(25% + 140px);">
             {% if user.is_authenticated %}
-            <i class="icon bars pl15 mr0 pr15 mt3 pb10" style="height: 30px;" id="toggle"></i>
+            <i class="icon bars pl15 mr0 pr15 mt3 pb10 textw text21" id="toggle"></i>
             {% endif %}
             <a href='{% if request.user.is_authenticated %}{{profile.get_absolute_url}}{%else%}{% url "main:home" %}{%endif%}' class="header main">
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
@@ -214,11 +215,11 @@
                     </a>
                     {% endif %}
                     {% if is_manager or is_director %}
-                    <a class="ui button white full-w bt1 not_in_mobile" href='{% url "schools:crm" %}'>
+                    <a class="ui button white full-w bt1" href='{% url "schools:crm" %}'>
                         <i class="list alternate icon"></i>
                         Клиенты
                         {% if profile.filter_data.crm_notices > 0 %}
-                        <span class="left_menu_number">{{profile.filter_data.crm_notices}}</span>
+                        <span class="beta_notice">{{profile.filter_data.crm_notices}}</span>
                         {% endif %}                    
                     </a>
                     {% endif %}
@@ -227,36 +228,34 @@
                         <i class="folder icon"></i>Документы
                     </a>
                     {% endif %}
-                    <a class="ui button white full-w bt1" href='{% url "schools:rating" %}'>
-                        <i class="trophy icon"></i>Рейтинги
+                    {% if is_manager or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <i class="dollar sign icon"></i>Оплата
+                        {% if profile|payment_notices > 0 %}
+                        <span class="beta_notice mr5">{{profile|payment_notices}}</span>
+                        {% endif %}
                     </a>
+                    <a class="ui button white full-w bt1" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <i class="table icon mr10"></i>Расписание
+                    </a>
+                    {% endif %}
                     {% if is_manager or is_trener or is_director %}
                     <a class="ui button white full-w bt1" href='{% url "squads:list" %}'>
-                        <i class="users icon"></i>Классы
+                        <i class="users icon"></i>Группы
                     </a>
                     <a class="ui button white full-w bt1" href='{% url "subjects:list" %}'>
-                        <i class="table icon"></i>Курсы
+                        <i class="book icon"></i>Курсы
                     </a>
+                    {% endif %}
+                    {% if is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">Финансы
+                    </a>                        
                     {% endif %}
                     {% if is_trener or is_director %}
                     <a class="ui button white full-w bt1" href='{% url "library:main" %}'>
                         <i class="file alternate icon"></i>База уроков
                     </a>
-                    {% endif %}
-                    {% if is_manager or is_trener or is_director %}
-                    <a class="ui button white full-w bt1" href='{% url "schools:payments" %}'>
-                        <i class="dollar sign icon"></i>Оплата
-                    </a>  
-                    {% endif %}
-                    {% if is_moderator %}
-                    <div class="text-center mt15">
-                        <a class="lftitemsmall ui button mini black" href='/moderator/'>
-                            Модераторская
-                        </a>               
-                        <a class="ui button small full-w white" href='/blog/'>
-                            <i class="newspaper icon"></i>Блог
-                        </a>         
-                    </div>
                     {% endif %}
                 {% endif %}           
             </div>

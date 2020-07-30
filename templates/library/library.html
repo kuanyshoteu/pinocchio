@@ -9,7 +9,7 @@
 {% endblock head_extra %}
 {% load staticfiles %}
 {% block content %}
-<div id="profile">
+<div class="full-h pt15">
     {% if folder %}
         {% if folder.parent %}
         <a id="go-back-btn-before"  href='{{ folder.parent.get_absolute_url }}'>
@@ -21,10 +21,10 @@
         </a>    
         {% endif %}
     {% endif %}
-    <div class="ui container">
-        <div class="ui stackable grid">
+    <div class="ui container full-h">
+        <div class="ui stackable grid full-h">
             {% include 'left_menu.html' %}
-            <div class="w85 wide column">
+            <div class="w85 wide column full-h">
                 <div class="library_page ui segment shadow_small no_padding">
                     <div class="backwhitelow dflex pb15 pl15 pt15 pr15">
                         <div class="dinline text21 textdg textbold dinline mr50">
@@ -141,11 +141,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="lesson_page" style="display: none;">
+                <div style="display: none;"  class="lesson_page full-h">
+                    {% include 'library/all_lesson_details.html' %}
                     <div style="display: none;" class="get_lessons_load text-center pt10">
                         <div class="ui active inline small loader"></div>
                     </div>
-                    {% include 'library/all_lesson_details.html' %}
                 </div>
             </div>
         </div>
