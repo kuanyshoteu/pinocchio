@@ -168,8 +168,8 @@ def cell_school_lectures(cell, profile):
     lectures = cell.lectures.all()
     # if profile.filter_data.subject_category:
     #     lectures = lectures.filter(category=profile.filter_data.subject_category)
-    if profile.filter_data.office:
-        lectures = lectures.filter(office=profile.filter_data.office)
+    # if profile.filter_data.office:
+    #     lectures = lectures.filter(office=profile.filter_data.office)
     return lectures
 
 @register.filter
@@ -537,10 +537,10 @@ def constant_profile_lectures(profile):
 def constant_school_lectures(profile, school):
     squads = school.groups.filter(shown=True)
     lectures = Lecture.objects.filter(squad__in=squads)
-    if profile.filter_data.subject_category:
-        lectures = lectures.filter(category=profile.filter_data.subject_category)
-    if profile.filter_data.office:
-        lectures = lectures.filter(office=profile.filter_data.office)
+    # if profile.filter_data.subject_category:
+    #     lectures = lectures.filter(category=profile.filter_data.subject_category)
+    # if profile.filter_data.office:
+    #     lectures = lectures.filter(office=profile.filter_data.office)
     if profile.filter_data.teacher:
         teacher = profile.filter_data.teacher
         squads = teacher.hissquads.all()

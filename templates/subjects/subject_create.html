@@ -105,12 +105,6 @@
 						<div class="seven wide column pl0 pr0">
 							<div class="ui shadow_small segment mt0 textdg" style="line-height: 40px;min-height: 264px;">
 								<div class="ui grid stackable">
-									<div class="sixteen wide column pl0 pb0">
-										<input type="file" name="subject_banner" id="subject_banner" class="postfile">
-				                        <label class="file_post" for="subject_banner">
-				                        	<a class="ui button mini"><i class="icon image blue"></i>Баннер</a>
-				                        </label>
-									</div>
                                     <div class="eight wide column pl0 pr0 pt15 pb15">
                                         <div class="dflex">
                                             <div class="ui segment border1 no_padding mb0" style="line-height: 0px;width: auto;">
@@ -128,18 +122,6 @@
                                             </div>
                                             <div class="individual_option_load ui loader mini ml10 mt10" style="position: relative;"></div>    
                                         </div>
-                                    </div>
-                                    <div class="eight wide column pl0 pt0 pr0 pb10">
-                                        <div class="ui toggle checkbox">
-                                          <input class="make_public" id="{{instance.id}}" type="checkbox" {% if instance.public %}checked{% endif%} url="{%url 'subjects:make_public'%}" name="public">
-                                          <label>Показывать курс в поиске</label>
-                                        </div>
-                                    </div>
-                                    <div class="eight wide column no_padding">
-                                        <div class="ui toggle checkbox">
-                                          <input class="make_public_cost" id="{{instance.id}}" type="checkbox" {% if instance.public_cost %}checked{% endif%} url="{%url 'subjects:make_public_cost'%}" name="public">
-                                          <label>Показывать стоимость в поиске</label>
-                                        </div>                                
                                     </div>
                                     <div class="sixteen wide column no_padding dflex">
                                         <span class="text15">Количество уроков:</span>

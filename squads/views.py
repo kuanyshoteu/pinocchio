@@ -74,7 +74,7 @@ def squad_list(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
-        "filter_office":profile.filter_data.office,
+        # "filter_office":profile.filter_data.office,
         'page':'squads',    
     }
     return render(request, "squads/squad_list.html", context)
@@ -109,8 +109,8 @@ def squad_create(request):
     if form.is_valid():
         instance = form.save(commit=False)
         instance.school = school
-        if len(school.school_offices.all()) > 0:
-            instance.office = school.school_offices.first()
+        # if len(school.school_offices.all()) > 0:
+        #     instance.office = school.school_offices.first()
         start = request.POST.get('start')
         if not start:
             start = timezone.now().date() - timedelta(7)
@@ -231,7 +231,7 @@ def squad_update(request, slug=None):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_crnt":school,        
         "school_money":school.money,
-        "offices":school.school_offices.all(),        
+        # "offices":school.school_offices.all(),        
         'time_periods':time_periods,
         'days':days,
         'number_of_pages':number_of_pages,
@@ -492,25 +492,25 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
     ok_mail = False
     if len(squad.squad_lectures.all()) > 0:
         send_date = (timezone.now().date() + timedelta(needed_day - today)).strftime('%d%m%y')+time
-        if lecture.office:
-            address = lecture.office.address
-        else:
-            if len(squad.school.school_offices.all()) > 0:
-                address = squad.school.school_offices.first().address
-            else:
-                address = ''
+        # if lecture.office:
+        #     address = lecture.office.address
+        # else:
+        #     if len(squad.school.school_offices.all()) > 0:
+        #         address = squad.school.school_offices.first().address
+        #     else:
+        #         address = ''
         if send_mail and '@' in mail:
             ok_mail = True
             try:
                 if password:
                     send_str = 'В '+lecture_time+' у Вас состоится пробный урок'
-                    if address != '':
-                        send_str += ' по адресу '+address
+                    # if address != '':
+                    #     send_str += ' по адресу '+address
                     send_hello_email(first_name, phone, mail, password, send_str)
                 else:
                     timeaddress = 'В '+lecture_time+' у Вас состоится пробный урок'
-                    if address != '':
-                        timeaddress += ' по адресу '+address
+                    # if address != '':
+                    #     timeaddress += ' по адресу '+address
                     text = "Здравствуйте "+first_name+ "! Вас зарегестрировали в группу<br><br>"+timeaddress+". Расписание можете посмотреть в личной странице"
                     send_email('Bilimtap регистрация в группу', text, [mail])
             except Exception as e:
@@ -518,7 +518,7 @@ def prepare_mail(first_name, phone, mail, squad, password, send_mail):
         if is_send:
             school = squad.school
             if school.version != 'free' and school.sms_amount > 0:
-                send_sms(phone, 'Ждем Вас на пробном уроке в '+lecture_time+' '+address, send_date)
+                send_sms(phone, 'Ждем Вас на пробном уроке в '+lecture_time, send_date)
                 school.sms_amount -= 1
                 school.save()
             pass
@@ -614,7 +614,6 @@ def change_schedule(request, id=None):
     is_in_school(profile, school)
     school.new_schedule = True
     school.save()
-
     if request.GET.get('subject_id') and request.GET.get('cell_id') and request.GET.get('old_cell'):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         subject_students = get_subject_students(subject.squads.prefetch_related('students'))
@@ -801,7 +800,7 @@ def add_lecture_work(start, end, squad, subject, days):
             cell=cell,
             day=day,
             subject=subject,
-            office = squad.office,
+            # office = squad.office,
             )
         lecture.save()
         lecture.category.add(*category)

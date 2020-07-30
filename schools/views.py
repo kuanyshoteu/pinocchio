@@ -53,7 +53,6 @@ def mails(request):
         "squads":school.groups.filter(shown=True),
         "subject_categories":school.school_subject_categories.all(),
         "subjects":school.school_subjects.all(),
-        "offices":school.school_offices.all(),
         "mail_templates":mail_templates,
         "is_trener":is_profi(profile, 'Teacher'),
         "is_manager":is_profi(profile, 'Manager'),
@@ -150,7 +149,6 @@ def school_schedule(request):
         "instance": school,
         "subject_categories":school.school_subject_categories.all(),
         "crm_cabinets":school.cabinets.all(),
-        "offices":school.school_offices.all(),
         "courses":school.school_subjects.all(),
         "teachers":all_teachers(school),        
         'days':Day.objects.all(),
@@ -565,7 +563,6 @@ def school_crm(request):
         "profile":profile,
         "instance": school,
         "columns":school.crm_columns.all(),
-        "offices":school.school_offices.all(),
         "courses":school.school_subjects.all(),
         "teachers":all_teachers(school),
         'time_periods':time_periods,
@@ -1052,12 +1049,12 @@ def crm_option(request):
         #     else:
         #         category = SubjectCategory.objects.get(id = int(request.GET.get('object_id')))
         #         filter_data.subject_category = category
-        if request.GET.get('option') == 'office':
-            if int(request.GET.get('object_id')) == -1:
-                filter_data.office = None
-            else:
-                office = Office.objects.get(id = int(request.GET.get('object_id')))
-                filter_data.office = office
+        # if request.GET.get('option') == 'office':
+        #     if int(request.GET.get('object_id')) == -1:
+        #         filter_data.office = None
+        #     else:
+        #         office = Office.objects.get(id = int(request.GET.get('object_id')))
+        #         filter_data.office = office
         if request.GET.get('option') == 'group':
             if int(request.GET.get('object_id')) != -1:
                 squad = Squad.objects.get(id = int(request.GET.get('object_id')))
@@ -2166,22 +2163,19 @@ def create_individual_group(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     ok = False
-    print('yo')
     if request.GET.get('student_id') and request.GET.get('subject_id'):
-        print('yo2')
         card = school.crm_cards.get(id=int(request.GET.get('student_id')))
         subject = school.school_subjects.get(id=int(request.GET.get('subject_id')))
         title = card.name+' - '+subject.title
         title = title[:45]
         title = create_squad_title(title, 1)
-        print(title)
         new_squad = school.groups.create(
             title=title,
             content='Записан на прохождение курса '+subject.title,
             start_date=timezone.now().date(),
         )
-        if len(school.school_offices.all()) > 0:
-            new_squad.office = new_squad.school.school_offices.first()
+        # if len(school.school_offices.all()) > 0:
+        #     new_squad.office = new_squad.school.school_offices.first()
         new_squad.save()
         student = card.card_user
         if not student:
@@ -2261,12 +2255,11 @@ def search_crm_cards(request):
     }
     return JsonResponse(data)
 
-def filter_crm_cards_work(cards, request,all_squads,all_students,all_offices):
+def filter_crm_cards_work(cards, request,all_squads,all_students):
     if len(request.GET.get('offices')) > 0:
         sids = request.GET.get('offices').split('d')
         del sids[-1]
-        offices = all_offices.filter(id__in=sids)
-        squads = all_squads.filter(office__in=offices)
+        squads = all_squads
         students = all_students.filter(squads__in=squads)
         cards = cards.filter(card_user__in=students)
     if len(request.GET.get('squads')) > 0:
@@ -2298,13 +2291,13 @@ def filter_crm_cards(request):
         all_cards = school.crm_cards.filter(author_profile=profile).select_related('card_user')
     all_squads = school.groups.all()
     all_students = school.people.filter(is_student=True).prefetch_related('squads')
-    all_offices = school.school_offices.all()
+    # all_offices = school.school_offices.all()
     all_res = []
     column_cards_lens = []
     for column in school.crm_columns.all():
         cards = all_cards.filter(column=column)
         column_cards_lens.append(len(cards))
-        cards = filter_crm_cards_work(cards, request,all_squads,all_students,all_offices)
+        cards = filter_crm_cards_work(cards, request,all_squads,all_students)
         i = 0
         res = []
         colid = column.id
@@ -2342,8 +2335,7 @@ def get_extra_cards(request):
             res = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
         all_squads = school.groups.all()
         all_students = school.people.filter(is_student=True).prefetch_related('squads')
-        all_offices = school.school_offices.all()
-        res = filter_crm_cards_work(res, request,all_squads,all_students,all_offices)
+        res = filter_crm_cards_work(res, request,all_squads,all_students)
         print(len(res), (page)*10)
         if len(res) <= (page)*10:
             Ended = True
@@ -2580,9 +2572,9 @@ def payment_get_students_list(profile, school):
     squads = school.groups.filter(shown=True).prefetch_related('students')
     if squad != None:
         squads = school.groups.filter(id = squad.id)
-    else:
-        if profile.filter_data.office:
-            squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
+    # else:
+    #     if profile.filter_data.office:
+    #         squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
     # if profile.filter_data.subject_category:
     #     subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
     #     squads = squads.filter(subjects__in=subjects).distinct()

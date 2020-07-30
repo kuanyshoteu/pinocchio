@@ -5,30 +5,28 @@ $(document).ready(function () {
     filter_squads()
     async function filter_squads(){
         obj = $('.squad_filter.green').attr('option')
-        console.log('obj22', obj)
         if (obj == 'all') {
-            $('.sq_office_all').show()
+            $('.sq_all').show()
         }
         else{
-            $('.sq_office_all').hide()
+            $('.sq_all').hide()
             squad_office = $('.squad_office_filter option:selected').val()
             if (obj == 'regular') {
-                $('.online_False.sq_office_'+squad_office).show()
-                $('.ind_False.sq_office_'+squad_office).show()            
+                $('.online_False').show()
+                $('.ind_False').show()            
             }
             else if (obj == 'online') {
-                $('.online_True.sq_office_'+squad_office).show()
+                $('.online_True').show()
             }
             else if (obj == 'individual') {
-                $('.ind_True.sq_office_'+squad_office).show()
+                $('.ind_True').show()
             }
             if (obj == 'empty') {
-                $('.empty_True.sq_office_'+squad_office).show()
+                $('.empty_True').show()
             }
             else{
                 $('.empty_True').hide()                
             }
-            console.log(squad_office)
         }
     }
     async function change_squad_filter(obj){
