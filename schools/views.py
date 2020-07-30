@@ -848,18 +848,25 @@ def office_delete(request):
 def create_cabinet(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
+    cid = -1
     if request.GET.get('title') != '':
         school = is_moderator_school(request, profile)
-        office = school.school_offices.get(id=int(request.GET.get('id')))
         capacity = 100
         if request.GET.get('capacity'):
             capacity = int(request.GET.get('capacity'))
-        office.cabinets.create(
-            school=school,
-            title=request.GET.get('title'),
-            capacity=capacity,
-            )
+        if request.GET.get('id') == '-1':
+            cabinet = school.cabinets.create(
+                title=request.GET.get('title'),
+                capacity=capacity,
+                )
+        else:
+            cabinet = school.cabinets.get(id=int(request.GET.get('id')))
+            cabinet.title = request.GET.get('title')
+            cabinet.capacity=capacity
+        cabinet.save()
+        cid = cabinet.id
     data = {
+        "cid":cid,
     }
     return JsonResponse(data)
 def delete_cabinet(request):

@@ -134,24 +134,6 @@
                                         <div class="choose_color" id="lightgreen" style="background-color: lightgreen;"></div>
                                         <div class="choose_color" id="#00b5ad" style="background-color: #00b5ad;"></div>
                                     </div>
-                                    <div class="sixteen wide column no_padding mt10">
-                                        <b>Офис:</b>
-                                        <select class="change_squad_office mt5" id="change_squad_office" url="{{ instance.change_office }}" option="office" style="margin-top: -10px;">
-                                            {% if instance.office == None %}
-                                                <option value="-1">Другое</option>
-                                            {% elif instance.office %}
-                                                <option value="{{ instance.office.id }}">{{ instance.office.title }}</option>
-                                            {% endif %}
-                                            {% for office in offices %}
-                                                {% if office != instance.office %}
-                                                <option value="{{ office.id }}">{{ office.title }}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if instance.office != None %}
-                                                <option value="-1">Другое</option>
-                                            {% endif %}
-                                        </select>                                       
-                                    </div>
     							</div>
                                 <div class="text-center pt15 mt15">
                                     <input type='submit' class='ui button blue tiny' value='Сохранить' />

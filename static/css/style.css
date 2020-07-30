@@ -860,13 +860,6 @@ body{
   color: #fff !important;
   border-color: grey !important;
 }
-.office_cabinet_create_capacity{
-  width: 40% !important;height: 30px !important;
-  font-size: 12px !important;
-}
-.office_cabinet_create_title{
-  width: 60% !important;height: 30px !important;overflow-y: hidden;
-}
 .highlight{
   background-color: #21BA45;padding: 5 10px !important;color: #fff;border-radius: 3px;
 }
@@ -1110,7 +1103,7 @@ body{
   color: red;
 }
 .redx{
-  right: 0;margin: -3px 4px;color: red;font-size: 13px;
+  right: 10;margin: -3px 4px;color: red;font-size: 13px;
   position: absolute;
 }
 .redx:hover{

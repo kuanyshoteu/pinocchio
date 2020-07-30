@@ -142,7 +142,7 @@
                                         {% else %}
                                         <option value="-1">Без кабинета</option>
                                         {% endif %}
-                                        {% for cabinet in instance.office.cabinets.all %}
+                                        {% for cabinet in cabinets %}
                                         {% if cabinet != lecture.7.cabinet %}
                                         <option value="{{cabinet.id}}">{{cabinet.title}}</option>
                                         {% endif %}

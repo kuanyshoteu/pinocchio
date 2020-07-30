@@ -18,7 +18,7 @@
             </a>
             {% endif %}
             {% if is_manager or is_director %}
-            <div side="right" class="hint_place4">
+            <div side="right" class="hint_place3">
                 <a class="item lftitem {%if page == 'crm' %}lftitem_crnt{%endif%}" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="address card icon mr10 no_padding text17" style="margin-top: -2px"></i>
                     Клиенты

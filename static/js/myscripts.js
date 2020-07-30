@@ -463,24 +463,6 @@
             }
         })        
     })
-
-    $('.delete_cabinet').click(function(e) {
-        id = $(this).attr('id')
-        url = $(this).attr('url')
-        if ($('.check_moderator').attr('status')=='True') {
-            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
-        }        
-        $.ajax({
-            url: url,
-            data: {
-                'id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.cabinet'+id).hide('fast')
-            }
-        })        
-    })
     $('.subject_period').click(function(e) {
         $('.subject_period').removeClass('green')
         $(this).addClass('green')
@@ -819,28 +801,66 @@
         }
         $('.wright_review').show()
     })
-    $('.save_office_cabinet').click(function(e) {
-        url = $(this).attr('url')
+    $('.delete_cabinet').click(function(e) {
+        this_ = $(this)
+        id = this_.parent().attr('id')
+        e.stopPropagation()
+        url = this_.attr('url')
+        if ($('.check_moderator').attr('status')=='True') {
+            url = url + '?type=moderator&mod_school_id='+$('.day_id').attr('group_id')
+        }        
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                this_.parent().parent().hide('fast')
+            }
+        })        
+    })
+    $('.cabinet_details').click(function(e) {
         id = $(this).attr('id')
-        status = $(this).attr('status')
-        title = $('.office_cabinet_create_title'+id).val()
-        capacity = $('.office_cabinet_create_capacity'+id).val()
-        type = ''
-        if (status != '') {
-            type = 'moderator'
+        title = $(this).find('.cabinet_title').text()
+        if (id == '-1') {
+            $('.cabinet_title_head').text('Новый кабинет')            
         }
+        else{
+            $('.cabinet_title_head').text('Кабинет ' + title)
+        }
+        capacity = parseInt($(this).find('.cabinet_capacity').text())
+        $('.data').attr('crnt_cabinet', id)
+        $('.add_cabinet_modal').modal('show')
+        $('.office_cabinet_create_title').val(title)
+        $('.office_cabinet_create_capacity').val(capacity)
+    })
+    $('.save_office_cabinet').click(function(e) {
+        this_ = $(this)
+        url = this_.attr('url')
+        title = $('.office_cabinet_create_title').val()
+        capacity = $('.office_cabinet_create_capacity').val()
+        id = $('.data').attr('crnt_cabinet')
+        this_.addClass('disabled')
+        $('.cabinet_loader').show()
         $.ajax({
             url: url,
             data: {
                 'title':title,
-                'id':id,
                 'capacity':capacity,
-                'mod_school_id':status,
-                'type':type
+                'id':id,
             },
             dataType: 'json',
             success: function (data) {
-                $('<div class="four wide column highlight_black" style="margin-right: 7px;margin-bottom: 7px;">'+title+'<br>'+capacity+' </div>').appendTo('.office_cabinets'+id)
+                cabinet = $('.cabinet_orig').clone(true)
+                cabinet.removeClass('cabinet_orig')
+                cabinet.find('.cabinet_title').text(title)
+                cabinet.find('.cabinet_capacity').text(capacity)
+                cabinet.find('.cabinet_details').attr('id', data.cid)
+                cabinet.appendTo('.all_cabinets')
+                this_.removeClass('disabled')
+                $('.cabinet_loader').hide()
+                $('.add_cabinet_modal').modal('hide') 
             }
         })        
     });

@@ -232,6 +232,7 @@ def squad_update(request, slug=None):
         "school_crnt":school,        
         "school_money":school.money,
         # "offices":school.school_offices.all(),        
+        "cabinets":school.cabinets.all(),        
         'time_periods':time_periods,
         'days':days,
         'number_of_pages':number_of_pages,
@@ -575,7 +576,7 @@ def squad_schedule(request, id=None):
                         cabinet_id = lecture.cabinet.id
                     office_cabs = [[cabinet_id, cabinet]]
                     if lecture.office:
-                        for cab in lecture.office.cabinets.all():
+                        for cab in school.cabinets.all():
                             if cab.id != cabinet_id:
                                 office_cabs.append([cab.id, cab.title])
                     lectures.append([lecture.id, lecture.subject.title, lecture.subject.id, cabinet, cabinet_id, office_cabs])
