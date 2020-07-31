@@ -852,12 +852,17 @@
             },
             dataType: 'json',
             success: function (data) {
-                cabinet = $('.cabinet_orig').clone(true)
-                cabinet.removeClass('cabinet_orig')
+                if (id == '-1') {
+                    cabinet = $('.cabinet_orig').clone(true)
+                    cabinet.removeClass('cabinet_orig')
+                    cabinet.find('.cabinet_details').attr('id', data.cid)
+                    cabinet.appendTo('.all_cabinets')
+                }
+                else{
+                    cabinet = $('.cab'+id)
+                }
                 cabinet.find('.cabinet_title').text(title)
                 cabinet.find('.cabinet_capacity').text(capacity)
-                cabinet.find('.cabinet_details').attr('id', data.cid)
-                cabinet.appendTo('.all_cabinets')
                 this_.removeClass('disabled')
                 $('.cabinet_loader').hide()
                 $('.add_cabinet_modal').modal('hide') 

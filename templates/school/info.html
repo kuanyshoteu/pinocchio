@@ -398,7 +398,7 @@
                 </div>
                 <div class="ui grid all_cabinets no_margin">
                     {% for cabinet in instance.cabinets.all %}
-                    <div class="twenty wide column pt0 pb0 pl0 pr10 {% if forloop.counter == 1 %}cabinet_orig{%endif%}">
+                    <div class="twenty wide column pt0 pb0 pl0 pr10 cab{{cabinet.id}} {% if forloop.counter == 1 %}cabinet_orig{%endif%}">
                         <a id="{{cabinet.id}}" class="cabinet_details full-w ui button small dark text-left shadow_dark pl10 pr10 br5 pt10 pb10 textw mr5 mb5">
                             <div class="textw redx delete_cabinet" url="{% url 'schools:delete_cabinet' %}" status="{%if is_moderator%}{{instance.id}}{%endif%}">✖</div>
                             <b class="cabinet_title textyellow text14">{{cabinet.title}}</b>
