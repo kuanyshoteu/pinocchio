@@ -48,11 +48,14 @@ class Cache(models.Model):
     full = models.BooleanField(default = False)
 
 class Subtheme(models.Model):
-    task_list = models.ManyToManyField(Task, related_name='subthemes')
-    content = models.TextField(default='')
+    task = models.ForeignKey(Task, null = True, on_delete = models.CASCADE, related_name='subthemes')
+    content = models.TextField(default='', null = True)
     video = models.FileField(default='')
     file = models.FileField(default='')
     youtube_video_link = models.TextField(default='')
+    order = models.IntegerField(null = True)
+    class Meta:
+        ordering = ['order', 'id']    
     def new_task_url(self):
         return reverse("papers:new_task_url")
     def add_task_url(self):
@@ -70,11 +73,11 @@ class Paper(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_papers') 
     title = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
-    author_profile = models.ForeignKey(Profile, null=True, on_delete = models.CASCADE, related_name='paper_author')
     subthemes = models.ManyToManyField(Subtheme, related_name='papers')
     done_by = models.ManyToManyField(Profile, related_name='done_papers')
-    typee = models.CharField(max_length=250, default = 'problem')
-    
+    order = models.IntegerField(null = True)
+    class Meta:
+        ordering = ['order', 'id']
     def __unicode__(self):
         return self.title
     def get_absolute_url(self):
@@ -87,15 +90,11 @@ class Paper(models.Model):
         return reverse("papers:add_subtheme_url")
     def rename_paper_url(self):
         return reverse("papers:rename_paper_url")
-
     @property
     def get_content_type(self):
         instance = self
         content_type = ContentType.objects.get_for_model(instance.__class__)
         return content_type
-
-    class Meta:
-        ordering = ['id']
     
 class Lesson(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='lessons')

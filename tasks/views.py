@@ -33,16 +33,16 @@ def ChangeAnswer(request):
     parent = True
     action = ''
     value = 0
+    print(request.GET.get('id'))
+    print(request.GET.get('ans'))
     if request.GET.get('id'):
         task = Task.objects.get(id = int(request.GET.get('id')))
-        if request.GET.get('answer'):
-            answer = request.GET.get('answer').split('&')
+        if request.GET.get('ans'):
+            answer = request.GET.get('ans').split('@')
+            print(answer, task.answer)
             del answer[-1]
             answer = sorted(answer)
-            if is_profi(profile, 'Teacher'):
-                task.answer = answer
-                task.save()
-            else:
+            if profile.is_student:
                 solver_checks = task.solver_checks.get(author_profile=profile)
                 was_solved = solver_checks.solver_correctness
                 solver_checks.solver_correctness = False
@@ -51,7 +51,7 @@ def ChangeAnswer(request):
                 if sorted(task.answer) == answer:
                     solver_checks.solver_correctness = True
                     solved = True
-                    for child in task.children():
+                    for child in task.children.all():
                         child_solver_checks = child.solver_checks.get(author_profile=profile)
                         if child_solver_checks == False:
                             solver_checks.solver_correctness = False
@@ -62,77 +62,69 @@ def ChangeAnswer(request):
                             profile.coins += task.cost
                             action = 'plus'
                             value = task.cost
-                            if request.GET.get('tags'):
-                                tags = request.GET.get('tags').split('&')
-                                del tags[-1]
-                                for tag_id in tags:
-                                    tag_id = int(tag_id)
-                                    if not profile.skill:
-                                        skill = Skill.objects.create()
-                                        skill.save()
-                                        skill.profile.add(profile)
-                                    if not tag_id in profile.skill.tag_ids:
-                                        profile.skill.tag_ids.append(tag_id)
-                                        profile.skill.easy_skills.append(0)
-                                        profile.skill.middle_skills.append(0)
-                                        profile.skill.hard_skills.append(0)
-                                        profile.skill.pro_skills.append(0)
-                                    index = profile.skill.tag_ids.index(tag_id)
-                                    print(profile.skill.tag_ids, index)
-                                    if task.cost <= 2:
-                                        profile.skill.easy_skills[index] += task.cost
-                                    elif task.cost <= 10:
-                                        profile.skill.middle_skills[index] += task.cost
-                                    elif task.cost <= 25:
-                                        profile.skill.hard_skills[index] += task.cost
-                                    else:
-                                        profile.skill.pro_skills[index] += task.cost
-                                    profile.save()
+                            for tag in task.tags.all():
+                                tag_id = tag.id
+                                if len(Skill.objects.filter(author=profile)) == 0:
+                                    skill = Skill.objects.create()
+                                    skill.author = profile
+                                    skill.save()
+                                if not tag_id in profile.skill.tag_ids:
+                                    profile.skill.tag_ids.append(tag_id)
+                                    profile.skill.easy_skills.append(0)
+                                    profile.skill.middle_skills.append(0)
+                                    profile.skill.hard_skills.append(0)
+                                    profile.skill.pro_skills.append(0)
+                                index = profile.skill.tag_ids.index(tag_id)
+                                if task.cost <= 2:
+                                    profile.skill.easy_skills[index] += task.cost
+                                elif task.cost <= 10:
+                                    profile.skill.middle_skills[index] += task.cost
+                                elif task.cost <= 25:
+                                    profile.skill.hard_skills[index] += task.cost
+                                else:
+                                    profile.skill.pro_skills[index] += task.cost
+                                profile.save()
                 else:
                     if was_solved:
                         profile.coins -= task.cost
                         action = 'minus'
                         value = task.cost
-                solver_checks.solver_ans = request.GET.get('answer').split('&')
+                solver_checks.solver_ans = answer
                 solver_checks.save()
-                if request.GET.get('parent_id'):
-                    if request.GET.get('parent_id') != '-1':
-                        task_parent = Task.objects.get(id = int(request.GET.get('parent_id')))
-                        parent_solver_checks = task_parent.solver_checks.get(author_profile=profile)
-                        was_parent_solved = parent_solver_checks.solver_correctness
-                        if solved == False:
-                            if was_parent_solved:
-                                profile.coins -= task_parent.cost
-                                value = task_parent.cost
-                                action = 'minus'
-
-                            parent_solver_checks.solver_correctness = False
-                            parent = False
-                        else:
-                            parent_solver_checks.solver_correctness = True
-                            for task_brother in task_parent.children():
-                                brother_solver_checks = task_brother.solver_checks.get(author_profile=profile)
-                                if brother_solver_checks.solver_correctness == False:
-                                    brother_solver_checks.solver_correctness = False
-                                    if was_parent_solved:
-                                        profile.coins -= task_parent.cost
-                                        value = task_parent.cost
-                                        action = 'minus'
-                                    parent = False
-                                    break
-                                task_brother.save()
-                                brother_solver_checks.save()
-                        task_parent.save()
-                        parent_solver_checks.save()
-                    else:
-                        parent='no_parent'
-                else:
-                    parent='no_parent'
+                # task_parent = task.parent
+                # if task_parent:
+                #     parent_solver_checks = task_parent.solver_checks.get(author_profile=profile)
+                #     was_parent_solved = parent_solver_checks.solver_correctness
+                #     if solved == False:
+                #         if was_parent_solved:
+                #             profile.coins -= task_parent.cost
+                #             value = task_parent.cost
+                #             action = 'minus'
+                #         parent_solver_checks.solver_correctness = False
+                #         parent = False
+                #     else:
+                #         parent_solver_checks.solver_correctness = True
+                #         for task_brother in task_parent.children():
+                #             brother_solver_checks = task_brother.solver_checks.get(author_profile=profile)
+                #             if brother_solver_checks.solver_correctness == False:
+                #                 brother_solver_checks.solver_correctness = False
+                #                 if was_parent_solved:
+                #                     profile.coins -= task_parent.cost
+                #                     value = task_parent.cost
+                #                     action = 'minus'
+                #                 parent = False
+                #                 break
+                #             task_brother.save()
+                #             brother_solver_checks.save()
+                #     task_parent.save()
+                #     parent_solver_checks.save()
+                # else:
+                #     parent = 'no_parent'
     profile.save()
     task.save()
     data = {
         'solved':solved,
-        'parent':parent,
+        # 'parent':parent,
         'action':action,
         'hiscoins':profile.coins,
     }

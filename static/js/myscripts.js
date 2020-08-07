@@ -1400,62 +1400,6 @@
             $('#iconright' + id).show()
         }
     });
-    $('.add_variant').click(function (event){
-        var id = $(this).attr('id')
-        var current_variant_number = parseInt($(this).attr('current_variant_number')) + 1
-        $(this).attr('current_variant_number', current_variant_number)
-        ul = document.getElementsByClassName(id + 'variants')[0]
-        li = document.createElement('div')
-        b = document.createElement('span')
-        b.innerHTML = 'Вариант ответа: '
-        textarea = document.createElement('textarea')
-        textarea.setAttribute('style', 'height: 33px;width: 200px;')
-        textarea.setAttribute('class', 'new_problem_test_' + id)
-        textarea.setAttribute('variant_number', current_variant_number)
-        checkbox = document.createElement('input')
-        checkbox.setAttribute('id', 'is_correct_variant_' + id + 'variant' + current_variant_number)
-        checkbox.setAttribute('type', 'checkbox')
-        li.appendChild(b)
-        li.appendChild(textarea)
-        li.appendChild(checkbox)
-        ul.appendChild(li)
-    })
-    $('.add_answer').click(function (event){
-        var id = $(this).attr('id')
-        div = document.getElementsByClassName('answers_' + id)[0]
-        li = document.createElement('li')
-        b = document.createElement('span')
-        b.innerHTML = 'Ответ: '
-        br = document.createElement('br')
-        textarea = document.createElement('textarea')
-        textarea.setAttribute('style', 'height: 33px;width: 200px;')
-        textarea.setAttribute('class', 'new_problem_ans_' + id)
-        div.appendChild(b)
-        div.appendChild(br)
-        div.appendChild(textarea)
-        div.appendChild(br)
-    })
-    $('.add_tag').click(function (event){
-        var id = $(this).attr('id')
-        div = document.getElementsByClassName('new_problem_tags_' + id)[0]
-        name = document.getElementById('new_problem_tag_name_' + id).value
-        a = document.createElement('a')
-        a.setAttribute('class', 'ui label new_problem_tag_'  + id)
-        a.setAttribute('name', name)
-        a.innerHTML = name
-        div.appendChild(a)
-    })
-    $(".problem_type").click(function (event) {
-        event.preventDefault();
-        var this_ = $(this)
-        var id = this_.attr('id')
-        type = this_.attr('type')
-        $('.problem_type_info').attr('info')
-        $('.problem_type').removeClass('blue')
-        $('.problem_type_'+type).addClass('blue')
-        $('.problem_form_type').hide()
-        $('.' + id + type).show()
-    })
     $(".content-markdown").each(function () {
         var content = $(this).text()
         var markedContent = marked(content)
@@ -1873,61 +1817,6 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                }
-            });
-        }
-    });
-    $(".check_task_answer").click(function () {
-        var this_ = $(this)
-        var id = this_.attr("id")
-        var pageUrl = this_.attr("data-href")
-        var paper_id = this_.attr("paper_id")
-        var answer = ""
-        var tags = ''
-        for(var i = 0; i < document.getElementsByClassName('problem_tag_' + paper_id).length; i++){
-            tags = tags + document.getElementsByClassName('problem_tag_' + paper_id)[i].getAttribute('tag_id') + '&'
-        }        
-        if( $(".task_type_" + paper_id).attr("type") == "input" ){
-            for(var i = 0; i < document.getElementsByClassName('check_task_answer_' + paper_id).length; i++){
-                answer = answer + document.getElementsByClassName('check_task_answer_' + paper_id)[i].value + "&"
-            }
-        }
-        if( $(".task_type_" + paper_id).attr("type") == "test" ){
-            for(var i = 0; i < document.getElementsByClassName("option_" + paper_id).length; i++){
-                if(document.getElementsByClassName("option_" + paper_id)[i].checked){
-                    answer = answer + document.getElementsByClassName("option_" + paper_id)[i].getAttribute("value") + "&"
-                }
-            }
-        }
-        if (pageUrl) {
-            $.ajax({
-                url: pageUrl,
-                data: {
-                    'id':this_.attr("id"),
-                    'answer':answer,
-                    'tags':tags,
-                    'parent_id':this_.attr("parent_id"),
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if(document.getElementById('hiscoins') != undefined){
-                        document.getElementById('hiscoins').innerHTML = data.hiscoins;
-                    }
-                    if (data.solved == true){
-                        document.getElementsByClassName('wrong_answer_alert_' + paper_id)[0].setAttribute('style', 'display:none')
-                        document.getElementsByClassName(paper_id + 'solved')[0].setAttribute('style', 'margin-right: 10px; font-size: 16px; font-weight: 600; color: green;');
-                        document.getElementsByClassName(paper_id + 'solved_tick')[0].setAttribute('style', 'color: green;font-size: 16px; font-weight: 600;')
-                        if(data.action == 'plus'){
-                            $('#coins_' + paper_id).toggleClass('bubble');
-                            $('.check_task_answer_' + paper_id).attr('style', 'border: 1.5px solid #008100 !important');                            
-                        }
-                    }
-                    else{
-                        document.getElementsByClassName('wrong_answer_alert_' + paper_id)[0].setAttribute('style', 'display:block')
-                        $('.check_task_answer_' + paper_id).attr('style', '')
-                        document.getElementsByClassName(paper_id + 'solved')[0].setAttribute('style', 'margin-right: 10px; font-size: 16px; font-weight: 600; color: black;');
-                        document.getElementsByClassName(paper_id + 'solved_tick')[0].setAttribute('style', 'display:none')
-                    }
                 }
             });
         }

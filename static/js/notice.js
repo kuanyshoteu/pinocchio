@@ -107,6 +107,7 @@ $("body").click(function(e){
     $('.bselect').hide()
     $('.show_search_students').hide()
     $('.folder_form').hide()
+    $('.change_task_modal').hide()
 });
 $('.reg_segment').click(function(e){
     $('.bselect').hide()

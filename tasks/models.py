@@ -25,14 +25,17 @@ class ProblemTag(models.Model):
 
 class Task(models.Model):
     author_profile = models.ForeignKey(Profile, default=1, on_delete = models.CASCADE)
-    slug = models.SlugField()
     text = models.TextField()
     image = models.ImageField(upload_to=upload_location, 
             null=True, 
             blank=True, 
             )
     answer = ArrayField(models.TextField(), default = list)
-    parent = models.ForeignKey("self", null=True, blank=True, on_delete = models.CASCADE)
+    parent = models.ForeignKey(
+        "self", 
+        null=True,
+        on_delete = models.CASCADE,
+        related_name = 'children')
     cost = models.IntegerField(default=1)
 
     is_test = models.BooleanField(default = False)
@@ -68,21 +71,6 @@ class Solver(models.Model):
     solver_try_number = models.IntegerField(default=0)
     task = models.ForeignKey(Task, default=1, on_delete = models.CASCADE, related_name='solver_checks')
 
-def create_slug(instance, new_slug=None):
-    if len(Task.objects.all()) > 0:
-        task = Task.objects.all()[len(Task.objects.all())-1]
-        slug = slugify('qqq' + str(task.id + 1))
-        if len(Task.objects.filter(slug=slug)) > 0:
-            slug = slugify('qqq' + str(task.id + 1) + 'q')
-    else:
-        slug = slugify('0')
-    return slug 
-
-def pre_save_course_receiver(sender, instance, *args, **kwargs):
-    if not instance.slug:
-        instance.slug = create_slug(instance)
-
-pre_save.connect(pre_save_course_receiver, sender=Task)
 
 
 

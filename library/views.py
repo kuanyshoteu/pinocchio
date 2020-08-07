@@ -23,7 +23,6 @@ def library(request):
 
 def school_library(request, school_id):
     profile = get_profile(request)
-    only_staff(profile)
     school = School.objects.get(id=school_id)
     is_in_school(profile, school)        
 
@@ -218,7 +217,6 @@ def get_folder_files(request):
     lessons = []
     school = is_moderator_school(request, profile)
     if request.GET.get('id'):
-        print(request.GET.get('id') == '-1')
         if request.GET.get('id') == '-1':
             lessons_q = school.lessons.filter(folder=None)
         else:
@@ -260,12 +258,220 @@ def create_lesson(request):
             author_profile = profile,
             )
         if request.GET.get('parent') != '-1':
-            folder = school.lesson_folders.filter(id = int(request.GET.get('parent')))
+            folder = school.lesson_folders.get(id = int(request.GET.get('parent')))
             lesson.folder = folder
         lesson.save()
+        lesson.papers.create(title="Введение", school=school)
         lessons = fill_lessons([lesson]) 
         ok = True
     data = {
         'lessons':lessons,
     }
     return JsonResponse(data)        
+
+def collect_task(task, is_main, profile):
+    task_res = []
+    if task.image:
+        image = task.image.url
+    else:
+        image = ''
+    answer_type = 'text'
+    if task.is_test:
+        answer_type = 'test'
+    if task.is_mult_ans:
+        answer_type = 'multans'
+    if is_profi(profile, 'Teacher'):
+        answer = task.answer
+        solver_correctness = False
+    else:
+        solver_checks = task.solver_checks.get_or_create(author_profile=profile)[0]
+        answer = solver_checks.solver_ans
+        solver_correctness = solver_checks.solver_correctness
+    task_res = [
+        task.id,        #0
+        task.text,      #1
+        image,          #2
+        answer,         #3
+        answer_type,    #4
+        task.variants,  #5
+        task.cost,      #6
+        solver_correctness, #7
+        ]
+    if is_main:
+        children = []
+        for ctask in task.children.all():
+            children.append(collect_task(ctask, False, profile))
+        task_res.append(children)
+    return task_res
+
+def collect_paper(paper, profile):
+    subthemes = []
+    for subtheme in paper.subthemes.all():
+        task_list = []
+        if subtheme.task:
+            task_list.append(collect_task(subtheme.task, True, profile))
+        if subtheme.video:
+            video = subtheme.video.url
+        else:
+            video = ''
+        if subtheme.file:
+            file = str(subtheme.file)
+            file_url = subtheme.file.url
+        else:
+            file = ''
+            file_url = ''
+        subthemes.append([
+            subtheme.id,                    #0
+            subtheme.content,               #1
+            file_url,                       #2
+            file,                           #3
+            subtheme.youtube_video_link,    #4
+            video,                          #5
+            task_list,                      #6
+            ])
+    res = [
+        paper.id,
+        paper.title,
+        subthemes,
+        ]    
+    return res
+
+def show_lesson(request):
+    profile = Profile.objects.get(user = request.user.id)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('lesson_id') and request.GET.get('paper_id'):
+        lesson = school.lessons.filter(id=int(request.GET.get('lesson_id')))
+        if len(lesson) == 0:
+            return JsonResponse({})
+        lesson = lesson[0]
+        paper_res = []
+        if request.GET.get('paper_id') == '-1':
+            paper = lesson.papers.filter(done_by=profile)
+            if len(paper) > 0:
+                paper = paper.first()
+            else:
+                paper = lesson.papers.first()
+        else:
+            paper = lesson.papers.filter(id=int(request.GET.get('paper_id')))
+            if len(paper) > 0:
+                paper = paper[0]
+        if paper:
+            paper_res = collect_paper(paper, profile)
+        else:
+            paper_res = []
+        all_papers = []
+        for paper in lesson.papers.all():
+            all_papers.append([paper.id, paper.title])
+        data = {
+            'paper_res':paper_res,
+            'title':lesson.title,
+            'author_profile':lesson.author_profile.first_name,
+            'author_profile_link':lesson.author_profile.get_absolute_url(),
+            'done_by':len(lesson.done_by.all()),
+            'try_by':len(lesson.try_by.all()),
+            'all_papers':all_papers,
+        }
+        return JsonResponse(data)        
+    else:
+        return JsonResponse({})
+
+def save_task(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        if request.GET.get('id') == '-1':
+            task = Task.objects.create()
+            task.save()
+            paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
+            if len(paper) == 0:
+                return JsonResponse({})
+            paper = paper[0]
+            subtheme = paper.subthemes.create()
+            subtheme.task = task
+            subtheme.save()
+        else:
+            task = Task.objects.filter(id=int(request.GET.get('id')))
+            if len(task) == 0:
+                return JsonResponse({})
+            task = task[0]
+        ans = request.GET.get('ans').split('@')
+        print('xxxx', ans)
+        variants = request.GET.get('variants').split('@')
+        del ans[-1]
+        del variants[-1]
+        task.answer = ans
+        task.text = request.GET.get('text')
+        task.variants = variants
+        if request.GET.get('type') == 'test':
+            task.is_test = True
+            task.is_mult_ans = False
+        elif request.GET.get('type') == 'multans':
+            task.is_test = False
+            task.is_mult_ans = True
+        else:
+            task.is_test = False
+            task.is_mult_ans = False
+        task.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def delete_subtheme(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        subtheme = Subtheme.objects.get(id=int(request.GET.get('id')))
+        subtheme.delete()
+    data = {
+    }
+    return JsonResponse(data)
+
+def add_task_to_subtheme(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id') and request.GET.get('paper_id'):
+        task = Task.objects.filter(id=int(request.GET.get('id')))
+        if len(task) == 0:
+            return JsonResponse({})
+        task = task[0]
+        paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
+        if len(paper) == 0:
+            return JsonResponse({})
+        paper = paper[0]
+        subtheme = paper.subthemes.create()
+        subtheme.task = task
+        subtheme.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def get_all_tasks(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    res = []
+    tasks = Task.objects.all()
+    for task in tasks:
+        res.append(collect_task(task, False, profile))
+    data = {
+        "res":res,
+    }
+    return JsonResponse(data)
+
+def save_paper_title(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('paper_id') and request.GET.get('title'):
+        paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
+        if len(paper) == 0:
+            return JsonResponse({})
+        paper = paper[0]
+        paper.title = request.GET.get('title')
+        paper.save()
+    data = {
+    }
+    return JsonResponse(data)

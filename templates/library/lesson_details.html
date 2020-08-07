@@ -17,10 +17,6 @@
 			    <div class="ui segment" style="padding-bottom: 20px;margin-bottom: 0">
 			        <h3 style="margin-bottom: 0;text-align: center; color: #696969;font-size: 30px;font-weight: 500">
 			            {{ lesson.title }}
-			            <br>
-			            {% if lesson.is_homework %}
-			                <span style="color: lightgreen; font-size: 13px; margin-left: 0px;font-weight: 600">Домашка</span>
-			            {% endif %}
 			        </h3>
 			        <div class="ui stackable grid" style="text-align: center; margin: 14px 0 0 0;">
 			            {% for ppr in lesson.papers.all %}

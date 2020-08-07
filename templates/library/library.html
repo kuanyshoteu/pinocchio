@@ -25,7 +25,7 @@
         <div class="ui stackable grid full-h">
             {% include 'left_menu.html' %}
             <div class="w85 wide column full-h">
-                <div class="library_page ui segment shadow_small no_padding">
+                <div class="mt0 library_page ui segment shadow_small no_padding">
                     <div class="backwhitelow dflex pb15 pl15 pt15 pr15">
                         <div class="dinline text21 textdg textbold dinline mr50">
                             Ваша база уроков
@@ -141,16 +141,16 @@
                         </div>
                     </div>
                 </div>
-                <div style="display: none;"  class="lesson_page full-h">
-                    {% include 'library/all_lesson_details.html' %}
-                    <div style="display: none;" class="get_lessons_load text-center pt10">
-                        <div class="ui active inline small loader"></div>
+                <div style="display: none;" class="mt0 lesson_page full-h">
+                    <div style="display: none;position: absolute;" class="full-w show_lesson_load text-center pt50">
+                        <div class="ui active inline large loader"></div>
                     </div>
+                    {% include 'library/all_lesson_details.html' %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-<span style="display: none;" class="data" crnt_folder="-1"></span>
+<span style="display: none;" class="data" crnt_folder="-1" opened_folder="-1"></span>
 {% include 'scripts/library.html' %}
 {% endblock %}

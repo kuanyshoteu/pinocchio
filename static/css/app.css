@@ -10770,9 +10770,7 @@ a.ui.label {
 /* Image */
 
 .ui.label > img {
-  width: auto !important;
   vertical-align: middle;
-  height: 2.1666em !important;
 }
 /* Icon */
 

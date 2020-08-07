@@ -1,12 +1,290 @@
-<div class="full-h">
-    <a style="position: absolute;left: 15;top:15;" id="go-back-btn-before" class="">
+{% load static %}
+<div class="full-h mb150">
+    {% if is_trener %}
+    <a style="position: absolute;left: 15;top:15;" id="go-back-btn-before" class="show_library">
         <i class="arrow left icon"></i>
     </a>
-    <div class="pl50">
-        <div class="ui segment shadow_small mt0 full-w">
-            УРОК
-        </div>            
+    {% endif %}
+    <div class="{% if is_trener %}pl50{% endif %} ui grid stackable no_margin">
+        <div class="mb15 twelve wide column pl0 pt0 {% if is_trener %}pr15{%else%}pr0{%endif%} pb0">
+            <div class="ui segment shadow_small pl0 pt0 pr0 pb50 topbr5 mt0 mb0 full-w" style="min-height: 300px;">
+                <div class="pl20 pr20 pt15 pb15 topbr5 text-center backwhitelow text21 textbold mb10 dflex">
+                    <div class="dflex" style="margin: 0 auto">
+                        <span class="crnt_lesson_title textdg mr10"></span>
+                        <div class="paper_title_box">
+                            <span class="crnt_paper_title textblue mr5"></span>
+                            {% if is_trener %}
+                            <a class="edit_paper_title"><i class="icon pen square textblue text17"></i></a>
+                            {% endif %}
+                        </div>
+                        {% if is_trener %}
+                        <form style="display: none;min-width: 300px;" class="ui form mb0 dinline paper_title_form">
+                            <div class="dflex">
+                                <textarea class="dinline mr5 mb0 paper_title_val" placeholder="Название страницы"></textarea>
+                                <a style="height: 26px;margin-top: 2px" class="save_paper_title ui button mini green shadow_green pt7"><i class="icon check textw mr0"></i></a>
+                            </div>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="pl20 pr20 pt10 pb0 textddg crnt_paper_box">
+                </div>
+                {% if is_trener %}
+                <div class="deskdflex pb15">
+                    <div class="shadow_small border1 ui segment pb30 br5 text-center" style="margin: 0 auto;">
+                        <div class="text-center text15 textblue textbold mb15">Добавить</div>
+                        <a id="-1" class="ui button green small textbold mr10 change_subtheme" status="text">
+                            <i class="icon file alternate textw"></i> Текст
+                        </a>
+                        <a got_tasks="no" class="add_task_open ui button blue small textbold mr10">
+                            <i class="icon tasks textw text15"></i> Задачу
+                        </a>
+                        <a id="-1" status="video" class="change_subtheme ui button youtube small textbold mr10">
+                            <i class="icon play circle textw"></i> Видео
+                        </a>
+                        <a id="-1" status="file" class="change_subtheme ui button teal small textbold mr10">
+                            <i class="icon paperclip textw"></i> Файл
+                        </a>
+                    </div>
+                </div>
+                <div class="ui modal small paper_add_text_box">
+                    <i class="icon close"></i>
+                    <div class="content">
+                        <form class="ui form">
+                            <div class="textdg textbold text15">Добавить текст</div>
+                            <div contenteditable="true" class="br5 borderblue pl10 pt5 pb5 pr10 mb5 mt5 paper_add_text_val" style="min-height: 70px;"></div>
+                            <div class="">
+                                <a id="-1" class="mr10 paper_add_text ui button blue shadow_blue pt7 pb7 small textbold">Добавить</a>
+                                <div style="display: none;" class="fill_subtheme_load ui active inline loader mini mr10"></div>
+                                <i class="icon check textgreen fill_subtheme_done" style="display: none;"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ui modal small add_video_modal">
+                    <i class="icon close"></i>
+                    <div class="content">
+                        <div class="text-center textblue textbold text17 mb15">Видео</div>
+                        <form class="ui form">
+                            <div class="textdg textbold text13">Видео из youtube</div>
+                            <textarea class="youtube_link_edit" placeholder="Ссылка на видео"></textarea>
+                            <div class="text-center textdg textbold mt5 mb15">или</div>
+                            <div class="text-center">
+                                <input type="file" id="paper_video" class="paper_video_input postfile pt0">
+                                <label class="" for="paper_video">
+                                    <a class="mb50 ui button small white shadow_small border1 textbold textblue"><i class="icon film blue"></i>Выберите своё видео</a>
+                                </label>
+                            </div>
+                            <div class="text-center">
+                                <a class="ui button small blue shadow_blue add_video">Сохранить</a>
+                                <div style="display: none;" class="ui active inline loader mini add_video_load"></div>
+                                <i style="display: none;" class="icon check textgreen add_video_done"></i>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ui modal small add_file_modal">
+                    <i class="icon close"></i>
+                    <div class="content">
+                        <div class="text-center textblue textbold text17 mb15">Загрузить файл</div>
+                        <form class="ui form">
+                            <div class="text-center">
+                                <input type="file" id="paper_file" class="paper_file_input postfile pt0">
+                                <label class="" for="paper_file">
+                                    <a class="mb30 ui button small white shadow_small border1 textbold textblue"><i class="icon paperclip textblue"></i>Выберите файл</a>
+                                </label>
+                                <div>
+                                    <a class="ui button small blue shadow_blue add_file">Сохранить</a>
+                                    <div style="display: none;" class="ui active inline loader mini add_file_load"></div>
+                                    <i style="display: none;" class="icon check textgreen add_file_done"></i>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="four wide column no_padding">
+            <div class="ui segment shadow_small mt0 full-w" style="min-height: 300px;">
+                <div class="text-center text17 textbold textdg mb15">
+                    Страницы
+                </div>
+                <div class="all_papers">
+                </div>
+                {% if is_trener %}
+                <div class="text-center mt30">
+                    <a class="add_paper ui button mini blue shadow_blue pt7 pb7 textbold">Добавить страницу</a>
+                </div>
+                {% endif %}
+            </div>            
+        </div>
     </div>
 </div>
-
-    
+{% if is_trener %}
+<div class="ui modal change_task_modal mt50" style="height: 100%;">
+    <i class="close icon"></i>
+    <div class="content">
+        <div class="" style="margin: 0 auto;width: 70%;min-height: 450px;">
+            <div class="mb15 text-center textblue text17 textbold change_task_head">
+                Изменить задачу
+            </div>
+            <div class="task_list_or_new text-center" style="display: none;">
+                <a class="show_new_task ui button small pt5 pb5 white shadow_small textblue border1 textbold">Создать задачу</a>
+                <a class="show_task_list ui button small pt5 pb5 blue shadow_blue textbold">Список существующих задач</a>                
+            </div>
+            <form class="ui form task_edit_form">
+                <div class="textdg textbold text15">Условие</div>
+                <textarea class="mb0 task_edit_text" style="height: 100px;"></textarea>
+                <div class="dflex mt15 mb10 textdg textbold">
+                    <div class="mr30 text15" style="padding-top: 2px">Ответ</div>
+                    <div class="">
+                        <a status="test" class="task_edit_type task_edit_type_radio ui button small textbold green shadow_green pt5 pb5 pl5 pr5">
+                            Тест
+                        </a>
+                        <a status="multans" class="task_edit_type task_edit_type_checkbox ui button small textbold white shadow_small border1 pt5 pb5 pl5 pr5">
+                            Тест с несколькими ответами
+                        </a>
+                        <a status="input" class="task_edit_type task_edit_type_input ui button small textbold white shadow_small border1 pt5 pb5 pl5 pr5">
+                            Ввод
+                        </a>
+                    </div>
+                </div>
+                <div class="task_edit_ans">
+                    <textarea style="display: none;" class="mb0 task_edit_ans_text" placeholder="Введите правильный ответ"></textarea>
+                    <div class="textdg text12 variants_extra">Отметьте галочкой правильные варианты</div>
+                    <div style="display: none;" class="task_edit_multans">
+                    </div>
+                    <div style="display: none;" class="task_edit_test">
+                    </div>
+                    <div class="variants_extra">
+                        <div class="textdg textbold text13 mt15">Новый вариант ответа</div>
+                        <div class="task_edit_test_variant dflex mb5">
+                            <div class="dflex edit_variant_box" style="width: calc(100% - 115px)">
+                                <label class="test_variant pt7 leftbr5" style="width: 35px !important; height: 30px;border-right: none;" for="">
+                                    <input class="edit_variant_input" type="checkbox">
+                                </label>
+                                <textarea class="edit_variant_text rightbr5 mb0 mr10"></textarea>
+                            </div>
+                            <div style="width: 115px;">
+                                <a class="add_variant full-w ui button mini mr0 pt7 pb7 pl5 pr5 blue shadow_blue textbold">Добавить вариант</a>
+                                <a style="display: none;" class="remove_variant full-w ui button mini mr0 pt7 pb7 pl5 pr5 white shadow_small border1 textbold textred">Убрать вариант</a>
+                            </div>
+                        </div>   
+                    </div>                 
+                </div>
+                <div class="mt50 text-center">
+                    <a class="ui button small blue shadow_blue save_task mr10" id="-1">Сохранить</a>
+                    <div style="display: none;" class="ui active inline loader mini save_task_load"></div>
+                    <i style="display: none;" class="icon check textgreen save_task_done"></i>
+                </div>
+            </form>
+            <div class="task_list_box">
+            </div>
+        </div>
+    </div>    
+</div>
+{% endif %}
+<div style="display: none;" class="lesson_origins">
+    <div class="text15 text_content pl15 pr15 mt5 mb30 subtheme_content">
+        {% if is_trener %}
+        <div class="ui divider" style="margin: 0 0 -18px -20px;"></div>
+        <div class="dflex">
+            <div class="pt5 dflex subtheme_btns backwhite pl10 pr10">
+                <a class="textred textbold mr10">
+                    <i class="icon angle up mr0 textblue"></i>
+                </a>            
+                <a class="textred textbold mr15">
+                    <i class="icon angle down mr0 textblue"></i>
+                </a>
+                <a class="text11 change_subtheme mr15" id="">Изменить</a>
+                <a class="textblue text12 delete_subtheme_open">Удалить</a>
+                <div style="position: absolute;display: none;" class="dinline delete_subtheme_sure text13 backwhite shadow_small br5 pt5 pr5 pb5 pl5 ml100">
+                    <span class="textblue textbold">Вы уверены?</span>
+                    <a class="ui button mini white shadow_small border1 pt5 pb5 ml10 textbold textblue delete_subtheme">Да</a>
+                    <a class="ui button mini border1 pt5 pb5" onclick="$('.delete_subtheme_sure').hide('fast')">Отменить</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="subtheme_content_box">
+            <div class="subtheme_content_text_box">
+            </div>
+        </div>
+        <div class="subtheme_youtube_box"></div>
+        <div class="subtheme_file_box"></div>
+    </div>
+    <div class="lesson_task pt10 pb10">
+        {% if is_trener %}
+        <div class="pl30 ml10">
+            <a class="text11 change_task">Изменить</a>
+            <a class="ml15 mr10 ui button mini pt5 pb5 white border1 shadow_small textbold textblue add_task_to_subtheme">Добавить</a>
+            <i style="display: none;" class="add_done icon check textgreen"></i>
+        </div>
+        {% endif %}
+        <div class="dflex text15 textddg text_content">
+            <div style="width: 40px">
+                <span class="task_number textblue textbold mr10"></span>
+                <div><i style="display: none;" class="task_solved text14 icon check textgreen"></i></div>
+            </div>
+            <div class="problem" style="width: calc(100% - 40px)">
+                <span class="task_content task_text"></span>
+                <div class="text-center">
+                    <img style="display: none;max-width: 92%; max-height: 100px;" class="task_img" src="">
+                </div>
+                <div class="half-w answer_box mt10">
+                </div>
+                {% if not is_trener %}
+                <div class="mt10 send_answer">
+                    <a class="ui button small pt5 pb5 textblue textbold white border1 shadow_small check_task_answer">Отправить</a>
+                    <div class="coin_box" style="display: none;">
+                        <div class="ui grid" style="width: 100px;">
+                            <div class="four wide column no_padding" style="line-height: 30px;">
+                                <h4>+<span class="cost_coin"></span></h4>
+                            </div>
+                            <div class="twelve wide column no_padding">
+                                <img style="width: 30px;" src="{% static 'images/coins_gold.png'%}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui active inline loader mini ml10 check_task_load" style="display: none;"></div>
+                    <i class="icon check textgreen text13 ml10 correct_ans" style="display: none;"></i>
+                    <span class="textbold textred ml10 wrong_ans" style="display: none;">Упс! Неверно, попробуйте еще раз!</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <label class="test_variant test_variant_orig mb5">
+        <input {%if is_trener %}disabled{%endif%} class="ans_input mr10" type="radio"> 
+        <span class="variant_val"></span>
+    </label>
+    <form class="ui form mb0 answer_text">
+        <textarea class="mb0 answer_text_val" placeholder="Ответ"></textarea>
+    </form>    
+    <div class="text-center lesson_file">
+        <a target="_blank" class="ui button small white shadow_small border1 textblue textbold">
+            <i class="icon download textblue"></i>
+            <span class="file_name"></span>
+        </a>
+    </div>
+    <div class="text-center youtube_video mt15 mb15">
+        <iframe class="yt" style="width: 92%; height: 360px;" src="" allowfullscreen></iframe>
+    </div>
+    <div class="text-center lesson_video mt15 mb15">
+        <video style="width: 92%; height: 360px; border: 1px solid grey;" controls>
+          <source class="video_source" src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>                        
+    </div>
+    <div class="lesson_data" paper_id=""></div>
+    <div class="full-w paper_origin mb5">
+        <a class="show_paper ui button small text14 white pt7 pb7 pl5 pr5 text-left full-w textblue textbold">
+            <span class="paper_list_title"></span>
+            <span style="float: right;">
+                <i style="display: none;" class="icon check textgreen"></i>
+                <i class="icon stop textred"></i>
+            </span>
+        </a>
+    </div>    
+</div>

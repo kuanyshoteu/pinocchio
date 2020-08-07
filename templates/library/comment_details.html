@@ -1,40 +1,24 @@
 {% load ttttags %}
 {% load staticfiles %}
-<div class="mt30 dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
+<div class="dflex {% if forloop.counter == 1%}comment_orig{%endif%}">
 	<a href="{{ comment.author_profile.get_absolute_url }}" class="mr10 dinline">
 		<img src="{% static 'images/nophoto.svg' %}" class="comment_author_img" style="width: 35px;height: 35px;border-radius: 4px;">
 	</a>
 	<div class="dinline full-w">
 		<div class="full-w dinline">
-			<a class="mr15 textbold comment_author" href="{{ comment.author_profile.get_absolute_url }}">{{ comment.author_profile.first_name }}</a>
-			<span class="textdg comment_time">{{ comment.timestamp }}</span>
+			<a class="mr15 textbold comment_author" href="{{ comment.author_profile.get_absolute_url }}">kuanysh</a>
+			<span class="textdg comment_time">15 july</span>
 		</div>
-		<div class="text14 comment_content">{{ comment.content }}</div>
+		<div class="text14 comment_content">yoyoy</div>
 		<div class="dflex">
 			<a class="like_comment" id="{{ comment.id }}" url="{{ comment.like_url }}">
-				<i class="mr0 icon triangle text21 up {% if profile in comment.likes.all %}green{% endif %}" id="likeup{{ comment.id }}"></i>
+				<i class="mr0 icon triangle text21 up green" id="likeup{{ comment.id }}"></i>
 			</a>
 			<a class="dislike_comment" id="{{ comment.id }}" url="{{ comment.dislike_url }}">
-				<i class="mr0 icon triangle text21 down {% if profile in comment.dislikes.all %}red{% endif %}" id="dislikedown{{ comment.id }}"></i>
+				<i class="mr0 icon triangle text21 down red" id="dislikedown{{ comment.id }}"></i>
 			</a>
-			<b id="likes_number{{ comment.id }}" class="mr15 textg">{{ comment|count_likes }}</b>
+			<b id="likes_number{{ comment.id }}" class="mr15 textg">5</b>
 			<a onclick="$('#comment'+$(this).attr('id')).fadeToggle('fast')" id="{{ comment.id }}" class="textdg">Ответить</a>
 		</div>
 	</div>
 </div>
-<div class="mt10" style="display: none; margin-left: 45px;" id="comment{{ comment.id }}">
-	<form class="ui form">
-		<textarea class="mb5" id="comment_content{{ comment.id }}" placeholder="Введите текст комментария"></textarea>
-		<a class="ui button mini blue new_comment" url="{{ lesson.new_comment_url }}" parent_id="{{ comment.id }}">Отправить</a>
-		<a class="ui button mini">Отмена</a>
-	</form>
-</div>
-{% if comment.children.all|length > 0 %}
-<div style="border-left: solid 1px #e8e8e8">
-	<div style="margin-left: 30px;">
-	{% for comment in comment|get_children %}
-		{% include 'library/comment_details.html' %}
-	{% endfor %}
-	</div>
-</div>
-{% endif %}

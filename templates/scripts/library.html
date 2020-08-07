@@ -41,12 +41,13 @@
                     <i class="icon star textgold text11"></i>
                     <i class="icon star textgold text11"></i>
                     <i class="icon star textgold text11"></i>
-                    <i class="icon star text11"></i>
-                </span>
+                    <i class="icon star textgold text11"></i>
+<!--                     <i class="icon star text11"></i>
+ -->                </span>
             </div>
             <div class="three wide column no_padding">
-                <div class="ui button mini pl5 pt5 pb5 pr5 white shadow_small">Опубликовать</div>
-            </div>
+<!--                 <div class="ui button mini pl5 pt5 pb5 pr5 white shadow_small">Опубликовать</div>
+ -->            </div>
         </div>
     </a>
     <form class="ui form shadow_small rename_lesson_form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
@@ -66,6 +67,12 @@
 <script type="text/javascript">
     fill_library()
     function fill_library(){
+        hash = document.location.hash
+        if (hash.length > 0) {
+            lesson_id = hash.split('p')[0].replace('#l', '')
+            paper_id = hash.split('p')[1].replace('#p', '')
+            show_lesson(lesson_id, paper_id)
+        }
         url = '{% url "library:get_library" %}'
         $.ajax({
             url: url,
@@ -76,7 +83,6 @@
                 folders = data.folders
                 for (var i = 0; i < folders.length; i++) {
                     folder = folders[i]
-                    // console.log(folder)
                     fill_folders(folder)
                 }
                 lessons = data.lessons
@@ -85,6 +91,605 @@
             }
         })
     }
+    $('.edit_paper_title').click(function(event){
+        $('.paper_title_box').hide()
+        $('.paper_title_form').show()
+        $('.paper_title_val').val($('.crnt_paper_title').text())
+    })    
+    $('.save_paper_title').click(function(event){
+        title = $('.paper_title_val').val()
+        paper_id = $('.lesson_data').attr('paper_id')
+        $('.crnt_paper_title').text(title)
+        $('.paper_title_box').show()
+        $('.paper_title_form').hide()
+        $('.show_paper'+paper_id).text(title)
+        $.ajax({
+            url: '{%url "library:save_paper_title"%}',
+            data: {
+                'title':title,
+                'paper_id':paper_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+            }
+        })
+    })    
+    $('.add_paper').click(function(event){
+        lesson_id = hash.split('p')[0].replace('#l', '')
+        $(this).addClass('disabled')
+        $.ajax({
+            url: '{%url "papers:add_paper_url"%}',
+            data: {
+                'lesson_id':lesson_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.save_paper_title').removeClass('disabled')
+                $('.save_paper_load').hide()
+                paper_id = data.paper_id
+                show_lesson(lesson_id, paper_id)
+            }
+        })
+    })
+    $('.show_library').click(function(event){
+        $('.lesson_page').hide()
+        $('.library_page').show('fast')
+        document.location.hash = "";
+    })    
+    $('.lesson_file').click(function(){
+        this_ = $(this)
+        id = this_.attr('id')
+        show_lesson(id, '-1')
+    })
+    function show_lesson(lesson_id, paper_id){
+        $('.show_lesson_load').show()
+        $('.library_page').hide()
+        $.ajax({
+            url: '{%url "library:show_lesson"%}',
+            data: {
+                'lesson_id':lesson_id,
+                'paper_id':paper_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.lesson_page').show()
+                $('.show_lesson_load').hide()
+                title = data.title
+                paper_res = data.paper_res
+                $('.crnt_lesson_title').text(title)
+                if (paper_res.length > 0) {
+                    fill_paper(paper_res, lesson_id)
+                }
+                paper_id = paper_res[0]
+                $('.all_papers').empty()
+                all_papers = data.all_papers
+                for (var i = 0; i < all_papers.length; i++) {
+                    id = all_papers[i][0]
+                    title = all_papers[i][1]
+                    paper_box = $('.paper_origin').clone(true)
+                    paper_box.removeClass('paper_origin')
+                    paper_box.find('.paper_list_title').text(title)
+                    paper_box.find('.show_paper').attr('id', id)
+                    paper_box.find('.show_paper').addClass('show_paper' + id)
+                    if (paper_id == id) {
+                        paper_box.addClass('shadow_small')
+                    }
+                    paper_box.appendTo('.all_papers')
+                }
+            }
+        }) 
+    }
+    $('.show_paper').click(function(e){
+        paper_id = $(this).attr('id')
+        lesson_id = hash.split('p')[0].replace('#l', '')
+        console.log(lesson_id, '66666666')    
+        show_lesson(lesson_id, paper_id)
+    })
+    function fill_paper(paper_res, lesson_id){
+        paper_id = paper_res[0]
+        $('.lesson_data').attr('paper_id', paper_id)
+        document.location.hash = "l"+lesson_id+"p"+paper_id;
+        title = paper_res[1]
+        $('.crnt_paper_title').text(title)
+        subthemes = paper_res[2]
+        crnt_paper_box = $('.crnt_paper_box')
+        crnt_paper_box.empty()
+        task_number = 0
+        is_new = true
+        for (var i = 0; i < subthemes.length; i++) {
+            subtheme = subthemes[i]
+            fill_subtheme(subtheme, task_number, is_new)
+        }
+    }
+    $('.delete_subtheme_open').click(function(){
+        $('.delete_subtheme_sure').hide()
+        $(this).parent().find('.delete_subtheme_sure').show('fast')
+    })
+    $('.delete_subtheme').click(function(){
+        id = $(this).parent().parent().parent().parent().attr('id')
+        $.ajax({
+            url: "{% url 'library:delete_subtheme' %}",
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.subtheme'+id).hide('fast')
+                number_tasks()
+            }
+        })
+    })
+    function fill_subtheme(subtheme, task_number, is_new){
+        origins = $('.lesson_origins')
+        crnt_paper_box = $('.crnt_paper_box')
+        id = subtheme[0]
+        content = subtheme[1]
+        content_box = origins.find('.subtheme_content').clone(true)
+        content_box.removeClass('subtheme_content')
+        console.log('xx', is_new)
+        if (is_new) {
+            content_box.appendTo(crnt_paper_box)
+        }
+        else{
+            old_subtheme = $('.subtheme'+id)
+            content_box.insertBefore(old_subtheme)
+            old_subtheme.remove()
+        }
+        content_box.attr('id', id)
+        content_box.addClass('subtheme'+id)
+        if (content) {
+            if (content.length > 0) {
+                content_box.find('.change_subtheme').attr('status', 'text')
+                content_box.find('.change_subtheme').attr('id',id)
+                content_box.find('.subtheme_content_edit').attr('id',id)
+                content_box.find('.subtheme_content_text_box').html(content)
+            }
+        }
+        file_url = subtheme[2]
+        if (file_url.length > 0) {
+            content_box.find('.change_subtheme').attr('status', 'file')
+            content_box.find('.change_subtheme').attr('id',id)
+            file_name = subtheme[3]
+            file_box = origins.find('.lesson_file').clone(true)
+            file_box.removeClass('lesson_file')
+            file_box.find('.button').attr('href', file_url)
+            file_box.find('.file_name').text(file_name)
+            file_box.appendTo(content_box)                
+        }
+        youtube = subtheme[4]
+        if (youtube.length > 0) {
+            console.log('88888888888')
+            content_box.find('.change_subtheme').attr('status', 'video')
+            content_box.find('.change_subtheme').attr('id',id)
+            youtube_box = origins.find('.youtube_video').clone(true)
+            youtube_box.removeClass('youtube_video')
+            youtube_box.find('.yt').attr('src', youtube)
+            youtube_box.appendTo(content_box.find('.subtheme_youtube_box'))
+        }
+        video_link = subtheme[5]
+        if (video_link.length > 0) {
+            content_box.find('.change_subtheme').attr('status', 'video')
+            content_box.find('.change_subtheme').attr('id',id)
+            video_box = origins.find('.lesson_video').clone(true)
+            video_box.removeClass('lesson_video')
+            video_box.find('.video_source').attr('src', video_link)
+            video_box.appendTo(content_box)
+        }
+        task_list = subtheme[6]
+        if (task_list.length > 0) {
+            content_box.find('.change_subtheme').hide()
+            subtheme_content_box = content_box.find('.subtheme_content_box')
+            for (var j = 0; j < task_list.length; j++) {
+                task_number += 1
+                task = task_list[j]
+                id = task[0]
+                text = task[1]
+                image = task[2]
+                answers = task[3]
+                answer_type = task[4]
+                variants = task[5]
+                cost = task[6]
+                solver_correctness = task[7]
+                is_new = true
+                toalltask = false
+                fill_task(id, task_number, text, image, answers, answer_type, variants, is_new, solver_correctness, toalltask, subtheme_content_box)
+            }
+            number_tasks()
+        }        
+    }
+    $('.task_edit_type').click(function(e){
+        $('.task_edit_type').removeClass('green shadow_green')
+        $('.task_edit_type').addClass('white shadow_small')
+        if ($(this).attr('status') == 'test') {
+            $('.task_edit_type_radio').removeClass('white shadow_small')
+            $('.task_edit_type_radio').addClass('green shadow_small')
+            $('.task_edit_test').show()
+            $('.variants_extra').show()
+            $('.task_edit_multans').hide()
+            $('.task_edit_ans_text').hide()
+            $('.edit_variant_input').attr('type', 'radio')
+        }
+        else if($(this).attr('status') == 'multans'){
+            $('.task_edit_type_checkbox').removeClass('white shadow_small')
+            $('.task_edit_type_checkbox').addClass('green shadow_small')
+            $('.task_edit_multans').show()
+            $('.variants_extra').show()
+            $('.task_edit_test').hide()
+            $('.task_edit_ans_text').hide()
+            $('.edit_variant_input').attr('type', 'checkbox')
+        }
+        else{
+            $('.task_edit_type_input').removeClass('white shadow_small')
+            $('.task_edit_type_input').addClass('green shadow_small')
+            $('.task_edit_ans_text').show()
+            $('.variants_extra').hide()
+            $('.task_edit_test').hide()
+            $('.task_edit_multans').hide()
+        }
+    })
+    $('.remove_variant').click(function(e){
+        variant_box = $(this).parent().parent()
+        variant_box.remove()
+    })
+    $('.add_variant').click(function(e){
+        parent = $(this).parent().parent()
+        input = parent.find('.edit_variant_input')
+        type = input.attr('type')
+        if (type == 'radio' && input.is(':checked')) {
+            $('.task_edit_test').find('.edit_variant_input').each(function(){
+                $(this).prop('checked', false)
+            })
+        }
+        variant = $('.task_edit_test_variant').clone(true)
+        variant.removeClass('task_edit_test_variant')
+        type = $('.task_edit_type.green').attr('status')
+        variant.find('.add_variant').remove()
+        variant.find('.remove_variant').attr('style', 'display:block')
+        variant.appendTo('.task_edit_'+type)
+        input.prop('checked', false)
+        $('.variants_extra').find('.edit_variant_text').val('')
+    })
+    $('.change_task').click(function(e){
+        $('.change_task_head').text('Изменить задачу')
+        $('.task_list_or_new').hide()
+        $('.task_edit_form').show()
+        $('.task_list_box').hide()
+        $('.change_task_modal').modal('show')
+        task_box = $(this).parent().parent()
+        id = task_box.attr('id')
+        task_number = $(this).attr('task_number')
+        $('.save_task').attr('task_number', task_number)
+        $('.save_task').attr('id', id)
+        text = task_box.find('.task_text').text()
+        $('.task_edit_text').val(text)
+        answer_box = task_box.find('.answer_box')
+        textarea = $('.task_edit_ans_text')
+        task_edit_multans = $('.task_edit_multans')
+        task_edit_test = $('.task_edit_test')
+        if (answer_box.find('.test_variant').length > 0) {
+            textarea.hide()
+            task_edit_multans.empty()
+            task_edit_test.empty()
+            $('.edit_variant_text').val('')
+            $('.edit_variant_input').prop('checked', false)
+            $('.variants_extra').show()
+            type = answer_box.find('.ans_input').attr('type')
+            $('.edit_variant_input').attr('type', type)
+            if (type == 'radio') {
+                task_edit_variants = task_edit_test
+            }
+            else {
+                task_edit_variants = task_edit_multans
+            }
+            task_edit_variants.show()
+            $('.task_edit_type').removeClass('green shadow_green')
+            $('.task_edit_type').addClass('white shadow_small')
+            $('.task_edit_type_'+type).removeClass('white shadow_small')
+            $('.task_edit_type_'+type).addClass('green shadow_small')
+            i = 0
+            answer_box.find('.test_variant').each(function(){
+                variant = $('.task_edit_test_variant').clone(true)
+                variant.removeClass('task_edit_test_variant')
+                variant.attr('for', 'edit_var'+i)
+                input = variant.find('.edit_variant_input')
+                input.attr('type',type)
+                input.attr('id', 'edit_var'+i)
+                i += 1;
+                if ($(this).find('.ans_input').is(':checked')) {
+                    input.prop('checked', true)
+                }
+                else{
+                    input.prop('checked', false)                    
+                }
+                variant_text = $(this).find('.variant_val').text()
+                variant.find('.edit_variant_text').val(variant_text)
+                variant.find('.add_variant').remove()
+                variant.find('.remove_variant').attr('style', 'display:block')
+                variant.appendTo(task_edit_variants)
+            })
+        }
+        else{
+            $('.task_edit_type').removeClass('green shadow_green')
+            $('.task_edit_type').addClass('white shadow_small')
+            $('.task_edit_type_input').removeClass('white shadow_small')
+            $('.task_edit_type_input').addClass('green shadow_small')
+            $('.task_edit_multans').hide()
+            $('.task_edit_test').hide()
+            $('.variants_extra').hide()
+            textarea.show()
+            answer = answer_box.find('.answer_text_val').val()
+            textarea.val(answer)
+        }
+    })
+    $('.show_task_list').click(function(e){
+        $('.show_task_list').removeClass('white shadow_small textblue ')
+        $('.show_task_list').addClass('blue shadow_blue')
+        $('.show_new_task').removeClass('blue shadow_blue')
+        $('.show_new_task').addClass('white shadow_small textblue ')
+        $('.task_edit_form').hide()
+        $('.task_list_box').show()
+    })
+    $('.show_new_task').click(function(e){
+        $('.show_new_task').removeClass('white shadow_small textblue ')
+        $('.show_new_task').addClass('blue shadow_blue')
+        $('.show_task_list').removeClass('blue shadow_blue')
+        $('.show_task_list').addClass('white shadow_small textblue ')
+        $('.task_edit_form').show()
+        $('.task_list_box').hide()
+    })
+    $('.add_task_open').click(function(e){
+        $('.change_task_modal').modal('show')
+        $('.task_list_or_new').show()
+        $('.task_edit_form').hide()
+        $('.task_list_box').show()
+        textarea = $('.task_edit_ans_text')
+        task_edit_multans = $('.task_edit_multans')
+        task_edit_test = $('.task_edit_test')
+        task_edit_multans.empty()
+        task_edit_test.empty()
+        textarea.hide()
+        task_edit_multans.hide()
+        task_edit_test.show()
+        $('.task_edit_text').val('')
+        $('.edit_variant_text').val('')
+        $('.edit_variant_input').prop('checked', false)
+        $('.variants_extra').show()
+        $('.edit_variant_input').attr('type', 'radio')
+        $('.task_edit_type').removeClass('green shadow_green')
+        $('.task_edit_type').addClass('white shadow_small')
+        $('.task_edit_type_radio').removeClass('white shadow_small')
+        $('.task_edit_type_radio').addClass('green shadow_small')
+        $('.change_task_head').text('Добавить задачу')
+        if ($(this).attr('got_tasks') == 'no') {
+            $('.get_all_tasks_load').show()
+            $.ajax({
+                url: "{% url 'library:get_all_tasks' %}",
+                data: {
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.get_all_tasks_load').hide()
+                    $('.add_task_open').attr('got_tasks', 'yes')
+                    alltasks = data.res
+                    task_number = 0
+                    for (var i = 0; i < alltasks.length; i++) {
+                        task_number += 1
+                        task = alltasks[i]
+                        id = task[0]
+                        text = task[1]
+                        image = task[2]
+                        answers = task[3]
+                        answer_type = task[4]
+                        variants = task[5]
+                        cost = task[6]
+                        solver_correctness = task[7]
+                        is_new = false
+                        toalltask = true
+                        subtheme = false
+                        fill_task(id, task_number, text, image, answers, answer_type, variants, is_new, solver_correctness, toalltask, subtheme)
+                    }
+                }
+            })            
+        }
+    })
+    function number_tasks(){
+        i = 1
+        $('.crnt_paper_box').find('.task_number').each(function(){
+            $(this).text(i + '. ')
+            i+=1
+        })
+    }
+    $('.save_task').click(function(e){
+        id = $(this).attr('id')
+        task_number = $(this).attr('task_number')
+        lesson_box = $('.lesson_task'+id)
+        type = $('.task_edit_type.green').attr('status')
+        text = $('.task_edit_text').val()
+        ans_ar = []
+        variants_ar = []
+        if (type == 'test' || type == 'multans') {
+            ans = ''
+            variants = ''
+            if (type == 'test') {
+                boxes = $('.task_edit_test')
+            }
+            else{
+                boxes = $('.task_edit_multans')
+            }
+            i = 0
+            boxes.find('.edit_variant_box').each(function(){
+                is_checked = $(this).find('.edit_variant_input').is(':checked')
+                variant_text = $(this).find('.edit_variant_text').val()
+                if (is_checked) {
+                    ans += i + '@'
+                    ans_ar.push(i)
+                }
+                variants += variant_text + '@'
+                variants_ar.push(variant_text)
+                i += 1
+            })
+        }
+        else{
+            ans = $('.task_edit_ans_text').val() + '@'
+            variants = ''
+            ans_ar = [$('.task_edit_ans_text').val()]
+            variants_ar = [0]
+        }
+        $('.save_task').addClass('disabled')
+        $('.save_task_load').show()
+        $('.save_task_done').hide()
+        sdata =  {
+            'id':id,
+            'type':type,
+            'variants':variants,
+            'ans':ans,
+            'text':text,
+        }
+        if (id == '-1') {
+            sdata.paper_id = $('.lesson_data').attr('paper_id')
+        }
+        $.ajax({
+            url: "{% url 'library:save_task' %}",
+            data: sdata,
+            dataType: 'json',
+            success: function (data) {
+                $('.save_task_load').hide()
+                $('.save_task_done').show()
+                $('.save_task').removeClass('disabled')
+                lesson_box.find('.task_text').text(text)
+                answer_box = lesson_box.find('.answer_box')
+                answer_box.empty()
+                is_new = false
+                subtheme = false
+                if (id == '-1') {
+                    id = data.id
+                    is_new = true
+                    subtheme = $('.subtheme_content').clone(true)
+                    subtheme.removeClass('subtheme_content')
+                    subtheme.appendTo('.crnt_paper_box')
+                }
+                image = ''
+                toalltask = false
+                fill_task(id, task_number, text, image, ans_ar, type, variants_ar, is_new, solver_correctness, toalltask, subtheme)
+                number_tasks()                
+            }
+        })
+    })
+    function fill_task(id, task_number, text, image, answers, answer_type, variants, is_new, solver_correctness, toalltask, subtheme){
+        origins = $('.lesson_origins')
+        task_box = origins.find('.lesson_task').clone(true)
+        task_box.removeClass('lesson_task')
+        if (solver_correctness) {
+            task_box.find('.task_solved').show()
+        }
+        task_box.attr('id', id)
+        task_box.find('.task_number').text(task_number + '. ')
+        task_box.find('.change_task').attr('task_number', task_number)
+        task_box.find('.task_content').text(text)
+        task_box.find('.check_task_answer').attr('id', id)
+        answer_box = task_box.find('.answer_box')
+        if (image.length > 0) {
+            task_box.find('.task_img').attr('src', image)
+        }
+        if (answer_type == "test" || answer_type == "multans") {
+            for (var k = 0; k < variants.length; k++) {
+                variant = variants[k]
+                variant_label = $('.test_variant_orig').clone(true)
+                variant_label.removeClass('test_variant_orig')
+                input = variant_label.find('.ans_input')
+                input.attr('id', 't'+id+'v'+k)
+                if (answer_type == "test") {
+                    input.attr('type', 'radio')
+                }
+                else{
+                    input.attr('type', 'checkbox')
+                }
+                variant_label.attr('for', 't'+id+'v'+k)
+                variant_label.find('.variant_val').text(variant)
+                variant_label.appendTo(answer_box)
+            }
+            ans_inputs = answer_box.find('.ans_input')
+            for (var k = 0; k < answers.length; k++) {
+                ans_inputs.eq(answers[k]).prop('checked', true)
+            }
+        }
+        else{
+            answer_text = $('.answer_text').clone(true)
+            answer_text.find('.answer_text_val').val(answers[0])
+            answer_text.removeClass('answer_text')
+            answer_text.appendTo(answer_box)
+        }
+        if (is_new) {
+            task_box.appendTo(subtheme)
+            task_box.find('.add_task_to_subtheme').hide()
+        }
+        else{
+            if (toalltask) {
+                if (task_number % 2 == 0) {
+                    task_box.addClass('backwhitelow')
+                }
+                task_box.addClass('pl15 pr15 br5')
+                task_box.find('.add_task_to_subtheme').show()
+                task_box.appendTo('.task_list_box')
+            }
+            else{
+                number_tasks()
+                task_box.find('.add_task_to_subtheme').hide()
+                task_box.insertBefore('.lesson_task'+id)
+                $('.lesson_task'+id).remove()
+            }
+        }
+        task_box.addClass('lesson_task'+id)     
+    }    
+    $('.add_task_to_subtheme').click(function(e){
+        this_ = $(this)
+        task_box = this_.parent().parent()
+        id = task_box.attr('id')
+        paper_id = $('.lesson_data').attr('paper_id')
+        this_.addClass('disabled')
+        $.ajax({
+            url: "{% url 'library:add_task_to_subtheme' %}",
+            data: {
+                'id':id,
+                'paper_id':paper_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                this_.removeClass('disabled')
+                task_box_clone = task_box.clone(true)
+                task_box.find('.add_done').show()
+                task_box_clone.removeClass('backwhitelow')
+                subtheme = $('.subtheme_content').clone(true)
+                subtheme.removeClass('subtheme_content')
+                task_box_clone.appendTo(subtheme.find('.subtheme_content_box'))
+                subtheme.appendTo('.crnt_paper_box')
+                task_box_clone.find('.add_task_to_subtheme').hide()
+                number_tasks()                
+            }
+        })
+    })
+    $('.edit_variant_input').click(function(e){
+        input = $(this)
+        if (input.attr('type') == 'radio') {
+            $('.task_edit_test').find('.edit_variant_input').each(function(){
+                $(this).prop('checked', false)
+            })
+            input.prop('checked', true)            
+        }
+    })
+    {% if not is_trener %}
+    $('.test_variant').click(function(e){
+        input = $(this).find('.ans_input')
+        if (input.attr('type') == 'radio') {
+            parent = $(this).parent()
+            parent.find('.test_variant').each(function(){
+                o_input = $(this).find('.ans_input')
+                o_input.prop('checked', false)
+            })
+            input.prop('checked', true)            
+        }
+    })
+    {% endif %}
     function fill_folders(folder){
         id = folder[0]
         title = folder[1]
@@ -117,12 +722,12 @@
         done_by = lesson[6]
         published = lesson[7]
         url = lesson[8]
-        lesson = $('.lesson_file_orig').clone()
+        lesson = $('.lesson_file_orig').clone(true)
         lesson.removeClass('lesson_file_orig')
         lesson.find('.lesson_title').text(title)
         lesson.find('.lesson_order').text(i+1)
-        // lesson.attr('onclick', 'show_lesson('+id+')')
-        lesson.attr('href', url)
+        lesson.attr('id', id)
+        // lesson.attr('href', url)
         lesson.appendTo('.lessons_box')
     }
     function fill_lectures(lessons){
@@ -146,6 +751,7 @@
     }
     function open_folder(id){
         folder = $('.folder'+id)
+        $('.data').attr('opened_folder', id)
         $('.folder_button').removeClass('backlightblue textw')
         $('.folder_button').addClass('white')
         folder.find('.folder_button').eq(0).addClass('backlightblue textw')
@@ -197,7 +803,7 @@
     }
     function create_folder_form(event){
         event.stopPropagation()
-        id = $('.data').attr('crnt_folder')
+        id = $('.data').attr('opened_folder')
         folder = $('.folder'+id)
         h = folder.position().top
         title = folder.find('.folder_title').eq(0).text()
@@ -217,21 +823,6 @@
         $('.folder_form').hide()
         $('.delete_folder_sure').show()
     })
-    function show_lesson(id){
-        $('.library_page').hide()
-        $('.lesson_page').show('fast')
-        $.ajax({
-            url: '{%url "library:delete_folder_url"%}',
-            data: {
-                'title':title,
-                'id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-
-            }
-        })
-    }
     $('.go_delete_folder').click(function(event){
         id = $('.data').attr('crnt_folder')
         folder = $('.folder'+id)
@@ -322,7 +913,7 @@
     })
     $('.create_lesson').click(function (event) {
         title = $('.new_lesson_title_text').val()
-        parent = $('.data').attr('crnt_folder')
+        parent = $('.data').attr('opened_folder')
         this_ = $(this)
         this_.addClass('disabled')
         if (title.length > 0) {
@@ -343,4 +934,231 @@
             });              
         }
     })
+    $(".check_task_answer").click(function () {
+        var this_ = $(this)
+        var id = this_.attr("id")
+        task_box = $('.lesson_task'+id)
+        answer_box = task_box.find('.answer_box')
+        var ans = ""
+        if (answer_box.find('.test_variant').length > 0){
+            type = answer_box.find('.ans_input').attr('type')
+            variants = ""
+            i = 0
+            answer_box.find('.test_variant').each(function(){
+                is_checked = $(this).find('.ans_input').is(':checked')
+                variant_text = $(this).find('.variant_val').text()
+                if (is_checked) {
+                    ans += i + '@'
+                }
+                variants += variant_text + '@'
+                i += 1
+            })
+        }
+        else{
+            ans = answer_box.find('.answer_text_val').val() + '@'
+        }
+        task_box.find('.check_task_load').show()
+        task_box.find('.wrong_ans').hide()
+        task_box.find('.correct_ans').hide()
+        $.ajax({
+            url: "{% url 'tasks:change_answer_url' %}",
+            data: {
+                'id':id,
+                'ans':ans,
+            },
+            dataType: 'json',
+            success: function (data) {
+                //$('.hiscoins').text(data.hiscoins)
+                task_box.find('.check_task_load').hide()
+                if (data.solved == true){
+                    task_box.find('.wrong_ans').hide()
+                    task_box.find('.correct_ans').show()
+                    task_box.find('.task_solved').show()
+                    if(data.action == 'plus'){
+                        task_box.find('.coin_box').toggleClass('bubble');
+                    }
+                }
+                else{
+                    task_box.find('.task_solved').hide()
+                    task_box.find('.wrong_ans').show()
+                    task_box.find('.correct_ans').hide()
+                }
+            }
+        });
+    });
+    $('.change_subtheme').click(function(e){
+        status = $(this).attr('status')
+        if (status == 'text') {
+            paper_add_text_open($(this))
+        }
+        else if (status == 'video') {
+            add_video_open($(this))
+        }
+        else if (status == 'file') {
+            add_file_open($(this))
+        }
+
+    })
+    function add_video_open(this_){
+        $('.add_video_modal').modal('show')
+        id = this_.attr('id')
+        youtube_link = $('.subtheme'+id).find('iframe').attr('src')
+        $('.youtube_link_edit').val(youtube_link)
+        $('.add_video').attr('id', id)
+        $('.add_video_done').hide()
+        $('.add_video_load').hide()
+    }
+    $('.add_video').click(function(e){
+        $('.add_video_done').hide()
+        $('.add_video_load').show()
+        $('.add_video').addClass('disabled')
+        subtheme_id = $(this).attr('id')
+        is_new = 'no'
+        if (subtheme_id == '-1') {
+            is_new = 'yes'
+        }
+        paper_id = $('.lesson_data').attr('paper_id')
+        youtube_link = $('.youtube_link_edit').val()
+        add_data = '?&youtube_link='+youtube_link+'&paper_id='+paper_id+'&subtheme_id='+subtheme_id+'&is_new='+is_new
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        file = $('.paper_video_input')[0].files[0]
+        formData.append('video' , file);
+        url = '{% url "papers:add_subtheme_url" %}'
+        $.ajax({
+            url: url+add_data,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('.add_video_done').show()
+                $('.add_video_load').hide()
+                $('.add_video').removeClass('disabled')
+                if (is_new == 'yes') {
+                    is_new = true
+                }
+                else{
+                    is_new = false
+                }
+                fill_subtheme(data.subtheme_res, 0, is_new)
+            }
+        })
+    })
+    function add_file_open(this_){
+        $('.add_file_modal').modal('show')
+        id = this_.attr('id')
+        $('.add_file').attr('id', id)
+        $('.add_file_done').hide()
+        $('.add_file_load').hide()
+    }
+    $('.add_file').click(function(e){
+        $('.add_file_done').hide()
+        $('.add_file_load').show()
+        $('.add_file').addClass('disabled')
+        subtheme_id = $(this).attr('id')
+        is_new = 'no'
+        if (subtheme_id == '-1') {
+            is_new = 'yes'
+        }
+        paper_id = $('.lesson_data').attr('paper_id')
+        add_data = '?paper_id='+paper_id+'&subtheme_id='+subtheme_id+'&is_new='+is_new
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        file = $('.paper_file_input')[0].files[0]
+        formData.append('file' , file);
+        url = '{% url "papers:add_subtheme_url" %}'
+        $.ajax({
+            url: url+add_data,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                $('.add_file_done').show()
+                $('.add_file_load').hide()
+                $('.add_file').removeClass('disabled')
+                if (is_new == 'yes') {
+                    is_new = true
+                }
+                else{
+                    is_new = false
+                }
+                fill_subtheme(data.subtheme_res, 0, is_new)
+            }
+        })
+    })
+    function paper_add_text_open(this_){
+        $('.fill_subtheme_done').hide()
+        $('.fill_subtheme_load').hide()
+        id = this_.attr('id')
+        $('.paper_add_text_box').modal('show')
+        $('.paper_add_text').attr('id', id)
+        if (id != '-1') {
+            text = this_.parent().parent().parent().find('.subtheme_content_text_box').html()
+            $('.paper_add_text_val').html(text)
+        }
+        else{
+            $('.paper_add_text_val').html('')            
+        }
+    }
+    $('.paper_add_text').click(function(e){
+        subtheme_id = $(this).attr('id')        
+        content = $('.paper_add_text_val').html()
+        len = content.length
+        $('.fill_subtheme_load').show()
+        $('.paper_add_text').addClass('disabled')
+        if (len > 0) {
+            texts = []
+            cnt = 0
+            if (len % 500 == 0) {len -= 1}
+            while(cnt <= parseInt(len/500)){
+                cnt += 1
+                ptext = content.substr(0, 500)
+                texts.push(ptext)
+                content = content.substr(500)
+            }
+            if (texts.length == 0) {texts = ['']}
+            sendTexts(0, texts, subtheme_id, 'no')
+        }
+    })
+    function sendTexts(i, texts, subtheme_id, is_several){
+        is_new = 'no'
+        if (subtheme_id == '-1') {
+            is_new = 'yes'
+        }
+        content = texts[i]
+        paper_id = $('.lesson_data').attr('paper_id')
+        $.ajax({
+            url: '{%url "papers:add_subtheme_url"%}',
+            data: {
+                'subtheme_id':subtheme_id,
+                'is_new':is_new,
+                'content':content,
+                'paper_id':paper_id,
+                'is_several':is_several,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (i < texts.length - 1) {
+                    i += 1
+                    sendTexts(i, texts, data.id, 'yes')
+                }
+                else{
+                    subtheme = data.subtheme_res
+                    if (is_new == 'yes') {
+                        is_new_c = true
+                    }
+                    else{
+                        is_new_c = false
+                    }
+                    console.log(subtheme)
+                    fill_subtheme(subtheme, task_number, is_new_c)
+                    $('.fill_subtheme_done').show()
+                    $('.fill_subtheme_load').hide()
+                    $('.paper_add_text').removeClass('disabled')
+                }
+            }
+        });        
+    }
 </script>

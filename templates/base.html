@@ -238,10 +238,10 @@
                     <a class="ui button white full-w bt1" href='{% url "squads:list" %}'>
                         <i class="users icon"></i>Группы
                     </a>
+                    {% endif %}
                     <a class="ui button white full-w bt1" href='{% url "subjects:list" %}'>
                         <i class="book icon"></i>Курсы
                     </a>
-                    {% endif %}
                     {% if is_director %}
                     <a class="ui button white full-w bt1" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                         <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">Финансы

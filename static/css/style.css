@@ -153,6 +153,9 @@
 .textdg{
   color: #545454 !important;
 }
+.textddg{
+  color: #202122 !important;
+}
 .textb{
   color: #000 !important;
 }
@@ -356,6 +359,10 @@
 .text24{
   font-size:24px !important; 
 }
+.text30{
+  font-size:30px !important; 
+  line-height: 30px;
+}
 .text21{
   font-size:21px !important; 
   line-height: 25px;
@@ -371,6 +378,9 @@
 }
 .text15{
   font-size:15px !important; 
+}
+.text_content{
+  line-height: 1.5em;
 }
 .text14{
   font-size:14px !important; 
@@ -486,6 +496,7 @@ table{
   background-color: #4a4a4a;
   opacity: 1;
 }
+
 /* Text Area */
 
 .ui.form textarea {
@@ -741,6 +752,9 @@ body{
 }
 .mr150{
   margin-right: 150px;
+}
+.ml100{
+  margin-left: 100px;
 }
 .mb50{
   margin-bottom: 50px !important;
@@ -1742,20 +1756,16 @@ a{
   display: inline-block !important;
 }
 .test_variant{
-  padding: 7px;
+  padding: 3px 10px;
   cursor: pointer; 
   width: 100% !important;
-  border: 2px solid #e4e4e4;  
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
   position: relative;
   display: block;
 }
 .test_variant:hover{
-  padding: 7px;
-  cursor: pointer; 
-  width: 100% !important;
-  border: 2px solid #808080;  
-  position: relative;
-  display: block;
+  border: 1px solid #808080;  
 }
 .test_variant2{
   padding: 6px;
@@ -2064,7 +2074,6 @@ a{
   display: flex;
   background: #4A4A4A;
 }
-
 .day {
   display: inline-block;
   width: 14%;

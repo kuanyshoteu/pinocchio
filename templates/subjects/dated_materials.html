@@ -9,7 +9,7 @@
     <div class="pl15 pt15 pr15 pb15 no_margin backrbb bottombr5">
         {% if materials|length == 0 %}
         <div style="color: #fff;">
-        Пока у курса {{instance.title}} нет уроков, изменить количество уроков можете в <a class="ui button mini green" href="{{instance.get_update_url}}">Настроках курса</a>        
+        Пока у курса {{instance.title}} нет уроков, изменить количество уроков можете в <a class="ui button mini green" href="{{instance.get_update_url}}">Настроках курса</a>
         </div>
         {% else %}
         <div class="ui grid no_margin">
@@ -26,7 +26,7 @@
                     <div id="lesson_list{{ material.id }}">
                         {% for lesson in material.lessons.all %}
                         <div class="pt15" id="lesson_in_material{{ material.id }}l{{ lesson.id }}">
-                            <a href="{{ lesson.get_absolute_url }}" class="textblue text14">
+                            <a href="/library/3/#l{{lesson.id}}p{{lesson.papers.first.id}}" class="textblue text14">
                                 <b>{{ lesson.title }}</b>
                             </a>
                             {% if lesson.is_homework %}

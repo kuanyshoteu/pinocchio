@@ -71,7 +71,8 @@ class Profile(models.Model):
         return reverse("accounts:profile", kwargs={"user": self.user})
 
 class Skill(models.Model):
-    author = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='skill') 
+    author = models.OneToOneField(Profile, null=True, on_delete = models.CASCADE, related_name='skill')
+    tag_ids = ArrayField(models.IntegerField(), default = list)
     easy_skills = ArrayField(models.IntegerField(), default = list)
     middle_skills = ArrayField(models.IntegerField(), default = list)
     hard_skills = ArrayField(models.IntegerField(), default = list)

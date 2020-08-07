@@ -111,37 +111,78 @@ def add_lesson(request):
 def AddPaper(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('id'):
-        lesson = Lesson.objects.get(id = int(request.GET.get('id')))
+    paper_id = -1
+    if request.GET.get('lesson_id'):
+        lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
         is_in_school(profile, lesson.school)           
-        if request.GET.get('title'):
-            paper = Paper.objects.create(title=request.GET.get('title'),school=lesson.school)
-            subtheme = Subtheme.objects.create()
-            subtheme.save()
-            paper.subthemes.add(subtheme)
-            lesson.papers.add(paper)
-        paper.author_profile = profile
+        paper = Paper.objects.create(
+            title = 'Страница',
+            school = lesson.school,
+            )
         paper.save()
+        print('xoxoxoxox', paper.title, paper.id)
+        lesson.papers.add(paper)
+        paper_id = paper.id
     data = {
+        'paper_id':paper_id,
     }
     return JsonResponse(data)
 
 def AddSubtheme(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('id'):
-        paper = Paper.objects.get(id = int(request.GET.get('id')))
-        is_in_school(profile, paper.school)           
-        if request.GET.get('title'):
-            subtheme = Subtheme.objects.create(title=request.GET.get('title'))
-            paper.subthemes.add(subtheme)
-        if request.GET.get('content'):
-            subtheme.content = request.GET.get('content')     
-        if request.GET.get('videolink'):
-            subtheme.video_link = request.GET.get('videolink').replace('watch?v=', 'embed/')
-      
-        subtheme.save()
+    school = is_moderator_school(request, profile)
+    print('AddSubtheme', request.GET.get('paper_id'))
+    if request.GET.get('paper_id'):
+        paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
+        if len(paper) == 0:
+            return JsonResponse({})
+        paper = paper[0]
+        content = request.GET.get('content')
+        file = request.FILES.get('file')
+        video = request.FILES.get('video')
+        print('0000', content)
+        if content or request.GET.get('youtube_link') or file or video:
+            if request.GET.get('is_new') == 'yes':
+                subtheme = paper.subthemes.create()
+                if content:
+                    print('11111')
+                    subtheme.content = content
+            else:
+                subtheme = paper.subthemes.get(id=int(request.GET.get('subtheme_id')))
+                print('wooop')
+                if request.GET.get('is_several') == 'yes':
+                    subtheme.content += content
+                else:
+                    subtheme.content = content
+            if request.GET.get('youtube_link'):
+                subtheme.youtube_video_link = request.GET.get('youtube_link').replace('watch?v=', 'embed/')
+            elif file:
+                subtheme.file = file
+            elif video:
+                subtheme.video = video
+            file_url = ''
+            file = ''
+            video = ''
+            if subtheme.file:
+                file = str(subtheme.file)
+                file_url = subtheme.file.url
+            if subtheme.video:
+                video = subtheme.video.url
+            subtheme.save()
+            subtheme_res = [
+                subtheme.id,                    #0
+                subtheme.content,               #1
+                file_url,                       #2
+                file,                           #3
+                subtheme.youtube_video_link,    #4
+                video,                          #5
+                [],                             #6
+                ]
+    print('tteeeeeee', subtheme_res)    
     data = {
+        'id':subtheme.id,
+        'subtheme_res':subtheme_res,
     }
     return JsonResponse(data)
 
@@ -214,32 +255,6 @@ def rename_lesson(request):
     data = {}
     return JsonResponse(data)
 
-def rename_paper(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_teachers(profile)
-    if request.GET.get('new_title') and request.GET.get('id'):
-        if len(request.GET.get('new_title')) > 0:
-            paper = Paper.objects.get(id = int(request.GET.get('id')))
-            is_in_school(profile, paper.school)           
-            if paper.title != request.GET.get('new_title'):
-                paper.title = request.GET.get('new_title')
-                paper.save()
-    data = {}
-    return JsonResponse(data)
-
-def rewrite_subtheme(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_teachers(profile)
-    if request.GET.get('new_content') and request.GET.get('id'):
-        if len(request.GET.get('new_content')) > 0:
-            subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
-            is_in_school(profile, subtheme.papers.first().school)
-            if subtheme.content != request.GET.get('new_content'):
-                subtheme.content = request.GET.get('new_content')
-                subtheme.save()
-    data = {}
-    return JsonResponse(data)
-
 def delete_paper(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
@@ -260,16 +275,6 @@ def rename_subtheme(request):
             if subtheme.title != request.GET.get('new_title'):
                 subtheme.title = request.GET.get('new_title')
                 subtheme.save()
-    data = {}
-    return JsonResponse(data)
-
-def delete_subtheme(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_teachers(profile)
-    if request.GET.get('id'):
-        subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
-        is_in_school(profile, subtheme.papers.first().school)
-        subtheme.delete()
     data = {}
     return JsonResponse(data)
 
