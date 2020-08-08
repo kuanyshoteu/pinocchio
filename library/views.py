@@ -261,7 +261,8 @@ def create_lesson(request):
             folder = school.lesson_folders.get(id = int(request.GET.get('parent')))
             lesson.folder = folder
         lesson.save()
-        lesson.papers.create(title="Введение", school=school)
+        paper = lesson.papers.create(title="Введение", school=school)
+        paper.save()
         lessons = fill_lessons([lesson]) 
         ok = True
     data = {

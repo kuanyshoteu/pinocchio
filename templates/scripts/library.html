@@ -114,7 +114,8 @@
             }
         })
     })    
-    $('.add_paper').click(function(event){
+    $('.add_paper_lesson').click(function(event){
+        hash = document.location.hash        
         lesson_id = hash.split('p')[0].replace('#l', '')
         $(this).addClass('disabled')
         $.ajax({
@@ -124,8 +125,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.save_paper_title').removeClass('disabled')
-                $('.save_paper_load').hide()
+                $('.add_paper_lesson').removeClass('disabled')
                 paper_id = data.paper_id
                 show_lesson(lesson_id, paper_id)
             }
@@ -181,6 +181,7 @@
     }
     $('.show_paper').click(function(e){
         paper_id = $(this).attr('id')
+        hash = document.location.hash
         lesson_id = hash.split('p')[0].replace('#l', '')
         console.log(lesson_id, '66666666')    
         show_lesson(lesson_id, paper_id)
@@ -1118,11 +1119,15 @@
                 texts.push(ptext)
                 content = content.substr(500)
             }
+            is_new_c = false
+            if (subtheme_id == '-1') {
+                is_new_c = true
+            }
             if (texts.length == 0) {texts = ['']}
-            sendTexts(0, texts, subtheme_id, 'no')
+            sendTexts(0, texts, subtheme_id, 'no', is_new_c)
         }
     })
-    function sendTexts(i, texts, subtheme_id, is_several){
+    function sendTexts(i, texts, subtheme_id, is_several, is_new_c){
         is_new = 'no'
         if (subtheme_id == '-1') {
             is_new = 'yes'
@@ -1142,17 +1147,10 @@
             success: function (data) {
                 if (i < texts.length - 1) {
                     i += 1
-                    sendTexts(i, texts, data.id, 'yes')
+                    sendTexts(i, texts, data.id, 'yes', is_new_c)
                 }
                 else{
                     subtheme = data.subtheme_res
-                    if (is_new == 'yes') {
-                        is_new_c = true
-                    }
-                    else{
-                        is_new_c = false
-                    }
-                    console.log(subtheme)
                     fill_subtheme(subtheme, task_number, is_new_c)
                     $('.fill_subtheme_done').show()
                     $('.fill_subtheme_load').hide()

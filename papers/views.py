@@ -114,13 +114,13 @@ def AddPaper(request):
     paper_id = -1
     if request.GET.get('lesson_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
-        is_in_school(profile, lesson.school)           
+        is_in_school(profile, lesson.school)
+        title = 'Страница' + str(len(lesson.papers.all()) + 1)
         paper = Paper.objects.create(
-            title = 'Страница',
+            title = title,
             school = lesson.school,
             )
         paper.save()
-        print('xoxoxoxox', paper.title, paper.id)
         lesson.papers.add(paper)
         paper_id = paper.id
     data = {
