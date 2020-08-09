@@ -14,6 +14,7 @@ from papers.models import *
 from .models import *
 from django.contrib.auth.models import User
 from constants import *
+from django.http import JsonResponse
 
 def library(request):
     profile = get_profile(request)
@@ -60,13 +61,11 @@ def folder_details(request, folder_id=None):
     }
     return render(request, 'library/library.html', context=context)
 
-from django.http import JsonResponse
 def file_action(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     cache = Cache.objects.get_or_create(author_profile = profile)
     cache = cache[0]
-    
     cache.object_type = request.GET.get('object_type')
     cache.object_id = int(request.GET.get('object_id'))
     cache.action = request.GET.get('action')
@@ -79,67 +78,78 @@ def file_action(request):
 def paste(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
+    school = is_moderator_school(request, profile)
     cache = Cache.objects.get_or_create(author_profile = profile)[0]
-    title = ''
-    link = ''
-    if request.GET.get('new_parent') != 'library':
-        new_parent = Folder.objects.get(id = int(request.GET.get('new_parent')))
-        school = new_parent.school
-    elif request.GET.get('school_id'):
-        school = School.objects.get(id=int(request.GET.get('school_id')))
-    is_in_school(profile, school)
-    if cache.object_type == 'folder':    
-        folder = Folder.objects.get(id = cache.object_id)
-        title = folder.title
-        link = folder.get_absolute_url()
-        copy_folder = Folder.objects.create(author_profile = profile, title=folder.title, school=folder.school)
-        for ppr in folder.lesson_list.all():
-            copy_folder.lesson_list.add(ppr)
-        if request.GET.get('new_parent') != 'library':
-            copy_folder.parent = new_parent
-            new_parent.children.add(copy_folder)
-        elif request.GET.get('school_id'):
-            copy_folder.school = school
-        copy_folder.save()
-        if cache.action == 'cut' and cache.previous_parent > 0:
-            folder.delete()
-    if cache.object_type == 'lesson':
-        lesson = Lesson.objects.get(id = cache.object_id)
-        new_lesson = Lesson.objects.create(author_profile = profile, title = lesson.title, school=lesson.school)
-        new_lesson.save()
-        title = new_lesson.title
-        link = new_lesson.get_absolute_url()
-        for paper in lesson.papers.all():
-            new_paper = new_lesson.papers.create(title=paper.title,
-                author_profile=paper.author_profile, typee=paper.typee)
-            for subtheme in paper.subthemes.all():
-                new_subtheme = Subtheme.objects.create(content=subtheme.content,video=subtheme.video,
-                    youtube_video_link=subtheme.youtube_video_link)
-                new_paper.subthemes.add(new_subtheme)
-                for task in subtheme.task_list.all():
-                    new_task = Task.objects.create(
-                        author_profile = profile, 
-                        text = task.text, 
-                        answer = task.answer)
-                    if task.image:
-                        new_task.image = task.image
-                    new_task.save()
-                    new_subtheme.task_list.add(new_task)
-
-        if request.GET.get('new_parent') != 'library':
-            new_parent.lesson_list.add(new_lesson)
-        elif request.GET.get('school_id'):
-            new_lesson.school = school
+    lesson_res = []
+    folder_res = []
+    if request.GET.get('new_folder') == '-1':
+        new_folder = None
+    else:
+        new_folder = school.lesson_folders.filter(id=int(request.GET.get('new_folder')))
+        if len(new_folder) == 0:
+            return JsonResponse({})
+        new_folder = new_folder[0]
+    if cache.object_type == 'folder':
+        folder = school.lesson_folders.get(id = cache.object_id)
         if cache.action == 'cut':
-            lesson.delete()
+            if cache.previous_parent == -1:
+                folder.parent = None
+            else:
+                folder.parent = new_folder
+        else:
+            copy_folder = school.lesson_folders.create(
+                author_profile = profile, 
+                title=folder.title,
+                parent = new_folder,
+                )
+            copy_folder.save()
+            for lesson in folder.lessons.all():
+                new_lesson = copy_lesson(lesson, copy_folder, school, 'copy', profile)
+            new_id = copy_folder.id
+        folder_res = [
+            copy_folder.id, 
+            copy_folder.title, 
+            False, 
+            len(copy_folder.lessons.all()),
+            ]
+    if cache.object_type == 'lesson':
+        lesson = school.lessons.get(id = cache.object_id)
+        lessons_q = [copy_lesson(lesson, new_folder, school, cache.action, profile)]
+        lesson_res = fill_lessons(lessons_q)[0]
     data = {
-        'status':'ok',
-        'object_type':cache.object_type,
-        'title':title,
-        'link':link,
+        'lesson_res':lesson_res,
+        'folder_res':folder_res,
     }
     return JsonResponse(data)
-    
+
+def copy_lesson(lesson, new_folder, school, action, profile):
+    if action == 'cut':
+        lesson.folder = new_folder
+        lesson.save()
+        return lesson
+    else:
+        new_lesson = school.lessons.create(
+            author_profile = profile, 
+            title = lesson.title + ' - копия',
+            folder = new_folder,
+            )
+        new_lesson.save()
+        for paper in lesson.papers.all():
+            new_paper = new_lesson.papers.create(
+                title=paper.title,
+                order = paper.order, 
+                )
+            new_paper.save()
+            for subtheme in paper.subthemes.all():
+                new_subtheme = new_paper.subthemes.create(
+                    task = subtheme.task,
+                    content=subtheme.content,
+                    video=subtheme.video,
+                    youtube_video_link=subtheme.youtube_video_link,
+                    file = subtheme.file,
+                    order = subtheme.order,
+                    )
+        return new_lesson
 
 def create_folder(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -202,12 +212,29 @@ def get_library(request):
             parent = -1
         else:
             parent = folder.parent.id
-        folders.append([folder.id, folder.title, parent, len(folder.lessons.all())])
+        folders.append([
+            folder.id, 
+            folder.title, 
+            parent, 
+            len(folder.lessons.all())]
+            )
     lessons_q = school.lessons.filter(folder=None)
     lessons = fill_lessons(lessons_q)
+    cache = Cache.objects.get_or_create(author_profile = profile)[0]
+    cache_title = ''
+    if cache.object_type == 'folder':
+        folder = school.lesson_folders.filter(id=cache.object_id)
+        if len(folder) > 0:
+            cache_title = folder[0].title
+    else:
+        lesson = school.lessons.filter(id=cache.object_id)
+        if len(lesson) > 0:
+            cache_title = lesson[0].title
+    cache_res = [cache.object_type, cache_title]
     data = {
         'folders':folders,
         'lessons':lessons,
+        'cache':cache_res,
     }
     return JsonResponse(data)
 

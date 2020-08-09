@@ -244,15 +244,18 @@ def AddTask(request):
     return JsonResponse(data)
 
 def rename_lesson(request):
+    ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('id') and request.GET.get('name'):
+    if request.GET.get('id') and request.GET.get('title'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         is_in_school(profile, lesson.school)           
-        lesson.title = request.GET.get('name')
+        lesson.title = request.GET.get('title')
         lesson.save()
-
-    data = {}
+        ok = True
+    data = {
+        'ok':ok,
+    }
     return JsonResponse(data)
 
 def delete_paper(request):
@@ -265,27 +268,18 @@ def delete_paper(request):
     data = {}
     return JsonResponse(data)
 
-def rename_subtheme(request):
-    profile = Profile.objects.get(user = request.user.id)
-    only_teachers(profile)
-    if request.GET.get('new_title') and request.GET.get('id'):
-        if len(request.GET.get('new_title')) > 0:
-            subtheme = Subtheme.objects.get(id = int(request.GET.get('id')))
-            is_in_school(profile, subtheme.papers.first().school)
-            if subtheme.title != request.GET.get('new_title'):
-                subtheme.title = request.GET.get('new_title')
-                subtheme.save()
-    data = {}
-    return JsonResponse(data)
-
 def delete_lesson(request):
+    ok = False
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     if request.GET.get('id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('id')))
         is_in_school(profile, lesson.school)
         lesson.delete()
-    data = {}
+        ok = True
+    data = {
+        'ok':ok,
+    }
     return JsonResponse(data)
 
 def delete_course(request):

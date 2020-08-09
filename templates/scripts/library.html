@@ -11,7 +11,7 @@
                         <span class="pl5 pr5 folder_title textbold mr5"></span>
                         <span class="text13 len_lessons"></span>
                     </div>
-                    <div class="pl5 pr5 br5 open_folder_features"><i class="ui icon ellipsis horizontal textllg"></i></div>
+                    <div class="open_features open_folder_features"><i class="ui icon ellipsis horizontal textllg"></i></div>
                 </div>
             </a>
             <a class="hide_children pl5 pr5 dinline br5" style="display: none;">
@@ -20,49 +20,44 @@
         </div>
         <div class="pl15 folder_children" style="display: none;"></div>
     </div>
-    <a class="lesson_file pl10 pr10 pt5 pb10 lesson_file_orig full-w ui button small text-left white dflexx">
-        <div class="ui grid stackable no_margin full-w">
-            <div class="six wide column pt5 pb0 pl0 pr15">
-                <div class="dflex full-w">
-                    <span class="lesson_order mr15 textg"></span>
-                    <i class="icon file text15 texttile mr5"></i>
-                    <span class="lesson_title textblue textbold text15"></span>
+    <div class="lesson_file_orig dflex">
+        <div class="pt7 pl5" style="width: 30px">
+            <a class="open_lesson_features open_features_dark"><i class="ui icon ellipsis horizontal"></i></a>
+        </div>
+        <a style="width: calc(100% - 30px)" class="lesson_file pl10 pr10 pt5 pb10 ui button small text-left white dflexx">
+            <div class="ui grid stackable no_margin full-w">
+                <div class="six wide column pt5 pb0 pl0 pr15">
+                    <div class="dflex full-w">
+                        <div style="width: 25px" class="lesson_order textg"></div>
+                        <i class="icon file text15 texttile mr5"></i>
+                        <div class="lesson_title textblue textbold text15"></div>
+                    </div>
+                </div>
+                <div class="three wide column pt5 pb0 pl0 pr15">
+                    <span>kuanysh</span>
+                </div>
+                <div class="four wide column pt5 pb0 pl0 pr15">
+                    <span class="textdg text12 textbold mr5">
+                        11 / 17
+                    </span>
+                    <span>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                        <i class="icon star textgold text11"></i>
+                </span>
+                </div>
+                <div class="three wide column no_padding">
+                    <!-- <div class="ui button mini pl5 pt5 pb5 pr5 white shadow_small">Опубликовать</div> -->
                 </div>
             </div>
-            <div class="three wide column pt5 pb0 pl0 pr15">
-                <span>kuanysh</span>
-            </div>
-            <div class="four wide column pt5 pb0 pl0 pr15">
-                <span class="textdg text12 textbold mr5">
-                    11 / 17
-                </span>
-                <span>
-                    <i class="icon star textgold text11"></i>
-                    <i class="icon star textgold text11"></i>
-                    <i class="icon star textgold text11"></i>
-                    <i class="icon star textgold text11"></i>
-                    <i class="icon star textgold text11"></i>
-<!--                     <i class="icon star text11"></i>
- -->                </span>
-            </div>
-            <div class="three wide column no_padding">
-<!--                 <div class="ui button mini pl5 pt5 pb5 pr5 white shadow_small">Опубликовать</div>
- -->            </div>
-        </div>
-    </a>
+        </a>
+    </div>
     <form class="ui form shadow_small rename_lesson_form rename_lesson{{ lesson.id }}" style="display: none; margin: 0; position: absolute; z-index: 3000" method='POST' enctype='multipart/form-data'>{% csrf_token %}
         <textarea class="mb0" style="height: 60px;" id='change_lesson_name{{ lesson.id }}' type="text">{{ lesson.title }}</textarea>
         <a class="ui button mini blue change_lesson_name full-w" id="{{ lesson.id }}" data-href='{{ lesson.change_name_url }}'>Сохранить</a>
     </form>
-    <div class="shadow_small ui segment lesson_features lesson_features{{ lesson.id }}" style="position: absolute; z-index: 3000; display: none; margin: 0px 0 0 130px; width: 155px;">
-        <a  class="rename_lesson" id="{{ lesson.id }}"><i class="icon pencil alternate"></i>Переименовать</a>
-        <div class="ui divider"></div>
-        <a  class="file_action" object_type='lesson' action='copy' data-href='{% url "library:file_action_url" %}' id="{{ lesson.id }}" parent='-1'><i class="icon copy outline"></i> Копировать</a>
-        <div class="ui divider"></div>
-        <a  class="file_action" object_type='lesson' action='cut' data-href='{% url "library:file_action_url" %}' id="{{ lesson.id }}" parent='-1'><i class="icon cut"></i> Вырезать</a>
-        <div class="ui divider"></div>
-        <a class="delete_lesson" id="{{ lesson.id }}" data-href='{{ lesson.delete_lesson_url }}' style="color: red; cursor: pointer;"><i class="trash alternate icon"></i>Удалить</a>
-    </div>
 </div>
 <script type="text/javascript">
     fill_library()
@@ -88,8 +83,19 @@
                 lessons = data.lessons
                 $('.len_lessons_main').text(lessons.length)
                 fill_lectures(lessons)
+                if (data.cache[1].length > 0) {
+                    fill_cache(data.cache[0], data.cache[1])
+                }
             }
         })
+    }
+    function fill_cache(object_type, title){
+        if (object_type == 'lesson') {
+            object_type = 'file'
+        }
+        $('.cache_show').show()
+        $('.cache_icon').addClass(object_type)
+        $('.cache_title').text(title)        
     }
     $('.edit_paper_title').click(function(event){
         $('.paper_title_box').hide()
@@ -133,7 +139,7 @@
     })
     $('.show_library').click(function(event){
         $('.lesson_page').hide()
-        $('.library_page').show('fast')
+        $('.library_page').fadeIn(400)
         document.location.hash = "";
     })    
     $('.lesson_file').click(function(){
@@ -152,7 +158,7 @@
             },
             dataType: 'json',
             success: function (data) {
-                $('.lesson_page').show()
+                $('.lesson_page').fadeIn(400)
                 $('.show_lesson_load').hide()
                 title = data.title
                 paper_res = data.paper_res
@@ -183,7 +189,6 @@
         paper_id = $(this).attr('id')
         hash = document.location.hash
         lesson_id = hash.split('p')[0].replace('#l', '')
-        console.log(lesson_id, '66666666')    
         show_lesson(lesson_id, paper_id)
     })
     function fill_paper(paper_res, lesson_id){
@@ -227,7 +232,6 @@
         content = subtheme[1]
         content_box = origins.find('.subtheme_content').clone(true)
         content_box.removeClass('subtheme_content')
-        console.log('xx', is_new)
         if (is_new) {
             content_box.appendTo(crnt_paper_box)
         }
@@ -259,7 +263,6 @@
         }
         youtube = subtheme[4]
         if (youtube.length > 0) {
-            console.log('88888888888')
             content_box.find('.change_subtheme').attr('status', 'video')
             content_box.find('.change_subtheme').attr('id',id)
             youtube_box = origins.find('.youtube_video').clone(true)
@@ -698,6 +701,7 @@
         len_lessons = folder[3]
         folder = $('.folder_orig').clone()
         folder.addClass('folder'+id)
+        folder.attr('id', id)
         folder.removeClass('folder_orig')
         folder.find('.folder_title').text(title)
         folder.find('.button').attr('onclick', 'open_folder('+id+')')
@@ -713,7 +717,7 @@
             folder.appendTo($('.folder'+parent).eq(0).find('.folder_children').eq(0))
         }
     }
-    function fill_one_lesson(lesson, i){
+    function fill_one_lesson(lesson){
         id = lesson[0]
         title = lesson[1]
         author = lesson[2]
@@ -726,16 +730,16 @@
         lesson = $('.lesson_file_orig').clone(true)
         lesson.removeClass('lesson_file_orig')
         lesson.find('.lesson_title').text(title)
-        lesson.find('.lesson_order').text(i+1)
-        lesson.attr('id', id)
-        // lesson.attr('href', url)
+        lesson.find('.lesson_file').attr('id', id)
+        lesson.find('.lesson_file').addClass('lesson_file'+id)
         lesson.appendTo('.lessons_box')
     }
     function fill_lectures(lessons){
         for (var i = 0; i < lessons.length; i++) {
             one_lesson = lessons[i]
-            fill_one_lesson(one_lesson, i)
+            fill_one_lesson(one_lesson)
         }
+        update_lesson_numbers()
     }
     function update_lesson_numbers(){
         i = 1
@@ -788,31 +792,26 @@
             }
         })
     }
-    function open_folder_features(event, id){
-        $('.data').attr('crnt_folder', id)
-        h = $('.folder'+id).position().top
-        $('.folder_features').css('margin-top', h - 37)
+    $('.open_lesson_features').click(function(e){
+        id = $(this).parent().parent().find('.lesson_file').attr('id')
+        $('.data').attr('crnt_lesson', id)
+        h = $('.lesson_file'+id).position().top
+        $('.lesson_features2').css('margin-top', h +37)
         $('.folder_form').hide()
-        $('.folder_features').show()
-        open_folder(id)
-        event.stopPropagation();
-    }
-    function show_new_lesson_form(event){
+        $('.lesson_features2').show()
+        e.stopPropagation();
+    })
+    $('.rename_lesson').click(function(event){
+        id = $('.data').attr('crnt_lesson')
+        lesson = $('.lesson_file'+id)
+        h = lesson.position().top + 37
+        title = lesson.find('.lesson_title').eq(0).text()
+        $('.crnt_lesson_title').text(title)
+        $('.lesson_rename_form').css('margin-top', h)
+        $('.folder_form').hide()
+        $('.lesson_rename_form').show()
         event.stopPropagation()
-        $('.folder_form').hide()
-        $('.new_lesson_title').show()
-    }
-    function create_folder_form(event){
-        event.stopPropagation()
-        id = $('.data').attr('opened_folder')
-        folder = $('.folder'+id)
-        h = folder.position().top
-        title = folder.find('.folder_title').eq(0).text()
-        $('.create_folder_title').text(title)
-        $('.new_folder_title').css('margin-top', h)
-        $('.folder_form').hide()
-        $('.new_folder_title').show()
-    }
+    }) 
     $('.delete_folder').click(function(event){
         event.stopPropagation()
         id = $('.data').attr('crnt_folder')
@@ -878,6 +877,92 @@
             });              
         }
     })
+    $('.delete_lesson').click(function(event){
+        event.stopPropagation()
+        id = $('.data').attr('crnt_lesson')
+        lesson = $('.lesson_file'+id)
+        h = lesson.position().top + 37
+        title = lesson.find('.lesson_title').eq(0).text()
+        $('.crnt_lesson_title').text(title)
+        $('.delete_lesson_sure').css('margin-top', h)
+        $('.folder_form').hide()
+        $('.delete_lesson_sure').show()
+    })
+    $('.go_delete_lesson').click(function(event){
+        id = $('.data').attr('crnt_lesson')
+        lesson = $('.lesson_file'+id).parent()
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_lesson_load').show()
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "papers:delete_lesson_url"%}',
+                data: {
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    if (data.ok) {
+                        $('.folder_form').hide()
+                        lesson.hide('fast')
+                    }
+                }
+            })
+        }
+    })
+    $('.rename_lesson_save').click(function(event){
+        id = $('.data').attr('crnt_lesson')
+        lesson = $('.lesson_file'+id)
+        title = $('.change_lesson_title_text').val()
+        btn = $(this)
+        btn.addClass('disabled')
+        $('.rename_lesson_load').show()
+        if (title.length > 0) {
+            $.ajax({
+                url: '{%url "papers:rename_lesson"%}',
+                data: {
+                    'title':title,
+                    'id':id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    btn.removeClass('disabled')
+                    $('.rename_lesson_load').hide()
+                    if (data.ok) {
+                        $('.folder_form').hide()
+                        lesson.find('.lesson_title').eq(0).text(title)
+                        $('.change_lesson_title_text').val('')
+                    }
+                }
+            });              
+        }
+    })
+    function open_folder_features(event, id){
+        $('.data').attr('crnt_folder', id)
+        h = $('.folder'+id).position().top
+        $('.folder_features').css('margin-top', h - 37)
+        $('.folder_form').hide()
+        $('.folder_features').show()
+        open_folder(id)
+        event.stopPropagation();
+    }
+    function show_new_lesson_form(event){
+        event.stopPropagation()
+        $('.folder_form').hide()
+        $('.new_lesson_title').show()
+    }
+    function create_folder_form(event){
+        event.stopPropagation()
+        id = $('.data').attr('opened_folder')
+        folder = $('.folder'+id)
+        h = folder.position().top
+        title = folder.find('.folder_title').eq(0).text()
+        $('.create_folder_title').text(title)
+        $('.new_folder_title').css('margin-top', h)
+        $('.folder_form').hide()
+        $('.new_folder_title').show()
+    }
     $('.rename_folder').click(function(event){
         id = $('.data').attr('crnt_folder')
         folder = $('.folder'+id)
@@ -928,7 +1013,7 @@
                 success: function (data) {
                     this_.removeClass('disabled')
                     lesson = data.lessons[0]
-                    fill_one_lesson(lesson, 0)
+                    fill_one_lesson(lesson)
                     update_lesson_numbers()
                     $('.folder_form').hide()
                 }
@@ -1159,4 +1244,57 @@
             }
         });        
     }
+    $('.file_action').click(function(e){
+        object_type = $(this).attr('object_type')
+        action = $(this).attr('action')
+        if (object_type == 'lesson') {
+            parent = $('.data').attr('opened_folder')
+            object_id = $('.data').attr('crnt_lesson')
+            title = $('.lesson_file' + object_id).find('.lesson_title').text()
+        }
+        else{
+            object_id = $('.data').attr('crnt_folder')
+            parent = $('.folder'+object_id).parent().parent().attr('id')
+            title = $('.folder'+object_id).find('.folder_title').text()
+        }
+        url = $('.data').attr('file_action_url')
+        $.ajax({
+            url: url,
+            data: {
+                'object_id':object_id,
+                'object_type':object_type,
+                'action':action,
+                'parent':parent,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.folder_form').hide()
+                fill_cache(object_type, title)
+            }
+        })
+    })
+    $('.paste_to_folder').click(function(e){
+        new_folder = $('.data').attr('opened_folder')
+        url = $('.data').attr('paste_to_folder')
+        $.ajax({
+            url: url,
+            data: {
+                'new_folder':new_folder,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.folder_form').hide()
+                if (data.lesson_res.length > 0) {
+                    console.log(data.lesson_res)
+                    fill_one_lesson(data.lesson_res)
+                }
+                else{
+                    folder = data.folder_res
+                    folder[2] = new_folder
+                    console.log(folder)
+                    fill_folders(data.folder_res)
+                }
+            }
+        })
+    })    
 </script>
