@@ -20,13 +20,14 @@ def library(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
+    check_school_version(school, 'business')
     return redirect(school.get_school_library())
 
 def school_library(request, school_id):
     profile = get_profile(request)
     school = School.objects.get(id=school_id)
-    is_in_school(profile, school)        
-
+    is_in_school(profile, school)
+    check_school_version(school, 'business')
     context = {
         "profile": profile,
         'is_trener':is_profi(profile, 'Teacher'),
@@ -45,6 +46,7 @@ def folder_details(request, folder_id=None):
     folder = Folder.objects.get(id=folder_id)
     school = folder.school
     is_in_school(profile, folder.school)        
+    check_school_version(school, 'business')
     context = {
         "profile": profile,
         'folder':folder,
@@ -79,6 +81,7 @@ def paste(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     cache = Cache.objects.get_or_create(author_profile = profile)[0]
     lesson_res = []
     folder_res = []
@@ -156,6 +159,7 @@ def create_folder(request):
     only_teachers(profile)
     if request.GET.get('title') and request.GET.get('parent_id'):
         school = is_moderator_school(request, profile)
+        check_school_version(school, 'business')
         folder = school.lesson_folders.create(
             title = request.GET.get('title'),
             author_profile = profile,
@@ -176,6 +180,7 @@ def rename_folder(request):
     ok = False
     if request.GET.get('id') and request.GET.get('title'):
         school = is_moderator_school(request, profile)
+        check_school_version(school, 'business')
         folder = school.lesson_folders.get(id = int(request.GET.get('id')))
         folder.title = request.GET.get('title')
         folder.save()
@@ -191,6 +196,7 @@ def delete_folder(request):
     ok = False
     if request.GET.get('id'):
         school = is_moderator_school(request, profile)
+        check_school_version(school, 'business')
         folder = school.lesson_folders.get(id = int(request.GET.get('id')))
         folder.childs.all().delete()
         folder.lessons.all().delete()
@@ -207,6 +213,7 @@ def get_library(request):
     folders = []
     lessons = []
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     for folder in school.lesson_folders.all():
         if not folder.parent:
             parent = -1
@@ -243,6 +250,7 @@ def get_folder_files(request):
     only_teachers(profile)
     lessons = []
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     if request.GET.get('id'):
         if request.GET.get('id') == '-1':
             lessons_q = school.lessons.filter(folder=None)
@@ -278,6 +286,7 @@ def create_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     ok = False
     if request.GET.get('parent') and request.GET.get('title'):
         lesson = school.lessons.create(
@@ -288,7 +297,11 @@ def create_lesson(request):
             folder = school.lesson_folders.get(id = int(request.GET.get('parent')))
             lesson.folder = folder
         lesson.save()
-        paper = lesson.papers.create(title="Введение", school=school)
+        paper = lesson.papers.create(
+            title="Введение", 
+            school=school,
+            order = 1,
+            )
         paper.save()
         lessons = fill_lessons([lesson]) 
         ok = True
@@ -367,6 +380,7 @@ def collect_paper(paper, profile):
 def show_lesson(request):
     profile = Profile.objects.get(user = request.user.id)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     if request.GET.get('lesson_id') and request.GET.get('paper_id'):
         lesson = school.lessons.filter(id=int(request.GET.get('lesson_id')))
         if len(lesson) == 0:
@@ -407,6 +421,7 @@ def save_task(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     if request.GET.get('id'):
         if request.GET.get('id') == '-1':
             task = Task.objects.create()
@@ -449,9 +464,19 @@ def delete_subtheme(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
-    if request.GET.get('id'):
-        subtheme = Subtheme.objects.get(id=int(request.GET.get('id')))
+    check_school_version(school, 'business')
+    if request.GET.get('id') and request.GET.get('paper_id'):
+        paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
+        if len(paper) == 0:
+            return JsonResponse({})
+        paper = paper[0]
+        subtheme = paper.subthemes.get(id=int(request.GET.get('id')))
         subtheme.delete()
+        i = 1
+        for subtheme in paper.subthemes.all():
+            subtheme.order = i
+            i += 1
+            subtheme.save()
     data = {
     }
     return JsonResponse(data)
@@ -460,6 +485,7 @@ def add_task_to_subtheme(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     if request.GET.get('id') and request.GET.get('paper_id'):
         task = Task.objects.filter(id=int(request.GET.get('id')))
         if len(task) == 0:
@@ -480,6 +506,7 @@ def get_all_tasks(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     res = []
     tasks = Task.objects.all()
     for task in tasks:
@@ -493,6 +520,7 @@ def save_paper_title(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     if request.GET.get('paper_id') and request.GET.get('title'):
         paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
         if len(paper) == 0:
@@ -501,5 +529,76 @@ def save_paper_title(request):
         paper.title = request.GET.get('title')
         paper.save()
     data = {
+    }
+    return JsonResponse(data)
+
+def move_subtheme(request):
+    ok = False
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
+    status = request.GET.get('status')
+    if request.GET.get('id') and status and request.GET.get('paper_id'):
+        paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
+        if len(paper) == 0:
+            return JsonResponse({})
+        paper = paper[0]
+        sid = int(request.GET.get('id'))
+        subtheme = paper.subthemes.filter(id=sid)
+        if len(subtheme) == 0:
+            return JsonResponse({})
+        subtheme = subtheme[0]
+        order = subtheme.order
+        if status == 'up':
+            order2 = order - 1
+        else:
+            order2 = order + 1            
+        subtheme2 = paper.subthemes.filter(order=order2)
+        if len(subtheme2) == 0:
+            return JsonResponse({})
+        subtheme2 = subtheme2[0]
+        subtheme2.order = order
+        subtheme2.save()
+        subtheme.order = order2
+        subtheme.save()
+        ok = True
+    data = {
+        'ok':ok,
+    }
+    return JsonResponse(data)
+
+def move_paper(request):
+    ok = False
+    profile = Profile.objects.get(user = request.user.id)
+    only_teachers(profile)
+    school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
+    status = request.GET.get('status')
+    if request.GET.get('paper_id') and status and request.GET.get('lesson_id'):
+        lesson = school.lessons.filter(id = int(request.GET.get('lesson_id')))
+        if len(lesson) == 0:
+            return JsonResponse({})
+        lesson = lesson[0]
+        paper = lesson.papers.filter(id = int(request.GET.get('paper_id')))
+        if len(paper) == 0:
+            return JsonResponse({})
+        paper = paper[0]
+        order = paper.order
+        if status == 'up':
+            order2 = order - 1
+        else:
+            order2 = order + 1
+        paper2 = lesson.papers.filter(order=order2)
+        if len(paper2) == 0:
+            return JsonResponse({})
+        paper2 = paper2[0]
+        paper2.order = order
+        paper2.save()
+        paper.order = order2
+        paper.save()
+        ok = True
+    data = {
+        'ok':ok,
     }
     return JsonResponse(data)

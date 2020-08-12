@@ -4,6 +4,7 @@
 {% block head_title %}
 Войти | {{ block.super }}
 {% endblock head_title %}{% block content %}
+{% include 'modals/forget_password.html' %}
 <div class="ui container" style="overflow-y: hidden;">
         <form method='POST' action='' enctype='multipart/form-data' class="ui form pl15 pr15 mt50">{% csrf_token %}
             <div class="text-center textdg" style="font-size: 25px;">

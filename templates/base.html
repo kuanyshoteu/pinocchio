@@ -54,7 +54,10 @@
 <body class="body">
 {% include "modals/confirm_delete.html" %}
 {% if is_manager %}
-{% include "modals/new_card_crm.html" %}
+    {% include "modals/new_card_crm.html" %}
+{%endif%}
+{% if is_director %}
+    {% include "modals/get_full_version.html" %}
 {%endif%}
 <div class="ui stackable menu" id="main-menu">
     <div class="ui container">
@@ -173,9 +176,6 @@
                     Войти
                 </a>
             </div>
-            {% include 'modals/login.html' %}
-            {% include 'modals/signup.html' %}
-            {% include 'modals/forget_password.html' %}
             {% endif %}
         </div>
     </div>
@@ -242,6 +242,7 @@
                     <a class="ui button white full-w bt1" href='{% url "subjects:list" %}'>
                         <i class="book icon"></i>Курсы
                     </a>
+                    {%if school_crnt.version == 'business'%}
                     {% if is_director %}
                     <a class="ui button white full-w bt1" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                         <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">Финансы
@@ -256,14 +257,20 @@
                         <i class="folder icon"></i>Документы
                     </a>
                     {% endif %}
-                    {%if school_crnt.version == 'business'%}
                     {% if is_trener or is_director %}
                     <a class="ui button white full-w bt1" href='{% url "library:main" %}'>
                         <i class="file alternate icon"></i>База уроков
                     </a>
                     {% endif %}
                     {% endif %}
-                {% endif %}           
+                    {%if school_crnt.version != 'business' and is_director %}
+                    <div class="text-center mt15">
+                        <a class="get_full_version ui button small green shadow_green textbold">
+                            Попробовать полную версию
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
         <div class="five wide column menu_back no_padding">

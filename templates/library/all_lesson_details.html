@@ -6,7 +6,7 @@
     </a>
     {% endif %}
     <div class="{% if is_trener %}pl50{% endif %} ui grid stackable no_margin">
-        <div class="mb15 twelve wide column pl0 pt0 {% if is_trener %}pr15{%else%}pr0{%endif%} pb0">
+        <div class="mb15 twelve wide column pl0 pt0 mobpr0 pb0">
             <div class="ui segment shadow_small pl0 pt0 pr0 pb50 topbr5 mt0 mb0 full-w" style="min-height: 300px;">
                 <div class="pl20 pr20 pt15 pb15 topbr5 text-center backwhitelow text21 textbold mb10 dflex">
                     <div class="dflex" style="margin: 0 auto">
@@ -110,6 +110,17 @@
                 <div class="text-center text17 textbold textdg mb15">
                     Страницы
                 </div>
+                <div style="display: none; position: absolute;width: calc(100% - 30px)" class="ui segment backdark shadow_dark no_padding paper_features folder_form">
+                    <a status="up" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left move_paper">
+                        <i class="icon angle up textw text11"></i> Вверх
+                    </a>
+                    <a status="down" class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left move_paper">
+                        <i class="icon angle down textw text11"></i> Вниз
+                    </a>
+                    <a  class="ui button dark full-w small pl15 pr5 pt10 pb10 text-left delete_paper">
+                        <i class="icon trash textw text11"></i> Удалить
+                    </a>
+                </div>
                 <div class="all_papers">
                 </div>
                 {% if is_trener %}
@@ -191,10 +202,10 @@
         <div class="ui divider" style="margin: 0 0 -18px -20px;"></div>
         <div class="dflex">
             <div class="pt5 dflex subtheme_btns backwhite pl10 pr10">
-                <a class="textred textbold mr10">
+                <a status="up" class="move_subtheme textred textbold mr10">
                     <i class="icon angle up mr0 textblue"></i>
                 </a>            
-                <a class="textred textbold mr15">
+                <a status="down" class="move_subtheme textred textbold mr15">
                     <i class="icon angle down mr0 textblue"></i>
                 </a>
                 <a class="text11 change_subtheme mr15" id="">Изменить</a>
@@ -278,13 +289,19 @@
         </video>                        
     </div>
     <div class="lesson_data" paper_id=""></div>
-    <div class="full-w paper_origin mb5">
-        <a class="show_paper ui button small text14 white pt7 pb7 pl5 pr5 text-left full-w textblue textbold">
+    <div class="full-w paper_origin mb5 dflex">
+        <a style="width: calc(100% - 15px)" class="show_paper ui button small text14 white pt7 pb7 pl5 pr5 text-left full-w textblue textbold">
             <span class="paper_list_title"></span>
-            <span style="float: right;">
-                <i style="display: none;" class="icon check textgreen"></i>
-                <i class="icon stop textred"></i>
-            </span>
         </a>
+        <span style="float: right;width: 15px;">
+            <i style="display: none;" class="icon check textgreen"></i>
+            {% if is_trener %}
+            <a class="show_paper_features">
+                <i class="icon ellipsis horizontal textllg"></i>
+            </a>
+            {% else %}
+            <i class="icon stop textred"></i>
+            {% endif %}
+        </span>
     </div>    
 </div>

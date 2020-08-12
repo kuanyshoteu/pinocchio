@@ -46,34 +46,11 @@ class Cache(models.Model):
     previous_parent = models.IntegerField(null = True)
     timestamp = models.DateTimeField(auto_now_add=True)
     full = models.BooleanField(default = False)
-
-class Subtheme(models.Model):
-    task = models.ForeignKey(Task, null = True, on_delete = models.CASCADE, related_name='subthemes')
-    content = models.TextField(default='', null = True)
-    video = models.FileField(default='')
-    file = models.FileField(default='')
-    youtube_video_link = models.TextField(default='')
-    order = models.IntegerField(null = True)
-    class Meta:
-        ordering = ['order', 'id']    
-    def new_task_url(self):
-        return reverse("papers:new_task_url")
-    def add_task_url(self):
-        return reverse("papers:add_task_url")        
-    def rename_subtheme_url(self):
-        return reverse("papers:rename_subtheme_url")
-    def rewrite_subtheme_url(self):
-        return reverse("papers:rewrite_subtheme_url")
-    def get_markdown(self):
-        return mark_safe(markdown(self.content))
-    def delete_subtheme_url(self):
-        return reverse("papers:delete_subtheme_url")
         
 class Paper(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='school_papers') 
     title = models.CharField(max_length=250)
     timestamp = models.DateTimeField(auto_now_add=True)
-    subthemes = models.ManyToManyField(Subtheme, related_name='papers')
     done_by = models.ManyToManyField(Profile, related_name='done_papers')
     order = models.IntegerField(null = True)
     class Meta:
@@ -95,6 +72,17 @@ class Paper(models.Model):
         instance = self
         content_type = ContentType.objects.get_for_model(instance.__class__)
         return content_type
+
+class Subtheme(models.Model):
+    task = models.ForeignKey(Task, null = True, on_delete = models.CASCADE, related_name='subthemes')
+    content = models.TextField(default='', null = True)
+    video = models.FileField(default='')
+    file = models.FileField(default='')
+    youtube_video_link = models.TextField(default='')
+    order = models.IntegerField(null = True)
+    paper = models.ForeignKey(Paper, null = True, on_delete = models.CASCADE, related_name='subthemes')
+    class Meta:
+        ordering = ['order', 'id']    
     
 class Lesson(models.Model):
     school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='lessons')

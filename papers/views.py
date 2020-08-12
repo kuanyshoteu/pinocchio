@@ -115,10 +115,13 @@ def AddPaper(request):
     if request.GET.get('lesson_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
         is_in_school(profile, lesson.school)
-        title = 'Страница' + str(len(lesson.papers.all()) + 1)
+        check_school_version(school, 'business')
+        papers_num = len(lesson.papers.all()) + 1
+        title = 'Страница' + str(papers_num)
         paper = Paper.objects.create(
             title = title,
             school = lesson.school,
+            order = papers_num,
             )
         paper.save()
         lesson.papers.add(paper)
@@ -132,7 +135,7 @@ def AddSubtheme(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
     school = is_moderator_school(request, profile)
-    print('AddSubtheme', request.GET.get('paper_id'))
+    check_school_version(school, 'business')
     if request.GET.get('paper_id'):
         paper = school.school_papers.filter(id = int(request.GET.get('paper_id')))
         if len(paper) == 0:
@@ -141,16 +144,17 @@ def AddSubtheme(request):
         content = request.GET.get('content')
         file = request.FILES.get('file')
         video = request.FILES.get('video')
-        print('0000', content)
         if content or request.GET.get('youtube_link') or file or video:
             if request.GET.get('is_new') == 'yes':
-                subtheme = paper.subthemes.create()
+                order = len(paper.subthemes.all()) + 1
+                subtheme = paper.subthemes.create(
+                    order = order,
+                    )
+                print(subtheme.order)
                 if content:
-                    print('11111')
                     subtheme.content = content
             else:
                 subtheme = paper.subthemes.get(id=int(request.GET.get('subtheme_id')))
-                print('wooop')
                 if request.GET.get('is_several') == 'yes':
                     subtheme.content += content
                 else:
@@ -179,7 +183,6 @@ def AddSubtheme(request):
                 video,                          #5
                 [],                             #6
                 ]
-    print('tteeeeeee', subtheme_res)    
     data = {
         'id':subtheme.id,
         'subtheme_res':subtheme_res,
@@ -261,8 +264,8 @@ def rename_lesson(request):
 def delete_paper(request):
     profile = Profile.objects.get(user = request.user.id)
     only_teachers(profile)
-    if request.GET.get('id'):
-        paper = Paper.objects.get(id = int(request.GET.get('id')))
+    if request.GET.get('paper_id'):
+        paper = Paper.objects.get(id = int(request.GET.get('paper_id')))
         is_in_school(profile, paper.school)
         paper.delete()
     data = {}

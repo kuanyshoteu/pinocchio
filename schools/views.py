@@ -44,6 +44,7 @@ def mails(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     default_templates = MailTemplate.objects.filter(default=True)
     school_templates = school.mail_templates.all()
     mail_templates = set(chain(default_templates, school_templates))
@@ -68,6 +69,7 @@ def connect_site(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     context = {
         "profile":profile,
         "instance": school,
@@ -224,18 +226,19 @@ def school_info(request):
     number = 0
     all_cards = school.crm_cards.filter(timestamp__gt=weekago)
     number_of_all = len(all_cards)    
-    for column in school.crm_columns.all().order_by('-id'):
-        if column.id != 6:
-            x = len(all_cards.filter(column=column))
-            number += x
-            if number_of_all > 0:
-                percent = round((number/number_of_all)*100,2)
-            else:
-                percent = 0
-            voronka.append([column.title, number, percent])
-            voronka2.append([column.title, number, percent])
-    voronka = reversed(voronka)
-    voronka2 = reversed(voronka2)
+    if school.version == 'business':
+        for column in school.crm_columns.all().order_by('-id'):
+            if column.id != 6:
+                x = len(all_cards.filter(column=column))
+                number += x
+                if number_of_all > 0:
+                    percent = round((number/number_of_all)*100,2)
+                else:
+                    percent = 0
+                voronka.append([column.title, number, percent])
+                voronka2.append([column.title, number, percent])
+        voronka = reversed(voronka)
+        voronka2 = reversed(voronka2)
     worktime1 = ''
     worktime2 = ''
     if '-' in school.worktime:
@@ -1972,6 +1975,7 @@ def get_manager_actions(request):
             ok = True
         if ok:
             school = is_moderator_school(request, profile)
+            check_school_version(school, 'business')
             history = sorted(
                 chain(
                     PaymentHistory.objects.filter(action_author=manager), 
@@ -2052,6 +2056,7 @@ def get_teacher_actions(request):
     res = []
     if request.GET.get('id'):
         school = is_moderator_school(request, profile)
+        check_school_version(school, 'business')
         teacher = Profile.objects.get(id=int(request.GET.get('id')))
         materials = teacher.done_subject_materials.filter(school=school).select_related('subject')
         squads = teacher.hissquads.all().prefetch_related('subjects')
@@ -2585,7 +2590,9 @@ def payment_get_students_list(profile, school):
     # if profile.filter_data.subject_category:
     #     subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
     #     squads = squads.filter(subjects__in=subjects).distinct()
+    print(school.people.filter(is_student=True))
     students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
+    print(students)
     if profile.filter_data.payment != 'all':
         firstofmonth = first_day_of_month(timezone.now().date())
         lastofmonth = last_day_of_month(firstofmonth)
@@ -2714,6 +2721,7 @@ def connect_site_api(request, school_id=None):
     if school_id:
         if request.GET.get('name') and request.GET.get('phone'):
             school = School.objects.get(id=school_id)
+            check_school_version(school, 'business')
             found = False
             student = None
             if len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
@@ -2894,3 +2902,20 @@ def get_crnt_month(squad, subject, getday):
 
 def get_workers_list(request):
     pass
+
+def connect_full_version(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    ok = False
+    school = is_moderator_school(request, profile)
+    if school.version == 'business':
+        ok = 'already'
+    else:
+        school.version = 'business'
+        school.version_date = timezone.now()
+        school.save()
+        ok = 'ok'
+    data = {
+        "ok":ok,
+    }
+    return JsonResponse(data)

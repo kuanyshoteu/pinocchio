@@ -178,7 +178,7 @@
                     paper_box.find('.show_paper').attr('id', id)
                     paper_box.find('.show_paper').addClass('show_paper' + id)
                     if (paper_id == id) {
-                        paper_box.addClass('shadow_small')
+                        paper_box.find('.show_paper').addClass('shadow_small')
                     }
                     paper_box.appendTo('.all_papers')
                 }
@@ -213,10 +213,12 @@
     })
     $('.delete_subtheme').click(function(){
         id = $(this).parent().parent().parent().parent().attr('id')
+        paper_id = $('.lesson_data').attr('paper_id')
         $.ajax({
             url: "{% url 'library:delete_subtheme' %}",
             data: {
                 'id':id,
+                'paper_id':paper_id,
             },
             dataType: 'json',
             success: function (data) {
@@ -1083,7 +1085,6 @@
         else if (status == 'file') {
             add_file_open($(this))
         }
-
     })
     function add_video_open(this_){
         $('.add_video_modal').modal('show')
@@ -1296,5 +1297,93 @@
                 }
             }
         })
-    })    
+    })
+    $('.move_subtheme').click(function(){
+        this_ = $(this)
+        subtheme = this_.parent().parent().parent()
+        status = this_.attr('status')
+        id = subtheme.attr('id')
+        url = $('.data').attr('move_subtheme_url')
+        paper_id = $('.lesson_data').attr('paper_id')
+        this_.addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'status':status,
+                'paper_id':paper_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    this_.removeClass('disabled')
+                    if (status == 'up') {
+                        subtheme_prev = subtheme.prev()
+                        subtheme.insertBefore(subtheme_prev)
+                    }
+                    else{
+                        subtheme_prev = subtheme.next()
+                        subtheme.insertAfter(subtheme_prev)
+                    }
+                }                       
+            }
+        })
+    })
+    $('.show_paper_features').click(function(event){
+        id = $(this).parent().prev().attr('id')
+        $('.data').attr('crnt_paper_features', id)
+        h = $(this).position().top
+        $('.paper_features').css('margin-top', h - 20)
+        $('.paper_features').show()
+        event.stopPropagation();
+    })
+    $('.move_paper').click(function(event){
+        this_ = $(this)
+        status = this_.attr('status')
+        event.stopPropagation();
+        hash = document.location.hash
+        lesson_id = hash.split('p')[0].replace('#l', '')
+        paper_id = $('.data').attr('crnt_paper_features')
+        url = $('.data').attr('move_paper')
+        show_paper = $('.show_paper'+paper_id).parent()
+        $.ajax({
+            url: url,
+            data: {
+                'lesson_id':lesson_id,
+                'paper_id':paper_id,
+                'status':status,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok) {
+                    $('.paper_features').hide()
+                    this_.removeClass('disabled')
+                    if (status == 'up') {
+                        show_paper_prev = show_paper.prev()
+                        show_paper.insertBefore(show_paper_prev)
+                    }
+                    else{
+                        show_paper_prev = show_paper.next()
+                        show_paper.insertAfter(show_paper_prev)
+                    }
+                }                       
+            }
+        })
+    })
+    $('.delete_paper').click(function(){
+        paper_id = $('.data').attr('crnt_paper_features')
+        url = $('.data').attr('delete_paper')
+        $.ajax({
+            url: url,
+            data: {
+                'paper_id':paper_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.paper_features').hide()
+                $('.show_paper'+paper_id).parent().hide('fast')
+                show_lesson(lesson_id, '-1')
+            }
+        })
+    })
 </script>

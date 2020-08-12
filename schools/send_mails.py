@@ -40,6 +40,7 @@ def send_mails(request):
     profile = Profile.objects.get(user = request.user.id)
     school = is_moderator_school(request, profile)
     only_managers(profile)
+    check_school_version(school, 'business')
     order = request.GET.get('order')
     text = request.GET.get('text')
     addresses = request.GET.get('addresses')
@@ -258,6 +259,7 @@ def save_mail_template(request):
     tid = -1
     if title and text:
         school = is_moderator_school(request, profile)
+        check_school_version(school, 'business')
         if len(school.mail_templates.filter(title=title)) == 0 and len(school.mail_templates.filter(text=text)) == 0:
             temp = school.mail_templates.create(
                 title=title,

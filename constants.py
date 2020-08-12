@@ -199,6 +199,10 @@ def is_moderator_school(request, profile):
                 school = School.objects.get(id=int(request.GET.get('mod_school_id')))
                 return school
     school = profile.schools.first()
+    if school.version == 'business':
+        if school.version_date + timedelta(30) < timezone.now():
+            school.version = 'free'
+            school.save()
     return school
 
 def get_times(interval):
@@ -297,3 +301,9 @@ def get_card_dialog(card):
     return res
 
 img_formats = ['jpg', 'jpeg', 'png']
+
+def check_school_version(school, version):
+    if school.version == version:
+        return True
+    else:
+        raise Http404        

@@ -1,113 +1,472 @@
-{% extends "base.html" %}
-{% load crispy_forms_tags %}
+<!DOCTYPE html> 
+<html class="all" lang="ru"> 
 {% load staticfiles %}
-{% load ttags %}
-{% load ttttags %}
-{% block content %}
-<div  style="margin-top: -5px;color: #fff;">
-    <div class="text-center newlandhead" style="">
-        <div id="cloud-intro"></div>
-        <div class="mb10 land_head">
-            Введите название интересующего курса
-        </div>
-                <!-- <a class="ui button mini blue gojson">Go json</a> -->
-        <form class="ui form mb0 search_form">
-            <textarea class="map_search_input mb0" url="/api/map_search/" style="" placeholder="Учебные центры и курсы"></textarea>
-            <a class="dinline ui button white mr0 map_search_btn rightbr5" url="/api/map_search_show/">
-                <i class="icon search mr0" style="color: #232f3e;"></i>
-            </a>
-            <div class="full-w map_search_hint ui segment no_padding mt0" style="text-align: left;display: none;">
+{% load static compress %}
+<head> 
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="G-3JdvIZH1oSADX0f2I8uRqCFAggIj06lzBKaEeYb3Y" />   
+    <meta name="yandex-verification" content="f222118f15d7576b" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1">
+    <meta name="description" content="Автоматизация продаж и бухгалтерии, контроль администраторов, интерактивное расписание, журнал посещаемости, SMS рассылки, интеграция с IP-телефонией, Instagram, Facebook">
+    <meta name="keywords" content="бесплатная CRM система для учебного центра, программа учета клиентов, языковой школы, образовательного, билимтап, bilimtap, автоматизация учебного заведения, управление, расписание">
+    <title>Bilimtap.kz – бесплатная CRM для учебного центра</title>
+    <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
+   <!-- CSS -->
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript" >
+       (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+       m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+       ym(55093303, "init", {
+            clickmap:true,
+            trackLinks:true,
+            accurateTrackBounce:true,
+            webvisor:true
+       });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/55093303" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146621937-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-146621937-1');
+      gtag('config', 'AW-794791496');
+    </script>
+    <script> 
+        async function gtag_report_conversion(url) { 
+            var callback = function () { 
+                if (typeof(url) != 'undefined') { } 
+            }; 
+            gtag('event', 'conversion', { 
+                'send_to': 'AW-794791496/48kyCKGctc8BEMic_voC', 
+                'event_callback': callback 
+            }); 
+            return false; 
+        } 
+    </script>
+    <link rel="canonical" href="https://www.bilimtap.kz/crm/" />
+    {% compress css %}
+    <link rel="stylesheet" href='{% static "css/style.css" %}'/>
+    <link rel="stylesheet" href='{% static "css/landing.css" %}'/>
+    {% endcompress %}
+    <title>Bilimtap – Marketplace и CRM для учебных центров</title>
+</head> 
+<body data-track-group="Landing-Marquee">  
+    {% include 'landing/forget_password.html' %}
+    <header class="fixed-top "> 
+        <nav class="navbar py-3 dflex pl0 pr0" data-track-group="Global Header"> 
+            <a class="float-left" href="/">
+                <img src="{% static 'images/logo_clean.jpeg' %}" alt="logo" class="land_logo">
+            </a> 
+            <div class="float-right buttons dflex deskpr50">
+                <a style="text-decoration: underline;" class="textw text15 textbold deskpr50 pt5 mobpr5" href="https://wa.me/+77089708242/?text=" data-action="share/whatsapp/share">+77089708242</a>
+                <a class="show_request_form btn btn-wrap backwhite pl5 pr5 pt5 pb5 text14">Обратный звонок</a>
             </div>
-        </form>
-        <div class="mb0 mt10 land_amount">
-            Более <b>{{len}}</b> учебных центров Алматы
-        </div>
-    </div>
-    <div class="ui grid stackable deskpl30 deskpr30 pt10 pb50" style="background-color: #f5f5f5;">
-        <div class="three wide column pb0 pr0 not_in_mobile">
-            <div class="ui segment shadow no_padding all_caregories">
-                <div class="ui segment mb0 textw backlightblue" style="line-height: 25px;border-radius:7px 7px 0px 0px;color: #232f3e;text-align: left;padding: 5px 15px;"><b>Категории:</b></div>
-                {% for cat in categories %}
-                <a href="{{cat.get_absolute_url}}" class="ui button full-w {%if forloop.counter|is_odd %}white{%else%}lightgrey{%endif%}" style="line-height: 25px;border-radius:{%if forloop.counter > 1%}0{%else%}7px 7px 0px 0{%endif%}px;color: #232f3e;text-align: left;padding: 5px 15px;border-bottom: 1px solid #e5e5e5">
-                    <div style="font-size: 14;font-weight: 400;">{{cat.title}}</div>
-                </a>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="thirteen wide column pl0 pt0" style="text-align: left;color: #696969">
-            <div class="ui grid stackable no_margin">
-                <div class="sixteen wide column pl15 pb0 mobpt0 pr0" style="display: inline-block;">
-                    <a class="full-w ui button small white shadow_small border1 pt10 pb10 mb15 in_mobile" onclick="$('.categories_modal').modal('show')">
-                        <i class="icon list textblue"></i>
-                        Категории
-                    </a>
-                </div>
-                {% for school in schools %}
-                    {% include 'modals/school_list.html' %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="ui modal categories_modal">
-        <i class="close icon" style="margin-right: -15px;margin-top: -15px;"></i>
+        </nav>
+    </header>
+    <div class="request_callback full-w mt150" style="display: none;position: fixed;z-index: 3000;">
+        <i class="close icon"></i>
         <div class="content">
-            <div style="height: 20px;"></div>
-            <div class="mobile_categories"></div>
+            <div class="modal_segment ui segment shadow backwhite br5 pt15 pl15 pr15 pb30" style="margin: 0 auto;">
+                <div class="text-center mb15 text17 textblue textbold">
+                    Оставьте номер и мы Вам перезвоним
+                </div>
+                <form class="ui form textdg text14 textbold">
+                    Имя:
+                    <textarea class="mb query_name"></textarea>
+                    Телефон:
+                    <textarea class="mb0 query_phone"></textarea>
+                </form>
+                <div class="text-center mt15">
+                    <a url="{% url 'main:get_request_land' %}" class="send_queryl btn btn-wrap btn-success text14" onclick="tag_counters_form()">
+                        Отправить
+                    </a>
+                    <div class="loading_small query_load ml10" style="display: none;">
+                        <div class="animation"><div class="circle one"></div></div>
+                        <div class="animation"><div class="circle two"></div></div>
+                        <div class="animation"><div class="circle three"></div></div>
+                        <div class="animation"><div class="circle four"></div></div>
+                        <div class="animation"><div class="circle five"></div></div>
+                        <div class="animation"><div class="circle six"></div></div>
+                    </div>
+                    <div style="display: none;" class="success_load textbold textgreen text15 mt10">Мы Вам позвоним, спасибо!</div>
+                </div>
+            </div>
         </div>
     </div>
-    {% include 'footer.html' %}
-</div>
-<span class="catchmob"></span>
-<script type="text/javascript">
-    fill_mob_cats()
-    function fill_mob_cats(){
-        if ($('.catchmob').width() == 1) {
-            $('.all_caregories').appendTo('.mobile_categories')
+    <div class="sectionl">
+        <section id="hero" style="height: 100%"> 
+            <div class="container pt50 pb0 text-white "> 
+                <div class="row align-items-center text-center text-md-left"> 
+                    <div class="col-lg-6 pt50"> 
+                        <h1 class="mland_head">CRM-система для управления учебным центром</h1> 
+                        <p class="lead mt15" style="text-align: left;">Не теряйте клиентов, контролируйте работу сотрудников, автоматизируйте бухгалтерию с помощью самой понятной CRM-системой на рынке</p>  
+                    </div>
+                    <div class="col-lg-5 pt15 offset-lg-1"> 
+                        {% if land_type == 'land_form' %}
+                            {% include 'landing/login.html' %}
+                        {% else %}
+                            {% include 'landing/image.html' %}                        
+                        {% endif %}
+                    </div>  
+                    <div class="mt30 col-lg-10 offset-lg-1 deskmenu text-center">
+                        Бесплатная неограниченная версия
+                    </div>  
+                    <div class="col-lg-12 deskmenu pt0 pb50 text-center"> 
+                        <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" href="/sign_up/">
+                            Подключить сейчас →
+                        </a>
+                    </div>  
+                </div> 
+            </div> 
+        </section> 
+        <section id="crm-presentation" style="margin-top: 50px;margin-bottom: 70px;"> 
+            <div class="container text-center"> 
+                <div class="row"> 
+                    <div class="col-md-10 offset-md-1"> 
+                        <h3>Как CRM-система увеличит Вашу прибыль?</h3> 
+                    </div> 
+                </div> 
+                <div id="carousel" data-step="1"> 
+                    <a class="arrow arrow-left"> 
+                        <svg height="20" viewBox="0 0 22 40" width="11"> 
+                            <path d="m4.31783602 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" transform="translate(.265262)"/> 
+                        </svg> 
+                    </a> 
+                    <a class="arrow arrow-right"> 
+                        <svg height="20" viewBox="0 0 22 40" width="11"> 
+                            <path d="m4.31783662 20 16.88192488 16.8819248c.7133028.7133029.7133028 1.8697953 0 2.5830981-.7133029.7133028-1.8697953.7133028-2.5830981 0l-18.08168628-18.0816863c-.38000317-.3800032-.5575644-.8857877-.53268368-1.3833366-.02488072-.4975489.15268051-1.0033334.53268368-1.3833366l18.08168628-18.08168628c.7133028-.71330283 1.8697952-.71330283 2.5830981 0 .7133028.71330283.7133028 1.86979522 0 2.58309804z" fill="#d9e4eb" fill-rule="evenodd" transform="matrix(-1 0 0 -1 21.734738 40)"/> 
+                        </svg> 
+                    </a>
+                    <div class="board how-it-works" style="margin-top: 5px;">
+                        <div class="captions"> 
+                            <div class="caption-texts">
+                                <div class="caption caption-1"> Интеграции с социальными сетями, IP-телефонией и Вашим сайтом позволяют системе собрать все заявки в едином месте </div> 
+                                <div class="caption caption-2"> Создавая карточку по каждой заявке, CRM-система напомнит менеджеру ответить на все обращения и перезвонить потенциальным клиентам </div> 
+                                <div class="caption caption-3"> Результаты взаимодействий с клиентом помогут Вам проанализировать работу с входящими заявками
+                                <br>
+                                Также сохранив данные клиентов, Вы сможете одним кликом оповестить их о новой акции или скидке </div>
+                            </div>
+                        </div> 
+                        <div class="slide_images">
+                            <img src="{% static 'images/landing/crm.jpg' %}" class="full-w land_img land_img1 br5" alt="landing">
+                            <img src="{% static 'images/landing/card.png' %}" class="full-w land_img land_img2 br5" alt="crm" style="display: none;">
+                            <img src="{% static 'images/landing/info.png' %}" class="full-w land_img land_img3 br5" alt="info" style="display: none;">
+                        </div>
+                    </div> 
+                </div> 
+            </div> 
+        </section> 
+        <section id="marketplace"> 
+            <div class="container mb50 pb-md-0"> 
+                <div class="row align-items-center"> 
+                    <div class="col-md-5 order-md-1 text-center text-md-left"> 
+                        <h3 style="font-size: 30px;">Как система сэкономит Вам время и сократит расходы?</h3> 
+                        <div class="board in_mobile"> 
+                            <img src="{% static 'images/landing/buh3.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
+                        </div>                    
+                        <p>Учёт клиентов, журнал посещаемости, учёт оплаты студентов ведутся в единой базе, система автоматически посчитает зарплаты преподавателям и сформирует нужные отчёты для Вашего бухгалтера </p>
+                            <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2 " id="1">
+                                Узнать больше
+                            </a>
+                    </div> 
+                    <div class="col-md-7 order-md-12"> 
+                        <div class="board deskmenu" style="margin-right: -10%"> 
+                            <img src="{% static 'images/landing/buh3.png' %}" style=" border-radius: 10px; object-fit: contain; width: 100%;" alt="Бухгалтерия">
+                        </div>
+                    </div> 
+                </div> 
+            </div> 
+        </section> 
+        <section id="teams"> 
+            <div class="container mb50"> 
+                <div class="row align-items-center"> 
+                    <div class="col-md-7"> 
+                        <div class="board deskmenu" style="margin-left: -10%;"> 
+                            <img src="{% static 'images/landing/reports.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
+                        </div>
+                    </div> 
+                    <div class="col-md-5 text-center text-md-left"> 
+                        <h3 class="mt-3 mt-md-0">Как система повысит эффективность сотрудников?</h3> 
+                        <div class="board in_mobile"> 
+                            <img src="{% static 'images/landing/reports.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
+                        </div>
+                        <p class="m-0">Каждое действие администраторов фиксируется в системе, что повышает ответственность к поставленным задачам</p> 
+                        <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2" id="1">
+                            Узнать больше
+                        </a>
+                    </div> 
+                </div> 
+            </div> 
+        </section> 
+        <section id="schedule"> 
+            <div class="container mb50 pt-md-0"> 
+                <div class="row align-items-center"> 
+                    <div class="col-md-7 order-md-12"> 
+                        <div class="board deskmenu" style="margin-right: -10%;"> 
+                            <img src="{% static 'images/landing/sch.jpg' %}" style="height: 100%; width: 100%;border-radius: 10px; object-fit: contain" alt="">
+                        </div> 
+                    </div> 
+                    <div class="col-md-5 order-md-1 text-center text-md-left"> 
+                        <h3 class="mt-3 mt-md-0">Расписание групп, финансы, оплата</h3> 
+                        <div class="board in_mobile"> 
+                            <img src="{% static 'images/landing/sch.jpg' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Действия менеджеров">
+                        </div>
+                        <p>Отныне всё визуально понятно</p>
+                        <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2" id="1">
+                            Узнать больше
+                        </a>
+                    </div> 
+                </div> 
+            </div> 
+        </section>
+        <section id="online_education"> 
+            <div class="container mb50"> 
+                <div class="row align-items-center"> 
+                    <div class="col-md-7"> 
+                        <div class="board deskmenu" style="margin-left: -10%;"> 
+                            <img src="{% static 'images/landing/online.png' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Онлайн уроки">
+                        </div>
+                    </div> 
+                    <div class="col-md-5 text-center text-md-left"> 
+                        <h3 class="mt-3 mt-md-0">Создайте онлайн курс, не выходя из системы</h3> 
+                        <div class="board in_mobile"> 
+                            <img src="{% static 'images/landing/online.png' %}" style=" border-radius: 10px; object-fit: contain;height: 100%; width: 100%;" alt="Онлайн уроки">
+                        </div>
+                        <p class="m-0">
+                            Добавляйте видео, задачи, книги и тесты в свою Базу уроков и сформируйте курс в 2 клика.
+                            <br>
+                            Единая система позволит Вам легко управлять оффлайн и онлайн продажами одновременно
+                        </p> 
+                        <a class="show_request_form textbold btn btn-wrap btn-primary btn-md px-4 mt-2" id="1">
+                            Узнать больше
+                        </a>
+                    </div> 
+                </div> 
+            </div> 
+        </section> 
+        <section id="features"> 
+            <div class="container text-center py-0"> 
+                <div class="row"> 
+                    <div class="col-lg-4"> 
+                        <div style="margin-bottom: 15px;" class="img img-collaborate">
+                            <img src="{% static 'images/landing/vrn.png' %}" class="three_feat1" alt="voronka"/>
+                        </div> 
+                        <h5>Воронка продаж</h5> 
+                        <p class="small">Поможет Вам проанализировать и найти слабые звенья в Вашей цепочке продаж</p> 
+                    </div> 
+                    <div class="col-lg-4"> 
+                        <div style="margin-bottom: 15px;" class="img img-apps">
+                            <img src="{% static 'images/landing/chat.svg' %}" class="three_feat2" alt="sms">
+                        </div>
+                        <h5>Интеграции с сервисами Email, SMS, Whatsapp рассылок</h5> 
+                        <p class="small">Автоматически напомнят Вашим клиентам о предстоящем пробном занятии или отмене урока</p> 
+                    </div> 
+                    <div class="col-lg-4"> 
+                        <div style="margin-bottom: 15px;" class="img img-sync">
+                            <img src="{% static 'images/landing/data.svg' %}" class="three_feat3" alt="money">
+                        </div> 
+                        <h5>Отчеты по задолженностям, продажам, финансам</h5> 
+                        <p class="small">Позволят быстро проанализировать текущую ситуацию в бизнесе</p> 
+                    </div>                 
+                </div> 
+            </div> 
+        </section>
+        <section class="mt50 pt50 pb50">
+            <div class="container py-0"> 
+                <div class="row"> 
+                    <div class="text-center col-md-10 offset-md-1"> 
+                        <h3>Наши клиенты</h3> 
+                    </div>
+                </div>
+                <div class="row justify-content-center mt10"> 
+                    <div class="col-lg-2 mb15"> 
+                        <img src="{% static 'images/partners/learn.jpg' %}" alt="learn" class="br5 full-w shadow_small border1">
+                    </div>
+                    <div class="col-lg-2 mb15"> 
+                        <img src="{% static 'images/partners/prime.png' %}" alt="prime" class="br5 full-w shadow_small border1">
+                    </div>
+                    <div class="col-lg-2 mb15"> 
+                        <img src="{% static 'images/partners/pws.png' %}" alt="pws" class="br5 full-w shadow_small border1">
+                    </div>
+                    <div class="col-lg-2 mb15"> 
+                        <img src="{% static 'images/partners/kingsland.png' %}" alt="kingsland" class="br5 full-w shadow_small border1">
+                    </div>
+                    <div class="col-lg-2 mb15"> 
+                        <img src="{% static 'images/partners/oky12.jpg' %}" alt="oky12" class="br5 full-w shadow_small border1">
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mt50">
+            <div class="container py-0"> 
+                <div class="row"> 
+                    <div class="text-center col-md-10 offset-md-1"> 
+                        <h3>Тарифы</h3> 
+                    </div>
+                </div>
+                <div class="row justify-content-center mt10"> 
+                    <div class="col-lg-4 mb15"> 
+                        <div class="full-h shadow_dark_low br5">
+                            <div class="text-center full-w topbr5 backwhitelow textblue textbold text17 pt15 pb15 pl15 pr15">
+                                Бесплатный
+                            </div>
+                            <div class="pt15 pl15 pr15 text14" style="line-height: 16px;">
+                                <div class="mb10">Неограниченный CRM</div>
+                                <div class="mb10">Неограниченное кол-во групп</div>
+                                <div class="mb10">Интерактивное расписание занятий</div>
+                                <div class="mb10">Журнал посещаемости</div>
+                                <div class="mb10">Учёт оплат клиентов</div>
+                                <div class="borderblue pl10 pt5 pb5 pr10 br5 text-center mt15 textbold">
+                                    Бесплатно
+                                </div>
+                            </div>
+                            <div class="text-center mt15 mb15">
+                                <a class="btn btn-secondary text15 pt5 pb5" href="/sign_up/">
+                                    Подключить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb15">
+                        <div class="full-h shadow_dark_low br5">
+                            <div class="text-center full-w topbr5 backgreen textw textbold text17 pt15 pb15 pl15 pr15">
+                                Команда
+                            </div>
+                            <div class="pt15 pb0 pl15 pr15 text14" style="line-height: 16px;">
+                                <div class="mb10">Возможности тарифа <b>Бесплатный</b></div>
+                                <div class="mb10">Воронка продаж</div>
+                                <div class="mb10">Отчёты для бухгалтерии</div>
+                                <div class="mb10">Анализ лучших курсов</div>
+                                <div class="mb10">Интеграции с сервисами Email, SMS, Whatsapp рассылок</div>
+                                <div class="mb10">Отчёты по работе администратора</div>
+                                <div class="mb10">Хранилище онлайн документов до 1 ГБ</div>
+                                <div class="mb10">Интеграция с Вашим сайтом</div>
+                                <div class="borderblue pl10 pt5 pb5 pr10 br5 text-center mt15 textbold">
+                                    2500тг
+                                </div>
+                            </div>
+                            <div class="text-center mt15 mb15">
+                                <a class="btn btn-secondary text15 pt5 pb5" href="/sign_up/">
+                                    Подключить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 text14 textbold mb15 text-center"> 
+                        *Цена за пользователя в месяц
+                        <br>
+                        Доступ для Ваших преподавателей <b class="textgreen">бесплатно</b>
+                    </div>
+                    <div class="col-lg-6 text17">
+                        <div class="border1 shadow_small text-center br5 mt15 pt15 pl15 pr15 pb15">
+                            <b>Дистанционное и онлайн обучение</b> <br>
+                            До 50 активных студентов – 2000 тг<br>
+                            До 100 активных студентов – 7000 тг<br>
+                            До 200 активных студентов – 15000 тг<br>
+                            До 300 активных студентов – 30000 тг<br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div id="get-started" class="text-center mt30"> 
+            <div class="container text-center py-0"> 
+                <div class="row"> 
+                    <div class="offset-lg-3 col-lg-6"> 
+                        <form class="quick-signup text-center mt-01" method="POST" action="/signup_redirect">
+                            <h5 class="text24">
+                                Бесплатная неограниченная версия
+                            </h5>
+                            <a class="textbold btn btn-wrap btn-success btn-md px-4 mt-2 " id="1" href="/sign_up/">
+                                Подключить сейчас
+                            </a>
+                        </form>  
+                    </div>
+                </div> 
+            </div> 
+        </div>
+        <section class="mt50 pt20">
+            <div class="container py-0"> 
+                <div class="row"> 
+                    <div class="text-center col-md-10 offset-md-1 mb20"> 
+                        <h3>Наши победы</h3> 
+                    </div>
+                    <div class="col-md-12"> 
+                        <div class="row">
+                            <div class="col-md-6 text-center mobpb50">
+                                <a href="https://www.astanahub.com">
+                                    <img style="width: 200px;height: auto;" src="{% static 'images/landing/astanahub.png' %}" alt="astanahub">
+                                </a>
+                                <div class="textb text15">
+                                    Акселерация Astana Hub 8.0
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <a class="" href="http://edtechforum.kz/">
+                                    <img class="shadow_small br5 border1" style="width: 200px;height: auto;" src="{% static 'images/landing/edtech.png' %}" alt="edtechforum">
+                                </a>
+                                <div class="pt5 textb">
+                                    <div class="text15">"Edtech forum: Global to Local, Local to Global" </div>
+                                    <div class="text13">
+                                        Ежегодный казахстанский форум образовательных технологий    
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="quiet badge-primary pt15 pb15 mt50" data-track-group="Footer">  
+            <script>
+              window.isHreflangPath = false;
+              window.prefLocale = '';
+              window.locale = 'ru';
+            </script> 
+            <div class="row"> 
+                <div class="col-md-12 text-center">
+                    <a class="" href="/">
+                        <img src="{% static 'images/logo_clean.jpeg' %}" alt="logo" class="land_logo">
+                    </a> 
+                </div>             
+                <div class="col-md-12 text-center"> 
+                    <a class="textw mr15" href="{% url 'main:team' %}">О нас</a>
+                    <a class="textw" href="{% url 'main:pricing' %}">Цены</a>
+                </div>
+                <div class="col-md-12 text-center textw mt30 mb10"> 
+                    &nbsp;© 2020. Все права защищены. 
+                </div> 
+            <div> 
+        </footer>   
+    </div>
+</body> 
+    <script type="text/javascript">
+        function tag_counters_form(){
+            name = $('.query_name').val()
+            phone = $('.query_phone').val()
+            if (name.length > 0 && phone.length > 0) {
+                gtag('event', 'send', {'event_category': 'form'}); 
+                ym(55093303,'reachGoal','send-form');
+            }
+            return true;          
         }
-    }
-    $('.gojson').on('click',function(e) {
-        $.ajax({
-            url: '/',
-            type: 'POST',
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify({ "type": "confirmation", "group_id": 169590398 }),
-            dataType: 'text',
-            success: function(result) {
-            }
-        });        
-    })
-    $('.map_search_input').on('input', function(e) {
-        text = $('.map_search_input').val()
-        url = $(this).attr('url')
-        $.ajax({
-            url: url,
-            data: {
-                'text': text,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if(data.res.length == 0){
-                    $('.map_search_hint').hide();
-                }
-                else{
-                    $('.map_search_hint').empty();
-                    url = $('.show_url').attr('url')
-                    for(var i = 0; i < data.res.length; i++){
-                        if (data.res[i][1] == 'category') {
-                            icon = '<b style="font-size:11px;color:grey;"></b> '
-                        }
-                        else 
-                            icon = '<b style="font-size:11px;color:grey;">центр: </b>'
-                        var element = $('<a href="'+data.res[i][2]+'" class="map_hint_item">'+icon+'<b>'+data.res[i][0]+'</b></a>').appendTo('.map_search_hint');
-                    }
-                    $('.map_search_hint').show();
-                }
-            }
-        });
-    })
-    $('.map_search_by_tags').on('click',function(e) {
-        text = $('.map_search_input').val()
-    })
-    
-</script>
-{% endblock content %}
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript">
+    </script>
+    {% compress js %}
+    <script src="{% static 'js/landing/func3.js' %}"></script> 
+    <script src="{% static 'js/landing/func.js' %}"></script>
+    {% endcompress %}
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=e41c217e-d9c0-4663-a3b4-4dba98ca5e05&lang=ru_RU"
+    type="text/javascript"></script>
+{% compress js %}       
+<script src="{% static 'js/landing/func2.js' %}"></script>   
+{% endcompress %}
+</html>

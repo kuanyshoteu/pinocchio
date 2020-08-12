@@ -30,10 +30,10 @@
                         <div class="dinline text21 textdg textbold dinline mr50">
                             Ваша база уроков
                         </div>
-                        <form class="ui form mb0 dflex br5 pr5 mr15 backwhite" style="border: 1px solid #d3d3d3;min-width: 25%;">
+                        <!-- <form class="ui form mb0 dflex br5 pr5 mr15 backwhite" style="border: 1px solid #d3d3d3;min-width: 25%;">
                             <textarea placeholder="Поиск уроков и папок" style="height: 25px;overflow-y: hidden;padding-top: 3px;border: none;" class="dinline mb0"></textarea>
                             <span style="padding-top: 3px;"><i class="icon search"></i></span>
-                        </form>
+                        </form> -->
                         <div class="cache_show textg text14" style="position: absolute;right: 10px;display: none;">
                             Скопировано:
                             <i class="icon cache_icon"></i> <span class="textblue cache_title"></span>
@@ -199,6 +199,6 @@
         </div>
     </div>
 </div>
-<span style="display: none;" class="data" file_action_url='{% url "library:file_action_url" %}' paste_to_folder="{% url 'library:paste_to_folder' %}" crnt_folder="-1" opened_folder="-1"></span>
+<span style="display: none;" class="data" file_action_url='{% url "library:file_action_url" %}' move_subtheme_url="{% url 'library:move_subtheme_url' %}" move_paper="{% url 'library:move_paper' %}" delete_paper="{% url 'papers:delete_paper_url' %}" paste_to_folder="{% url 'library:paste_to_folder' %}" crnt_folder="-1" opened_folder="-1"></span>
 {% include 'scripts/library.html' %}
 {% endblock %}

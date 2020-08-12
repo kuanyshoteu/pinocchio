@@ -36,33 +36,13 @@ def loaderio(request):
     return render(request, "loaderio-c10fbfa327821a1063a562c197571027.txt", context)
 
 def newland(request):
-    is_trener = False
-    is_manager = False
-    is_director = False
-    is_moderator = False
     profile = None
-    money = 0
     if request.user.is_authenticated:
         profile = get_profile(request)
-        is_trener = is_profi(profile, 'Teacher')
-        is_manager = is_profi(profile, 'Manager')
-        is_director = is_profi(profile, 'Director')
-        is_moderator = is_profi(profile, 'Moderator')
-        if len(profile.schools.all()):
-            money = profile.schools.first().money
+        return redirect(profile.get_absolute_url())
     context = {
         "profile":profile,
-        "categories":SchoolCategory.objects.all(),
-        "schools":ElliteSchools.objects.first().schools.all(),
-        "url":School.objects.first().get_landing(),
-        'is_trener':is_trener,
-        "is_manager":is_manager,
-        "is_director":is_director,
-        "is_moderator":is_moderator,
-        "school_money":money,
-        "newland":True,
-        "five":[1,2,3,4,5],
-        'len':int(len(School.objects.all())/10)*10
+        "land_type":"land_form",
     }
     return render(request, "newland.html", context)
 
@@ -104,9 +84,7 @@ def category_landing(request, id=None):
         is_director = is_profi(profile, 'Director')
         if len(profile.schools.all()):
             money = profile.schools.first().money
-
     category = SchoolCategory.objects.get(id=id)
-
     context = {
         "profile":profile,
         "category":category,
@@ -140,8 +118,9 @@ def about(request):
         profile = get_profile(request)
     context = {
         "profile":profile,
+        "land_type":"image",
     }
-    return render(request, "about.html", context)
+    return render(request, "newland.html", context)
 
 def team(request):
     profile = None
@@ -968,6 +947,7 @@ def get_school_report(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
+    check_school_version(school, 'business')
     if request.POST.get('first_report') and request.POST.get('second_report'):
         timeago = datetime.datetime.strptime(request.POST.get('first_report'), "%Y-%m-%d").date()
         timefuture = datetime.datetime.strptime(request.POST.get('second_report'), "%Y-%m-%d").date()

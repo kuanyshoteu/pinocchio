@@ -51,7 +51,6 @@ urlpatterns = [
     url(r'^api/delete_cabinet/', delete_cabinet, name='delete_cabinet'),
     url(r'^api/make_zaiavka/(?P<school_id>\d+)/$', make_zaiavka, name='make_zaiavka'),
     url(r'^api/get_school_report/(?P<school_id>\d+)/$', get_school_report, name='get_school_report'),
-    url(r'^adilmed/', adilmed, name="adilmed"),
     # salaries
     url(r'^api/move_worker/$', move_worker, name='move_worker_url'),
     url(r'^api/add_job/$', add_job, name='add_job'),
@@ -109,4 +108,8 @@ urlpatterns = [
     # school workers
     url(r'^salaries/$', school_salaries, name='salaries'),
     url(r'^api/add_worker_school/', add_worker_school, name='add_worker_school'),        
+    # school versions
+    url(r'^api/connect_full_version/', connect_full_version, name='connect_full_version'),            
+    # adilmed
+    url(r'^adilmed/', adilmed, name="adilmed"),
 ]

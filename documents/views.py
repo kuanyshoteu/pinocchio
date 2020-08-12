@@ -22,12 +22,14 @@ def documents(request):
     profile = get_profile(request)    
     only_staff(profile)
     school = profile.schools.first()
+    check_school_version(school, 'business')
     return redirect(school.get_school_documents())
 
 def school_documents(request, school_id):
     profile = get_profile(request)
     only_staff(profile)
     school = School.objects.get(id=school_id)
+    check_school_version(school, 'business')
     is_in_school(profile, school)
     img = ['png', 'jpg', 'jpeg']
     html = ['html', 'css', 'js', 'py', 'java']

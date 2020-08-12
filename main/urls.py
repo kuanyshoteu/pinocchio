@@ -39,5 +39,5 @@ urlpatterns = [
     url(r'^api/update_hint/$', update_hint, name='update_hint'),
     url(r'^robots.txt', robots, name="robots"),
     url(r'^sitemap', sitemap, name="sitemap"),
-    url(r'^$', login_page, name='home'),
+    url(r'^$', newland, name='home'),
 ]

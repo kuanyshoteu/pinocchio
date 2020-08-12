@@ -391,7 +391,7 @@
                     </div>
                 </div>
             </div>            
-            <div class="ui segment no_margin pl15 hint_place3" side="top">
+            <div class="ui segment no_margin pl15" side="top">
                 <div class="text14 textdg pb10">
                     <b>Кабинеты</b>
                     <span>{{instance.cabinets.all|length}}</span>
@@ -429,6 +429,7 @@
                     </div>
                 </div>
             </div>
+            {%if school_crnt.version == 'business'%}
             {% include 'school/voronka_chart.html' %}
             <div class="ui segment mb0">
                 <div class="textdg textbold text15 mb10">Отчеты по менеджерам</div>
@@ -472,6 +473,7 @@
                 </div>
                 {% endif %}
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

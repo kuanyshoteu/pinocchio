@@ -47,27 +47,27 @@
             <a class="item lftitem {%if page == 'subjects' %}lftitem_crnt{%endif%}" href='{% url "subjects:list" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                 <i class="book icon mr10"></i>Курсы
             </a>
-            {% if is_director %}
-            <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">
-                <span>Финансы</span>
-            </a>
-            {% endif %}
-            {% if is_manager or is_trener or is_director %}
-            <a class="item lftitem {%if page == 'mails' %}lftitem_crnt{%endif%}" href='{% url "schools:mails" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="envelope icon mr10"></i>Рассылки
-                <span class="grey_notice">beta</span>
-            </a>
-            <a class="item lftitem {%if page == 'documents' %}lftitem_crnt{%endif%}" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="folder icon mr10"></i>Документы
-            </a>
-            {% endif %}
             {%if school_crnt.version == 'business'%}
-            {% if is_trener or is_director %}
-            <a class="item lftitem {%if page == 'library' %}lftitem_crnt{%endif%}" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
-                <i class="file alternate icon mr10"></i>База уроков
-            </a>
-            {% endif %}
+                {% if is_director %}
+                <a class="item lftitem {%if page == 'finance' %}lftitem_crnt{%endif%}" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                    <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">
+                    <span>Финансы</span>
+                </a>
+                {% endif %}
+                {% if is_manager or is_trener or is_director %}
+                <a class="item lftitem {%if page == 'mails' %}lftitem_crnt{%endif%}" href='{% url "schools:mails" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                    <i class="envelope icon mr10"></i>Рассылки
+                    <span class="grey_notice">beta</span>
+                </a>
+                <a class="item lftitem {%if page == 'documents' %}lftitem_crnt{%endif%}" href='{% url "documents:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                    <i class="folder icon mr10"></i>Документы
+                </a>
+                {% endif %}
+                {% if is_trener or is_director %}
+                <a class="item lftitem {%if page == 'library' %}lftitem_crnt{%endif%}" href='{% url "library:main" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                    <i class="file alternate icon mr10"></i>База уроков
+                </a>
+                {% endif %}
             {% endif %}
         </div>
         {% endif %}
@@ -87,4 +87,11 @@
             О нас
         </a>
     </div>
+    {%if school_crnt.version != 'business' and is_director%}
+    <div class="text-center mt15">
+        <a class="get_full_version ui button small green shadow_green textbold">
+            Попробовать полную версию
+        </a>
+    </div>
+    {% endif %}
 </div>
