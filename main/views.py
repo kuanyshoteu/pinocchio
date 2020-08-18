@@ -1350,8 +1350,7 @@ def upload_cards(request):
                     elif i == 2:
                         comment = aaa
                     i += 1
-                print(name, phone, comment)
-                # xls_create_card(None,name,'', None,phone,'',column,school, comment)
+                xls_create_card(None,name,'', None,phone,'',column,school, comment)
     context = {   
     }
     return render(request, "upload_cards.html", context)
