@@ -259,8 +259,9 @@
         name = $(this).attr('cname')
         save_card_id(id, name)
     })
-    function column_scroll(column){
-        this_ = $('.column_scrollable'+column)
+    $('.column_scrollable').scroll(function (){
+        this_ = $(this)
+        column = this_.attr('id')
         if (this_.attr('Ended') == 'false') {
             url = $('.data').attr('get_extra_cards')
             page = this_.attr('page')
@@ -290,7 +291,7 @@
                 })
             }
         }
-    };
+    });
     function filter_title(id){
         this_ = $('.filter-title-'+id)
         $('.filter-list').hide()
@@ -480,27 +481,23 @@
         $('.current_card').attr('id', id)
         $('.current_card').attr('name', name)
     }
-    new Vue({
-        el: '#app',
-        delimiters: ['[[', ']]'],
-        data() {
-            return {
-                squad: 'Выберите Класс',
-                schedule: null,
-                inSubjectSquads: [],
-                outSubjectSquads: [],
-                trener: ''
-            }
-        },
-        methods: {
-            move_card(column_id) {
-                id = $('.current_card').attr('id')
-                axios.get('/schools/api/move_card/', {
-                    params: {
-                        'column_id': column_id,
-                        'card_id': id
-                    }
-                });
+    function allowDrop(this_){
+        id = $('.current_card').attr('id')
+        $('.crm_card'+id).prependTo(this_)
+        event.preventDefault();
+    }
+    function move_card(event,column_id){
+        console.log('move_card')
+        event.preventDefault();
+        id = $('.current_card').attr('id')
+        $.ajax({
+            url: $('.data').attr('move_card_url'),
+            data: {
+                'column_id': column_id,
+                'card_id': id
+            },
+            dataType: 'json',
+            success: function (data) {
                 oldcolumn_id = $('#card'+id).attr('column_id')
                 $('#card'+id).attr('column_id', column_id)
                 $('#cardsc'+id).attr('column', column_id)
@@ -520,9 +517,9 @@
                         openNav(id);
                     }
                 }
-            },
-        },
-    })
+            }
+        })        
+    }
     function open_crmcard(id){
         $('#card_formedit').modal('show');
         $('.card_saved').hide()
@@ -676,7 +673,7 @@
                 if (data.ok) {
                     $('.empty_dialog').hide()
                     $('.card_mail_text').val('')
-                    message = $('.manager_message_cont').clone()
+                    message = $('.manager_message_cont').clone(true)
                     message.removeClass('manager_message_cont')
                     message.find('.message_date').text(data.time)
                     message.find('.message_text').text(text)

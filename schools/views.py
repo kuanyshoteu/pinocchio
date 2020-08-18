@@ -2089,7 +2089,7 @@ def get_all_cards_first(request):
     page = 1
     all_res = []
     for column in school.crm_columns.all():
-        res = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
+        res = column.cards.filter(school=school).select_related('card_user')
         if len(res) <= 0:
             continue
         p = Paginator(res, 4)
@@ -2121,7 +2121,7 @@ def get_all_cards_second(request):
     all_res = []
     column_cards_lens = []
     for column in school.crm_columns.all():
-        query = column.cards.filter(author_profile=profile,school=school).select_related('card_user')
+        query = column.cards.filter(school=school).select_related('card_user')
         column_cards_lens.append(len(query))
         res = []
         colid = column.id

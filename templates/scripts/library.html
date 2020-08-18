@@ -34,12 +34,14 @@
                     </div>
                 </div>
                 <div class="three wide column pt5 pb0 pl0 pr15">
-                    <span>kuanysh</span>
+                    <span class="author_name"></span>
                 </div>
                 <div class="four wide column pt5 pb0 pl0 pr15">
-                    <span class="textdg text12 textbold mr5">
-                        11 / 17
+                    <span class="done_by textdg text12 mr5">
                     </span>
+                    /
+                    <span class="try_by textdg text12 mr5">
+                    </span>                    
                     <span>
                         <i class="icon star textgold text11"></i>
                         <i class="icon star textgold text11"></i>
@@ -138,10 +140,16 @@
         })
     })
     $('.show_library').click(function(event){
+        show_library()
+    })
+    function show_library(){
         $('.lesson_page').hide()
         $('.library_page').fadeIn(400)
-        document.location.hash = "";
-    })    
+        document.location.hash = "";        
+        let stateObj = { id: "100" }; 
+        window.history.replaceState(stateObj, 
+                    "", "#");
+    }
     $('.lesson_file').click(function(){
         this_ = $(this)
         id = this_.attr('id')
@@ -191,10 +199,24 @@
         lesson_id = hash.split('p')[0].replace('#l', '')
         show_lesson(lesson_id, paper_id)
     })
+    $(window).on('hashchange', function(e){
+        hash = document.location.hash
+        if (hash.length > 1) {
+            lesson_id = hash.split('p')[0].replace('#l', '')
+            paper_id = hash.split('p')[1].replace('#p', '')
+            show_lesson(lesson_id, paper_id)            
+        }
+        else{
+            show_library()
+        }
+    });    
     function fill_paper(paper_res, lesson_id){
         paper_id = paper_res[0]
         $('.lesson_data').attr('paper_id', paper_id)
         document.location.hash = "l"+lesson_id+"p"+paper_id;
+        let stateObj = { id: "100" }; 
+        window.history.replaceState(stateObj, 
+                    "", "#l"+lesson_id+"p"+paper_id);
         title = paper_res[1]
         $('.crnt_paper_title').text(title)
         subthemes = paper_res[2]
@@ -733,6 +755,9 @@
         lesson.removeClass('lesson_file_orig')
         lesson.find('.lesson_title').text(title)
         lesson.find('.lesson_file').attr('id', id)
+        lesson.find('.author_name').text(author)
+        lesson.find('.done_by').text(done_by)
+        lesson.find('.try_by').text(try_by)
         lesson.find('.lesson_file').addClass('lesson_file'+id)
         lesson.appendTo('.lessons_box')
     }
@@ -957,6 +982,7 @@
     function create_folder_form(event){
         event.stopPropagation()
         id = $('.data').attr('opened_folder')
+        $('.new_folder_title_text').val('')
         folder = $('.folder'+id)
         h = folder.position().top
         title = folder.find('.folder_title').eq(0).text()
@@ -1003,6 +1029,7 @@
         title = $('.new_lesson_title_text').val()
         parent = $('.data').attr('opened_folder')
         this_ = $(this)
+        $('.new_lesson_title').val('')
         this_.addClass('disabled')
         if (title.length > 0) {
             $.ajax({
@@ -1385,5 +1412,15 @@
                 show_lesson(lesson_id, '-1')
             }
         })
+    })
+    $('.postfile').change(function() {
+        input = this
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('.new_file_preview').text(input.files[0].name)
+            }
+            reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
     })
 </script>

@@ -115,7 +115,6 @@ def AddPaper(request):
     if request.GET.get('lesson_id'):
         lesson = Lesson.objects.get(id = int(request.GET.get('lesson_id')))
         is_in_school(profile, lesson.school)
-        check_school_version(school, 'business')
         papers_num = len(lesson.papers.all()) + 1
         title = 'Страница' + str(papers_num)
         paper = Paper.objects.create(
