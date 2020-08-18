@@ -14,6 +14,10 @@ from dateutil.relativedelta import relativedelta
 from itertools import chain
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import json
+
+cloudpayments_id = 'pk_8f05633d39130c02981943d45a4a4'
+cloudpayments_secretkey = 'be5fb1c28aff24ce84ef4cbc090d4152'
+
 def send_sms(phones, message, time):
     login = 'Pinocchio'
     password = 'Siski11zhopa'

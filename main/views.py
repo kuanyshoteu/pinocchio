@@ -29,6 +29,20 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions
 from django.http import JsonResponse
+import pandas as pd
+from io import BytesIO
+from todolist.form import FileForm
+from todolist.models import Document
+from django.contrib.postgres.search import TrigramSimilarity
+from dateutil.relativedelta import relativedelta
+
+import math
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
+import hashlib
+import hmac
+import base64
 
 def loaderio(request):
     context = {
@@ -559,7 +573,6 @@ def login_social(request):
     }
     return JsonResponse(data)
 
-from django.contrib.postgres.search import TrigramSimilarity
 def map_search(request):
     text = request.GET.get('text')
     res = []
@@ -942,7 +955,6 @@ def get_date_by_num(material_number, squad, subject,lectures):
     else:
         return '_'
 
-from dateutil.relativedelta import relativedelta
 def get_school_report(request):
     profile = get_profile(request)
     only_directors(profile)
@@ -1257,8 +1269,6 @@ def cat_filter(request):
     }
     return JsonResponse(data)
 
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 def handler404(request, exception):
     return render(request,'er404.html', {})
 def handler500(request):
@@ -1282,10 +1292,6 @@ def robots(request):
 def sitemap(request):
     return render(request,'Sitemap.xml', {})
 
-import pandas as pd
-from io import BytesIO
-from todolist.form import FileForm
-from todolist.models import Document
 def file_changer(request):
     if 'file' in request.FILES:
         file = request.FILES['file']
@@ -1317,11 +1323,10 @@ def file_changer(request):
     context = {   
     }
     return render(request, "file_changer.html", context)
-import math
 def upload_cards(request):
     if 'file' in request.FILES:
         x=float('nan')
-        school = School.objects.get(id=140)
+        school = School.objects.get(id=155)
         file = request.FILES['file']
         data2 = pd.ExcelFile(file)
         datas = pd.read_excel(data2, None)
@@ -1341,64 +1346,17 @@ def upload_cards(request):
                     if i == 0:
                         name = aaa
                     elif i == 1:
-                        if str(aaa) != 'nan':
-                            name += ' ' + str(aaa)
-                    elif i == 2:
-                        parents = aaa
-                    elif i == 3:
-                        if str(aaa) != 'nan' and str(aaa) != 'NaT':
-                            birthday = aaa
-                    elif i == 5:
                         phone = aaa
-                    elif i == 8:
-                        if aaa:
-                            if not '@' in str(aaa) and str(aaa) != 'nan':
-                                mail = aaa
+                    elif i == 2:
+                        comment = aaa
                     i += 1
-                card = xls_create_card(None,name,parents,birthday,phone,mail,column,school)
-                i = 0
-                for aaa in row:
-                    if i == 4:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa)
-                    elif i == 6:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa).replace(' ', '')
-                    elif i == 7:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa)
-                    elif i == 8:
-                        if not '@' in str(aaa):
-                            if str(aaa) != 'nan':    
-                                tag = card.hashtags.get_or_create(title=aaa)
-                                comment += ' !'+str(aaa)
-                    elif i == 9:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa)
-                    elif i == 10:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa)
-                    elif i == 11:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa)
-                    elif i == 12:
-                        if str(aaa) != 'nan':    
-                            tag = card.hashtags.get_or_create(title=aaa)
-                            comment += ' !'+str(aaa)
-                    i += 1
-                card.comments = comment
-                card.save()
+                print(name, phone, comment)
+                # xls_create_card(None,name,'', None,phone,'',column,school, comment)
     context = {   
     }
     return render(request, "upload_cards.html", context)
 
-def xls_create_card(profile,name,parents,birthday,phone,mail,column,school):
+def xls_create_card(profile,name,parents,birthday,phone,mail,column,school, comment):
     card = school.crm_cards.create(
         author_profile=profile,
         name = name,
@@ -1406,7 +1364,7 @@ def xls_create_card(profile,name,parents,birthday,phone,mail,column,school):
         birthday = birthday,
         phone = phone,
         mail = mail,
-        comments = '',
+        comments = comment,
         column = column,
         saved = False,
         card_user = None,
@@ -1462,3 +1420,39 @@ def update_hint(request):
     data = {
     }
     return JsonResponse(data)
+
+def cloudpayments_pay(request):
+    request.GET.get('dir')
+    if check_cloudpayments_hash(request):
+        pass
+    data = {
+        'code':0
+    }
+    return JsonResponse(data)
+
+def cloudpayments_fail(request):
+    request.GET.get('dir')
+    data = {
+        'code':0
+    }
+    return JsonResponse(data)
+
+def cloudpayments_refund(request):
+    request.GET.get('dir')
+    data = {
+        'code':0
+    }
+    return JsonResponse(data)
+
+def check_cloudpayments_hash(request):
+    print(request.headers)
+    decoded = 0
+    encoded = 1
+    message = bytes(decoded, 'utf-8')
+    secret = bytes(cloudpayments_secretkey, 'utf-8')
+    encoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+    if encoded == encoded2:
+        return True
+    else:
+        return False
+    print(signature)
