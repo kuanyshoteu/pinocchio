@@ -259,6 +259,9 @@
         name = $(this).attr('cname')
         save_card_id(id, name)
     })
+    $( window ).scroll(function() {
+        console.log('8888888')
+    });
     $('.column_scrollable').scroll(function (){
         this_ = $(this)
         column = this_.attr('id')
