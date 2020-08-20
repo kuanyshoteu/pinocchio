@@ -1479,6 +1479,7 @@ def cloudpayments_refund(request):
     return JsonResponse(data)
 
 def check_cloudpayments_hash(request):
+    print(request.headers)
     print(request.headers['X-Content-HMAC'])
     print(request.headers['Content-HMAC'])
     decoded = request.headers['X-Content-HMAC']
