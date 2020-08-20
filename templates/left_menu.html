@@ -94,7 +94,12 @@
         </a>
     </div>
     {% endif %}
-    <a class="ui button mini green vidget">vidget</a>
+    <div class="text-center mt15">
+        <a class="get_full_version ui button small green shadow_green textbold">
+            Попробовать полную версию
+        </a>
+    </div>
+    <!-- <a class="ui button mini green vidget">vidget</a> -->
     <!-- <a class="ui button mini green subscribe">subscribe</a> -->
 </div>
 <span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
@@ -128,7 +133,7 @@
                 widget.charge({ // options
                     publicId: publicId,
                     description: 'Оплата за 6 месяцев подписки', //назначение
-                    amount: 2500 * 6,
+                    amount: 10,
                     currency: 'KZT',
                     invoiceId: invoiceId,
                     accountId: accountId,
