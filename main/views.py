@@ -1421,11 +1421,32 @@ def update_hint(request):
     return JsonResponse(data)
 
 def cloudpayments_pay(request):
-    request.GET.get('dir')
     if check_cloudpayments_hash(request):
-        pass
+        profile_id = request.GET.get('AccountId')
+        profile = Profile.objects.get(id = int(profile_id))
+        school = profile.schools.first()
+        last_payment = school.subscribe_payments.all()
+        months = int(float(request.GET.get('Amount')) / 2500)
+        if len(school.subscribe_payments.all()) > 0:
+            last_date = school.subscribe_payments.first().timestamp
+        else:
+            last_date = timezone.now()
+        day = last_date.strftime('%d')
+        mnth = last_date.strftime('%m')
+        year = last_date.strftime('%Y')
+        newmnth = int(mnth) + 6
+        if newmnth > 12:
+            newmnth -= 12
+            year = str(int(year) + 1)
+        if newmnth < 10:
+            newmnth = '0' + str(newmnth)
+        else:
+            newmnth = str(newmnth)
+        school.version_date = datetime.datetime.strptime(year+
+            '-'+newmnth+'-'+day+' '+last_date.strftime('%H')+':'+last_date.strftime('%M'), "%Y-%m-%d %H:%M")
+        print(school.version_date)
     data = {
-        'code':0
+        'code':0,
     }
     return JsonResponse(data)
 
@@ -1445,13 +1466,28 @@ def cloudpayments_refund(request):
 
 def check_cloudpayments_hash(request):
     print(request.headers)
-    decoded = 0
-    encoded = 1
+    print(request.headers['X-Content-HMAC'])
+    print(request.headers['Content-HMAC'])
+    decoded = request.headers['X-Content-HMAC']
+    encoded = request.headers['Content-HMAC']
     message = bytes(decoded, 'utf-8')
     secret = bytes(cloudpayments_secretkey, 'utf-8')
     encoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
     if encoded == encoded2:
+        print('okokokokokoko')
         return True
     else:
+        print('nononononono')
         return False
-    print(signature)
+
+def get_cloudpayments_data(request):
+    profile = Profile.objects.get(user = request.user)
+    publicId = 'test_api_00000000000000000000001'
+    invoiceId = '1'
+    accountId = profile.id
+    data = {
+        'publicId':publicId,
+        'invoiceId':invoiceId,
+        'accountId':accountId,
+    }
+    return JsonResponse(data)

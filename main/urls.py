@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
     url(r'^api/another_hint/$', another_hint, name='another_hint'),
     url(r'^api/update_hint/$', update_hint, name='update_hint'),
+    url(r'^api/get_cloudpayments_data/$', get_cloudpayments_data, name='get_cloudpayments_data'),
     url(r'^api/cloudpayments/pay/$', cloudpayments_pay, name='cloudpayments_pay'),
     url(r'^api/cloudpayments/fail/$', cloudpayments_fail, name='cloudpayments_fail'),
     url(r'^api/cloudpayments/refund/$', cloudpayments_refund, name='cloudpayments_refund'),

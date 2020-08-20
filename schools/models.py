@@ -41,7 +41,6 @@ class School(models.Model):
     money_update_date = models.DateTimeField(auto_now_add=False)
     sms_amount = models.IntegerField(default=0)
     pay_day_diff = models.IntegerField(default=5)
-    schedule_type = models.CharField(max_length=10, default='classic') #May be "classic" or "new"
     schedule_interval = models.IntegerField(default=60)
     importance = models.IntegerField(default=0)
     bill_day_diff = models.IntegerField(default=5)
@@ -163,6 +162,17 @@ class SocialMedia(models.Model):
             )
     content = models.TextField(default='')
     link = models.TextField(default='')
+
+class SubscribePay(models.Model):
+    school = models.ForeignKey(School, null=True, on_delete = models.CASCADE, related_name='subscribe_payments')
+    author = models.CharField(max_length=250)
+    phone = models.CharField(max_length=250)
+    transactionId = models.IntegerField(default=0)
+    amount = models.IntegerField(default=0)
+    currency = models.CharField(max_length=10)
+    timestamp = models.DateTimeField(auto_now_add=False)
+    class Meta:
+        ordering = ['-timestamp']
         
 class SocialMediaAccount(models.Model):
     access_token = models.TextField(default='')
