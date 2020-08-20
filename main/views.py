@@ -1446,6 +1446,18 @@ def cloudpayments_pay(request):
             newmnth = str(newmnth)
         school.version_date = datetime.datetime.strptime(year+
             '-'+newmnth+'-'+day+' '+last_date.strftime('%H')+':'+last_date.strftime('%M'), "%Y-%m-%d %H:%M")
+        name = profile.first_name
+        if request.GET.get('Name'):
+            name = request.GET.get('Name')
+        transaction_id = request.GET.get('TransactionId')
+        school.subscribe_payments.create(
+            author = name,
+            phone = profile.phone,
+            transactionId = int(transaction_id),
+            amount = int(request.GET.get('Amount')),
+            currency = int(request.GET.get('Currency')),
+            timestamp = timezone.now(),
+            )
         print(school.version_date)
     data = {
         'code':0,
@@ -1467,14 +1479,14 @@ def cloudpayments_refund(request):
     return JsonResponse(data)
 
 def check_cloudpayments_hash(request):
-    print(request.headers)
     print(request.headers['X-Content-HMAC'])
     print(request.headers['Content-HMAC'])
     decoded = request.headers['X-Content-HMAC']
-    encoded = request.headers['Content-HMAC']
+    encoded = bytes(request.headers['Content-HMAC'], 'utf-8')
     message = bytes(decoded, 'utf-8')
     secret = bytes(cloudpayments_secretkey, 'utf-8')
     encoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+    print('encoded2', encoded2)
     if encoded == encoded2:
         print('okokokokokoko')
         return True

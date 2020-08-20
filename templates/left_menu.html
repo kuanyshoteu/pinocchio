@@ -117,15 +117,17 @@
         //         alert('yoyo')
         //     }
         // })
-    // })
+//    })
     $('.vidget').click(function(){
         url = $('.get_cloudpayments_data').attr('url')
+        $(this).addClass('disabled')
         $.ajax({
             url: url,
             data: {
             },
             dataType: 'json',
             success: function (data) {
+                $('.vidget').removeClass('disabled')
                 publicId = data.publicId
                 invoiceId = data.invoiceId
                 accountId = data.accountId
