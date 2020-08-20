@@ -1421,7 +1421,9 @@ def update_hint(request):
     return JsonResponse(data)
 
 def cloudpayments_pay(request):
+    print('cloudpayments_pay')
     if check_cloudpayments_hash(request):
+        print('get_hash')
         profile_id = request.GET.get('AccountId')
         profile = Profile.objects.get(id = int(profile_id))
         school = profile.schools.first()
@@ -1482,7 +1484,7 @@ def check_cloudpayments_hash(request):
 
 def get_cloudpayments_data(request):
     profile = Profile.objects.get(user = request.user)
-    publicId = 'test_api_00000000000000000000001'
+    publicId = cloudpayments_id
     invoiceId = '1'
     accountId = profile.id
     data = {
