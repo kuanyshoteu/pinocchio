@@ -94,4 +94,54 @@
         </a>
     </div>
     {% endif %}
+    <div class="text-center mt15">
+        <a class="get_full_version ui button small green shadow_green textbold">
+            Попробовать полную версию
+        </a>
+    </div>
+    <!-- <a class="ui button mini green vidget">vidget</a> -->
+    <!-- <a class="ui button mini green subscribe">subscribe</a> -->
 </div>
+<span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
+<script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
+<script type="text/javascript">
+//    $('.subscribe').click(function(){
+        // $.ajax({
+        //     url: '{% url "main:cloudpayments_pay"%}',
+        //     data: {
+        //         'AccountId':1,
+        //         "Amount":15000,
+        //     },
+        //     dataType: 'json',
+        //     success: function (data) {
+        //         alert('yoyo')
+        //     }
+        // })
+//    })
+    $('.vidget').click(function(){
+        url = $('.get_cloudpayments_data').attr('url')
+        $(this).addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                publicId = data.publicId
+                invoiceId = data.invoiceId
+                accountId = data.accountId
+                var widget = new cp.CloudPayments();
+                widget.charge({ // options
+                    publicId: publicId,
+                    description: 'Оплата за 6 месяцев подписки', //назначение
+                    amount: 10,
+                    currency: 'KZT',
+                    invoiceId: invoiceId,
+                    accountId: accountId,
+                    skin: "mini",
+                })
+                $('.vidget').removeClass('disabled')
+            }
+        })
+    })
+</script>

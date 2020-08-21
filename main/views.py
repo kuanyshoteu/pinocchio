@@ -1479,21 +1479,28 @@ def cloudpayments_refund(request):
     return JsonResponse(data)
 
 def check_cloudpayments_hash(request):
-    # print(request.headers)
-    print(request.headers['X-Content-HMAC'])
-    print(request.headers['Content-HMAC'])
-    decoded = request.headers['X-Content-HMAC']
-    encoded = bytes(request.headers['Content-HMAC'], 'utf-8')
-    message = bytes(decoded, 'utf-8')
-    secret = bytes(cloudpayments_secretkey, 'utf-8')
-    encoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
-    print('encoded2', encoded2)
-    if encoded == encoded2:
-        print('okokokokokoko')
-        return True
-    else:
-        print('nononononono')
-        return False
+    print(request.headers)
+    return False
+    # print(request.headers['X-Content-HMAC'])
+    # print(request.headers['Content-HMAC'])
+    # decoded = request.headers['X-Content-HMAC']
+    # encoded = bytes(request.headers['Content-HMAC'], 'utf-8')
+    # decoded = 'lzg9BPe0ve22tYW5asIPB4a8Pfq++VIAK4C41e0WFeg='
+
+    # encoded = 'THkZAWrS8nWjbUqV3ho2eZOzJjrlVk9senebPrvjW3E='
+
+    # res = 'mu/LgpRAQ7x/09YSvO3EDgl5V2ERzrBKCnM3CRTKtSA='
+
+    # message = bytes(encoded, 'utf-8')
+    # secret = bytes(cloudpayments_secretkey, 'utf-8')
+    # encoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+    # print('encoded2', encoded2)
+    # if encoded == encoded2:
+    #     print('okokokokokoko')
+    #     return True
+    # else:
+    #     print('nononononono')
+    #     return False
 
 def get_cloudpayments_data(request):
     profile = Profile.objects.get(user = request.user)
