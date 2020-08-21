@@ -47,7 +47,7 @@ def students_number(squad):
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
-    if True: #filter_data.timestamp < today:
+    if filter_data.timestamp < today:
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)
         students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None)
