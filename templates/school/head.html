@@ -2,8 +2,8 @@
 <div class="ui segment mt0">
     <div class="ui grid stackable no_margin">
         <div class="ten wide column no_padding">
-            <div class="group-name hint_place2" side="bottom">
-                <span class="ui header ava-title school_title"><a class="textblue" href="{{instance.landing}}">{{ instance.title }}</a></span>
+            <div class="group-name">
+                <span class="ui header ava-title school_title textblue">{{ instance.title }}</span>
                 {% if is_director %}
                 <a onclick="$('.school_title_form').show()"><i class="icon pen square blue" style="font-size: 17px"></i></a>
                 <form class="ui form no_margin school_title_form" style="width: 400px;display: none;">
@@ -25,6 +25,7 @@
                 <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
                     Сотрудники
                 </a>
+                {%if school_crnt.version == 'business'%}
                 {% if is_moderator %}
                 <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
                     Социальные сети
@@ -33,6 +34,7 @@
                 <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
                     Подключение сайта
                 </a>
+                {% endif %}
             </div>
         </div>
         {% if info_data == 'info_data' %}

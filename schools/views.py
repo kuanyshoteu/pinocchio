@@ -1179,7 +1179,7 @@ def card_send_mail(request):
 def edit_card_mail(request):
     profile = Profile.objects.get(user = request.user.id)
     only_managers(profile)
-    if request.GET.get('id') and request.GET.get('mail'):
+    if request.GET.get('id'):
         school = is_moderator_school(request, profile)
         card = school.crm_cards.get(id = int(request.GET.get('id')))
         student = card.card_user
@@ -2253,12 +2253,13 @@ def search_crm_cards(request):
             similarity=TrigramSimilarity('title', text)
             hashtags = school.hashtags.annotate(similarity=similarity,).filter(similarity__gt=0.05*kef).order_by('-similarity')
             extra = school.crm_cards.filter(hashtags__in=hashtags)
+            print(extra)
             cards = set(chain(cards, extra))
         i = 0
         for card in cards:
             colid = card.column.id
             res.append([colid, get_card_data_by_column(card, colid)])
-            i+=1
+            i += 1
             if i == 5:
                 break
     res.reverse()

@@ -39,8 +39,10 @@
                 <form class="ui form" method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
                 	<div class="ui grid stackable no_margin">
                         <div class="{% if instance %}sixteen{% else %}eight{% endif %} wide column pt0 pl0 pb0 mobpr0 {% if instance %}pr0{%endif%}">
+                            {% if instance %}
                             {% if not instance.shown %}
                             <div class="ui segment text17 textred textbold">Группа удалена*</div>
+                            {% endif %}
                             {% endif %}
                             <div style="background-color:{%if instance.color_back != '' %}{{instance.color_back}}{%else%}rgb(49, 58, 87){%endif%};" class="text17 ui segment textw shadow_small mb15">
                                 {% if instance %}

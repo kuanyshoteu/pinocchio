@@ -1,5 +1,9 @@
 <div style="display: none;">
     <span class="hint_text1">
-        Можете изменить в <b style="color: yellow">настройках курса</b>
+        {% if profile.is_student %}
+            Все материалы Ваших курсов
+        {% else %}
+            Можете изменить в <b style="color: yellow">настройках курса</b>
+        {% endif %}
     </span>
 </div>

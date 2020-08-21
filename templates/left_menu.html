@@ -18,7 +18,7 @@
             </a>
             {% endif %}
             {% if is_manager or is_director %}
-            <div side="right" class="{%if page == 'info' %}hint_place3{%endif%}">
+            <div side="right" class="{%if page == 'info' %}hint_place2{%endif%}">
                 <a class="item lftitem {%if page == 'crm' %}lftitem_crnt{%endif%}" href='{% url "schools:crm" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
                     <i class="address card icon mr10 no_padding text17" style="margin-top: -2px"></i>
                     Клиенты
@@ -71,14 +71,12 @@
             {% endif %}
         </div>
         {% endif %}
-        <a class="lftitemsmall small_text ml10" href="{% url 'main:home' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}">
-            Поиск курсов
-        </a>
-        <br>
+        {% if not profile.is_student %}
         <a class="lftitemsmall small_text ml10" href='/help/'>
             Помощь
         </a>
         <br>
+        {% endif %}
         <a class="lftitemsmall small_text ml10 update_hints" url='{% url "main:update_hint" %}'>
             Подсказки
         </a>
@@ -98,19 +96,6 @@
 <span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
 <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
 <script type="text/javascript">
-    $('.subscribe').click(function(){
-        $.ajax({
-            url: '{% url "main:cloudpayments_pay"%}',
-            data: {
-                'AccountId':1,
-                "Amount":15000,
-            },
-            dataType: 'json',
-            success: function (data) {
-                alert('yoyo')
-            }
-        })
-    })
     $('.vidget').click(function(){
         url = $('.get_cloudpayments_data').attr('url')
         $(this).addClass('disabled')

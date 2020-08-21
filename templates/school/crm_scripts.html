@@ -248,7 +248,6 @@
                 $(nc).appendTo('.crmbox'+column)
             }
             else{
-                $('.newcardlight').removeClass('newcardlight')
                 nc.find('.card_segment').addClass('newcardlight')
                 $(nc).prependTo('.crmbox'+column)
             }
@@ -1011,6 +1010,7 @@
             dataType: 'json',
             success: function (data) {
                 ids = ''
+                $('.newcardlight').removeClass('newcardlight')
                 for (var i = 0; i < data.res.length; i++) {
                     colid = data.res[i][0]
                     $('#card_container'+data.res[i][1][0][0]).remove()

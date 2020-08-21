@@ -47,12 +47,13 @@ def students_number(squad):
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
-    if filter_data.timestamp < today:
+    if True: #filter_data.timestamp < today:
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)
         students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None)
         cards = school.crm_cards.filter(card_user__in=students)
-        number = len(BillData.objects.filter(squad__in=squads, pay_date__lte=today + timedelta(school.bill_day_diff), card__in=cards))
+        bill_datas = BillData.objects.filter(squad__in=squads, pay_date__lte=today + timedelta(school.bill_day_diff), card__in=cards)
+        number = len(cards.filter(bill_data__in=bill_datas).distinct())
         filter_data.payment_notices = number
         filter_data.timestamp = today
         filter_data.save()
