@@ -1480,20 +1480,14 @@ def cloudpayments_refund(request):
 
 def check_cloudpayments_hash(request):
     decoded = request.headers['Content-HMAC']
-    encoded = request.headers['X-Content-HMAC']
+    decoded = bytes(decoded, 'utf-8')
     url = request.META['QUERY_STRING']
     message = bytes(url, 'utf-8')
-    print(message)
     secret = bytes(cloudpayments_secretkey, 'utf-8')
     decoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
-    print(encoded)
-    print(decoded)
-    print(decoded2)
     if decoded == decoded2:
-        print('okokokokokoko')
         return True
     else:
-        print('nononononono')
         return False
 
 def get_cloudpayments_data(request):

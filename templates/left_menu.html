@@ -104,6 +104,9 @@
 <span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
 <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
 <script type="text/javascript">
+    $('.btn-bor').click(function(){
+        location.reload()
+    })
     $('.subscribe').click(function(){
         $.ajax({
             url: '{% url "main:cloudpayments_pay"%}',
