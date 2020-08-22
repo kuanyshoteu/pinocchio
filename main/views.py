@@ -1479,12 +1479,14 @@ def cloudpayments_refund(request):
     return JsonResponse(data)
 
 def check_cloudpayments_hash(request):
-    decoded = request.headers['X-Content-HMAC']
-    url = request.META['QUERY_STRING']
+    decoded = request.headers['Content-HMAC']
+    encoded = request.headers['X-Content-HMAC']
+    url = 'TransactionId=464089868&Amount=10.00&Currency=KZT&PaymentAmount=10.00&PaymentCurrency=KZT&OperationType=Payment&InvoiceId=1&AccountId=1&SubscriptionId=&Name=&Email=&DateTime=2020-08-22+21:46:54&IpAddress=2.72.141.55&IpCountry=KZ&IpCity=%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B&IpRegion=&IpDistrict=%D0%90%D0%BB%D0%BC%D0%B0%D1%82%D1%8B&IpLatitude=43.25654&IpLongitude=76.92848&CardFirstSix=440043&CardLastFour=5766&CardType=Visa&CardExpDate=05%2f23&Issuer=KASPI+Bank+JSC&IssuerBankCountry=KZ&Description=%D0%9E%D0%BF%D0%BB%D0%B0%D1%82%D0%B0+%D0%B7%D0%B0+6+%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B5%D0%B2+%D0%BF%D0%BE%D0%B4%D0%BF%D0%B8%D1%81%D0%BA%D0%B8&AuthCode=297784&TestMode=0&Status=Completed&GatewayName=Sber+KZ&TotalFee=30.00&CardProduct=N1&PaymentMethod=' #request.META['QUERY_STRING']
     message = bytes(url, 'utf-8')
     print(message)
     secret = bytes(cloudpayments_secretkey, 'utf-8')
     decoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
+    print(encoded)
     print(decoded)
     print(decoded2)
     if decoded == decoded2:

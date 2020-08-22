@@ -96,11 +96,27 @@
         <a class="vidget ui button small green shadow_green textbold">
             vidget
         </a>
+        <a class="subscribe ui button small green shadow_green textbold">
+            subscribe
+        </a>
     </div>
 </div>
 <span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
 <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
 <script type="text/javascript">
+    $('.subscribe').click(function(){
+        $.ajax({
+            url: '{% url "main:cloudpayments_pay"%}',
+            data: {
+                'AccountId':1,
+                "Amount":15000,
+            },
+            dataType: 'json',
+            success: function (data) {
+                alert('yoyo')
+            }
+        })
+    })    
     $('.vidget').click(function(){
         url = $('.get_cloudpayments_data').attr('url')
         $(this).addClass('disabled')
