@@ -1485,7 +1485,6 @@ def check_cloudpayments_hash(request):
     print(message)
     secret = bytes(cloudpayments_secretkey, 'utf-8')
     decoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
-    print('encoded2', encoded2)
     if decoded == decoded2:
         print('okokokokokoko')
         return True
