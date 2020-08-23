@@ -92,8 +92,47 @@
         </a>
     </div>
     {% endif %}
+    {% if is_moderator %}
+    <div class="text-center mt15">
+        <a class="vidget ui button small green shadow_green textbold">
+            vidget
+        </a>
+    </div>
+    {% endif %}
 </div>
+<span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
 <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
+{% if is_moderator %}
+<script type="text/javascript">
+    $('.vidget').click(function(){
+        url = $('.get_cloudpayments_data').attr('url')
+        $(this).addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                publicId = data.publicId
+                invoiceId = data.invoiceId
+                accountId = data.accountId
+                var widget = new cp.CloudPayments();
+                widget.charge({ // options
+                    publicId: publicId,
+                    description: 'Оплата за 6 месяцев подписки', //назначение
+                    amount: 10,
+                    currency: 'KZT',
+                    invoiceId: invoiceId,
+                    accountId: accountId,
+                    skin: "mini",
+                })
+                $('.vidget').removeClass('disabled')
+            }
+        })
+    })
+</script>
+{% endif %}
+
 <script type="text/javascript">
     $('.btn-bor').click(function(){
         location.reload()
