@@ -308,6 +308,13 @@ img_formats = ['jpg', 'jpeg', 'png']
 
 def check_school_version(school, version):
     if school.version == version:
-        return True
+        if version == 'business':
+            if school.version_date < timezone.now():
+                return True
+            else:
+                school.version = 'free'
+                school.save()
+        else:
+            return True
     else:
         raise Http404        
