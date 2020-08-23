@@ -2907,7 +2907,6 @@ def get_workers_list(request):
 def connect_full_version(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
-    ok = False
     school = is_moderator_school(request, profile)
     ok = 'error'
     if school.version == 'business':
