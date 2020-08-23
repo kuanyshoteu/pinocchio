@@ -2909,13 +2909,25 @@ def connect_full_version(request):
     only_directors(profile)
     ok = False
     school = is_moderator_school(request, profile)
+    ok = 'error'
     if school.version == 'business':
         ok = 'already'
     else:
-        school.version = 'business'
-        school.version_date = timezone.now()
-        school.save()
-        ok = 'ok'
+        if len(school.subscribe_payments.all()) == 0:
+            school.version = 'business'
+            school.version_date = timezone.now()
+            school.save()
+            ok = 'ok'
+            school.subscribe_payments.create(
+                author = profile.first_name,
+                phone = profile.phone,
+                transactionId = -1,
+                amount = 0,
+                currency = '',
+                timestamp = timezone.now(),
+                )
+        else:
+            ok = 'need_pay'
     data = {
         "ok":ok,
     }

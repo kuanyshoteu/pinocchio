@@ -92,6 +92,7 @@
         </a>
     </div>
     {% endif %}
+    {% if is_moderator %}
     <div class="text-center mt15">
         <a class="vidget ui button small green shadow_green textbold">
             vidget
@@ -100,7 +101,9 @@
             subscribe
         </a>
     </div>
+    {% endif %}
 </div>
+{% if is_moderator %}
 <span style="display: none;" class="get_cloudpayments_data" url="{% url 'main:get_cloudpayments_data' %}"></span>
 <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
 <script type="text/javascript">
@@ -146,4 +149,37 @@
             }
         })
     })
+    $('.connect_full_version').click(function(e) {
+        url = $(this).attr('url')
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.ok == 'ok' || data.ok == 'already') {
+                    location.reload();
+                }
+                else if(data.ok == 'need_pay'){
+                    publicId = data.publicId
+                    invoiceId = data.invoiceId
+                    accountId = data.accountId
+                    var widget = new cp.CloudPayments();
+                    widget.charge({
+                        publicId: publicId,
+                        description: 'Оплата за 6 месяцев подписки',
+                        amount: 10,
+                        currency: 'KZT',
+                        invoiceId: invoiceId,
+                        accountId: accountId,
+                        skin: "mini",
+                    })
+                }
+                else{
+                    $('.connect_full_version_er').show()
+                }
+            }
+        })
+    })
 </script>
+{% endif %}

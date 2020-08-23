@@ -2,18 +2,6 @@
         e.stopPropagation()
         $('.get_full_version_modal').modal('show')
     })
-    $('.connect_full_version').click(function(e) {
-        url = $(this).attr('url')
-        $.ajax({
-            url: url,
-            data: {
-            },
-            dataType: 'json',
-            success: function (data) {
-                location.reload();
-            }
-        })
-    })
     $('.newpost_title').on('input', function () {
         $('.save_post.disabled').addClass('blue')
         $('.save_post.disabled').removeClass('disabled')
