@@ -2912,6 +2912,7 @@ def connect_full_version(request):
     ok = 'error'
     if school.version == 'business':
         ok = 'already'
+        data = {"ok":ok}
     else:
         if len(school.subscribe_payments.all()) == 0:
             school.version = 'business'
@@ -2926,9 +2927,14 @@ def connect_full_version(request):
                 currency = '',
                 timestamp = timezone.now(),
                 )
+            data = {"ok":ok}
         else:
             ok = 'need_pay'
-    data = {
-        "ok":ok,
-    }
+            invoiceId = '1'
+            data = {
+                "ok":ok,
+                'publicId':cloudpayments_id,
+                'invoiceId':invoiceId,
+                'accountId':profile.id,
+            }
     return JsonResponse(data)
