@@ -1454,8 +1454,8 @@ def cloudpayments_pay(request):
             author = name,
             phone = profile.phone,
             transactionId = int(transaction_id),
-            amount = int(request.GET.get('Amount')),
-            currency = int(request.GET.get('Currency')),
+            amount = float(request.GET.get('Amount')),
+            currency = request.GET.get('Currency'),
             timestamp = timezone.now(),
             )
         print(school.version_date)

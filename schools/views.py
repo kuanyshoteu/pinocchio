@@ -2915,7 +2915,20 @@ def connect_full_version(request):
     else:
         if len(school.subscribe_payments.all()) == 0:
             school.version = 'business'
-            school.version_date = timezone.now()
+            last_date = timezone.now()
+            day = last_date.strftime('%d')
+            mnth = last_date.strftime('%m')
+            year = last_date.strftime('%Y')
+            newmnth = int(mnth) + 6
+            if newmnth > 12:
+                newmnth -= 12
+                year = str(int(year) + 1)
+            if newmnth < 10:
+                newmnth = '0' + str(newmnth)
+            else:
+                newmnth = str(newmnth)
+            school.version_date = datetime.datetime.strptime(year+
+                '-'+newmnth+'-'+day+' '+last_date.strftime('%H')+':'+last_date.strftime('%M'), "%Y-%m-%d %H:%M")
             school.save()
             ok = 'ok'
             school.subscribe_payments.create(

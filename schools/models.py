@@ -168,7 +168,7 @@ class SubscribePay(models.Model):
     author = models.CharField(max_length=250)
     phone = models.CharField(max_length=250)
     transactionId = models.IntegerField(default=0)
-    amount = models.IntegerField(default=0)
+    amount = models.FloatField(default=0)
     currency = models.CharField(max_length=10)
     timestamp = models.DateTimeField(auto_now_add=False)
     class Meta:
