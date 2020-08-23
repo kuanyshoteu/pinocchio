@@ -1486,9 +1486,9 @@ def check_cloudpayments_hash(request):
     secret = bytes(cloudpayments_secretkey, 'utf-8')
     decoded2 = base64.b64encode(hmac.new(secret, message, digestmod=hashlib.sha256).digest())
     if decoded == decoded2:
-        return True
-    else:
-        return False
+        if request.GET.get('Status') == 'Completed':
+            return True
+    return False
 
 def get_cloudpayments_data(request):
     profile = Profile.objects.get(user = request.user)
