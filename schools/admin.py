@@ -147,3 +147,12 @@ class MailTemplateModelAdmin(admin.ModelAdmin):
     class Meta:
         model = MailTemplate
 admin.site.register(MailTemplate, MailTemplateModelAdmin)
+
+class SubscribePayModelAdmin(admin.ModelAdmin):
+    list_display = ["id", "get_school", "author", "transactionId", "amount", "currency", "timestamp"]
+    list_display_links = ["id"]
+    class Meta:
+        model = SubscribePay
+    def get_school(self, obj):
+        return obj.school.title
+admin.site.register(SubscribePay, SubscribePayModelAdmin)
