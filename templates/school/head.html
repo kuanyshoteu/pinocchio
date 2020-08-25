@@ -34,7 +34,10 @@
                 <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
                     Подключение сайта
                 </a>
-                {% endif %}
+<!--                 <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
+                    Тариф
+                </a>
+ -->                {% endif %}
             </div>
         </div>
         {% if info_data == 'info_data' %}

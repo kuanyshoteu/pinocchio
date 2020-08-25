@@ -96,16 +96,23 @@
                     <div class="ui grid" style="margin-top: 0px;height: 100%;">
                         {% for column in columns %}
                         <div class="wide column center aligned pr5 pl0 pt5 pb0" style="width: 16.65%;">
-                            <div class="margin0 backdark pt10 pb10 textw topbr5">
-                                <div class="crm_title mb10">
-                                    {{ column.title }}
-                                    <div class="ml5 dinline textlg column_cards_len column_cards_len{{column.id}}"></div>
+                            <div class="column_head margin0 backdark pt10 pb10 textw topbr5">
+                                <div class="crm_title mb10 pl5 pr5">
+                                    <a style="display: none;position: absolute;right: 10px" class="rename_column ml10"><i class="icon pencil alternate text11 textw"></i></a>
+                                    <div class="column_title dinline">
+                                        <span class="column_title_act">{{ column.title }}</span>
+                                        <div class="ml5 dinline textlg column_cards_len column_cards_len{{column.id}}"></div>
+                                    </div>
+                                    <form class="mb0 rename_column_form ui form" style="display: none;">
+                                        <textarea style="padding: 3px;" class="mb5 rename_column_text" placeholder="Название столбца">{{ column.title }}</textarea>
+                                        <a id="{{ column.id }}" class="save_colummn_name ui button mini blue full-w">Сохранить</a>
+                                    </form>
                                 </div>
                                 <div class="text-center pl5 pr5 {%if forloop.counter == 1%}hint_place1" side="right2{%endif%}">
                                     <a class="ui button mini white textblue pt5 pb5 full-w" onclick="open_new_card_modal('{{ column.id }}')" id="{{column.id}}">Добавить</a>
                                 </div>
                             </div>
-                            <div Ended="false" class="mobpr30 column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
+                            <div Ended="false" num="{{forloop.counter}}" class="mobpr30 column_scrollable column_scrollable{{column.id}} backdark {%if forloop.counter == 1%}hint_place2" side="right{%endif%}" page="2" id="{{column.id}}" style="height: calc(100% - 140px);overflow-x: hidden;">
                                 <div class="loader_center ui active loader column_loader"></div>
                                 <div class="textw" style="padding: 0 4px;">
                                     <div class="column{{ column.id }} crm_column">
@@ -149,7 +156,7 @@
 <span style="display: none;" class="card_for_save" id="-1" predoplata_url="{{ instance.predoplata }}" url="{{ instance.save_card_as_user }}" get_card_squads="{{ instance.get_card_squads }}" get_card_info="{% url 'schools:get_card_info' %}"></span>
 <span style="display: none;" class="first_column" id="{{ columns.0.id }}"></span>
 <span style="display: none;" class="delete_card_data" id="-1" url="{{ instance.delete_card_url }}"></span>
-<span class="data" move_card_url="{% url 'schools:move_card_url' %}" last_hint="3" hint_type="1" hint="{{hint}}" is_crm="yes" is_dir="{{is_director}}" hisid="{{profile.id}}" filter_crm_cards="{%url 'schools:filter_crm_cards'%}" get_card_dialog="{%url 'schools:get_card_dialog'%}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
+<span class="data" rename_column_url="{% url 'schools:rename_column' %}" move_card_url="{% url 'schools:move_card_url' %}" last_hint="3" hint_type="1" hint="{{hint}}" is_crm="yes" is_dir="{{is_director}}" hisid="{{profile.id}}" filter_crm_cards="{%url 'schools:filter_crm_cards'%}" get_card_dialog="{%url 'schools:get_card_dialog'%}" get_schedule="{%url 'schools:get_schedule'%}" get_all_cards_first="{%url 'schools:get_all_cards_first'%}" get_all_cards_second="{%url 'schools:get_all_cards_second'%}" get_extra_cards="{%url 'schools:get_extra_cards'%}" send_login_url="{%url 'schools:send_login_url'%}" make_payment_card="{% url 'accounts:make_payment_card'%}" change_day_of_week="{% url 'schools:change_day_of_week'%}" search_crm_cards="{% url 'schools:search_crm_cards' %}" used_cards=""></span>
 {% include 'school/crm_scripts.html' %}
 {% include 'hints/crm_hints.html' %}
 {% include 'hints/get_hint_script.html' %}

@@ -2950,3 +2950,15 @@ def connect_full_version(request):
                 'accountId':profile.id,
             }
     return JsonResponse(data)
+
+def rename_column(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id') and request.GET.get('name'):
+        column = school.crm_columns.get(id = int(request.GET.get('id')))
+        column.title = request.GET.get('name')
+        column.save()
+    data = {
+    }
+    return JsonResponse(data)

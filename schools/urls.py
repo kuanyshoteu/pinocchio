@@ -93,6 +93,7 @@ urlpatterns = [
     url(r'^api/get_schedule/', get_schedule, name='get_schedule'),
     url(r'^api/card_send_mail/$', card_send_mail, name='card_send_mail'),
     url(r'^api/create_individual_group/$', create_individual_group, name='create_individual_group'),
+    url(r'^api/rename_column/$', rename_column, name='rename_column'),
     # social media
     url(r'^social_networks_settings/$', social_networks_settings, name='social_networks_settings'),
     url(r'^instagram_connecting/$', instagram_connecting, name='instagram_connecting'),

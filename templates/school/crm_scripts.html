@@ -508,14 +508,16 @@
                 $('.column_cards_len'+column_id).text(newcolumn_cards_len+1)
                 oldcolumn_cards_len = parseInt($('.column_cards_len'+oldcolumn_id).text())
                 $('.column_cards_len'+oldcolumn_id).text(oldcolumn_cards_len-1)
-                if(oldcolumn_id == '1'){
+                column_num = $('.column_scrollable'+column_id).attr('num')
+                oldcolumn_num = $('.column_scrollable'+oldcolumn_id).attr('num')
+                if(column_num == '1'){
                     openNav(id);
                 }
-                else if(column_id > oldcolumn_id){
-                    if (column_id == '2') {
+                else if(column_num > oldcolumn_num){
+                    if (column_num == '2') {
                         openNav(id);
                     }
-                    if (column_id == '4' || column_id == '5') {
+                    if (column_num == '4' || column_num == '5') {
                         openNav(id);
                     }
                 }
@@ -1217,5 +1219,40 @@
         $('#search_text').val(text)
         $('.search_hint').hide();
         hint_item(text)
-    })    
+    })
+    $('.column_head').on("mouseenter", function(){
+        $(this).find('.rename_column').show()
+    })
+    $('.column_head').on("mouseleave", function(){
+        $('.rename_column').hide()
+    })
+    $('.rename_column').click(function(){
+        $('.column_title').show()
+        $('.rename_column_form').hide()
+        parent = $(this).parent()
+        parent.find('.column_title').hide()
+        parent.find('.rename_column_form').show()
+    })
+    $('.save_colummn_name').click(function(){
+        parent = $(this).parent()
+        name = parent.find('.rename_column_text').val()
+        id = $(this).attr('id')
+        url = $('.data').attr('rename_column_url')
+        $(this).addClass('disabled')
+        this_ = $(this)
+        $.ajax({
+            url: url,
+            data: {
+                'name':name,
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.column_title').show()
+                $('.rename_column_form').hide()
+                parent.parent().find('.column_title_act').text(name)
+                this_.removeClass('disabled')
+            }
+        })
+    })
 </script>

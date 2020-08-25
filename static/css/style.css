@@ -1159,7 +1159,7 @@ body{
   color: red;
 }
 .redx{
-  right: 0;
+  right: 10px;
   margin: -3px 0px;
   color: red;
   font-size: 13px;
@@ -1169,6 +1169,20 @@ body{
   padding: 1px 2px 0 2px;
 }
 .redx:hover{
+  background-color: red !important;
+  color: #fff !important;
+}
+.redxw{
+  right: 0;
+  margin: -3px 0px;
+  color: red;
+  font-size: 13px;
+  position: absolute;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 1px 2px 0 2px;
+}
+.redxw:hover{
   color: red;
 }
 a{

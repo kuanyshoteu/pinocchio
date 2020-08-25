@@ -434,8 +434,10 @@ def create_school_work(title, slogan, version):
         worktime='По предварительной записи',
         )
     school.save()
-    for column in CRMColumn.objects.filter(id__lt = 7): 
-        school.crm_columns.add(column)
+    columns = ['Новые заявки', 'Записались на пробное занятие', 'Посетители пробное занятие', 'Предоплата', 'Купили абонемент', 'Отучились']
+    for column_name in columns:
+        c = school.crm_columns.create(title = column_name)
+        c.save()
     return school
 
 def register_view(request):
@@ -1384,8 +1386,19 @@ def moderator_run_code(request):
     if request.GET.get('secret') != 'IMJINfv5rf56ref658f7wef':
         return JsonResponse({'d8w':'11wd'})
     print('moderator_run_code')
+    create_columns()
     print('moderator_end_code')
     return render(request, "moder_code.html", {})
+
+def create_columns():
+    column_names = ['Новые заявки', 'Записались на пробное занятие', 'Посетители пробное занятие', 'Предоплата', 'Купили абонемент', 'Отучились']    
+    for school in School.objects.all():
+        i = 0
+        for column in school.crm_columns.all():
+            newc = school.crm_columns.create(title=column_names[i])
+            i += 1
+            cards = school.crm_cards.filter(column=column)
+            newc.cards.add(*cards)
 
 def searching_subjects(request):
     profile = get_profile(request)
