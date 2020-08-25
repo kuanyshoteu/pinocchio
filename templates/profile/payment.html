@@ -42,7 +42,9 @@
                 <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}"><i class="icon shopping bag backblue textw"></i> История оплаты</a>
                 <br>
                 {%endif%}
+                {%if school_crnt.version == 'business'%}
                 <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}"><i class="icon clock backblue textw"></i> История всех действий</a>
+                {%endif%}
             </div>
             {% if hisprofile.is_student %}
             <div class="ui modal payment_history full-h">
