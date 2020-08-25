@@ -1,4 +1,5 @@
 {% load ttags %}
+{% if hisprofile.is_student or school_crnt.version == 'business' %}
 {% if is_manager %}
 <div class="ui segment shadow_small mb0">
 {%endif%}
@@ -136,6 +137,7 @@
         </div>
     </div>
 </div>
+{%endif%}
 {%endif%}
 {% if is_manager and hisprofile.is_student %}
 <div class="mt15 mb5">
