@@ -392,6 +392,8 @@ def create_school_work(title, slogan, version):
         title=title,
         slogan=slogan,
         version=version,
+        version_date = timezone.now(),
+        money_update_date = timezone.now(),
         worktime='По предварительной записи',
         )
     school.save()
@@ -447,7 +449,7 @@ def register_view(request):
             lastid = str(len(Profile.objects.all()) + 1)
             card = school.crm_cards.create(
                 author_profile=profile,
-                column=CRMColumn.objects.get(id=1),
+                column=school.crm_columns.first(),
                 name='Тестовый ученик',
                 phone='+7777' + lastid,
                 mail='test@mail.com'+lastid,

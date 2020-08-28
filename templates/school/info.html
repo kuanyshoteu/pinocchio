@@ -44,7 +44,7 @@
                                             <div style="height: 30px;" class="textdg text13 suggest_city">Вводите города через запятую</div>
                                         </div>
                                         <div class="twelve wide column no_padding">
-                                            <div contenteditable="true" suggest_url="{% url 'schools:search_city' %}" class="border1 pt5 school_cities_edit no_margin br5 pl10 pr10" style="height: 29px;" position="0">
+                                            <div contenteditable="true" suggest_url="{% url 'schools:search_city' %}" class="backwhite borderblue school_cities_edit no_margin br5 pl10 pr10" style="height: 29px;padding-top: 3px" position="0">
                                                 {%for city in instance.cities.all%}{{ city.title }}{%if instance.cities.all|length > forloop.counter%}, {%endif%}{%endfor%}
                                             </div>
                                         </div>
