@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^api/cloudpayments/pay/$', cloudpayments_pay, name='cloudpayments_pay'),
     url(r'^api/cloudpayments/fail/$', cloudpayments_fail, name='cloudpayments_fail'),
     url(r'^api/cloudpayments/refund/$', cloudpayments_refund, name='cloudpayments_refund'),
+    url(r'^api/wazzup24/$', wazzup24, name='wazzup24'),
     url(r'^robots.txt', robots, name="robots"),
     url(r'^sitemap', sitemap, name="sitemap"),
     url(r'^$', newland, name='home'),

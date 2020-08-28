@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    Управление | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div class='ui container pb150 pt15'>
+    <div class="ui grid stackable">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column">
+            {% include 'school/head.html' %}
+            <div class="ui segment">
+                <div>
+                    <span class="textdg text17 textbold">У вас подключен тариф</span>
+                    {% if school_crnt.version == 'business' %}
+                        <span class="text17 textbold textblue mr10">Команда</span>
+                        <span class="text13 textdg">до {{ school_crnt.version_date }}</span>
+                    {% else %}
+                        <span class="text17 textbold textblue">Бесплатный</span>
+                    {% endif %}
+                </div>
+                {% if school_crnt.version != 'business' %}
+                <div class="ui grid stackable no_margin">
+                    {% if school_crnt.version == 'business' %}
+                        <div class="six wide column">
+                            <div class="text15 textblue">
+                                Осталось дней: <b>{{ school_crnt|tarif_days_left }}</b>
+                            </div>
+                            <div class="text15 textblue">
+                                Менеджеров сейчас: <b>{{managers|length}}</b>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="four wide column deskpt50">
+                        <img class="full-w" src="{%static 'images/upgrade.svg'%}">
+                    </div>
+                    <div class="six wide column pr0">
+                        <div class="dflex">
+                            <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
+                                <div class="text17 text-center textbold mb5 textblue">
+                                    {% if school_crnt.version == 'business' %}
+                                    Настройки подписки
+                                    {% else %}
+                                    Подключите полную версию системы bilimtap.kz
+                                    {% endif %}
+                                </div>
+                                {% if school_crnt.version == 'business' %}
+                                <div class="text-left">
+                                    <form class="ui form mb10">
+                                        <div class="text12 textbold textdg dinline mt5 mr5">Количество менеджеров:</div>
+                                        <div>
+                                            <input type="number" name="" value="{{managers|length}}" class="full-w managers_num mb0 pl5 pr5" style="width: 70px;">
+                                        </div>
+                                        <div class="textdg textbold text12 mt5">
+                                            Дата 
+                                            <input value="{{school_crnt|version_date_format}}" type="date" name="">
+                                        </div>
+                                    </form>
+                                    <div class="text-center">
+                                        <a url="{% url 'schools:connect_full_version' %}" class="connect_full_version textbold ui button green shadow_green pl30 pr30 next_hint">Сохранить изменения</a>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="text14 mb10 text-center">
+                                    Станьте ещё более эффективными!
+                                </div>
+                                {% include 'modals/get_full_version_form.html' %}
+                                <div class="text14 mt50 text-left textddg">
+                                    В полной версии стоимость за каждого менеджера 2500тг в месяц
+                                    <br>
+                                    Минимальный срок подписки 6 месяцев
+                                </div>
+                                <div class="mt10 text14 text-left">
+                                    Бесплатный доступ к полной версии действует в течении 30 дней 
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% if school_crnt.version != 'business' %}
+                    <div class="six wide column pr0">
+                        <div class="shadow_small br5 pt20 pb30">
+                            <div class="pl15 pr15 mb5 textbold text17 textblue">В полной версии также есть:</div>
+                            <div class="textblue text15">
+                                <div class="pl15 pr15 pt5 pb5">Воронка продаж</div>
+                                <div class="pl15 pr15 pt5 pb5 backwhitelow">Отчёты для бухгалтерии</div>
+                                <div class="pl15 pr15 pt5 pb5">Анализ лучших курсов</div>
+                                <div class="pl15 pr15 pt5 pb5 backwhitelow">Интеграции с сервисами Email, SMS, Whatsapp рассылок</div>
+                                <div class="pl15 pr15 pt5 pb5">Отчёты по работе администратора</div>
+                                <div class="pl15 pr15 pt5 pb5 backwhitelow">Хранилище онлайн документов до 1 ГБ</div>
+                                <div class="pl15 pr15 pt5 pb5">Интеграция с Вашим сайтом</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                {% if school_crnt.version == 'business' %}
+                <div class="mt30">
+                    <div class="textdg text17 textbold">
+                        История оплаты
+                    </div>
+                    <table class="ui celled striped table br5">
+                        <thead>
+                            <tr style="color: #222;">
+                                <th>Время</th>
+                                <th>Имя</th>
+                                <th>Телефон</th>
+                                <th>Транзакция</th>
+                                <th>Сумма</th>
+                                <th>Валюта</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                            {% for sp in school_crnt.subscribe_payments.all %}
+                            <tr style="color: #222;">
+                                <td>{{sp.timestamp}}</td>
+                                <td>{{sp.author}}</td>
+                                <td>{{sp.phone}}</td>
+                                <td>{{sp.transactionId}}</td>
+                                <td>{{sp.amount}}</td>
+                                <td>{{sp.currency}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>                    
+                </div>
+                {% endif %}                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -16,6 +16,13 @@ def remove_space(title):
     return title.replace(' ', '_')
 
 @register.filter
+def version_date_format(school):
+    return school.version_date.strftime('%Y-%m-%d')
+@register.filter
+def tarif_days_left(school):
+    return (school.version_date.date() - timezone.now().date()).days
+
+@register.filter
 def is_online(squad):
     return len(squad.subjects.filter(is_online=True)) > 0
 @register.filter

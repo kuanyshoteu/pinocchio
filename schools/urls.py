@@ -110,7 +110,8 @@ urlpatterns = [
     url(r'^salaries/$', school_salaries, name='salaries'),
     url(r'^api/add_worker_school/', add_worker_school, name='add_worker_school'),        
     # school versions
-    url(r'^api/connect_full_version/', connect_full_version, name='connect_full_version'),            
+    url(r'^api/connect_full_version/', connect_full_version, name='connect_full_version'),
+    url(r'^bills/$', bills, name='bills'),    
     # adilmed
     url(r'^adilmed/', adilmed, name="adilmed"),
 ]

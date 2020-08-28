@@ -21,7 +21,7 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from constants import *
 from schools.models import School
-from schools.views import get_social_networks, add_subject_category_work, register_new_student
+from schools.views import get_social_networks, add_subject_category_work, register_new_student, register_user_work
 from squads.views import add_subject_work, add_lecture_work, remove_student_from_squad, add_student_to_squad
 from squads.models import BillData
 from papers.models import LessonFolder
@@ -349,13 +349,6 @@ def login_view(request):
     }
     return JsonResponse(data)
 
-def search_free_name(name):
-    if len(User.objects.filter(username=name)) > 0:
-        name += '1'
-        return search_free_name(name)        
-    else:
-        return name
-
 def add_worker_school(request):
     ok = False
     password = False
@@ -393,38 +386,6 @@ def add_worker_school(request):
         "url":url,
     }
     return JsonResponse(data)
-
-def register_user_work(name, phone, mail, password, request):
-    print(mail)
-    if len(mail) > 0:
-        if len(Profile.objects.filter(mail=mail)) > 0:
-            return False
-    if len(Profile.objects.filter(phone=phone)) == 0 or password == False:
-        print('nennnnnn')
-        new_name = search_free_name(name.replace(' ', ''))
-        user = User.objects.create(username=new_name, password=password)
-        if password:
-            user.set_password(password)
-        user.save()
-        if password:
-            user2 = authenticate(username = str(user.username), password=str(password))
-            try:
-                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-            except Exception as e:
-                res = 'er'
-        profile = Profile.objects.create(user = user)
-        profile.first_name = name
-        profile.phone = phone
-        profile.mail = mail
-        filter_data = FilterData.objects.get_or_create(author=profile)[0]
-        filter_data.save()
-        profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
-        profile.confirmation_time = timezone.now()
-        profile.confirmed = False
-        profile.save()
-    else:
-        profile = False
-    return profile
 
 def create_school_work(title, slogan, version):
     school = School.objects.create(
@@ -509,7 +470,7 @@ def register_view(request):
             add_subject_work(school, test_squad, subject)
             profile.schools.add(school)
 
-            html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Школа: <a href='https://www.bilimtap.kz/schools/info/?type=moderator&mod_school_id="+str(school.id)+"'>"+school_name+"</a><br>Телефон: "+phone+"<br>Телефон: "+phone
+            html_content = "Имя: <a href='https://www.bilimtap.kz/"+profile.get_absolute_url()+"'>"+name+"</a><br>Школа: <a href='https://www.bilimtap.kz/schools/info/?type=moderator&mod_school_id="+str(school.id)+"'>"+school_name+"</a><br>Телефон: "+phone+"<br>Почта: "+mail
             try:
                 send_email("Клиент новый", html_content, ['aaa.academy.kz@gmail.com'])
             except Exception as e:
@@ -1512,5 +1473,10 @@ def get_cloudpayments_data(request):
         'publicId':publicId,
         'invoiceId':invoiceId,
         'accountId':accountId,
+    }
+    return JsonResponse(data)
+
+def wazzup24(request):
+    data = {
     }
     return JsonResponse(data)

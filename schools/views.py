@@ -296,11 +296,37 @@ def school_salaries(request):
         "is_moderator":is_profi(profile, 'Moderator'),
         "school_money":school.money,
         "school_crnt":school,
-        "teachers":teachers,
+        "all_students_len":len(school.people.filter(is_student=True, squads__in=school.groups.filter(shown=True)).exclude(card=None).exclude(squads=None).distinct()),
         "managers":managers,
+        "teachers":teachers,
         "page":"info",        
     }
     return render(request, "school/salaries.html", context)
+
+def bills(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    manager_prof = Profession.objects.get(title='Manager')
+    managers = school.people.filter(profession=manager_prof)
+    teacher_prof = Profession.objects.get(title='Teacher')
+    teachers = school.people.filter(profession=teacher_prof)
+    context = {
+        "profile":profile,
+        "instance": school,
+        "bills":True,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "all_students_len":len(school.people.filter(is_student=True, squads__in=school.groups.filter(shown=True)).exclude(card=None).exclude(squads=None).distinct()),
+        "managers":managers,
+        "teachers":teachers,
+        "page":"info",
+    }
+    return render(request, "school/bills.html", context)
 
 def social_networks_settings(request):
     profile = get_profile(request)
@@ -2939,6 +2965,25 @@ def connect_full_version(request):
                 currency = '',
                 timestamp = timezone.now(),
                 )
+            managers_num = 1
+            if request.GET.get('managers_num'):
+                managers_num = int(request.GET.get('managers_num'))
+            profession = Profession.objects.filter(title = 'Manager')
+            old_managers = school.people.filter(profession__in=profession)
+            old_managers_len = len(old_managers)
+            profession = profession[0]
+            if old_managers_len > managers_num:
+                for i in range(0, old_managers_len  - managers_num):
+                    old_managers.last().delete()
+            if old_managers_len < managers_num:
+                for i in range(0, managers_num - old_managers_len):
+                    name = 'Менеджер' + str(old_managers_len + i+1)
+                    password = random_password()
+                    new_manager = register_user_work(name, name+str(school.id), '', password, False)
+                    new_manager.is_student = False
+                    new_manager.save()
+                    new_manager.profession.add(profession)
+                    new_manager.schools.add(school)
             data = {"ok":ok}
         else:
             ok = 'need_pay'
@@ -2950,6 +2995,44 @@ def connect_full_version(request):
                 'accountId':profile.id,
             }
     return JsonResponse(data)
+
+def register_user_work(name, phone, mail, password, request):
+    if len(mail) > 0:
+        if len(Profile.objects.filter(mail=mail)) > 0:
+            return False
+    print(len(Profile.objects.filter(phone=phone)), password)
+    if len(Profile.objects.filter(phone=phone)) == 0 or password == False:
+        new_name = search_free_name(name.replace(' ', ''))
+        user = User.objects.create(username=new_name, password=password)
+        if password:
+            user.set_password(password)
+        user.save()
+        if password:
+            user2 = authenticate(username = str(user.username), password=str(password))
+            try:
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            except Exception as e:
+                res = 'er'
+        profile = Profile.objects.create(user = user)
+        profile.first_name = name
+        profile.phone = phone
+        profile.mail = mail
+        filter_data = FilterData.objects.get_or_create(author=profile)[0]
+        filter_data.save()
+        profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
+        profile.confirmation_time = timezone.now()
+        profile.confirmed = False
+        profile.save()
+    else:
+        profile = False
+    return profile
+
+def search_free_name(name):
+    if len(User.objects.filter(username=name)) > 0:
+        name += '1'
+        return search_free_name(name)        
+    else:
+        return name
 
 def rename_column(request):
     profile = Profile.objects.get(user = request.user.id)

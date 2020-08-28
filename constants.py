@@ -18,6 +18,8 @@ import json
 cloudpayments_id = 'pk_8f05633d39130c02981943d45a4a4'
 cloudpayments_secretkey = '933e77aa9d8497d3149d550f6e1e4873'
 
+wazzup24_secretkey = '1b8dca4bc26b4b9098c169c3ecc1736d'
+
 def send_sms(phones, message, time):
     login = 'Pinocchio'
     password = 'Siski11zhopa'
@@ -91,10 +93,13 @@ def get_frist_day_of_month(now):
     return first_day
 
 def random_password():
-    symbols = string.ascii_letters + string.digits
+    symbols = string.ascii_letters
+    digits = string.digits
     password = ''
-    for i in range(0, 9):
+    for i in range(0, 4):
         password += random.choice(symbols)
+    for i in range(0, 4):
+        password += random.choice(digits)
     return password
 
 def random_secrete_confirm():
@@ -309,7 +314,7 @@ img_formats = ['jpg', 'jpeg', 'png']
 def check_school_version(school, version):
     if school.version == version:
         if version == 'business':
-            if school.version_date < timezone.now():
+            if school.version_date > timezone.now():
                 return True
             else:
                 school.version = 'free'

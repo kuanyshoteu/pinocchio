@@ -137,37 +137,4 @@
     $('.btn-bor').click(function(){
         location.reload()
     })
-    $('.connect_full_version').click(function(e) {
-        url = $(this).attr('url')
-        $.ajax({
-            url: url,
-            data: {
-            },
-            dataType: 'json',
-            success: function (data) {
-                console.log(data.ok)
-                if (data.ok == 'ok' || data.ok == 'already') {
-                    location.reload();
-                }
-                else if(data.ok == 'need_pay'){
-                    publicId = data.publicId
-                    invoiceId = data.invoiceId
-                    accountId = data.accountId
-                    var widget = new cp.CloudPayments();
-                    widget.charge({
-                        publicId: publicId,
-                        description: 'Оплата за 6 месяцев подписки',
-                        amount: 2500 * 6,
-                        currency: 'KZT',
-                        invoiceId: invoiceId,
-                        accountId: accountId,
-                        skin: "mini",
-                    })
-                }
-                else{
-                    $('.connect_full_version_er').show()
-                }
-            }
-        })
-    })    
 </script>

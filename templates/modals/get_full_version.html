@@ -3,19 +3,22 @@
     <i class="close icon"></i>
     <div class="content no_padding br15 backwhite">
         <div class="ui grid stackable no_margin br15 backrbblue">
-            <div class="eight wide column pt50 mobbottombr5 deskrightbr15">
+            <div class="eight wide column pt20 pb20 mobbottombr5 deskrightbr15">
                 <div class="text21 text-center textbold mb15 textblue">
                     Полная версия системы bilimtap.kz
                 </div>
                 <div class="text17 mb15 text-center">
                     Станьте ещё более эффективными!
                 </div>
-                <div class="text-center">
-                    <a url="{% url 'schools:connect_full_version' %}" class="connect_full_version textbold ui button green shadow_green pl30 pr30 next_hint">Подключить</a>
+                {% include 'modals/get_full_version_form.html' %}
+                <div class="text14 mt50 text-center textddg">
+                    В полной версии стоимость за каждого менеджера 2500тг в месяц
+                    <br>
+                    Минимальный срок подписки 6 месяцев
                 </div>
-                <div class="text14 mt50 text-center textdg">
-                    Бесплатный доступ действует в течении 30 дней 
-                </div>                
+                <div class="mt10 text14 text-center">
+                    Бесплатный доступ к полной версии действует в течении 30 дней 
+                </div>
             </div>
             <div class="no_padding_side backwhite eight wide column mobtopbr5 deskrightbr15 pt20 pb30">
                 <div class="pl15 pr15 mb5 textbold text17 textblue">В полной версии также есть:</div>

@@ -2,6 +2,43 @@
         e.stopPropagation()
         $('.get_full_version_modal').modal('show')
     })
+    $('.connect_full_version').click(function(e) {
+        url = $(this).attr('url')
+        managers_num = $('.managers_num').val()
+        $('.connect_full_version').addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+                'managers_num':managers_num,
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.ok)
+                if (data.ok == 'ok' || data.ok == 'already') {
+                    location.reload();
+                }
+                else if(data.ok == 'need_pay'){
+                    publicId = data.publicId
+                    invoiceId = data.invoiceId
+                    accountId = data.accountId
+                    var widget = new cp.CloudPayments();
+                    widget.charge({
+                        publicId: publicId,
+                        description: 'Оплата за 6 месяцев подписки',
+                        amount: 2500 * 6* managers_num,
+                        currency: 'KZT',
+                        invoiceId: invoiceId,
+                        accountId: accountId,
+                        skin: "mini",
+                    })
+                }
+                else{
+                    $('.connect_full_version_er').show()
+                }
+                $('.connect_full_version').removeClass('disabled')
+            }
+        })
+    })    
     $('.newpost_title').on('input', function () {
         $('.save_post.disabled').addClass('blue')
         $('.save_post.disabled').removeClass('disabled')

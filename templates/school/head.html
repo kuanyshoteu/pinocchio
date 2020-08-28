@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="ui segment mt0">
+<div class="ui segment mt0 pb5">
     <div class="ui grid stackable no_margin">
         <div class="ten wide column no_padding">
             <div class="group-name">
@@ -18,45 +18,42 @@
                 </form>
                 {% endif %}
             </div>
-            <div class="mt15 mb10 pt5">
-                <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if main_school %}current_option{% else %}other_option{% endif %}">
+            <div class="mt10 pt10">
+                <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="mobmb5 {% if main_school %}current_option{% else %}other_option{% endif %}">
                     Общие 
                 </a>
-                <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if salaries %}current_option{% else %}other_option{% endif %}">
+                <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if salaries %}current_option{% else %}other_option{% endif %}">
                     Сотрудники
                 </a>
                 {%if school_crnt.version == 'business'%}
                 {% if is_moderator %}
-                <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
+                <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
                     Социальные сети
                 </a>
                 {% endif %}
-                <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
+                <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if connect_site %}current_option{% else %}other_option{% endif %}">
                     Подключение сайта
                 </a>
-                {% if is_moderator %}
-                <a href="{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="{% if connect_site %}current_option{% else %}other_option{% endif %}">
+                {% endif %}
+                <a href="{% url 'schools:bills' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if bills %}current_option{% else %}other_option{% endif %}">
                     Тариф
                 </a>
-                {% endif %}
-                {% endif %}
             </div>
         </div>
-        {% if info_data == 'info_data' %}
         <div class="six wide column no_padding">
             <div class="textw br5 pt10">
                 <div class="dflex text-center" style="float: right;">
-                    <div class="pl10 pt10 pr10 pb10 leftbr5" style="background-color: #49a1eb;opacity: 0.9;">
+                    <div class="pl5 pt10 pr5 pb10 leftbr5" style="background-color: #49a1eb;opacity: 0.9;">
                         Курсов: <b>{{instance.school_subjects.all|length}}</b>
                         <br>
                         Групп: <b>{{instance.groups.all|length}}</b>
                     </div>
-                    <div class="pl10 pt10 pr10 pb10" style="background-color: #49a1eb;opacity: 0.9;">
+                    <div class="pl5 pt10 pr5 pb10" style="background-color: #49a1eb;opacity: 0.9;">
                         Учителей: <b>{{teachers|length}}</b>
                         <br>
                         Менеджеров: <b>{{managers|length}}</b>
                     </div>
-                    <div class="pl10 pt10 pr10 pb10 rightbr5" style="background-color: #49a1eb;opacity: 0.9;">
+                    <div class="pl5 pt10 pr5 pb10 rightbr5" style="background-color: #49a1eb;opacity: 0.9;">
                         Карточек: <b>{{instance.crm_cards.all|length}}</b>
                         <br>
                         Студентов в группах: <b>{{all_students_len}}</b>
@@ -64,6 +61,5 @@
                 </div>
             </div>            
         </div>
-        {% endif %}
     </div>
 </div>
