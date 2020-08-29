@@ -111,6 +111,7 @@ urlpatterns = [
     url(r'^api/add_worker_school/', add_worker_school, name='add_worker_school'),        
     # school versions
     url(r'^api/connect_full_version/', connect_full_version, name='connect_full_version'),
+    url(r'^api/free_trial/', free_trial, name='free_trial'),
     url(r'^bills/$', bills, name='bills'),    
     # adilmed
     url(r'^adilmed/', adilmed, name="adilmed"),

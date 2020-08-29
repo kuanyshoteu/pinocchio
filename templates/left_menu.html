@@ -85,17 +85,29 @@
             О нас
         </a>
     </div>
-    {%if school_crnt.version != 'business' and is_director%}
-    <div class="text-center mt15">
-        <a class="get_full_version ui button small green shadow_green textbold">
-            Попробовать полную версию
-        </a>
-    </div>
+    {% if is_director %}
+        <div class="text-center mt15">
+        {%if school_crnt.version != 'business'%}
+            <a class="get_full_version ui button small green shadow_green textbold">
+                Попробовать полную версию
+            </a>
+        {% else %}
+            {% if school_crnt|tarif_days_left <= 30 %}
+                <div class="textdg">Осталось {{school_crnt|tarif_days_left}} дней</div>
+                <a href="{% url 'schools:bills' %}" class="ui button small green shadow_green pt5 pb5 textbold mt5">Продлить</a>
+            {% endif %}
+        {% endif %}
+        </div>
     {% endif %}
     {% if is_moderator %}
     <div class="text-center mt15">
         <a class="vidget ui button small green shadow_green textbold">
             vidget
+        </a>
+    </div>
+    <div class="text-center mt15">
+        <a class="vidget2 ui button small green shadow_green textbold">
+            payment
         </a>
     </div>
     {% endif %}
@@ -104,6 +116,26 @@
 <script src="https://widget.cloudpayments.ru/bundles/cloudpayments"></script>
 {% if is_moderator %}
 <script type="text/javascript">
+    $('.vidget2').click(function(){
+        url = "{% url 'main:cloudpayments_pay' %}"
+        $.ajax({
+            url: url,
+            data: {
+                'AccountId':1,
+                'TransactionId':123,
+                'Amount':45000,
+                'Currency':'KZT',
+                'Data':{
+                    months: 6,
+                    managers_num:3,
+                }
+            },
+            dataType: 'json',
+            success: function (data) {
+                window.alert('ypa');
+            }
+        })
+    })
     $('.vidget').click(function(){
         url = $('.get_cloudpayments_data').attr('url')
         $(this).addClass('disabled')
@@ -125,6 +157,10 @@
                     invoiceId: invoiceId,
                     accountId: accountId,
                     skin: "mini",
+                    'data':{
+                        months: 6,
+                        managers_num:3,
+                    }
                 })
                 $('.vidget').removeClass('disabled')
             }

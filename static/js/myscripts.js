@@ -2,10 +2,13 @@
         e.stopPropagation()
         $('.get_full_version_modal').modal('show')
     })
-    $('.connect_full_version').click(function(e) {
+    $('.free_trial').click(function(e) {
         url = $(this).attr('url')
         managers_num = $('.managers_num').val()
         $('.connect_full_version').addClass('disabled')
+        $('.free_trial').addClass('disabled')
+        $('.no_free_trial').hide()
+        $('.get_tarif_load').show()
         $.ajax({
             url: url,
             data: {
@@ -13,32 +16,131 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log(data.ok)
                 if (data.ok == 'ok' || data.ok == 'already') {
                     location.reload();
                 }
-                else if(data.ok == 'need_pay'){
-                    publicId = data.publicId
-                    invoiceId = data.invoiceId
-                    accountId = data.accountId
-                    var widget = new cp.CloudPayments();
-                    widget.charge({
-                        publicId: publicId,
-                        description: 'Оплата за 6 месяцев подписки',
-                        amount: 2500 * 6* managers_num,
-                        currency: 'KZT',
-                        invoiceId: invoiceId,
-                        accountId: accountId,
-                        skin: "mini",
-                    })
-                }
                 else{
-                    $('.connect_full_version_er').show()
+                    $('.no_free_trial').show()
                 }
+                $('.connect_full_version').removeClass('disabled')
+                $('.free_trial').removeClass('disabled')
+                $('.get_tarif_load').hide()
+            }
+        })
+    })
+    $('.connect_full_version').click(function(e) {
+        url = $(this).attr('url')
+        managers_num = $('.managers_num').val()
+        $('.connect_full_version').addClass('disabled')
+        cost = parseInt($('.tarif_cost').text().replace(' ', '').replace(' ', '').replace(' ', ''))
+        tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
+        if (tarif_cost_input == 'choose_tarif_0') {
+            month = 'crnt'
+            description ='Оплата за новых менеджеров'
+        }
+        else if (tarif_cost_input == 'choose_tarif_6') {
+            month = '6'
+            description ='Оплата за '+month+' месяцев подписки'
+        }
+        else if(tarif_cost_input == 'choose_tarif_1'){
+            month = '12'
+            description ='Оплата за '+month+' месяцев подписки'
+        }
+        else if(tarif_cost_input == 'choose_tarif_2'){
+            month = '24'
+            description ='Оплата за '+month+' месяцев подписки'
+        }
+        $('.get_tarif_load').show()
+        $('.no_free_trial').hide()
+        $.ajax({
+            url: url,
+            data: {
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.get_tarif_load').hide()
+                publicId = data.publicId
+                invoiceId = data.invoiceId
+                accountId = data.accountId
+                var widget = new cp.CloudPayments();
+                widget.charge({
+                    publicId: publicId,
+                    description: description,
+                    amount: cost,
+                    currency: 'KZT',
+                    invoiceId: invoiceId,
+                    accountId: accountId,
+                    skin: "mini",
+                    data: {
+                        'month':month,
+                        'managers_num':managers_num,
+                    }
+                })
                 $('.connect_full_version').removeClass('disabled')
             }
         })
-    })    
+    })
+    $('.choose_tarif').click(function(){
+        input = $(this).find('.choose_tarif_input')
+        $('.choose_tarif').each(function(){
+            o_input = $(this).find('.choose_tarif_input')
+            o_input.prop('checked', false)
+        })
+        input.prop('checked', true)
+        calc_tarif_cost()
+    })
+    $('.managers_num').on('change', function(){
+        calc_tarif_cost()            
+    })
+    function calc_tarif_cost(){
+        managers_num = $('.managers_num').val()
+        tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
+        discount_text = ''
+        is_dot = true
+        if (tarif_cost_input == 'choose_tarif_0') {
+            left_days = parseInt($('.tarif_left_days').text()) / 30
+            tarif_cost = (2500 * left_days * managers_num).toFixed(0)
+            tarif_left_cost = parseFloat($('.tarif_left_cost').text()).toFixed(0)
+            tarif_cost = (tarif_cost - tarif_left_cost).toFixed(0)
+            is_dot = false
+        }
+        else if (tarif_cost_input == 'choose_tarif_6') {
+            tarif_cost = 2500 * 6 * managers_num
+        }
+        else if(tarif_cost_input == 'choose_tarif_1'){
+            tarif_cost = 2500 * 12 * managers_num
+            tarif_cost = tarif_cost - tarif_cost*0.1
+            discount_text = "со скидкой"
+        }
+        else if(tarif_cost_input == 'choose_tarif_2'){
+            tarif_cost = 2500 * 24 * managers_num
+            tarif_cost = tarif_cost - tarif_cost*0.1
+            discount_text = "со скидкой"
+        }
+        if (tarif_cost <= 0) {
+            tarif_cost = 0
+            $('.connect_full_version').addClass('disabled')
+        }
+        else{
+            $('.connect_full_version').removeClass('disabled')            
+        }
+        if (is_dot) {
+            tarif_cost = tarif_cost + ''
+            temp_str = ''
+            j = 1
+            for (var i = tarif_cost.length - 1; i >= 0; i--) {
+                temp_str = tarif_cost[i] + temp_str
+                if (j % 3 == 0) {
+                    temp_str = ' ' + temp_str
+                }
+                j += 1
+            }
+        }
+        else{
+            temp_str = tarif_cost
+        }
+        $('.tarif_cost').text(temp_str)        
+    }
     $('.newpost_title').on('input', function () {
         $('.save_post.disabled').addClass('blue')
         $('.save_post.disabled').removeClass('disabled')

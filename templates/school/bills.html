@@ -28,18 +28,71 @@
                         <span class="text17 textbold textblue">Бесплатный</span>
                     {% endif %}
                 </div>
-                {% if school_crnt.version != 'business' %}
                 <div class="ui grid stackable no_margin">
                     {% if school_crnt.version == 'business' %}
-                        <div class="six wide column">
-                            <div class="text15 textblue">
-                                Осталось дней: <b>{{ school_crnt|tarif_days_left }}</b>
-                            </div>
-                            <div class="text15 textblue">
-                                Менеджеров сейчас: <b>{{managers|length}}</b>
+                    <div class="six wide column">
+                        <div class="text15 textblue">
+                            Осталось дней: <b class="tarif_left_days">{{ school_crnt|tarif_days_left }}</b>
+                        </div>
+                        <div class="text15 textblue ">
+                            Менеджеров сейчас: <b class="tarif_left_managers">{{managers|length}}</b>
+                        </div>
+                        <div class="text15 textblue mt15">
+                            Денежная стоимость остатка: <b class="tarif_left_cost"></b> тг
+                        </div>
+                    </div>
+                    <div class="ten wide column pr0">
+                        <div class="dflex">
+                            <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
+                                <div class="text17 text-center textbold mb5 textblue">
+                                    Настройки подписки
+                                </div>
+                                <div class="text-center">
+                                    <form class="ui form mb10">
+                                        <div class="ui grid stackable">
+                                            <div class="text-left eight wide column pl5">
+                                                <div class="textbold text13 textdg mt5 mr5">Период:</div>
+                                                <label for="choose_tarif_0" class="choose_tarif pt5 br5 mb5 backwhite">
+                                                    <input id="choose_tarif_0" style="margin: 3px 4px 0 0" class="choose_tarif_input" checked="" type="checkbox">
+                                                    <span class="text13 textblue textbold">Оставить нынешнее</span>
+                                                </label>
+                                                <label for="choose_tarif_6" class="choose_tarif pt5 br5 mb5 backwhite">
+                                                    <input id="choose_tarif_6" style="margin: 3px 4px 0 0" class="choose_tarif_input" type="checkbox">
+                                                    <span class="text13 textblue textbold">Продлить на 6 месяцев</span>
+                                                </label>
+                                                <label for="choose_tarif_1" class="choose_tarif pt5 br5 mb5 backwhite">
+                                                    <input id="choose_tarif_1" style="margin: 2px 4px 0 0" class="choose_tarif_input" type="checkbox">
+                                                    <span class="text13 textblue textbold">Продлить на 1 год</span>
+                                                    <br>
+                                                    <span class="ml15 textgreen text13 textbold">10% скидка</span>
+                                                </label>
+                                                <label for="choose_tarif_2" class="choose_tarif pt5 br5 mb5 backwhite">
+                                                    <input id="choose_tarif_2" style="margin: 2px 4px 0 0" class="choose_tarif_input" type="checkbox">
+                                                    <span class="text13 textblue textbold">Продлить на 2 года</span>
+                                                    <br>
+                                                    <div class="ml15 textgreen text13 textbold">10% скидка</div>
+                                                </label>
+                                            </div>
+                                            <div class="text-left eight wide column pr5">
+                                                <div class="textbold text13 textdg mt5 mr5">Количество менеджеров</div>
+                                                <div>
+                                                    <input type="number" name="" value="{{managers|length}}" class="managers_num mb0 pl5 pr5" style="width: 70px">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="tarif_explain"></div>
+                                    <div class="tarif_explain_calc"></div>
+                                    <a url="{% url 'schools:connect_full_version' %}" class="disabled connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
+                                        Сохранить
+                                        <span class="textw tarif_cost">0</span> тг
+                                    </a>
+                                    <div class="get_tarif_load ui active small inline loader" style="display: none;"></div>
+                                </div>
                             </div>
                         </div>
-                    {% endif %}
+                    </div>
+                    {% else %}
                     <div class="four wide column deskpt50">
                         <img class="full-w" src="{%static 'images/upgrade.svg'%}">
                     </div>
@@ -47,46 +100,19 @@
                         <div class="dflex">
                             <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
                                 <div class="text17 text-center textbold mb5 textblue">
-                                    {% if school_crnt.version == 'business' %}
-                                    Настройки подписки
-                                    {% else %}
-                                    Подключите полную версию системы bilimtap.kz
-                                    {% endif %}
+                                    Подключите полную версию системы Bilimtap.kz
                                 </div>
-                                {% if school_crnt.version == 'business' %}
-                                <div class="text-left">
-                                    <form class="ui form mb10">
-                                        <div class="text12 textbold textdg dinline mt5 mr5">Количество менеджеров:</div>
-                                        <div>
-                                            <input type="number" name="" value="{{managers|length}}" class="full-w managers_num mb0 pl5 pr5" style="width: 70px;">
-                                        </div>
-                                        <div class="textdg textbold text12 mt5">
-                                            Дата 
-                                            <input value="{{school_crnt|version_date_format}}" type="date" name="">
-                                        </div>
-                                    </form>
-                                    <div class="text-center">
-                                        <a url="{% url 'schools:connect_full_version' %}" class="connect_full_version textbold ui button green shadow_green pl30 pr30 next_hint">Сохранить изменения</a>
-                                    </div>
-                                </div>
-                                {% else %}
                                 <div class="text14 mb10 text-center">
                                     Станьте ещё более эффективными!
                                 </div>
-                                {% include 'modals/get_full_version_form.html' %}
-                                <div class="text14 mt50 text-left textddg">
-                                    В полной версии стоимость за каждого менеджера 2500тг в месяц
-                                    <br>
-                                    Минимальный срок подписки 6 месяцев
+                                <div class="text-center mt15">
+                                    <a class="get_full_version ui button small green shadow_green textbold">
+                                        Попробовать полную версию
+                                    </a>
                                 </div>
-                                <div class="mt10 text14 text-left">
-                                    Бесплатный доступ к полной версии действует в течении 30 дней 
-                                </div>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
-                    {% if school_crnt.version != 'business' %}
                     <div class="six wide column pr0">
                         <div class="shadow_small br5 pt20 pb30">
                             <div class="pl15 pr15 mb5 textbold text17 textblue">В полной версии также есть:</div>
@@ -103,7 +129,6 @@
                     </div>
                     {% endif %}
                 </div>
-                {% endif %}
                 {% if school_crnt.version == 'business' %}
                 <div class="mt30">
                     <div class="textdg text17 textbold">
@@ -139,4 +164,13 @@
         </div>
     </div>
 </div>
+<script>
+    tarif_left_cost()
+    function tarif_left_cost() {
+        days = parseInt($('.tarif_left_days').text()) / 30
+        managers = $('.tarif_left_managers').text()
+        res = (2500 * managers * days).toFixed(1)
+        $('.tarif_left_cost').text(res)
+    }
+</script>
 {% endblock content %}

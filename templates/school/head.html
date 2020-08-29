@@ -18,8 +18,8 @@
                 </form>
                 {% endif %}
             </div>
-            <div class="mt10 pt10">
-                <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="mobmb5 {% if main_school %}current_option{% else %}other_option{% endif %}">
+            <div class="mt10">
+                <a href="{{ instance.get_absolute_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline mobmb5 {% if main_school %}current_option{% else %}other_option{% endif %}">
                     Общие 
                 </a>
                 <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if salaries %}current_option{% else %}other_option{% endif %}">

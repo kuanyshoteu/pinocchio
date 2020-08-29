@@ -21,7 +21,7 @@ from django.contrib.auth import (
 from django.contrib.auth.models import User
 from constants import *
 from schools.models import School
-from schools.views import get_social_networks, add_subject_category_work, register_new_student, register_user_work
+from schools.views import get_social_networks, add_subject_category_work, register_new_student, register_user_work, tarif_change
 from squads.views import add_subject_work, add_lecture_work, remove_student_from_squad, add_student_to_squad
 from squads.models import BillData
 from papers.models import LessonFolder
@@ -1398,43 +1398,22 @@ def update_hint(request):
 
 def cloudpayments_pay(request):
     print('cloudpayments_pay')
-    if check_cloudpayments_hash(request):
+    if True:
         print('get_hash')
         profile_id = request.GET.get('AccountId')
         profile = Profile.objects.get(id = int(profile_id))
         school = profile.schools.first()
-        last_payment = school.subscribe_payments.all()
-        months = int(float(request.GET.get('Amount')) / 2500)
-        if len(school.subscribe_payments.all()) > 0:
-            last_date = school.subscribe_payments.first().timestamp
-        else:
-            last_date = timezone.now()
-        day = last_date.strftime('%d')
-        mnth = last_date.strftime('%m')
-        year = last_date.strftime('%Y')
-        newmnth = int(mnth) + 6
-        if newmnth > 12:
-            newmnth -= 12
-            year = str(int(year) + 1)
-        if newmnth < 10:
-            newmnth = '0' + str(newmnth)
-        else:
-            newmnth = str(newmnth)
-        school.version_date = datetime.datetime.strptime(year+
-            '-'+newmnth+'-'+day+' '+last_date.strftime('%H')+':'+last_date.strftime('%M'), "%Y-%m-%d %H:%M")
+        print(request.GET.get('Data[managers_num]'))
+        months = int(request.GET.get('Data[months]'))
+        managers_num = int(request.GET.get('Data[managers_num]'))
+        transaction_id = request.GET.get('TransactionId')
         name = profile.first_name
         if request.GET.get('Name'):
             name = request.GET.get('Name')
-        transaction_id = request.GET.get('TransactionId')
-        school.subscribe_payments.create(
-            author = name,
-            phone = profile.phone,
-            transactionId = int(transaction_id),
-            amount = float(request.GET.get('Amount')),
-            currency = request.GET.get('Currency'),
-            timestamp = timezone.now(),
-            )
-        print(school.version_date)
+        phone = profile.phone
+        amount = float(request.GET.get('Amount'))
+        currency = request.GET.get('Currency')
+        tarif_change(school, months, managers_num, name, phone, transaction_id, amount,currency)
     data = {
         'code':0,
     }

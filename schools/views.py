@@ -2930,7 +2930,7 @@ def get_crnt_month(squad, subject, getday):
 def get_workers_list(request):
     pass
 
-def connect_full_version(request):
+def free_trial(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     school = is_moderator_school(request, profile)
@@ -2940,67 +2940,77 @@ def connect_full_version(request):
         data = {"ok":ok}
     else:
         if len(school.subscribe_payments.all()) == 0:
-            school.version = 'business'
-            last_date = timezone.now()
-            day = last_date.strftime('%d')
-            mnth = last_date.strftime('%m')
-            year = last_date.strftime('%Y')
-            newmnth = int(mnth) + 6
-            if newmnth > 12:
-                newmnth -= 12
-                year = str(int(year) + 1)
-            if newmnth < 10:
-                newmnth = '0' + str(newmnth)
-            else:
-                newmnth = str(newmnth)
-            school.version_date = datetime.datetime.strptime(year+
-                '-'+newmnth+'-'+day+' '+last_date.strftime('%H')+':'+last_date.strftime('%M'), "%Y-%m-%d %H:%M")
-            school.save()
-            ok = 'ok'
-            school.subscribe_payments.create(
-                author = profile.first_name,
-                phone = profile.phone,
-                transactionId = -1,
-                amount = 0,
-                currency = '',
-                timestamp = timezone.now(),
-                )
             managers_num = 1
             if request.GET.get('managers_num'):
                 managers_num = int(request.GET.get('managers_num'))
-            profession = Profession.objects.filter(title = 'Manager')
-            old_managers = school.people.filter(profession__in=profession)
-            old_managers_len = len(old_managers)
-            profession = profession[0]
-            if old_managers_len > managers_num:
-                for i in range(0, old_managers_len  - managers_num):
-                    old_managers.last().delete()
-            if old_managers_len < managers_num:
-                for i in range(0, managers_num - old_managers_len):
-                    name = 'Менеджер' + str(old_managers_len + i+1)
-                    password = random_password()
-                    new_manager = register_user_work(name, name+str(school.id), '', password, False)
-                    new_manager.is_student = False
-                    new_manager.save()
-                    new_manager.profession.add(profession)
-                    new_manager.schools.add(school)
-            data = {"ok":ok}
+            months = 1
+            name = profile.first_name
+            phone = profile.phone
+            transactionId = 0
+            amount = 0
+            currency = 'Бесплатно'
+            tarif_change(school, months, managers_num, name, phone, transactionId,amount,currency)
+            data = {"ok":'ok'}
         else:
-            ok = 'need_pay'
-            invoiceId = '1'
-            data = {
-                "ok":ok,
-                'publicId':cloudpayments_id,
-                'invoiceId':invoiceId,
-                'accountId':profile.id,
-            }
+            data = {"ok":'no_trial'}
+    return JsonResponse(data)
+
+def tarif_change(school, months, managers_num, name, phone, transactionId, amount, currency):
+    school.version = 'business'
+    last_date = timezone.now()
+    if months == 1:
+        school.version_date = timezone.now() + timedelta(30)
+    else:
+        if len(school.subscribe_payments.all()) > 0:
+            last_date = school.subscribe_payments.first().timestamp
+        else:
+            last_date = timezone.now()
+        school.version_date = last_date + relativedelta(months=months)       
+    school.save()
+    school.subscribe_payments.create(
+        author = name,
+        phone = phone,
+        transactionId = transactionId,
+        amount = amount,
+        currency = currency,
+        timestamp = timezone.now(),
+        )
+    profession = Profession.objects.filter(title = 'Manager')
+    old_managers = school.people.filter(profession__in=profession)
+    old_managers_len = len(old_managers)
+    profession = profession[0]
+    if old_managers_len > managers_num:
+        for i in range(0, old_managers_len  - managers_num):
+            old_managers.last().delete()
+    if old_managers_len < managers_num:
+        for i in range(0, managers_num - old_managers_len):
+            name = 'Менеджер' + str(old_managers_len + i+1)
+            password = random_password()
+            new_manager = register_user_work(name, name+str(school.id), '', password, False)
+            new_manager.is_student = False
+            new_manager.save()
+            new_manager.profession.add(profession)
+            new_manager.schools.add(school)
+
+
+def connect_full_version(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    ok = 'need_pay'
+    invoiceId = '1'
+    data = {
+        "ok":ok,
+        'publicId':cloudpayments_id,
+        'invoiceId':invoiceId,
+        'accountId':profile.id,
+    }
     return JsonResponse(data)
 
 def register_user_work(name, phone, mail, password, request):
     if len(mail) > 0:
         if len(Profile.objects.filter(mail=mail)) > 0:
             return False
-    print(len(Profile.objects.filter(phone=phone)), password)
     if len(Profile.objects.filter(phone=phone)) == 0 or password == False:
         new_name = search_free_name(name.replace(' ', ''))
         user = User.objects.create(username=new_name, password=password)

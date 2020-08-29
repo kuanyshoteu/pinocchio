@@ -1841,6 +1841,19 @@ a{
   position: relative;
   display: flex;
 }
+.choose_tarif{
+  padding: 3px 10px;
+  cursor: pointer; 
+  width: 100% !important;
+  min-width: 190px;
+  border: 1px solid #e4e4e4;
+  border-radius: 5px;
+  position: relative;
+  display: block;
+}
+.choose_tarif:hover{
+  border: 1px solid #808080;  
+}
 .in_schedule{
   color: #fff; 
   padding: 1px !important; 
