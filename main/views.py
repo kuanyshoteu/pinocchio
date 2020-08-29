@@ -1404,8 +1404,8 @@ def cloudpayments_pay(request):
         profile = Profile.objects.get(id = int(profile_id))
         school = profile.schools.first()
         print(request.GET)
-        months = int(request.GET.get('Data[months]'))
-        managers_num = int(request.GET.get('Data[managers_num]'))
+        months = int(request.GET.get('Data')[months])
+        managers_num = int(request.GET.get('Data')[managers_num])
         transaction_id = request.GET.get('TransactionId')
         name = profile.first_name
         if request.GET.get('Name'):
