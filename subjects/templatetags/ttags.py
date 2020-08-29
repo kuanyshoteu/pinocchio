@@ -20,7 +20,11 @@ def version_date_format(school):
     return school.version_date.strftime('%Y-%m-%d')
 @register.filter
 def tarif_days_left(school):
-    return (school.version_date.date() - timezone.now().date()).days
+    res = (school.version_date.date() - timezone.now().date()).days
+    if res <= 0:
+        school.version = 'free'
+        school.save()
+    return res
 
 @register.filter
 def is_online(squad):

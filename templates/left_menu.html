@@ -93,7 +93,7 @@
             </a>
         {% else %}
             {% if school_crnt|tarif_days_left <= 30 %}
-                <div class="textdg">Осталось {{school_crnt|tarif_days_left}} дней</div>
+                <div class="textdg">Осталось <span class="tarif_days_left_check">{{school_crnt|tarif_days_left}}</span> дней</div>
                 <a href="{% url 'schools:bills' %}" class="ui button small green shadow_green pt5 pb5 textbold mt5">Продлить</a>
             {% endif %}
         {% endif %}
@@ -170,6 +170,9 @@
 {% endif %}
 
 <script type="text/javascript">
+    if(parseInt($('.tarif_days_left_check').text()) <= 0){
+        location.reload()        
+    }
     $('.btn-bor').click(function(){
         location.reload()
     })

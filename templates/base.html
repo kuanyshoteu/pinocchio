@@ -69,9 +69,14 @@
                 <img src="{% static 'images/logo_clean.jpeg' %}" id="logo">
             </a>
             {% if is_manager %}
-            <a class="ui button mini white textblue mr10 open_new_card_form1" id="request-responsive" style="position: absolute;right: 5%;padding: 10px;font-size: 14px;top: 5px;">
-                Заявка
-            </a>
+            <div style="position: absolute;right: 1%;top: 5px;" class="in_mobile">
+                <a class="ui button mini white textblue mr5 open_new_card_form1" style="padding: 10px;font-size: 14px;">
+                    Заявка
+                </a>
+                <a class="ui button mini white textblue mr10 wazzap_new_message" style="padding: 10px;font-size: 14px;">
+                    Сообщения
+                </a>                
+            </div>
             {% endif %}
             {% if not request.user.is_authenticated %}
             <a href="{% url 'main:about' %}" class="ui button mini blue shadow_dark_low pb5 pl5 pr5 textbold" id="request-responsive" style="position: absolute;right: 75px;font-size: 14px;top: 10px;padding-top: 4px;">Стать партнером</a>
@@ -108,6 +113,9 @@
             {% if is_manager %}
             <a class="ui textw mini mr10 pt5 pb5 bbtm open_new_card_form1">
                 Заявка
+            </a>
+            <a class="ui textw mini mr10 pt5 pb5 bbtm open_new_card_form1">
+                Сообщения
             </a>
             {% endif %}
             {% if is_director %}
