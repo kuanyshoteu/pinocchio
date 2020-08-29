@@ -1403,7 +1403,7 @@ def cloudpayments_pay(request):
         profile_id = request.GET.get('AccountId')
         profile = Profile.objects.get(id = int(profile_id))
         school = profile.schools.first()
-        print(request.GET.get('Data[managers_num]'))
+        print(request.GET)
         months = int(request.GET.get('Data[months]'))
         managers_num = int(request.GET.get('Data[managers_num]'))
         transaction_id = request.GET.get('TransactionId')
