@@ -1,3 +1,20 @@
+    $('.wazzap_new_message').click(function(e) {
+        url = "https://api.dev-wazzup24.com/v2/iframe"
+        $.ajax({
+            type: "POST",
+            url: url,
+            headers: {
+                Authorization: 'Basic 123',
+            },            
+            data: {
+                'managers_num':managers_num,
+            },
+            dataType: 'json',
+            success: function (data) {
+
+            }
+        })
+    })
     $('.get_full_version').click(function(e) {
         e.stopPropagation()
         $('.get_full_version_modal').modal('show')
