@@ -1398,7 +1398,7 @@ def update_hint(request):
 
 def cloudpayments_pay(request):
     print('cloudpayments_pay')
-    if True:
+    if check_cloudpayments_hash(request):
         print('get_hash')
         profile_id = request.GET.get('AccountId')
         profile = Profile.objects.get(id = int(profile_id))
