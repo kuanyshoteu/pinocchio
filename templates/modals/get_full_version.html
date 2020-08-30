@@ -27,7 +27,7 @@
                                 <label for="choose_tarif_2" class="choose_tarif pt5 br5 mb5 backwhite">
                                     <input id="choose_tarif_2" style="margin: 2px 4px 0 0" class="choose_tarif_input" type="checkbox">
                                     <span class="text13 textblue textbold">На 2 года</span>
-                                    <span class="textgreen text13 textbold">10% скидка</span>
+                                    <span class="textgreen text13 textbold">20% скидка</span>
                                 </label>
                             </div>
                             <div class="text-left eight wide column">
@@ -39,7 +39,8 @@
                         </div>
                     </form>
                     <a url="{% url 'schools:free_trial' %}" class="free_trial textbold ui button small textblue pl5 pr5 mr10 mb10 shadow_small lightgrey next_hint">Попробовать бесплатно 30 дней</a>
-                    <a url="{% url 'schools:connect_full_version' %}" class="connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
+                    <span class="show_vidget_url" url="{% url 'schools:connect_full_version' %}"></span>
+                    <a class="connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
                         Подключить
                         <span class="textw tarif_cost">15 000</span> тг
                     </a>

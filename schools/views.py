@@ -2956,16 +2956,30 @@ def free_trial(request):
     return JsonResponse(data)
 
 def tarif_change(school, months, managers_num, name, phone, transactionId, amount, currency):
-    school.version = 'business'
-    last_date = timezone.now()
     if months == 1:
         school.version_date = timezone.now() + timedelta(30)
     else:
-        if len(school.subscribe_payments.all()) > 0:
-            last_date = school.subscribe_payments.first().timestamp
+        if school.version_date > timezone.now():
+            last_date = school.version_date
         else:
             last_date = timezone.now()
+        if months == 0:
+            time = (last_date - timezone.now()).days / 30
+            cost = int(2500 * managers_num * time)
+        else:
+            cost = managers_num * months * 2500
+            if months == 6:
+                discount = 0
+            elif months == 12:
+                discount = 0.1
+            elif months == 24:
+                discount = 0.2
+            cost = cost - cost * discount
+        print(amount, cost - 50)
+        if amount < cost - 50:
+            return 'wrong'
         school.version_date = last_date + relativedelta(months=months)       
+    school.version = 'business'
     school.save()
     school.subscribe_payments.create(
         author = name,
@@ -2979,6 +2993,8 @@ def tarif_change(school, months, managers_num, name, phone, transactionId, amoun
     old_managers = school.people.filter(profession__in=profession)
     old_managers_len = len(old_managers)
     profession = profession[0]
+    if months == 0:
+        managers_num = old_managers_len + managers_num
     if old_managers_len > managers_num:
         for i in range(0, old_managers_len  - managers_num):
             old_managers.last().delete()
@@ -2991,7 +3007,7 @@ def tarif_change(school, months, managers_num, name, phone, transactionId, amoun
             new_manager.save()
             new_manager.profession.add(profession)
             new_manager.schools.add(school)
-
+    return 'ok'
 
 def connect_full_version(request):
     profile = Profile.objects.get(user = request.user.id)
@@ -3053,5 +3069,61 @@ def rename_column(request):
         column.title = request.GET.get('name')
         column.save()
     data = {
+    }
+    return JsonResponse(data)
+
+def show_manager_data(request):
+    name = ''
+    phone = ''
+    mail = ''
+    profile = Profile.objects.get(user = request.user.id)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        manager_prof = Profession.objects.get(title='Manager')
+        manager = school.people.filter(profession=manager_prof).get(id = int(request.GET.get('id')))
+        name = manager.first_name
+        phone = manager.phone
+        mail = manager.mail
+    data = {
+        'name':name,
+        'phone':phone,
+        'mail':mail,
+    }
+    return JsonResponse(data)
+
+def save_manager_data(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id') and request.GET.get('name') and request.GET.get('phone'):
+        manager_prof = Profession.objects.get(title='Manager')
+        manager = school.people.filter(profession=manager_prof).get(id = int(request.GET.get('id')))
+        manager.first_name = request.GET.get('name')
+        manager.phone = request.GET.get('phone')
+        manager.mail = request.GET.get('mail')
+        manager.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def delete_manager(request):
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    end_work = 'Ошибка'
+    active_managers = 0
+    if request.GET.get('id'):
+        manager_prof = Profession.objects.get(title='Manager')
+        managers = school.people.filter(profession=manager_prof) 
+        manager = managers.get(id = int(request.GET.get('id')))
+        manager.end_work = school.version_date
+        manager.check_end_work = True
+        manager.save()
+        end_work = school.version_date.strftime('%d.%m.%Y')
+        active_managers = len(managers.filter(check_end_work=False))
+    data = {
+        'end_work':end_work,
+        'active_managers':active_managers,
     }
     return JsonResponse(data)

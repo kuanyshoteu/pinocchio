@@ -428,6 +428,8 @@ def register_view(request):
             profile.profession.add(director)
             teacher_profession = Profession.objects.get(title = 'Teacher')
             profile.profession.add(teacher_profession)
+            manager_profession = Profession.objects.get(title = 'Manager')
+            profile.profession.add(manager_profession)
             profile.is_student = False
             profile.save()
             school = create_school_work(school_name, slogan, 'free')
@@ -1404,8 +1406,9 @@ def cloudpayments_pay(request):
         profile = Profile.objects.get(id = int(profile_id))
         school = profile.schools.first()
         print(request.GET)
-        months = int(request.GET.get('Data').get('months'))
-        managers_num = int(request.GET.get('Data').get('managers_num'))
+        data = request.GET.get('Data').replace('{','').replace('}','').split(',')
+        months = int(data[0].split(':')[1])
+        managers_num = int(data[1].split(':')[1])
         transaction_id = request.GET.get('TransactionId')
         name = profile.first_name
         if request.GET.get('Name'):
@@ -1413,7 +1416,8 @@ def cloudpayments_pay(request):
         phone = profile.phone
         amount = float(request.GET.get('Amount'))
         currency = request.GET.get('Currency')
-        tarif_change(school, months, managers_num, name, phone, transaction_id, amount,currency)
+        res = tarif_change(school, months, managers_num, name, phone, transaction_id, amount,currency)
+        print(res)
     data = {
         'code':0,
     }

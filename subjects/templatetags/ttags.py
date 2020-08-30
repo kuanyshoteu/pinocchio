@@ -55,9 +55,16 @@ def students_number(squad):
     return len(squad.students.filter(is_student=True))
 
 @register.filter
+def filter_actives(managers):
+    return len(managers.filter(check_end_work=False))
+
+@register.filter
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
+    if manager.check_end_work:
+        if manager.end_work < timezone.now():
+            manager.delete()
     if filter_data.timestamp < today:
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)

@@ -15,6 +15,81 @@
             }
         })
     })
+    $('.show_manager_data').click(function(){
+        url = $('.data').attr('show_manager_data')
+        id = $(this).attr('id')
+        $('.manager_data').modal('show')
+        $('.data').attr('crnt_manager_id', id)
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.crnt_manager_name').text(data.name)
+                $('.manager_name_change').val(data.name)
+                $('.manager_phone_change').val(data.phone)
+                $('.manager_mail_change').val(data.mail)
+            }
+        })        
+    })
+    $('.delete_manager_show_modal').click(function(){
+        parent = $(this).parent()
+        id = parent.find('.show_manager_data').attr('id')
+        name = parent.find('.manager_name').text()
+        $('.data').attr('crnt_manager_id', id)
+        $('.delete_manager_name').text(name)
+        $('.delete_manager_modal').modal('show')
+        console.log('xkxkxk')
+    })
+    $('.delete_manager').click(function(){
+        url = $('.data').attr('delete_manager')
+        id = $('.data').attr('crnt_manager_id')
+        $('.delete_manager').addClass('disabled')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.show_manager_data'+id).addClass('textg')
+                $('.show_manager_data'+id).removeClass('textblue')
+                $('.show_manager_data'+id).find('.manager_status').text("доступен до " + data.end_work)
+                parent.find('.delete_manager').hide()
+                $('.managers_num_crnt').text(data.active_managers)
+                $('.delete_manager_modal').modal('hide')
+                $('.delete_manager').removeClass('disabled')
+            }
+        })        
+    })
+    $('.save_manager_data').click(function(){
+        url = $('.data').attr('save_manager_data')
+        id = $('.data').attr('crnt_manager_id')
+        name = $('.manager_name_change').val()
+        phone = $('.manager_phone_change').val()
+        mail = $('.manager_mail_change').val()
+        $(this).addClass('disabled')
+        $('.save_manager_load').show()
+        $('.save_manager_check').hide()
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'name':name,
+                'phone':phone,
+                'mail':mail,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.show_manager_data'+id).text(name)
+                $('.save_manager_data').removeClass('disabled')
+                $('.save_manager_load').hide()
+                $('.save_manager_check').show()
+            }
+        })        
+    })
     $('.get_full_version').click(function(e) {
         e.stopPropagation()
         $('.get_full_version_modal').modal('show')
@@ -46,16 +121,13 @@
         })
     })
     $('.connect_full_version').click(function(e) {
-        url = $(this).attr('url')
         managers_num = $('.managers_num').val()
-        $('.connect_full_version').addClass('disabled')
-        cost = parseInt($('.tarif_cost').text().replace(' ', '').replace(' ', '').replace(' ', ''))
-        tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
-        if (tarif_cost_input == 'choose_tarif_0') {
-            month = 'crnt'
-            description ='Оплата за новых менеджеров'
+        if (managers_num == undefined) {
+            managers_num = $('.managers_num_crnt').text()
         }
-        else if (tarif_cost_input == 'choose_tarif_6') {
+        cost = parseInt(remove_spaces($('.tarif_cost').text()))        
+        tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
+        if (tarif_cost_input == 'choose_tarif_6') {
             month = '6'
             description ='Оплата за '+month+' месяцев подписки'
         }
@@ -67,7 +139,27 @@
             month = '24'
             description ='Оплата за '+month+' месяцев подписки'
         }
-        $('.get_tarif_load').show()
+        show_vidget(month, managers_num, cost, description)
+    })
+    $('.tarif_new_managers').click(function(e) {
+        month = '0'
+        managers_num = $('.managers_num_tarif').val()
+        cost = parseInt(remove_spaces($('.new_managers_cost').text()))
+        desc2 = ' новых менеджеров'
+        if (managers_num == 1) {
+            desc2 = ' нового менеджера'
+        }
+        description = 'Оплата за ' + managers_num + desc2
+        show_vidget(month, managers_num, cost, description)
+    })
+    function remove_spaces(text){
+        while(text.search(' ') > 0){
+            text = text.replace(' ', '')
+        }        
+        return text
+    }
+    function show_vidget(month, managers_num, cost, description){
+        url = $('.show_vidget_url').attr('url')
         $('.no_free_trial').hide()
         $.ajax({
             url: url,
@@ -93,10 +185,12 @@
                         'managers_num':managers_num,
                     }
                 })
-                $('.connect_full_version').removeClass('disabled')
+                if (month != '0') {
+                    $('.connect_full_version').removeClass('disabled')                    
+                }
             }
         })
-    })
+    }
     $('.choose_tarif').click(function(){
         input = $(this).find('.choose_tarif_input')
         $('.choose_tarif').each(function(){
@@ -104,24 +198,30 @@
             o_input.prop('checked', false)
         })
         input.prop('checked', true)
-        calc_tarif_cost()
+        managers_num = $('.managers_num').val()
+        if (managers_num == undefined) {
+            managers_num = $('.managers_num_crnt').text()
+        }
+        calc_tarif_cost(managers_num)
+    })
+    $('.managers_num_tarif').on('change', function(){
+        managers_num = $(this).val()
+        left_days = parseInt($('.tarif_left_days').text()) / 30
+        tarif_cost = (2500 * left_days * managers_num).toFixed(0)
+        console.log($('.tarif_left_days').text(), left_days, managers_num)
+        tarif_cost = add_spaces_to_cost(tarif_cost)
+        $('.new_managers_cost').text(tarif_cost)
     })
     $('.managers_num').on('change', function(){
-        calc_tarif_cost()            
-    })
-    function calc_tarif_cost(){
         managers_num = $('.managers_num').val()
+        calc_tarif_cost(managers_num)
+    })
+    function calc_tarif_cost(managers_num){
+        managers_num = parseInt(managers_num)
         tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
         discount_text = ''
         is_dot = true
-        if (tarif_cost_input == 'choose_tarif_0') {
-            left_days = parseInt($('.tarif_left_days').text()) / 30
-            tarif_cost = (2500 * left_days * managers_num).toFixed(0)
-            tarif_left_cost = parseFloat($('.tarif_left_cost').text()).toFixed(0)
-            tarif_cost = (tarif_cost - tarif_left_cost).toFixed(0)
-            is_dot = false
-        }
-        else if (tarif_cost_input == 'choose_tarif_6') {
+        if (tarif_cost_input == 'choose_tarif_6') {
             tarif_cost = 2500 * 6 * managers_num
         }
         else if(tarif_cost_input == 'choose_tarif_1'){
@@ -131,7 +231,7 @@
         }
         else if(tarif_cost_input == 'choose_tarif_2'){
             tarif_cost = 2500 * 24 * managers_num
-            tarif_cost = tarif_cost - tarif_cost*0.1
+            tarif_cost = tarif_cost - tarif_cost*0.2
             discount_text = "со скидкой"
         }
         if (tarif_cost <= 0) {
@@ -142,21 +242,25 @@
             $('.connect_full_version').removeClass('disabled')            
         }
         if (is_dot) {
-            tarif_cost = tarif_cost + ''
-            temp_str = ''
-            j = 1
-            for (var i = tarif_cost.length - 1; i >= 0; i--) {
-                temp_str = tarif_cost[i] + temp_str
-                if (j % 3 == 0) {
-                    temp_str = ' ' + temp_str
-                }
-                j += 1
-            }
+            temp_str = add_spaces_to_cost(tarif_cost)
         }
         else{
             temp_str = tarif_cost
         }
         $('.tarif_cost').text(temp_str)        
+    }
+    function add_spaces_to_cost(tarif_cost){
+        tarif_cost = tarif_cost + ''
+        temp_str = ''
+        j = 1
+        for (var i = tarif_cost.length - 1; i >= 0; i--) {
+            temp_str = tarif_cost[i] + temp_str
+            if (j % 3 == 0) {
+                temp_str = ' ' + temp_str
+            }
+            j += 1
+        }
+        return temp_str        
     }
     $('.newpost_title').on('input', function () {
         $('.save_post.disabled').addClass('blue')
