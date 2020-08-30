@@ -2949,13 +2949,13 @@ def free_trial(request):
             transactionId = 0
             amount = 0
             currency = 'Бесплатно'
-            tarif_change(school, months, managers_num, name, phone, transactionId,amount,currency)
+            tarif_change(profile, school, months, managers_num, name, phone, transactionId,amount,currency)
             data = {"ok":'ok'}
         else:
             data = {"ok":'no_trial'}
     return JsonResponse(data)
 
-def tarif_change(school, months, managers_num, name, phone, transactionId, amount, currency):
+def tarif_change(profile, school, months, managers_num, name, phone, transactionId, amount, currency):
     if months == 1:
         school.version_date = timezone.now() + timedelta(30)
     else:
@@ -2976,7 +2976,7 @@ def tarif_change(school, months, managers_num, name, phone, transactionId, amoun
                 discount = 0.2
             cost = cost - cost * discount
         print(amount, cost - 50)
-        if amount < cost - 50:
+        if amount < cost - 50 and is_profi(profile, 'Moderator') == False:
             return 'wrong'
         school.version_date = last_date + relativedelta(months=months)       
     school.version = 'business'

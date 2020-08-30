@@ -1416,7 +1416,7 @@ def cloudpayments_pay(request):
         phone = profile.phone
         amount = float(request.GET.get('Amount'))
         currency = request.GET.get('Currency')
-        res = tarif_change(school, months, managers_num, name, phone, transaction_id, amount,currency)
+        res = tarif_change(profile, school, months, managers_num, name, phone, transaction_id, amount,currency)
         print(res)
     data = {
         'code':0,
