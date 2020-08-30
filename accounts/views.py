@@ -104,8 +104,7 @@ def account_view(request, user = None):
     if is_profi(hisprofile, 'Director'):
         hissquads = profile.schools.first().groups.filter(shown=True)
     elif is_profi(hisprofile, 'Manager'):
-        if profile.filter_data.office:
-            hissquads = profile.filter_data.office.groups.filter(shown=True)
+        hissquads = profile.schools.first().groups.filter(shown=True)
     elif is_profi(hisprofile, 'Teacher'):
         hissquads = hisprofile.hissquads.filter(shown=True)
     else:
@@ -120,15 +119,7 @@ def account_view(request, user = None):
         hiscacheatt.subject = None
     hiscacheatt.save()
     att_squad = hiscacheatt.squad
-    if is_profi(hisprofile, 'Manager'):
-        if profile.filter_data.office:
-            if att_squad in hissquads:
-                hissubjects = att_squad.subjects.all()
-        else:
-            if att_squad in hissquads:
-                hissubjects = att_squad.subjects.all()
-    else:
-        hissubjects = set(Subject.objects.filter(squads__in=hissquads))
+    hissubjects = set(Subject.objects.filter(squads__in=hissquads))
     school_money = 0
     if len(profile.schools.all()) > 0:
         school = profile.schools.first()

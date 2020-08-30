@@ -2975,7 +2975,6 @@ def tarif_change(profile, school, months, managers_num, name, phone, transaction
             elif months == 24:
                 discount = 0.2
             cost = cost - cost * discount
-        print(amount, cost - 50)
         if amount < cost - 50 and is_profi(profile, 'Moderator') == False:
             return 'wrong'
         school.version_date = last_date + relativedelta(months=months)       
@@ -3125,5 +3124,22 @@ def delete_manager(request):
     data = {
         'end_work':end_work,
         'active_managers':active_managers,
+    }
+    return JsonResponse(data)
+
+def change_schooler_password(request):
+    new_password = 'Ошибка'
+    profile = Profile.objects.get(user = request.user.id)
+    only_directors(profile)
+    school = is_moderator_school(request, profile)
+    if request.GET.get('id'):
+        manager_prof = Profession.objects.get(title='Manager')
+        schooler = school.people.get(id = int(request.GET.get('id')))
+        user = schooler.user
+        new_password = random_password()
+        user.set_password(new_password)
+        user.save()
+    data = {
+        'password':new_password,
     }
     return JsonResponse(data)

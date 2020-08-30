@@ -31,8 +31,8 @@
                 </div>
                 <div class="ui grid stackable no_margin">
                     {% if school_crnt.version == 'business' %}
-                    <span class="show_vidget_url" url="{% url 'schools:connect_full_version' %}"></span>
-                    <div class="six wide column">
+                    <span style="display: none;" class="show_vidget_url" url="{% url 'schools:connect_full_version' %}"></span>
+                    <div class="six wide column pl10 pr10">
                         <div class="shadow_small ui segment">
                             <div class="text17 text-center textbold mb5 textblue">
                                 Аккаунты менеджеров
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="six wide column">
+                    <div class="six wide column pl10 pr10">
                         <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
                             <div class="text17 text-center textbold mb15 textblue">
                                 Продление подписки
@@ -220,6 +220,14 @@
                 Почта:
             </div>
             <textarea class="manager_mail_change"></textarea>
+            <div class="">
+                <a class="ui button small pt5 pb5 textbold textblue white shadow_small border1 change_schooler_password">Обновить пароль аккаунта</a>
+                <div class="mt10">
+                    <div class="ui active inline loader mini schooler_new_password_load" style="display: none;"></div>
+                    <div class="change_schooler_password_exp textdg textbold text13" style="display: none;">Новый пароль аккаунта: </div>
+                    <div class="textblue textbold schooler_new_password" style="display: none;"></div>                    
+                </div>
+            </div>
         </form>
         <div class="text-center">
             <a class="ui button small blue shadow_blue save_manager_data">Сохранить</a>
@@ -228,7 +236,7 @@
         </div>
     </div>
 </div>
-<span class="data" delete_manager="{% url 'schools:delete_manager' %}" save_manager_data="{% url 'schools:save_manager_data' %}" show_manager_data="{% url 'schools:show_manager_data' %}"></span>
+<span class="data" change_schooler_password="{% url 'schools:change_schooler_password' %}" delete_manager="{% url 'schools:delete_manager' %}" save_manager_data="{% url 'schools:save_manager_data' %}" show_manager_data="{% url 'schools:show_manager_data' %}"></span>
 
 <script>
     tarif_left_cost()

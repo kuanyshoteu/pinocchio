@@ -15,11 +15,33 @@
             }
         })
     })
+    $('.change_schooler_password').click(function(){
+        url = $('.data').attr('change_schooler_password')
+        id = $('.data').attr('crnt_manager_id')
+        $('.schooler_new_password_load').show()  
+        $('.change_schooler_password').addClass('disabled')      
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.schooler_new_password').show()
+                $('.schooler_new_password').text(data.password)
+                $('.change_schooler_password').removeClass('disabled')
+                $('.schooler_new_password_load').hide()
+                $('.change_schooler_password_exp').show()
+            }
+        })
+    })
     $('.show_manager_data').click(function(){
         url = $('.data').attr('show_manager_data')
         id = $(this).attr('id')
         $('.manager_data').modal('show')
         $('.data').attr('crnt_manager_id', id)
+        $('.schooler_new_password').hide()
+        $('.change_schooler_password_exp').hide()
         $.ajax({
             url: url,
             data: {
@@ -32,7 +54,7 @@
                 $('.manager_phone_change').val(data.phone)
                 $('.manager_mail_change').val(data.mail)
             }
-        })        
+        })
     })
     $('.delete_manager_show_modal').click(function(){
         parent = $(this).parent()
@@ -1340,7 +1362,6 @@
         password2 = $('.reset_password2').val()
         id = $(this).attr('id')
         $('.success_change_pswrd').hide()
-        console.log('9999999999999')
         $.ajax({
             url: url,
             data: {
@@ -1350,7 +1371,6 @@
             },
             dataType: 'json',
             success: function (data) {
-                console.log('tototto')
                 $('.success_change_pswrd').show()
             }
         })        
