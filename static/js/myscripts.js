@@ -1,20 +1,3 @@
-    $('.wazzap_new_message').click(function(e) {
-        url = "https://api.dev-wazzup24.com/v2/iframe"
-        $.ajax({
-            type: "POST",
-            url: url,
-            headers: {
-                Authorization: 'Basic 123',
-            },            
-            data: {
-                'managers_num':managers_num,
-            },
-            dataType: 'json',
-            success: function (data) {
-
-            }
-        })
-    })
     $('.change_schooler_password').click(function(){
         url = $('.data').attr('change_schooler_password')
         id = $('.data').attr('crnt_manager_id')

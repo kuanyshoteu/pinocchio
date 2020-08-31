@@ -483,7 +483,38 @@
 <span style="display: none;" class="hint_place0" side="modal"></span>
 {% include 'hints/info_hints.html' %}
 {% include 'hints/get_hint_script.html' %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script> 
 <script type="text/javascript">
+    const socket2 = io.connect(`https://amo-ws.dev-wazzup24.com`);
+    socket2.on('connect', () => {
+      socket2.emit('apiV2IframeConnecting', {
+         'apiKey': 'e818e44b18e54d36a35384a25c77104f',
+         'userId': '2b408353-6c98-49f7-9091-9cf7bc151bc6',
+      });
+    });
+     
+    socket2.on('apiV2Notify', (data) => {
+      console.log('apiV2Notify', data);
+     });
+
+    $('.wazzap_new_message').click(function(e) {
+        obj1 = {
+                "id": "85797262",
+                "name": "wup"
+            }
+        obj1 = JSON.stringify(obj1)
+        data = {
+            'user':obj1,
+            'scope':'global',
+        }
+        fetch('https://api.dev-wazzup24.com/v2/iframe', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Basic e818e44b18e54d36a35384a25c77104f',
+          },
+          body:data,
+        })
+    })
     function add_suggested_city(title){
         text = $('.school_cities_edit').text()
         position = window.getSelection().anchorOffset

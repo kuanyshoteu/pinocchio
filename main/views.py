@@ -1462,6 +1462,8 @@ def get_cloudpayments_data(request):
     return JsonResponse(data)
 
 def wazzup24(request):
+    print(request.headers['Authorization'])
+    print(request.POST)
     data = {
     }
     return JsonResponse(data)
