@@ -135,10 +135,7 @@
         })
     })
     $('.connect_full_version').click(function(e) {
-        managers_num = $('.managers_num').val()
-        if (managers_num == undefined) {
-            managers_num = $('.managers_num_crnt').text()
-        }
+        managers_num = $('.managers_num_all').text()
         cost = parseInt(remove_spaces($('.tarif_cost').text()))        
         tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
         if (tarif_cost_input == 'choose_tarif_6') {
@@ -226,11 +223,16 @@
         $('.new_managers_cost').text(tarif_cost)
     })
     $('.managers_num').on('change', function(){
-        managers_num = $('.managers_num').val()
+        managers_num = parseInt($('.managers_num').val())
         calc_tarif_cost(managers_num)
+        managers_crnt = parseInt($('.managers_num_crnt').text())
+        managers_num += managers_crnt
+        $('.managers_num_all').text(managers_num)
     })
     function calc_tarif_cost(managers_num){
         managers_num = parseInt(managers_num)
+        managers_crnt = parseInt($('.managers_num_crnt').text())
+        managers_num += managers_crnt
         tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
         discount_text = ''
         is_dot = true

@@ -44,7 +44,7 @@
                                 <form class="ui form mb10">
                                     <div class="text-left">
                                         <label for="choose_tarif_6" class="choose_tarif pt5 br5 mb5 backwhite">
-                                            <input id="choose_tarif_6" style="margin: 3px 4px 0 0" class="choose_tarif_input" type="checkbox">
+                                            <input checked id="choose_tarif_6" style="margin: 3px 4px 0 0" class="choose_tarif_input" type="checkbox">
                                             <span class="text13 textblue textbold">Продлить на 6 месяцев</span>
                                         </label>
                                         <label for="choose_tarif_1" class="choose_tarif pt5 br5 mb5 backwhite">
@@ -57,11 +57,17 @@
                                             <span class="mr5 text13 textblue textbold">Продлить на 2 года</span>
                                             <span class="textgreen text13 textbold">20% скидка</span>
                                         </label>
+                                        <div class="mt15 mb5">
+                                            <div class="mr5 pt5 dinline textdg textbold text13">Количество новых менеджеров:</div>
+                                            <input type="number" name="" value="0" class="managers_num mb0 pl5 pr5" style="width: 70px">
+                                        </div>
+                                        <div class="textdg textbold text13">Активных менеджеров сейчас: <b class="managers_num_crnt textblue text15">{{managers|filter_actives}}</b></div>
+                                        <div class="ui divider"></div>
+                                        <div class="textdg textbold text13">Всего менеджеров: <b class="text15 managers_num_all textblue">{{managers|filter_actives}}</b></div>
                                     </div>
                                 </form>
                                 <div class="tarif_explain textdg">Стоимость за каждого менеджера <b class="textblue">2500тг</b> в месяц</div>
-                                <div class="">Активных менеджеров: <b class="managers_num_crnt textblue">{{managers|filter_actives}}</b></div>
-                                <a class="mt15 disabled connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
+                                <a class="mt15 connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
                                     Продлить
                                     <span class="textw tarif_cost">0</span> тг
                                 </a>
@@ -139,12 +145,55 @@
 </div>
 
 <script>
-    tarif_left_cost()
-    function tarif_left_cost() {
-        days = parseInt($('.tarif_left_days').text()) / 30
-        managers = $('.tarif_left_managers').text()
-        res = (2500 * managers * days).toFixed(1)
-        $('.tarif_left_cost').text(res)
+    calc_tarif_cost(0)
+    function calc_tarif_cost(managers_num){
+        managers_num = parseInt(managers_num)
+        managers_crnt = parseInt($('.managers_num_crnt').text())
+        managers_num += managers_crnt
+        $('.managers_num_all').text(managers_num)
+        tarif_cost_input = $('.choose_tarif_input:checked').attr('id')
+        discount_text = ''
+        is_dot = true
+        if (tarif_cost_input == 'choose_tarif_6') {
+            tarif_cost = 2500 * 6 * managers_num
+        }
+        else if(tarif_cost_input == 'choose_tarif_1'){
+            tarif_cost = 2500 * 12 * managers_num
+            tarif_cost = tarif_cost - tarif_cost*0.1
+            discount_text = "со скидкой"
+        }
+        else if(tarif_cost_input == 'choose_tarif_2'){
+            tarif_cost = 2500 * 24 * managers_num
+            tarif_cost = tarif_cost - tarif_cost*0.2
+            discount_text = "со скидкой"
+        }
+        if (tarif_cost <= 0) {
+            tarif_cost = 0
+            $('.connect_full_version').addClass('disabled')
+        }
+        else{
+            $('.connect_full_version').removeClass('disabled')            
+        }
+        if (is_dot) {
+            temp_str = add_spaces_to_cost(tarif_cost)
+        }
+        else{
+            temp_str = tarif_cost
+        }
+        $('.tarif_cost').text(temp_str)        
+    }
+    function add_spaces_to_cost(tarif_cost){
+        tarif_cost = tarif_cost + ''
+        temp_str = ''
+        j = 1
+        for (var i = tarif_cost.length - 1; i >= 0; i--) {
+            temp_str = tarif_cost[i] + temp_str
+            if (j % 3 == 0) {
+                temp_str = ' ' + temp_str
+            }
+            j += 1
+        }
+        return temp_str        
     }
 </script>
 {% endblock content %}
