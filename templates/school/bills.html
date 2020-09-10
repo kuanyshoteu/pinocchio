@@ -22,77 +22,18 @@
                 <div>
                     <span class="textdg text17 textbold">У вас подключен тариф</span>
                     {% if school_crnt.version == 'business' %}
-                        <span class="text17 textbold textblue mr10">Команда</span>
-                        <span class="text13 textdg mr15">до {{ school_crnt.version_date }}</span>
-                        <span class="text13 textblue">Осталось <b class="tarif_left_days">{{ school_crnt|tarif_days_left }}</b> дней</span>
+                    <span class="text17 textbold textblue mr10">Команда</span>
+                    <span class="text13 textdg mr15">до {{ school_crnt.version_date }}</span>
+                    <span class="text13 textblue">Осталось <b class="tarif_left_days">{{ school_crnt|tarif_days_left }}</b> дней</span>
                     {% else %}
-                        <span class="text17 textbold textblue">Бесплатный</span>
+                    <span class="text17 textbold textblue">Бесплатный</span>
                     {% endif %}
+                    <span>Менеджеров <b class="textblue">{{ managers|length }}</b></span>
                 </div>
                 <div class="ui grid stackable no_margin">
                     {% if school_crnt.version == 'business' %}
                     <span style="display: none;" class="show_vidget_url" url="{% url 'schools:connect_full_version' %}"></span>
-                    <div class="six wide column pl10 pr10">
-                        <div class="shadow_small ui segment">
-                            <div class="text17 text-center textbold mb5 textblue">
-                                Аккаунты менеджеров
-                            </div>
-                            <div class="mt15 textdg text14">
-                                Менеджеров сейчас: <b class="textblue">{{managers|length}}</b>
-                            </div>
-                            <div class="tarif_managers mt15 mb15">
-                                {% for manager in managers %}
-                                <div class="full-w dflex mb5">
-                                    <a id="{{manager.id}}" style="width: calc(100% - 65px)" class="show_manager_data show_manager_data{{manager.id}} ui button small white shadow_small text-left {% if manager.check_end_work %}textg{%else%}textblue{%endif%}">
-                                        <b class="manager_name">{{ manager.first_name }}</b>
-                                        <div class="textg manager_status">{% if manager.check_end_work %}Доступен до {{manager.end_work}}{%endif%}</div>
-                                    </a>
-                                    {% if not manager.check_end_work and manager != profile %}
-                                    <a style="width: 65px;" class="delete_manager_show_modal mr0 ui button small pl5 pr5 white shadow_small textbold textred">Удалить</a>
-                                    {%endif%}
-                                </div>
-                                {% endfor %}
-                            </div>
-                            <div class="full-w text-center">
-                                <a class="ui button small blue shadow_blue" onclick="$('.new_tarif_managers_modal').modal('show')">Добавить менеджеров</a>
-                            </div>
-                            <div class="ui modal small delete_manager_modal">
-                                <i class="icon close"></i>
-                                <div class="content pb50">
-                                    <div class="mb15 text17 text-center textblue textbold">Удаление менеджера</div>
-                                    <div class="mb5 text-center">Вы уверены, что хотите удалить менеджера <span class="delete_manager_name textbold textblue"></span>?</div>
-                                    <div class="text-center text14 textred textbold">Удаленного менеджера нельзя будет восстановаить</div>
-                                    <div class="mt15 text-center">
-                                        <a class="ui button small textbold mr15" onclick="$('.delete_manager_modal').modal('hide')">Отмена</a>
-                                        <a class="ui button small white shadow_small textred textbold delete_manager">Удалить</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ui modal mini new_tarif_managers_modal">
-                                <i class="icon close"></i>
-                                <div class="content">
-                                    <div class="text17 text-center textbold mb5 textblue">
-                                        Добавление менеджеров
-                                    </div>
-                                    <form class="ui form pl15 pr15">
-                                        <div class="textdg textbold text13">Количество новых менеджеров:</div>
-                                        <input type="number" name="" value="1" class="managers_num_tarif mb0 pl5 pr5" style="width: 70px">
-                                    </form>
-                                    <div class="full-w text-center mb50">
-                                        <a class="tarif_new_managers ui button blue small shadow_blue">
-                                            Добавить 
-                                            <span class="new_managers_cost">2 500</span> тг
-                                        </a>
-                                    </div>                                    
-                                    <div class="text13 textddg">
-                                        До конца подписки осталось <b class="textblue">
-                                        {{ school_crnt|tarif_days_left }}</b> дней
-                                        <br>
-                                        Стоимость за каждого менеджера <b class="textblue">2 500тг</b> в месяц
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="four wide column pl10 pr10">
                     </div>
                     <div class="six wide column pl10 pr10">
                         <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
@@ -129,27 +70,23 @@
                         </div>
                     </div>
                     {% else %}
-                    <div class="four wide column deskpt50">
-                        <img class="full-w" src="{%static 'images/upgrade.svg'%}">
-                    </div>
+                    <div class="four wide column no_padding"></div>
                     <div class="six wide column pr0">
                         <div class="dflex">
                             <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
-                                <div class="text17 text-center textbold mb5 textblue">
+                                <div class="text21 text-center textbold mb10 textblue">
                                     Подключите полную версию системы Bilimtap.kz
                                 </div>
-                                <div class="text14 mb10 text-center">
+                                <div class="text17 mb10 text-center">
                                     Станьте ещё более эффективнее!
                                 </div>
                                 <div class="text-center mt15">
-                                    <a class="get_full_version ui button small green shadow_green textbold">
+                                    <a class="get_full_version ui button large green shadow_green textbold">
                                         Попробовать полную версию
                                     </a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="six wide column pr0">
                         <div class="shadow_small br5 pt20 pb30">
                             <div class="pl15 pr15 mb5 textbold text17 textblue">В полной версии также есть:</div>
                             <div class="textblue text15">
@@ -200,43 +137,6 @@
         </div>
     </div>
 </div>
-<div class="ui modal mini manager_data">
-    <i class="icon close"></i>
-    <div class="content">
-        <div class="text-center textbold textblue text17">
-            Данные менеджера 
-            <span class="crnt_manager_name"></span>
-        </div>
-        <form class="ui form mt15">
-            <div class="textdg textbold text13">
-                Имя:
-            </div>
-            <textarea class="manager_name_change"></textarea>
-            <div class="textdg textbold text13">
-                Номер:
-            </div>
-            <textarea class="manager_phone_change"></textarea>
-            <div class="textdg textbold text13">
-                Почта:
-            </div>
-            <textarea class="manager_mail_change"></textarea>
-            <div class="">
-                <a class="ui button small pt5 pb5 textbold textblue white shadow_small border1 change_schooler_password">Обновить пароль аккаунта</a>
-                <div class="mt10">
-                    <div class="ui active inline loader mini schooler_new_password_load" style="display: none;"></div>
-                    <div class="change_schooler_password_exp textdg textbold text13" style="display: none;">Новый пароль аккаунта: </div>
-                    <div class="textblue textbold schooler_new_password" style="display: none;"></div>                    
-                </div>
-            </div>
-        </form>
-        <div class="text-center">
-            <a class="ui button small blue shadow_blue save_manager_data">Сохранить</a>
-            <div style="display: none;" class="ui active inline loader mini save_manager_load"></div>
-            <i style="display: none;" class="save_manager_check icon check textgreen"></i>
-        </div>
-    </div>
-</div>
-<span class="data" change_schooler_password="{% url 'schools:change_schooler_password' %}" delete_manager="{% url 'schools:delete_manager' %}" save_manager_data="{% url 'schools:save_manager_data' %}" show_manager_data="{% url 'schools:show_manager_data' %}"></span>
 
 <script>
     tarif_left_cost()

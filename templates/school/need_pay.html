@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+    Управление | {{ block.super }}
+{% endblock head_title %}
+
+{% block head_extra %}
+    {{ form.media }}
+{% endblock head_extra %}
+{% load ttags %}
+{% load ttttags %}
+{% load staticfiles %}
+
+{% block content %}
+<div class='ui container pb150 pt15'>
+    <div class="ui grid stackable">
+        {% include 'left_menu.html' %}
+        <div class="w85 wide column">
+            <div class="ui segment text-center pt100 pb150">
+                <div class="text21 textddg textbold mb15">
+                    Эта функция доступна в <span class="textblue">Полной версии</span>
+                </div>
+                {% if school_crnt.tried_free %}
+                <a href="{% url 'schools:bills' %}" class="ui button large green shadow_green textbold">
+                    Купить полную версию
+                </a>
+                {% else %}
+                <a class="get_full_version ui button large green shadow_green textbold">
+                    Попробовать полную версию
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -25,6 +25,9 @@
                 <a href="{{ instance.get_salaries_url }}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if salaries %}current_option{% else %}other_option{% endif %}">
                     Сотрудники
                 </a>
+                <a href="{% url 'schools:bills' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if bills %}current_option{% else %}other_option{% endif %}">
+                    Тариф
+                </a>
                 {%if school_crnt.version == 'business'%}
                 {% if is_moderator %}
                 <a href="{% url 'schools:social_networks_settings' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if social_networks_settings %}current_option{% else %}other_option{% endif %}">
@@ -35,9 +38,6 @@
                     Подключение сайта
                 </a>
                 {% endif %}
-                <a href="{% url 'schools:bills' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if bills %}current_option{% else %}other_option{% endif %}">
-                    Тариф
-                </a>
             </div>
         </div>
         <div class="six wide column no_padding">

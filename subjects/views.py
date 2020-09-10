@@ -182,18 +182,19 @@ def subject_update(request, slug=None):
         if len(request.FILES) > 0:
             if 'subject_banner' in request.FILES:
                 file = request.FILES['subject_banner']
-                instance.image_banner = file        
-        if request.POST.get('number_of_materials') == "":
-            get_number_of_materials = 0
-        else:
-            get_number_of_materials = int(request.POST.get('number_of_materials'))
-        if instance.number_of_materials < get_number_of_materials:
-            if get_number_of_materials < 302:
-                for i in range(0, get_number_of_materials - instance.number_of_materials):
-                    instance.materials.create(
-                        school=instance.school
-                    )
-        instance.number_of_materials = int(request.POST.get('number_of_materials'))
+                instance.image_banner = file     
+        if request.POST.get('number_of_materials'):
+            if request.POST.get('number_of_materials') == "":
+                get_number_of_materials = 0
+            else:
+                get_number_of_materials = int(request.POST.get('number_of_materials'))
+            if instance.number_of_materials < get_number_of_materials:
+                if get_number_of_materials < 302:
+                    for i in range(0, get_number_of_materials - instance.number_of_materials):
+                        instance.materials.create(
+                            school=instance.school
+                        )
+            instance.number_of_materials = int(request.POST.get('number_of_materials'))
 
         for squad in instance.squads.all():
             update_squad_dates(instance, squad)

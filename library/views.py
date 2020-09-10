@@ -20,14 +20,38 @@ def library(request):
     profile = get_profile(request)
     only_staff(profile)
     school = profile.schools.first()
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     return redirect(school.get_school_library())
 
 def school_library(request, school_id):
     profile = get_profile(request)
     school = School.objects.get(id=school_id)
     is_in_school(profile, school)
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     context = {
         "profile": profile,
         'is_trener':is_profi(profile, 'Teacher'),

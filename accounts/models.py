@@ -64,7 +64,7 @@ class Profile(models.Model):
     check_end_work = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['is_student', 'id']
+        ordering = ['is_student', 'check_end_work', 'id']
 
     def get_absolute_url(self):
         self.user.username = self.user.username.replace(' ', '_')

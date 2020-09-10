@@ -29,7 +29,7 @@
 	}
 </style>
 <div id="profile">
-	{% if instance %}
+	{% if instance and school_crnt.version == 'business' %}
 	<a id="go-back-btn-before"  href='{{ instance.get_absolute_url }}'>
         <i class="arrow left icon"></i>
     </a>
@@ -123,10 +123,12 @@
                                             <div class="individual_option_load ui loader mini ml10 mt10" style="position: relative;"></div>    
                                         </div>
                                     </div>
+                                    {%if school_crnt.version == 'business'%}
                                     <div class="sixteen wide column no_padding dflex">
                                         <span class="text15">Количество уроков:</span>
                                         <input class="mt5 ml5 pl5 pr5" type="number" style="width:100px;" name="number_of_materials" value="{{instance.number_of_materials}}">
                                     </div>
+                                    {% endif %}
 								</div>
                                 <div class="text-center mt30">
                                     <input type='submit' class='ui button blue tiny' value='Сохранить' />

@@ -356,28 +356,22 @@ def add_worker_school(request):
     wid = 0
     url = ''
     print('add_worker_school')
-    if is_profi(profile, 'Director') and request.GET.get('prof_id') and request.GET.get('name') and request.GET.get('phone'):
+    if is_profi(profile, 'Director') and request.GET.get('name') and request.GET.get('phone'):
         school = is_moderator_school(request, profile)
         print(school.title)
         name = request.GET.get('name')
         phone = request.GET.get('phone')
         mail = request.GET.get('mail')
         password = random_password()
+        print(name, phone)
         profile = register_user_work(name, phone, mail, password, False)
         profile.is_student = False
         profile.save()
         wid = profile.id
         url = profile.get_absolute_url()
-        profession = Profession.objects.get(id = int(request.GET.get('prof_id')))
-        if profession.title != 'Teacher':
-            return JsonResponse({'ok':False})
+        profession = Profession.objects.get(title = 'Teacher')
         profile.profession.add(profession)
         profile.schools.add(school)
-        if request.GET.get('job_id') != '-1':
-            job = profession.job_categories.filter(id=int(request.GET.get('job_id')))
-            if len(job) > 0:
-                job = job[0]
-                profile.job_categories.add(job)
         ok = True
     data = {
         "ok":ok,
@@ -926,7 +920,19 @@ def get_school_report(request):
     profile = get_profile(request)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     if request.POST.get('first_report') and request.POST.get('second_report'):
         timeago = datetime.datetime.strptime(request.POST.get('first_report'), "%Y-%m-%d").date()
         timefuture = datetime.datetime.strptime(request.POST.get('second_report'), "%Y-%m-%d").date()
@@ -1356,14 +1362,10 @@ def moderator_run_code(request):
     return render(request, "moder_code.html", {})
 
 def create_columns():
-    column_names = ['Новые заявки', 'Записались на пробное занятие', 'Посетители пробное занятие', 'Предоплата', 'Купили абонемент', 'Отучились']    
     for school in School.objects.all():
-        i = 0
-        for column in school.crm_columns.all():
-            newc = school.crm_columns.create(title=column_names[i])
-            i += 1
-            cards = school.crm_cards.filter(column=column)
-            newc.cards.add(*cards)
+        if len(school.subscribe_payments.all()) > 0:
+            school.tried_free = True
+            school.save()
 
 def searching_subjects(request):
     profile = get_profile(request)

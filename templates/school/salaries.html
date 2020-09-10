@@ -23,129 +23,134 @@
             {% include 'left_menu.html' %}
             <div class="w85 wide column">
                 {% include 'school/head.html' %}
-                <div id="app">
-                {% for prof in instance|get_professions %}
-                    <div class="ui segment mb0 backblue">
-                        <div class="dinline textw text15 mr15 textbold">
-                        {% if prof.title == 'Teacher' %}
-                            Преподаватель
-                        {% elif prof.title == 'Manager' %}
-                            Менеджер
-                        {% endif %}
-                        </div> 
-<!--                         <div class="ui pointing below label no_margin backwhite">
-                            {% if prof.title == 'Teacher' %}
-                                Зарплата за <b>1</b> урок   
-                            {% else %}
-                                Зарплата за месяц
-                            {% endif %}
-                        </div>
- -->                        
-
-                        <a class="ui button mini white ml15" onclick="$('.show_add_job{{prof.id}}').modal('show')">Добавить должность</a>
-                        <div class="ui modal mini text-center show_add_job{{prof.id}}">
-                            <i class="icon close"></i>
-                            <div class="content">
-                                <div class="move_worker_error highlight_red full-w" style="display: none;">
-                                    Можно менять только должность сотрудника
-                                    <br>
-                                    Для смены профессии свяжитесь с <b>тех. поддержкой</b>
-                                </div>
-                                <div class="delete_job_error highlight_red full-w" style="display: none;">
-                                    Нельзя удалить все должности профессии
-                                </div>
-                                <form class="pt10 ui form mb0" style="margin: 0 auto;width: 350px;">
-                                    <div class="mt15 textbold textdg">Название должности</div>
-                                    <textarea placeholder="" class="mb0 mr10 new_job_title{{prof.id}}"></textarea>
-                                    <div class="text-center mt10">
-                                        <a class="ui button mini blue add_job" url="{%url 'schools:add_job'%}" id="{{prof.id}}">Добавить</a>                            
-                                    </div>
-                                </form>
+                <div class="ui grid stackable no_margin">
+                    <div class="six wide column pt0 pl0 mobpr0 deskpr30 pb0">
+                        <div class="shadow_small ui segment">
+                            <div class="text17 text-center textbold mb5 textblue">
+                                Аккаунты менеджеров
                             </div>
-                        </div>
-                        <div class="ui grid stackable no_padding mt15 ml0 mr0 mb0">
-                        {% for job in prof|get_job_categories:instance %}
-                            <div class="third wide column pt0 pl0">
-                                <div class="ui segment mt0 pt0 ">
-                                    <div class="ui grid no_margin">
-                                        <div class="eight wide column pl0 pr0 pb0 textbold textdg">
-                                            {{ job.title }}
-                                        </div>
-<!--                                         <div class="eight wide column pl0 pr0 pt15 pb5">
-                                            <a class="redx" onclick="$('#show_delete_job{{job.id}}').modal('show')" style="margin-top: -15px;margin-right: -10px;">✖</a>
-                                            <div class="ui modal mini" id='show_delete_job{{job.id}}'>
-                                                <i class="close icon"></i>
-                                                <div class="content">
-                                                    Вы уверены, что хотите удалить должность?
-                                                    <br><br>
-                                                    <a class="yes_delete_job ui button mini green" id="{{job.id}}" url="{% url 'schools:delete_job' %}">Да</a>
-                                                    <a class="ui button mini red" onclick="$('#show_delete_job').modal('hide')">Нет</a>
-                                                </div>                                      
-                                            </div>
-                                            <form class="ui form no_margin">
-                                                <div id="input{{worker.id}}" class="ui grid" style="float: right;">
-                                                    <div class="twelve wide column pt10 pr0 pl0">
-                                                        <input class="no_margin" style="height: 28px;padding: 6px 5px" type="number" id="job_salary{{job.id}}" value="{{ job.salary }}">
-                                                    </div>
-                                                    <div class="four wide column pt10 pl0">
-                                                        <a class="ui button mini blue save_job_salary" id="{{ job.id }}" style="padding: 9px 2px 9px 10px;"><i class="check textw icon"></i></a>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
- -->                                    </div>
-                                    <div class="no_margin" style="min-height: 200px;">
-                                        <draggable style="min-height: 200px;"
-                                            class="jobbox{{ job.id }}"
-                                            :options="{group:{ name:'people'}}"
-                                            @add="move_worker({{ job.id }})">
-                                            {% for worker in job|get_school_workers:instance %}
-                                            {% include 'modals/worker.html' %}
-                                            {% endfor %}
-                                        </draggable> 
-                                        {% if prof.title == 'Teacher' %}
-                                        <div class="text-center">
-                                            <a onclick="sal_add_worker('{{prof.id}}', '{{job.id}}')" class="ui button mini blue">Добавить сотрудника</a>
-                                        </div>
-                                        {% endif %}
+                            <div class="mt15 textdg text14">
+                                Менеджеров сейчас: <b class="crnt_manager_num textblue mr15">{{managers|length}}</b>
+                                <a class="ui button small pt5 pb5 blue shadow_blue" onclick="$('.new_tarif_managers_modal').modal('show')">Добавить менеджеров</a>
+                            </div>
+                            <div class="tarif_managers mt15 mb15">
+                                {% for manager in managers %}
+                                <div class="full-w dflex mb5">
+                                    <a id="{{manager.id}}" style="width: calc(100% - 65px)" class="show_manager_data show_manager_data{{manager.id}} ui button small white shadow_small text-left textblue">
+                                        <b class="manager_name">{{ manager.first_name }}</b>
+                                        <div class="textg manager_status">{% if manager.check_end_work %}Доступен до {{manager.end_work}}{%endif%}</div>
+                                    </a>
+                                    {% if not manager.check_end_work and manager != profile %}
+                                    <a profession="Manager" style="width: 65px;" class="delete_manager_show_modal mr0 ui button small pl5 pr5 white shadow_small textbold textred">Удалить</a>
+                                    {%endif%}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="ui modal small delete_manager_modal">
+                                <i class="icon close"></i>
+                                <div class="content pb50">
+                                    <div class="mb15 text17 text-center textblue textbold">Удаление сотрудника</div>
+                                    <div class="mb5 text-center">Вы уверены, что хотите удалить сотрудника <span class="delete_manager_name textbold textblue"></span>?</div>
+                                    <div class="text-center text14 textred textbold">Удаленного сотрудника нельзя будет восстановить</div>
+                                    <div class="mt15 text-center">
+                                        <a class="ui button small textbold mr15" onclick="$('.delete_manager_modal').modal('hide')">Отмена</a>
+                                        <a class="ui button small white shadow_small textred textbold delete_manager">Удалить</a>
+                                        <div class="ui inline active loader mini delete_manager_load" style="display: none;"></div>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}  
-                        {% if prof|get_jobless_workers_len:instance %}                          
-                            <div class="third wide column pt0 pl0">
-                                <div class="ui segment pt0 mt0">
-                                    <div class="ui grid no_margin">
-                                        <div class="eight wide column pl0 pb0 textbold textdg">
-                                            Без должности
-                                        </div>
+                            <div class="ui modal mini new_tarif_managers_modal">
+                                <i class="icon close"></i>
+                                <div class="content">
+                                    <div class="text17 text-center textbold mb5 textblue">
+                                        Добавление менеджеров
                                     </div>
-                                    <div class="no_margin" style="min-height: 200px;">
-                                        <draggable style="min-height: 200px;"
-                                            class="jobbox-1"
-                                            :options="{group:{ name:'people'}}"
-                                            @add="move_worker(-1)">
-                                            {% for worker in prof|get_jobless_workers:instance %}
-                                            {% include 'modals/worker.html' %}
-                                        {% endfor %}
-                                        </draggable>
-                                        {% if prof.title == 'Teacher' %}
-                                        <div class="text-center">
-                                            <a onclick="sal_add_worker('{{prof.id}}', '-1')" prof="{{prof.id}}" job="{{job.id}}" class="sal_add_worker ui button mini blue">Добавить сотрудника</a>
-                                        </div>
-                                        {% endif %}
+                                    <form class="ui form pl15 pr15">
+                                        <div class="textdg textbold text13">Количество новых менеджеров:</div>
+                                        <input type="number" name="" value="1" class="managers_num_tarif mb0 pl5 pr5" style="width: 70px">
+                                    </form>
+                                    <div class="full-w text-center mb50">
+                                        <a class="tarif_new_managers ui button blue small shadow_blue">
+                                            Добавить 
+                                            <span class="new_managers_cost">2 500</span> тг
+                                        </a>
+                                    </div>                                    
+                                    <div class="text13 textddg">
+                                        До конца подписки осталось <b class="textblue tarif_left_days">
+                                        {{ school_crnt|tarif_days_left }}</b> дней
+                                        <br>
+                                        Стоимость за каждого менеджера <b class="textblue">2 500тг</b> в месяц
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
                         </div>
                     </div>
-                {% endfor %}
+                    <div class="six wide column pt0 pl0 pr0 pb0">
+                        <div class="shadow_small ui segment">
+                            <div class="text17 text-center textbold mb5 textblue">
+                                Учителя
+                            </div>
+                            <div class="mt15 textdg text14">
+                                Учителей сейчас: <b class="textblue mr15">{{teachers|length}}</b>
+                                <a class="ui button small pt5 pb5 blue shadow_blue" onclick="$('.sal_add_worker_form').modal('show')">Добавить учителя</a>                                
+                            </div>
+                            <div class="tarif_managers mt15 mb15">
+                                {% for manager in teachers %}
+                                <div class="full-w dflex mb5">
+                                    <a id="{{manager.id}}" style="width: calc(100% - 65px)" class="show_manager_data show_manager_data{{manager.id}} ui button small white shadow_small text-left textblue">
+                                        <b class="manager_name">{{ manager.first_name }}</b>
+                                        <div class="textg manager_status">{% if manager.check_end_work %}Доступен до {{manager.end_work}}{%endif%}</div>
+                                    </a>
+                                    {% if not manager.check_end_work and manager != profile %}
+                                    <a style="width: 65px;" profession="Teacher" class="delete_manager_show_modal mr0 ui button small pl5 pr5 white shadow_small textbold textred">Удалить</a>
+                                    {%endif%}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<div class="ui modal mini manager_data">
+    <i class="icon close"></i>
+    <div class="content">
+        <div class="text-center textbold textblue text17">
+            Данные менеджера 
+            <span class="crnt_manager_name"></span>
+        </div>
+        <form class="ui form mt15">
+            <div class="textdg textbold text13">
+                Имя:
+            </div>
+            <textarea class="manager_name_change"></textarea>
+            <div class="textdg textbold text13">
+                Номер:
+            </div>
+            <textarea class="manager_phone_change"></textarea>
+            <div class="textdg textbold text13">
+                Почта:
+            </div>
+            <textarea class="manager_mail_change"></textarea>
+            <div class="">
+                <a class="ui button small pt5 pb5 textbold textblue white shadow_small border1 change_schooler_password">Обновить пароль аккаунта</a>
+                <div class="mt10">
+                    <div class="ui active inline loader mini schooler_new_password_load" style="display: none;"></div>
+                    <div class="change_schooler_password_exp textdg textbold text13" style="display: none;">Новый пароль аккаунта: </div>
+                    <div class="textblue textbold schooler_new_password" style="display: none;"></div>                    
+                </div>
+            </div>
+        </form>
+        <div class="text-center">
+            <a class="ui button small blue shadow_blue save_manager_data">Сохранить</a>
+            <div style="display: none;" class="ui active inline loader mini save_manager_load"></div>
+            <i style="display: none;" class="save_manager_check icon check textgreen"></i>
+        </div>
+    </div>
+</div>
+<span class="data" change_schooler_password="{% url 'schools:change_schooler_password' %}" delete_manager="{% url 'schools:delete_manager' %}" save_manager_data="{% url 'schools:save_manager_data' %}" show_manager_data="{% url 'schools:show_manager_data' %}"></span>
 <div class="ui modal small sal_add_worker_form">
     <i class="icon close"></i>
     <div class="content">
@@ -182,6 +187,27 @@
 <span class="save_job_salary_url" url="{{ instance.save_job_salary }}"></span>
 <span style="display: none;" id="0" class="current_worker"></span>
 <script type="text/javascript">
+    calc_first_cost_for_managers()
+    function calc_first_cost_for_managers(){
+        managers_num = $('.managers_num_tarif').val()
+        left_days = parseInt($('.tarif_left_days').text()) / 30
+        tarif_cost = (2500 * left_days * managers_num).toFixed(0)
+        tarif_cost = add_spaces_to_cost(tarif_cost)
+        $('.new_managers_cost').text(tarif_cost)        
+    }
+    function add_spaces_to_cost(tarif_cost){
+        tarif_cost = tarif_cost + ''
+        temp_str = ''
+        j = 1
+        for (var i = tarif_cost.length - 1; i >= 0; i--) {
+            temp_str = tarif_cost[i] + temp_str
+            if (j % 3 == 0) {
+                temp_str = ' ' + temp_str
+            }
+            j += 1
+        }
+        return temp_str        
+    }
     function sal_add_worker(prof_id, job_id){
         $('.sal_add_worker_form').modal('show')
         $('.add_worker_school').attr('prof_id', prof_id)
@@ -202,6 +228,7 @@
         name = $('.new_sal_worker_name').val();
         phone = $('.new_sal_worker_phone').val();
         mail = $('.new_sal_worker_mail').val();
+        console.log(name, phone)
         if (name == '' || phone == '') {
             $('.not_success_created_worker').show()
         }

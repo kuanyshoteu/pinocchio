@@ -46,6 +46,7 @@ class School(models.Model):
     bill_day_diff = models.IntegerField(default=5)
     version = models.CharField(max_length=10, default='')
     version_date = models.DateTimeField(auto_now_add=False)
+    tried_free = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['importance','version','rating', '-average_cost']

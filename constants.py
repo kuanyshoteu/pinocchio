@@ -1,3 +1,4 @@
+from django.shortcuts import render, redirect
 from accounts.models import *
 from subjects.models import *
 from schools.models import School
@@ -322,4 +323,4 @@ def check_school_version(school, version):
         else:
             return True
     else:
-        raise Http404        
+        return False

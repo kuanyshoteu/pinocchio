@@ -62,9 +62,9 @@ def filter_actives(managers):
 def payment_notices(profile):
     today = timezone.now().date()
     filter_data = profile.filter_data
-    if manager.check_end_work:
-        if manager.end_work < timezone.now():
-            manager.delete()
+    if profile.check_end_work:
+        if profile.end_work < timezone.now():
+            profile.delete()
     if filter_data.timestamp < today:
         school = profile.schools.first()
         squads = school.groups.filter(shown=True)

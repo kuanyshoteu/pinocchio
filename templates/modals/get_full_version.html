@@ -11,48 +11,12 @@
                     Станьте ещё более эффективнее!
                 </div>
                 <div class="text-center">
-                    <form class="ui form mb10">
-                        <div class="ui grid stackable">
-                            <div class="text-left eight wide column">
-                                <div class="textbold text13 textdg mt5 mr5">Выберите период</div>
-                                <label for="choose_tarif_6" class="choose_tarif pt5 br5 mb5 backwhite">
-                                    <input id="choose_tarif_6" style="margin: 1px 4px 0 0" class="choose_tarif_input" checked="" type="checkbox">
-                                    <span class="text13 textblue textbold">На 6 месяцев</span>
-                                </label>
-                                <label for="choose_tarif_1" class="choose_tarif pt5 br5 mb5 backwhite">
-                                    <input id="choose_tarif_1" style="margin: 2px 4px 0 0" class="choose_tarif_input" type="checkbox">
-                                    <span class="text13 textblue textbold">На 1 год</span>
-                                    <span class="textgreen text13 textbold">10% скидка</span>
-                                </label>
-                                <label for="choose_tarif_2" class="choose_tarif pt5 br5 mb5 backwhite">
-                                    <input id="choose_tarif_2" style="margin: 2px 4px 0 0" class="choose_tarif_input" type="checkbox">
-                                    <span class="text13 textblue textbold">На 2 года</span>
-                                    <span class="textgreen text13 textbold">20% скидка</span>
-                                </label>
-                            </div>
-                            <div class="text-left eight wide column">
-                                <div class="textbold text13 textdg mt5 mr5">Количество менеджеров</div>
-                                <div>
-                                    <input type="number" name="" value="1" class="managers_num mb0 pl5 pr5" style="width: 70px">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <a url="{% url 'schools:free_trial' %}" class="free_trial textbold ui button small textblue pl5 pr5 mr10 mb10 shadow_small lightgrey next_hint">Попробовать бесплатно 30 дней</a>
+                    <a url="{% url 'schools:free_trial' %}" class="free_trial textbold ui button large green mb10 shadow_green">Подключить тестовый период 30 дней</a>
                     <span class="show_vidget_url" url="{% url 'schools:connect_full_version' %}"></span>
-                    <a class="connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
-                        Подключить
-                        <span class="textw tarif_cost">15 000</span> тг
-                    </a>
                     <div class="text-center" style="height: 24px;">
                         <div style="display: none;" class="no_free_trial textred textbold text1">Вы уже использовали бесплатую пробную версию</div>
                         <div class="get_tarif_load ui active small inline loader" style="display: none;"></div>
                     </div>
-                </div>
-                <div class="text14 mt50 text-center textddg">
-                    В полной версии стоимость за каждого менеджера 2500тг в месяц
-                    <br>
-                    Минимальный срок подписки 6 месяцев
                 </div>
             </div>
             <div class="no_padding_side backwhite eight wide column mobtopbr5 deskrightbr15 pt20 pb30">

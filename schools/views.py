@@ -44,7 +44,19 @@ def mails(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     default_templates = MailTemplate.objects.filter(default=True)
     school_templates = school.mail_templates.all()
     mail_templates = set(chain(default_templates, school_templates))
@@ -69,7 +81,19 @@ def connect_site(request):
     profile = get_profile(request)
     only_managers(profile)
     school = is_moderator_school(request, profile)
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     context = {
         "profile":profile,
         "instance": school,
@@ -1271,6 +1295,7 @@ def send_login_url(request):
             login_text = "<br>Ваш логин: "+student.phone+" или "+student.mail
             password_text = "<br>Ваш пароль (не говорите никому): "+password
             text += login_text + password_text
+            print(mail)
             send_email(head, text,[mail])
             ok = True
     data = {
@@ -2001,7 +2026,19 @@ def get_manager_actions(request):
             ok = True
         if ok:
             school = is_moderator_school(request, profile)
-            check_school_version(school, 'business')
+            if not check_school_version(school, 'business'):
+                context = {  
+                    'report':True,
+                    "profile":profile,
+                    "instance": school,
+                    'is_trener':is_profi(profile, 'Teacher'),
+                    "is_manager":is_profi(profile, 'Manager'),
+                    "is_director":is_profi(profile, 'Director'),
+                    "is_moderator":is_profi(profile, 'Moderator'),
+                    "school_money":school.money,
+                    "school_crnt":school, 
+                }
+                return render(request, "school/need_pay.html", context)
             history = sorted(
                 chain(
                     PaymentHistory.objects.filter(action_author=manager), 
@@ -2082,7 +2119,19 @@ def get_teacher_actions(request):
     res = []
     if request.GET.get('id'):
         school = is_moderator_school(request, profile)
-        check_school_version(school, 'business')
+        if not check_school_version(school, 'business'):
+            context = {  
+                'report':True,
+                "profile":profile,
+                "instance": school,
+                'is_trener':is_profi(profile, 'Teacher'),
+                "is_manager":is_profi(profile, 'Manager'),
+                "is_director":is_profi(profile, 'Director'),
+                "is_moderator":is_profi(profile, 'Moderator'),
+                "school_money":school.money,
+                "school_crnt":school, 
+            }
+            return render(request, "school/need_pay.html", context)
         teacher = Profile.objects.get(id=int(request.GET.get('id')))
         materials = teacher.done_subject_materials.filter(school=school).select_related('subject')
         squads = teacher.hissquads.all().prefetch_related('subjects')
@@ -2748,7 +2797,19 @@ def connect_site_api(request, school_id=None):
     if school_id:
         if request.GET.get('name') and request.GET.get('phone'):
             school = School.objects.get(id=school_id)
-            check_school_version(school, 'business')
+            if not check_school_version(school, 'business'):
+                context = {  
+                    'report':True,
+                    "profile":profile,
+                    "instance": school,
+                    'is_trener':is_profi(profile, 'Teacher'),
+                    "is_manager":is_profi(profile, 'Manager'),
+                    "is_director":is_profi(profile, 'Director'),
+                    "is_moderator":is_profi(profile, 'Moderator'),
+                    "school_money":school.money,
+                    "school_crnt":school, 
+                }
+                return render(request, "school/need_pay.html", context)
             found = False
             student = None
             if len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
@@ -2939,7 +3000,7 @@ def free_trial(request):
         ok = 'already'
         data = {"ok":ok}
     else:
-        if len(school.subscribe_payments.all()) == 0:
+        if school.tried_free == False:
             managers_num = 1
             if request.GET.get('managers_num'):
                 managers_num = int(request.GET.get('managers_num'))
@@ -2959,6 +3020,7 @@ def tarif_change(profile, school, months, managers_num, name, phone, transaction
     if months == 1:
         school.version_date = timezone.now() + timedelta(30)
     else:
+        school.tried_free = True
         if school.version_date > timezone.now():
             last_date = school.version_date
         else:
@@ -3079,8 +3141,7 @@ def show_manager_data(request):
     only_managers(profile)
     school = is_moderator_school(request, profile)
     if request.GET.get('id'):
-        manager_prof = Profession.objects.get(title='Manager')
-        manager = school.people.filter(profession=manager_prof).get(id = int(request.GET.get('id')))
+        manager = school.people.get(id = int(request.GET.get('id')))
         name = manager.first_name
         phone = manager.phone
         mail = manager.mail
@@ -3110,17 +3171,21 @@ def delete_manager(request):
     profile = Profile.objects.get(user = request.user.id)
     only_directors(profile)
     school = is_moderator_school(request, profile)
-    end_work = 'Ошибка'
+    end_work = ''
     active_managers = 0
-    if request.GET.get('id'):
-        manager_prof = Profession.objects.get(title='Manager')
+    if request.GET.get('id') and request.GET.get('profession'):
+        manager_prof = Profession.objects.get(title=request.GET.get('profession'))
         managers = school.people.filter(profession=manager_prof) 
         manager = managers.get(id = int(request.GET.get('id')))
-        manager.end_work = school.version_date
-        manager.check_end_work = True
-        manager.save()
-        end_work = school.version_date.strftime('%d.%m.%Y')
-        active_managers = len(managers.filter(check_end_work=False))
+        if request.GET.get('profession') == 'Teacher':
+            print(manager.first_name)
+            manager.delete()
+        else:
+            manager.end_work = school.version_date
+            manager.check_end_work = True
+            manager.save()
+            end_work = school.version_date.strftime('%d.%m.%Y')
+            active_managers = len(managers.filter(check_end_work=False))
     data = {
         'end_work':end_work,
         'active_managers':active_managers,
@@ -3133,10 +3198,12 @@ def change_schooler_password(request):
     only_directors(profile)
     school = is_moderator_school(request, profile)
     if request.GET.get('id'):
-        manager_prof = Profession.objects.get(title='Manager')
         schooler = school.people.get(id = int(request.GET.get('id')))
         user = schooler.user
-        new_password = random_password()
+        if request.GET.get('password'):
+            new_password = request.GET.get('password')
+        else:
+            new_password = random_password()
         user.set_password(new_password)
         user.save()
     data = {

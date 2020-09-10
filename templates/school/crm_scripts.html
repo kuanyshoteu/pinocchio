@@ -913,6 +913,7 @@
         var parents = $('.card_parentsedit').val()
         var comment = $('.card_commentedit').text()
         var birthday = $('.card_birthday').val()
+        var mail = $('.card_mail_edit').val()
         this_ = $(this)
         ok = false
         if (mail.length > 0) {
@@ -945,6 +946,9 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.ok) {
+                        $('.card_mail').text(mail)
+                        $('.card_mail').show()
+                        $('.card_mail_form').hide()
                         $('.send_login_loading').hide()
                         $('.sended_login').show()
                         this_.addClass('disabled')

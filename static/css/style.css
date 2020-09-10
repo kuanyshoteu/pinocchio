@@ -1642,6 +1642,7 @@ a{
 .lftitem{
     padding: 8px 0px 8px 8px !important;
     color: #fff;
+    font-weight: 600
 }
 .lftitemsmall:hover{
     background: none !important;
@@ -1967,7 +1968,7 @@ a{
 }
 .small_text{
   font-size: 12px !important;
-  color: #909090 !important;
+  color: #545454 !important;
 }
 .small_link{
   font-size: 11px; cursor: pointer;
@@ -2959,6 +2960,9 @@ a{
   }
   .deskpr50{
     padding-right: 50px !important
+  }
+  .deskpr15{
+    padding-right: 15px !important
   }
   .deskbr15{
     border-radius: 15px !important;

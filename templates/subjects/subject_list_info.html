@@ -7,6 +7,7 @@
                     {{sq.squads.all|length}}
                 </div>
             </div>
+            {% if school_crnt.version == 'business' %}
             <div class="wide column right-side pt5 pb5" style="width: calc(100% - 42px);">
                 <h5 class="mb0" style="font-size: 13px;">
                     <a href="{{ sq.get_absolute_url }}" class="textblue">{{ sq.title }}</a>
@@ -15,6 +16,13 @@
                 <a href="{{sq.get_update_url}}" class="textg" style="text-decoration: underline;">Настройки курса</a> 
                 {%endif%}               
             </div>
+            {% else %}
+            <a href="{{sq.get_update_url}}" class="wide column right-side pt5 pb5" style="width: calc(100% - 42px);">
+                <h5 class="mb0" style="font-size: 13px;">
+                    <span class="textblue">{{ sq.title }}</span>
+                </h5>
+            </a>            
+            {% endif %}
         </div>
     </div>
 </div>

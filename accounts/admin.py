@@ -6,7 +6,7 @@ from .models import *
 class ProfileModelAdmin(admin.ModelAdmin):
     list_display = ["first_name", "id", "phone"]
     list_display_links = ["first_name"]
-    list_filter = ["schools"]
+    list_filter = ["schools", 'profession']
     search_fields = ["first_name"]
     class Meta:
         model = Profile

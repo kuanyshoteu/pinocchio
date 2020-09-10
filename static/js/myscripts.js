@@ -42,30 +42,39 @@
     $('.delete_manager_show_modal').click(function(){
         parent = $(this).parent()
         id = parent.find('.show_manager_data').attr('id')
+        profession = $(this).attr('profession')
         name = parent.find('.manager_name').text()
         $('.data').attr('crnt_manager_id', id)
+        $('.data').attr('profession', profession)
         $('.delete_manager_name').text(name)
         $('.delete_manager_modal').modal('show')
-        console.log('xkxkxk')
     })
     $('.delete_manager').click(function(){
         url = $('.data').attr('delete_manager')
         id = $('.data').attr('crnt_manager_id')
+        profession = $('.data').attr('profession')
         $('.delete_manager').addClass('disabled')
+        $('.delete_manager_load').show()
         $.ajax({
             url: url,
             data: {
                 'id':id,
+                'profession':profession,
             },
             dataType: 'json',
             success: function (data) {
-                $('.show_manager_data'+id).addClass('textg')
-                $('.show_manager_data'+id).removeClass('textblue')
-                $('.show_manager_data'+id).find('.manager_status').text("доступен до " + data.end_work)
-                parent.find('.delete_manager').hide()
-                $('.managers_num_crnt').text(data.active_managers)
-                $('.delete_manager_modal').modal('hide')
+                $('.delete_manager_load').hide()
                 $('.delete_manager').removeClass('disabled')
+                $('.delete_manager_modal').modal('hide')
+                if (data.end_work == '') {
+                    $('.show_manager_data'+id).parent().hide('fast')
+                }
+                else{
+                    $('.show_manager_data'+id).removeClass('textblue')
+                    $('.show_manager_data'+id).find('.manager_status').text("доступен до " + data.end_work)
+                    parent.find('.delete_manager').hide()
+                    $('.managers_num_crnt').text(data.active_managers)
+                }
             }
         })        
     })
@@ -213,7 +222,6 @@
         managers_num = $(this).val()
         left_days = parseInt($('.tarif_left_days').text()) / 30
         tarif_cost = (2500 * left_days * managers_num).toFixed(0)
-        console.log($('.tarif_left_days').text(), left_days, managers_num)
         tarif_cost = add_spaces_to_cost(tarif_cost)
         $('.new_managers_cost').text(tarif_cost)
     })

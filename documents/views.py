@@ -22,14 +22,38 @@ def documents(request):
     profile = get_profile(request)    
     only_staff(profile)
     school = profile.schools.first()
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     return redirect(school.get_school_documents())
 
 def school_documents(request, school_id):
     profile = get_profile(request)
     only_staff(profile)
     school = School.objects.get(id=school_id)
-    check_school_version(school, 'business')
+    if not check_school_version(school, 'business'):
+        context = {  
+            'report':True,
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
     is_in_school(profile, school)
     img = ['png', 'jpg', 'jpeg']
     html = ['html', 'css', 'js', 'py', 'java']
