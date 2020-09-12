@@ -666,13 +666,18 @@ def add_subject_work(school, squad, subject):
     if not squad.id in subject.squad_ids:
         update_squad_dates(subject, squad)
         subject.save()
+    crnt_bill = 0
+    crnt_lesson_bill = 0
+    for subject in squad.subjects.all():
+        if subject.cost_period == 'month':
+            crnt_bill += subject.cost
+        elif subject.cost_period == 'lesson':
+            crnt_lesson_bill += subject.cost
+    squad.bill = crnt_bill
+    squad.lesson_bill = crnt_lesson_bill
+    today = timezone.now().date()
     cost = subject.cost
     cards = school.crm_cards.all()
-    if subject.cost_period == 'month':
-        squad.bill += cost
-    elif subject.cost_period == 'lesson':
-        squad.lesson_bill += cost
-    today = timezone.now().date()
     if subject.cost_period == 'month' and cost > 0:
         for nm in squad.bill_data.all():
             if len(nm.finance_closed.filter(subject=subject)) == 0:
@@ -695,11 +700,15 @@ def delete_subject(request):
         subject = Subject.objects.get(id = int(request.GET.get('subject_id')) )
         squad.subjects.remove(subject)
         subject.subject_lectures.filter(squad=squad).delete()
-        cost = subject.cost
-        if subject.cost_period == 'month':
-            squad.bill -= cost
-        elif subject.cost_period == 'lesson':
-            squad.lesson_bill -= cost
+        crnt_bill = 0
+        crnt_lesson_bill = 0
+        for subject in squad.subjects.all():
+            if subject.cost_period == 'month':
+                crnt_bill += subject.cost
+            elif subject.cost_period == 'lesson':
+                crnt_lesson_bill += subject.cost
+        squad.bill = crnt_bill
+        squad.lesson_bill = crnt_lesson_bill
         squad.save()
     data = {
     }
@@ -730,12 +739,15 @@ def remove_subject_from_squad(squad, subject):
         del subject.start_dates[idx]
         subject.save()
     cost = subject.cost
-    if subject.cost_period == 'month':
-        squad.bill -= cost
-    elif subject.cost_period == 'lesson':
-        squad.lesson_bill -= cost
-    elif subject.cost_period == 'course':
-        squad.course_bill -= cost
+    crnt_bill = 0
+    crnt_lesson_bill = 0
+    for subject in squad.subjects.all():
+        if subject.cost_period == 'month':
+            crnt_bill += subject.cost
+        elif subject.cost_period == 'lesson':
+            crnt_lesson_bill += subject.cost
+    squad.bill = crnt_bill
+    squad.lesson_bill = crnt_lesson_bill
     squad.save()
     nms = squad.bill_data.all()
     subject.finance_closed.filter(bill_data__in=nms).delete()
@@ -1015,7 +1027,7 @@ def make_alive(request):
     return JsonResponse(data)
 
 def delete_payment(request):
-    ok = False
+    timestamp = False
     profile = get_profile(request)
     only_managers(profile)
     if request.GET.get('id'):
@@ -1036,9 +1048,8 @@ def delete_payment(request):
                 squad = payment.squad
                 payment.canceled = True
                 payment.save()
-                add_money(student, school, squad, card, -1*payment.amount, profile)
-
+                timestamp = add_money(student, school, squad, card, -1*payment.amount, profile)
     data = {
-        "ok":True
+        "timestamp":timestamp,
     }
     return JsonResponse(data)

@@ -18,26 +18,7 @@
         {% include 'left_menu.html' %}
         <div class="w85 wide column scrollable" style="overflow-y: scroll;height: 100%;" scroll="no" onscroll="catch_scroll()">
             <div class="ui segment shadow_small mb0 text15 no_padding" >
-                <div class="payment_schedule backdark shadow_dark mt15 pl15 pr15" style="position: fixed;z-index: 3000;left: 23%;display: none;">
-                    <a onclick="$('.payment_schedule').hide()" style="padding: 35px; position: absolute;margin-top: -52px;right: -52px;">
-                        <i class="icon x textblue"></i>
-                    </a>
-                    <div class="textw full-w pt10 pb10">
-                        Посещаемость
-                        <span class="textyellow textbold payment_schedule_student_name"></span> <span class="textw pl5 pr5">—</span> 
-                        <span days="," class="textyellow textbold payment_schedule_group_title"></span>
-                        <div class="ui active loader mini inverted get_attendance_loader" status="ok" style="position: absolute;right: 15px;margin-top: -17px;"></div>
-                    </div>
-                    <div id="calendar"></div>
-                    <div class="pt15 pb30 textw subject_reports">
-                        <div class="textbold">По предметам:</div>
-                    </div>
-                    <div class="dflexx mb5 payment_subject_report_orig textw" style="display: none;">
-                        <div class="textyellow dinline">
-                            <span style="width: 160px;" class="textdots payment_subject"></span>
-                        </div> 
-                    </div>
-                </div>
+                {% include 'school/attendance_schedule.html' %}
                 <div class="pl15 pt15 pr15 pb15 mb10">
                     <b class="textdg text17 mr15">Оплата студентов</b>
                     <div class="text14 dinline textdg ">Студентов записанных в группы: <b class="textblue all_students_len mr15"></b> Показано: <b class="textblue crnt_students_len"></b></div>
@@ -57,22 +38,6 @@
                             <div style="display: none;">
                                 <a class="payment_search_orig ui button small pl10 pr10 pt10 pb10 white text-left textblue full-w textbold"></a>
                             </div>
-<!--                             <div class="four wide column pl0 pb0 text13 hint_place1" side="bottom">
-                                Выберите <b class="textdg ">предмет</b>:
-                                <div class="controls"> 
-                                    <select class="text15 crm_option" id="crm_subject_mobile" url="{{ instance.crm_option_url }}" option="filter_subject_category"> 
-                                        {% if profile.filter_data.subject_category %}
-                                            <option value="{{ profile.filter_data.subject_category.id }}">{{ profile.filter_data.subject_category.title }}</option>
-                                        {% endif %}
-                                        <option value="-1">Все предметы</option>
-                                        {% for subject_category in subject_categories %}
-                                            {% if subject_category != profile.filter_data.subject_category %}
-                                            <option value="{{ subject_category.id }}">{{ subject_category.title }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div> -->
                             <div class="four wide column pl0 pb0 text13">
                                 Выберите <b class="textdg ">группу</b>:
                                 <div class="controls"> 
@@ -142,26 +107,8 @@
         </table>
     </div>
 </div>
-<div style="display: none;">
-    {%include 'school/payment_student_form.html' %}
-</div>
-<span style="display: none;" class="instance_data" set_student_discounts="{% url 'squads:set_student_discounts' %}" get_student_discounts="{% url 'squads:get_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
-<div style="display: none;">
-    <div class="cp_present dinline backgreen pl5 pr5 shadow_green" style="border-radius: 3px;padding-top: 2px;">
-        <i class="icon check textw text11 mr0" style="line-height: 11px;"></i>
-    </div>
-    <div class="cp_warned dinline backorange pl5 pr5 shadow_red" style="border-radius: 3px;padding-top: 2px;">
-        <i class="icon clock textw text11 mr0" style="line-height: 11px;"></i>
-    </div>
-    <div class="cp_absent dinline backred pl5 pr5 shadow_red" style="border-radius: 3px;padding-top: 2px;">
-        <i class="icon x textw text11 mr0" style="line-height: 11px;"></i>
-    </div>
-</div>
-<span class="data" get_payment_student="{%url 'schools:get_payment_student'%}" last_one="1" payday_change_url="{%url 'schools:payday_change'%}" payment_history="{% url 'schools:payment_history' %}" hint_type="3" last_hint="2" hint="{{hint}}"></span>
+<span class="data" payment_student="all" last_one="1" hint_type="3" last_hint="2" hint="{{hint}}"></span>
 {% include 'hints/payment_hints.html' %}
 {% include 'hints/get_hint_script.html' %}
-{% include 'scripts/get_student_discounts.html' %}
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
-{% include 'calendar.html' %}
 {% include 'scripts/payment.html' %}
 {% endblock content %}

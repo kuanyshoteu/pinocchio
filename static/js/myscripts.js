@@ -1,3 +1,6 @@
+    $('.show_videohints').click(function(){
+        $('.videohints').modal('show')
+    })
     $('.change_schooler_password').click(function(){
         url = $('.data').attr('change_schooler_password')
         id = $('.data').attr('crnt_manager_id')
@@ -677,32 +680,6 @@
             },
             dataType: 'json',
             success: function (data) {
-            }
-        })        
-    })
-    $('.dis').click(function(e) {
-        student_id = $('.discount_student_name').attr('id')
-        squad_id = $('.discount_group_title').attr('id')
-        url = $('.instance_data').attr('set_student_discounts')
-        this_ = $(this)
-        id = this_.attr('id')
-        $.ajax({
-            url: url,
-            data: {
-                'id':id,
-                'student_id':student_id,
-                'squad_id':squad_id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.add) {
-                    console.log('add')
-                    this_.addClass('green')                    
-                }
-                else{
-                    console.log('remove')
-                    this_.removeClass('green')                    
-                }
             }
         })        
     })

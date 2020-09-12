@@ -47,13 +47,10 @@
         </div>
     </div>
 </div>
-<span class="data" hint_type="2" attendance_change_url="{{attendance.change_url}}"  last_hint="2" hint="{{hint}}" payment_history="{% url 'schools:payment_history' %}"></span>
+<span class="data" payment_student="{{hisprofile.id}}" hint_type="2" attendance_change_url="{{attendance.change_url}}"  last_hint="2" hint="{{hint}}"></span>
 {% if hisprofile == profile %}
 {% include 'hints/profile_hints.html' %}
 {% include 'hints/get_hint_script.html' %}
 {% endif %}
-{% include 'scripts/get_student_discounts.html' %}
-<script type="text/javascript">
-    {% include 'modals/show_payment_history.html' %}
-</script>
+{% include 'scripts/payment.html' %}
 {% endblock content %}

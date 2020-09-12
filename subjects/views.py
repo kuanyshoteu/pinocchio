@@ -167,8 +167,8 @@ def subject_update(request, slug=None):
             new_lesson_bill = 0
             new_month_bill = cost
         for squad in squads:
-            squad.lesson_bill = squad.lesson_bill - old_lesson_bill + new_lesson_bill
             squad.bill = squad.bill - old_month_bill + new_month_bill
+            squad.lesson_bill = squad.lesson_bill - old_lesson_bill + new_lesson_bill
             squad.save()
         cost = 0
         for subject in school.school_subjects.all():

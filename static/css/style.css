@@ -1707,6 +1707,14 @@ a{
   z-index: 3000;
   width: 150px;
 }
+.video_hints{
+  position: absolute;
+  margin-top: 27px;
+  right: 1em;
+  margin-right: 60px;
+  z-index: 2000;
+  width: 150px;
+}
 .float_right{
   float: right;
 }

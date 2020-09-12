@@ -1,5 +1,93 @@
+<span class="payment_urls" style="display: none;" get_payment_student="{%url 'schools:get_payment_student'%}" get_payment_list="{%url 'schools:get_payment_list'%}"  payment_history="{% url 'schools:payment_history' %}" payday_change_url="{%url 'schools:payday_change'%}" pay_url="{% url 'accounts:make_payment' %}" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
+{% include 'school/payment_student_form.html' %}
+<div class="ui small modal student_discounts_modal">
+    <i class="close icon"></i>
+    <div class="content">
+        <div class="text-center textbold textdg text17">
+            Скидки <span class="discount_student_name textblue" id=""></span> в группе <span class="discount_group_title textblue"></span>
+        </div>
+        <div class="textbold text13 textdg text-center">
+            Нажмите на те скидки, которые нужно дать студенту
+        </div>
+        <div class="textbold text13 textdg text-center">
+            Зелеными отмечены те скидки, которые есть у студента
+        </div>
+        <div class="student_discounts_list ui grid stackable mt10 ml0 mr0 mb0">
+            {% for dis in school_crnt.discounts.all %}
+            <div class="four wide column pt0 pl0 pr5 pb5">
+                <a class="dis{{dis.id}} dis ui button small pt5 pb5 pl5 pr5 full-w show_hint_schedule" sq_id="{{instance.id}}" id="{{dis.id}}">
+                    <b>{{dis.title}}</b>
+                    <br>
+                    {{dis.amount}} 
+                    {%if dis.discount_type == 'percent' %}
+                        процентов
+                    {%else%}
+                        тенге
+                    {%endif%}
+                </a>                
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+{% include 'calendar.html' %}
 <script type="text/javascript">
-    {% include 'modals/show_payment_history.html' %}
+    function show_payment_history(id){
+        url = $('.payment_urls').attr('payment_history')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.payment_history').modal('show')
+                $('.fill_payment_history').empty()
+                $('.payment_student_name').text(data.student_name)
+                for (var i = 0; i < data.res.length; i++) {
+                    payment_timestamp = data.res[i][0]
+                    payment_amount = data.res[i][1]
+                    payment_squad = data.res[i][2]
+                    payment_manager_url = data.res[i][3]
+                    payment_manager = data.res[i][4]
+                    cancel_access = data.res[i][5]
+                    id = data.res[i][6]
+                    squad_color=data.res[i][7]
+                    fill_payment_history_row('down', payment_timestamp, payment_amount, payment_squad, payment_manager_url, payment_manager, cancel_access, id, squad_color, i)
+                }
+            }
+        })        
+    };
+    function fill_payment_history_row(direction, payment_timestamp, payment_amount, payment_squad, payment_manager_url, payment_manager, cancel_access, id, squad_color, i){
+        if (cancel_access) {
+            cancel = $('.delete_payment_orig').clone(true)
+            cancel.removeClass('delete_payment_orig')
+            cancel.find('.delete_payment').attr('id', id)
+        }
+        else{
+            cancel = $('<td style="width:125px;" class="textg text12">Отменено</td>')                     
+        }
+        payment_row = $('.payment_row_orig').clone(true)
+        payment_row.removeClass('payment_row_orig')
+        if (i % 2 == 0) {
+            payment_row.addClass('backwhitelow')
+        }
+        payment_row.find('.payment_timestamp').text(payment_timestamp)
+        if (squad_color.length == 0) {squad_color = 'rgb(49, 58, 87);'}
+        payment_row.find('.payment_squad').attr('style', 'background-color:'+ squad_color)
+        payment_row.find('.payment_amount').text(payment_amount)
+        payment_row.find('.payment_squad').text(payment_squad)
+        payment_row.find('.payment_manager').attr('href', payment_manager_url)
+        payment_row.find('.payment_manager').text(payment_manager)
+        cancel.appendTo(payment_row)
+        if (direction == 'up') {
+            payment_row.prependTo('.fill_payment_history')
+        }
+        else{
+            payment_row.appendTo('.fill_payment_history')            
+        }
+    }
     fill_filters()
     function fill_filters(){
         filter_payment_select = $('#filter_payment')
@@ -20,7 +108,6 @@
             $('<option value="paid">Уже оплатили</option>').appendTo(filter_payment_select)            
         }
     }
-    get_payment_list(1)
     function show_payment_calendar(group_title, student_name, group_id, student_id, getday){
         $('#calendar').empty()
         var calendar = new Calendar('#calendar', []);
@@ -75,7 +162,7 @@
         $('#calendar').attr('getday', getday)
         crnt_month = getday[5]+getday[6]
         getday = getday.replace('-','z').replace('-','z')
-        today = $('.data').attr('today')
+        today = $('.payment_urls').attr('today')
         $("[date="+today+"]").find('.day-number').addClass('textyellow')
         if ($('.get_attendance_loader').attr('status') == 'ok') {
             $('.get_attendance_loader').attr('status', 'wait')
@@ -172,44 +259,76 @@
             get_payment_list(page)
         }
     }
+    get_payment_list(1)
     function get_payment_list(page){
         $('.get_payment_load').show()
         $('.scrollable').attr('scroll', 'no')
+        url = $('.payment_urls').attr('get_payment_list')
+        student = $('.data').attr('payment_student')
+        if (student) {        
+            $.ajax({
+                url: url,
+                data: {
+                    'page':page,
+                    'student':student,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    $('.payment_urls').attr('today', data.today)
+                    $('.get_payment_load').hide()
+                    if (data.ended) {
+                        $('.scrollable').attr('scroll', 'no')
+                        if (parseInt(page) > 0) {
+                            $('.ended').show()
+                        }
+                    }
+                    else{
+                        last_one = parseInt($('.data').attr('last_one'))
+                        $('.data').attr('last_one', last_one + data.res.length)
+                        fill_payment_student(data, '.payments_box')
+                        $('.scrollable').attr('scroll', 'yes')
+                        $('.payments_box').attr('page', parseInt(page)+1)
+                    }
+                    $('.all_students_len').text(data.all_students_len)
+                    $('.crnt_students_len').text(data.crnt_students_len)                
+                }
+            })        
+        }
+    }
+    $('.crm_option').on('change', function(e) {
+        $('.get_payment_load').show()
+        $('.payment_search_res').empty()        
+        $('.payments_box').empty()
+        id = $(this).attr('id')
+        this_ = document.getElementById(id);
+        object_id = this_.options[this_.selectedIndex].value;
+        url = $(this).attr('url')
+        option = $(this).attr('option')
         $.ajax({
-            url: "{%url 'schools:get_payment_list'%}",
+            url: url,
             data: {
-                'page':page,
+                'object_id':object_id,
+                'option':option,
             },
             dataType: 'json',
             success: function (data) {
-                $('.data').attr('today', data.today)
-                $('.get_payment_load').hide()
-                if (data.ended) {
-                    $('.scrollable').attr('scroll', 'no')
-                    if (parseInt(page) > 0) {
-                        $('.ended').show()
-                    }
-                }
-                else{
-                    last_one = parseInt($('.data').attr('last_one'))
-                    $('.data').attr('last_one', last_one + data.res.length)
-                    fill_payment_student(data, '.payments_box')
-                    $('.scrollable').attr('scroll', 'yes')
-                    $('.payments_box').attr('page', parseInt(page)+1)
-                }
-                $('.all_students_len').text(data.all_students_len)
-                $('.crnt_students_len').text(data.crnt_students_len)                
+                $('.data').attr('last_one', 1)
+                get_payment_list(1)
             }
-        })        
-    }
+        });
+    })    
     function fill_payment_student(data, place){
+        if ($('.data').attr('payment_student') != 'all'){
+            $('.payment_name_box').hide()
+        }
         for (var i = 0; i < data.res.length; i++) {
             student = data.res[i]
             student_id = student[0]
             name = student[1]
+            console.log(name, 'xoxop')
             student_url = student[2]
             notices = student[4]
-            payment_div = $('.payment_orig').clone()
+            payment_div = $('.payment_orig').clone(true)
             payment_div.addClass('pmnt_st'+student_id)
             payment_div.find('.show_payment_history').attr('onclick', 'show_payment_history('+student_id+')')
             payment_div.removeClass('payment_orig')
@@ -234,7 +353,7 @@
                 days = group[7]
                 discount_res = group[8]
                 sq_url = group[9]
-                today = $('.data').attr('today')
+                today = $('.payment_urls').attr('today')
                 if (color_back == '') {color_back='rgb(49, 58, 87)'}
                 group_div = $('.group_box').clone()
                 group_div.removeClass('group_box')
@@ -279,31 +398,11 @@
                 }
             }
             payment_div.appendTo(place)
+            console.log(payment_div)
         }
     }
-    $('.crm_option').on('change', function(e) {
-        $('.get_payment_load').show()
-        $('.payment_search_res').empty()        
-        $('.payments_box').empty()
-        id = $(this).attr('id')
-        this_ = document.getElementById(id);
-        object_id = this_.options[this_.selectedIndex].value;
-        url = $(this).attr('url')
-        option = $(this).attr('option')
-        $.ajax({
-            url: url,
-            data: {
-                'object_id':object_id,
-                'option':option,
-            },
-            dataType: 'json',
-            success: function (data) {
-                $('.data').attr('last_one', 1)
-                get_payment_list(1)
-            }
-        });
-    })    
     function make_payment(id, group_id) {
+        console.log('make_payment')
         amount = $('.payment_amounts'+id+'g'+group_id).val()
         if (amount) {
             $('.success_payment').hide()
@@ -323,13 +422,32 @@
                     $('.payment_load'+id+'g'+group_id).hide()
                     $('.payday_text'+id+'g'+group_id).parent().addClass('newcardlight')
                     $('.make_payment'+id+'g'+group_id).removeClass('disabled')
+                    if ($('.squad_bill_block'+group_id).length > 0){
+                        $('.squad_bill_block_cont'+group_id).load(document.URL + ' .squad_bill_block'+group_id)
+                    }
                 }
             })        
         }
     };
-    function delete_payment(id){
-        url = $('.instance_data').attr('delete_payment')        
+    $('.delete_payment').click(function(){
+        id = $(this).attr('id')
+        url = $('.payment_urls').attr('delete_payment')        
         $('.delete_payment_error').hide()
+        row = $(this).parent().parent()
+        payment_amount = -1 * parseInt(row.find('.payment_amount').text())
+        payment_squad = row.find('.payment_squad').text()
+        squad_color = row.find('.payment_squad').attr('style').split(':')[1]
+        payment_manager_url = row.find('.payment_manager').attr('href')
+        payment_manager = row.find('.payment_manager').text()
+        cancel_access = false
+        i = 0
+        canceled_text = $('.canceled_text_orig').clone()
+        canceled_text.removeClass('canceled_text_orig')
+        canceled_text.appendTo($(this).parent())
+        $(this).remove()
+        if (row.hasClass('backwhitelow')) {
+            i = 1
+        }
         $.ajax({
             url: url,
             data: {
@@ -337,21 +455,26 @@
             },
             dataType: 'json',
             success: function (data) {
-                if (data.ok) {
-                    location.reload()
+                if (data.timestamp) {
+                    payment_timestamp = data.timestamp
+                    fill_payment_history_row('up', payment_timestamp, payment_amount, payment_squad, payment_manager_url, payment_manager, cancel_access, id, squad_color, i)
+                    canceled_text.show('fast')
+                    if ($('.squad_bill_block'+group_id).length > 0){
+                        $('.squad_bill_block_cont'+group_id).load(document.URL + ' .squad_bill_block'+group_id)
+                    }
                 }
                 else{
                     $('.payment_delete_error').show()
                 }
             }
         })
-    }
+    })
     function change_pay_date(student, squad){
         load = $('.payday_load'+student+'g'+squad)
         load.show()
         check = $('#paydate_check'+student+'g'+squad)
         paydate = $('#payday_input'+student+'g'+squad).val()
-        url = $('.data').attr('payday_change_url')
+        url = $('.payment_urls').attr('payday_change_url')
         $.ajax({
             url: url,
             data: {
@@ -426,7 +549,7 @@
         student = $('.pmnt_st'+id)
         $('.payment_search_res').empty()
         $('.payment_search_nosquad').hide()
-        url = $('.data').attr('get_payment_student')
+        url = $('.payment_urls').attr('get_payment_student')
         if (student.length > 0) {
             div = student.clone()
             div.removeClass('pmnt_st'+id)
@@ -461,4 +584,52 @@
             })
         }
     }
+    function get_student_discounts(student_id, squad_id){
+        url = $('.payment_urls').attr('get_student_discounts')
+        $('.student_discounts_modal').modal('show')
+        $.ajax({
+            url: url,
+            data: {
+                'student_id':student_id,
+                'squad_id':squad_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.dis').removeClass('green')
+                for (var i = 0; i < data.res.length; i++) { 
+                    $('.dis'+data.res[i]).addClass('green')
+                }
+                $('.discount_student_name').text(data.name)
+                $('.discount_student_name').attr('id', student_id)
+                $('.discount_group_title').attr('id', squad_id)
+                $('.discount_group_title').text(data.squad_title)
+            }
+        })        
+    }
+    $('.dis').click(function(e) {
+        student_id = $('.discount_student_name').attr('id')
+        squad_id = $('.discount_group_title').attr('id')
+        url = $('.payment_urls').attr('set_student_discounts')
+        this_ = $(this)
+        id = this_.attr('id')
+        $.ajax({
+            url: url,
+            data: {
+                'id':id,
+                'student_id':student_id,
+                'squad_id':squad_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.add) {
+                    console.log('add')
+                    this_.addClass('green')                    
+                }
+                else{
+                    console.log('remove')
+                    this_.removeClass('green')                    
+                }
+            }
+        })        
+    })
 </script>

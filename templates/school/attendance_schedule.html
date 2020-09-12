@@ -1,0 +1,20 @@
+<div class="payment_schedule backdark shadow_dark mt15 pl15 pr15" style="position: fixed;z-index: 3000;left: 23%;display: none;">
+    <a onclick="$('.payment_schedule').hide()" style="padding: 35px; position: absolute;margin-top: -52px;right: -52px;">
+        <i class="icon x textblue"></i>
+    </a>
+    <div class="textw full-w pt10 pb10">
+        Посещаемость
+        <span class="textyellow textbold payment_schedule_student_name"></span> <span class="textw pl5 pr5">—</span> 
+        <span days="," class="textyellow textbold payment_schedule_group_title"></span>
+        <div class="ui active loader mini inverted get_attendance_loader" status="ok" style="position: absolute;right: 15px;margin-top: -17px;"></div>
+    </div>
+    <div id="calendar"></div>
+    <div class="pt15 pb30 textw subject_reports">
+        <div class="textbold">По предметам:</div>
+    </div>
+    <div class="dflexx mb5 payment_subject_report_orig textw" style="display: none;">
+        <div class="textyellow dinline">
+            <span style="width: 160px;" class="textdots payment_subject"></span>
+        </div> 
+    </div>
+</div>

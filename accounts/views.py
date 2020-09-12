@@ -529,7 +529,7 @@ def logout_view(request):
 
 def add_money(profile, school, squad, card, amount, manager):
     if amount > squad.bill*10 and amount > squad.lesson_bill * 100:
-        return 'too much'
+        return False
     nm = card.bill_data.get(squad=squad)
     nm.money += amount
     nm.save()
@@ -537,9 +537,9 @@ def add_money(profile, school, squad, card, amount, manager):
     today = timezone.now().date()
     ok = True
     subjects = squad.subjects.filter(cost__gt=0)
-    while crnt > 0:
+    while crnt != 0:
         for subject in subjects:
-            if crnt <= 0:
+            if crnt == 0:
                 break
             fc = nm.finance_closed.filter(subject=subject)
             if len(fc) > 0:
@@ -555,9 +555,13 @@ def add_money(profile, school, squad, card, amount, manager):
                     )
                 if subject.cost_period == 'month':
                     fc.bills = [subject.cost]
-            added_money = min(subject.cost - fc.moneys[-1], crnt)
-            fc.moneys[-1] += added_money
+            if crnt > 0:
+                added_money = min(subject.cost - fc.moneys[-1], crnt)
+            else:
+                added_money = max(-1 * fc.moneys[-1], crnt)
             crnt -= added_money
+            fc.moneys[-1] += added_money
+            print(crnt, added_money,fc.moneys[-1])
             finance_update_month(fc, subject.cost, subject.cost_period)
             fc.save()
     canceled = False
@@ -572,6 +576,7 @@ def add_money(profile, school, squad, card, amount, manager):
     )
     change_school_money(school, amount, 'student_payment', profile.first_name)
     school.save()
+    return ph.timestamp.strftime('%d %B %Y  %H:%M')
 
 def finance_update_month(fc, subject_cost, cost_period):
     if cost_period == 'month':
@@ -579,8 +584,16 @@ def finance_update_month(fc, subject_cost, cost_period):
             fc.moneys.append(0)
             fc.bills.append(subject_cost)
             fc.closed_months += 1
-            ok = True
-            fc.save()
+        elif fc.moneys[-1] <= 0:
+            if len(fc.moneys) > 1:
+                fc.moneys = fc.moneys[:-1]
+                fc.bills = fc.bills[:-1]
+            else:
+                fc.moneys = [0]
+                fc.bills = [0]                
+            fc.closed_months -= 1
+        ok = True
+        fc.save()
 
 def make_payment(request):
     manager = Profile.objects.get(user = request.user)

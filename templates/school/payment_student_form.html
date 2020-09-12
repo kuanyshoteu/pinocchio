@@ -1,64 +1,97 @@
-<div class="payment_orig no_margin ui grid stackable pt5 pb5 pl15 pr15">
-    <div class="three wide column no_padding">
-        <span class="text13 textbold textdg student_counter"></span>
-        <a class="student_name textbold textblue" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
-        </a>
-        <div style="display: none;" class="red_notice dinline ml5">0</div>
-    </div>
-    <div class="twelve wide column no_padding">
-        <form class="ui form mb0 mt5 full-w">
-            <div class="student_groups full-w">
-            </div>
-        </form>        
-    </div>
-    <div class="one wide column pl5 pr0 pb0 pt0">
-        <a style="right: 0;line-height: 13px" class="ui button mini white shadow_small border1 textblue textbold pl5 pr5 show_payment_history">История оплаты</a>        
-    </div>
-</div>
-<div class="mobpb50 deskmb5 group_box ui grid stackable mt0 ml0 mr0">
-    <div style="width: 8px;" class="dinline pt5 pl0 pr0">
-        <i class="lesson_pay_notice icon circle text7 pl0 pr0 mr0" style="display: none;"></i>
-    </div>
-    <div style="width: 8px;" class="dinline pt5 pl0 pr0">
-        <i class="month_pay_notice icon circle textred text7 pl0 pr0 mr0" style="display: none;"></i>
-    </div>
-    <div class="wide column pt0 pb0 pl0 pr10 mobmb5" style="width: calc(100% - 365px); max-width: 200px;">
-        <a class="group_name full-w shadow_small textbold textw ui button small pt7 pb7 pl5 pr5 mobmb5 text-left" style="height: 31px">
-        </a>
-    </div>
-    <div class="wide column pt0 pb0 pl0 pr10" style="width: 195px;">
-        <input style="width: 95px;" class="payment_amounts pl10 pr5 pb5 pt5" placeholder="Сумма" type="number">
-        <a style="height: 29px;" class="pl5 pr5 ui button mini white border1 shadow_small make_payment ml10 textblue textbold">Оплатить</a>
-        <div class="dinline" style="width: 14px;">
-            <i class="check icon textgreen success_payment" style="display: none;"></i>
-            <div class="ui active inline mini loader payment_load " style="display: none;"></div>
-        </div>
-    </div>
-    <a class="wide column pt5 pb0 pl0 pr0 show_payment_calendar mobmb15" st="shpaycal" style="width: 30px;">
-        <i class="text17 icon table textblue mr0" st="shpaycal"></i>
-    </a>
-    <div class="wide column pt0 pb0 pl0 pr0 mobmb15" style="width: 145px;">
-        <div class="text13" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
-            <span class="textdg text11">Дата следующей оплаты:</span><br>
-            <span class="payday_text textblue ml5"></span>
-            <a class="show_change_date">
-                <i class="icon pen square textblue"></i>
+<div style="display: none;">
+    <span class="textg text12 canceled_text_orig" style="display: none;">Отменено</span>
+    <table>
+        <td style="width: 125px;" class="delete_payment_orig">
+            <a id="" class="delete_payment ui button mini white border1 shadow_small textred pt5 pb5">
+                Отменить оплату
             </a>
-            <div class="mt5 block_change_pay_date pl5 pr5" style="display: none;">
-                <input style="width: 140px;" class="pl5 pr0 pb5 pt0 payday_input" type="date" name="">
-                <br>
-                <a class="ui button mini shadow_small white textblue textbold border1 pt5 pb5 mt5 mb5 change_pay_date" style="width: 135px;height: 23px;">
-                    Сохранить
-                    <div class="payday_load ui active inline mini loader" style="display: none;"></div>
-                    <i style="display: none;" class="paydate_check icon check textblue ml5" id=""></i>
+        </td>
+        <tr class="payment_row_orig"> 
+            <td class="text13 pt10 pb10 pl15 pr15 payment_timestamp">
+            </td> 
+            <td class="pt10 pb10 pl15 pr15 payment_amount">
+            </td> 
+            <td>
+                <div class="payment_squad textw br5 pt5 pb5 pl15 pr15 text13 textbold">
+                </div>
+            </td> 
+            <td class="pt10 pb10 pl15 pr15">
+                <a class="payment_manager">
                 </a>
-            </div>
+            </td>
+        </tr>
+    </table>
+    <div class="payment_orig no_margin ui grid stackable pt5 pb5 pl15 pr15">
+        <div class="three wide column no_padding payment_name_box">
+            <span class="text13 textbold textdg student_counter"></span>
+            <a class="student_name textbold textblue" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+            </a>
+            <div style="display: none;" class="red_notice dinline ml5">0</div>
+        </div>
+        <div class="twelve wide column no_padding">
+            <form class="ui form mb0 mt5 full-w">
+                <div class="student_groups full-w">
+                </div>
+            </form>        
+        </div>
+        <div class="one wide column pl5 pr0 pb0 pt0">
+            <a style="right: 0;line-height: 13px" class="ui button mini white shadow_small border1 textblue textbold pl5 pr5 show_payment_history">История оплаты</a>        
         </div>
     </div>
-    <div class="wide column pt0 pb0 pl0 pr0" style="width: 55px;">
-        <a class="ui labeled icon button small textblue white shadow_small border1 pt5 pr5 pb5 pl20 mr0">
-            <i class="icon percent text7 textblue"></i>
-            <span class="student_discount">Скидки</span>
+    <div class="cp_present dinline backgreen pl5 pr5 shadow_green" style="border-radius: 3px;padding-top: 2px;">
+        <i class="icon check textw text11 mr0" style="line-height: 11px;"></i>
+    </div>
+    <div class="cp_warned dinline backorange pl5 pr5 shadow_red" style="border-radius: 3px;padding-top: 2px;">
+        <i class="icon clock textw text11 mr0" style="line-height: 11px;"></i>
+    </div>
+    <div class="cp_absent dinline backred pl5 pr5 shadow_red" style="border-radius: 3px;padding-top: 2px;">
+        <i class="icon x textw text11 mr0" style="line-height: 11px;"></i>
+    </div>
+    <div class="mobpb50 deskmb5 group_box ui grid stackable mt0 ml0 mr0">
+        <div style="width: 8px;" class="dinline pt5 pl0 pr0">
+            <i class="lesson_pay_notice icon circle text7 pl0 pr0 mr0" style="display: none;"></i>
+        </div>
+        <div style="width: 8px;" class="dinline pt5 pl0 pr0">
+            <i class="month_pay_notice icon circle textred text7 pl0 pr0 mr0" style="display: none;"></i>
+        </div>
+        <div class="wide column pt0 pb0 pl0 pr10 mobmb5" style="width: calc(100% - 365px); max-width: 200px;">
+            <a class="group_name full-w shadow_small textbold textw ui button small pt7 pb7 pl5 pr5 mobmb5 text-left" style="height: 31px">
+            </a>
+        </div>
+        <div class="wide column pt0 pb0 pl0 pr10" style="width: 195px;">
+            <input style="width: 95px;" class="payment_amounts pl10 pr5 pb5 pt5" placeholder="Сумма" type="number">
+            <a style="height: 29px;" class="pl5 pr5 ui button mini white border1 shadow_small make_payment ml10 textblue textbold">Оплатить</a>
+            <div class="dinline" style="width: 14px;">
+                <i class="check icon textgreen success_payment" style="display: none;"></i>
+                <div class="ui active inline mini loader payment_load " style="display: none;"></div>
+            </div>
+        </div>
+        <a class="wide column pt5 pb0 pl0 pr0 show_payment_calendar mobmb15" st="shpaycal" style="width: 30px;">
+            <i class="text17 icon table textblue mr0" st="shpaycal"></i>
         </a>
+        <div class="wide column pt0 pb0 pl0 pr0 mobmb15" style="width: 145px;">
+            <div class="text13" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">
+                <span class="textdg text11">Дата следующей оплаты:</span><br>
+                <span class="payday_text textblue ml5"></span>
+                <a class="show_change_date">
+                    <i class="icon pen square textblue"></i>
+                </a>
+                <div class="mt5 block_change_pay_date pl5 pr5" style="display: none;">
+                    <input style="width: 140px;" class="pl5 pr0 pb5 pt0 payday_input" type="date" name="">
+                    <br>
+                    <a class="ui button mini shadow_small white textblue textbold border1 pt5 pb5 mt5 mb5 change_pay_date" style="width: 135px;height: 23px;">
+                        Сохранить
+                        <div class="payday_load ui active inline mini loader" style="display: none;"></div>
+                        <i style="display: none;" class="paydate_check icon check textblue ml5" id=""></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="wide column pt0 pb0 pl0 pr0" style="width: 55px;">
+            <a class="ui labeled icon button small textblue white shadow_small border1 pt5 pr5 pb5 pl20 mr0">
+                <i class="icon percent text7 textblue"></i>
+                <span class="student_discount">Скидки</span>
+            </a>
+        </div>
     </div>
 </div>

@@ -1,143 +1,119 @@
 {% load ttags %}
 {% if hisprofile.is_student or school_crnt.version == 'business' %}
-{% if is_manager %}
-<div class="ui segment shadow_small mb0">
-{%endif%}
-{% if is_manager and hisprofile.is_student %}
-    <div class="text17 textdg textbold">Оплата</div>
-{%endif%}
-{% if is_manager %}
-    <div class="ui grid stackable no_margin">
+    {% if is_manager %}
         {% if hisprofile.is_student %}
-        <div class="ten wide column pl0 pt0 pr30 pb10">
-            Пожалуйста, укажите за какую группу вносится оплата:
-            <form class="ui form mb10 mt10" style="display: flex;">
-                <input class="mr10 payment_amount{{ hisprofile.id }}" placeholder="Сумма" type="number" name="">
-                <select id="pay_for_group">
-                    {%for squad in hissquads%}
-                        <option value="{{squad.id}}">{{squad.title}}</option>
-                    {%endfor%}
-                </select>
-            </form>
-            <div class="text-center">
-                <a class="ui button mini blue make_payment" onclick="make_payment('{{ hisprofile.id }}')">
-                    Оплатить
-                </a>
-                <div class="loading_small payment_loading{{ hisprofile.id }}" style="display: none;">
-                  <div class="animation"><div class="circle one"></div></div>
-                  <div class="animation"><div class="circle two"></div></div>
-                  <div class="animation"><div class="circle three"></div></div>
-                  <div class="animation"><div class="circle four"></div></div>
-                  <div class="animation"><div class="circle five"></div></div>
-                  <div class="animation"><div class="circle six"></div></div>
-                </div>
-                <i style="display: none;" class="icon check textgreen text15 ml5" id="payment_success{{ hisprofile.id }}"></i>                
+        {% include 'school/attendance_schedule.html' %}
+        <div class="ui segment shadow_small mb0 topbr5">
+            <div class="mb5">
+                <div class="text17 textdg textbold">Оплата</div>
+                <div class="text15 textdg textbold">Клиент записан в данные группы:</div>
+            </div>
+            <div class="payments_box">
             </div>
         </div>
         {%endif%}
-        <div class="six wide column pl0 pt0 pr15 pb0">
-            <div class="pb0">
+        <div class="ui segment shadow_small mb0 mt0 bottombr5">
+    {%endif%}
+    {% if is_manager %}
+            <div class="six wide column pl0 pt0 pr15 pb0">
+                <div class="pb0">
+                    {% if hisprofile.is_student %}
+                    <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue mb10" onclick="$('.move_money').modal('show')"><i class="icon random backblue textw"></i> Перевод денег</a>
+                    <br>
+                    {%endif%}
+                    {%if school_crnt.version == 'business'%}
+                    <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}"><i class="icon clock backblue textw"></i> История всех действий</a>
+                    {%endif%}
+                </div>
                 {% if hisprofile.is_student %}
-                <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue mb10" onclick="$('.move_money').modal('show')"><i class="icon random backblue textw"></i> Перевод денег</a>
-                <br>
-                <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue mb10 show_payment_history" onclick="show_payment_history('{{hisprofile.id}}')" id="{{hisprofile.id}}"><i class="icon shopping bag backblue textw"></i> История оплаты</a>
-                <br>
-                {%endif%}
-                {%if school_crnt.version == 'business'%}
-                <a class="border1 ui labeled icon button pt5 pb5 small textblue white shadow_blue get_manager_actions" url="{%if is_this_manager %}{% url 'schools:get_manager_actions' %}{%elif is_this_trener%}{% url 'schools:get_teacher_actions' %}{%else%}{% url 'schools:get_student_actions' %}{%endif%}" id="{{hisprofile.id}}"><i class="icon clock backblue textw"></i> История всех действий</a>
-                {%endif%}
-            </div>
-            {% if hisprofile.is_student %}
-            <div class="ui modal payment_history full-h">
-                <i class="close icon"></i>
-                <div class="content">
-                    <div class="text-center mb15">
-                        <div class="text17 textblue">
-                            <b>История оплаты</b>
-                        </div>
-                        <span class="textdg text13">
-                            Можете отменить оплату в течении 3 суток
-                        </span>
-                    </div>
-                    <table class="text14 br5 shadow_small" style="margin: 0 auto;">
-                        <thead>
-                            <tr class="textdg">
-                                <th class="pt10 pb10 pl15 pr15 ">Время</th>
-                                <th class="pt10 pb10 pl15 pr15 ">Сумма</th>
-                                <th class="pt10 pb10 pl15 pr15 ">Группа</th>
-                                <th class="pt10 pb10 pl15 pr15 ">Менеджер</th>
-                                <th class=""></th>
-                            </tr>
-                        </thead>
-                        <tbody class="fill_payment_history">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="ui modal move_money">
-                <i class="close icon"></i>
-                <div class="content">
-                    <div class="text-center mb30">
-                        <b>Перевод денег среди своих счетов</b>
-                    </div>
-                    <form class="ui form" style="font-weight: 600;">
-                        <div class="ui grid">
-                            Из счета группы:
-                            <select class="move_money_from ml15" style="width: 250px;">
-                                {% for nm in profile|get_bills:hisprofile %}
-                                <option value="{{ nm.id }}">
-                                    {{ nm.squad.title }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                            <div class="ml15 mr15">в счет группы:</div>
-                            <select class="move_money_to" style="width: 250px;">
-                                {% for nm in profile|get_bills:hisprofile %}
-                                <option value="{{ nm.id }}">
-                                    {{ nm.squad.title }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                            <br><br>
-                            <div style=" margin: 15px auto;width: 400px;">
-                                <div style="display: inline-block;" class="mr15">Сумму:</div>
-                                <input type="number" name="" class="move_money_amount" style="width: 250px;">
+                <div class="ui modal payment_history full-h">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        <div class="text-center mb15">
+                            <div class="text17 textblue">
+                                <b>История оплаты</b>
                             </div>
+                            <span class="textdg text13">
+                                Можете отменить оплату в течении 3 суток
+                            </span>
                         </div>
-                    </form>
-                    <div class="text-center">
-                        <div class="move_money_loading loading" style="display: none;">
-                          <div class="animation"><div class="circle one"></div></div>
-                          <div class="animation"><div class="circle two"></div></div>
-                          <div class="animation"><div class="circle three"></div></div>
-                          <div class="animation"><div class="circle four"></div></div>
-                          <div class="animation"><div class="circle five"></div></div>
-                          <div class="animation"><div class="circle six"></div></div>
-                        </div>
-                        <a class="ui button small blue move_money_send" url="{% url 'squads:move_money' %}" id="{{hisprofile.id}}">Перевести</a>
-                        <br>
-                        <div style="width: 400px;margin: 15px auto;display: none;" class="highlight move_money_success">Перевод проведен успешно</div>
+                        <table class="text14 br5 shadow_small" style="margin: 0 auto;">
+                            <thead>
+                                <tr class="textdg">
+                                    <th class="pt10 pb10 pl15 pr15 ">Время</th>
+                                    <th class="pt10 pb10 pl15 pr15 ">Сумма</th>
+                                    <th class="pt10 pb10 pl15 pr15 ">Группа</th>
+                                    <th class="pt10 pb10 pl15 pr15 ">Менеджер</th>
+                                    <th class=""></th>
+                                </tr>
+                            </thead>
+                            <tbody class="fill_payment_history">
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            </div>
-            {%endif%}
-            {% if is_manager %}
-            <div class="ui modal" style="min-height: 100%;margin-top: 10%;" id="manager_actions{{hisprofile.id}}">
-                <i class="close icon"></i>
-                <div class="content">
-                    <div class="text-center mb15">
-                        <div style="font-size: 17px;">
-                            <b>История действий {{hisprofile.first_name}}</b>
+                <div class="ui modal move_money">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        <div class="text-center mb30">
+                            <b>Перевод денег среди своих счетов</b>
                         </div>
-                    </div>                    
-                    <div class="set_manager_actions{{hisprofile.id}}"></div>
+                        <form class="ui form dflex" style="font-weight: 600;">
+                            <div style="margin: 0 auto">
+                                <div class="textdg">Из счета группы:</div>
+                                <select class="move_money_from" style="width: 250px;">
+                                    {% for nm in profile|get_bills:hisprofile %}
+                                    <option value="{{ nm.id }}">
+                                        {{ nm.squad.title }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="mt15 textdg">В счет группы:</div>
+                                <select class="move_money_to" style="width: 250px;">
+                                    {% for nm in profile|get_bills:hisprofile %}
+                                    <option value="{{ nm.id }}">
+                                        {{ nm.squad.title }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                <div>
+                                    <div class="mt15 textdg">Сумму:</div>
+                                    <input type="number" name="" class="move_money_amount" style="width: 250px;">
+                                </div>
+                            </div>
+                        </form>
+                        <div class="text-center">
+                            <div class="move_money_loading loading" style="display: none;">
+                              <div class="animation"><div class="circle one"></div></div>
+                              <div class="animation"><div class="circle two"></div></div>
+                              <div class="animation"><div class="circle three"></div></div>
+                              <div class="animation"><div class="circle four"></div></div>
+                              <div class="animation"><div class="circle five"></div></div>
+                              <div class="animation"><div class="circle six"></div></div>
+                            </div>
+                            <a class="ui button small blue move_money_send" url="{% url 'squads:move_money' %}" id="{{hisprofile.id}}">Перевести</a>
+                            <br>
+                            <div style="width: 400px;margin: 15px auto;display: none;" class="highlight move_money_success">Перевод проведен успешно</div>
+                        </div>
+                    </div>
                 </div>
-            </div> 
-            {%endif%}           
+                {%endif%}
+                {% if is_manager %}
+                <div class="ui modal" style="min-height: 100%;margin-top: 10%;" id="manager_actions{{hisprofile.id}}">
+                    <i class="close icon"></i>
+                    <div class="content">
+                        <div class="text-center mb15">
+                            <div style="font-size: 17px;">
+                                <b>История действий {{hisprofile.first_name}}</b>
+                            </div>
+                        </div>                    
+                        <div class="set_manager_actions{{hisprofile.id}}"></div>
+                    </div>
+                </div> 
+                {%endif%}           
+            </div>
         </div>
-    </div>
-</div>
-{%endif%}
+    {%endif%}
 {%endif%}
 {% if is_manager and hisprofile.is_student %}
 <div class="mt15 mb5">
@@ -218,51 +194,3 @@
     {% endfor %}
 </div>
 {%endif%}
-<span style="display: none;" pay_url="{% url 'accounts:make_payment' %}" class="instance_data" get_student_discounts="{% url 'squads:get_student_discounts' %}" set_student_discounts="{% url 'squads:set_student_discounts' %}" delete_payment="{% url 'squads:delete_payment' %}"></span>
-<script type="text/javascript">
-    function make_payment(id) {
-        this_ = document.getElementById('pay_for_group');
-        group_id = this_.options[this_.selectedIndex].value;        
-        amount = $('.payment_amount'+id).val()
-        if (amount) {
-            $('#payment_success'+id).hide()
-            $('.payment_loading'+id).show()
-            $('.make_payment').addClass('disabled')
-            $.ajax({
-                url: $('.instance_data').attr('pay_url'),
-                data: {
-                    'amount':amount,
-                    'id':id,
-                    'group_id':group_id                
-                },
-                dataType: 'json',
-                success: function (data) {
-                    $('.payment_amount'+id).val('')
-                    $('#payment_success'+id).show()
-                    $('.payment_loading'+id).hide()
-                    $('.make_payment').removeClass('disabled')
-                    $('.squad_bill_block_cont'+group_id).load(document.URL +  ' .squad_bill_block'+group_id)
-                }
-            })            
-        }
-    };    
-    function delete_payment(id){
-        url = $('.instance_data').attr('delete_payment')        
-        $('.delete_payment_error').hide()
-        $.ajax({
-            url: url,
-            data: {
-                'id':id,
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.ok) {
-                    location.reload()
-                }
-                else{
-                    $('.payment_delete_error').show()
-                }
-            }
-        })
-    }
-</script>

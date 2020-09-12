@@ -2470,8 +2470,9 @@ def payment_history(request):
                     squad_title = payment.squad.title
                     squad_color = payment.squad.color_back
                 cancel_access = False
-                if payment.timestamp > timezone.now() - timedelta(3):
+                if payment.timestamp > timezone.now() - timedelta(3) and payment.canceled == False:
                     cancel_access = True
+
                 res.append([
                     payment.timestamp.strftime('%d %B %Y  %H:%M'), #0
                     payment.amount,                               #1
@@ -2619,21 +2620,29 @@ def get_payment_list(request):
     only_managers(profile)
     res = []
     today = timezone.now().date()
-    if request.GET.get('page'):
+    crnt_students_len = 0
+    all_students_len = 0
+    if request.GET.get('page') and request.GET.get('student'):
         page = int(request.GET.get('page'))
         school = is_moderator_school(request, profile)
         cards = school.crm_cards.select_related('card_user')
-        students, squads = payment_get_students_list(profile, school)
-        all_students_len = len(school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct())
-        crnt_students_len = len(students)
-        if len(students) <= (page-1)*16:
-            return JsonResponse({"ended":True})
-        p = Paginator(students, 16)
-        page1 = p.page(page)
+        if request.GET.get('student') == 'all':
+            students, squads = payment_get_students_list(profile, school)
+            all_students_len = len(school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct())
+            crnt_students_len = len(students)
+            if len(students) <= (page-1)*16:
+                return JsonResponse({"ended":True})
+            p = Paginator(students, 16)
+            page1 = p.page(page)
+            students_q = page1.object_list
+            squad = profile.filter_data.squad
+        else:
+            students_q = school.people.filter(id=int(request.GET.get('student')))
+            squad = -1
+            squads = students_q.first().squads.filter(shown=True)
         res = []
         bill_day_diff = school.bill_day_diff
-        squad = profile.filter_data.squad
-        for student in page1.object_list:
+        for student in students_q:
             card = cards.filter(card_user=student)[0]
             if squad == None:
                 squads2 = squads.filter(students=student)
@@ -2660,15 +2669,7 @@ def payment_get_students_list(profile, school):
     squads = school.groups.filter(shown=True).prefetch_related('students')
     if squad != None:
         squads = school.groups.filter(id = squad.id)
-    # else:
-    #     if profile.filter_data.office:
-    #         squads = school.groups.filter(shown=True,office=profile.filter_data.office).prefetch_related('students')
-    # if profile.filter_data.subject_category:
-    #     subjects = school.school_subjects.filter(category=profile.filter_data.subject_category)
-    #     squads = squads.filter(subjects__in=subjects).distinct()
-    print(school.people.filter(is_student=True))
     students = school.people.filter(is_student=True, squads__in=squads).exclude(card=None).exclude(squads=None).distinct()
-    print(students)
     if profile.filter_data.payment != 'all':
         firstofmonth = first_day_of_month(timezone.now().date())
         lastofmonth = last_day_of_month(firstofmonth)

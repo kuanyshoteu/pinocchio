@@ -55,6 +55,7 @@
 {% include "modals/confirm_delete.html" %}
 {% if is_manager %}
     {% include "modals/new_card_crm.html" %}
+    {% include "modals/videohints.html" %}
 {%endif%}
 {% if is_director and school_crnt.version == 'free' %}
     {% include "modals/get_full_version.html" %}
@@ -193,24 +194,24 @@
         </div>
     </div>
 </div>
-<div class="menu profile_links">
-    <div class="ui segment no_padding">
+<!-- <div class="video_hints">
+    <a class="ui button green shadow_green show_videohints">Видео Подсказки</a>
+</div>
+ --><div class="menu profile_links">
+    <div class="ui segment shadow_small no_padding">
         {% if user.is_authenticated %}
-        <a class="ui button small full-w white" style="text-align: left;" href='{{ profile.get_absolute_url }}'>
-            <i class="icon user"></i> Моя страница
+        <a class="ui button small full-w white pl10 textblue" style="text-align: left;" href='{{ profile.get_absolute_url }}'>
+            <i class="icon user textblue"></i> Моя страница
         </a>
         {% endif %}
         {% if is_moderator %}
-        <div class="ui divider no_margin"></div>
-        <a class="ui button small full-w white" style="text-align: left;" href='/moderator/'>
-            <i class="chess queen icon"></i> Модератор</a>
-        <div class="ui divider no_margin"></div>
-        <a class="ui button small full-w white" style="text-align: left;" href='/blog/'>
-            <i class="newspaper icon"></i>Блог</a>
+        <a class="ui button small full-w white pl10 textblue" style="text-align: left;" href='/moderator/'>
+            <i class="chess queen icon textblue"></i> Модератор</a>
+        <a class="ui button small full-w white pl10 textblue" style="text-align: left;" href='/blog/'>
+            <i class="newspaper icon textblue"></i>Блог</a>
         {% endif %}
-        <div class="ui divider no_margin"></div>
-        <a class="ui button small full-w white" style="text-align: left;" href='{% url "logout" %}'>
-            <i class="icon close"></i> Выйти</a>
+        <a class="ui button small full-w white pl10 textblue" style="text-align: left;" href='{% url "logout" %}'>
+            <i class="icon close textblue"></i> Выйти</a>
     </div>
 </div>
 <br><br>
