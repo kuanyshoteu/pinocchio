@@ -1,0 +1,60 @@
+<!DOCTYPE html> 
+<html class="all" lang="ru"> 
+{% load staticfiles %}
+{% load static compress %}
+<head> 
+    <meta charset="utf-8">
+    <meta name="google-site-verification" content="G-3JdvIZH1oSADX0f2I8uRqCFAggIj06lzBKaEeYb3Y" />   
+    <meta name="yandex-verification" content="f222118f15d7576b" />
+    <meta name="viewport" content="width=device-width, initial-scale = 1">
+    <meta name="description" content="Автоматизация продаж и бухгалтерии, контроль администраторов, интерактивное расписание, журнал посещаемости, SMS рассылки, интеграция с IP-телефонией, Instagram, Facebook">
+    <meta name="keywords" content="бесплатная CRM система для учебного центра, программа учета клиентов, языковой школы, образовательного, билимтап, bilimtap, автоматизация учебного заведения, управление, расписание">
+    <title>Форма заявок Bilimtap.kz</title>
+    <link rel="shortcut icon" href='{% static "images/favicon.ico" %}' type="image/png">
+   <!-- CSS -->
+    <link rel="canonical" href="https://www.bilimtap.kz/crm/" />
+    {% compress css %}
+    <link rel="stylesheet" href='{% static "css/style.css" %}'/>
+    <link rel="stylesheet" href='{% static "css/landing.css" %}'/>
+    {% endcompress %}
+</head> 
+<body style="background-color: #f5f5f5;">  
+    <div class="full-w dflex mt50 pt50">
+        <div class="content" style="margin: 0 auto;">
+            <div class="modal_segment ui segment shadow backwhite border1 mt15 mb15 br5 pt15 pl15 pr15 pb30">
+                <div class=""></div>
+                <div class="text-center mb15 text17 textblue textbold">
+                    Оставьте номер и мы Вам перезвоним
+                </div>
+                <form class="ui form textdg text14 textbold">
+                    Имя*:
+                    <textarea class="form_name"></textarea>
+                    Телефон*:
+                    <textarea class="form_phone"></textarea>
+                    Город:
+                    <textarea class="mb0 form_city"></textarea>
+                </form>
+                <div class="text-center mt15">
+                    <input value="Отправить" type="submit" onclick="return false" type="submit" class="btn btn-wrap btn-success text14 textbold shadow_green form_query_send" id="{{ instance.id }}">
+                    <div class="loading_small form_loading ml10" style="display: none;">
+                        <div class="animation"><div class="circle one"></div></div>
+                        <div class="animation"><div class="circle two"></div></div>
+                        <div class="animation"><div class="circle three"></div></div>
+                        <div class="animation"><div class="circle four"></div></div>
+                        <div class="animation"><div class="circle five"></div></div>
+                        <div class="animation"><div class="circle six"></div></div>
+                    </div>
+                    <div style="display: none;" class="ok_form_query textbold textgreen text15 mt10">Мы Вам позвоним, спасибо!</div>
+                </div>
+            </div>
+            <div class="textdg pt5 text12 mb15 mt15 pt15" style="text-align: right;">
+                Работает на <a href="https://www.bilimtap.kz/crm/"><img class="br5 mr5" style="width: 60px;margin-top: -3px;" src="{% static 'images/logoblue.png' %}"></a>
+            </div>
+        </div>
+    </div>
+</body> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    {% compress js %}
+    <script src="{% static 'js/form.js' %}"></script> 
+    {% endcompress %}
+</html>

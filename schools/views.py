@@ -108,6 +108,45 @@ def connect_site(request):
     }
     return render(request, "school/connect_site.html", context)
 
+def mini_landing_edit(request):
+    profile = get_profile(request)
+    only_managers(profile)
+    school = is_moderator_school(request, profile)
+    if not check_school_version(school, 'business'):
+        context = {  
+            "profile":profile,
+            "instance": school,
+            'is_trener':is_profi(profile, 'Teacher'),
+            "is_manager":is_profi(profile, 'Manager'),
+            "is_director":is_profi(profile, 'Director'),
+            "is_moderator":is_profi(profile, 'Moderator'),
+            "school_money":school.money,
+            "school_crnt":school, 
+        }
+        return render(request, "school/need_pay.html", context)
+    context = {
+        "profile":profile,
+        "instance": school,
+        'is_trener':is_profi(profile, 'Teacher'),
+        "is_manager":is_profi(profile, 'Manager'),
+        "is_director":is_profi(profile, 'Director'),
+        "is_moderator":is_profi(profile, 'Moderator'),
+        "school_money":school.money,
+        "school_crnt":school,
+        "page":"info",
+        "mini_landing":True,
+    }
+    return render(request, "school/mini_landing_edit.html", context)
+
+def mini_landing(request, school_id=None):
+    school = School.objects.get(id=school_id)
+    if not check_school_version(school, 'business'):
+        raise Http404
+    context = {
+        "instance": school,
+    }
+    return render(request, "school/mini_landing.html", context)
+
 def school_rating(request):
     profile = get_profile(request)
     if len(profile.schools.all()) == 0:
@@ -2826,7 +2865,7 @@ def connect_site_api(request, school_id=None):
                 card.color = 'red'
                 card.save()
                 return JsonResponse({})
-            column = school.crm_columns.get(id = 1)
+            column = school.crm_columns.first()
             saved = False
             if found:
                 saved = True
@@ -2847,6 +2886,63 @@ def connect_site_api(request, school_id=None):
                 )
             hist.save()
     data = {
+    }
+    return JsonResponse(data)
+
+def form_query_send(request, school_id=None):
+    ok = False
+    if school_id:
+        if request.GET.get('name') and request.GET.get('phone'):
+            school = School.objects.get(id=school_id)
+            if not check_school_version(school, 'business'):
+                data = {
+                }
+                return JsonResponse(data)
+            found = False
+            student = None
+            if len(Profile.objects.filter(phone=request.GET.get('phone'))) > 0:
+                found = True
+                student = Profile.objects.filter(phone=request.GET.get('phone'))[0]
+                card = student.card.get(school=school)
+            if len(school.crm_cards.filter(phone=request.GET.get('phone'))) > 0:
+                found = True
+                student = False
+                card = school.crm_cards.filter(phone=request.GET.get('phone'))[0]
+            city = ''
+            if request.GET.get('city'):
+                city = ' !' + request.GET.get('city') + ' '
+                founttag = school.hashtags.create(title = request.GET.get('city').replace(' ', '_'))
+                founttag.save()
+                card.hashtags.add(founttag)
+            if found:
+                card.comments += city + 'Оставлена через форму заявок'
+                card.color = 'red'
+                card.save()
+                return JsonResponse({})
+            column = school.crm_columns.first()
+            saved = False
+            if found:
+                saved = True
+            card = school.crm_cards.create(
+                name = request.GET.get('name'),
+                phone = request.GET.get('phone'),
+                column = column,
+                saved = saved,
+                comments = city + 'Оставлена заявка через сайт',
+                card_user = student,
+                color = 'red'
+            )
+            print(column, card)
+            card.save()
+            ok = True
+            update_crm_notices(school)
+            hist = CRMCardHistory.objects.create(
+                card = card,
+                edit = '***Создание карточки***',
+                )
+            hist.save()
+    data = {
+        'ok':ok,
     }
     return JsonResponse(data)
 
@@ -3211,3 +3307,4 @@ def change_schooler_password(request):
         'password':new_password,
     }
     return JsonResponse(data)
+

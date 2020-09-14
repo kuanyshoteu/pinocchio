@@ -28,10 +28,10 @@
                     {% else %}
                     <span class="text17 textbold textblue">Бесплатный</span>
                     {% endif %}
-                    <span>Менеджеров <b class="textblue">{{ managers|length }}</b></span>
+                    <span class="ml15">Активных менеджеров сейчас: <b class="textblue">{{ managers|length }}</b></span>
                 </div>
                 <div class="ui grid stackable no_margin">
-                    {% if school_crnt.version == 'business' %}
+                    {% if school_crnt.tried_free %}
                     <span style="display: none;" class="show_vidget_url" url="{% url 'schools:connect_full_version' %}"></span>
                     <div class="four wide column pl10 pr10">
                     </div>

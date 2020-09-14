@@ -78,7 +78,6 @@
                 <a class="ui button mini white textblue mr10 wazzap_new_message" style="padding: 10px;font-size: 14px;">
                     Сообщения
                 </a>
-                <iframe src=""></iframe>
                 {% endif %}
             </div>
             {% endif %}
@@ -194,10 +193,10 @@
         </div>
     </div>
 </div>
-<!-- <div class="video_hints">
-    <a class="ui button green shadow_green show_videohints">Видео Подсказки</a>
+<div class="video_hints">
+    <a class="not_in_mobile ui button green shadow_green show_videohints">Видео Подсказки</a>
 </div>
- --><div class="menu profile_links">
+<div class="menu profile_links">
     <div class="ui segment shadow_small no_padding">
         {% if user.is_authenticated %}
         <a class="ui button small full-w white pl10 textblue" style="text-align: left;" href='{{ profile.get_absolute_url }}'>

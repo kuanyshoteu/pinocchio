@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block head_title %}
+    Форма заявок | {{ block.super }}
+{% endblock head_title %}
+
+{% load ttags %}
+{% load staticfiles %}
+{% block content %}
+<div id="group-details">
+    <div class='ui container'>
+        <div class="ui grid">
+            {% include 'left_menu.html' %}
+            <div class="w85 wide column">
+                {% include 'school/head.html' %}
+                <div class="ui segment shadow_small mb0 topbr5 pb150">
+                    <div class="textblue textbold pt5 text17 mb15 dflex">
+                        Форма заявок от <img class="br5 ml5 mr5" style="width: 100px;margin-top: -3px" src="{% static 'images/logoblue.png' %}">
+                    </div>
+                    <div class="textdg textbold text15">
+                        Ссылка для Вашей формы заявок
+                        <a class="textbold" href="/forms/{{school_crnt.id}}">
+                            https://www.bilimtap.kz/forms/{{school_crnt.id}}
+                        </a>
+                    </div>
+                    <div class="mt50 textdg textbold text-center text15">
+                        Так выглядит форма
+                    </div>
+                    <div class="full-w dflex">
+                        <div class="content" style="margin: 0 auto;">
+                            <div class="modal_segment ui segment shadow backwhite border1 mt15 mb15 br5 pt15 pl15 pr15 pb30">
+                                <div class=""></div>
+                                <div class="text-center mb15 text17 textblue textbold">
+                                    Оставьте номер и мы Вам перезвоним
+                                </div>
+                                <form class="ui form textdg text14 textbold">
+                                    Имя:
+                                    <textarea class="query_name" style="width: 368px;display: block;"></textarea>
+                                    Телефон:
+                                    <textarea class="query_phone" style="width: 368px;display: block;"></textarea>
+                                    Город:
+                                    <textarea class="mb0 query_city" style="width: 368px;display: block;"></textarea>
+                                </form>
+                                <div class="text-center mt15">
+                                    <a class="ui button green text14 textbold shadow_green">
+                                        Отправить
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="textdg pt5 text12 mb15" style="text-align: right;">
+                                Работает на <a href="https://www.bilimtap.kz/crm/"><img class="br5 mr5" style="width: 60px;" src="{% static 'images/logoblue.png' %}"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

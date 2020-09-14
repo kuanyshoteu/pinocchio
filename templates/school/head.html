@@ -37,6 +37,9 @@
                 <a href="{% url 'schools:connect_site' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if connect_site %}current_option{% else %}other_option{% endif %}">
                     Подключение сайта
                 </a>
+                <a href="{% url 'schools:mini_landing_edit' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="dinline {% if mini_landing %}current_option{% else %}other_option{% endif %}">
+                    Форма заявок
+                </a>
                 {% endif %}
             </div>
         </div>

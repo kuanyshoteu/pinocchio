@@ -3,6 +3,7 @@ from django.contrib import admin
 
 from .views import *
 from news.views import blog
+from schools.views import mini_landing, form_query_send
 app_name = 'Enigmath'
 urlpatterns = [
     url(r'^crm/$', about, name='about'),
@@ -37,6 +38,8 @@ urlpatterns = [
     url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
     url(r'^api/another_hint/$', another_hint, name='another_hint'),
     url(r'^api/update_hint/$', update_hint, name='update_hint'),
+    url(r'^forms/(?P<school_id>\d+)/$', mini_landing, name='mini_landing'),
+    url(r'^api/form_query_send/(?P<school_id>\d+)/$', form_query_send, name='form_query_send'),
     url(r'^api/get_cloudpayments_data/$', get_cloudpayments_data, name='get_cloudpayments_data'),
     url(r'^api/cloudpayments/pay/$', cloudpayments_pay, name='cloudpayments_pay'),
     url(r'^api/cloudpayments/fail/$', cloudpayments_fail, name='cloudpayments_fail'),

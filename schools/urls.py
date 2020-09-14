@@ -16,8 +16,12 @@ urlpatterns = [
     url(r'^payments/$', school_payments, name='payments'),
     url(r'^reports/$', get_school_report, name='get_school_report'),
     url(r'^mails/$', mails, name='mails'),
+    #site integrations
+    url(r'^mini_landing_edit/$', mini_landing_edit, name='mini_landing_edit'),
     url(r'^connect_site/$', connect_site, name='connect_site'),
     url(r'^api/connect_site_api/(?P<school_id>\d+)/$', connect_site_api, name='connect_site_api'),
+    url(r'^mini_landing_edit/$', mini_landing_edit, name='mini_landing_edit'),
+    #common
     url(r'^api/crm_option_url/$', crm_option, name='crm_option_url'),
     url(r'^api/crm_option_url2/$', crm_option2, name='crm_option_url2'),
     url(r'^api/call_helper/$', call_helper, name='call_helper'),
