@@ -2913,7 +2913,6 @@ def form_query_send(request, school_id=None):
                 city = ' !' + request.GET.get('city') + ' '
                 founttag = school.hashtags.create(title = request.GET.get('city').replace(' ', '_'))
                 founttag.save()
-                card.hashtags.add(founttag)
             if found:
                 card.comments += city + 'Оставлена через форму заявок'
                 card.color = 'red'
@@ -2932,8 +2931,8 @@ def form_query_send(request, school_id=None):
                 card_user = student,
                 color = 'red'
             )
-            print(column, card)
             card.save()
+            card.hashtags.add(founttag)
             ok = True
             update_crm_notices(school)
             hist = CRMCardHistory.objects.create(
