@@ -3115,6 +3115,7 @@ def free_trial(request):
 def tarif_change(profile, school, months, managers_num, name, phone, transactionId, amount, currency):
     if months == 1:
         school.version_date = timezone.now() + timedelta(30)
+        school.tried_free = True
     else:
         school.tried_free = True
         if school.version_date > timezone.now():
