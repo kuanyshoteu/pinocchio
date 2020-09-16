@@ -108,6 +108,23 @@ $("body").click(function(e){
     $('.show_search_students').hide()
     $('.folder_form').hide()
     $('.change_task_modal').hide()
+    hint_type = $('.data').attr('hint_type')
+    console.log('zpzpz', hint_type, $('.data').attr('videohint'))
+    if ($('#yt_hint')) {
+        document.getElementById('yt_hint').contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    }
+    if (hint_type && $('.data').attr('videohint') == '0') {
+        $.ajax({
+            url: '/api/video_done/',
+            data: {
+                'hint_type':hint_type,
+            },
+            dataType: 'json',
+            success: function (data) {
+                $('.data').attr('videohint', '1')
+            }
+        })
+    }
 });
 $('.reg_segment').click(function(e){
     $('.bselect').hide()

@@ -88,7 +88,13 @@ $(function(){
     $('.update_pswd').click(function(e){
         e.stopPropagation();
     });
+    $('.folder_form').click(function(e){
+        e.stopPropagation();
+    });
     $('.show_forget_password').click(function(e){
+        e.stopPropagation();
+    });
+    $('.forget_password_modal2').click(function(e){
         e.stopPropagation();
     });
 	$("body").click(function(e){

@@ -1,0 +1,46 @@
+<div class="ui modal videohint_page mt50">
+    <i class="close icon"></i>
+    <div class="content">
+        <div class="textblue text21 textbold text-center mb10">
+            {% if page == 'crm' %}
+            Клиенты
+            {% elif page == 'payments' %}
+            Оплаты
+            {% elif page == 'subjects' %}
+            Курсы
+            {% elif page == 'squads' %}
+            Группы
+            {% elif page == 'mypage' %}
+            Моя страница
+            {% endif %}
+        </div>
+        <div class="textdg textbold text17 mb15">
+            {% if page == 'crm' %}
+            В этом видео инструкция как создавать карточки клиентов и регистрировать в группы
+            {% elif page == 'payments' %}
+            В этом видео инструкция записывания всех оплат Ваших клиентов
+            {% elif page == 'subjects' %}
+            В этом видео инструкция работы с курсами Вашего центра
+            {% elif page == 'squads' %}
+            В этом видео инструкция работы с группами Вашего центра и составление расписаний
+            {% elif page == 'mypage' %}
+            В этом видео инструкция как пользоваться Журналом посещаемости
+            {% endif %}
+        </div>
+        <div class="ui grid stackable">
+            <div class="sixteen wide column">
+                {% if page == 'crm' %}
+                <iframe class="yt" id="yt_hint" ?enablejsapi=1 style="width: 100%;" width="500" height="415" src="https://www.youtube.com/embed/PGOll-x9r-w?enablejsapi=1&rel=0" allowfullscreen allow="autoplay"></iframe>
+                {% elif page == 'payments' %}
+                <iframe class="yt" frameborder="0" id="yt_hint" ?enablejsapi=1 style="width: 100%;" width="500" height="415" src="https://www.youtube.com/embed/Q8wKuWLIN8U?enablejsapi=1&rel=0" allowfullscreen allow="autoplay"></iframe>
+                {% elif page == 'subjects' %}
+                <iframe class="yt" id="yt_hint" ?enablejsapi=1 style="width: 100%;" width="500" height="415" src="https://www.youtube.com/embed/hf8MtPtnDT8?enablejsapi=1&rel=0" allowfullscreen allow="autoplay"></iframe>
+                {% elif page == 'squads' %}
+                <iframe class="yt" id="yt_hint" ?enablejsapi=1 style="width: 100%;" width="500" height="415" src="https://www.youtube.com/embed/Myy1kx1hpUQ?enablejsapi=1&rel=0" allowfullscreen allow="autoplay"></iframe>
+                {% elif page == 'mypage' %}
+                <iframe class="yt" id="yt_hint" ?enablejsapi=1 style="width: 100%;" width="500" height="415" src="https://www.youtube.com/embed/Jkl-V_Fwb0M?enablejsapi=1&rel=0" allowfullscreen allow="autoplay"></iframe>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

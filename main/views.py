@@ -1362,10 +1362,9 @@ def moderator_run_code(request):
     return render(request, "moder_code.html", {})
 
 def create_columns():
-    for school in School.objects.all():
-        if len(school.subscribe_payments.all()) > 0:
-            school.tried_free = True
-            school.save()
+    for profile in Profile.objects.all():
+        profile.videohints = [1, 1, 1, 1, 1, 1, 1]
+        profile.save()
 
 def searching_subjects(request):
     profile = get_profile(request)
@@ -1395,6 +1394,18 @@ def another_hint(request):
 def update_hint(request):
     profile = Profile.objects.get(user = request.user)
     profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
+    profile.videohints = [1, 1, 1, 1, 1, 1, 1]
+    profile.save()
+    data = {
+    }
+    return JsonResponse(data)
+
+def video_done(request):
+    profile = Profile.objects.get(user = request.user)
+    if len(profile.videohints) == 0:
+        profile.videohints = [0, 0, 0, 0, 0, 0, 0]
+    hint_type = int(request.GET.get('hint_type'))
+    profile.videohints[hint_type] = 1
     profile.save()
     data = {
     }

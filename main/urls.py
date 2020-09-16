@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^api/get_request_land/$', get_request_land, name='get_request_land'),
     url(r'^api/another_hint/$', another_hint, name='another_hint'),
     url(r'^api/update_hint/$', update_hint, name='update_hint'),
+    url(r'^api/video_done/$', video_done, name='video_done'),
     url(r'^forms/(?P<school_id>\d+)/$', mini_landing, name='mini_landing'),
     url(r'^api/form_query_send/(?P<school_id>\d+)/$', form_query_send, name='form_query_send'),
     url(r'^api/get_cloudpayments_data/$', get_cloudpayments_data, name='get_cloudpayments_data'),

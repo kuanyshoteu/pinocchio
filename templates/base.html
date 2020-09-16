@@ -56,6 +56,7 @@
 {% if is_manager %}
     {% include "modals/new_card_crm.html" %}
     {% include "modals/videohints.html" %}
+    {% include "hints/videohint_page.html" %}
 {%endif%}
 {% if is_director and school_crnt.version == 'free' %}
     {% include "modals/get_full_version.html" %}
@@ -193,9 +194,11 @@
         </div>
     </div>
 </div>
+{% if is_manager %}
 <div class="video_hints">
-    <a class="not_in_mobile ui button green shadow_green show_videohints">Видео Подсказки</a>
+    <a class="not_in_mobile ui button green small shadow_green show_videohints">Видео Подсказки</a>
 </div>
+{% endif %}
 <div class="menu profile_links">
     <div class="ui segment shadow_small no_padding">
         {% if user.is_authenticated %}

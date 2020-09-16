@@ -8,7 +8,6 @@
 Группы | {{ block.super }}
 {% endblock head_title %}
 {% block content %}
-
 <div id="profile">
     <div class='ui container mb50'>
         <div class="ui grid stackable">
@@ -79,4 +78,6 @@
         </div>
     </div>
 </div>
+<span class="data" style="display: none;" hint_type="5" last_hint="0" hint="1" videohint="{{profile.videohints.5}}">
+{% include 'hints/get_hint_script.html' %}
 {% endblock content %}

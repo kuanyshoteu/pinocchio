@@ -24,7 +24,6 @@
         $('.hint_box').hide()
         $('.shadow_green').removeClass('shadow_green')
     })
-    get_hints()
     function get_hints(){
         hint = parseInt($('.data').attr('hint'));
         if (hint < 100) {
@@ -66,6 +65,15 @@
         })
     }
     function show_hint(hint_number){
+        if ($('.data').attr('videohint') == '0') {
+            setTimeout(function (){
+                $('.videohint_page').modal('show')
+            }, 1000);
+            setTimeout(function (){
+                document.getElementById('yt_hint').contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                console.log('play play')
+            }, 5000);
+        }
         if (hint_number > parseInt($('.data').attr('last_hint'))) {
             return false
         }
@@ -154,4 +162,7 @@
             scrollTop: scroll_topp
         }, 500);
     }
+    $(document).ready(
+        get_hints()
+    )
 </script>

@@ -325,7 +325,6 @@
             student = data.res[i]
             student_id = student[0]
             name = student[1]
-            console.log(name, 'xoxop')
             student_url = student[2]
             notices = student[4]
             payment_div = $('.payment_orig').clone(true)
@@ -398,11 +397,9 @@
                 }
             }
             payment_div.appendTo(place)
-            console.log(payment_div)
         }
     }
     function make_payment(id, group_id) {
-        console.log('make_payment')
         amount = $('.payment_amounts'+id+'g'+group_id).val()
         if (amount) {
             $('.success_payment').hide()
@@ -622,11 +619,9 @@
             dataType: 'json',
             success: function (data) {
                 if (data.add) {
-                    console.log('add')
                     this_.addClass('green')                    
                 }
                 else{
-                    console.log('remove')
                     this_.removeClass('green')                    
                 }
             }

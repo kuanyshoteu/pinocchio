@@ -47,10 +47,12 @@
         </div>
     </div>
 </div>
-<span class="data" payment_student="{{hisprofile.id}}" hint_type="2" attendance_change_url="{{attendance.change_url}}"  last_hint="2" hint="{{hint}}"></span>
+<span class="data" payment_student="{{hisprofile.id}}" hint_type="2" attendance_change_url="{{attendance.change_url}}" last_hint="2" hint="{{hint}}" videohint="{{profile.videohints.2}}"></span>
 {% if hisprofile == profile %}
-{% include 'hints/profile_hints.html' %}
-{% include 'hints/get_hint_script.html' %}
+    {% include 'hints/profile_hints.html' %}
+    {% include 'hints/get_hint_script.html' %}
 {% endif %}
-{% include 'scripts/payment.html' %}
+{% if hisprofile.is_student and is_manager %}
+    {% include 'scripts/payment.html' %}
+{% endif %}
 {% endblock content %}

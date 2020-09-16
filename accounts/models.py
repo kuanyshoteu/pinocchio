@@ -60,6 +60,7 @@ class Profile(models.Model):
     confirmation_code = models.CharField(default='', max_length=250)
     confirmation_time = models.DateTimeField(auto_now_add=False, default=datetime.datetime.strptime('2000-01-01', "%Y-%m-%d"))
     hint_numbers = ArrayField(models.IntegerField(), default = list)
+    videohints = ArrayField(models.IntegerField(), default = list)
     end_work = models.DateTimeField(auto_now_add=False, null=True)
     check_end_work = models.BooleanField(default=False)
 

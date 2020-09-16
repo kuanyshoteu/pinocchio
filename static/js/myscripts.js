@@ -1,5 +1,5 @@
     $('.show_videohints').click(function(){
-        $('.videohints').modal('show')
+        $('.videohint_page').modal('show')
     })
     $('.change_schooler_password').click(function(){
         url = $('.data').attr('change_schooler_password')
