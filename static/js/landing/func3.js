@@ -11,6 +11,7 @@ $(function(){
             },
             dataType: 'json',
             success: function (data) {
+                $('.update_pswd-btn').removeClass('disabled')
                 if (data.ok) {
                     $('.wrong_mail_update_pswd').hide()
                     $('.ok_update_pswd').show()

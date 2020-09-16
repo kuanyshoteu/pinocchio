@@ -3204,6 +3204,7 @@ def register_user_work(name, phone, mail, password, request):
         filter_data = FilterData.objects.get_or_create(author=profile)[0]
         filter_data.save()
         profile.hint_numbers = [0, 1, 1, 1, 1, 1, 1]
+        profile.videohints = [0, 0, 0, 0, 0, 0, 0]
         profile.confirmation_time = timezone.now()
         profile.confirmed = False
         profile.save()

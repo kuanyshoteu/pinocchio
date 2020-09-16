@@ -499,6 +499,7 @@ def update_pswd(request):
             html_content = text
             try:
                 send_email("bilimtap.kz восстановление пароля", html_content, [request.GET.get('mail')])
+                print('send_email 555')
                 ok = True
             except Exception as e:
                 ok = False
