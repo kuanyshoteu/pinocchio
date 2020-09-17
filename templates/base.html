@@ -217,6 +217,85 @@
     </div>
 </div>
 <br><br>
+<div class='content-container'>
+    <div class="vmenu ui grid no_padding full-h full-w" id='vmenu2' style=" width: 100%; height: 100%; z-index: 3000; position: fixed; margin: 5px 0 0;">
+        <div class="eleven wide column no_padding">
+            <div class="ui segment no_padding full-h shadow" style="background-color: #f4f4f4; z-index: 3000;">
+                {% if user.is_authenticated %}
+                    <a class="ui button white full-w bt1" href='{{ profile.get_absolute_url }}'>
+                        <i class="home icon"></i> Моя страница
+                    </a>
+                    {% if is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:info" %}'>
+                        <i class="cog icon"></i>Управление
+                    </a>
+                    {% endif %}
+                    {% if is_manager or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:crm" %}'>
+                        <i class="list alternate icon"></i>
+                        Клиенты
+                        {% if profile.filter_data.crm_notices > 0 %}
+                        <span class="beta_notice">{{profile.filter_data.crm_notices}}</span>
+                        {% endif %}                    
+                    </a>
+                    {% endif %}
+                    {% if is_manager or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:payments" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <i class="dollar sign icon"></i>Оплата
+                        {% if profile|payment_notices > 0 %}
+                        <span class="beta_notice mr5">{{profile|payment_notices}}</span>
+                        {% endif %}
+                    </a>
+                    <a class="ui button white full-w bt1" href='{% url "schools:schedule" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <i class="table icon mr10"></i>Расписание
+                    </a>
+                    {% endif %}
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "squads:list" %}'>
+                        <i class="users icon"></i>Группы
+                    </a>
+                    {% endif %}
+                    <a class="ui button white full-w bt1" href='{% url "subjects:list" %}'>
+                        <i class="book icon"></i>Курсы
+                    </a>
+                    {%if school_crnt.version == 'business'%}
+                    {% if is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:get_school_report" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <img src="{% static 'images/iconchart.png'%}" style="width: 14px;margin-right: 13px;margin-top: -8px;">Финансы
+                    </a>                        
+                    {% endif %}
+                    {% if is_manager or is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "schools:mails" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'>
+                        <i class="envelope icon mr10"></i>Рассылки
+                        <span class="grey_notice">beta</span>
+                    </a>
+                    <a class="ui button white full-w bt1" href='{% url "documents:main" %}'>
+                        <i class="folder icon"></i>Документы
+                    </a>
+                    {% endif %}
+                    {% if is_trener or is_director %}
+                    <a class="ui button white full-w bt1" href='{% url "library:main" %}'>
+                        <i class="file alternate icon"></i>База уроков
+                    </a>
+                    {% endif %}
+                    {% endif %}
+                    {%if school_crnt.version != 'business' and is_director %}
+                    <div class="text-center mt15">
+                        <a class="get_full_version ui button small green shadow_green textbold">
+                            Попробовать полную версию
+                        </a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="five wide column menu_back no_padding">
+        </div>
+    </div>
+    <div class="block_content" style="padding-top: 10px;min-height: calc(100% - 40px);">
+        {% block content %}{% endblock content %}
+    </div>
+</div>
 <audio id="notification_audio" style="display: none;" controls>
     <source src='{% static "notification.mp3" %}' type="audio/mpeg">
 </audio>
