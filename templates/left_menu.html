@@ -71,22 +71,6 @@
         {% endif %}
     </div>
     {% if is_director %}
-        <div class="text-center mt5 mb10">
-            {%if school_crnt.version != 'business'%}
-                {% if school_crnt.tried_free %}
-                <a href="{% url 'schools:bills' %}" class="ui button green shadow_green pt5 pb5 textbold mt5">Купить полную версию</a>
-                {% else %}
-                <a class="get_full_version ui button large pl10 pr10 blue textbold">
-                    Полная версия
-                    <div class="text13">30 дней бесплатно</div>
-                </a>
-                {% endif %}
-                <div class="mt10">
-                    <a class="get_discount_instructions text13 textbold ui button mini white shadow_small textblue border1 pt5 pb5 pl5 pr5">Получите 10% скидку на полную версию</a>
-                    {% include 'modals/discount_instructions.html' %}
-                </div>
-            {% endif %}
-        </div>
     {% endif %}
     <a class="lftitemsmall small_text ml10" href='/team/'>
         О нас
