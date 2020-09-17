@@ -4342,8 +4342,7 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 #main-info-phone {
     display: none;
   }
-/* Mobile */
-
+  /* Mobile */
 @media only screen and (max-width: 767px) {
   #search-form {
     display: none;
@@ -4464,8 +4463,12 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;*/
   }
   .fixed_menu{
-    position: fixed;margin-left: 0;padding-left: 0;
-    padding-right: 0 !important;margin-right: 1rem;
+    position: fixed !important;
+    width: 165px;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
   }
   .twenty{
     width: 20% !important;
@@ -4498,8 +4501,15 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;
   }
   .fixed_menu{
-    position: fixed;margin-left: 0%;z-index: 90;padding-left: 0;
-    padding-right: 0 !important;margin-right: 1rem;
+    position: fixed !important;
+    z-index: 90;
+    background-color: #fafafa;
+    width: 165px;
+    border-right: none;
+    margin-top: 14px !important;
+    margin-left: 14px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
   }
   #logo{
     margin-left: 0%;
@@ -4535,8 +4545,15 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-right: auto !important;
   }
   .fixed_menu{
-    position: fixed;margin-left: 2%;z-index: 90;padding-left: 0;
-    padding-right: 0 !important;margin-right: 1rem;
+    position: fixed !important;
+    z-index: 90;
+    background-color: #fafafa;
+    width: 165px;
+    border-right: none;
+    margin-top: 14px;
+    margin-left: 14px !important;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
   }
   #logo{
     margin-left: 2%;
@@ -5581,33 +5598,6 @@ a.ui.inverted.grey.header:hover {
              Icon
 *******************************/
 
-@font-face {
-  font-family: 'Icons';
-  src: url("/static/fonts/semantic-ui/icons.eot");
-  src: url("/static/fonts/semantic-ui/icons.eot?#iefix") format("embedded-opentype"), url("/static/fonts/semantic-ui/icons.woff2") format("woff2"), url("/static/fonts/semantic-ui/icons.woff") format("woff"), url("/static/fonts/semantic-ui/icons.ttf") format("truetype"), url("/static/fonts/semantic-ui/icons.svg#icons") format("svg");
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-decoration: inherit;
-  text-transform: none;
-}
-i.icon {
-  display: inline-block;
-  opacity: 1;
-  height: 1em;
-  font-family: 'Icons';
-  font-style: normal;
-  font-weight: normal;
-  text-decoration: inherit;
-  text-align: center;
-  speak: none;
-  font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  color: #99b1c6;
-}
 /*******************************
              Types
 *******************************/
@@ -7422,17 +7412,11 @@ i.icon.bullseye:before {
 i.icon.check.circle.outline:before {
   content: "\F321";
 }
-i.icon.check.circle:before {
-  content: "\F058";
-}
 i.icon.check.square.outline:before {
   content: "\F322";
 }
 i.icon.check.square:before {
   content: "\F14A";
-}
-i.icon.check:before {
-  content: "\F00C";
 }
 i.icon.cloud:before {
   content: "\F0C2";
@@ -7664,9 +7648,6 @@ i.icon.life.ring:before {
 i.icon.lightbulb.outline:before {
   content: "\F620";
 }
-i.icon.lightbulb:before {
-  content: "\F0EB";
-}
 i.icon.magnet:before {
   content: "\F076";
 }
@@ -7708,9 +7689,6 @@ i.icon.plane:before {
 }
 i.icon.road:before {
   content: "\F018";
-}
-i.icon.rocket:before {
-  content: "\F135";
 }
 i.icon.ship:before {
   content: "\F21A";
@@ -7932,9 +7910,6 @@ i.icon.user.plus:before {
 }
 i.icon.user.times:before {
   content: "\F235";
-}
-i.icon.users:before {
-  content: "\F0C0";
 }
 /* Brands */
 

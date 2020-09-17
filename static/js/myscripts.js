@@ -1,3 +1,6 @@
+    $('.get_discount_instructions').click(function(){
+        $('.discount_instructions').modal('show')
+    })
     $('.show_videohints').click(function(){
         $('.videohint_page').modal('show')
     })
@@ -1272,6 +1275,7 @@
         mail = $('.sign_mail').val()
         new_password = $('.sign_password').val()
         new_password2 = $('.sign_password2').val()
+        console.log('reg reg')
         if (name.length > 0 && school_name.length > 0 && phone.length > 0 && mail.length > 0 && new_password.length > 0 && new_password == new_password2) {
             $(this).addClass('disabled')
             $('.next_step_load').show()
@@ -1287,6 +1291,7 @@
                 },
                 dataType: 'json',
                 success: function (data) {
+                    console.log(data.res)
                     if (data.res == 'ok') {
                         window.location.replace(data.url);
                     }

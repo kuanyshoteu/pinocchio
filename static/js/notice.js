@@ -109,8 +109,7 @@ $("body").click(function(e){
     $('.folder_form').hide()
     $('.change_task_modal').hide()
     hint_type = $('.data').attr('hint_type')
-    console.log('zpzpz', hint_type, $('.data').attr('videohint'))
-    if ($('#yt_hint')) {
+    if ($('#yt_hint').length > 0) {
         document.getElementById('yt_hint').contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
     }
     if (hint_type && $('.data').attr('videohint') == '0') {

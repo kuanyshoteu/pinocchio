@@ -326,6 +326,7 @@ def login_view(request):
     res = 'error'
     if request.GET.get('username') and request.GET.get('password'):
         found = False
+        print(request.GET.get('username'), request.GET.get('password'))
         if len(Profile.objects.filter(mail=request.GET.get('username'))) > 0:
             profile = Profile.objects.filter(mail=request.GET.get('username'))[0]
             found = True
@@ -413,6 +414,7 @@ def register_view(request):
     teachers = "Учитель1"
     url = ''
     if name and mail and phone and password1 and password2:
+        print('stststst 0')
         if password1 == password2:
             res = 'ok'
             profile = register_user_work(name, phone, mail, password1, request)

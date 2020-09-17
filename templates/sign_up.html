@@ -28,23 +28,21 @@
                             <div style="display: none;float: right;" class="textred textbold reg_fill_all1">Заполните все</div>
                             <form method='POST' enctype='multipart/form-data' class="ui form mb0">{% csrf_token %}
                                 <span class="textdg textbold text13">Как Вас зовут?</span> 
-                                <input class="sign_dir_name mb10">
+                                <input class="backwhitelow sign_dir_name mb10">
                                 <span class="textdg textbold text13">Название Вашего учебного центра:</span> 
                                 <div style="display: none;" class="textred textbold reg_wrong_phone">Пользователь с таким номером или email уже существует</div>
-                                <input class="sign_school_name mb10">
+                                <input class="backwhitelow sign_school_name mb10">
                                 <span class="textdg textbold text13">Номер телефона</span> 
-                                <input class="sign_phone mb10">
+                                <input class="backwhitelow sign_phone mb10">
                                 <span class="textdg textbold text13">Электронная почта</span> 
-                                <input class="sign_mail mb10">
+                                <input class="backwhitelow sign_mail mb10">
                                 <div style="display: none;" class="textred textbold reg_wrong_pass">Пароли не совпадают</div>
                                 <span class="textdg textbold text13">Введите свой пароль:</span> 
-                                <input class="sign_password mb10" type="password">
+                                <input class="backwhitelow sign_password mb10" type="password">
                                 <span class="textdg textbold text13">Повторите пароль:</span> 
-                                <input class="sign_password2 mb10" type="password">
+                                <input class="backwhitelow sign_password2 mb10" type="password">
                                 <div class="text-center">
-                                    <a onclick="tag_counters_sign()" class="ui button green shadow_green textbold register-btn2 mt15 mb15 pl50 pr50">
-                                        <b>Готово</b>
-                                    </a>
+                                    <input class="ui button green shadow_green textbold register-btn2 mt15 mb15 pl50 pr50" type="submit" onclick="return false;" name="" value="Готово">
                                     <div class="next_step_load ui loader active inline small" style="display: none;"></div>
                                 </div>
                             </form>   
@@ -64,8 +62,11 @@
         gtag('js', new Date());
         gtag('config', 'UA-146621937-1');
         gtag('config', 'AW-794791496');
-
+        $('.register-btn2').click(function(){
+            tag_counters_sign()
+        })
         function tag_counters_sign(){
+            console.log('tag gggg')
             gtag('event', 'click', {'event_category': 'start-work'}); 
             ym(55093303,'reachGoal','click-start-work');
             return true;                 

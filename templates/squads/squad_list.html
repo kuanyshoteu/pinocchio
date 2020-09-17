@@ -63,9 +63,9 @@
                                 <a href="{% url 'squads:trash' %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}" class="ui button mini white border1 pl5 pr5 shadow_small textdg mr5 mb5">Удаленные</a>
                                 {% if is_director or is_manager%}
                                 <a class="pl5 pr5 ui button mini blue shadow_blue textbold" href='{% url "squads:create" %}{%if is_moderator%}?type=moderator&mod_school_id={{school_crnt.id}}{%endif%}'> Создать новую группу</a>
-                                {% endif %}                            
+                                {% endif %}
                             {% endif %}
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>

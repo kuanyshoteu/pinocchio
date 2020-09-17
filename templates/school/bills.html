@@ -23,12 +23,12 @@
                     <span class="textdg text17 textbold">У вас подключен тариф</span>
                     {% if school_crnt.version == 'business' %}
                     <span class="text17 textbold textblue mr10">Команда</span>
-                    <span class="text13 textdg mr15">до {{ school_crnt.version_date }}</span>
-                    <span class="text13 textblue">Осталось <b class="tarif_left_days">{{ school_crnt|tarif_days_left }}</b> дней</span>
+                    <div class="text13 textdg mr15">До <b class="textblue">{{ school_crnt.version_date }}</b></div>
+                    <span class="text13 textdg">Осталось <b class="textblue tarif_left_days">{{ school_crnt|tarif_days_left }} дней</b></span>
                     {% else %}
                     <span class="text17 textbold textblue">Бесплатный</span>
                     {% endif %}
-                    <span class="ml15">Активных менеджеров сейчас: <b class="textblue">{{ managers|length }}</b></span>
+                    <div class="textdg text13">Активных менеджеров сейчас: <b class="textblue">{{ managers|length }}</b></div>
                 </div>
                 <div class="ui grid stackable no_margin">
                     {% if school_crnt.tried_free %}
@@ -36,11 +36,11 @@
                     <div class="four wide column pl10 pr10">
                     </div>
                     <div class="six wide column pl10 pr10">
-                        <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
-                            <div class="text17 text-center textbold mb15 textblue">
+                        <div class="text-center shadow_small br5">
+                            <div class="topbr5 pt15 pl15 pr15 pb15 backdarklow text17 text-center textbold mb15 textw">
                                 Продление подписки
                             </div>
-                            <div class="text-center">
+                            <div class="bottombr5 pt15 pl15 pr15 pb15 text-center">
                                 <form class="ui form mb10">
                                     <div class="text-left">
                                         <label for="choose_tarif_6" class="choose_tarif pt5 br5 mb5 backwhite">
@@ -64,47 +64,109 @@
                                         <div class="textdg textbold text13">Активных менеджеров сейчас: <b class="managers_num_crnt textblue text15">{{managers|filter_actives}}</b></div>
                                         <div class="ui divider"></div>
                                         <div class="textdg textbold text13">Всего менеджеров: <b class="text15 managers_num_all textblue">{{managers|filter_actives}}</b></div>
+                                        <div class="text13 tarif_explain textdg text-left">*Стоимость за каждого менеджера <b class="textblue">2500тг</b> в месяц</div>
                                     </div>
                                 </form>
-                                <div class="tarif_explain textdg">Стоимость за каждого менеджера <b class="textblue">2500тг</b> в месяц</div>
-                                <a class="mt15 connect_full_version textbold ui button small green shadow_green pl10 pr10 next_hint">
-                                    Продлить
-                                    <span class="textw tarif_cost">0</span> тг
-                                </a>
+                                <div class="text-right textdg text14">
+                                    <span class="mr10">Итого:</span> <span class="textddg textbold tarif_cost">0</span> тг
+                                </div>
+                                <div class="text-right">
+                                    <a class="mt15 connect_full_version textbold ui button blue pl10 pr10 next_hint">
+                                        Оплатить
+                                    </a>                                    
+                                </div>
                                 <div class="get_tarif_load ui active small inline loader" style="display: none;"></div>
                             </div>
                         </div>
                     </div>
                     {% else %}
                     <div class="four wide column no_padding"></div>
-                    <div class="six wide column pr0">
-                        <div class="dflex">
-                            <div class="text-center shadow_small pt15 pl15 pr15 pb15 br5">
-                                <div class="text21 text-center textbold mb10 textblue">
-                                    Подключите полную версию системы Bilimtap.kz
-                                </div>
-                                <div class="text17 mb10 text-center">
-                                    Станьте ещё более эффективнее!
-                                </div>
-                                <div class="text-center mt15">
-                                    <a class="get_full_version ui button large green shadow_green textbold">
-                                        Попробовать полную версию
-                                    </a>
-                                </div>
+                    <div class="eight wide column deskpt30 pr0">
+                        <div class="text-center pt15 pl15 pr15 pb15 br5">
+                            <div class="text30 text-center textbold mb10 textblue">
+                                Полная версия Bilimtap.kz
+                            </div>
+                            <div class="text21 mt30 mb10 text-center">
+                                Все страницы без ограничений
+                            </div>
+                            <div class="text21 mb10 text-center">
+                                Станьте ещё более эффективнее!
+                            </div>
+                            <div class="text-center mt30 pt5">
+                                <a class="get_full_version ui button large blue textbold">
+                                    Попробовать бесплатно
+                                </a>
+                            </div>
+                            <div class="textdg text21 mt30">
+                                1 месяц бесплатно • Затем 2500тг/мес.
                             </div>
                         </div>
-                        <div class="shadow_small br5 pt20 pb30">
-                            <div class="pl15 pr15 mb5 textbold text17 textblue">В полной версии также есть:</div>
-                            <div class="textblue text15">
-                                <div class="pl15 pr15 pt5 pb5">Воронка продаж</div>
-                                <div class="pl15 pr15 pt5 pb5 backwhitelow">Отчёты для бухгалтерии</div>
-                                <div class="pl15 pr15 pt5 pb5">Анализ лучших курсов</div>
-                                <div class="pl15 pr15 pt5 pb5 backwhitelow">Интеграции с сервисами Email, SMS, Whatsapp рассылок</div>
-                                <div class="pl15 pr15 pt5 pb5">Отчёты по работе администратора</div>
-                                <div class="pl15 pr15 pt5 pb5 backwhitelow">Хранилище онлайн документов до 1 ГБ</div>
-                                <div class="pl15 pr15 pt5 pb5">Интеграция с Вашим сайтом</div>
+                    </div>
+                    <div class="four wide column no_padding"></div>
+                    <div class="sixteen wide column no_padding">
+                        <div class="backdark shadow_small mt50 br5 pt20 pb30">
+                            <div class="textw text15 ui grid stackable">
+                                <div class="third wide column text-center">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon file excel alternate text24" style="color: #79b5e2"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Отчёты для бухгалтерии в формате Excel
+                                    </div>
+                                </div>
+                                <div class="third wide column text-center">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon envelope text24" style="color: #79b5e2"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Интеграции с сервисами Email, SMS, Whatsapp рассылок
+                                    </div>
+                                </div>
+                                <div class="third wide column text-center">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon sitemap text24" style="color: #79b5e2;"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Интеграция с Вашим сайтом
+                                    </div>
+                                </div>
+                                <div class="four wide column text-center mt30">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon chart pie text24" style="color: #79b5e2"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Воронка продаж
+                                    </div>
+                                    <div class="textlg text15">
+                                        Отслеживайте весь путь канала продаж
+                                    </div>
+                                </div>
+                                <div class="four wide column text-center mt30">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon book text24" style="color: #79b5e2"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Анализ лучших курсов
+                                    </div>
+                                </div>
+                                <div class="four wide column text-center mt30">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon address card text24 no_padding" style="color: #79b5e2;height: 0"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Отчёты по работе администратора
+                                    </div>
+                                </div>
+                                <div class="four wide column text-center mt30">
+                                    <div class="pt10 mb10" style="width: 50px;height: 50px; border: 3px solid #79b5e2; border-radius: 100%;margin: 0 auto">
+                                        <i class="icon folder text24" style="color: #79b5e2;"></i>
+                                    </div>
+                                    <div class="text21">
+                                        Хранилище онлайн документов до 1 ГБ
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </div>                        
                     </div>
                     {% endif %}
                 </div>
