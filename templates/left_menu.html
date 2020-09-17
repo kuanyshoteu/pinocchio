@@ -81,13 +81,10 @@
                     <div class="text13">30 дней бесплатно</div>
                 </a>
                 {% endif %}
-<!--                 <div class="mt10">
+                <div class="mt10">
                     <a class="get_discount_instructions text13 textbold ui button mini white shadow_small textblue border1 pt5 pb5 pl5 pr5">Получите 10% скидку на полную версию</a>
                     {% include 'modals/discount_instructions.html' %}
                 </div>
- -->            {% elif school_crnt|tarif_days_left <= 30 %}
-                <div class="textdg">Осталось <span class="tarif_days_left_check">{{school_crnt|tarif_days_left}}</span> дней</div>
-                <a href="{% url 'schools:bills' %}" class="ui button large green shadow_green pt5 pb5 textbold mt5">Продлить</a>
             {% endif %}
         </div>
     {% endif %}
