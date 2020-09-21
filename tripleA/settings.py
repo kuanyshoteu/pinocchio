@@ -251,7 +251,7 @@ STATICFILES_FINDERS = [
 # EMAIL
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'aaa.academy.kz@gmail.com'
-EMAIL_HOST_PASSWORD = 'Ebanyi1$&gifs09$'
+EMAIL_HOST_PASSWORD = 'k@ui$pokw$32'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
